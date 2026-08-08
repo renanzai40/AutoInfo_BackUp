@@ -21,6 +21,7 @@ import argparse
 import asyncio
 import datetime
 import json
+import re
 import shutil
 import sys
 import zipfile
@@ -140,12 +141,65 @@ _ENTRY_KEYS = frozenset(
     {"source_url", "source_type", "source_platform", "title", "entry_id", "uuid"}
 )
 
-# Canonical D1 sections -> markdown heading aliases.
+# Canonical D1 sections -> markdown heading aliases (#172: format headings).
+# Report products use report-style headings; presentation/digest/tutorial
+# products use their own headings. Approach A (aliases) is the complement to
+# the per-product-type required-section rules in _build_product_output.
 _SECTION_HEADING_ALIASES: dict[str, tuple[str, ...]] = {
-    "key_findings": ("key findings", "key_findings", "key-findings", "key points"),
-    "summary": ("summary", "executive summary", "overview"),
-    "recommendations": ("recommendations", "conclusion", "next steps"),
+    "key_findings": (
+        "key findings", "key_findings", "key-findings", "key points",
+        "slide", "slides", "learning objectives", "main findings", "introduction",
+    ),
+    "summary": (
+        "summary", "executive summary", "overview",
+        "entries", "content", "executive overview", "body",
+    ),
+    "recommendations": (
+        "recommendations", "conclusion", "next steps",
+        "exercises", "further reading", "action items", "next actions",
+    ),
 }
+
+# Presentation slide headings: "Slide N: ..." -> key_findings (#172).
+_SLIDE_HEADING_RE = re.compile(r"^slide\s*\d+\s*:", re.IGNORECASE)
+
+# Digest entry headings: "1. Title" / "1) Title" -> entries present (#172).
+_ENTRY_HEADING_RE = re.compile(r"^\d+[.)]\s+\S", re.IGNORECASE)
+
+# Empty-state placeholder content templates emit when no content was produced
+# (e.g. "_No objectives defined._", "_No exercises provided._"). It is
+# genuinely empty content, not a real section — B-04 must stay rejected (#172).
+_EMPTY_PLACEHOLDER_RE = re.compile(r"^\s*_no\s+.+_\.?\s*$", re.IGNORECASE)
+
+# Canonical D1 sections each product type must genuinely contain. Sections
+# outside a type's required set are still checked by the D1 gate (it always
+# requires all three); they get a non-empty marker so a complete product of
+# that format is not false-rejected (#172).
+_PRODUCT_TYPE_REQUIRED_SECTIONS: dict[str, tuple[str, ...]] = {
+    "report": ("key_findings", "summary", "recommendations"),
+    "presentation": ("key_findings",),          # at least one Slide N heading
+    "digest": ("summary",),                     # Entries section / entries present
+    "tutorial": ("key_findings", "recommendations"),  # Learning Objectives + Exercises
+    "column": ("key_findings",),                # at least one content heading
+    "magazine": ("key_findings",),              # at least one content heading
+}
+
+# Filename keywords -> product type (checked in order).
+_PRODUCT_TYPE_KEYWORDS: tuple[tuple[str, str], ...] = (
+    ("presentation", "presentation"),
+    ("tutorial", "tutorial"),
+    ("magazine", "magazine"),
+    ("digest", "digest"),
+    ("column", "column"),
+)
+
+# Column-template headings (column.md.j2). generate_report persists every
+# report (including report_type="column") under the "report" product name, so
+# classify by content when the filename alone says report (#172).
+_COLUMN_HEADINGS = frozenset({
+    "the big idea", "deep dive", "reader takeaways",
+    "implications & outlook", "what changed this week",
+})
 
 # Canonical D1 sections -> JSON top-level / llm_synthesis key aliases.
 _SECTION_SOURCE_KEYS: dict[str, tuple[str, ...]] = {
@@ -245,21 +299,74 @@ def _json_entries(parsed: Any) -> list[dict[str, Any]]:
     return []
 
 
-def _sections_from_headings(text: str) -> dict[str, str]:
-    """Map canonical D1 sections to non-empty heading content (md/html)."""
-    import re
+def _is_empty_placeholder(content: str) -> bool:
+    """True when *content* is an empty-state placeholder (``_No ..._``).
 
+    Templates emit placeholders like ``_No objectives defined._``,
+    ``_No exercises provided._`` and ``_No entries found ..._`` when no
+    content was produced. That is genuinely empty content — it must NOT
+    satisfy a D1 required section (B-04 stays rejected, #172).
+    """
+    stripped = content.strip()
+    if not stripped:
+        return False
+    return bool(_EMPTY_PLACEHOLDER_RE.match(stripped))
+
+
+def _detect_product_type(file_path: Path, body: str = "") -> str:
+    """Infer the product type from the artifact path (#172).
+
+    Filename keywords win (presentation/digest/tutorial/column/magazine);
+    everything else defaults to ``report``. Column products are persisted
+    under the ``report`` name (generate_report persists report_type="column"
+    as report-markdown-*), so column-template headings in the body upgrade a
+    report-named file to ``column``.
+    """
+    rel = file_path.as_posix().lower()
+    for keyword, ptype in _PRODUCT_TYPE_KEYWORDS:
+        if keyword in rel:
+            return ptype
+    if body and any(
+        line.strip().lstrip("#").strip().lower() in _COLUMN_HEADINGS
+        for line in body.splitlines()
+    ):
+        return "column"
+    return "report"
+
+
+def _sections_from_headings(
+    text: str, product_type: str = "report"
+) -> dict[str, str]:
+    """Map canonical D1 sections to non-empty heading content (md/html).
+
+    Headings are matched against :data:`_SECTION_HEADING_ALIASES`, with
+    format-specific additions per *product_type* (approach A + B, #172):
+
+    - ``Slide N:`` headings (presentation) -> ``key_findings``
+    - numbered entry headings (digest) count as an ``summary``/Entries
+    - column/magazine products pass when any content heading is non-empty
+
+    Empty-state placeholder content (``_No objectives defined._``) is treated
+    as empty so a genuinely empty product still fails D1.
+    """
     found: dict[str, str] = {}
     heading_re = re.compile(r"<h([1-6])[^>]*>(.*?)</h\1>", re.IGNORECASE | re.DOTALL)
     if heading_re.search(text):
-        # HTML: split on headings like markdown for a uniform pass below
-        lines: list[str] = []
+        # HTML: convert heading tags to markdown headings but keep the body
+        # text between them so per-section content is not lost (#172).
+        converted: list[str] = []
+        pos = 0
         for m in heading_re.finditer(text):
-            lines.append(
+            converted.append(text[pos:m.start()])
+            converted.append(
                 "\n" + "#" * int(m.group(1)) + " "
                 + re.sub(r"<[^>]+>", "", m.group(2)).strip()
+                + "\n"
             )
-        text = "\n".join(lines)
+            pos = m.end()
+        converted.append(text[pos:])
+        # Strip remaining tags; headings are now on their own lines.
+        text = re.sub(r"<[^>]+>", " ", "".join(converted))
     blocks: list[tuple[str, list[str]]] = []
     cur_heading: str | None = None
     cur_lines: list[str] = []
@@ -274,11 +381,61 @@ def _sections_from_headings(text: str) -> dict[str, str]:
             cur_lines.append(line.strip())
     if cur_heading:
         blocks.append((cur_heading, cur_lines))
+
+    def _block_content(heading: str, lines: list[str]) -> str:
+        # Templates separate sections with "---" horizontal rules; those are
+        # not content and would mask an empty-state placeholder (#172).
+        body_lines = [
+            line for line in lines
+            if line and not re.match(r"^[-*=_]{3,}\s*$", line)
+        ]
+        content = " ".join(body_lines)
+        if _is_empty_placeholder(content):
+            return ""
+        return content
+
+    # Approach A: exact alias matches.
     for canonical, aliases in _SECTION_HEADING_ALIASES.items():
         for heading, lines in blocks:
             if heading in aliases and canonical not in found:
-                content = " ".join(line for line in lines if line)
-                found[canonical] = content or "present"
+                content = _block_content(heading, lines)
+                if content or _is_empty_placeholder(
+                    " ".join(
+                        line for line in lines
+                        if line and not re.match(r"^[-*=_]{3,}\s*$", line)
+                    )
+                ):
+                    # Real content, or an empty-state placeholder (kept empty).
+                    found[canonical] = content or ""
+    # Approach B: presentation slide headings -> key_findings. Detected
+    # regardless of *product_type*: a "Slide N:" heading is a strong format
+    # signal and the alias alone cannot match "slide 1: overview" exactly.
+    if "key_findings" not in found:
+        slide_parts: list[str] = []
+        for heading, lines in blocks:
+            if _SLIDE_HEADING_RE.match(heading):
+                content = _block_content(heading, lines)
+                if content:
+                    slide_parts.append(content)
+        if slide_parts:
+            found["key_findings"] = " ".join(slide_parts)
+    # Approach B: digest numbered entry headings -> summary present.
+    if "summary" not in found:
+        entry_count = 0
+        for heading, lines in blocks:
+            if _ENTRY_HEADING_RE.match(heading):
+                content = _block_content(heading, lines)
+                if content:
+                    entry_count += 1
+        if entry_count:
+            found["summary"] = "present"
+    # Approach B: column/magazine pass with at least one content heading.
+    if product_type in ("column", "magazine") and not found:
+        for heading, lines in blocks:
+            content = _block_content(heading, lines)
+            if content:
+                found["key_findings"] = content
+                break
     return found
 
 
@@ -292,6 +449,37 @@ def _section_value(parsed: dict[str, Any], aliases: tuple[str, ...]) -> Any:
             if val not in (None, "", [], {}):
                 return val
     return None
+
+
+# Non-empty marker for canonical sections a product format does not produce
+# but the D1 gate always checks. Only applied to sections OUTSIDE the
+# product type's required set, so genuinely empty products still fail (#172).
+_D1_NON_REQUIRED_MARKER = "present"
+
+
+def _apply_format_sections(
+    sections: dict[str, str], product_type: str
+) -> dict[str, str]:
+    """Map a product's detected sections onto the three D1 canonical keys.
+
+    The D1 gate always requires ``key_findings``/``summary``/``recommendations``
+    to be present and non-empty, but each product format only genuinely
+    produces a subset (report: all three; presentation: slides; digest:
+    entries; tutorial: objectives + exercises). Sections outside the type's
+    required set get a non-empty marker so a complete product of that format
+    is not false-rejected; sections inside the set keep their detected value
+    (empty stays empty -> D1 still blocks genuinely empty products, #172).
+    """
+    required = _PRODUCT_TYPE_REQUIRED_SECTIONS.get(
+        product_type, _PRODUCT_TYPE_REQUIRED_SECTIONS["report"]
+    )
+    mapped: dict[str, str] = {}
+    for canonical in ("key_findings", "summary", "recommendations"):
+        value = sections.get(canonical, "")
+        if canonical not in required and not value:
+            value = _D1_NON_REQUIRED_MARKER
+        mapped[canonical] = value
+    return mapped
 
 
 def _build_product_output(file_path: Path, bucket: str) -> dict[str, Any]:
@@ -313,7 +501,10 @@ def _build_product_output(file_path: Path, bucket: str) -> dict[str, Any]:
             body = file_path.read_text(encoding="utf-8", errors="replace")
         except Exception:  # noqa: BLE001
             body = ""
-        sections = _sections_from_headings(str(body))
+        format_type = _detect_product_type(file_path, str(body))
+        sections = _apply_format_sections(
+            _sections_from_headings(str(body), format_type), format_type
+        )
     elif fmt == "json":
         try:
             body = file_path.read_text(encoding="utf-8", errors="replace")
@@ -337,6 +528,7 @@ def _build_product_output(file_path: Path, bucket: str) -> dict[str, Any]:
                     "recommendations": _section_value(
                         parsed, _SECTION_SOURCE_KEYS["recommendations"]
                     ),
+
                 }
     key_findings = sections.get("key_findings")
     summary = sections.get("summary")
