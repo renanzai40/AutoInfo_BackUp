@@ -8,7 +8,6 @@ have safe defaults when loading old configuration files.
 from __future__ import annotations
 
 import json
-import os
 import subprocess
 import sys
 from pathlib import Path
@@ -236,16 +235,16 @@ class TestAllV01TestsPass:
     """Existing v0.1 test suite still passes after v0.1.1 changes."""
 
     V01_TEST_FILES = [
-        "tests/test_cli_commands.py",
+        "tests/cli/test_cli_commands.py",
         "tests/test_collection.py",
         "tests/test_integration.py",
-        "tests/test_kb.py",
-        "tests/test_llm.py",
-        "tests/test_mcp_server.py",
+        "tests/kb/test_kb.py",
+        "tests/llm/test_llm.py",
+        "tests/mcp/test_mcp_server.py",
         "tests/test_process.py",
-        "tests/test_pubmed_handler.py",
-        "tests/test_quality.py",
-        "tests/test_rss_handler.py",
+        "tests/collectors/test_pubmed_handler.py",
+        "tests/llm/test_quality.py",
+        "tests/collectors/test_rss_handler.py",
     ]
 
     @pytest.mark.slow
@@ -410,6 +409,7 @@ class TestInitIntegration:
     def test_init_exit_code_zero(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
         """``autoinfo init --demo medical-research`` exits 0."""
         from typer.testing import CliRunner
+
         from autoinfo.cli import app
 
         # TRIAGE #60 (regression) + cwd-leak fix: #106 (79b188a) moved the
@@ -427,9 +427,12 @@ class TestInitIntegration:
         assert (tmp_path / "collections").is_dir()
         assert (tmp_path / "outputs").is_dir()
 
-    def test_init_config_loads_with_new_schema(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_init_config_loads_with_new_schema(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Generated config loads with new schema (tasks/fallback have defaults)."""
         from typer.testing import CliRunner
+
         from autoinfo.cli import app
 
         monkeypatch.chdir(tmp_path)
@@ -576,7 +579,9 @@ class TestCollectProcessPipeline:
         assert proc_result.kb_entries_created >= 1
         assert proc_result.errors == []
 
-    def test_collect_dry_run_still_works(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_collect_dry_run_still_works(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Dry-run collection works with new config."""
         self._prepare_project(tmp_path, monkeypatch)
 
