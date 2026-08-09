@@ -4998,38 +4998,32 @@ def generate_tutorial(
         for e in entries
     )
 
-    prompt = (
-        f"You are a tutorial designer creating content for a {target_audience} "
-        f"audience ({audience_desc}). "
-        "Given the following knowledge base entries, structure them into a "
-        "coherent learning path. "
-        "Return a JSON object with the following fields:\n"
-        '  - "title": tutorial title (string)\n'
-        '  - "duration": estimated reading/completion time (string, e.g. "45 minutes")\n'
-        '  - "prerequisites": comma-separated prerequisites (string)\n'
-        '  - "objectives": array of 3-5 learning objective strings\n'
-        '  - "content": array of section objects, each with:\n'
-        '      - "heading": section heading\n'
-        '      - "body": 2-4 paragraph section content\n'
-        '      - "code_example": optional code/example snippet (string or null)\n'
-        '      - "code_language": language for the code snippet (string or null)\n'
-        '      - "key_takeaway": one-line takeaway (string or null)\n'
-        '  - "exercises": array of exercise objects, each with:\n'
-        '      - "title": exercise title\n'
-        '      - "description": exercise description\n'
-        '      - "hint": optional hint (string or null)\n'
-        '      - "solution": optional solution (string or null)\n'
-        '  - "summary": 2-3 sentence summary of the tutorial\n'
-        '  - "further_reading": array of reference strings\n\n'
-        f"KB Entries:\n{entry_summaries}\n\n"
-        "Return all fields in a single JSON object. Adapt depth, terminology, "
-        f"and examples specifically for a {target_audience} audience."
-    )
-
-    if custom_instructions:
-        prompt += f"\n\nAdditional instructions: {custom_instructions}"
+    if format == "agent":
+        prompt = _build_tutorial_json_prompt(
+            target_audience, audience_desc, entry_summaries, custom_instructions
+        )
+    else:
+        prompt = _build_tutorial_markdown_prompt(
+            target_audience, audience_desc, entry_summaries, custom_instructions
+        )
 
     llm_result = _call_llm_for_tutorial(prompt)
+
+    # -- Deterministic completeness (markdown path) --------------------------
+    # DeepSeek-V4-Flash does not reliably emit the tutorial schema as
+    # parseable JSON or markdown with a stable shape.  Ensure a domain that
+    # HAS entries never renders the all-empty template: replace an unusable
+    # LLM result entirely and fill any still-missing sections from KB entries.
+    if format == "markdown":
+        if not _tutorial_has_content(llm_result):
+            logger.warning(
+                "Tutorial LLM output unusable for domain '%s' (missing "
+                "objectives/content); falling back to KB-derived tutorial",
+                domain,
+            )
+        llm_result = _ensure_tutorial_complete(
+            llm_result, domain, entries, target_audience
+        )
 
     # -- Build template context -------------------------------------------
     generated_at = datetime.now(timezone.utc).isoformat()
@@ -5169,7 +5163,293 @@ def _call_llm_for_tutorial(prompt: str) -> dict[str, Any]:
         logger.error("Tutorial generation failed: %s", exc)
         return {}
     content: str = response.choices[0].message.content or ""
-    return _parse_json_response(content)
+    if not content:
+        return {}
+    parsed = _parse_json_response(content)
+    if parsed:
+        return parsed
+    return _parse_tutorial_markdown(content)
+
+
+def _build_tutorial_json_prompt(
+    target_audience: str,
+    audience_desc: str,
+    entry_summaries: str,
+    custom_instructions: str,
+) -> str:
+    """Build the structured-JSON tutorial prompt (agent-native format path)."""
+    prompt = (
+        f"You are a tutorial designer creating content for a {target_audience} "
+        f"audience ({audience_desc}). "
+        "Given the following knowledge base entries, structure them into a "
+        "coherent learning path. "
+        "Return a JSON object with the following fields:\n"
+        '  - "title": tutorial title (string)\n'
+        '  - "duration": estimated reading/completion time (string, e.g. "45 minutes")\n'
+        '  - "prerequisites": comma-separated prerequisites (string)\n'
+        '  - "objectives": array of 3-5 learning objective strings\n'
+        '  - "content": array of section objects, each with:\n'
+        '      - "heading": section heading\n'
+        '      - "body": 2-4 paragraph section content\n'
+        '      - "code_example": optional code/example snippet (string or null)\n'
+        '      - "code_language": language for the code snippet (string or null)\n'
+        '      - "key_takeaway": one-line takeaway (string or null)\n'
+        '  - "exercises": array of exercise objects, each with:\n'
+        '      - "title": exercise title\n'
+        '      - "description": exercise description\n'
+        '      - "hint": optional hint (string or null)\n'
+        '      - "solution": optional solution (string or null)\n'
+        '  - "summary": 2-3 sentence summary of the tutorial\n'
+        '  - "further_reading": array of reference strings\n\n'
+        f"KB Entries:\n{entry_summaries}\n\n"
+        "Return all fields in a single JSON object. Adapt depth, terminology, "
+        f"and examples specifically for a {target_audience} audience."
+    )
+    if custom_instructions:
+        prompt += f"\n\nAdditional instructions: {custom_instructions}"
+    return prompt
+
+
+def _build_tutorial_markdown_prompt(
+    target_audience: str,
+    audience_desc: str,
+    entry_summaries: str,
+    custom_instructions: str,
+) -> str:
+    """Build the flat-markdown tutorial prompt (robust markdown render path).
+
+    Plain markdown with fixed heading markers is far more reliably emitted by
+    the default model than the nested tutorial JSON schema, and the response is
+    parsed by heading instead of ``json.loads``.
+    """
+    prompt = (
+        f"You are a tutorial designer creating content for a {target_audience} "
+        f"audience ({audience_desc}). "
+        "Given the following knowledge base entries, structure them into a "
+        "coherent learning path. "
+        "Return plain Markdown with this exact structure:\n\n"
+        "# <tutorial title>\n"
+        "Duration: <estimated reading/completion time, e.g. '45 minutes'>\n"
+        "Prerequisites: <comma-separated prerequisites or 'None'>\n\n"
+        "## Learning Objectives\n"
+        "- <objective 1>\n"
+        "- <objective 2>\n"
+        "- <objective 3>\n\n"
+        "## Content\n"
+        "### <section heading 1>\n"
+        "<2-4 paragraphs of section content>\n"
+        "### <section heading 2>\n"
+        "<2-4 paragraphs of section content>\n\n"
+        "## Exercises\n"
+        "- <exercise 1>\n"
+        "- <exercise 2>\n\n"
+        "## Summary\n"
+        "<2-3 sentence summary>\n\n"
+        "## Further Reading\n"
+        "- <reference 1>\n"
+        "- <reference 2>\n\n"
+        "Use exactly the heading names above. Do NOT wrap your answer in a "
+        "code fence or emit JSON.\n\n"
+        f"KB Entries:\n{entry_summaries}\n\n"
+        "Adapt depth, terminology, and examples specifically for a "
+        f"{target_audience} audience."
+    )
+    if custom_instructions:
+        prompt += f"\n\nAdditional instructions: {custom_instructions}"
+    return prompt
+
+
+def _parse_tutorial_markdown(content: str) -> dict[str, Any]:
+    """Parse a markdown tutorial response into the tutorial context schema.
+
+    Handles the structure requested by ``_build_tutorial_markdown_prompt``:
+    ``# title``, optional ``Duration:`` / ``Prerequisites:`` lines,
+    ``## Learning Objectives`` bullets, ``## Content`` with ``### <heading>``
+    subsections, ``## Exercises`` bullets or ``### Exercise N:`` headings,
+    ``## Summary`` paragraph and ``## Further Reading`` bullets.  Returns
+    ``{}`` when *content* is empty.
+    """
+    if not content:
+        return {}
+    result: dict[str, Any] = {
+        "title": "",
+        "duration": "",
+        "prerequisites": "",
+        "objectives": [],
+        "content": [],
+        "exercises": [],
+        "summary": "",
+        "further_reading": [],
+    }
+    current_section = ""
+    content_heading = ""
+    content_body: list[str] = []
+    exercise_title = ""
+    exercise_body: list[str] = []
+
+    def flush_content() -> None:
+        nonlocal content_heading, content_body
+        if content_heading:
+            result["content"].append(
+                {
+                    "heading": content_heading,
+                    "body": "\n\n".join(line.strip() for line in content_body).strip(),
+                }
+            )
+            content_heading = ""
+            content_body = []
+
+    def flush_exercise() -> None:
+        nonlocal exercise_title, exercise_body
+        if exercise_title:
+            result["exercises"].append(
+                {
+                    "title": exercise_title,
+                    "description": "\n\n".join(
+                        line.strip() for line in exercise_body
+                    ).strip(),
+                }
+            )
+            exercise_title = ""
+            exercise_body = []
+
+    def is_bullet(text: str) -> bool:
+        return bool(
+            re.match(r"^(?:[-*]|\d+[.)])\s+\S", text)
+        )
+
+    def bullet_text(text: str) -> str:
+        return re.sub(r"^(?:[-*]|\d+[.)])\s+", "", text).strip()
+
+    for raw in content.splitlines():
+        line = raw.rstrip()
+        stripped = line.strip()
+        if line.startswith("# ") and not line.startswith("## "):
+            result["title"] = stripped.lstrip("#").strip()
+            continue
+        if not current_section and (
+            stripped.lower().startswith("duration:")
+            or stripped.lower().startswith("prerequisites:")
+        ):
+            key, _, value = stripped.partition(":")
+            result[key.strip().lower()] = value.strip()
+            continue
+        if stripped.startswith("## "):
+            flush_content()
+            flush_exercise()
+            current_section = stripped.lstrip("#").strip()
+            continue
+        if current_section in ("Learning Objectives", "Learning Goals"):
+            if is_bullet(stripped):
+                item = bullet_text(stripped)
+                if item:
+                    result["objectives"].append(item)
+            continue
+        if current_section == "Content":
+            if stripped.startswith("### "):
+                flush_content()
+                content_heading = stripped.lstrip("#").strip()
+                content_body = []
+            elif content_heading and stripped:
+                content_body.append(stripped)
+            continue
+        if current_section in ("Exercises", "Practice", "Practice Exercises"):
+            if stripped.startswith("### "):
+                flush_exercise()
+                heading = stripped.lstrip("#").strip()
+                exercise_title = re.sub(
+                    r"^Exercise\s*(\d+)?\s*[:.)-]?\s*",
+                    "",
+                    heading,
+                    flags=re.IGNORECASE,
+                ).strip() or heading
+                exercise_body = []
+            elif is_bullet(stripped):
+                flush_exercise()
+                item = bullet_text(stripped)
+                if item:
+                    result["exercises"].append({"title": item, "description": ""})
+            elif exercise_title and stripped:
+                exercise_body.append(stripped)
+            continue
+        if current_section in ("Summary", "Conclusion", "Wrap-Up"):
+            if stripped:
+                result["summary"] = (result["summary"] + " " + stripped).strip()
+            continue
+        if current_section in ("Further Reading", "References", "Resources"):
+            if is_bullet(stripped):
+                item = bullet_text(stripped)
+                if item:
+                    result["further_reading"].append(item)
+            elif stripped and not line.startswith(("---", "***")):
+                result["further_reading"].append(stripped)
+            continue
+    flush_content()
+    flush_exercise()
+    return result
+
+
+def _tutorial_has_content(result: dict[str, Any]) -> bool:
+    """True when a tutorial LLM result carries real objectives and content."""
+    return bool(result.get("objectives")) and bool(result.get("content"))
+
+
+def _entry_derived_sections(
+    entries: list[dict[str, Any]],
+) -> tuple[list[str], list[dict[str, str]], list[dict[str, str]], list[str]]:
+    """Derive objectives/content/exercises/further-reading from KB entries."""
+    objectives: list[str] = []
+    content: list[dict[str, str]] = []
+    exercises: list[dict[str, str]] = []
+    further_reading: list[str] = []
+    for index, entry in enumerate(entries):
+        title = entry.get("title") or f"Entry {index + 1}"
+        summary = entry.get("summary") or "(no summary available)"
+        if len(objectives) < 5:
+            objectives.append(title)
+        content.append({"heading": title, "body": summary})
+        exercises.append(
+            {
+                "title": f"What is the key finding in '{title}'?",
+                "description": (
+                    f"Summarize the main finding or conclusion of the entry "
+                    f"'{title}' in one or two sentences."
+                ),
+            }
+        )
+        url = entry.get("source_url")
+        if url and url not in further_reading:
+            further_reading.append(url)
+    return objectives[:5], content, exercises, further_reading[:20]
+
+
+def _ensure_tutorial_complete(
+    llm_result: dict[str, Any],
+    domain: str,
+    entries: list[dict[str, Any]],
+    target_audience: str,
+) -> dict[str, Any]:
+    """Guarantee the markdown tutorial never renders the all-empty template.
+
+    Keeps every usable field from *llm_result* (title, duration, objectives,
+    content, …) and fills any missing or empty section from the KB entries,
+    so a domain that HAS entries always produces a complete tutorial.
+    """
+    objectives, content, exercises, further_reading = _entry_derived_sections(entries)
+    return {
+        "title": llm_result.get("title") or f"{domain} — Tutorial",
+        "duration": llm_result.get("duration") or f"{len(entries)} minutes",
+        "prerequisites": llm_result.get("prerequisites") or "None",
+        "objectives": llm_result.get("objectives") or objectives,
+        "content": llm_result.get("content") or content,
+        "exercises": llm_result.get("exercises") or exercises,
+        "summary": llm_result.get("summary") or (
+            f"This tutorial walks through {len(entries)} knowledge base "
+            f"entries in the {domain} domain, covering the key findings "
+            f"for a {target_audience} audience."
+        ),
+        "further_reading": llm_result.get("further_reading") or further_reading,
+    }
 
 
 def _render_tutorial_template(context: dict[str, Any]) -> str:
