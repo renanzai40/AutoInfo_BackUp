@@ -212,7 +212,7 @@ def _apply_delivery_gates(
         )
 
     # Deferred imports to avoid circular dependencies
-    from autoinfo.quality import QualityResult, run_delivery_gates  # noqa: PLC0415
+    from autoinfo.quality import QualityResult, run_delivery_gates  # noqa: PLC0415, F401
 
     llm_synthesis: dict[str, Any] = context.get("llm_synthesis", {})
 
@@ -1245,7 +1245,7 @@ def _export_graphml(
         Standard export result dict with keys: ``format``, ``path``,
         ``entries_count``, ``domain``, ``success``.
     """
-    from xml.etree import ElementTree as _ET
+    from xml.etree import ElementTree as _ET  # noqa: N814
 
     store = KBStore()
     data = store.export_knowledge_graph(domain=domain or "")
@@ -2248,7 +2248,7 @@ PRODUCT_TEMPLATES: list[dict[str, Any]] = [
     },
     {
         "name": "enterprise-briefing",
-        "description": "Enterprise briefings with custom data, white-labeling, and priority support",
+        "description": "Enterprise briefings with custom data, white-labeling, and priority support",  # noqa: E501
         "access_level": "enterprise",
         "template": ProductTemplate(domain="*", access_level="enterprise"),
     },
@@ -3320,6 +3320,8 @@ def generate_report(
                     "title": e.get("title", ""),
                     "summary": e.get("summary", ""),
                     "source_url": e.get("source_url", ""),
+                    "source_type": e.get("source_type", ""),
+                    "source_platform": e.get("source_platform", ""),
                     "relevance_score": e.get("relevance_score", 0),
                     "source_tier": e.get("source_tier"),
                     "domain": e.get("domain", domain),
@@ -3710,7 +3712,7 @@ def _group_by_theme(
         if len(domain_groups) >= 2:
             groups = []
             for domain_name in sorted(domain_groups):
-                theme_name = domain_name.replace("-", " ").title() if domain_name != "Unknown" else "Other Sources"
+                theme_name = domain_name.replace("-", " ").title() if domain_name != "Unknown" else "Other Sources"  # noqa: E501
                 groups.append({
                     "theme": theme_name,
                     "description": (
@@ -3946,6 +3948,9 @@ def _render_report_json(report_data: ReportData, period: str = "weekly") -> str:
                 "title": item.get("title", ""),
                 "summary": item.get("summary", ""),
                 "url": url,
+                "source_url": url,
+                "source_type": item.get("source_type", ""),
+                "source_platform": item.get("source_platform", ""),
                 "date": item.get("collected_at", ""),
                 "domain": item.get("domain", ""),
             })
@@ -3961,6 +3966,9 @@ def _render_report_json(report_data: ReportData, period: str = "weekly") -> str:
             "title": ref.get("title", ""),
             "summary": "",
             "url": url,
+            "source_url": url,
+            "source_type": ref.get("source_type", ""),
+            "source_platform": ref.get("source_platform", ""),
             "date": "",
             "domain": ref.get("domain", ""),
         })
@@ -4573,7 +4581,7 @@ _REPORT_AUDIENCE_DESCRIPTIONS: dict[str, str] = {
     "researcher": "technical depth, citations, methodology focus, statistical rigor",
     "executive": "strategic overview, ROI, competitive landscape, high-level implications",
     "investor": "market context, opportunities & risks, competitive position, growth potential",
-    "clinician": "practical application, clinical guidelines, patient outcomes, treatment protocols",
+    "clinician": "practical application, clinical guidelines, patient outcomes, treatment protocols",  # noqa: E501
     "student": "foundational concepts, simplified explanations, step-by-step learning, study aids",
     "general": "balanced overview suitable for any audience — no special structure applied",
 }
@@ -5036,7 +5044,7 @@ def generate_presentation(
 
     # -- Agent-native JSON-LD format ----------------------------------------
     if format == "agent":
-        return _render_presentation_agent_json(llm_result, domain, topic, target_audience, generated_at, topic_entries)
+        return _render_presentation_agent_json(llm_result, domain, topic, target_audience, generated_at, topic_entries)  # noqa: E501
 
     # -- Render via Jinja2 template ---------------------------------------
     return _render_presentation_template(context, format=format)
