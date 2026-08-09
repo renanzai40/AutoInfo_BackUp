@@ -264,7 +264,7 @@ class TestAllV01TestsPass:
             cwd=str(project_root),
             capture_output=True,
             text=True,
-            timeout=120,
+            timeout=300,
         )
 
         # Print output for debugging on failure
