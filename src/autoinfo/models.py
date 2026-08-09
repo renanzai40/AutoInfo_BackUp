@@ -209,7 +209,7 @@ class KBEntry:
     version: int = 1
     previous_version: int = 0
     supersedes: str = ""
-    trace_id: str = ""  # Per-item pipeline traceability — UUID from collection, resolvable via trace_item
+    trace_id: str = ""  # Per-item pipeline traceability — UUID from collection, resolvable via trace_item  # noqa: E501
     # ToS compliance metadata from G1-TosCompliance gate (written to frontmatter
     # by _entry_to_frontmatter; kept as a field so from_dict parses cleanly).
     tos_compliant: bool | None = None
