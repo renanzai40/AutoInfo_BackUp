@@ -3570,6 +3570,10 @@ _DEFAULT_DOMAIN_GUIDANCE = (
     "policy & regulation, emerging innovations"
 )
 
+# Entries are grouped in batches of this size so the LLM prompt stays small
+# enough to return reliable JSON even for very long entry lists.
+_GROUPING_BATCH_SIZE = 20
+
 
 def _group_by_theme(
     extractor: LLMExtractor,
@@ -3608,10 +3612,134 @@ def _group_by_theme(
                 },
             ]
 
-    Falls back to a single ``"General"`` group when the LLM call fails
-    or when the LLM repeatedly collapses entries into one theme.
+    Entries are grouped in batches of at most ``_GROUPING_BATCH_SIZE`` so the
+    LLM prompt stays small enough to return reliable JSON even for long entry
+    lists; resulting themes are then merged across batches by normalized
+    name.  When the LLM fails or collapses a batch, a deterministic keyword /
+    source-type / domain heuristic is used instead, so the entries never
+    collapse into a single ``"General"`` group while more than one distinct
+    topic is detectable.
     """
-    # Build a compact representation of entries for the LLM prompt
+    if not entries:
+        return []
+
+    batch_size = _GROUPING_BATCH_SIZE
+    batches = [
+        entries[i : i + batch_size] for i in range(0, len(entries), batch_size)
+    ]
+
+    merged: list[dict[str, Any]] = []
+    for batch in batches:
+        merged.extend(
+            _group_batch_by_theme(extractor, batch, domain=domain, domains=domains)
+        )
+
+    return _ensure_all_entries_grouped(_merge_theme_groups(merged), entries)
+
+
+def _group_batch_by_theme(
+    extractor: LLMExtractor,
+    entries: list[dict[str, Any]],
+    domain: str = "",
+    domains: list[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Group a single batch of entries (at most ``_GROUPING_BATCH_SIZE``).
+
+    Uses the LLM (with an anti-collapse retry) and maps the returned entry
+    IDs back to entry objects.  Falls back to a deterministic keyword /
+    source-type / domain grouping when the LLM fails or collapses the batch.
+    """
+    groups_raw = _llm_group_batch(extractor, entries, domain=domain, domains=domains)
+    if not groups_raw:
+        groups = _deterministic_grouping(entries, domain=domain)
+        if groups is not None:
+            return groups
+        return [
+            {
+                "theme": "General",
+                "description": (
+                    f"All {len(entries)} entries included in this report."
+                ),
+                "entries": list(entries),
+            }
+        ]
+
+    entry_map: dict[str, dict[str, Any]] = {
+        e.get("entry_id", ""): e for e in entries if e.get("entry_id")
+    }
+
+    result: list[dict[str, Any]] = []
+    for g in groups_raw:
+        group_entries = [
+            entry_map[eid]
+            for eid in g.get("entry_ids", [])
+            if eid in entry_map
+        ]
+        if group_entries:
+            result.append({
+                "theme": g.get("theme", "Untitled"),
+                "description": g.get("description", ""),
+                "entries": group_entries,
+            })
+
+    # -- Coverage guard -----------------------------------------------------
+    # The LLM sometimes returns parseable JSON whose entry_ids do not match
+    # the actual entry IDs, which would dump every entry into a single
+    # catch-all.  If the LLM groups cover fewer than half the batch, treat
+    # the result as unreliable and fall back to deterministic grouping.
+    matched_count = sum(len(g["entries"]) for g in result)
+    if matched_count < max(1, len(entries) // 2):
+        logger.warning(
+            "LLM groups matched only %d/%d entries, falling back to "
+            "deterministic grouping",
+            matched_count,
+            len(entries),
+        )
+        groups = _deterministic_grouping(entries, domain=domain)
+        if groups is not None:
+            return groups
+        return [
+            {
+                "theme": "General",
+                "description": (
+                    f"All {len(entries)} entries included in this report."
+                ),
+                "entries": list(entries),
+            }
+        ]
+
+    # Ensure no entry is left out (ungrouped entries go into a catch-all)
+    grouped_ids: set[str] = {
+        e.get("entry_id", "")
+        for g in result
+        for e in g["entries"]
+        if e.get("entry_id")
+    }
+    ungrouped = [e for e in entries if e.get("entry_id", "") not in grouped_ids]
+    if ungrouped:
+        result.append({
+            "theme": "Additional Topics",
+            "description": (
+                f"{len(ungrouped)} entry(ies) not covered by other themes."
+            ),
+            "entries": ungrouped,
+        })
+
+    return result
+
+
+def _llm_group_batch(
+    extractor: LLMExtractor,
+    entries: list[dict[str, Any]],
+    domain: str = "",
+    domains: list[str] | None = None,
+) -> list[dict[str, Any]] | None:
+    """Ask the LLM to group a single batch of entries into themes.
+
+    Returns the raw parsed ``groups`` list (each object carries ``theme``,
+    ``description`` and ``entry_ids``) or ``None`` when the LLM fails or
+    repeatedly collapses the batch into a single theme.
+    """
     entry_summaries_parts: list[str] = []
     for e in entries:
         entry_domain = e.get("domain", domain)
@@ -3695,102 +3823,266 @@ def _group_by_theme(
         # If retry STILL produced only 1 group, treat as failure → fallback
         if groups_raw and len(groups_raw) <= 1:
             logger.warning(
-                "Strict retry returned only %d group(s), falling back to General",
+                "Strict retry returned only %d group(s), falling back to "
+                "deterministic grouping",
                 len(groups_raw),
             )
             groups_raw = None
 
-    if not groups_raw:
-        # Smart fallback: split by domain rather than lumping everything under "General".
-        # This handles the case where the LLM fails or collapses all entries.
-        from collections import defaultdict
-        domain_groups: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
-        for e in entries:
-            d = (e.get("domain") or "").strip() or "Unknown"
-            domain_groups[d].append(e)
+    result: list[dict[str, Any]] | None = groups_raw
+    return result
 
-        if len(domain_groups) >= 2:
-            groups = []
-            for domain_name in sorted(domain_groups):
-                theme_name = domain_name.replace("-", " ").title() if domain_name != "Unknown" else "Other Sources"  # noqa: E501
-                groups.append({
-                    "theme": theme_name,
-                    "description": (
-                        f"{len(domain_groups[domain_name])} entries from "
-                        f"{domain_name or 'other sources'}."
-                    ),
-                    "entries": domain_groups[domain_name],
-                })
-            return groups
+def _deterministic_grouping(
+    entries: list[dict[str, Any]],
+    domain: str = "",
+) -> list[dict[str, Any]] | None:
+    """Group entries deterministically without the LLM.
 
-        # Single domain (or all unknown): split by source_type instead
-        source_groups: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
-        for e in entries:
-            st = (e.get("source_type") or "").strip() or "unknown"
-            source_groups[st].append(e)
+    Splits by ``source_type`` (existing fallback), then by ``domain``, and
+    finally by a keyword classifier built from the domain's ``_keywords.yaml``
+    when the simpler splits still collapse to a single group.  Returns
+    ``None`` only when fewer than two distinct topics are detectable, so the
+    caller can decide on a last-resort group.
+    """
+    from collections import defaultdict
 
-        if len(source_groups) >= 2:
-            groups = []
-            for st in sorted(source_groups):
-                theme_name = st.upper()
-                groups.append({
-                    "theme": theme_name,
-                    "description": f"{len(source_groups[st])} entries from {st} sources.",
-                    "entries": source_groups[st],
-                })
-            return groups
+    # 1. Split by source_type
+    source_groups: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
+    for e in entries:
+        st = (e.get("source_type") or "").strip() or "unknown"
+        source_groups[st].append(e)
 
-        # Last resort — single group with all entries
+    if len(source_groups) >= 2:
+        return [
+            {
+                "theme": st.upper(),
+                "description": f"{len(es)} entries from {st} sources.",
+                "entries": es,
+            }
+            for st, es in sorted(source_groups.items())
+        ]
+
+    # 2. Split by domain
+    domain_groups: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
+    for e in entries:
+        d = (e.get("domain") or "").strip() or "Unknown"
+        domain_groups[d].append(e)
+
+    if len(domain_groups) >= 2:
+        return [
+            {
+                "theme": (
+                    d.replace("-", " ").title() if d != "Unknown" else "Other Sources"
+                ),
+                "description": f"{len(es)} entries from {d or 'other sources'}.",
+                "entries": es,
+            }
+            for d, es in sorted(domain_groups.items())
+        ]
+
+    # 3. Keyword classifier (from knowledge/<domain>/_keywords.yaml) — this
+    #    replaces the old "General" dump when the entries are all from one
+    #    source_type and one domain but still cover distinct topics.
+    keyword_groups = _keyword_group_entries(entries, domain=domain)
+    if keyword_groups is not None:
+        return keyword_groups
+
+    # Only a single distinct topic is detectable.
+    return None
+
+
+def _keyword_group_entries(
+    entries: list[dict[str, Any]],
+    domain: str = "",
+) -> list[dict[str, Any]] | None:
+    """Group entries by keyword topics from the domain's ``_keywords.yaml``.
+
+    Loads topic keywords from ``knowledge/<domain>/_keywords.yaml`` (when
+    present) and maps each entry's title/summary to the longest keyword it
+    contains.  Returns a list of groups, or ``None`` when fewer than two
+    distinct keyword topics are detectable so the caller can fall back to
+    source-type / domain grouping.
+    """
+    from collections import defaultdict
+
+    topics = _load_keyword_topics(domain)
+    if not topics:
+        return None
+
+    # Normalize once, keep the original spelling for display, and match the
+    # most specific (longest) keyword first.
+    norm_topics: list[tuple[str, str]] = []
+    for t in topics:
+        nt = _normalize_text(t)
+        if len(nt) >= 3:
+            norm_topics.append((nt, t))
+    if not norm_topics:
+        return None
+    norm_topics.sort(key=lambda pair: len(pair[0]), reverse=True)
+
+    groups: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
+    for e in entries:
+        text = _normalize_text(
+            f"{e.get('title', '')} {e.get('summary', '')}"
+        )
+        best = _match_keyword(text, norm_topics)
+        groups[best if best else "__unmatched__"].append(e)
+
+    keyword_names = [name for name in groups if name != "__unmatched__"]
+    if not keyword_names:
+        return None
+    if len(keyword_names) == 1 and not groups.get("__unmatched__"):
+        return None
+
+    result: list[dict[str, Any]] = []
+    for name, es in groups.items():
+        if name == "__unmatched__":
+            continue
+        result.append({
+            "theme": name.title(),
+            "description": f"{len(es)} entries related to '{name}'.",
+            "entries": es,
+        })
+
+    unmatched = groups.get("__unmatched__", [])
+    if unmatched:
+        result.append({
+            "theme": "Additional Topics",
+            "description": (
+                f"{len(unmatched)} entry(ies) not matched to a topic keyword."
+            ),
+            "entries": unmatched,
+        })
+    return result
+
+
+def _load_keyword_topics(domain: str) -> list[str]:
+    """Load non-deprecated topic keywords for *domain* from ``_keywords.yaml``."""
+    if not domain:
+        return []
+    path = Path("knowledge") / domain / "_keywords.yaml"
+    if not path.is_file():
+        return []
+    try:
+        raw: dict[str, Any] = yaml.safe_load(
+            path.read_text(encoding="utf-8")
+        ) or {}
+    except Exception as exc:
+        logger.warning("Failed to read keyword file %s: %s", path, exc)
+        return []
+    kw_map: dict[str, Any] = raw.get("keywords", {}) or {}
+    topics: list[str] = []
+    for keyword, data in kw_map.items():
+        if isinstance(data, dict) and data.get("state") == "deprecated":
+            continue
+        topics.append(keyword)
+    return topics
+
+
+def _match_keyword(
+    text: str,
+    norm_topics: list[tuple[str, str]],
+) -> str:
+    """Return the longest normalized topic keyword found in *text*.
+
+    Matches on normalized (lower-cased, punctuation-stripped) text with word
+    boundaries so short keywords do not match inside unrelated words.
+    """
+    for nt, _original in norm_topics:
+        if re.search(r"(?:^|\s)" + re.escape(nt) + r"(?=\s|$)", text):
+            return nt
+    return ""
+
+
+def _normalize_text(value: str) -> str:
+    """Lower-case *value*, strip punctuation and collapse whitespace."""
+    return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9]+", " ", value.lower())).strip()
+
+
+def _normalize_theme_text(value: str) -> str:
+    """Normalize a theme name for exact-name merging across batches."""
+    return _normalize_text(str(value))
+
+
+def _merge_theme_groups(
+    groups: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Merge groups that share the same normalized theme name.
+
+    Entries are deduplicated by ``entry_id`` when merging so the same entry
+    is never reported under a theme twice.
+    """
+    from collections import defaultdict
+
+    by_name: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
+    for g in groups:
+        theme = (g.get("theme") or "").strip() or "Untitled"
+        key = _normalize_theme_text(theme) or theme.strip().lower()
+        by_name[key].append(g)
+
+    result: list[dict[str, Any]] = []
+    for merged in by_name.values():
+        theme = merged[0]["theme"]
+        description = next(
+            (g["description"] for g in merged if g.get("description")), ""
+        )
+        seen: set[str] = set()
+        entries: list[dict[str, Any]] = []
+        for g in merged:
+            for e in g["entries"]:
+                eid = e.get("entry_id", "")
+                if eid and eid in seen:
+                    continue
+                if eid:
+                    seen.add(eid)
+                entries.append(e)
+        result.append({
+            "theme": theme,
+            "description": description,
+            "entries": entries,
+        })
+    return result
+
+
+def _ensure_all_entries_grouped(
+    groups: list[dict[str, Any]],
+    entries: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Guarantee every input entry appears in some group."""
+    if not groups:
         return [
             {
                 "theme": "General",
                 "description": (
                     f"All {len(entries)} entries included in this report."
                 ),
-                "entries": entries,
+                "entries": list(entries),
             }
         ]
 
-    # Map entry IDs back to actual entry objects
-    entry_map: dict[str, dict[str, Any]] = {}
-    for e in entries:
-        eid = e.get("entry_id", "")
-        if eid:
-            entry_map[eid] = e
-
-    result: list[dict[str, Any]] = []
-    for g in groups_raw:
-        group_entries = [
-            entry_map[eid]
-            for eid in g.get("entry_ids", [])
-            if eid in entry_map
-        ]
-        if group_entries:
-            result.append({
-                "theme": g.get("theme", "Untitled"),
-                "description": g.get("description", ""),
-                "entries": group_entries,
+    grouped_ids: set[str] = {
+        e.get("entry_id", "")
+        for g in groups
+        for e in g["entries"]
+        if e.get("entry_id")
+    }
+    missing = [
+        e
+        for e in entries
+        if not (e.get("entry_id", "") and e["entry_id"] in grouped_ids)
+    ]
+    if missing:
+        if len(groups) >= 2:
+            groups.append({
+                "theme": "Additional Topics",
+                "description": (
+                    f"{len(missing)} entry(ies) not covered by other themes."
+                ),
+                "entries": missing,
             })
-
-    # Ensure no entry is left out (ungrouped entries go into a catch-all)
-    grouped_ids: set[str] = set()
-    for g in result:
-        for e in g["entries"]:
-            eid = e.get("entry_id", "")
-            if eid:
-                grouped_ids.add(eid)
-
-    ungrouped = [e for e in entries if e.get("entry_id", "") not in grouped_ids]
-    if ungrouped:
-        result.append({
-            "theme": "Additional Topics",
-            "description": (
-                f"{len(ungrouped)} entry(ies) not covered by other themes."
-            ),
-            "entries": ungrouped,
-        })
-
-    return result
+        else:
+            groups[0]["entries"].extend(missing)
+    return groups
 
 
 def _normalize_report_audience(target_audience: str) -> str:
