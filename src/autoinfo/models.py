@@ -210,6 +210,10 @@ class KBEntry:
     previous_version: int = 0
     supersedes: str = ""
     trace_id: str = ""  # Per-item pipeline traceability — UUID from collection, resolvable via trace_item
+    # ToS compliance metadata from G1-TosCompliance gate (written to frontmatter
+    # by _entry_to_frontmatter; kept as a field so from_dict parses cleanly).
+    tos_compliant: bool | None = None
+    tos_classification: str | None = None
     # KB promotion provenance — frontmatter-only (no DB column); how a Draft
     # reached 03-Wiki ("agent" | "director") and which actor promoted it.
     promotion_source: str | None = None
