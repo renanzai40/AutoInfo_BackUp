@@ -90,11 +90,11 @@ kb_tiers:
   - 02-Draft
   - 03-Wiki
 
-# Required cells — full implemented surface across the 2 configured demo
-# domains (tech-ai-developer + medical-research). Every product x format
-# combination that the codebase can produce must have evidence.
+# Required cells — every product x format the codebase ACTUALLY supports
+# (capability-verified 2026-08-09; tutorial=md+agent, presentation=md+html+agent,
+# template products=md+html, digest/report=all 7). Cells outside this set are
+# not implementable and are NOT gaps.
 required_cells:
-  # ---- medical-research: all 8 products x 7 formats (56 cells) ----
   - {domain: medical-research, product: digest, format: markdown}
   - {domain: medical-research, product: digest, format: html}
   - {domain: medical-research, product: digest, format: json}
@@ -110,48 +110,17 @@ required_cells:
   - {domain: medical-research, product: report, format: epub}
   - {domain: medical-research, product: report, format: audiobook}
   - {domain: medical-research, product: tutorial, format: markdown}
-  - {domain: medical-research, product: tutorial, format: html}
-  - {domain: medical-research, product: tutorial, format: json}
   - {domain: medical-research, product: tutorial, format: agent}
-  - {domain: medical-research, product: tutorial, format: audio}
-  - {domain: medical-research, product: tutorial, format: epub}
-  - {domain: medical-research, product: tutorial, format: audiobook}
   - {domain: medical-research, product: presentation, format: markdown}
   - {domain: medical-research, product: presentation, format: html}
-  - {domain: medical-research, product: presentation, format: json}
   - {domain: medical-research, product: presentation, format: agent}
-  - {domain: medical-research, product: presentation, format: audio}
-  - {domain: medical-research, product: presentation, format: epub}
-  - {domain: medical-research, product: presentation, format: audiobook}
   - {domain: medical-research, product: premium-briefing, format: markdown}
   - {domain: medical-research, product: premium-briefing, format: html}
-  - {domain: medical-research, product: premium-briefing, format: json}
-  - {domain: medical-research, product: premium-briefing, format: agent}
-  - {domain: medical-research, product: premium-briefing, format: audio}
-  - {domain: medical-research, product: premium-briefing, format: epub}
-  - {domain: medical-research, product: premium-briefing, format: audiobook}
   - {domain: medical-research, product: column, format: markdown}
-  - {domain: medical-research, product: column, format: html}
-  - {domain: medical-research, product: column, format: json}
-  - {domain: medical-research, product: column, format: agent}
-  - {domain: medical-research, product: column, format: audio}
-  - {domain: medical-research, product: column, format: epub}
-  - {domain: medical-research, product: column, format: audiobook}
   - {domain: medical-research, product: magazine-digest, format: markdown}
   - {domain: medical-research, product: magazine-digest, format: html}
-  - {domain: medical-research, product: magazine-digest, format: json}
-  - {domain: medical-research, product: magazine-digest, format: agent}
-  - {domain: medical-research, product: magazine-digest, format: audio}
-  - {domain: medical-research, product: magazine-digest, format: epub}
-  - {domain: medical-research, product: magazine-digest, format: audiobook}
   - {domain: medical-research, product: enterprise-briefing, format: markdown}
   - {domain: medical-research, product: enterprise-briefing, format: html}
-  - {domain: medical-research, product: enterprise-briefing, format: json}
-  - {domain: medical-research, product: enterprise-briefing, format: agent}
-  - {domain: medical-research, product: enterprise-briefing, format: audio}
-  - {domain: medical-research, product: enterprise-briefing, format: epub}
-  - {domain: medical-research, product: enterprise-briefing, format: audiobook}
-  # ---- tech-ai-developer: same 8 products x 7 formats (56 cells) ----
   - {domain: tech-ai-developer, product: digest, format: markdown}
   - {domain: tech-ai-developer, product: digest, format: html}
   - {domain: tech-ai-developer, product: digest, format: json}
@@ -167,48 +136,17 @@ required_cells:
   - {domain: tech-ai-developer, product: report, format: epub}
   - {domain: tech-ai-developer, product: report, format: audiobook}
   - {domain: tech-ai-developer, product: tutorial, format: markdown}
-  - {domain: tech-ai-developer, product: tutorial, format: html}
-  - {domain: tech-ai-developer, product: tutorial, format: json}
   - {domain: tech-ai-developer, product: tutorial, format: agent}
-  - {domain: tech-ai-developer, product: tutorial, format: audio}
-  - {domain: tech-ai-developer, product: tutorial, format: epub}
-  - {domain: tech-ai-developer, product: tutorial, format: audiobook}
   - {domain: tech-ai-developer, product: presentation, format: markdown}
   - {domain: tech-ai-developer, product: presentation, format: html}
-  - {domain: tech-ai-developer, product: presentation, format: json}
   - {domain: tech-ai-developer, product: presentation, format: agent}
-  - {domain: tech-ai-developer, product: presentation, format: audio}
-  - {domain: tech-ai-developer, product: presentation, format: epub}
-  - {domain: tech-ai-developer, product: presentation, format: audiobook}
   - {domain: tech-ai-developer, product: premium-briefing, format: markdown}
   - {domain: tech-ai-developer, product: premium-briefing, format: html}
-  - {domain: tech-ai-developer, product: premium-briefing, format: json}
-  - {domain: tech-ai-developer, product: premium-briefing, format: agent}
-  - {domain: tech-ai-developer, product: premium-briefing, format: audio}
-  - {domain: tech-ai-developer, product: premium-briefing, format: epub}
-  - {domain: tech-ai-developer, product: premium-briefing, format: audiobook}
   - {domain: tech-ai-developer, product: column, format: markdown}
-  - {domain: tech-ai-developer, product: column, format: html}
-  - {domain: tech-ai-developer, product: column, format: json}
-  - {domain: tech-ai-developer, product: column, format: agent}
-  - {domain: tech-ai-developer, product: column, format: audio}
-  - {domain: tech-ai-developer, product: column, format: epub}
-  - {domain: tech-ai-developer, product: column, format: audiobook}
   - {domain: tech-ai-developer, product: magazine-digest, format: markdown}
   - {domain: tech-ai-developer, product: magazine-digest, format: html}
-  - {domain: tech-ai-developer, product: magazine-digest, format: json}
-  - {domain: tech-ai-developer, product: magazine-digest, format: agent}
-  - {domain: tech-ai-developer, product: magazine-digest, format: audio}
-  - {domain: tech-ai-developer, product: magazine-digest, format: epub}
-  - {domain: tech-ai-developer, product: magazine-digest, format: audiobook}
   - {domain: tech-ai-developer, product: enterprise-briefing, format: markdown}
   - {domain: tech-ai-developer, product: enterprise-briefing, format: html}
-  - {domain: tech-ai-developer, product: enterprise-briefing, format: json}
-  - {domain: tech-ai-developer, product: enterprise-briefing, format: agent}
-  - {domain: tech-ai-developer, product: enterprise-briefing, format: audio}
-  - {domain: tech-ai-developer, product: enterprise-briefing, format: epub}
-  - {domain: tech-ai-developer, product: enterprise-briefing, format: audiobook}
-
 # Products whose generation requires an LLM key. When the LLM is unavailable,
 # an empty required cell for one of these is 未配置unconfigured — never 空gap.
 llm_gated_products:
