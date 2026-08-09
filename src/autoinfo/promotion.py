@@ -227,6 +227,8 @@ def _run_g4_check(
         model=f"{provider}/{model_name}",
         json_mode=json_mode,
         timeout=timeout,
+        api_key=(config.llm.api_key if config and config.llm.api_key else None),
+        base_url=(config.llm.base_url if config and config.llm.base_url else None),
     )
     return g4.check(
         _item_from_entry(entry, _draft_body(entry)),
