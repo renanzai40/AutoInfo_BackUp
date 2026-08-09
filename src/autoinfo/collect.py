@@ -28,7 +28,7 @@ from autoinfo.dedup import DedupChecker
 from autoinfo.models import CollectionResult, Item, KBEntry
 
 logger = logging.getLogger(__name__)
-from autoinfo.logging import get_pipeline_logger
+from autoinfo.logging import get_pipeline_logger  # noqa: E402
 
 plog = get_pipeline_logger("collect")
 
@@ -616,7 +616,7 @@ def _build_handler(source_config: SourceConfig) -> Any:
 
     raise ValueError(
         f"Unknown source type '{source_config.type}' for source "
-        f"'{source_config.name}'. Supported types: api (pubmed + generic), rss, web, email_imap, pdf."
+        f"'{source_config.name}'. Supported types: api (pubmed + generic), rss, web, email_imap, pdf."  # noqa: E501
     )
 
 
@@ -797,7 +797,7 @@ def _fetch_items(
         return [handler.to_item(item) for item in items]
 
     # -- HuggingFace / Kaggle handler path -----------------------------------
-    if hasattr(handler, "fetch") and getattr(handler, "source_type", "") in ("huggingface", "kaggle"):
+    if hasattr(handler, "fetch") and getattr(handler, "source_type", "") in ("huggingface", "kaggle"):  # noqa: E501
         search_query = topic if topic else ""
         items = handler.fetch(query=search_query, limit=limit)
         return [handler.to_item(item) for item in items]
