@@ -90,63 +90,123 @@ kb_tiers:
   - 02-Draft
   - 03-Wiki
 
-# Required cells — every product x format the codebase ACTUALLY supports
-# (capability-verified 2026-08-09; tutorial=md+agent, presentation=md+html+agent,
-# template products=md+html, digest/report=all 7). Cells outside this set are
-# not implementable and are NOT gaps.
+# Required cells — FULL end-user capability surface (8 products x 7 formats).
+# Each cell carries a capability annotation so the matrix can distinguish
+# 'real gap' (implemented but no evidence) from 'capability boundary'
+# (not implemented by design — annotated, not silently dropped).
 required_cells:
-  - {domain: medical-research, product: digest, format: markdown}
-  - {domain: medical-research, product: digest, format: html}
-  - {domain: medical-research, product: digest, format: json}
-  - {domain: medical-research, product: digest, format: agent}
-  - {domain: medical-research, product: digest, format: audio}
-  - {domain: medical-research, product: digest, format: epub}
-  - {domain: medical-research, product: digest, format: audiobook}
-  - {domain: medical-research, product: report, format: markdown}
-  - {domain: medical-research, product: report, format: html}
-  - {domain: medical-research, product: report, format: json}
-  - {domain: medical-research, product: report, format: agent}
-  - {domain: medical-research, product: report, format: audio}
-  - {domain: medical-research, product: report, format: epub}
-  - {domain: medical-research, product: report, format: audiobook}
-  - {domain: medical-research, product: tutorial, format: markdown}
-  - {domain: medical-research, product: tutorial, format: agent}
-  - {domain: medical-research, product: presentation, format: markdown}
-  - {domain: medical-research, product: presentation, format: html}
-  - {domain: medical-research, product: presentation, format: agent}
-  - {domain: medical-research, product: premium-briefing, format: markdown}
-  - {domain: medical-research, product: premium-briefing, format: html}
-  - {domain: medical-research, product: column, format: markdown}
-  - {domain: medical-research, product: magazine-digest, format: markdown}
-  - {domain: medical-research, product: magazine-digest, format: html}
-  - {domain: medical-research, product: enterprise-briefing, format: markdown}
-  - {domain: medical-research, product: enterprise-briefing, format: html}
-  - {domain: tech-ai-developer, product: digest, format: markdown}
-  - {domain: tech-ai-developer, product: digest, format: html}
-  - {domain: tech-ai-developer, product: digest, format: json}
-  - {domain: tech-ai-developer, product: digest, format: agent}
-  - {domain: tech-ai-developer, product: digest, format: audio}
-  - {domain: tech-ai-developer, product: digest, format: epub}
-  - {domain: tech-ai-developer, product: digest, format: audiobook}
-  - {domain: tech-ai-developer, product: report, format: markdown}
-  - {domain: tech-ai-developer, product: report, format: html}
-  - {domain: tech-ai-developer, product: report, format: json}
-  - {domain: tech-ai-developer, product: report, format: agent}
-  - {domain: tech-ai-developer, product: report, format: audio}
-  - {domain: tech-ai-developer, product: report, format: epub}
-  - {domain: tech-ai-developer, product: report, format: audiobook}
-  - {domain: tech-ai-developer, product: tutorial, format: markdown}
-  - {domain: tech-ai-developer, product: tutorial, format: agent}
-  - {domain: tech-ai-developer, product: presentation, format: markdown}
-  - {domain: tech-ai-developer, product: presentation, format: html}
-  - {domain: tech-ai-developer, product: presentation, format: agent}
-  - {domain: tech-ai-developer, product: premium-briefing, format: markdown}
-  - {domain: tech-ai-developer, product: premium-briefing, format: html}
-  - {domain: tech-ai-developer, product: column, format: markdown}
-  - {domain: tech-ai-developer, product: magazine-digest, format: markdown}
-  - {domain: tech-ai-developer, product: magazine-digest, format: html}
-  - {domain: tech-ai-developer, product: enterprise-briefing, format: markdown}
-  - {domain: tech-ai-developer, product: enterprise-briefing, format: html}
+  - {domain: medical-research, product: digest, format: markdown, capability: implemented}
+  - {domain: medical-research, product: digest, format: html, capability: implemented}
+  - {domain: medical-research, product: digest, format: json, capability: implemented}
+  - {domain: medical-research, product: digest, format: agent, capability: implemented}
+  - {domain: medical-research, product: digest, format: audio, capability: implemented}
+  - {domain: medical-research, product: digest, format: epub, capability: implemented}
+  - {domain: medical-research, product: digest, format: audiobook, capability: implemented}
+  - {domain: medical-research, product: report, format: markdown, capability: implemented}
+  - {domain: medical-research, product: report, format: html, capability: implemented}
+  - {domain: medical-research, product: report, format: json, capability: implemented}
+  - {domain: medical-research, product: report, format: agent, capability: implemented}
+  - {domain: medical-research, product: report, format: audio, capability: implemented}
+  - {domain: medical-research, product: report, format: epub, capability: implemented}
+  - {domain: medical-research, product: report, format: audiobook, capability: implemented}
+  - {domain: medical-research, product: tutorial, format: markdown, capability: implemented}
+  - {domain: medical-research, product: tutorial, format: html, capability: not-implemented}
+  - {domain: medical-research, product: tutorial, format: json, capability: not-implemented}
+  - {domain: medical-research, product: tutorial, format: agent, capability: implemented}
+  - {domain: medical-research, product: tutorial, format: audio, capability: not-implemented}
+  - {domain: medical-research, product: tutorial, format: epub, capability: not-implemented}
+  - {domain: medical-research, product: tutorial, format: audiobook, capability: not-implemented}
+  - {domain: medical-research, product: presentation, format: markdown, capability: implemented}
+  - {domain: medical-research, product: presentation, format: html, capability: implemented}
+  - {domain: medical-research, product: presentation, format: json, capability: not-implemented}
+  - {domain: medical-research, product: presentation, format: agent, capability: implemented}
+  - {domain: medical-research, product: presentation, format: audio, capability: not-implemented}
+  - {domain: medical-research, product: presentation, format: epub, capability: not-implemented}
+  - {domain: medical-research, product: presentation, format: audiobook, capability: not-implemented}
+  - {domain: medical-research, product: premium-briefing, format: markdown, capability: implemented}
+  - {domain: medical-research, product: premium-briefing, format: html, capability: implemented}
+  - {domain: medical-research, product: premium-briefing, format: json, capability: not-implemented}
+  - {domain: medical-research, product: premium-briefing, format: agent, capability: not-implemented}
+  - {domain: medical-research, product: premium-briefing, format: audio, capability: not-implemented}
+  - {domain: medical-research, product: premium-briefing, format: epub, capability: not-implemented}
+  - {domain: medical-research, product: premium-briefing, format: audiobook, capability: not-implemented}
+  - {domain: medical-research, product: column, format: markdown, capability: implemented}
+  - {domain: medical-research, product: column, format: html, capability: implemented}
+  - {domain: medical-research, product: column, format: json, capability: not-implemented}
+  - {domain: medical-research, product: column, format: agent, capability: not-implemented}
+  - {domain: medical-research, product: column, format: audio, capability: not-implemented}
+  - {domain: medical-research, product: column, format: epub, capability: not-implemented}
+  - {domain: medical-research, product: column, format: audiobook, capability: not-implemented}
+  - {domain: medical-research, product: magazine-digest, format: markdown, capability: implemented}
+  - {domain: medical-research, product: magazine-digest, format: html, capability: implemented}
+  - {domain: medical-research, product: magazine-digest, format: json, capability: not-implemented}
+  - {domain: medical-research, product: magazine-digest, format: agent, capability: not-implemented}
+  - {domain: medical-research, product: magazine-digest, format: audio, capability: not-implemented}
+  - {domain: medical-research, product: magazine-digest, format: epub, capability: not-implemented}
+  - {domain: medical-research, product: magazine-digest, format: audiobook, capability: not-implemented}
+  - {domain: medical-research, product: enterprise-briefing, format: markdown, capability: implemented}
+  - {domain: medical-research, product: enterprise-briefing, format: html, capability: implemented}
+  - {domain: medical-research, product: enterprise-briefing, format: json, capability: not-implemented}
+  - {domain: medical-research, product: enterprise-briefing, format: agent, capability: not-implemented}
+  - {domain: medical-research, product: enterprise-briefing, format: audio, capability: not-implemented}
+  - {domain: medical-research, product: enterprise-briefing, format: epub, capability: not-implemented}
+  - {domain: medical-research, product: enterprise-briefing, format: audiobook, capability: not-implemented}
+  - {domain: tech-ai-developer, product: digest, format: markdown, capability: implemented}
+  - {domain: tech-ai-developer, product: digest, format: html, capability: implemented}
+  - {domain: tech-ai-developer, product: digest, format: json, capability: implemented}
+  - {domain: tech-ai-developer, product: digest, format: agent, capability: implemented}
+  - {domain: tech-ai-developer, product: digest, format: audio, capability: implemented}
+  - {domain: tech-ai-developer, product: digest, format: epub, capability: implemented}
+  - {domain: tech-ai-developer, product: digest, format: audiobook, capability: implemented}
+  - {domain: tech-ai-developer, product: report, format: markdown, capability: implemented}
+  - {domain: tech-ai-developer, product: report, format: html, capability: implemented}
+  - {domain: tech-ai-developer, product: report, format: json, capability: implemented}
+  - {domain: tech-ai-developer, product: report, format: agent, capability: implemented}
+  - {domain: tech-ai-developer, product: report, format: audio, capability: implemented}
+  - {domain: tech-ai-developer, product: report, format: epub, capability: implemented}
+  - {domain: tech-ai-developer, product: report, format: audiobook, capability: implemented}
+  - {domain: tech-ai-developer, product: tutorial, format: markdown, capability: implemented}
+  - {domain: tech-ai-developer, product: tutorial, format: html, capability: not-implemented}
+  - {domain: tech-ai-developer, product: tutorial, format: json, capability: not-implemented}
+  - {domain: tech-ai-developer, product: tutorial, format: agent, capability: implemented}
+  - {domain: tech-ai-developer, product: tutorial, format: audio, capability: not-implemented}
+  - {domain: tech-ai-developer, product: tutorial, format: epub, capability: not-implemented}
+  - {domain: tech-ai-developer, product: tutorial, format: audiobook, capability: not-implemented}
+  - {domain: tech-ai-developer, product: presentation, format: markdown, capability: implemented}
+  - {domain: tech-ai-developer, product: presentation, format: html, capability: implemented}
+  - {domain: tech-ai-developer, product: presentation, format: json, capability: not-implemented}
+  - {domain: tech-ai-developer, product: presentation, format: agent, capability: implemented}
+  - {domain: tech-ai-developer, product: presentation, format: audio, capability: not-implemented}
+  - {domain: tech-ai-developer, product: presentation, format: epub, capability: not-implemented}
+  - {domain: tech-ai-developer, product: presentation, format: audiobook, capability: not-implemented}
+  - {domain: tech-ai-developer, product: premium-briefing, format: markdown, capability: implemented}
+  - {domain: tech-ai-developer, product: premium-briefing, format: html, capability: implemented}
+  - {domain: tech-ai-developer, product: premium-briefing, format: json, capability: not-implemented}
+  - {domain: tech-ai-developer, product: premium-briefing, format: agent, capability: not-implemented}
+  - {domain: tech-ai-developer, product: premium-briefing, format: audio, capability: not-implemented}
+  - {domain: tech-ai-developer, product: premium-briefing, format: epub, capability: not-implemented}
+  - {domain: tech-ai-developer, product: premium-briefing, format: audiobook, capability: not-implemented}
+  - {domain: tech-ai-developer, product: column, format: markdown, capability: implemented}
+  - {domain: tech-ai-developer, product: column, format: html, capability: implemented}
+  - {domain: tech-ai-developer, product: column, format: json, capability: not-implemented}
+  - {domain: tech-ai-developer, product: column, format: agent, capability: not-implemented}
+  - {domain: tech-ai-developer, product: column, format: audio, capability: not-implemented}
+  - {domain: tech-ai-developer, product: column, format: epub, capability: not-implemented}
+  - {domain: tech-ai-developer, product: column, format: audiobook, capability: not-implemented}
+  - {domain: tech-ai-developer, product: magazine-digest, format: markdown, capability: implemented}
+  - {domain: tech-ai-developer, product: magazine-digest, format: html, capability: implemented}
+  - {domain: tech-ai-developer, product: magazine-digest, format: json, capability: not-implemented}
+  - {domain: tech-ai-developer, product: magazine-digest, format: agent, capability: not-implemented}
+  - {domain: tech-ai-developer, product: magazine-digest, format: audio, capability: not-implemented}
+  - {domain: tech-ai-developer, product: magazine-digest, format: epub, capability: not-implemented}
+  - {domain: tech-ai-developer, product: magazine-digest, format: audiobook, capability: not-implemented}
+  - {domain: tech-ai-developer, product: enterprise-briefing, format: markdown, capability: implemented}
+  - {domain: tech-ai-developer, product: enterprise-briefing, format: html, capability: implemented}
+  - {domain: tech-ai-developer, product: enterprise-briefing, format: json, capability: not-implemented}
+  - {domain: tech-ai-developer, product: enterprise-briefing, format: agent, capability: not-implemented}
+  - {domain: tech-ai-developer, product: enterprise-briefing, format: audio, capability: not-implemented}
+  - {domain: tech-ai-developer, product: enterprise-briefing, format: epub, capability: not-implemented}
+  - {domain: tech-ai-developer, product: enterprise-briefing, format: audiobook, capability: not-implemented}
 # Products whose generation requires an LLM key. When the LLM is unavailable,
 # an empty required cell for one of these is 未配置unconfigured — never 空gap.
 llm_gated_products:
