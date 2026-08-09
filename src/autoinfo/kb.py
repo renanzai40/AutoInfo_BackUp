@@ -37,7 +37,7 @@ from autoinfo.schema import check_schema
 
 logger = logging.getLogger(__name__)
 
-from enum import Enum
+from enum import Enum  # noqa: E402
 
 
 class RelationType(str, Enum):
@@ -660,7 +660,7 @@ class SQLiteIndex:
         list[dict]
             Each dict contains the columns from the ``entries`` table.
         """
-        return self.list_entries(domain=domain, tier=tier, limit=limit, offset=offset, user_id=user_id)
+        return self.list_entries(domain=domain, tier=tier, limit=limit, offset=offset, user_id=user_id)  # noqa: E501
 
     def count_entries_by_tier(self, domain: str, tier: str) -> int:
         """Return the number of entries in *domain* for *tier*.
@@ -1370,20 +1370,20 @@ class SQLiteIndex:
                 (date_from,),
             ).fetchone()
             (dup_items,) = conn.execute(
-                "SELECT COUNT(*) FROM entries WHERE collected_at >= ? AND dedup_status = 'duplicate'",
+                "SELECT COUNT(*) FROM entries WHERE collected_at >= ? AND dedup_status = 'duplicate'",  # noqa: E501
                 (date_from,),
             ).fetchone()
 
             # Per-domain breakdown
             domain_rows = conn.execute(
-                "SELECT domain, COUNT(*) as cnt FROM entries WHERE collected_at >= ? GROUP BY domain ORDER BY cnt DESC",
+                "SELECT domain, COUNT(*) as cnt FROM entries WHERE collected_at >= ? GROUP BY domain ORDER BY cnt DESC",  # noqa: E501
                 (date_from,),
             ).fetchall()
             domains = {r["domain"]: r["cnt"] for r in domain_rows}
 
             # Per-source breakdown
             src_rows = conn.execute(
-                "SELECT source_platform, COUNT(*) as cnt FROM entries WHERE collected_at >= ? GROUP BY source_platform ORDER BY cnt DESC",
+                "SELECT source_platform, COUNT(*) as cnt FROM entries WHERE collected_at >= ? GROUP BY source_platform ORDER BY cnt DESC",  # noqa: E501
                 (date_from,),
             ).fetchall()
             sources = {r["source_platform"]: r["cnt"] for r in src_rows if r["source_platform"]}
@@ -3015,7 +3015,7 @@ class KBStore:
         file_path = file_dir / file_name
 
         merged_body_parts: list[str] = []
-        for i, re in enumerate(raw_entries):
+        for i, re in enumerate(raw_entries):  # noqa: F402
             merged_body_parts.append(
                 f"## Source {i + 1}: {re['title']}\n\n"
             )
@@ -4095,7 +4095,8 @@ class KBStore:
     # ------------------------------------------------------------------
 
     def rebuild_wiki_links(self) -> dict[str, Any]:
-        """Scan all KB entries for ``[[wiki link]]`` syntax and update ``## Linked References`` sections.
+        """Scan all KB entries for ``[[wiki link]]`` syntax and
+        update the ``## Linked References`` sections.
 
         Two-pass: (1) build title→entry map + collect all ``[[Title]]`` references;
         (2) write/replace sections per entry (skipping 03-Wiki — append-only).
@@ -4106,8 +4107,8 @@ class KBStore:
         """
         from collections import defaultdict
 
-        WIKI_LINK_RE = re.compile(r"\[\[([^\]]+)\]\]")
-        SECTION_PATTERN = re.compile(
+        WIKI_LINK_RE = re.compile(r"\[\[([^\]]+)\]\]")  # noqa: N806
+        SECTION_PATTERN = re.compile(  # noqa: N806
             r"\n## Linked References\n.*?(?=\n## |\Z)", re.DOTALL
         )
 
