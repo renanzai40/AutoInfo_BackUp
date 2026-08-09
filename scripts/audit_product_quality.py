@@ -1,83 +1,72 @@
 #!/usr/bin/env python3
-"""Content-quality audit of processed products (end-user view).
+"""Refined content-quality audit: focus on EXECUTIVE SUMMARY quality (the
+end-user reads first), not stray section titles.
 
-For every persisted product under outputs/<domain>/, classify content quality:
-- OK: has substantive content (non-placeholder, non-empty, real substance)
-- EMPTY: placeholder/empty-state markers (_No objectives defined._ etc.)
-- VAGUE: content exists but is generic boilerplate (no domain-specific substance)
-- NONPRODUCT: not a product file (matrix-report.md etc.)
+For each md product, judge:
+- OK: executive summary (first content section after metadata) has substantive
+      domain-specific content (not boilerplate/placeholder/self-referential)
+- EMPTY: no content / placeholder markers anywhere
+- VAGUE: executive summary is boilerplate (this report covers / article titled / no content)
+- NONPRODUCT: matrix/test artifacts
 
 Usage: python3 scripts/audit_product_quality.py
 """
 import re
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUTS = ROOT / "outputs"
 
-# Placeholder markers that indicate an empty-state product
-PLACEHOLDER_MARKERS = [
-    "_No objectives defined._",
-    "_No exercises provided._",
-    "_No entries found",
-    "_No content",
-    "No content provided",
-    "no content was provided",
-    "has no accessible content",
-    "lacks accessible content",
-    "but no content was provided",
+PLACEHOLDER = [
+    "_No objectives defined._", "_No exercises provided._", "_No entries found",
+    "No content provided", "no content was provided", "has no accessible content",
+    "were submitted without substantive content", "no findings or analyses were available",
     "is empty, so no detailed summary",
-    "were submitted without substantive content",
-    "no findings or analyses were available",
+]
+VAGUE = [
+    "this report covers", "the article titled", "the provided content is empty",
+    "appears to discuss", "the instructions emphasize", "this article is a directive",
+    "this document provides instructions", "all .* entries included in this report",
+    "the report's content and implications remain unspecified",
 ]
 
-# Vague boilerplate phrases (LLM wrote meta-instructions instead of analysis)
-VAGUE_MARKERS = [
-    "the instructions emphasize",
-    "this article is a directive",
-    "this document provides instructions",
-    "the article titled",
-    "this report covers",
-    "distills .* entries into a coherent picture",
-    "all .* entries included in this report",
-    "the report's content and implications remain unspecified",
-    "appears to discuss",
-    "no content was provided for analysis",
-    "the provided content is empty",
-]
+
+def _first_summary(text: str) -> str:
+    """Return text up to the first '## Executive Summary' section content."""
+    m = re.search(r"## (?:Executive Summary|The Big Idea)\s*\n(.*?)(?=\n## |\Z)", text, re.S)
+    if m:
+        return m.group(1)
+    return text[:1500]
 
 
 def _classify(path: Path, text: str) -> tuple[str, str]:
-    """Return (status, note)."""
     name = path.name
     if name.startswith("matrix-report") or name == "report.md":
-        return "NONPRODUCT", "matrix/test artifact, not a product"
+        return "NONPRODUCT", "matrix/test artifact"
     if not text.strip():
-        return "EMPTY", "zero-length file"
-    # EMPTY: placeholder markers
-    for m in PLACEHOLDER_MARKERS:
+        return "EMPTY", "zero-length"
+    for m in PLACEHOLDER:
         if m.lower() in text.lower():
-            return "EMPTY", f"placeholder: {m[:40]}"
-    # VAGUE: boilerplate
-    for m in VAGUE_MARKERS:
-        if re.search(m, text, re.IGNORECASE):
-            return "VAGUE", f"boilerplate: {m[:40]}"
+            return "EMPTY", f"placeholder: {m[:36]}"
+    summary = _first_summary(text)
+    if not summary.strip():
+        return "EMPTY", "no summary section"
+    for m in VAGUE:
+        if re.search(m, summary, re.I):
+            return "VAGUE", f"boilerplate in summary: {m[:36]}"
     return "OK", ""
 
 
 def main() -> None:
-    by_status: dict[str, list[tuple[Path, str]]] = {}
+    by: dict[str, list[tuple[Path, str]]] = {}
     for p in OUTPUTS.rglob("*.md"):
-        text = p.read_text(encoding="utf-8", errors="replace")
-        status, note = _classify(p, text)
-        by_status.setdefault(status, []).append((p, note))
-
-    for status in ("OK", "EMPTY", "VAGUE", "NONPRODUCT"):
-        items = by_status.get(status, [])
-        print(f"\n=== {status}: {len(items)} ===")
-        for p, note in sorted(items):
-            print(f"  {p.relative_to(OUTPUTS)} | {note}")
+        status, note = _classify(p, p.read_text(encoding="utf-8", errors="replace"))
+        by.setdefault(status, []).append((p, note))
+    for st in ("OK", "VAGUE", "EMPTY", "NONPRODUCT"):
+        items = by.get(st, [])
+        print(f"\n=== {st}: {len(items)} ===")
+        for p, n in sorted(items):
+            print(f"  {p.relative_to(OUTPUTS)} | {n}")
 
 
 if __name__ == "__main__":
