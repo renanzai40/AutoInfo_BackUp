@@ -330,9 +330,13 @@ def _build_product_output(file_path: Path, bucket: str) -> dict[str, Any]:
             entries = _json_entries(parsed)
             if isinstance(parsed, dict):
                 sections = {
-                    "key_findings": _section_value(parsed, _SECTION_SOURCE_KEYS["key_findings"]),
+                    "key_findings": _section_value(
+                        parsed, _SECTION_SOURCE_KEYS["key_findings"]
+                    ),
                     "summary": _section_value(parsed, _SECTION_SOURCE_KEYS["summary"]),
-                    "recommendations": _section_value(parsed, _SECTION_SOURCE_KEYS["recommendations"]),
+                    "recommendations": _section_value(
+                        parsed, _SECTION_SOURCE_KEYS["recommendations"]
+                    ),
                 }
     key_findings = sections.get("key_findings")
     summary = sections.get("summary")
