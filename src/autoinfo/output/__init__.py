@@ -4121,10 +4121,35 @@ def _generate_executive_summary(
     Returns a dict ``{"executive_summary": str, "key_findings": list[str],
     "recommendations": list[str]}`` — never raises.
     """
-    themes_summary = "\n".join(
-        f"- {g['theme']}: {len(g['entries'])} entries"
-        for g in groupings
-    )
+    # Build a compact detail block of ACTUAL entry content so the LLM has
+    # concrete material to analyze. Theme-count summaries alone produce
+    # boilerplate / meta-narrative prose, so feed the highest-relevance
+    # entries (capped to keep the prompt short) with their titles and summary
+    # excerpts.
+    _MAX_DETAIL_ENTRIES = 40
+    _MAX_ENTRY_SUMMARY_CHARS = 120
+
+    ranked = sorted(
+        (e for g in groupings for e in g["entries"]),
+        key=lambda e: float(e.get("relevance_score") or 0.0),
+        reverse=True,
+    )[:_MAX_DETAIL_ENTRIES]
+    picked_ids = {id(e) for e in ranked}
+
+    detail_lines: list[str] = []
+    for g in groupings:
+        picked = [e for e in g["entries"] if id(e) in picked_ids]
+        for e in picked:
+            detail_lines.append(
+                f"- [{g['theme']}] {e.get('title', '')}: "
+                f"{(e.get('summary') or '')[: _MAX_ENTRY_SUMMARY_CHARS]}"
+            )
+        if len(picked) < len(g["entries"]):
+            detail_lines.append(
+                f"- [{g['theme']}] (+{len(g['entries']) - len(picked)} more "
+                "entries in this theme)"
+            )
+    entries_detail = "\n".join(detail_lines) or "(no entries)"
 
     cross_domain_prefix = ""
     if domains and len(domains) >= 2:
@@ -4136,10 +4161,12 @@ def _generate_executive_summary(
 
     prompt = (
         cross_domain_prefix +
-        "Write a report synthesis covering "
-        f"{len(entries)} knowledge base entries across "
-        f"the following themes:\n\n{themes_summary}\n\n"
-        "Focus on the key findings and overall significance. "
+        "Write a report synthesis analyzing the following knowledge base "
+        "entries (grouped by theme). Use the actual content: cite specific "
+        "findings, studies, and data points from the entries. Do NOT describe "
+        "the report structure or the writing instructions — write the analysis "
+        "itself.\n\n"
+        f"Themes and entries:\n{entries_detail}\n\n"
         "Return plain Markdown with this exact structure:\n\n"
         "## Executive Summary\n"
         "<2-3 paragraphs>\n\n"
