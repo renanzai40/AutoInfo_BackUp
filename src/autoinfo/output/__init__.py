@@ -3021,6 +3021,8 @@ class ReportData:
     domain: str
     collection_id: str = ""
     executive_summary: str = ""
+    key_findings: list[str] = field(default_factory=list)
+    recommendations: list[str] = field(default_factory=list)
     sections: list[ReportSection] = field(default_factory=list)
     references: list[dict[str, Any]] = field(default_factory=list)
     appendices: list[dict[str, Any]] = field(default_factory=list)
@@ -3304,11 +3306,26 @@ def generate_report(
             )
 
     # -- Generate executive summary via LLM --------------------------------
-    executive_summary = _generate_executive_summary(
+    summary_result = _generate_executive_summary(
         extractor, entries, groupings, effective_instructions,
         target_audience=target_audience,
         domains=report_domains if is_cross_domain else None,
     )
+    # The synthesis returns a dict of ``{executive_summary, key_findings,
+    # recommendations}``.  Accept a bare string for backward compatibility
+    # (legacy callers / direct mocks) — treated as summary only.
+    if isinstance(summary_result, dict):
+        executive_summary = summary_result.get("executive_summary", "") or ""
+        key_findings = [
+            str(f) for f in (summary_result.get("key_findings") or [])
+        ]
+        recommendations = [
+            str(r) for r in (summary_result.get("recommendations") or [])
+        ]
+    else:
+        executive_summary = str(summary_result or "")
+        key_findings = []
+        recommendations = []
 
     # -- Build report data -------------------------------------------------
     sections = [
@@ -3338,6 +3355,8 @@ def generate_report(
         domain=report_title_domain,
         collection_id=collection_id or "",
         executive_summary=executive_summary,
+        key_findings=key_findings,
+        recommendations=recommendations,
         sections=sections,
         references=references,
     )
@@ -3346,8 +3365,8 @@ def generate_report(
     report_context: dict[str, Any] = {
         "llm_synthesis": {
             "executive_summary": report_data.executive_summary,
-            "key_findings": [s.title for s in report_data.sections],
-            "recommendations": [],
+            "key_findings": report_data.key_findings,
+            "recommendations": report_data.recommendations,
         },
     }
 
@@ -3427,12 +3446,9 @@ def generate_report(
             "generated_at": datetime.now(timezone.utc).isoformat(),
             "llm_synthesis": {
                 "executive_summary": report_data.executive_summary,
-                "key_findings": [
-                    {"topic": s.title, "detail": s.content}
-                    for s in report_data.sections
-                ],
+                "key_findings": report_data.key_findings,
                 "trends": [],
-                "recommendations": [],
+                "recommendations": report_data.recommendations,
             },
             "target_audience": target_audience,
         }
@@ -3572,7 +3588,7 @@ _DEFAULT_DOMAIN_GUIDANCE = (
 
 # Entries are grouped in batches of this size so the LLM prompt stays small
 # enough to return reliable JSON even for very long entry lists.
-_GROUPING_BATCH_SIZE = 20
+_GROUPING_BATCH_SIZE = 8
 
 
 def _group_by_theme(
@@ -3749,10 +3765,6 @@ def _llm_group_batch(
         )
     entry_summaries = "\n".join(entry_summaries_parts)
 
-    domain_guidance = _DOMAIN_THEME_GUIDANCE.get(
-        domain, _DEFAULT_DOMAIN_GUIDANCE
-    )
-
     cross_domain_instruction = ""
     if domains and len(domains) >= 2:
         cross_domain_instruction = (
@@ -3765,26 +3777,10 @@ def _llm_group_batch(
 
     prompt = (
         cross_domain_instruction +
-        "Group the following knowledge base entries into 3\u20135 coherent "
-        "themes. Each theme must represent a distinct topic area.\n\n"
-        "IMPORTANT: Do NOT group all entries under a single catch-all theme "
-        "like \"General\", \"Additional\", or \"Miscellaneous\". If you "
-        "cannot immediately distinguish themes, suggest reasonable "
-        "topic-based splits based on the entries\u2019 content. Each entry "
-        "should ideally go into its most specific thematic group.\n\n"
-        f"Domain context: {domain_guidance}. Consider themes relevant to "
-        "this domain when grouping.\n\n"
-        "Example of good grouping:\n"
-        "  Entries: [\"COVID vaccine efficacy in elderly\", "
-        "\"mRNA platform advances\", \"FDA fast-track approval process\"]\n"
-        "  Good themes: \"Vaccine Clinical Trials\", "
-        "\"mRNA Technology Advances\", \"Drug Regulation\"\n"
-        "  Bad (collapsed): \"General Medical Topics\"\n\n"
-        "Return a JSON object with a single key 'groups' whose value is "
-        "an array of objects. Each object must have:\n"
-        "  - 'theme': short theme name (2\u20135 words)\n"
-        "  - 'description': 2\u20133 sentence description of this theme\n"
-        "  - 'entry_ids': array of entry IDs belonging to this theme\n\n"
+        "Group the following knowledge base entries into 3\u20135 themes. "
+        "Each entry goes into exactly one theme. Do NOT use catch-all names "
+        "like \"General\" or \"Additional\".\n\n"
+        'Return JSON: {"groups": [{"theme": str, "entry_ids": [str]}]}\n\n'
         f"Entries:\n{entry_summaries}"
     )
 
@@ -3809,9 +3805,8 @@ def _llm_group_batch(
             "2\u20133 DISTINCT themes. Do NOT use catch-all themes like "
             "\"General\", \"Miscellaneous\", or \"Other\". Each entry must "
             "be assigned to the most specific theme that describes its "
-            "content. "
-            f"Domain context: {domain_guidance}. "
-            "Return a JSON object with a single key 'groups' as before.\n\n"
+            "content.\n\n"
+            'Return JSON: {"groups": [{"theme": str, "entry_ids": [str]}]}\n\n'
             f"Entries:\n{entry_summaries}"
         )
         try:
@@ -4113,10 +4108,18 @@ def _generate_executive_summary(
     custom_instructions: str = "",
     target_audience: str = "",
     domains: list[str] | None = None,
-) -> str:
-    """Generate an executive summary via LLM.
+) -> dict[str, Any]:
+    """Generate the report synthesis (summary + findings + recommendations).
 
-    Falls back to a simple bullet-list summary when the LLM call fails.
+    Asks the LLM for flat Markdown with ``## Executive Summary`` /
+    ``## Key Findings`` / ``## Recommendations`` headings — the default
+    model emits markdown far more reliably than a nested JSON schema —
+    and parses it by heading (see :func:`_parse_report_markdown`).
+
+    Falls back to a legacy single-string JSON summary via the extractor,
+    and finally to a bullet-list summary, so the report is never empty.
+    Returns a dict ``{"executive_summary": str, "key_findings": list[str],
+    "recommendations": list[str]}`` — never raises.
     """
     themes_summary = "\n".join(
         f"- {g['theme']}: {len(g['entries'])} entries"
@@ -4133,12 +4136,21 @@ def _generate_executive_summary(
 
     prompt = (
         cross_domain_prefix +
-        "Write a concise executive summary (3\u20135 paragraphs) for a "
-        f"report covering {len(entries)} knowledge base entries across "
+        "Write a report synthesis covering "
+        f"{len(entries)} knowledge base entries across "
         f"the following themes:\n\n{themes_summary}\n\n"
         "Focus on the key findings and overall significance. "
-        "Return a JSON object with a single key 'executive_summary' "
-        "whose value is the summary text."
+        "Return plain Markdown with this exact structure:\n\n"
+        "## Executive Summary\n"
+        "<2-3 paragraphs>\n\n"
+        "## Key Findings\n"
+        "- <finding 1>\n"
+        "- <finding 2>\n\n"
+        "## Recommendations\n"
+        "- <recommendation 1>\n"
+        "- <recommendation 2>\n\n"
+        "Use exactly the heading names above. Do NOT wrap your answer in a "
+        "code fence or emit JSON."
     )
     if custom_instructions:
         prompt += f"\n\nAdditional instructions: {custom_instructions}"
@@ -4148,10 +4160,20 @@ def _generate_executive_summary(
     if audience_prompt:
         prompt += f"\n\n{audience_prompt}"
 
+    # Primary path: flat markdown synthesis (reliable with the default model).
+    parsed = _parse_report_markdown(_call_llm_for_report_synthesis(prompt))
+    if parsed.get("executive_summary"):
+        return parsed
+
+    # Legacy path: single-string JSON summary via the extractor.
     try:
         raw = _llm_json_extract(extractor, prompt, "executive_summary")
         if raw and isinstance(raw, str) and raw.strip():
-            return raw.strip()
+            return {
+                "executive_summary": raw.strip(),
+                "key_findings": [],
+                "recommendations": [],
+            }
     except Exception as exc:
         logger.warning("Executive summary via LLM failed: %s", exc)
 
@@ -4160,10 +4182,114 @@ def _generate_executive_summary(
         f"- **{g['theme']}**: {len(g['entries'])} entry(ies)"
         for g in groupings
     )
-    return (
-        f"This report covers {len(entries)} knowledge base entries "
-        f"grouped into {len(groupings)} themes:\n\n{theme_bullets}"
-    )
+    return {
+        "executive_summary": (
+            f"This report covers {len(entries)} knowledge base entries "
+            f"grouped into {len(groupings)} themes:\n\n{theme_bullets}"
+        ),
+        "key_findings": [],
+        "recommendations": [],
+    }
+
+
+def _call_llm_for_report_synthesis(prompt: str) -> str:
+    """Call the configured LLM to synthesize report Markdown.
+
+    Uses the shared :func:`call_with_fallback` helper in plain-text mode
+    (no JSON mode) — the default model emits the flat ``## Executive
+    Summary`` / ``## Key Findings`` / ``## Recommendations`` structure
+    reliably while a nested JSON schema frequently comes back empty.
+    Returns the raw Markdown text (possibly empty) on success, ``""`` on
+    failure.
+    """
+    config_path = get_config_path()
+    if config_path and config_path.is_file():
+        try:
+            config = load_config(config_path)
+        except Exception:
+            config = Config()
+    else:
+        config = Config()
+
+    model = config.llm.resolve_model() or "openrouter/deepseek/deepseek-chat"
+    try:
+        response = call_with_fallback(
+            model=model,
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a report synthesis assistant. Given knowledge "
+                        "base entries and themes, write a concise executive "
+                        "summary, key findings, and recommendations. Respond "
+                        "with plain Markdown only — no JSON, no code fences."
+                    ),
+                },
+                {"role": "user", "content": prompt},
+            ],
+            json_mode=False,
+            max_tokens=4000,
+            temperature=0.1,
+            api_key=config.llm.api_key or None,
+            base_url=config.llm.base_url or None,
+        )
+    except Exception as exc:
+        logger.warning("Report synthesis via LLM failed: %s", exc)
+        return ""
+    content: str = response.choices[0].message.content or ""
+    return content.strip()
+
+
+def _parse_report_markdown(content: str) -> dict[str, Any]:
+    """Parse a Markdown report synthesis into the report context schema.
+
+    Handles the structure requested by the report-synthesis prompt:
+    ``## Executive Summary`` (paragraphs), ``## Key Findings`` (bullets)
+    and ``## Recommendations`` (bullets).  Returns ``{}`` when *content*
+    is empty or carries no executive summary.
+    """
+    if not content:
+        return {}
+    result: dict[str, Any] = {
+        "executive_summary": "",
+        "key_findings": [],
+        "recommendations": [],
+    }
+    current_section = ""
+    summary_lines: list[str] = []
+
+    def is_bullet(text: str) -> bool:
+        return bool(re.match(r"^(?:[-*]|\d+[.)])\s+\S", text))
+
+    def bullet_text(text: str) -> str:
+        return re.sub(r"^(?:[-*]|\d+[.)])\s+", "", text).strip()
+
+    for raw in content.splitlines():
+        line = raw.rstrip()
+        stripped = line.strip()
+        if stripped.startswith("## "):
+            current_section = stripped.lstrip("#").strip().lower()
+            continue
+        if not current_section:
+            continue
+        if current_section in ("executive summary", "summary", "overview"):
+            if stripped and not line.startswith(("---", "***")):
+                summary_lines.append(stripped)
+        elif current_section in ("key findings", "findings", "main findings"):
+            if is_bullet(stripped):
+                item = bullet_text(stripped)
+                if item:
+                    result["key_findings"].append(item)
+        elif current_section in ("recommendations", "next steps", "action items"):
+            if is_bullet(stripped):
+                item = bullet_text(stripped)
+                if item:
+                    result["recommendations"].append(item)
+
+    result["executive_summary"] = "\n\n".join(summary_lines).strip()
+    if not result["executive_summary"]:
+        return {}
+    return result
 
 
 def _llm_json_extract(
@@ -4206,6 +4332,8 @@ def _report_data_to_dict(
         "domain": report_data.domain,
         "collection_id": report_data.collection_id,
         "executive_summary": report_data.executive_summary,
+        "key_findings": report_data.key_findings,
+        "recommendations": report_data.recommendations,
         "source_tier_badge": source_tier_badge,
         "sections": [
             {
@@ -4268,6 +4396,8 @@ def _render_report_json(report_data: ReportData, period: str = "weekly") -> str:
     output = {
         "title": report_data.title,
         "summary": report_data.executive_summary,
+        "key_findings": report_data.key_findings,
+        "recommendations": report_data.recommendations,
         "entries": entries_list,
         "metadata": {
             "generated_at": report_data.generated_at,
@@ -4328,6 +4458,8 @@ def _render_report_template(report_data: ReportData, source_tier_badge: bool = T
         domain=report_data.domain,
         collection_id=report_data.collection_id,
         executive_summary=report_data.executive_summary,
+        key_findings=report_data.key_findings,
+        recommendations=report_data.recommendations,
         source_tier_badge=source_tier_badge,
         sections=[
             {

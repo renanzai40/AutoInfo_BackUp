@@ -192,6 +192,10 @@ class TestGenerateReport:
             patch.object(
                 _get_llm_extractor_class(), "extract", mock_extract
             ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
+            ),
         ):
             mock_store = MagicMock()
             mock_store.list_entries.return_value = sample_entries
@@ -247,6 +251,10 @@ class TestGenerateReport:
             patch.object(
                 _get_llm_extractor_class(), "extract", mock_extract
             ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
+            ),
         ):
             mock_store = MagicMock()
             mock_store.list_entries.return_value = sample_entries
@@ -283,6 +291,10 @@ class TestGenerateReport:
             patch.object(
                 _get_llm_extractor_class(), "extract", mock_extract
             ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
+            ),
         ):
             mock_store = MagicMock()
             mock_store.list_entries.return_value = sample_entries
@@ -310,6 +322,10 @@ class TestGenerateReport:
             patch("autoinfo.output.KBStore") as mock_kb_cls,
             patch.object(
                 _get_llm_extractor_class(), "extract", mock_extract
+            ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
             ),
         ):
             mock_store = MagicMock()
@@ -339,6 +355,10 @@ class TestGenerateReport:
             patch.object(
                 _get_llm_extractor_class(), "extract", mock_extract
             ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
+            ),
         ):
             mock_store = MagicMock()
             mock_store.list_entries.return_value = sample_entries
@@ -363,6 +383,10 @@ class TestGenerateReport:
             patch("autoinfo.output.KBStore") as mock_kb_cls,
             patch.object(
                 _get_llm_extractor_class(), "extract", mock_extract
+            ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
             ),
         ):
             mock_store = MagicMock()
@@ -391,6 +415,10 @@ class TestGenerateReport:
             patch("autoinfo.output.KBStore") as mock_kb_cls,
             patch.object(
                 _get_llm_extractor_class(), "extract", mock_extract
+            ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
             ),
         ):
             mock_store = MagicMock()
@@ -428,6 +456,10 @@ class TestReportTypes:
             patch.object(
                 _get_llm_extractor_class(), "extract", mock_extract
             ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
+            ),
         ):
             mock_store = MagicMock()
             mock_store.list_entries.return_value = sample_entries
@@ -462,6 +494,10 @@ class TestReportTypes:
             patch.object(
                 _get_llm_extractor_class(), "extract", mock_extract
             ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
+            ),
         ):
             mock_store = MagicMock()
             mock_store.list_entries.return_value = sample_entries
@@ -488,6 +524,10 @@ class TestReportTypes:
             patch("autoinfo.output.KBStore") as mock_kb_cls,
             patch.object(
                 _get_llm_extractor_class(), "extract", mock_extract
+            ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
             ),
         ):
             mock_store = MagicMock()
@@ -516,6 +556,10 @@ class TestReportTypes:
             patch.object(
                 _get_llm_extractor_class(), "extract", mock_extract
             ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
+            ),
         ):
             mock_store = MagicMock()
             mock_store.list_entries.return_value = sample_entries
@@ -542,6 +586,10 @@ class TestReportTypes:
             patch("autoinfo.output.KBStore") as mock_kb_cls,
             patch.object(
                 _get_llm_extractor_class(), "extract", mock_extract
+            ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
             ),
         ):
             mock_store = MagicMock()

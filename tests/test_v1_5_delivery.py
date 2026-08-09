@@ -592,6 +592,10 @@ class TestDigestDeliveryGates:
         monkeypatch.setattr("autoinfo.output.KBStore", lambda: _MockStore())
         # Mock LLM calls used by _group_by_theme and _generate_executive_summary
         monkeypatch.setattr(
+            "autoinfo.output._call_llm_for_report_synthesis",
+            lambda prompt: "",
+        )
+        monkeypatch.setattr(
             "autoinfo.output._llm_json_extract",
             lambda extractor, prompt, field: (
                 [{"theme": "General", "description": "All entries", "entry_ids": ["e1"]}]
@@ -629,6 +633,10 @@ class TestDigestDeliveryGates:
                 ]
 
         monkeypatch.setattr("autoinfo.output.KBStore", lambda: _MockStore())
+        monkeypatch.setattr(
+            "autoinfo.output._call_llm_for_report_synthesis",
+            lambda prompt: "",
+        )
         monkeypatch.setattr(
             "autoinfo.output._llm_json_extract",
             lambda extractor, prompt, field: (

@@ -176,17 +176,12 @@ _EMPTY_PLACEHOLDER_RE = re.compile(r"^\s*_no\s+.+_\.?\s*$", re.IGNORECASE)
 # requires all three); they get a non-empty marker so a complete product of
 # that format is not false-rejected (#172).
 #
-# Reports render via report.md.j2 (Executive Summary + per-theme Sections +
-# References) — they produce NO separate ``## Key Findings`` /
-# ``## Recommendations`` headings; the LLM writes findings + recommendations
-# inside the Executive Summary (see the report-generation prompt). The summary
-# is therefore the only canonical section a report genuinely emits, and it is
-# the sole required section. key_findings/recommendations stay optional: when a
-# report does carry those headings they are still detected and validated; when
-# absent the non-empty marker fills them so a complete report is not
-# false-rejected by D1.
+# Reports render via report.md.j2 (Executive Summary + Key Findings +
+# Recommendations + per-theme Sections + References) — the template now emits
+# separate ``## Key Findings`` / ``## Recommendations`` headings, so a report
+# must genuinely carry all three canonical sections.
 _PRODUCT_TYPE_REQUIRED_SECTIONS: dict[str, tuple[str, ...]] = {
-    "report": ("summary",),
+    "report": ("key_findings", "summary", "recommendations"),
     "presentation": ("key_findings",),          # at least one Slide N heading
     "digest": ("summary",),                     # Entries section / entries present
     "tutorial": ("key_findings", "recommendations"),  # Learning Objectives + Exercises
