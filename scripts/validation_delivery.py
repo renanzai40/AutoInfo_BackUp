@@ -154,6 +154,36 @@ _SECTION_SOURCE_KEYS: dict[str, tuple[str, ...]] = {
     "recommendations": ("recommendations", "next_steps", "conclusion"),
 }
 
+# JSON filenames that carry run/coverage metadata rather than a report product.
+_METADATA_JSON_NAMES = frozenset({"scenarios.json", "manifest.json"})
+_METADATA_JSON_PREFIXES = ("coverage-",)
+_METADATA_JSON_SUFFIXES = ("_runs.json",)
+
+# Keys that mark a JSON dict as a genuine report product (D1-inspectable).
+_REPORT_JSON_MARKERS = frozenset(
+    {"title", "entries", "llm_synthesis", "digest_type", "@type", "sections"}
+)
+
+
+def _is_metadata_json(file_path: Path, parsed: Any) -> bool:
+    """True when *file_path* is JSON that is NOT a report product (#169).
+
+    Metadata JSONs (``scenarios.json``, ``coverage-*.json``, ``*_runs.json``,
+    ``manifest.json``) carry run/coverage state rather than a rendered
+    product; they must run with ``product_type="RAW"`` so the D1-D3 gates
+    trivially skip. A parsed dict exposing report markers
+    (``title``/``entries``/``llm_synthesis``/...) is a real product
+    regardless of its filename.
+    """
+    name = file_path.name.lower()
+    if name in _METADATA_JSON_NAMES:
+        return True
+    if name.startswith(_METADATA_JSON_PREFIXES) or name.endswith(_METADATA_JSON_SUFFIXES):
+        return True
+    if isinstance(parsed, dict):
+        return not bool(_REPORT_JSON_MARKERS & parsed.keys())
+    return False
+
 
 def _parse_json_payload(file_path: Path) -> Any:
     """Load JSON / JSONL content; returns ``None`` when unparseable."""
@@ -290,13 +320,24 @@ def _build_product_output(file_path: Path, bucket: str) -> dict[str, Any]:
         except Exception:  # noqa: BLE001
             body = ""
         parsed = _parse_json_payload(file_path)
-        entries = _json_entries(parsed)
-        if isinstance(parsed, dict):
-            sections = {
-                "key_findings": _section_value(parsed, _SECTION_SOURCE_KEYS["key_findings"]),
-                "summary": _section_value(parsed, _SECTION_SOURCE_KEYS["summary"]),
-                "recommendations": _section_value(parsed, _SECTION_SOURCE_KEYS["recommendations"]),
-            }
+        # Metadata JSONs (scenarios.json / coverage-* / *_runs.json /
+        # manifest.json, or any dict without report markers) are run/coverage
+        # bookkeeping, not report products — treat as RAW so the D gates skip
+        # instead of rejecting them on empty report sections (#169).
+        if _is_metadata_json(file_path, parsed):
+            product_type = "RAW"
+        else:
+            entries = _json_entries(parsed)
+            if isinstance(parsed, dict):
+                sections = {
+                    "key_findings": _section_value(
+                        parsed, _SECTION_SOURCE_KEYS["key_findings"]
+                    ),
+                    "summary": _section_value(parsed, _SECTION_SOURCE_KEYS["summary"]),
+                    "recommendations": _section_value(
+                        parsed, _SECTION_SOURCE_KEYS["recommendations"]
+                    ),
+                }
     key_findings = sections.get("key_findings")
     summary = sections.get("summary")
     recommendations = sections.get("recommendations")

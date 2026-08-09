@@ -450,6 +450,12 @@ def call_with_fallback(
         or f"{provider}/{config.llm.model or DEFAULT_MODEL}"
     )
 
+    # Primary api_key falls back to config.llm.api_key (which may hold a
+    # ${ENV} placeholder) — matches the fallback entries below (#166/#119).
+    primary_key = api_key or config.llm.api_key or ""
+    if primary_key.startswith("${") and primary_key.endswith("}"):
+        primary_key = os.environ.get(primary_key[2:-1], "")
+
     chain: list[dict[str, str]] = [{
         "model": primary,
         # Primary base_url defaults to config.llm.base_url (issue #147
@@ -457,7 +463,7 @@ def call_with_fallback(
         # so without this the primary silently hits the provider default
         # endpoint (e.g. api.openai.com) instead of the configured one).
         "base_url": base_url or (config.llm.base_url or ""),
-        "api_key": api_key or "",
+        "api_key": primary_key,
     }]
     for fb in config.llm.fallback:
         fb_provider = fb.provider or provider

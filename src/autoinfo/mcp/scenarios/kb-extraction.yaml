@@ -2,12 +2,54 @@
 # Without AUTOINFO_LLM_API_KEY this scenario reports unconfigured (never
 # silently skipped): the Director User is obligated to provide BYOK keys
 # during onboarding.
+#
+# The extract_fields / query_collected steps operate on a real KB entry, so
+# this scenario seeds the 01-Raw entry via the real KBStore with genuine
+# provenance (deterministic CLI step — the same call path process_collection
+# uses) before exercising the MCP surface.  Cleanup purges only the seeded
+# entry (source_url matches the scenario marker), never real user data.
 name: kb-extraction
 description: "LLM-required extraction and Q&A tools with real model calls"
 category: extraction
 requires_env: ["AUTOINFO_LLM_API_KEY"]
 requires_domain: ["medical-research"]
 steps:
+  - name: "seed 01-Raw CRISPR entry with genuine provenance"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.kb import KBStore
+      from autoinfo.models import Item
+      from autoinfo.quality import QualityResult
+      store = KBStore()
+      item = Item(
+          id="kb-extraction-crispr-raw", source_name="web", source_type="web",
+          source_url="https://kb-extraction.autoinfo.dev/crispr-gene-editing-advances-2026",
+          source_platform="web",
+          title="CRISPR Gene Editing Advances in 2026",
+          content=(
+              "CRISPR-Cas9 and base editing technologies are advancing "
+              "genetic engineering in medical research. New delivery methods "
+              "improve in-vivo gene editing for monogenic disorders. "
+              "CRISPR screening identifies novel therapeutic targets."
+          ),
+          domain="medical-research", topic_tags=["general"],
+          collected_at="2026-08-08T00:00:00+00:00",
+          content_type="text", quality_tier=1,
+      )
+      g3 = QualityResult(gate_name="G3-RelevanceScoring", passed=True, score=85.0,
+                         details={})
+      entry = store.store_entry(item=item, tier="01-Raw",
+                                quality_results={"G3-RelevanceScoring": g3})
+      print("SEED_EXTRACTION_RAW " + entry.entry_id + " " + entry.tier)
+      assert entry.tier == "01-Raw"
+      assert entry.entry_id == "medical-research-general-crispr-gene-editing-advances-in-2026"
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SEED_EXTRACTION_RAW", "medical-research-general-crispr-gene-editing-advances-in-2026", "01-Raw"]
+
   - name: "extract_fields performs on-demand LLM extraction"
     tool: extract_fields
     arguments:
@@ -27,3 +69,32 @@ steps:
     expect:
       success: true
       llm_assert: "Does the result contain an answer about genetic engineering or gene editing? The domain is medical-research and there are entries about CRISPR, so the response should mention gene editing or genetic engineering technologies."
+
+# Always-run best-effort cleanup (engine executes these after the main steps,
+# on pass or fail; results never affect the scenario status).  Only the entry
+# whose source_url matches the scenario marker is purged, so real user data
+# is never touched.
+cleanup_steps:
+  - name: "purge seeded kb-extraction entry"
+    kind: cli
+    command: |-
+      python3 -c '
+      import pathlib
+      from autoinfo.kb import KBStore
+      store = KBStore()
+      eid = "medical-research-general-crispr-gene-editing-advances-in-2026"
+      marker = "https://kb-extraction.autoinfo.dev/crispr-gene-editing-advances-2026"
+      removed = []
+      meta = store.index.get_entry(eid)
+      if meta is not None and meta.get("source_url", "") == marker:
+          res = store.delete_entry(eid, actor="director")
+          removed.append(eid + ":" + str(res))
+      for p in list(pathlib.Path("knowledge/medical-research/01-Raw/general").glob("*crispr-gene-editing-advances-2026*")):
+          p.unlink(missing_ok=True)
+          removed.append(str(p))
+      print("CLEANED " + str(removed))
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["CLEANED"]

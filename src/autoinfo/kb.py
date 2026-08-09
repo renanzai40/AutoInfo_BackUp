@@ -37,7 +37,7 @@ from autoinfo.schema import check_schema
 
 logger = logging.getLogger(__name__)
 
-from enum import Enum
+from enum import Enum  # noqa: E402
 
 
 class RelationType(str, Enum):
@@ -215,7 +215,7 @@ def _parse_date(s: str) -> date:
 # FTS5 query escaping
 # ---------------------------------------------------------------------------
 
-_FTS5_SPECIAL = re.compile(r'[\^"():+\-!~{}\[\]\\\\*]')
+_FTS5_SPECIAL = re.compile(r'[\^"():+\-!~{}\[\]\\\\*?]')
 _FTS5_KEYWORDS = frozenset({"AND", "OR", "NOT", "NEAR"})
 
 
@@ -235,6 +235,56 @@ def _escape_fts5_query(query: str) -> str:
     for tok in tokens:
         safe.append(tok.lower() if tok.upper() in _FTS5_KEYWORDS else tok)
     return " ".join(safe) if safe else ""
+
+
+# Common English stopwords dropped when falling back to OR / LIKE search.
+# Kept deliberately small — only words unlikely to carry search intent.
+_FTS5_STOPWORDS = frozenset(
+    {
+        "a", "an", "the",
+        "what", "which", "who", "whom", "whose", "where", "when", "why", "how",
+        "are", "is", "was", "were", "be", "been", "being", "am",
+        "do", "does", "did", "done", "doing", "have", "has", "had",
+        "can", "could", "would", "should", "will", "shall", "may", "might", "must",
+        "and", "or", "not", "of", "to", "for", "in", "on", "at", "with", "by",
+        "from", "as", "into", "over", "under", "about", "than", "then", "so",
+        "if", "but", "up", "down", "out", "off", "it", "its", "this", "that",
+        "these", "those", "there", "here", "we", "you", "they", "he", "she",
+        "i", "me", "my", "our", "us", "their", "them", "your", "any", "all",
+        "each", "every", "some", "such", "only", "same", "very", "just",
+        "also", "other", "others", "more", "most", "no", "yes", "etc",
+        # Frequent in natural-language questions about content
+        "discuss", "discusses", "discussed", "discussing", "mention",
+        "mentions", "mentioned", "technology", "technologies", "article",
+        "articles", "information", "about", "main", "topic", "topics",
+    }
+)
+
+
+def _split_search_terms(query: str) -> list[str]:
+    """Split a query into individual search terms.
+
+    Mirrors the tokenisation of :func:`_escape_fts5_query`: FTS5 special
+    characters are replaced by whitespace and the remaining words are
+    returned in order.
+    """
+    if not query or not query.strip():
+        return []
+    cleaned = query.replace('"', " ")
+    cleaned = _FTS5_SPECIAL.sub(" ", cleaned)
+    return cleaned.split()
+
+
+def _meaningful_search_terms(query: str) -> list[str]:
+    """Return the non-stopword terms of *query*, preserving order.
+
+    Used to build OR-semantics and LIKE fallback queries for long
+    natural-language questions that fail FTS5's default AND semantics.
+    """
+    return [
+        term for term in _split_search_terms(query)
+        if term.lower() not in _FTS5_STOPWORDS
+    ]
 
 
 # ---------------------------------------------------------------------------
@@ -610,7 +660,7 @@ class SQLiteIndex:
         list[dict]
             Each dict contains the columns from the ``entries`` table.
         """
-        return self.list_entries(domain=domain, tier=tier, limit=limit, offset=offset, user_id=user_id)
+        return self.list_entries(domain=domain, tier=tier, limit=limit, offset=offset, user_id=user_id)  # noqa: E501
 
     def count_entries_by_tier(self, domain: str, tier: str) -> int:
         """Return the number of entries in *domain* for *tier*.
@@ -1320,20 +1370,20 @@ class SQLiteIndex:
                 (date_from,),
             ).fetchone()
             (dup_items,) = conn.execute(
-                "SELECT COUNT(*) FROM entries WHERE collected_at >= ? AND dedup_status = 'duplicate'",
+                "SELECT COUNT(*) FROM entries WHERE collected_at >= ? AND dedup_status = 'duplicate'",  # noqa: E501
                 (date_from,),
             ).fetchone()
 
             # Per-domain breakdown
             domain_rows = conn.execute(
-                "SELECT domain, COUNT(*) as cnt FROM entries WHERE collected_at >= ? GROUP BY domain ORDER BY cnt DESC",
+                "SELECT domain, COUNT(*) as cnt FROM entries WHERE collected_at >= ? GROUP BY domain ORDER BY cnt DESC",  # noqa: E501
                 (date_from,),
             ).fetchall()
             domains = {r["domain"]: r["cnt"] for r in domain_rows}
 
             # Per-source breakdown
             src_rows = conn.execute(
-                "SELECT source_platform, COUNT(*) as cnt FROM entries WHERE collected_at >= ? GROUP BY source_platform ORDER BY cnt DESC",
+                "SELECT source_platform, COUNT(*) as cnt FROM entries WHERE collected_at >= ? GROUP BY source_platform ORDER BY cnt DESC",  # noqa: E501
                 (date_from,),
             ).fetchall()
             sources = {r["source_platform"]: r["cnt"] for r in src_rows if r["source_platform"]}
@@ -1469,6 +1519,14 @@ class SQLiteIndex:
         ``offset``, ``method``.  Falls back to a LIKE-based search if
         the FTS5 query syntax is invalid.
 
+        To keep long natural-language questions from returning 0 hits
+        (FTS5 MATCH uses AND semantics, so every token must match), the
+        search walks a fallback chain when a query returns no results:
+        (1) FTS5 MATCH with the escaped query (``method="fts5"``);
+        (2) FTS5 MATCH with the meaningful non-stopword terms joined by
+        ``OR`` (``method="or"``); (3) a LIKE search over title, summary
+        and tags for those terms (``method="like"``).
+
         Parameters
         ----------
         query:
@@ -1570,10 +1628,10 @@ class SQLiteIndex:
             return conds, params
 
         with self._connect() as conn:
-            try:
-                # FTS5 search with dynamic filters
+            def _fts5_rows(match_query: str) -> list[sqlite3.Row]:
+                """Run an FTS5 MATCH with dynamic filters, returning rows."""
                 fts_conds = ["entries_fts5 MATCH ?"]
-                fts_params: list[Any] = [safe_query]
+                fts_params: list[Any] = [match_query]
 
                 extra_conds, extra_params = _build_filter_params("e")
                 fts_conds.extend(extra_conds)
@@ -1581,7 +1639,7 @@ class SQLiteIndex:
 
                 where_clause = " AND ".join(fts_conds)
 
-                rows = conn.execute(
+                return conn.execute(
                     f"""SELECT e.entry_id, e.title, e.summary, e.relevance_score,
                                e.source_score, e.file_path, e.domain, e.collected_at,
                                e.created_at, e.tier, f.rank
@@ -1591,14 +1649,47 @@ class SQLiteIndex:
                         ORDER BY f.rank""",
                     fts_params,
                 ).fetchall()
-            except sqlite3.OperationalError:
-                # Fallback: LIKE search across title, summary, tags
-                like_q = f"%{query}%"
-                like_conds = [
-                    "(e.title LIKE ? OR e.summary LIKE ? OR e.tags LIKE ?)"
-                ]
-                like_params: list[Any] = [like_q, like_q, like_q]
 
+            method = "fts5"
+            try:
+                rows = _fts5_rows(safe_query)
+            except sqlite3.OperationalError:
+                rows = []
+
+            if not rows:
+                # Step 2 — retry with OR semantics across the meaningful
+                # (non-stopword) terms, since FTS5 MATCH defaults to AND
+                # semantics and long questions can match nothing.
+                meaningful = _meaningful_search_terms(query)
+                or_terms = [
+                    e for e in (_escape_fts5_query(t) for t in meaningful) if e
+                ]
+                if or_terms:
+                    or_query = " OR ".join(or_terms)
+                    method = "or"
+                    try:
+                        rows = _fts5_rows(or_query)
+                    except sqlite3.OperationalError:
+                        rows = []
+
+            if not rows:
+                # Step 3 — LIKE fallback across title, summary, tags
+                method = "like"
+                like_terms = meaningful or _split_search_terms(query)
+                like_parts: list[str] = []
+                like_params: list[Any] = []
+                for term in like_terms:
+                    like_parts.append(
+                        "(e.title LIKE ? OR e.summary LIKE ? OR e.tags LIKE ?)"
+                    )
+                    pattern = f"%{term}%"
+                    like_params.extend([pattern, pattern, pattern])
+
+                if not like_parts:
+                    like_parts = ["(e.title LIKE ? OR e.summary LIKE ?)"]
+                    like_params = [f"%{query}%", f"%{query}%"]
+
+                like_conds = ["(" + " OR ".join(like_parts) + ")"]
                 extra_conds_l, extra_params_l = _build_filter_params("e")
                 like_conds.extend(extra_conds_l)
                 like_params.extend(extra_params_l)
@@ -1627,7 +1718,7 @@ class SQLiteIndex:
                 }
 
                 if mode == "fts5":
-                    result["method"] = "fts5"
+                    result["method"] = method
                     return result
 
                 # For hybrid/vector, try vector search on top
@@ -1656,7 +1747,7 @@ class SQLiteIndex:
         }
 
         if mode == "fts5":
-            result["method"] = "fts5"
+            result["method"] = method
             return result
 
         # For hybrid/vector, open a new connection for vector search
@@ -2924,7 +3015,7 @@ class KBStore:
         file_path = file_dir / file_name
 
         merged_body_parts: list[str] = []
-        for i, re in enumerate(raw_entries):
+        for i, re in enumerate(raw_entries):  # noqa: F402
             merged_body_parts.append(
                 f"## Source {i + 1}: {re['title']}\n\n"
             )
@@ -4004,7 +4095,8 @@ class KBStore:
     # ------------------------------------------------------------------
 
     def rebuild_wiki_links(self) -> dict[str, Any]:
-        """Scan all KB entries for ``[[wiki link]]`` syntax and update ``## Linked References`` sections.
+        """Scan all KB entries for ``[[wiki link]]`` syntax and
+        update the ``## Linked References`` sections.
 
         Two-pass: (1) build title→entry map + collect all ``[[Title]]`` references;
         (2) write/replace sections per entry (skipping 03-Wiki — append-only).
@@ -4015,8 +4107,8 @@ class KBStore:
         """
         from collections import defaultdict
 
-        WIKI_LINK_RE = re.compile(r"\[\[([^\]]+)\]\]")
-        SECTION_PATTERN = re.compile(
+        WIKI_LINK_RE = re.compile(r"\[\[([^\]]+)\]\]")  # noqa: N806
+        SECTION_PATTERN = re.compile(  # noqa: N806
             r"\n## Linked References\n.*?(?=\n## |\Z)", re.DOTALL
         )
 
