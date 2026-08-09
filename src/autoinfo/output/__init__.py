@@ -3320,6 +3320,8 @@ def generate_report(
                     "title": e.get("title", ""),
                     "summary": e.get("summary", ""),
                     "source_url": e.get("source_url", ""),
+                    "source_type": e.get("source_type", ""),
+                    "source_platform": e.get("source_platform", ""),
                     "relevance_score": e.get("relevance_score", 0),
                     "source_tier": e.get("source_tier"),
                     "domain": e.get("domain", domain),
@@ -3946,6 +3948,9 @@ def _render_report_json(report_data: ReportData, period: str = "weekly") -> str:
                 "title": item.get("title", ""),
                 "summary": item.get("summary", ""),
                 "url": url,
+                "source_url": url,
+                "source_type": item.get("source_type", ""),
+                "source_platform": item.get("source_platform", ""),
                 "date": item.get("collected_at", ""),
                 "domain": item.get("domain", ""),
             })
@@ -3961,6 +3966,9 @@ def _render_report_json(report_data: ReportData, period: str = "weekly") -> str:
             "title": ref.get("title", ""),
             "summary": "",
             "url": url,
+            "source_url": url,
+            "source_type": ref.get("source_type", ""),
+            "source_platform": ref.get("source_platform", ""),
             "date": "",
             "domain": ref.get("domain", ""),
         })
