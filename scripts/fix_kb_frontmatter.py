@@ -7,7 +7,6 @@ those summary lines as double-quoted YAML scalars (proper escaping) and verifies
 each file parses cleanly afterward.
 """
 import re
-import sys
 from pathlib import Path
 
 import yaml

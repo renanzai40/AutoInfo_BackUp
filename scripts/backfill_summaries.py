@@ -7,9 +7,10 @@ SQLite entries table and the KB markdown frontmatter.
 
 Usage: HOME=/home/renanzai python3 scripts/backfill_summaries.py [--domain X] [--dry-run]
 """
-import sys, os, time
-from pathlib import Path
+import os
+import sys
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 os.environ.setdefault("AUTOINFO_LLM_API_KEY", os.environ.get("OPENCODE_GO_KEY", ""))
@@ -38,7 +39,10 @@ def _extract_summary(cfg, entry: dict) -> tuple[str, str, str]:
     item = Item(
         id=entry["entry_id"], source_name="backfill", source_type="internal",
         source_url="", title=entry["title"] or "(untitled)",
-        content=f"Write a 2-3 sentence factual summary of this article based on its title: {entry['title']}",
+        content=(
+            "Write a 2-3 sentence factual summary of this article "
+            f"based on its title: {entry['title']}"
+        ),
     )
     try:
         r = LLMExtractor(cfg).extract(item, schema=["tl_dr"])
@@ -61,10 +65,13 @@ def _write_db_summaries(updates: dict[str, str]) -> None:
         row = cur.execute("SELECT rowid FROM entries WHERE entry_id=?", (eid,)).fetchone()
         if row:
             cur.execute("DELETE FROM entries_fts5 WHERE rowid=?", (row[0],))
-            e = cur.execute("SELECT title, summary, domain, tags FROM entries WHERE entry_id=?", (eid,)).fetchone()
+            e = cur.execute(
+                "SELECT title, summary, domain, tags FROM entries WHERE entry_id=?", (eid,)
+            ).fetchone()
             if e:
                 cur.execute(
-                    "INSERT INTO entries_fts5(rowid, title, summary, content, domain, tags) VALUES (?,?,?,?,?,?)",
+                    "INSERT INTO entries_fts5(rowid, title, summary, content, "
+                    "domain, tags) VALUES (?,?,?,?,?,?)",
                     (row[0], e[0] or "", e[1] or "", "", e[2] or "", e[3] or ""),
                 )
     conn.commit()
@@ -90,13 +97,19 @@ def _write_md_summaries(updates: dict[str, str]) -> None:
         if not md.is_file():
             # fall back to searching by entry_id in frontmatter
             for p in (root / "knowledge").rglob("*.md"):
-                if p.read_text(encoding="utf-8", errors="replace").startswith("---") and f"entry_id: {eid}" in p.read_text(encoding="utf-8", errors="replace")[:2000]:
+                head = p.read_text(encoding="utf-8", errors="replace")
+                if head.startswith("---") and f"entry_id: {eid}" in head[:2000]:
                     md = p
                     break
             else:
                 continue
         text = md.read_text(encoding="utf-8")
-        new_text = re.sub(r"(?m)^summary:.*$", f"summary: '{summary.replace(chr(39), chr(39)+chr(39)+chr(39))}'", text, count=1)
+        new_text = re.sub(
+            r"(?m)^summary:.*$",
+            f"summary: '{summary.replace(chr(39), chr(39) + chr(39) + chr(39))}'",
+            text,
+            count=1,
+        )
         if new_text != text:
             md.write_text(new_text, encoding="utf-8")
 

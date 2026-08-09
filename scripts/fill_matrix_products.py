@@ -7,7 +7,10 @@ already have evidence. Result-driven: verifies the generated artifact exists.
 
 Usage: HOME=/home/renanzai python3 scripts/fill_matrix_products.py [--dry-run]
 """
-import sys, os, asyncio, time
+import asyncio
+import os
+import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
@@ -15,8 +18,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 os.environ.setdefault("AUTOINFO_LLM_API_KEY", os.environ.get("OPENCODE_GO_KEY", ""))
 
 from autoinfo.output import (
-    generate_digest, generate_report, generate_tutorial, generate_presentation,
     PRODUCT_TEMPLATES,
+    generate_digest,
+    generate_presentation,
+    generate_report,
+    generate_tutorial,
 )
 
 DOMAINS = ["medical-research", "tech-ai-developer"]

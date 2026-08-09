@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 """Generate the remaining matrix cells: digest/report audio+audiobook, column html."""
-import sys, os, time
+import os
+import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 os.environ.setdefault("AUTOINFO_LLM_API_KEY", os.environ.get("OPENCODE_GO_KEY", ""))
 
 from autoinfo.output import (
-    generate_digest, generate_report, PRODUCT_TEMPLATES,
+    PRODUCT_TEMPLATES,
+    generate_digest,
+    generate_report,
 )
 
 OUTPUTS = Path(__file__).resolve().parent.parent / "outputs"

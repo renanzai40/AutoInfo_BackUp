@@ -10,7 +10,6 @@ Usage: HOME=/home/renanzai python3 scripts/fix_matrix_spec.py [--dry-run]
 """
 import sys
 from pathlib import Path
-from collections import OrderedDict
 
 SPEC = Path(__file__).resolve().parent.parent / "docs/dev/specs/end-user-matrix.yaml"
 

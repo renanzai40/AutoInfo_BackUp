@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Measure LLM concurrency: how fast do N parallel calls complete, do we hit rate limits?"""
-import sys, os, time, threading
-from pathlib import Path
+import os
+import sys
+import time
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 os.environ.setdefault("AUTOINFO_LLM_API_KEY", os.environ.get("OPENCODE_GO_KEY", ""))
@@ -20,11 +22,15 @@ def one_call(model: str, i: int) -> tuple[int, float, str]:
     item = Item(
         id=f"conc-test-{i}", source_name="test", source_type="internal",
         source_url="", title="Summary",
-        content=f"Summarize item {i}: The knowledge base covers IVF treatment outcomes, donor selection criteria, and clinic marketing strategies in reproductive medicine.",
+        content=(
+            f"Summarize item {i}: The knowledge base covers IVF treatment outcomes, "
+            "donor selection criteria, and clinic marketing strategies in "
+            "reproductive medicine."
+        ),
     )
     t0 = time.time()
     try:
-        r = ext.extract(item, schema=["summary"])
+        ext.extract(item, schema=["summary"])
         dt = time.time() - t0
         return i, dt, "OK"
     except Exception as e:
