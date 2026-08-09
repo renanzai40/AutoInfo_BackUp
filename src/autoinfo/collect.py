@@ -677,7 +677,15 @@ def _fetch_items(
                 extra={"source_name": source_config.name},
             )
             return []
-        query = topic if topic else ""
+        query = topic or source_config.settings.get("query", "") or ""
+        if not query.strip():
+            plog.warning(
+                "API source has no query (no --topic and no source query); "
+                "skipping to avoid fetching unrelated content",
+                source_type=source_config.type,
+                extra={"source_name": source_config.name},
+            )
+            return []
         items = handler.fetch(url, query=query, limit=limit)
         return items[:limit]
 
@@ -691,7 +699,15 @@ def _fetch_items(
                 extra={"source_name": source_config.name},
             )
             return []
-        query = topic if topic else ""
+        query = topic or source_config.settings.get("query", "") or ""
+        if not query.strip():
+            plog.warning(
+                "Quandl source has no query (no --topic and no source query); "
+                "skipping to avoid fetching unrelated content",
+                source_type=source_config.type,
+                extra={"source_name": source_config.name},
+            )
+            return []
         items = handler.fetch(url, query=query, limit=limit)
         return items[:limit]
 
