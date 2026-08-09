@@ -17,6 +17,7 @@ import difflib
 import html.parser
 import json
 import logging
+import os
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -29,6 +30,41 @@ from autoinfo.llm import call_with_fallback
 from autoinfo.models import ExtractionResult, Item, KBEntry
 
 logger = logging.getLogger(__name__)
+
+# ---------------------------------------------------------------------------
+# LLM credential resolution for gate calls
+# ---------------------------------------------------------------------------
+
+
+def _llm_credentials(
+    config: Any | None = None,
+) -> tuple[str | None, str | None]:
+    """Resolve the configured LLM ``api_key`` / ``base_url`` for gate LLM calls.
+
+    Prefers an explicitly supplied *config*; otherwise the on-disk config is
+    loaded.  A plain (hardcoded) ``llm.api_key`` is therefore honoured by
+    :func:`autoinfo.llm.call_with_fallback` instead of relying solely on the
+    ``OPENAI_API_KEY`` / ``AUTOINFO_LLM_API_KEY`` env vars.  When no config or
+    key is available ``(None, None)`` is returned, preserving the historical
+    env-based resolution (backward compatible).
+    """
+    from autoinfo.config import get_config_path, load_config  # noqa: PLC0415
+
+    cfg = config
+    if cfg is None:
+        try:
+            path = get_config_path()
+            if path is not None:
+                cfg = load_config(path)
+        except Exception:
+            cfg = None
+
+    if cfg is None:
+        return None, None
+    api_key = cfg.llm.api_key or os.environ.get("AUTOINFO_LLM_API_KEY", "")
+    base_url = cfg.llm.base_url
+    return (api_key or None), (base_url or None)
+
 
 # ---------------------------------------------------------------------------
 # Deterministic source credibility score map (E9)
@@ -886,6 +922,7 @@ class G3RelevanceScoring:
         max_attempts = gate_config.retries
 
         retries_used = 0
+        llm_api_key, llm_base_url = _llm_credentials()
 
         for attempt in range(max_attempts):
             model = models[min(attempt, len(models) - 1)]
@@ -928,6 +965,8 @@ class G3RelevanceScoring:
                         max_tokens=10,
                         temperature=0.0,
                         timeout=self._timeout,
+                        api_key=llm_api_key,
+                        base_url=llm_base_url,
                     )
                     raw = response.choices[0].message.content
 
@@ -1066,11 +1105,15 @@ class G4FactualConsistency:
         collections_path: str | Path = "collections",
         json_mode: bool = False,
         timeout: float | None = None,
+        api_key: str | None = None,
+        base_url: str | None = None,
     ) -> None:
         self._model = model
         self._collections_path = Path(collections_path)
         self._json_mode = json_mode
         self._timeout = timeout
+        self._api_key = api_key
+        self._base_url = base_url
 
     # ------------------------------------------------------------------
     # Public API
@@ -1131,6 +1174,10 @@ class G4FactualConsistency:
         retry_log: list[dict[str, Any]] = []
         last_error: str | None = None
 
+        llm_api_key, llm_base_url = self._api_key, self._base_url
+        if llm_api_key is None and llm_base_url is None:
+            llm_api_key, llm_base_url = _llm_credentials()
+
         for attempt in range(max_attempts):
             model = models[min(attempt, len(models) - 1)]
 
@@ -1160,6 +1207,8 @@ class G4FactualConsistency:
                     max_tokens=500,
                     temperature=0.0,
                     timeout=self._timeout,
+                    api_key=llm_api_key,
+                    base_url=llm_base_url,
                 )
 
                 raw_content: str = response.choices[0].message.content
@@ -1401,6 +1450,8 @@ class G5TranslationAccuracy:
                 },
             )
 
+        llm_api_key, llm_base_url = _llm_credentials()
+
         try:
             response = call_with_fallback(
                 model=self._model,
@@ -1418,6 +1469,8 @@ class G5TranslationAccuracy:
                 max_tokens=500,
                 temperature=0.0,
                 timeout=self._timeout,
+                api_key=llm_api_key,
+                base_url=llm_base_url,
             )
 
             content: str = response.choices[0].message.content  # type: ignore[union-attr]
@@ -2588,6 +2641,8 @@ def llm_judge(
         '"readability":int,"issues":[str]}'
     )
 
+    llm_api_key, llm_base_url = _llm_credentials()
+
     try:
         resp = call_with_fallback(
             model=model,
@@ -2596,6 +2651,8 @@ def llm_judge(
             max_tokens=1000,
             temperature=0.0,
             timeout=timeout,
+            api_key=llm_api_key,
+            base_url=llm_base_url,
         )
         parsed = json.loads(resp.choices[0].message.content)
     except Exception as e:

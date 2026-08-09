@@ -6,7 +6,6 @@ requires_env: []
 collect_artifacts:
   - "outputs/**/*"
   - "exports/**/*.json"
-  - "validation-runs/**/*.json"
 steps:
   - name: "list_output_templates returns templates"
     tool: list_output_templates
