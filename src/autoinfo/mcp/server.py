@@ -66,7 +66,7 @@ from autoinfo.cli.doctor import calculate_health_score
 from autoinfo.cli.init import _list_demo_domains
 from autoinfo.config import SOURCE_KEY_ENV_VARS, VALID_SOURCE_TYPES
 from autoinfo.kb import DirectorOnlyError, is_director
-from autoinfo.llm import call_with_fallback
+from autoinfo.llm import call_with_fallback, parse_json_response
 from autoinfo.mcp.errors import ErrorCode, error_dict, error_response, success_response
 
 logger = logging.getLogger(__name__)
@@ -2079,7 +2079,7 @@ def _handle_suggest_keywords(
         content: str = response.choices[0].message.content or ""  # type: ignore[union-attr]
 
         try:
-            parsed = json.loads(content)
+            parsed = parse_json_response(content)
         except json.JSONDecodeError:
             # LLM returned empty or non-JSON content — surface a graceful
             # error instead of a raw traceback so validation can report it.

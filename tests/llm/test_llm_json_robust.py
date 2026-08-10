@@ -74,7 +74,10 @@ def sample_extraction() -> ExtractionResult:
     return ExtractionResult(
         item_id="test-item-178",
         title="Test article about IVF outcomes",
-        tl_dr="IVF success rates improve with time-lapse imaging. Live birth rate increased from 39.5% to 48.2%.",
+        tl_dr=(
+            "IVF success rates improve with time-lapse imaging. Live birth "
+            "rate increased from 39.5% to 48.2%."
+        ),
         key_points=["Time-lapse imaging improves IVF outcomes"],
         entities=[{"name": "IVF", "type": "procedure", "relevance": 0.9}],
         relevance_score=90.0,
@@ -231,7 +234,7 @@ class TestCallWithFallbackMaxTokens:
         )
         task_cfg = _resolve_task_llm_config(config, "extraction")
         assert task_cfg.max_tokens == 777
-        mock_litellm = self._call(config=task_cfg)
+        mock_litellm = self._call(config=Config(llm=task_cfg))
         assert mock_litellm.completion.call_args.kwargs["max_tokens"] == 777
 
 
@@ -287,7 +290,9 @@ class TestCefrMaxTokens:
         """Fake LLM returning a bare level still classifies (B2)."""
         mock_litellm = _mock_litellm("B2")
         with patch.object(LLMExtractor, "_get_litellm", return_value=mock_litellm):
-            result = classify_text("The mitochondria is the powerhouse of the cell", lang="en")
+            result = classify_text(
+                "The mitochondria is the powerhouse of the cell", lang="en"
+            )
         assert result["cefr_level"] == "B2"
         # The bump from 50 must have taken effect (and be sane).
         assert mock_litellm.completion.call_args.kwargs["max_tokens"] >= 256

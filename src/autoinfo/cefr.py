@@ -105,7 +105,7 @@ def classify_text(
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
             ],
-            max_tokens=50,
+            max_tokens=256,
             temperature=0.1,
             base_url=base_url or None,
             api_key=api_key or None,

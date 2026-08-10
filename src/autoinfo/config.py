@@ -128,6 +128,9 @@ class LLMConfig:
     reasoning_model: bool = False
     # Seconds per litellm call; overrides litellm's 600s default (config.yaml ``llm.timeout``).
     timeout: float = 120.0
+    # Tokens per litellm call; ``None`` keeps the historical 2000 default.
+    # Task-level overrides land here via :func:`_resolve_task_llm_config`.
+    max_tokens: int | None = None
     fallback: list[LLMConfig] = field(default_factory=list)
     tasks: dict[str, LLMTaskConfig] = field(default_factory=dict)
 
@@ -719,6 +722,7 @@ def _dict_to_config(raw: dict[str, Any]) -> Config:
             json_mode=bool(llm_raw.get("json_mode", False)),
             reasoning_model=bool(llm_raw.get("reasoning_model", False)),
             timeout=float(llm_raw.get("timeout", 120.0)),
+            max_tokens=int(llm_raw["max_tokens"]) if llm_raw.get("max_tokens") else None,
             fallback=fallback,
             tasks=tasks,
         ),
@@ -958,6 +962,9 @@ def config_to_dict(config: Config) -> dict[str, Any]:
     # Only include project_name when non-empty (backward compat)
     if config.project.project_name:
         raw["project"]["project_name"] = config.project.project_name
+    # Only include max_tokens when set (None keeps the 2000 default)
+    if config.llm.max_tokens is not None:
+        raw["llm"]["max_tokens"] = config.llm.max_tokens
     # Serialize llm.tasks
     if config.llm.tasks:
         raw["llm"]["tasks"] = {}
@@ -1172,6 +1179,7 @@ def _resolve_task_llm_config(config: Config, task_name: str = "") -> LLMConfig:
         json_mode=base.json_mode,
         reasoning_model=base.reasoning_model,
         timeout=base.timeout,
+        max_tokens=task_cfg.max_tokens or base.max_tokens,
         fallback=base.fallback,
         tasks=base.tasks,
     )

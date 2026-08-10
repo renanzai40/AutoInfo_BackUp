@@ -26,7 +26,7 @@ from typing import Any, Literal
 import yaml
 
 from autoinfo.config import QualityGateConfig
-from autoinfo.llm import call_with_fallback
+from autoinfo.llm import call_with_fallback, parse_json_response
 from autoinfo.models import ExtractionResult, Item, KBEntry
 
 logger = logging.getLogger(__name__)
@@ -1212,7 +1212,7 @@ class G4FactualConsistency:
                 )
 
                 raw_content: str = response.choices[0].message.content
-                parsed = json.loads(raw_content)
+                parsed = parse_json_response(raw_content)
                 contradiction = bool(parsed.get("contradiction", False))
                 explanation = str(parsed.get("explanation", ""))
 
@@ -1474,7 +1474,7 @@ class G5TranslationAccuracy:
             )
 
             content: str = response.choices[0].message.content  # type: ignore[union-attr]
-            parsed = json.loads(content)
+            parsed = parse_json_response(content)
             faithful = bool(parsed.get("faithful", False))
             explanation = str(parsed.get("explanation", ""))
             issues = list(parsed.get("issues", []))
@@ -2654,7 +2654,7 @@ def llm_judge(
             api_key=llm_api_key,
             base_url=llm_base_url,
         )
-        parsed = json.loads(resp.choices[0].message.content)
+        parsed = parse_json_response(resp.choices[0].message.content)
     except Exception as e:
         logger.warning("llm_judge failed: %s", e)
         return {"faithfulness": 0, "terminology": 0, "style": 0, "readability": 0,
