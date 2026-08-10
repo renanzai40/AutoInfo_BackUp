@@ -25,7 +25,12 @@ CAPABILITY = {
     "enterprise-briefing": ["markdown", "html"],
 }
 
-DOMAINS = ["medical-research", "tech-ai-developer"]
+DOMAINS = [
+    "medical-research", "ai-commercial", "financial-intelligence",
+    "tech-ai-developer", "language-learning", "online-video",
+    "financial-news", "online-education", "legal-compliance",
+    "general-news", "gaming", "b2b", "retail",
+]
 
 
 def main() -> None:

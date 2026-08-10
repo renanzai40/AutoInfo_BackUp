@@ -620,7 +620,16 @@ class SQLiteIndex:
                 conditions.append("tier = ?")
                 params.append(tier)
             if date_from is not None:
-                conditions.append("collected_at >= ?")
+                # Issue #182 (paygrade): many sources publish articles with
+                # original pub dates far older than the ingest date (e.g.
+                # Coursera blog posts from weeks ago, collected today). A
+                # strict collected_at >= date_from filter then returns empty
+                # for weekly/monthly digests. Fall back to created_at (ingest
+                # time) so digests still surface recently-ingested content.
+                conditions.append(
+                    "(collected_at >= ? OR created_at >= ?)"
+                )
+                params.append(date_from)
                 params.append(date_from)
             if user_id is not None:
                 conditions.append("user_id = ?")
@@ -709,7 +718,16 @@ class SQLiteIndex:
                 conditions.append("tier = ?")
                 params.append(tier)
             if date_from is not None:
-                conditions.append("collected_at >= ?")
+                # Issue #182 (paygrade): many sources publish articles with
+                # original pub dates far older than the ingest date (e.g.
+                # Coursera blog posts from weeks ago, collected today). A
+                # strict collected_at >= date_from filter then returns empty
+                # for weekly/monthly digests. Fall back to created_at (ingest
+                # time) so digests still surface recently-ingested content.
+                conditions.append(
+                    "(collected_at >= ? OR created_at >= ?)"
+                )
+                params.append(date_from)
                 params.append(date_from)
             if user_id is not None:
                 conditions.append("user_id = ?")
@@ -2792,6 +2810,7 @@ class KBStore:
             fs_entries = [
                 e for e in fs_entries
                 if e.get("collected_at", "") >= date_from
+                or e.get("created_at", "") >= date_from
             ]
         return fs_entries[offset: offset + limit]
 

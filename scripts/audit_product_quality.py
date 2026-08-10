@@ -45,12 +45,15 @@ def _classify(path: Path, text: str) -> tuple[str, str]:
         return "NONPRODUCT", "matrix/test artifact"
     if not text.strip():
         return "EMPTY", "zero-length"
-    for m in PLACEHOLDER:
-        if m.lower() in text.lower():
-            return "EMPTY", f"placeholder: {m[:36]}"
     summary = _first_summary(text)
     if not summary.strip():
         return "EMPTY", "no summary section"
+    # Placeholder check applies to the SUMMARY only — a missing entry body
+    # inside a product with a real summary is a RAW-data gap, not a product
+    # defect (issue #182: raw quality cascades into processed quality).
+    for m in PLACEHOLDER:
+        if m.lower() in summary.lower():
+            return "EMPTY", f"placeholder in summary: {m[:36]}"
     for m in VAGUE:
         if re.search(m, summary, re.I):
             return "VAGUE", f"boilerplate in summary: {m[:36]}"

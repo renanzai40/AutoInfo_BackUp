@@ -94,8 +94,9 @@ def test_non_required_no_evidence_is_not_applicable(spec):
 
 
 def test_classify_cell_accepts_tuple_form(spec):
+    # not-implemented cell → NOT_APPLICABLE (capability boundary, not a gap)
     assert cm.classify_cell(
-        ("b2b", "report", "html"), EMPTY_PRODUCED, llm_available=True, spec=spec
+        ("medical-research", "tutorial", "html"), EMPTY_PRODUCED, llm_available=True, spec=spec
     ) == cm.NOT_APPLICABLE
 
 

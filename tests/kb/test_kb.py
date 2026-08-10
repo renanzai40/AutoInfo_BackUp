@@ -24,7 +24,6 @@ from autoinfo.kb import KBStore, SQLiteIndex, _slugify
 from autoinfo.models import ExtractionResult, Item, KBEntry
 from autoinfo.quality import QualityResult
 
-
 # ===================================================================
 # _slugify helper
 # ===================================================================
@@ -120,7 +119,9 @@ class TestSQLiteIndex:
         assert retrieved["domain"] == sample_entry.domain
         assert retrieved["source_url"] == sample_entry.source_url
 
-    def test_index_entry_tags_stored_as_json(self, index: SQLiteIndex, sample_entry: KBEntry) -> None:
+    def test_index_entry_tags_stored_as_json(
+        self, index: SQLiteIndex, sample_entry: KBEntry
+    ) -> None:
         index.index_entry(sample_entry)
         retrieved = index.get_entry(sample_entry.entry_id)
         assert retrieved is not None
@@ -216,9 +217,11 @@ class TestSQLiteIndex:
             )
         )
 
-        # date_from = 2026-07-01 — should include only "new"
+        # date_from = 2026-07-01 — strict collected_at would keep only "new",
+        # but the #182 created_at fallback keeps both (both indexed just now
+        # with fresh created_at). Digest generation never sees empty.
         entries = index.list_entries("medical-research", date_from="2026-07-01")
-        assert len(entries) == 1
+        assert len(entries) == 2
         assert entries[0]["entry_id"] == "new"
 
         # date_from = 2026-01-01 — should include both
@@ -312,7 +315,7 @@ class TestKBStore:
             source_type="api",
             source_platform="pubmed",
             source_url="https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=12345678",
-            title="Improved IVF outcomes with time-lapse embryo imaging: a randomized controlled trial",
+            title="Improved IVF outcomes with time-lapse embryo imaging",
             content=(
                 "Time-lapse embryo imaging has been proposed as a non-invasive method "
                 "to improve embryo selection in IVF cycles."
@@ -387,7 +390,9 @@ class TestKBStore:
         assert "IVF" in fp.parts
         assert fp.name.endswith(".md")
 
-    def test_frontmatter_contains_all_required_fields(self, store: KBStore, sample_item: Item) -> None:
+    def test_frontmatter_contains_all_required_fields(
+        self, store: KBStore, sample_item: Item
+    ) -> None:
         entry = store.store_entry(sample_item)
         # Read the file and parse frontmatter
         raw = Path(entry.file_path).read_text(encoding="utf-8")
@@ -417,7 +422,9 @@ class TestKBStore:
         assert fm["quality_tier"] == 1
         assert fm["language"] == "en"
 
-    def test_frontmatter_includes_quality_flags(self, store: KBStore, sample_item: Item, sample_quality_results) -> None:
+    def test_frontmatter_includes_quality_flags(
+        self, store: KBStore, sample_item: Item, sample_quality_results
+    ) -> None:
         entry = store.store_entry(sample_item, quality_results=sample_quality_results)
         raw = Path(entry.file_path).read_text(encoding="utf-8")
         end = raw.find("---", 3)
@@ -428,14 +435,18 @@ class TestKBStore:
         assert flags["G1-SourceAuthority"] is False
         assert flags["G3-RelevanceScoring"] is False
 
-    def test_frontmatter_relevance_score_from_quality(self, store: KBStore, sample_item: Item, sample_quality_results) -> None:
+    def test_frontmatter_relevance_score_from_quality(
+        self, store: KBStore, sample_item: Item, sample_quality_results
+    ) -> None:
         entry = store.store_entry(sample_item, quality_results=sample_quality_results)
         raw = Path(entry.file_path).read_text(encoding="utf-8")
         end = raw.find("---", 3)
         fm = yaml.safe_load(raw[3:end])
         assert fm["relevance_score"] == 92.0
 
-    def test_frontmatter_dedup_status_unique(self, store: KBStore, sample_item: Item, sample_quality_results) -> None:
+    def test_frontmatter_dedup_status_unique(
+        self, store: KBStore, sample_item: Item, sample_quality_results
+    ) -> None:
         entry = store.store_entry(sample_item, quality_results=sample_quality_results)
         raw = Path(entry.file_path).read_text(encoding="utf-8")
         end = raw.find("---", 3)
@@ -463,7 +474,9 @@ class TestKBStore:
         # Body is after the frontmatter block
         assert sample_item.content in raw
 
-    def test_body_includes_extraction_data(self, store: KBStore, sample_item: Item, sample_extraction: ExtractionResult) -> None:
+    def test_body_includes_extraction_data(
+        self, store: KBStore, sample_item: Item, sample_extraction: ExtractionResult
+    ) -> None:
         entry = store.store_entry(sample_item, extraction=sample_extraction)
         raw = Path(entry.file_path).read_text(encoding="utf-8")
         assert sample_extraction.tl_dr in raw
@@ -561,8 +574,12 @@ class TestKBStore:
         store.store_entry(new_item)
 
         entries = store.list_entries("medical-research", date_from="2026-07-01")
-        assert len(entries) == 1
-        # entry_id is auto-generated as {domain}-{topic_slug}-{slug}
+        # Issue #182: created_at fallback — both items were stored just now
+        # (fresh created_at), so even the old-collected_at item passes the
+        # weekly window via its ingest time. Digest generation thus never
+        # sees an empty domain when sources publish old-dated articles.
+        assert len(entries) == 2
+        # newest first (both collected_at DESC)
         assert "new-article" in entries[0]["entry_id"]
 
     # ------------------------------------------------------------------
@@ -634,7 +651,9 @@ class TestKBStore:
         sample_extraction: ExtractionResult,
         sample_quality_results,
     ) -> None:
-        entry = store.store_entry(sample_item, extraction=sample_extraction, quality_results=sample_quality_results)
+        entry = store.store_entry(
+            sample_item, extraction=sample_extraction, quality_results=sample_quality_results
+        )
         assert entry.relevance_score == 92.0
         assert entry.dedup_status == "unique"
         assert entry.summary == sample_extraction.tl_dr
