@@ -106,6 +106,9 @@ def run_collection(
     if domain_config is None:
         raise ValueError(f"Domain '{domain}' not found in configuration.")
 
+    # -- Resolve topic keywords for relevance filtering (#177) --------------
+    keywords = _resolve_topic_keywords(domain_config, topic)
+
     # -- Determine which sources to collect --------------------------------
     source_configs = _resolve_sources(domain_config.sources, sources)
     if not source_configs:
@@ -141,6 +144,7 @@ def run_collection(
             checker=checker,
             new_items_collector=all_new_items,
             force_full=force_full,
+            keywords=keywords,
         )
         per_source.append(src_result)
         if progress_cb is not None:
@@ -192,6 +196,7 @@ def run_collection(
         "domain": domain,
         "total_found": total_found,
         "total_new": total_new,
+        "items_filtered": sum(r.items_filtered for r in per_source),
         "duration_s": round(elapsed, 3),
         "per_source": [r.to_dict() for r in per_source],
         "dry_run": dry_run,
@@ -234,6 +239,40 @@ def _make_collection_id() -> str:
     return f"col-{ts}-{short}"
 
 
+def _resolve_topic_keywords(domain_config: Any, topic: str) -> list[str]:
+    """Resolve the keyword list used for topic-relevance filtering (#177).
+
+    When *topic* names a configured topic, only that topic's keywords apply;
+    otherwise the union of all domain topics' keywords is used (order-
+    preserving, deduplicated). Returns ``[]`` when nothing is configured —
+    callers must then skip filtering so keyword-less domains behave exactly
+    as before the filter existed.
+    """
+    topics = getattr(domain_config, "topics", [])
+    candidates = [t for t in topics if t.name == topic] if topic else []
+    if not candidates:
+        candidates = list(topics)
+    keywords: list[str] = []
+    for t in candidates:
+        for kw in getattr(t, "keywords", []) or []:
+            if kw and kw not in keywords:
+                keywords.append(kw)
+    return keywords
+
+
+def _matches_keywords(item: Item, keywords: list[str] | None) -> bool:
+    """Return True when any topic keyword appears in the item title/content.
+
+    Case-insensitive substring matching (same semantics as the G3 lexical
+    fallback). An empty keyword list keeps every item so keyword-less
+    domains never lose data.
+    """
+    if not keywords:
+        return True
+    text = f"{item.title or ''} {item.content or ''}".lower()
+    return any(kw and kw.lower() in text for kw in keywords)
+
+
 def _collect_from_source(
     source_config: SourceConfig,
     domain: str,
@@ -245,6 +284,7 @@ def _collect_from_source(
     checker: DedupChecker,
     new_items_collector: list[Item] | None = None,
     force_full: bool = False,
+    keywords: list[str] | None = None,
 ) -> CollectionResult:
     """Fetch items from a single source, deduplicate, and optionally cache."""
     src_start = time.time()
@@ -283,7 +323,7 @@ def _collect_from_source(
 
     # -- Fetch items -------------------------------------------------------
     try:
-        items = _fetch_items(handler, source_config, topic, limit)
+        items = _fetch_items(handler, source_config, topic, limit, keywords)
     except SourceFailure as exc:
         plog.error(
             "Source failed",
@@ -352,6 +392,27 @@ def _collect_from_source(
         )
 
     items_found = len(items)
+
+    # -- Topic-keyword relevance filter (#177) ------------------------------
+    kept_items: list[Item] = []
+    items_filtered = 0
+    for item in items:
+        if _matches_keywords(item, keywords):
+            kept_items.append(item)
+        else:
+            items_filtered += 1
+    if items_filtered:
+        plog.info(
+            "Relevance filter dropped items",
+            source_type=source_config.type,
+            extra={
+                "source_name": source_config.name,
+                "items_found": items_found,
+                "items_filtered": items_filtered,
+                "items_kept": len(kept_items),
+            },
+        )
+    items = kept_items
 
     # Ensure every item carries the correct domain and source quality tier
     for item in items:
@@ -437,6 +498,7 @@ def _collect_from_source(
             status="success",
             duration_s=elapsed,
             trace_ids=trace_ids,
+            items_filtered=items_filtered,
         )
 
     return CollectionResult(
@@ -446,6 +508,7 @@ def _collect_from_source(
         status="success" if not errors else "partial",
         items_found=items_found,
         items_new=items_new,
+        items_filtered=items_filtered,
         errors=errors,
         duration_s=elapsed,
         estimated_duration_s=elapsed,
@@ -625,6 +688,7 @@ def _fetch_items(
     source_config: SourceConfig,
     topic: str,
     limit: int,
+    keywords: list[str] | None = None,
 ) -> list[Item]:
     """Fetch items from a handler.
 
@@ -718,7 +782,8 @@ def _fetch_items(
 
     # -- OpenAlex handler path --------------------------------------------
     if hasattr(handler, "fetch") and getattr(handler, "source_type", "") == "openalex":
-        items = handler.fetch(limit=limit)
+        query = " ".join(keywords) if keywords else topic
+        items = handler.fetch(limit=limit, query=query)
         return [handler.to_item(item) for item in items]
 
     # -- AP API handler path (paid/enterprise) ----------------------------
@@ -972,6 +1037,7 @@ def _log_run(
     errors: list[dict[str, Any]] | None = None,
     duration_s: float = 0.0,
     trace_ids: list[str] | None = None,
+    items_filtered: int = 0,
 ) -> None:
     """Append a run entry to ``collections/<domain>/<source>/_runs.json``.
 
@@ -994,6 +1060,7 @@ def _log_run(
         "status": status,
         "items_found": items_found,
         "items_new": items_new,
+        "items_filtered": items_filtered,
         "errors": errors or [],
         "duration_ms": round(duration_s * 1000, 1),
     }
