@@ -170,11 +170,14 @@ class OpenAlexHandler(BaseHandler):
     # Public API
     # ------------------------------------------------------------------
 
-    def fetch(self, limit: int = 10) -> list[dict[str, Any]]:
+    def fetch(self, limit: int = 10, query: str = "") -> list[dict[str, Any]]:
         """Fetch works from the OpenAlex API.
 
         Args:
             limit: Maximum number of results to return (default 10).
+            query: Topic query override. When non-empty it takes precedence
+                over the configured ``query`` so collection can pass topic
+                keywords into the API ``search`` param (#177).
 
         Returns:
             List of article dicts, each with keys ``id``, ``title``,
@@ -187,9 +190,9 @@ class OpenAlexHandler(BaseHandler):
         # -- Build query parameters --
         params: dict[str, Any] = {}
 
-        query = self.config.get("query", "")
-        if query:
-            params["search"] = query
+        search_query = query or self.config.get("query", "")
+        if search_query:
+            params["search"] = search_query
 
         extra_filters = self.config.get("filters", "")
         if extra_filters:

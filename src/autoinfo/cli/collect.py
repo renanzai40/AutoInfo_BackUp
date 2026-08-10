@@ -201,11 +201,14 @@ def _make_progress_printer() -> Callable[[Any], None]:
 
     def _on_source_done(src_result: Any) -> None:
         icon = icons.get(src_result.status, "?")
-        print(
+        line = (
             f"  {icon} {src_result.source}: {src_result.items_new} new / "
-            f"{src_result.items_found} found ({src_result.duration_s:.1f}s)",
-            flush=True,
+            f"{src_result.items_found} found"
         )
+        filtered = getattr(src_result, "items_filtered", 0) or 0
+        if filtered:
+            line += f" ({filtered} filtered)"
+        print(f"{line} ({src_result.duration_s:.1f}s)", flush=True)
 
     return _on_source_done
 
@@ -225,11 +228,14 @@ def _print_human(result: dict[str, Any]) -> None:
             "skipped": "–",
         }.get(src["status"], "?")
 
-        typer.echo(
+        line = (
             f"  {status_icon} {src['source']}: "
-            f"{src['items_new']} new / {src['items_found']} found "
-            f"({src['duration_s']:.1f}s)"
+            f"{src['items_new']} new / {src['items_found']} found"
         )
+        filtered = src.get("items_filtered", 0) or 0
+        if filtered:
+            line += f" ({filtered} filtered)"
+        typer.echo(f"{line} ({src['duration_s']:.1f}s)")
 
         for err in src.get("errors", []):
             typer.echo(f"      ↳ {err.get('message', 'unknown error')}", err=True)

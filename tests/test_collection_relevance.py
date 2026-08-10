@@ -18,9 +18,15 @@ from __future__ import annotations
 import json
 from unittest.mock import patch
 
-from autoinfo.config import Config, DomainConfig, LLMConfig, ProjectConfig, SourceConfig, TopicConfig
+from autoinfo.config import (
+    Config,
+    DomainConfig,
+    LLMConfig,
+    ProjectConfig,
+    SourceConfig,
+    TopicConfig,
+)
 from autoinfo.models import Item
-
 
 # ======================================================================
 # Fakes & helpers
@@ -79,7 +85,7 @@ def _run_collection(items: list[Item], topics: list[TopicConfig], topic: str = "
     from autoinfo.collect import run_collection
 
     config = _make_config(topics=topics)
-    with patch("autoinfo.collect.get_config_path") as mock_path, patch(
+    with patch("autoinfo.collect.get_config_path"), patch(
         "autoinfo.collect.load_config"
     ) as mock_load:
         mock_load.return_value = config
@@ -229,7 +235,9 @@ class TestOpenAlexTopicQuery:
 
         handler = FakeOpenAlexHandler()
         source = SourceConfig(name="openalex", type="openalex", settings={})
-        items = _fetch_items(handler, source, topic="", limit=5, keywords=["CRISPR", "gene editing"])
+        items = _fetch_items(
+            handler, source, topic="", limit=5, keywords=["CRISPR", "gene editing"]
+        )
         assert items == []
         assert handler.calls[-1] == {"limit": 5, "query": "CRISPR gene editing"}
 

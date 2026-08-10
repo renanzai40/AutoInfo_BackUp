@@ -79,6 +79,7 @@ class CollectionResult:
     status: str = ""
     items_found: int = 0
     items_new: int = 0
+    items_filtered: int = 0
     errors: list[dict[str, Any]] = field(default_factory=list)
     source_failed: bool = False
     duration_s: float = 0.0
