@@ -362,48 +362,123 @@ class LLMExtractor:
 
     @staticmethod
     def _parse_response(content: str | None) -> dict[str, Any]:
-        """Parse the LLM response as JSON with several fallback strategies.
+        """Parse the LLM response as JSON via :func:`parse_json_response`.
 
-        1. Direct :func:`json.loads`.
-        2. Extract JSON from markdown code blocks (```json ... ```).
-        3. Find the first ``{…}`` brace-delimited block.
-
-        Returns an empty dict when all strategies fail or content is ``None``.
+        Returns an empty dict when all strategies fail or content is ``None``
+        — the historical lenient contract for extraction.  The raising
+        contract lives in the public :func:`parse_json_response`.
         """
         if content is None:
             logger.warning("LLM returned None content — empty response")
             return {}
-
-        # Strategy 1 — direct JSON
         try:
-            return json.loads(content)
+            parsed = parse_json_response(content)
+        except json.JSONDecodeError:
+            logger.warning(
+                "Failed to parse LLM response as JSON: %.200s", content or ""
+            )
+            return {}
+        if isinstance(parsed, dict):
+            return parsed
+        logger.warning(
+            "LLM response parsed but is not a JSON object: %.200s", content or ""
+        )
+        return {}
+
+
+def parse_json_response(content: str | None) -> Any:
+    """Parse LLM output as JSON, tolerating markdown and prose noise.
+
+    Strategies, in order:
+
+    1. Direct :func:`json.loads` (plain JSON object or array).
+    2. Extract JSON from a markdown fenced code block (`` ```json ... ``` ``
+       or a bare `` ``` ... ``` ``).
+    3. Extract the first ``{…}`` brace-delimited block from surrounding
+       prose.
+
+    Parameters
+    ----------
+    content:
+        The raw LLM response text, or ``None`` when the model returned no
+        content.
+
+    Returns
+    -------
+    Any
+        The parsed JSON value (typically a ``dict`` or ``list``).
+
+    Raises
+    ------
+    json.JSONDecodeError
+        When *content* is ``None`` (empty response) or none of the three
+        strategies yields valid JSON.  Callers decide the failure policy —
+        e.g. retry/block (quality gates) or a graceful error envelope
+        (MCP tools).
+    TypeError
+        When *content* is not a string (mirrors :func:`json.loads`).
+    """
+    if content is None:
+        raise json.JSONDecodeError("LLM returned no parseable content", "", 0)
+    if not isinstance(content, str):
+        raise TypeError(
+            f"LLM response content must be a string, got {type(content).__name__}"
+        )
+
+    # Strategy 1 — direct JSON
+    try:
+        return json.loads(content)
+    except (json.JSONDecodeError, TypeError):
+        pass
+
+    # Strategy 2 — markdown fenced code block
+    match = re.search(r"```(?:json)?\s*([\s\S]*?)```", content)
+    if match:
+        try:
+            return json.loads(match.group(1))
         except (json.JSONDecodeError, TypeError):
             pass
 
-        # Strategy 2 — markdown fenced code block
+    # Strategy 3 — bare JSON object anywhere in the text
+    match = re.search(r"\{[\s\S]*\}", content)
+    if match:
         try:
-            match = re.search(r"```(?:json)?\s*([\s\S]*?)```", content)
-            if match:
-                try:
-                    return json.loads(match.group(1))
-                except (json.JSONDecodeError, TypeError):
-                    pass
-        except TypeError:
+            return json.loads(match.group(0))
+        except (json.JSONDecodeError, TypeError):
             pass
 
-        # Strategy 3 — bare JSON object anywhere in the text
-        try:
-            match = re.search(r"\{[\s\S]*\}", content)
-            if match:
-                try:
-                    return json.loads(match.group(0))
-                except (json.JSONDecodeError, TypeError):
-                    pass
-        except TypeError:
-            pass
+    raise json.JSONDecodeError("Failed to parse LLM response as JSON", content, 0)
 
-        logger.warning("Failed to parse LLM response as JSON: %.200s", content or "")
-        return {}
+
+def _completion_request(
+    entry: dict[str, str],
+    messages: list[dict[str, str]],
+    *,
+    max_tokens: int,
+    temperature: float,
+    json_mode: bool,
+    reasoning_model: bool,
+    timeout: float | None,
+) -> dict[str, Any]:
+    """Build the LiteLLM completion kwargs for a single chain *entry*.
+
+    ``response_format`` is added only when ``json_mode`` is set **and** the
+    effective reasoning-model flag is ``False`` — reasoning providers
+    reject the parameter, so callers rely on the prompt plus
+    :func:`parse_json_response` instead (issue #178).
+    """
+    kwargs: dict[str, Any] = {
+        "model": entry["model"],
+        "messages": messages,
+        "max_tokens": max_tokens,
+        "temperature": temperature,
+        "api_base": entry["base_url"] or None,
+        "api_key": entry["api_key"] or None,
+        "timeout": timeout,
+    }
+    if json_mode and not reasoning_model:
+        kwargs["response_format"] = {"type": "json_object"}
+    return kwargs
 
 
 def call_with_fallback(
@@ -412,9 +487,10 @@ def call_with_fallback(
     model: str | None = None,
     base_url: str | None = None,
     api_key: str | None = None,
-    max_tokens: int = 2000,
+    max_tokens: int | None = None,
     temperature: float = 0.1,
     json_mode: bool = False,
+    reasoning_model: bool | None = None,
     timeout: float | None = None,
     config: Config | None = None,
 ) -> Any:
@@ -430,7 +506,20 @@ def call_with_fallback(
     otherwise credentials resolve from the environment (``${ENV}``
     placeholders in fallback keys are expanded).  Fallback entries always
     come from *config* (or the on-disk config when *config* is ``None``).
-    *json_mode* adds ``response_format={"type": "json_object"}``.
+    *json_mode* adds ``response_format={"type": "json_object"}`` unless
+    the effective reasoning-model flag is set (see below).
+
+    *reasoning_model* marks the model as a reasoning model that rejects
+    ``response_format`` (e.g. DeepSeek-R1).  When ``None`` (default) the
+    value inherits from ``config.llm.reasoning_model``; an explicit bool
+    wins.  When ``json_mode`` is ``True`` and the effective flag is
+    ``True``, ``response_format`` is suppressed and callers rely on the
+    prompt plus :func:`parse_json_response` (issue #178).
+
+    *max_tokens* defaults to ``config.llm.max_tokens`` when set, else the
+    historical 2000.  A task-level ``llm.tasks[<task>].max_tokens``
+    resolved via :func:`autoinfo.config._resolve_task_llm_config` therefore
+    reaches the request payload (issue #178).
     """
     _litellm = LLMExtractor._get_litellm()
     if _litellm is None:
@@ -442,6 +531,11 @@ def call_with_fallback(
             config = load_config(config_path) if config_path is not None else Config()
         except Exception:
             config = Config()
+
+    if reasoning_model is None:
+        reasoning_model = config.llm.reasoning_model
+    if max_tokens is None:
+        max_tokens = config.llm.max_tokens or 2000
 
     provider = config.llm.provider or DEFAULT_PROVIDER
     primary = (
@@ -486,14 +580,15 @@ def call_with_fallback(
         attempted.append(entry["model"])
         try:
             response = _litellm.completion(
-                model=entry["model"],
-                messages=messages,
-                **(dict(response_format={"type": "json_object"}) if json_mode else {}),
-                max_tokens=max_tokens,
-                temperature=temperature,
-                api_base=entry["base_url"] or None,
-                api_key=entry["api_key"] or None,
-                timeout=timeout,
+                **_completion_request(
+                    entry,
+                    messages,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                    json_mode=json_mode,
+                    reasoning_model=reasoning_model,
+                    timeout=timeout,
+                )
             )
             if entry["model"] != primary:
                 logger.info(
