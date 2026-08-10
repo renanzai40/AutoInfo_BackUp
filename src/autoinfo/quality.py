@@ -1014,14 +1014,53 @@ class G3RelevanceScoring:
 
     @staticmethod
     def _lexical_score(text: str, keywords: list[str]) -> int:
-        """Compute relevance score using lexical keyword overlap.
+        """Compute a discriminative relevance score using keyword overlap.
 
-        Returns ``round((matches / len(keywords)) * 100)``, capped at 100.
+        Issue #182 audit-feedback: the old ``matches/keywords*100`` gave
+        every item ~100 when a handful of keywords matched, so G3 had no
+        discriminative power (all entries scored 100.0).  This version
+        rewards:
+
+        - title hits (strong signal) over body-only hits
+        - coverage of MULTIPLE distinct keywords over one repeated word
+        - phrase-length keywords (specific) over single generic tokens
+
+        Returns 0-100 with a spread that lets the threshold actually cut.
         """
         if not keywords:
             return 100
-        matches = sum(1 for kw in keywords if kw.lower() in text)
-        return min(round((matches / len(keywords)) * 100), 100)
+        low = text.lower()
+        title, _, body = low.partition("\n")
+        title_low = title.strip()
+        body_low = low
+
+        matched = 0.0
+        distinct = 0
+        title_hits = 0
+        for kw in keywords:
+            k = kw.lower()
+            if not k:
+                continue
+            in_title = k in title_low
+            in_body = k in body_low
+            if in_title:
+                matched += 2.0
+                distinct += 1
+                title_hits += 1
+            elif in_body:
+                matched += 1.0
+                distinct += 1
+        if distinct == 0:
+            return 0
+
+        coverage = distinct / len(keywords)
+        density = min(matched / max(len(keywords), 1), 2.0)
+        score = int(round(min((coverage * 60 + density * 40), 100)))
+        # Reserve 100 for high coverage + title hits (rare, meaningful)
+        title_ratio = title_hits / max(len(keywords), 1)
+        if score >= 100 and not (coverage >= 0.5 and title_ratio >= 0.3):
+            score = 96
+        return score
 
     # ------------------------------------------------------------------
     # Score parsing

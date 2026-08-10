@@ -270,7 +270,10 @@ async def create_entry(body: EntryCreate) -> dict[str, Any]:
                     "success": False,
                     "error": {
                         "code": ErrorCode.DOMAIN_NOT_FOUND,
-                        "message": f"Domain '{body.domain}' not found. Use add_domain(name='{body.domain}') to create it.",
+                        "message": (
+                            f"Domain '{body.domain}' not found. "
+                            f"Use add_domain(name='{body.domain}') to create it."
+                        ),
                         "actionable": True,
                     },
                 },
@@ -298,6 +301,13 @@ async def create_entry(body: EntryCreate) -> dict[str, Any]:
         entry = store.store_entry(item=item, tier=body.tier)
     except PermissionError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    if entry is None:
+        # Issue #182: rejected (content too short) — surface a clean error
+        raise HTTPException(
+            status_code=422,
+            detail="entry rejected by KB store (content too short or unparseable)",
+        )
 
     # Fetch the full entry with content to return
     full = store.get_entry(entry.entry_id) or entry.to_dict()
@@ -470,7 +480,9 @@ async def list_feeds(
             ET.SubElement(xml_item, "description").text = item["summary"] or ""
             if item["collected_at"]:
                 ET.SubElement(xml_item, "pubDate").text = item["collected_at"]
-            ET.SubElement(xml_item, "source", {"url": item["url"] or ""}).text = item["source_type"] or ""
+            ET.SubElement(xml_item, "source", {"url": item["url"] or ""}).text = (
+                item["source_type"] or ""
+            )
 
         from fastapi.responses import Response
         ET.indent(rss, space="  ")

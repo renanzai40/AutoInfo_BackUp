@@ -350,7 +350,7 @@ def _update_index_cefr(entry_id: str, cefr_level: str) -> None:
     Non-blocking: any failure is logged and swallowed.
     """
     try:
-        store = KBStore()
+        store = KBStore(min_content_chars=50)
         with store.index._connect() as conn:
             conn.execute(
                 "UPDATE entries SET cefr = ? WHERE entry_id = ?",
@@ -645,7 +645,7 @@ def run_processing(
     # -- Initialise components ----------------------------------------------
     proc_config = _build_config_with_model(config, model)
     extractor = LLMExtractor(config=proc_config)
-    kb_store = KBStore()
+    kb_store = KBStore(min_content_chars=50)
 
     # Load existing entries for G2 dedup checking
     # Convert SQLite dicts back to KBEntry objects for type safety.
@@ -1109,6 +1109,12 @@ def run_processing(
 
             with _STORAGE_LOCK:
                 entry = kb_store.store_entry(item, extraction, quality_results)
+            if entry is None:
+                # Issue #182: entry rejected by KB (content too short) —
+                # skip it; do not crash or count it as created.
+                item_log["status"] = "rejected"
+                item_log["detail"] = "content below minimum length"
+                return item_log, stats
             # M1T14: keep in-memory entry trace_id in sync with item (store_entry
             # already persists item.trace_id to KBEntry + frontmatter in kb.py)
             if not entry.trace_id:

@@ -185,11 +185,23 @@ def import_markdown(domain: str, data: str) -> dict[str, Any]:
             collected_at=frontmatter.get("collected_at"),
             language=frontmatter.get("language", ""),
             tags=frontmatter.get("tags"),
-            **{k: v for k, v in frontmatter.items() if k not in MANDATORY_FIELDS_MD and k not in ("title", "language", "tags", "domain")},
+            **{
+                k: v for k, v in frontmatter.items()
+                if k not in MANDATORY_FIELDS_MD
+                and k not in ("title", "language", "tags", "domain")
+            },
         )
 
-        store = KBStore()
+        store = KBStore(min_content_chars=50)
         entry = store.store_entry(item=item, tier="01-Raw")
+        if entry is None:
+            # Issue #182: content too short / rejected — surface a clean
+            # failure instead of crashing on entry.entry_id.
+            return {
+                "success": False,
+                "entry_id": None,
+                "error": "entry rejected by KB store (content too short or unparseable)",
+            }
 
         return {
             "success": True,
@@ -284,11 +296,19 @@ def import_json(domain: str, data: str) -> dict[str, Any]:
                 collected_at=entry_data.get("collected_at"),
                 language=entry_data.get("language", ""),
                 tags=entry_data.get("tags"),
-                **{k: v for k, v in entry_data.items() if k not in MANDATORY_FIELDS_JSON and k not in ("language", "tags")},
+                **{
+                    k: v for k, v in entry_data.items()
+                    if k not in MANDATORY_FIELDS_JSON
+                    and k not in ("language", "tags")
+                },
             )
 
-            store = KBStore()
-            store.store_entry(item=item, tier="01-Raw")
+            store = KBStore(min_content_chars=50)
+            entry = store.store_entry(item=item, tier="01-Raw")
+            if entry is None:
+                # Issue #182: rejected (content too short) — count as failed
+                failed += 1
+                continue
             imported += 1
         except Exception as exc:
             failed += 1
@@ -372,8 +392,12 @@ def import_csv(domain: str, data: str) -> dict[str, Any]:
                 tags=tags,
             )
 
-            store = KBStore()
-            store.store_entry(item=item, tier="01-Raw")
+            store = KBStore(min_content_chars=50)
+            entry = store.store_entry(item=item, tier="01-Raw")
+            if entry is None:
+                # Issue #182: rejected (content too short) — count as failed
+                failed += 1
+                continue
             imported += 1
         except Exception as exc:
             failed += 1

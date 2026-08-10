@@ -6227,6 +6227,14 @@ def _handle_create_kb_entry(
         store = KBStore()
         entry = store.store_entry(item=item, tier="01-Raw")
 
+        if entry is None:
+            # Issue #182: rejected (content too short) — clean error response
+            return {
+                "error_code": ErrorCode.VALIDATION_ERROR.value,
+                "message": "entry rejected by KB store (content too short or unparseable)",
+                "actionable": True,
+            }
+
         return success_response({
             "entry_id": entry.entry_id,
             "tier": entry.tier,

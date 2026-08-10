@@ -119,19 +119,24 @@ def main() -> None:
             return
         for domain, prod, why in bad:
             print(f"[RETRY] {domain}/{prod} ({why})")
+            out_path = OUTPUTS / domain / f"{prod}-markdown-{STAMP}.md"
             try:
                 result = _gen(domain, prod)
                 text = result if isinstance(result, str) else str(result)
-                out_path = OUTPUTS / domain / f"{prod}-markdown-{STAMP}.md"
                 out_path.parent.mkdir(parents=True, exist_ok=True)
-                out_path.write_text(text, encoding="utf-8")
                 still, why2 = _is_bad(out_path, text)
-                status = "OK" if not still and len(text) >= MIN_CHARS[prod] else "BAD"
-                msg = f"  -> {status} ({len(text)} chars)"
-                if status == "BAD":
-                    msg += f" {why2}"
-                print(msg)
+                ok = not still and len(text) >= MIN_CHARS[prod]
+                if ok:
+                    out_path.write_text(text, encoding="utf-8")
+                    print(f"  -> OK ({len(text)} chars)")
+                else:
+                    # Never persist an empty/draft shell (#182 audit-feedback)
+                    if out_path.exists():
+                        out_path.unlink()
+                    print(f"  -> BAD ({len(text)} chars) {why2}")
             except Exception as exc:  # noqa: BLE001
+                if out_path.exists() and out_path.stat().st_size < MIN_CHARS[prod]:
+                    out_path.unlink()
                 print(f"  -> ERR {exc}")
     remaining = _scan_bad()
     print(f"\n=== Final: {len(remaining)} still failing ===")

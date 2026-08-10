@@ -500,10 +500,12 @@ class TestG3RelevanceScoring:
 
     def test_partial_keyword_match(self, sample_item: Item) -> None:
         g3 = G3RelevanceScoring()
-        # Only "IVF" appears in the item, "quantum" does not
+        # Only "IVF" appears in the item (in title, weighted), "quantum" does not
         result = g3.check(sample_item, topic_keywords=["IVF", "quantum"])
 
-        assert result.score == 50.0  # 1/2 matched = 50
+        # Discriminative scoring (#182): title hit (weight 2.0) + 1/2
+        # coverage → 70, not the old flat 1/2 = 50.
+        assert result.score == 70.0
 
     def test_no_keywords_match_returns_zero(self, sample_item: Item) -> None:
         g3 = G3RelevanceScoring()
@@ -574,26 +576,34 @@ class TestG3RelevanceScoring:
     def test_custom_threshold(self, sample_item: Item) -> None:
         """Custom threshold values are respected."""
         g3 = G3RelevanceScoring()
-        # 1/3 match = round((1/3)*100) = 33
-        # With threshold=30: 33 >= 30 → passes (not flagged)
-        # With threshold=40: 33 < 40 → flagged + hidden
+        # 1/3 match, IVF in title → discriminative score 47 (#182)
+        # With threshold=30: 47 >= 30 → passes (not flagged)
+        # With threshold=40: 47 < 40 → passes; with threshold=60: flagged
         result_low = g3.check(
             sample_item,
             topic_keywords=["IVF", "quantum", "computing"],
             threshold=30,
         )
-        assert result_low.score == 33.0
+        assert result_low.score == 47.0
         assert result_low.passed is True
-        assert result_low.flagged is False  # 33 >= 30
+        assert result_low.flagged is False  # 47 >= 30
 
-        result_high = g3.check(
+        result_mid = g3.check(
             sample_item,
             topic_keywords=["IVF", "quantum", "computing"],
             threshold=40,
         )
-        assert result_high.score == 33.0
+        assert result_mid.score == 47.0
+        assert result_mid.passed is True  # 47 >= 40
+
+        result_high = g3.check(
+            sample_item,
+            topic_keywords=["IVF", "quantum", "computing"],
+            threshold=60,
+        )
+        assert result_high.score == 47.0
         assert result_high.passed is False
-        assert result_high.flagged is True  # 33 < 40
+        assert result_high.flagged is True  # 47 < 60
         assert result_high.details["hidden"] is True
 
 

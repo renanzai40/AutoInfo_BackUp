@@ -217,11 +217,11 @@ class TestSQLiteIndex:
             )
         )
 
-        # date_from = 2026-07-01 — strict collected_at would keep only "new",
-        # but the #182 created_at fallback keeps both (both indexed just now
-        # with fresh created_at). Digest generation never sees empty.
+        # date_from = 2026-07-01 — collected_at is authoritative (COALESCE
+        # #182): "new" (collected 07-15) passes, "old" (collected 06-01) does
+        # not, even though both were indexed just now with fresh created_at.
         entries = index.list_entries("medical-research", date_from="2026-07-01")
-        assert len(entries) == 2
+        assert len(entries) == 1
         assert entries[0]["entry_id"] == "new"
 
         # date_from = 2026-01-01 — should include both
@@ -304,8 +304,13 @@ class TestKBStore:
 
     @pytest.fixture
     def store(self, tmp_path: Path) -> KBStore:
-        """Create a KBStore rooted in a temp directory."""
-        return KBStore(base_path=tmp_path / "knowledge")
+        """Create a KBStore rooted in a temp directory.
+
+        Tests intentionally use short content fixtures — disable the
+        content-length guard (default 50 chars, #182) so unit tests can
+        exercise store_entry with minimal items.
+        """
+        return KBStore(base_path=tmp_path / "knowledge", min_content_chars=0)
 
     @pytest.fixture
     def sample_item(self) -> Item:
@@ -574,12 +579,11 @@ class TestKBStore:
         store.store_entry(new_item)
 
         entries = store.list_entries("medical-research", date_from="2026-07-01")
-        # Issue #182: created_at fallback — both items were stored just now
-        # (fresh created_at), so even the old-collected_at item passes the
-        # weekly window via its ingest time. Digest generation thus never
-        # sees an empty domain when sources publish old-dated articles.
-        assert len(entries) == 2
-        # newest first (both collected_at DESC)
+        # Issue #182 (COALESCE): collected_at is authoritative — the old
+        # item (collected 06-01) is excluded even though it was just stored
+        # with a fresh created_at. Weekly digests never surface stale
+        # content merely because it was re-ingested.
+        assert len(entries) == 1
         assert "new-article" in entries[0]["entry_id"]
 
     # ------------------------------------------------------------------
@@ -743,7 +747,9 @@ def test_import_kb_markdown_frontmatter_domain_does_not_collide(
         "tags: [import, test]\n"
         "---\n"
         "\n"
-        "Body of the imported article.\n"
+        "Body of the imported article with sufficient length to pass the\n"
+        "content-minimum guard (issue #182) and exercise the frontmatter\n"
+        "domain override path end to end.\n"
     )
 
     monkeypatch.chdir(tmp_path)  # KBStore() writes to ./knowledge

@@ -172,7 +172,10 @@ class TestPresentationContentPreference:
             mock_prefs.return_value = _prefs_result(preferences)
             # Topic matches every fixture entry title, so tier filtering is
             # the only thing that distinguishes the prompt content.
-            generate_presentation(domain="test-domain", topic="article one", user_id=user_id)
+            generate_presentation(
+                domain="test-domain", topic="article one",
+                user_id=user_id, allow_empty=True,
+            )
             return mock_llm
 
     def test_raw_only_excludes_processed_tiers(self) -> None:
@@ -199,7 +202,7 @@ class TestPresentationContentPreference:
         ):
             mock_llm.return_value = {"title": "Deck", "description": "", "slides": []}
             mock_kb_cls.return_value = _kb_store_mock()
-            generate_presentation(domain="test-domain", topic="article one")
+            generate_presentation(domain="test-domain", topic="article one", allow_empty=True)
 
         prompt = _llm_prompt(mock_llm)
         assert "Raw tier article one" in prompt

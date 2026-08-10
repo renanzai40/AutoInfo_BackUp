@@ -620,16 +620,15 @@ class SQLiteIndex:
                 conditions.append("tier = ?")
                 params.append(tier)
             if date_from is not None:
-                # Issue #182 (paygrade): many sources publish articles with
-                # original pub dates far older than the ingest date (e.g.
-                # Coursera blog posts from weeks ago, collected today). A
-                # strict collected_at >= date_from filter then returns empty
-                # for weekly/monthly digests. Fall back to created_at (ingest
-                # time) so digests still surface recently-ingested content.
+                # Issue #182 audit-feedback (stale-content regression): a
+                # plain OR on created_at pulled OLD articles into weekly
+                # digests just because they were re-ingested recently (e.g.
+                # legal-compliance 2019 GDPR posts created_at=2026-08-10).
+                # Weekly content should reflect the CONTENT date; created_at
+                # only stands in when collected_at is missing entirely.
                 conditions.append(
-                    "(collected_at >= ? OR created_at >= ?)"
+                    "COALESCE(NULLIF(collected_at, ''), NULLIF(created_at, '')) >= ?"
                 )
-                params.append(date_from)
                 params.append(date_from)
             if user_id is not None:
                 conditions.append("user_id = ?")
@@ -718,16 +717,15 @@ class SQLiteIndex:
                 conditions.append("tier = ?")
                 params.append(tier)
             if date_from is not None:
-                # Issue #182 (paygrade): many sources publish articles with
-                # original pub dates far older than the ingest date (e.g.
-                # Coursera blog posts from weeks ago, collected today). A
-                # strict collected_at >= date_from filter then returns empty
-                # for weekly/monthly digests. Fall back to created_at (ingest
-                # time) so digests still surface recently-ingested content.
+                # Issue #182 audit-feedback (stale-content regression): a
+                # plain OR on created_at pulled OLD articles into weekly
+                # digests just because they were re-ingested recently (e.g.
+                # legal-compliance 2019 GDPR posts created_at=2026-08-10).
+                # Weekly content should reflect the CONTENT date; created_at
+                # only stands in when collected_at is missing entirely.
                 conditions.append(
-                    "(collected_at >= ? OR created_at >= ?)"
+                    "COALESCE(NULLIF(collected_at, ''), NULLIF(created_at, '')) >= ?"
                 )
-                params.append(date_from)
                 params.append(date_from)
             if user_id is not None:
                 conditions.append("user_id = ?")
@@ -2332,10 +2330,14 @@ class KBStore:
     >>> full = store.get_entry(entry.entry_id)
     """
 
-    def __init__(self, base_path: Path | None = None) -> None:
+    def __init__(self, base_path: Path | None = None, min_content_chars: int = 0) -> None:
+        # min_content_chars defaults to 0 so unit tests with intentionally
+        # short fixtures keep working; production entry points (process.py,
+        # importer.py, api routes) pass 50 explicitly (#182).
         if base_path is None:
             base_path = _default_kb_base_path()
         self.base_path = base_path.resolve()
+        self.min_content_chars = min_content_chars
         # Place the SQLite db alongside the knowledge directory
         db_path = self.base_path.parent / "autoinfo.db"
         self.index = SQLiteIndex(db_path)
@@ -2450,7 +2452,7 @@ class KBStore:
         quality_results: dict[str, QualityResult] | None = None,
         tier: str = "01-Raw",
         user_id: str | None = None,
-    ) -> KBEntry:
+    ) -> KBEntry | None:
         """Create a Markdown KB entry for *item* and index it in SQLite.
 
         Parameters
@@ -2544,6 +2546,26 @@ class KBStore:
         summary = extraction.tl_dr if extraction and extraction.tl_dr else ""
         tags = item.topic_tags[:]
 
+        # Issue #182 audit-feedback:
+        # 1) collected_at must never be empty at rest — fall back to the
+        #    content/creation time so provenance is always present.
+        # 2) items whose content is essentially absent (title only, <50
+        #    chars) are not yet usable as paid content — skip them instead
+        #    of polluting KB with empty shells.
+        collected_at = item.collected_at or ""
+        if not collected_at.strip():
+            created_at_ts = datetime.now(timezone.utc).isoformat()
+            collected_at = created_at_ts
+        content_len = len((item.content or "").strip())
+        if content_len < self.min_content_chars:
+            logger.warning(
+                "Skipping KB store for %s: content too short (%d chars) — "
+                "title-only item would ship an empty shell (#182)",
+                item.id,
+                content_len,
+            )
+            return None
+
         entry = KBEntry(
             entry_id=entry_id,
             title=item.title,
@@ -2552,7 +2574,7 @@ class KBStore:
             source_url=item.source_url,
             source_type=item.source_type,
             source_platform=item.source_platform,
-            collected_at=item.collected_at,
+            collected_at=collected_at,
             summary=summary,
             tags=tags,
             quality_tier=quality_tier,
@@ -2807,10 +2829,11 @@ class KBStore:
         # Fallback: scan filesystem
         fs_entries = self._scan_kb_filesystem(domain, tier=tier)
         if date_from:
+            def _content_date(e: dict[str, Any]) -> str:
+                return e.get("collected_at") or e.get("created_at") or ""
             fs_entries = [
                 e for e in fs_entries
-                if e.get("collected_at", "") >= date_from
-                or e.get("created_at", "") >= date_from
+                if _content_date(e) >= date_from
             ]
         return fs_entries[offset: offset + limit]
 

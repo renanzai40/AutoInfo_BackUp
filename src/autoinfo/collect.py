@@ -809,7 +809,11 @@ def _fetch_items(
 
     # -- PubMed handler path -----------------------------------------------
     if hasattr(handler, "search") and hasattr(handler, "fetch"):
-        query = topic if topic else source_config.name
+        # Issue #182: when no topic is provided, fall back to the first
+        # domain topic keyword instead of the source name — searching
+        # "pubmed" returns off-topic records that the relevance filter
+        # then discards (found>0, new=0).
+        query = topic or (keywords[0] if keywords else source_config.name)
         pmids = handler.search(query, max_results=limit)
         if not pmids:
             return []
