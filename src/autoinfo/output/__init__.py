@@ -4126,14 +4126,14 @@ def _generate_executive_summary(
     # boilerplate / meta-narrative prose, so feed the highest-relevance
     # entries (capped to keep the prompt short) with their titles and summary
     # excerpts.
-    _MAX_DETAIL_ENTRIES = 40
-    _MAX_ENTRY_SUMMARY_CHARS = 120
+    max_detail_entries = 40
+    max_entry_summary_chars = 120
 
     ranked = sorted(
         (e for g in groupings for e in g["entries"]),
         key=lambda e: float(e.get("relevance_score") or 0.0),
         reverse=True,
-    )[:_MAX_DETAIL_ENTRIES]
+    )[:max_detail_entries]
     picked_ids = {id(e) for e in ranked}
 
     detail_lines: list[str] = []
@@ -4142,7 +4142,7 @@ def _generate_executive_summary(
         for e in picked:
             detail_lines.append(
                 f"- [{g['theme']}] {e.get('title', '')}: "
-                f"{(e.get('summary') or '')[: _MAX_ENTRY_SUMMARY_CHARS]}"
+                f"{(e.get('summary') or '')[: max_entry_summary_chars]}"
             )
         if len(picked) < len(g["entries"]):
             detail_lines.append(

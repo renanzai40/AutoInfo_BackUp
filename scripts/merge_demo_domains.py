@@ -8,8 +8,9 @@ already configured. Preserves existing config blocks.
 Usage: HOME=/home/renanzai python3 scripts/merge_demo_domains.py [--dry-run]
 """
 import sys
-import yaml
 from pathlib import Path
+
+import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / ".autoinfo" / "config.yaml"
@@ -48,7 +49,9 @@ def main() -> None:
 
     print(f"\n新增域: {len(added)} -> 总域数: {len(cfg['domains'])}")
     if added and not dry:
-        CONFIG.write_text(yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False), encoding="utf-8")
+        CONFIG.write_text(
+            yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False), encoding="utf-8"
+        )
         print(f"written {CONFIG}")
     else:
         print("(dry-run — pass --write to apply)" if not added else "(dry-run)")

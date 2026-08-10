@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 os.environ.setdefault("AUTOINFO_LLM_API_KEY", os.environ.get("OPENCODE_GO_KEY", ""))
 
-from autoinfo.output import generate_report, generate_tutorial, PRODUCT_TEMPLATES
+from autoinfo.output import PRODUCT_TEMPLATES, generate_report, generate_tutorial  # noqa: E402
 
 OUT = ROOT / "outputs"
 
@@ -67,12 +67,18 @@ def main() -> None:
                     d.mkdir(parents=True, exist_ok=True)
                     p = d / f"{product}-markdown-{time.strftime('%Y%m%d-%H%M%S')}.md"
                     p.write_text(str(out), encoding="utf-8")
-                    print(f"[OK ] {domain}/{product} attempt={attempt} {p.name} ({p.stat().st_size}b)")
+                    print(
+                        f"[OK ] {domain}/{product} attempt={attempt} {p.name} "
+                        f"({p.stat().st_size}b)"
+                    )
                     ok = True
                     break
                 print(f"[retry] {domain}/{product} attempt={attempt}: {reason}")
             except Exception as e:
-                print(f"[err ] {domain}/{product} attempt={attempt}: {type(e).__name__} {str(e)[:60]}")
+                print(
+                    f"[err ] {domain}/{product} attempt={attempt}: "
+                    f"{type(e).__name__} {str(e)[:60]}"
+                )
             time.sleep(1)
         if not ok:
             print(f"[FAIL] {domain}/{product} after 5 attempts")

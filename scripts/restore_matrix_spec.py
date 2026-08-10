@@ -60,10 +60,21 @@ def main() -> None:
     new_block = "\n".join(lines) + "\n"
 
     old_text = text[start:end]
-    old_count = sum(1 for l in old_text.splitlines() if l.strip().startswith("- {domain:"))
-    print(f"old required_cells: {old_count} -> new: {len(DOMAINS)*len(PRODUCTS)*len(ALL_FORMATS)}")
-    print(f"implemented: {sum(1 for d in DOMAINS for p in PRODUCTS for f in ALL_FORMATS if f in CAPABILITY[p])}")
-    print(f"not-implemented: {sum(1 for d in DOMAINS for p in PRODUCTS for f in ALL_FORMATS if f not in CAPABILITY[p])}")
+    old_count = sum(
+        1 for line in old_text.splitlines() if line.strip().startswith("- {domain:")
+    )
+    implemented_count = sum(
+        1 for d in DOMAINS for p in PRODUCTS for f in ALL_FORMATS if f in CAPABILITY[p]
+    )
+    not_implemented_count = (
+        len(DOMAINS) * len(PRODUCTS) * len(ALL_FORMATS) - implemented_count
+    )
+    print(
+        f"old required_cells: {old_count} -> new: "
+        f"{len(DOMAINS)*len(PRODUCTS)*len(ALL_FORMATS)}"
+    )
+    print(f"implemented: {implemented_count}")
+    print(f"not-implemented: {not_implemented_count}")
 
     if "--write" in sys.argv:
         SPEC.write_text(text[:start] + new_block + text[end:], encoding="utf-8")

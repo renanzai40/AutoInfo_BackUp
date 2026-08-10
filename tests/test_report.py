@@ -15,14 +15,12 @@ Covers:
 
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
 
 from autoinfo.models import ExtractionResult
-
 
 # ===================================================================
 # Fixtures
@@ -81,7 +79,10 @@ def _make_grouping_result() -> ExtractionResult:
             "groups": [
                 {
                     "theme": "IVF & Reproductive Medicine",
-                    "description": "Advancements in IVF treatment and assisted reproductive technologies.",
+                    "description": (
+                        "Advancements in IVF treatment and assisted "
+                        "reproductive technologies."
+                    ),
                     "entry_ids": ["entry-001"],
                 },
                 {
@@ -655,8 +656,13 @@ class TestReportTypes:
         assert "Industry Overview" in instructions
         assert "Key Developments" in instructions
 
-    def test_standard_type_passes_empty_instructions(self, sample_entries: list[dict]) -> None:
-        """``report_type="standard"`` passes empty/unchanged custom_instructions to executive summary."""
+    def test_standard_type_passes_empty_instructions(
+        self, sample_entries: list[dict]
+    ) -> None:
+        (
+            """``report_type="standard"`` passes empty/unchanged custom_instructions"""
+            """ to executive summary."""
+        )
         with (
             patch("autoinfo.output.KBStore") as mock_kb_cls,
             patch.object(
@@ -672,7 +678,11 @@ class TestReportTypes:
             mock_store.list_entries.return_value = sample_entries
             mock_kb_cls.return_value = mock_store
 
-            _call_report("medical-research", report_type="standard", custom_instructions="Focus on safety.")
+            _call_report(
+                "medical-research",
+                report_type="standard",
+                custom_instructions="Focus on safety.",
+            )
 
         args = mock_exec.call_args.args
         instructions = args[3] if len(args) > 3 else ""

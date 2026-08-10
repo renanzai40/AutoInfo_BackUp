@@ -20,8 +20,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from autoinfo.models import ExtractionResult
-from autoinfo.output import PRODUCT_TEMPLATES, _VALID_REPORT_TYPES
-
+from autoinfo.output import _VALID_REPORT_TYPES, PRODUCT_TEMPLATES
 
 # ===================================================================
 # Fixtures
@@ -76,7 +75,10 @@ def _make_grouping_result() -> ExtractionResult:
             "groups": [
                 {
                     "theme": "IVF & Reproductive Medicine",
-                    "description": "Advancements in IVF treatment and assisted reproductive technologies.",
+                    "description": (
+                        "Advancements in IVF treatment and assisted "
+                        "reproductive technologies."
+                    ),
                     "entry_ids": ["entry-001"],
                 },
                 {

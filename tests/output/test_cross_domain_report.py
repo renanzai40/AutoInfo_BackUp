@@ -19,7 +19,6 @@ import pytest
 
 from autoinfo.models import ExtractionResult
 
-
 # Fixtures
 # ---------------------------------------------------------------------------
 

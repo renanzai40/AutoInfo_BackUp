@@ -574,7 +574,9 @@ class TestDigestDeliveryGates:
             # TRIAGE #35 — generate_report calls list_entries positionally
             # (output/__init__.py:2808: kb_store.list_entries(domain, limit=5000)),
             # so the mock signature must accept positional domain/limit too.
-            def list_entries(self, domain=None, limit=20, **kwargs: object) -> list[dict[str, object]]:
+            def list_entries(
+                self, domain=None, limit=20, **kwargs: object
+            ) -> list[dict[str, object]]:
                 return [
                     {
                         "entry_id": "e1",
@@ -615,7 +617,9 @@ class TestDigestDeliveryGates:
         class _MockStore:
             # TRIAGE #35 — same positional list_entries signature as the
             # other report-path mock (generate_report, output/__init__.py:2808).
-            def list_entries(self, domain=None, limit=20, **kwargs: object) -> list[dict[str, object]]:
+            def list_entries(
+                self, domain=None, limit=20, **kwargs: object
+            ) -> list[dict[str, object]]:
                 return [
                     {
                         "entry_id": "e1",
