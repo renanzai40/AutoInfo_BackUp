@@ -676,11 +676,18 @@ def test_enduser_journey_scenario_loads():
 
 
 def _required_cells() -> set[tuple[str, str, str]]:
-    """The spec's required domain x product x format cells (Oracle R8)."""
+    """The spec's required-capability domain x product x format cells
+    (Oracle R8) — required cells annotated ``capability: not-implemented``
+    are capability boundaries (rendered 不适用not-applicable, never 空gap),
+    so they are excluded from the gap-domain set."""
     spec = yaml.safe_load(
         (ROOT / "docs" / "dev" / "specs" / "end-user-matrix.yaml").read_text(encoding="utf-8")
     )
-    return {(c["domain"], c["product"], c["format"]) for c in spec["required_cells"]}
+    return {
+        (c["domain"], c["product"], c["format"])
+        for c in spec["required_cells"]
+        if c.get("capability", "implemented") == "implemented"
+    }
 
 
 def _zip_matrix_meta(zip_path: Path) -> dict[str, Any]:

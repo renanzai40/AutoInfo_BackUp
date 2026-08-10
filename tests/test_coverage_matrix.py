@@ -103,13 +103,18 @@ def test_capability_boundary_required_cell_is_not_applicable(spec):
     """A required cell annotated capability: not-implemented is a deliberate
     capability boundary — it must render 不适用not-applicable, NEVER 空gap or
     未配置unconfigured, whether or not the LLM is available."""
-    # (medical-research, tutorial, html) is required + not-implemented in the spec
     cell = {"domain": "medical-research", "product": "tutorial", "format": "html"}
     assert ("medical-research", "tutorial", "html") in cm.not_implemented_cells_set(spec)
-    assert cm.classify_cell(cell, EMPTY_PRODUCED, llm_available=True, spec=spec) == cm.NOT_APPLICABLE
-    assert cm.classify_cell(cell, EMPTY_PRODUCED, llm_available=False, spec=spec) == cm.NOT_APPLICABLE
+    assert cm.classify_cell(
+        cell, EMPTY_PRODUCED, llm_available=True, spec=spec
+    ) == cm.NOT_APPLICABLE
+    assert cm.classify_cell(
+        cell, EMPTY_PRODUCED, llm_available=False, spec=spec
+    ) == cm.NOT_APPLICABLE
     assert cm.classify_cell(cell, EMPTY_PRODUCED, llm_available=True, spec=spec) != cm.GAP
-    assert cm.classify_cell(cell, EMPTY_PRODUCED, llm_available=False, spec=spec) != cm.UNCONFIGURED
+    assert cm.classify_cell(
+        cell, EMPTY_PRODUCED, llm_available=False, spec=spec
+    ) != cm.UNCONFIGURED
 
 
 def test_capability_boundary_with_evidence_is_produced(spec):
