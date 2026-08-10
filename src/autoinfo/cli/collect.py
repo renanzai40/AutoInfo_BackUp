@@ -9,10 +9,10 @@ Usage::
 """
 
 
-import json
-from typing import Any, Callable
+import json  # noqa: E402
+from typing import Any, Callable  # noqa: E402
 
-import typer
+import typer  # noqa: E402
 
 app = typer.Typer()
 
@@ -80,7 +80,7 @@ def collect(
             config_path = get_config_path()
             if config_path is None:
                 typer.echo(
-                    "Error: No configuration found. Run 'autoinfo init' first. See docs/dev/required-api-keys.md for API key setup.",
+                    "Error: No configuration found. Run 'autoinfo init' first. See docs/dev/required-api-keys.md for API key setup.",  # noqa: E501
                     err=True,
                 )
                 raise typer.Exit(code=1)

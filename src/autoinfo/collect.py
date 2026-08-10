@@ -196,6 +196,7 @@ def run_collection(
         "domain": domain,
         "total_found": total_found,
         "total_new": total_new,
+        "items_filtered": sum(r.items_filtered for r in per_source),
         "duration_s": round(elapsed, 3),
         "per_source": [r.to_dict() for r in per_source],
         "dry_run": dry_run,
