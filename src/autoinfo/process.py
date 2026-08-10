@@ -135,7 +135,7 @@ def detect_language(text: str) -> str:
     if len(text.strip()) < 20:
         return "unknown"
     try:
-        from langdetect import LangDetectException as _LDE
+        from langdetect import LangDetectException as _LDE  # noqa: N814
         from langdetect import detect_langs
     except ImportError:
         logger.debug("langdetect not installed — language detection disabled")
@@ -297,7 +297,7 @@ def _read_progress(domain: str) -> dict:
         with sqlite3.connect(str(db_path)) as conn:
             _init_progress_table(conn)
             row = conn.execute(
-                "SELECT last_processed_index, total_items FROM processing_progress WHERE domain = ?",
+                "SELECT last_processed_index, total_items FROM processing_progress WHERE domain = ?",  # noqa: E501
                 (domain,),
             ).fetchone()
             if row is not None:
@@ -655,7 +655,7 @@ def run_processing(
     from dataclasses import fields as _dc_fields
 
     from autoinfo.models import KBEntry
-    _KB_FIELDS = {f.name for f in _dc_fields(KBEntry)}
+    _KB_FIELDS = {f.name for f in _dc_fields(KBEntry)}  # noqa: N806
     existing_entries_raw = kb_store.list_entries(domain, limit=10000)
     existing_entries: list[KBEntry] = [
         KBEntry(**{k: v for k, v in row.items() if k in _KB_FIELDS})
@@ -857,7 +857,7 @@ def run_processing(
                     )
                     g4_model = f"{g4_provider}/{g4_model_name}"
                     g4_gate_config = gate_config.get("G4-SummaryFactual") if gate_config else None
-                    g4 = G4FactualConsistency(model=g4_model, json_mode=proc_config.llm.json_mode if proc_config else False, timeout=llm_timeout)
+                    g4 = G4FactualConsistency(model=g4_model, json_mode=proc_config.llm.json_mode if proc_config else False, timeout=llm_timeout)  # noqa: E501
                     g4_result = g4.check(item, extraction, gate_config=g4_gate_config)
                     quality_results["G4-SummaryFactual"] = g4_result
 
