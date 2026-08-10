@@ -533,12 +533,13 @@ class TestCollectProcessPipeline:
                 dry_run=False,
             )
 
-        # #177: topic-keyword relevance filter is now active at the collection
-        # layer — the article on neuroplasticity doesn't match IVF/embryo
-        # keywords and is dropped by design.
+        # #177: the topic-keyword relevance filter is source-type aware — it
+        # applies only to cross-disciplinary search platforms (OpenAlex,
+        # Semantic Scholar, CrossRef, ...). PubMed is a topical provider API,
+        # so neither article is keyword-filtered.
         assert result["total_found"] == 2
-        assert result["total_new"] == 1
-        assert result["items_filtered"] == 1
+        assert result["total_new"] == 2
+        assert result["items_filtered"] == 0
         assert result["domain"] == self.DOMAIN
         assert result["dry_run"] is False
 

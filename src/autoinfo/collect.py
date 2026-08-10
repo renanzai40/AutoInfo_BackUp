@@ -11,6 +11,7 @@ import asyncio
 import json
 import logging
 import os
+import re
 import threading
 import time
 import uuid
@@ -260,17 +261,96 @@ def _resolve_topic_keywords(domain_config: Any, topic: str) -> list[str]:
     return keywords
 
 
-def _matches_keywords(item: Item, keywords: list[str] | None) -> bool:
-    """Return True when any topic keyword appears in the item title/content.
+# ---------------------------------------------------------------------------
+# Topic-keyword relevance filter (#177) — source-type aware
+# ---------------------------------------------------------------------------
+# The filter exists to keep cross-disciplinary *search platforms* on-domain
+# (OpenAlex/CrossRef/Semantic Scholar returning "Loot Crates" for a medical
+# query).  Curated niche feeds (publication RSS like retail-dive/techcrunch,
+# provider APIs like pubmed) are topical by construction — the source itself
+# is the relevance signal — so filtering them drops real items (the #177
+# over-filtering regression).  Classification mirrors the name-based
+# dispatch in ``_build_handler``.
+CROSS_DISCIPLINARY_SOURCE_TYPES: frozenset[str] = frozenset({
+    "openalex",
+    "dblp",
+    "web",
+})
+# Generic ``api`` handlers whose NAME marks a cross-disciplinary platform.
+# (Deep-imported alongside ``_build_handler``: Semantic Scholar, CrossRef.)
+CROSS_DISCIPLINARY_API_NAME_MARKERS: tuple[str, ...] = ("semantic", "crossref")
+# Token-level word splitter for partial-word matching ("retail" -> "retailer",
+# "gene" -> "gene-editing").
+_WORD_RE = re.compile(r"[a-z0-9]+")
 
-    Case-insensitive substring matching (same semantics as the G3 lexical
-    fallback). An empty keyword list keeps every item so keyword-less
-    domains never lose data.
+
+def _is_cross_disciplinary_source(source_config: SourceConfig) -> bool:
+    """Return True when *source_config* is a cross-disciplinary search platform.
+
+    Such platforms execute a broad query over a cross-topic corpus, so an
+    item's on-domain-ness can only be judged by topic keywords (#177).
+    Everything else — curated publication RSS, provider APIs (pubmed, uspto,
+    coursera), site-scoped Google News feeds — is topical by construction
+    and is never keyword-filtered.
+    """
+    stype = (source_config.type or "").lower()
+    if stype in CROSS_DISCIPLINARY_SOURCE_TYPES:
+        return True
+    if stype == "api":
+        name = (source_config.name or "").lower()
+        if any(marker in name for marker in CROSS_DISCIPLINARY_API_NAME_MARKERS):
+            return True
+    # Google News search RSS: unscoped feeds (news.google.com/rss,
+    # /search?q=...) return cross-topic headlines; site-scoped queries
+    # (q=site:...) are effectively curated per-site feeds.
+    if stype == "rss":
+        url = (source_config.url or "").lower()
+        if "news.google.com/rss" in url and "q=site:" not in url:
+            return True
+    return False
+
+
+def _keyword_matches(keyword: str, text: str) -> bool:
+    """Return True when every word of *keyword* appears in *text*.
+
+    Matching is case-insensitive, token-level, partial-word aware: a word
+    matches when it occurs at a word boundary as a prefix of a longer token
+    — "retail" matches "retailers", "gene" matches "gene-editing" — so
+    inflected/hyphenated forms of a keyword count even though a naive
+    substring match would miss them.
+    """
+    words = _WORD_RE.findall(keyword.lower())
+    if not words:
+        return False
+    return all(
+        re.search(rf"(?<![a-z0-9]){re.escape(w)}", text) is not None
+        for w in words
+    )
+
+
+def _matches_keywords(
+    item: Item,
+    keywords: list[str] | None,
+    min_keywords: int = 1,
+) -> bool:
+    """Return True when at least *min_keywords* topic keywords match *item*.
+
+    A keyword matches when every one of its words appears (partial-word
+    aware) in title or content.  The *min_keywords* floor (default 1)
+    requires that many distinct keywords to match, tolerating a single
+    loose phrase while still rejecting keyword-less items.  An empty
+    keyword list keeps every item so keyword-less domains never lose data.
     """
     if not keywords:
         return True
     text = f"{item.title or ''} {item.content or ''}".lower()
-    return any(kw and kw.lower() in text for kw in keywords)
+    matched = 0
+    for kw in keywords:
+        if kw and _keyword_matches(kw, text):
+            matched += 1
+            if matched >= min_keywords:
+                return True
+    return False
 
 
 def _collect_from_source(
@@ -394,13 +474,18 @@ def _collect_from_source(
     items_found = len(items)
 
     # -- Topic-keyword relevance filter (#177) ------------------------------
+    # Curated sources skip the filter entirely (topical by construction),
+    # so they keep every item and report 0 filtered — the #177 regression fix.
     kept_items: list[Item] = []
     items_filtered = 0
-    for item in items:
-        if _matches_keywords(item, keywords):
-            kept_items.append(item)
-        else:
-            items_filtered += 1
+    if _is_cross_disciplinary_source(source_config):
+        for item in items:
+            if _matches_keywords(item, keywords):
+                kept_items.append(item)
+            else:
+                items_filtered += 1
+    else:
+        kept_items = items
     if items_filtered:
         plog.info(
             "Relevance filter dropped items",
