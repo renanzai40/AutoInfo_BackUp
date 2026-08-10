@@ -22,6 +22,7 @@ network or LLM calls.
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 from unittest.mock import MagicMock, patch
 
@@ -32,7 +33,6 @@ from autoinfo.collectors.http_api import HttpApiHandler
 from autoinfo.config import SourceConfig
 from autoinfo.kb import _build_body
 from autoinfo.models import Item
-
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -131,6 +131,7 @@ def test_empty_title_and_content_item_dropped_and_counted(
     )
 
     handler = HttpApiHandler(config)
+    caplog.set_level(logging.INFO, logger="autoinfo.collectors.http_api")
     items = handler.fetch(config.url, limit=10)
 
     assert len(items) == 1

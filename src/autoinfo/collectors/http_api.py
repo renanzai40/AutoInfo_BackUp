@@ -131,6 +131,10 @@ class HttpApiHandler(BaseHandler):
         self.source_name = source_config.name
         self._settings = source_config.settings
         self._last_request_time = 0.0
+        # Count of items dropped because both title and content were empty
+        # after field mapping (issue #180 — e.g. sources with no
+        # ``field_mapping`` produce whole-dict items with no usable fields).
+        self.dropped_empty_items: int = 0
 
     # ------------------------------------------------------------------
     # Rate limiting
@@ -339,7 +343,7 @@ class HttpApiHandler(BaseHandler):
 
         for i, raw in enumerate(raw_items):
             try:
-                content = _get_field(raw, field_mapping.get("content", "")) or ""
+                content = _coerce_str(_get_field(raw, field_mapping.get("content", "")))
 
                 # CrossRef-specific fallback: if the content field (abstract) is empty
                 # AND the source is CrossRef, try to scrape the DOI landing page.
@@ -361,17 +365,37 @@ class HttpApiHandler(BaseHandler):
                                 scrape_exc,
                             )
 
+                title = _coerce_str(_get_field(raw, field_mapping.get("title", "")))
+                source_url = (
+                    _coerce_str(_get_field(raw, field_mapping.get("source_url", "")))
+                    or self.source_config.url
+                )
+                content_type = (
+                    _coerce_str(_get_field(raw, field_mapping.get("content_type", "")))
+                    or "text"
+                )
+
+                # Issue #180: sources without a field_mapping (e.g. Alpha
+                # Vantage) produce whole-dict items with empty title AND
+                # content — drop them instead of writing garbage KB entries.
+                if not title and not content:
+                    self.dropped_empty_items += 1
+                    logger.info(
+                        "Dropping empty item %d from source '%s' "
+                        "(no title and no content after field mapping)",
+                        i,
+                        self.source_name,
+                    )
+                    continue
+
                 item = Item(
                     id=_get_field(raw, field_mapping.get("id", "")) or _make_stable_id(raw, i),
                     source_name=self.source_name,
                     source_type="api",
-                    source_url=(
-                        _get_field(raw, field_mapping.get("source_url", ""))
-                        or self.source_config.url
-                    ),
-                    title=_get_field(raw, field_mapping.get("title", "")) or "",
+                    source_url=source_url,
+                    title=title,
                     content=content,
-                    content_type=_get_field(raw, field_mapping.get("content_type", "")) or "text",
+                    content_type=content_type,
                     source_platform=self.source_config.name,
                     collected_at=collected_at,
                     raw_data=raw,
@@ -423,6 +447,17 @@ def _traverse_json(data: dict[str, Any], dot_path: str) -> Any:
         else:
             return None
     return current
+
+
+def _coerce_str(value: Any) -> str:
+    """Coerce a raw API field value to ``str``; ``None`` becomes ``""``.
+
+    HTTP JSON APIs (e.g. World Bank) return numeric values for
+    string-intended fields.  Coercing here keeps ``Item.title`` /
+    ``Item.content`` as ``str`` so downstream joins (``kb._build_body``)
+    cannot raise ``TypeError`` (issue #180).
+    """
+    return "" if value is None else str(value)
 
 
 def _get_field(data: dict[str, Any], path: str) -> Any:

@@ -4686,7 +4686,7 @@ def _build_body(
                 rel = ent.get("relevance", "")
                 parts.append(f"- **{name}** ({etype}, relevance={rel})\n")
 
-    return "".join(parts)
+    return "".join("" if part is None else str(part) for part in parts)
 
 
 def _strip_frontmatter(text: str) -> str:

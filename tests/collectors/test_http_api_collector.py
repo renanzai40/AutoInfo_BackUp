@@ -22,7 +22,6 @@ from autoinfo.collectors.base import SourceFailure
 from autoinfo.collectors.http_api import HttpApiHandler, _get_field, _traverse_json
 from autoinfo.config import SourceConfig
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
@@ -390,7 +389,7 @@ class TestHttpApiHandlerFetch:
     def test_fetch_skips_malformed_items(
         self, mock_get: MagicMock, crossref_config: SourceConfig
     ) -> None:
-        """Items with missing mapped fields should still be created with empty/default values."""
+        """Items with no mapped title AND no content are dropped (issue #180)."""
         response = {
             "message": {
                 "items": [
@@ -401,7 +400,7 @@ class TestHttpApiHandlerFetch:
                         "URL": "https://doi.org/10.1234/good.001",
                     },
                     {
-                        # Missing DOI, title
+                        # Missing title + abstract -> empty item, dropped
                         "DOI": "10.1234/bad.001",
                     },
                 ],
@@ -416,10 +415,10 @@ class TestHttpApiHandlerFetch:
         handler = HttpApiHandler(crossref_config)
         items = handler.fetch(crossref_config.url, query="test", limit=5)
 
-        # Both items should be present; bad item gets empty strings for missing fields
-        assert len(items) == 2
+        # Only the good item survives; the empty one is dropped and counted.
+        assert len(items) == 1
         assert items[0].title == "Good Paper"
-        assert items[1].id == "10.1234/bad.001"
+        assert handler.dropped_empty_items == 1
 
     @patch("autoinfo.collectors.http_api.httpx.get")
     def test_fetch_with_api_key_header_mode(

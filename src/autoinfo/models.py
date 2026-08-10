@@ -61,6 +61,15 @@ class Item:
                 # Required field without a default — use empty string
                 filtered[field_name] = ""
 
+        # Issue #180: coerce string-intended fields so non-str values coming
+        # from collectors (e.g. numeric HTTP API fields) cannot crash
+        # downstream joins (kb._build_body) or leak into KB frontmatter.
+        for field_name in ("title", "content", "source_url"):
+            if field_name in filtered:
+                filtered[field_name] = (
+                    "" if filtered[field_name] is None else str(filtered[field_name])
+                )
+
         try:
             return cls(**filtered)
         except Exception as exc:
