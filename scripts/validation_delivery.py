@@ -175,6 +175,11 @@ _EMPTY_PLACEHOLDER_RE = re.compile(r"^\s*_no\s+.+_\.?\s*$", re.IGNORECASE)
 # outside a type's required set are still checked by the D1 gate (it always
 # requires all three); they get a non-empty marker so a complete product of
 # that format is not false-rejected (#172).
+#
+# Reports render via report.md.j2 (Executive Summary + Key Findings +
+# Recommendations + per-theme Sections + References) — the template now emits
+# separate ``## Key Findings`` / ``## Recommendations`` headings, so a report
+# must genuinely carry all three canonical sections.
 _PRODUCT_TYPE_REQUIRED_SECTIONS: dict[str, tuple[str, ...]] = {
     "report": ("key_findings", "summary", "recommendations"),
     "presentation": ("key_findings",),          # at least one Slide N heading
@@ -182,10 +187,19 @@ _PRODUCT_TYPE_REQUIRED_SECTIONS: dict[str, tuple[str, ...]] = {
     "tutorial": ("key_findings", "recommendations"),  # Learning Objectives + Exercises
     "column": ("key_findings",),                # at least one content heading
     "magazine": ("key_findings",),              # at least one content heading
+    # Briefing products render via the report template family (Executive
+    # Summary + Sections + References); the only canonical section they
+    # genuinely produce is the summary (#172 follow-up).
+    "enterprise_briefing": ("summary",),
+    "premium_briefing": ("summary",),
+    "magazine_digest": ("summary",),
 }
 
 # Filename keywords -> product type (checked in order).
 _PRODUCT_TYPE_KEYWORDS: tuple[tuple[str, str], ...] = (
+    ("enterprise-briefing", "enterprise_briefing"),
+    ("premium-briefing", "premium_briefing"),
+    ("magazine-digest", "magazine_digest"),
     ("presentation", "presentation"),
     ("tutorial", "tutorial"),
     ("magazine", "magazine"),
@@ -316,8 +330,9 @@ def _is_empty_placeholder(content: str) -> bool:
 def _detect_product_type(file_path: Path, body: str = "") -> str:
     """Infer the product type from the artifact path (#172).
 
-    Filename keywords win (presentation/digest/tutorial/column/magazine);
-    everything else defaults to ``report``. Column products are persisted
+    Filename keywords win (presentation/digest/tutorial/column/magazine/
+    enterprise-briefing/premium-briefing/magazine-digest); everything else
+    defaults to ``report``. Column products are persisted
     under the ``report`` name (generate_report persists report_type="column"
     as report-markdown-*), so column-template headings in the body upgrade a
     report-named file to ``column``.

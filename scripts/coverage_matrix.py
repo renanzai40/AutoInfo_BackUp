@@ -100,6 +100,22 @@ def required_cells_set(spec: dict[str, Any]) -> set[Cell]:
     return out
 
 
+def not_implemented_cells_set(spec: dict[str, Any]) -> set[Cell]:
+    """Return the capability-boundary cells of *spec*.
+
+    Required cells annotated ``capability: not-implemented`` describe a
+    deliberate capability boundary (no code implements that product x format
+    combination for that domain), NOT a missing-evidence gap. They render as
+    ``不适用not-applicable`` instead of ``空gap`` — a real gap is "implemented
+    but no evidence".
+    """
+    out: set[Cell] = set()
+    for c in spec.get("required_cells", []):
+        if c.get("capability", "implemented") != "implemented":
+            out.add((c["domain"], c["product"], c["format"]))
+    return out
+
+
 def classify_cell(
     cell: dict[str, str] | Cell,
     produced: set[Cell],
@@ -109,13 +125,14 @@ def classify_cell(
     """Classify one domain x product x format cell.
 
     Priority (Oracle R8 — required empty LLM-gated cells are
-    ``未配置unconfigured``, NEVER ``空gap``):
+    ``未配置unconfigured``, NEVER ``空gap``; capability-boundary cells are
+    ``不适用not-applicable``, NEVER ``空gap``):
 
-    1. required AND produced                      -> 有produced
-    2. required AND NOT produced:
+    1. produced (required or not)                -> 有produced
+    2. required, capability: not-implemented     -> 不适用not-applicable
+    3. required AND NOT produced:
        - product in llm_gated_products AND LLM unavailable -> 未配置unconfigured
        - otherwise                              -> 空gap
-    3. non-required AND produced                 -> 有produced
     4. non-required AND no evidence              -> 不适用not-applicable
     """
     if isinstance(cell, dict):
@@ -124,6 +141,8 @@ def classify_cell(
         key = cell
     if key in produced:
         return PRODUCED
+    if key in not_implemented_cells_set(spec):
+        return NOT_APPLICABLE
     if key in required_cells_set(spec):
         if key[1] in spec.get("llm_gated_products", []) and not llm_available:
             return UNCONFIGURED

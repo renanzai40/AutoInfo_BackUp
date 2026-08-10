@@ -306,6 +306,10 @@ class TestReportPromotionTrigger:
         with (
             patch("autoinfo.output.KBStore", return_value=store),
             patch.object(_get_llm_extractor_class(), "extract", mock_extract),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
+            ),
         ):
             result = generate_report(domain="medical-research", format="markdown")
 

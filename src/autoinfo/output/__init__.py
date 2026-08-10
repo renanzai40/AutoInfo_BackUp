@@ -3021,6 +3021,8 @@ class ReportData:
     domain: str
     collection_id: str = ""
     executive_summary: str = ""
+    key_findings: list[str] = field(default_factory=list)
+    recommendations: list[str] = field(default_factory=list)
     sections: list[ReportSection] = field(default_factory=list)
     references: list[dict[str, Any]] = field(default_factory=list)
     appendices: list[dict[str, Any]] = field(default_factory=list)
@@ -3304,11 +3306,26 @@ def generate_report(
             )
 
     # -- Generate executive summary via LLM --------------------------------
-    executive_summary = _generate_executive_summary(
+    summary_result = _generate_executive_summary(
         extractor, entries, groupings, effective_instructions,
         target_audience=target_audience,
         domains=report_domains if is_cross_domain else None,
     )
+    # The synthesis returns a dict of ``{executive_summary, key_findings,
+    # recommendations}``.  Accept a bare string for backward compatibility
+    # (legacy callers / direct mocks) — treated as summary only.
+    if isinstance(summary_result, dict):
+        executive_summary = summary_result.get("executive_summary", "") or ""
+        key_findings = [
+            str(f) for f in (summary_result.get("key_findings") or [])
+        ]
+        recommendations = [
+            str(r) for r in (summary_result.get("recommendations") or [])
+        ]
+    else:
+        executive_summary = str(summary_result or "")
+        key_findings = []
+        recommendations = []
 
     # -- Build report data -------------------------------------------------
     sections = [
@@ -3338,6 +3355,8 @@ def generate_report(
         domain=report_title_domain,
         collection_id=collection_id or "",
         executive_summary=executive_summary,
+        key_findings=key_findings,
+        recommendations=recommendations,
         sections=sections,
         references=references,
     )
@@ -3346,8 +3365,8 @@ def generate_report(
     report_context: dict[str, Any] = {
         "llm_synthesis": {
             "executive_summary": report_data.executive_summary,
-            "key_findings": [s.title for s in report_data.sections],
-            "recommendations": [],
+            "key_findings": report_data.key_findings,
+            "recommendations": report_data.recommendations,
         },
     }
 
@@ -3427,12 +3446,9 @@ def generate_report(
             "generated_at": datetime.now(timezone.utc).isoformat(),
             "llm_synthesis": {
                 "executive_summary": report_data.executive_summary,
-                "key_findings": [
-                    {"topic": s.title, "detail": s.content}
-                    for s in report_data.sections
-                ],
+                "key_findings": report_data.key_findings,
                 "trends": [],
-                "recommendations": [],
+                "recommendations": report_data.recommendations,
             },
             "target_audience": target_audience,
         }
@@ -3570,6 +3586,10 @@ _DEFAULT_DOMAIN_GUIDANCE = (
     "policy & regulation, emerging innovations"
 )
 
+# Entries are grouped in batches of this size so the LLM prompt stays small
+# enough to return reliable JSON even for very long entry lists.
+_GROUPING_BATCH_SIZE = 8
+
 
 def _group_by_theme(
     extractor: LLMExtractor,
@@ -3608,10 +3628,134 @@ def _group_by_theme(
                 },
             ]
 
-    Falls back to a single ``"General"`` group when the LLM call fails
-    or when the LLM repeatedly collapses entries into one theme.
+    Entries are grouped in batches of at most ``_GROUPING_BATCH_SIZE`` so the
+    LLM prompt stays small enough to return reliable JSON even for long entry
+    lists; resulting themes are then merged across batches by normalized
+    name.  When the LLM fails or collapses a batch, a deterministic keyword /
+    source-type / domain heuristic is used instead, so the entries never
+    collapse into a single ``"General"`` group while more than one distinct
+    topic is detectable.
     """
-    # Build a compact representation of entries for the LLM prompt
+    if not entries:
+        return []
+
+    batch_size = _GROUPING_BATCH_SIZE
+    batches = [
+        entries[i : i + batch_size] for i in range(0, len(entries), batch_size)
+    ]
+
+    merged: list[dict[str, Any]] = []
+    for batch in batches:
+        merged.extend(
+            _group_batch_by_theme(extractor, batch, domain=domain, domains=domains)
+        )
+
+    return _ensure_all_entries_grouped(_merge_theme_groups(merged), entries)
+
+
+def _group_batch_by_theme(
+    extractor: LLMExtractor,
+    entries: list[dict[str, Any]],
+    domain: str = "",
+    domains: list[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Group a single batch of entries (at most ``_GROUPING_BATCH_SIZE``).
+
+    Uses the LLM (with an anti-collapse retry) and maps the returned entry
+    IDs back to entry objects.  Falls back to a deterministic keyword /
+    source-type / domain grouping when the LLM fails or collapses the batch.
+    """
+    groups_raw = _llm_group_batch(extractor, entries, domain=domain, domains=domains)
+    if not groups_raw:
+        groups = _deterministic_grouping(entries, domain=domain)
+        if groups is not None:
+            return groups
+        return [
+            {
+                "theme": "General",
+                "description": (
+                    f"All {len(entries)} entries included in this report."
+                ),
+                "entries": list(entries),
+            }
+        ]
+
+    entry_map: dict[str, dict[str, Any]] = {
+        e.get("entry_id", ""): e for e in entries if e.get("entry_id")
+    }
+
+    result: list[dict[str, Any]] = []
+    for g in groups_raw:
+        group_entries = [
+            entry_map[eid]
+            for eid in g.get("entry_ids", [])
+            if eid in entry_map
+        ]
+        if group_entries:
+            result.append({
+                "theme": g.get("theme", "Untitled"),
+                "description": g.get("description", ""),
+                "entries": group_entries,
+            })
+
+    # -- Coverage guard -----------------------------------------------------
+    # The LLM sometimes returns parseable JSON whose entry_ids do not match
+    # the actual entry IDs, which would dump every entry into a single
+    # catch-all.  If the LLM groups cover fewer than half the batch, treat
+    # the result as unreliable and fall back to deterministic grouping.
+    matched_count = sum(len(g["entries"]) for g in result)
+    if matched_count < max(1, len(entries) // 2):
+        logger.warning(
+            "LLM groups matched only %d/%d entries, falling back to "
+            "deterministic grouping",
+            matched_count,
+            len(entries),
+        )
+        groups = _deterministic_grouping(entries, domain=domain)
+        if groups is not None:
+            return groups
+        return [
+            {
+                "theme": "General",
+                "description": (
+                    f"All {len(entries)} entries included in this report."
+                ),
+                "entries": list(entries),
+            }
+        ]
+
+    # Ensure no entry is left out (ungrouped entries go into a catch-all)
+    grouped_ids: set[str] = {
+        e.get("entry_id", "")
+        for g in result
+        for e in g["entries"]
+        if e.get("entry_id")
+    }
+    ungrouped = [e for e in entries if e.get("entry_id", "") not in grouped_ids]
+    if ungrouped:
+        result.append({
+            "theme": "Additional Topics",
+            "description": (
+                f"{len(ungrouped)} entry(ies) not covered by other themes."
+            ),
+            "entries": ungrouped,
+        })
+
+    return result
+
+
+def _llm_group_batch(
+    extractor: LLMExtractor,
+    entries: list[dict[str, Any]],
+    domain: str = "",
+    domains: list[str] | None = None,
+) -> list[dict[str, Any]] | None:
+    """Ask the LLM to group a single batch of entries into themes.
+
+    Returns the raw parsed ``groups`` list (each object carries ``theme``,
+    ``description`` and ``entry_ids``) or ``None`` when the LLM fails or
+    repeatedly collapses the batch into a single theme.
+    """
     entry_summaries_parts: list[str] = []
     for e in entries:
         entry_domain = e.get("domain", domain)
@@ -3620,10 +3764,6 @@ def _group_by_theme(
             f"{e.get('title', '?')}: {e.get('summary', '(no summary)')}"
         )
     entry_summaries = "\n".join(entry_summaries_parts)
-
-    domain_guidance = _DOMAIN_THEME_GUIDANCE.get(
-        domain, _DEFAULT_DOMAIN_GUIDANCE
-    )
 
     cross_domain_instruction = ""
     if domains and len(domains) >= 2:
@@ -3637,26 +3777,10 @@ def _group_by_theme(
 
     prompt = (
         cross_domain_instruction +
-        "Group the following knowledge base entries into 3\u20135 coherent "
-        "themes. Each theme must represent a distinct topic area.\n\n"
-        "IMPORTANT: Do NOT group all entries under a single catch-all theme "
-        "like \"General\", \"Additional\", or \"Miscellaneous\". If you "
-        "cannot immediately distinguish themes, suggest reasonable "
-        "topic-based splits based on the entries\u2019 content. Each entry "
-        "should ideally go into its most specific thematic group.\n\n"
-        f"Domain context: {domain_guidance}. Consider themes relevant to "
-        "this domain when grouping.\n\n"
-        "Example of good grouping:\n"
-        "  Entries: [\"COVID vaccine efficacy in elderly\", "
-        "\"mRNA platform advances\", \"FDA fast-track approval process\"]\n"
-        "  Good themes: \"Vaccine Clinical Trials\", "
-        "\"mRNA Technology Advances\", \"Drug Regulation\"\n"
-        "  Bad (collapsed): \"General Medical Topics\"\n\n"
-        "Return a JSON object with a single key 'groups' whose value is "
-        "an array of objects. Each object must have:\n"
-        "  - 'theme': short theme name (2\u20135 words)\n"
-        "  - 'description': 2\u20133 sentence description of this theme\n"
-        "  - 'entry_ids': array of entry IDs belonging to this theme\n\n"
+        "Group the following knowledge base entries into 3\u20135 themes. "
+        "Each entry goes into exactly one theme. Do NOT use catch-all names "
+        "like \"General\" or \"Additional\".\n\n"
+        'Return JSON: {"groups": [{"theme": str, "entry_ids": [str]}]}\n\n'
         f"Entries:\n{entry_summaries}"
     )
 
@@ -3681,9 +3805,8 @@ def _group_by_theme(
             "2\u20133 DISTINCT themes. Do NOT use catch-all themes like "
             "\"General\", \"Miscellaneous\", or \"Other\". Each entry must "
             "be assigned to the most specific theme that describes its "
-            "content. "
-            f"Domain context: {domain_guidance}. "
-            "Return a JSON object with a single key 'groups' as before.\n\n"
+            "content.\n\n"
+            'Return JSON: {"groups": [{"theme": str, "entry_ids": [str]}]}\n\n'
             f"Entries:\n{entry_summaries}"
         )
         try:
@@ -3695,102 +3818,266 @@ def _group_by_theme(
         # If retry STILL produced only 1 group, treat as failure → fallback
         if groups_raw and len(groups_raw) <= 1:
             logger.warning(
-                "Strict retry returned only %d group(s), falling back to General",
+                "Strict retry returned only %d group(s), falling back to "
+                "deterministic grouping",
                 len(groups_raw),
             )
             groups_raw = None
 
-    if not groups_raw:
-        # Smart fallback: split by domain rather than lumping everything under "General".
-        # This handles the case where the LLM fails or collapses all entries.
-        from collections import defaultdict
-        domain_groups: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
-        for e in entries:
-            d = (e.get("domain") or "").strip() or "Unknown"
-            domain_groups[d].append(e)
+    result: list[dict[str, Any]] | None = groups_raw
+    return result
 
-        if len(domain_groups) >= 2:
-            groups = []
-            for domain_name in sorted(domain_groups):
-                theme_name = domain_name.replace("-", " ").title() if domain_name != "Unknown" else "Other Sources"  # noqa: E501
-                groups.append({
-                    "theme": theme_name,
-                    "description": (
-                        f"{len(domain_groups[domain_name])} entries from "
-                        f"{domain_name or 'other sources'}."
-                    ),
-                    "entries": domain_groups[domain_name],
-                })
-            return groups
+def _deterministic_grouping(
+    entries: list[dict[str, Any]],
+    domain: str = "",
+) -> list[dict[str, Any]] | None:
+    """Group entries deterministically without the LLM.
 
-        # Single domain (or all unknown): split by source_type instead
-        source_groups: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
-        for e in entries:
-            st = (e.get("source_type") or "").strip() or "unknown"
-            source_groups[st].append(e)
+    Splits by ``source_type`` (existing fallback), then by ``domain``, and
+    finally by a keyword classifier built from the domain's ``_keywords.yaml``
+    when the simpler splits still collapse to a single group.  Returns
+    ``None`` only when fewer than two distinct topics are detectable, so the
+    caller can decide on a last-resort group.
+    """
+    from collections import defaultdict
 
-        if len(source_groups) >= 2:
-            groups = []
-            for st in sorted(source_groups):
-                theme_name = st.upper()
-                groups.append({
-                    "theme": theme_name,
-                    "description": f"{len(source_groups[st])} entries from {st} sources.",
-                    "entries": source_groups[st],
-                })
-            return groups
+    # 1. Split by source_type
+    source_groups: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
+    for e in entries:
+        st = (e.get("source_type") or "").strip() or "unknown"
+        source_groups[st].append(e)
 
-        # Last resort — single group with all entries
+    if len(source_groups) >= 2:
+        return [
+            {
+                "theme": st.upper(),
+                "description": f"{len(es)} entries from {st} sources.",
+                "entries": es,
+            }
+            for st, es in sorted(source_groups.items())
+        ]
+
+    # 2. Split by domain
+    domain_groups: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
+    for e in entries:
+        d = (e.get("domain") or "").strip() or "Unknown"
+        domain_groups[d].append(e)
+
+    if len(domain_groups) >= 2:
+        return [
+            {
+                "theme": (
+                    d.replace("-", " ").title() if d != "Unknown" else "Other Sources"
+                ),
+                "description": f"{len(es)} entries from {d or 'other sources'}.",
+                "entries": es,
+            }
+            for d, es in sorted(domain_groups.items())
+        ]
+
+    # 3. Keyword classifier (from knowledge/<domain>/_keywords.yaml) — this
+    #    replaces the old "General" dump when the entries are all from one
+    #    source_type and one domain but still cover distinct topics.
+    keyword_groups = _keyword_group_entries(entries, domain=domain)
+    if keyword_groups is not None:
+        return keyword_groups
+
+    # Only a single distinct topic is detectable.
+    return None
+
+
+def _keyword_group_entries(
+    entries: list[dict[str, Any]],
+    domain: str = "",
+) -> list[dict[str, Any]] | None:
+    """Group entries by keyword topics from the domain's ``_keywords.yaml``.
+
+    Loads topic keywords from ``knowledge/<domain>/_keywords.yaml`` (when
+    present) and maps each entry's title/summary to the longest keyword it
+    contains.  Returns a list of groups, or ``None`` when fewer than two
+    distinct keyword topics are detectable so the caller can fall back to
+    source-type / domain grouping.
+    """
+    from collections import defaultdict
+
+    topics = _load_keyword_topics(domain)
+    if not topics:
+        return None
+
+    # Normalize once, keep the original spelling for display, and match the
+    # most specific (longest) keyword first.
+    norm_topics: list[tuple[str, str]] = []
+    for t in topics:
+        nt = _normalize_text(t)
+        if len(nt) >= 3:
+            norm_topics.append((nt, t))
+    if not norm_topics:
+        return None
+    norm_topics.sort(key=lambda pair: len(pair[0]), reverse=True)
+
+    groups: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
+    for e in entries:
+        text = _normalize_text(
+            f"{e.get('title', '')} {e.get('summary', '')}"
+        )
+        best = _match_keyword(text, norm_topics)
+        groups[best if best else "__unmatched__"].append(e)
+
+    keyword_names = [name for name in groups if name != "__unmatched__"]
+    if not keyword_names:
+        return None
+    if len(keyword_names) == 1 and not groups.get("__unmatched__"):
+        return None
+
+    result: list[dict[str, Any]] = []
+    for name, es in groups.items():
+        if name == "__unmatched__":
+            continue
+        result.append({
+            "theme": name.title(),
+            "description": f"{len(es)} entries related to '{name}'.",
+            "entries": es,
+        })
+
+    unmatched = groups.get("__unmatched__", [])
+    if unmatched:
+        result.append({
+            "theme": "Additional Topics",
+            "description": (
+                f"{len(unmatched)} entry(ies) not matched to a topic keyword."
+            ),
+            "entries": unmatched,
+        })
+    return result
+
+
+def _load_keyword_topics(domain: str) -> list[str]:
+    """Load non-deprecated topic keywords for *domain* from ``_keywords.yaml``."""
+    if not domain:
+        return []
+    path = Path("knowledge") / domain / "_keywords.yaml"
+    if not path.is_file():
+        return []
+    try:
+        raw: dict[str, Any] = yaml.safe_load(
+            path.read_text(encoding="utf-8")
+        ) or {}
+    except Exception as exc:
+        logger.warning("Failed to read keyword file %s: %s", path, exc)
+        return []
+    kw_map: dict[str, Any] = raw.get("keywords", {}) or {}
+    topics: list[str] = []
+    for keyword, data in kw_map.items():
+        if isinstance(data, dict) and data.get("state") == "deprecated":
+            continue
+        topics.append(keyword)
+    return topics
+
+
+def _match_keyword(
+    text: str,
+    norm_topics: list[tuple[str, str]],
+) -> str:
+    """Return the longest normalized topic keyword found in *text*.
+
+    Matches on normalized (lower-cased, punctuation-stripped) text with word
+    boundaries so short keywords do not match inside unrelated words.
+    """
+    for nt, _original in norm_topics:
+        if re.search(r"(?:^|\s)" + re.escape(nt) + r"(?=\s|$)", text):
+            return nt
+    return ""
+
+
+def _normalize_text(value: str) -> str:
+    """Lower-case *value*, strip punctuation and collapse whitespace."""
+    return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9]+", " ", value.lower())).strip()
+
+
+def _normalize_theme_text(value: str) -> str:
+    """Normalize a theme name for exact-name merging across batches."""
+    return _normalize_text(str(value))
+
+
+def _merge_theme_groups(
+    groups: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Merge groups that share the same normalized theme name.
+
+    Entries are deduplicated by ``entry_id`` when merging so the same entry
+    is never reported under a theme twice.
+    """
+    from collections import defaultdict
+
+    by_name: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
+    for g in groups:
+        theme = (g.get("theme") or "").strip() or "Untitled"
+        key = _normalize_theme_text(theme) or theme.strip().lower()
+        by_name[key].append(g)
+
+    result: list[dict[str, Any]] = []
+    for merged in by_name.values():
+        theme = merged[0]["theme"]
+        description = next(
+            (g["description"] for g in merged if g.get("description")), ""
+        )
+        seen: set[str] = set()
+        entries: list[dict[str, Any]] = []
+        for g in merged:
+            for e in g["entries"]:
+                eid = e.get("entry_id", "")
+                if eid and eid in seen:
+                    continue
+                if eid:
+                    seen.add(eid)
+                entries.append(e)
+        result.append({
+            "theme": theme,
+            "description": description,
+            "entries": entries,
+        })
+    return result
+
+
+def _ensure_all_entries_grouped(
+    groups: list[dict[str, Any]],
+    entries: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Guarantee every input entry appears in some group."""
+    if not groups:
         return [
             {
                 "theme": "General",
                 "description": (
                     f"All {len(entries)} entries included in this report."
                 ),
-                "entries": entries,
+                "entries": list(entries),
             }
         ]
 
-    # Map entry IDs back to actual entry objects
-    entry_map: dict[str, dict[str, Any]] = {}
-    for e in entries:
-        eid = e.get("entry_id", "")
-        if eid:
-            entry_map[eid] = e
-
-    result: list[dict[str, Any]] = []
-    for g in groups_raw:
-        group_entries = [
-            entry_map[eid]
-            for eid in g.get("entry_ids", [])
-            if eid in entry_map
-        ]
-        if group_entries:
-            result.append({
-                "theme": g.get("theme", "Untitled"),
-                "description": g.get("description", ""),
-                "entries": group_entries,
+    grouped_ids: set[str] = {
+        e.get("entry_id", "")
+        for g in groups
+        for e in g["entries"]
+        if e.get("entry_id")
+    }
+    missing = [
+        e
+        for e in entries
+        if not (e.get("entry_id", "") and e["entry_id"] in grouped_ids)
+    ]
+    if missing:
+        if len(groups) >= 2:
+            groups.append({
+                "theme": "Additional Topics",
+                "description": (
+                    f"{len(missing)} entry(ies) not covered by other themes."
+                ),
+                "entries": missing,
             })
-
-    # Ensure no entry is left out (ungrouped entries go into a catch-all)
-    grouped_ids: set[str] = set()
-    for g in result:
-        for e in g["entries"]:
-            eid = e.get("entry_id", "")
-            if eid:
-                grouped_ids.add(eid)
-
-    ungrouped = [e for e in entries if e.get("entry_id", "") not in grouped_ids]
-    if ungrouped:
-        result.append({
-            "theme": "Additional Topics",
-            "description": (
-                f"{len(ungrouped)} entry(ies) not covered by other themes."
-            ),
-            "entries": ungrouped,
-        })
-
-    return result
+        else:
+            groups[0]["entries"].extend(missing)
+    return groups
 
 
 def _normalize_report_audience(target_audience: str) -> str:
@@ -3821,15 +4108,48 @@ def _generate_executive_summary(
     custom_instructions: str = "",
     target_audience: str = "",
     domains: list[str] | None = None,
-) -> str:
-    """Generate an executive summary via LLM.
+) -> dict[str, Any]:
+    """Generate the report synthesis (summary + findings + recommendations).
 
-    Falls back to a simple bullet-list summary when the LLM call fails.
+    Asks the LLM for flat Markdown with ``## Executive Summary`` /
+    ``## Key Findings`` / ``## Recommendations`` headings — the default
+    model emits markdown far more reliably than a nested JSON schema —
+    and parses it by heading (see :func:`_parse_report_markdown`).
+
+    Falls back to a legacy single-string JSON summary via the extractor,
+    and finally to a bullet-list summary, so the report is never empty.
+    Returns a dict ``{"executive_summary": str, "key_findings": list[str],
+    "recommendations": list[str]}`` — never raises.
     """
-    themes_summary = "\n".join(
-        f"- {g['theme']}: {len(g['entries'])} entries"
-        for g in groupings
-    )
+    # Build a compact detail block of ACTUAL entry content so the LLM has
+    # concrete material to analyze. Theme-count summaries alone produce
+    # boilerplate / meta-narrative prose, so feed the highest-relevance
+    # entries (capped to keep the prompt short) with their titles and summary
+    # excerpts.
+    max_detail_entries = 40
+    max_entry_summary_chars = 120
+
+    ranked = sorted(
+        (e for g in groupings for e in g["entries"]),
+        key=lambda e: float(e.get("relevance_score") or 0.0),
+        reverse=True,
+    )[:max_detail_entries]
+    picked_ids = {id(e) for e in ranked}
+
+    detail_lines: list[str] = []
+    for g in groupings:
+        picked = [e for e in g["entries"] if id(e) in picked_ids]
+        for e in picked:
+            detail_lines.append(
+                f"- [{g['theme']}] {e.get('title', '')}: "
+                f"{(e.get('summary') or '')[: max_entry_summary_chars]}"
+            )
+        if len(picked) < len(g["entries"]):
+            detail_lines.append(
+                f"- [{g['theme']}] (+{len(g['entries']) - len(picked)} more "
+                "entries in this theme)"
+            )
+    entries_detail = "\n".join(detail_lines) or "(no entries)"
 
     cross_domain_prefix = ""
     if domains and len(domains) >= 2:
@@ -3841,12 +4161,23 @@ def _generate_executive_summary(
 
     prompt = (
         cross_domain_prefix +
-        "Write a concise executive summary (3\u20135 paragraphs) for a "
-        f"report covering {len(entries)} knowledge base entries across "
-        f"the following themes:\n\n{themes_summary}\n\n"
-        "Focus on the key findings and overall significance. "
-        "Return a JSON object with a single key 'executive_summary' "
-        "whose value is the summary text."
+        "Write a report synthesis analyzing the following knowledge base "
+        "entries (grouped by theme). Use the actual content: cite specific "
+        "findings, studies, and data points from the entries. Do NOT describe "
+        "the report structure or the writing instructions — write the analysis "
+        "itself.\n\n"
+        f"Themes and entries:\n{entries_detail}\n\n"
+        "Return plain Markdown with this exact structure:\n\n"
+        "## Executive Summary\n"
+        "<2-3 paragraphs>\n\n"
+        "## Key Findings\n"
+        "- <finding 1>\n"
+        "- <finding 2>\n\n"
+        "## Recommendations\n"
+        "- <recommendation 1>\n"
+        "- <recommendation 2>\n\n"
+        "Use exactly the heading names above. Do NOT wrap your answer in a "
+        "code fence or emit JSON."
     )
     if custom_instructions:
         prompt += f"\n\nAdditional instructions: {custom_instructions}"
@@ -3856,10 +4187,20 @@ def _generate_executive_summary(
     if audience_prompt:
         prompt += f"\n\n{audience_prompt}"
 
+    # Primary path: flat markdown synthesis (reliable with the default model).
+    parsed = _parse_report_markdown(_call_llm_for_report_synthesis(prompt))
+    if parsed.get("executive_summary"):
+        return parsed
+
+    # Legacy path: single-string JSON summary via the extractor.
     try:
         raw = _llm_json_extract(extractor, prompt, "executive_summary")
         if raw and isinstance(raw, str) and raw.strip():
-            return raw.strip()
+            return {
+                "executive_summary": raw.strip(),
+                "key_findings": [],
+                "recommendations": [],
+            }
     except Exception as exc:
         logger.warning("Executive summary via LLM failed: %s", exc)
 
@@ -3868,10 +4209,114 @@ def _generate_executive_summary(
         f"- **{g['theme']}**: {len(g['entries'])} entry(ies)"
         for g in groupings
     )
-    return (
-        f"This report covers {len(entries)} knowledge base entries "
-        f"grouped into {len(groupings)} themes:\n\n{theme_bullets}"
-    )
+    return {
+        "executive_summary": (
+            f"This report covers {len(entries)} knowledge base entries "
+            f"grouped into {len(groupings)} themes:\n\n{theme_bullets}"
+        ),
+        "key_findings": [],
+        "recommendations": [],
+    }
+
+
+def _call_llm_for_report_synthesis(prompt: str) -> str:
+    """Call the configured LLM to synthesize report Markdown.
+
+    Uses the shared :func:`call_with_fallback` helper in plain-text mode
+    (no JSON mode) — the default model emits the flat ``## Executive
+    Summary`` / ``## Key Findings`` / ``## Recommendations`` structure
+    reliably while a nested JSON schema frequently comes back empty.
+    Returns the raw Markdown text (possibly empty) on success, ``""`` on
+    failure.
+    """
+    config_path = get_config_path()
+    if config_path and config_path.is_file():
+        try:
+            config = load_config(config_path)
+        except Exception:
+            config = Config()
+    else:
+        config = Config()
+
+    model = config.llm.resolve_model() or "openrouter/deepseek/deepseek-chat"
+    try:
+        response = call_with_fallback(
+            model=model,
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a report synthesis assistant. Given knowledge "
+                        "base entries and themes, write a concise executive "
+                        "summary, key findings, and recommendations. Respond "
+                        "with plain Markdown only — no JSON, no code fences."
+                    ),
+                },
+                {"role": "user", "content": prompt},
+            ],
+            json_mode=False,
+            max_tokens=4000,
+            temperature=0.1,
+            api_key=config.llm.api_key or None,
+            base_url=config.llm.base_url or None,
+        )
+    except Exception as exc:
+        logger.warning("Report synthesis via LLM failed: %s", exc)
+        return ""
+    content: str = response.choices[0].message.content or ""
+    return content.strip()
+
+
+def _parse_report_markdown(content: str) -> dict[str, Any]:
+    """Parse a Markdown report synthesis into the report context schema.
+
+    Handles the structure requested by the report-synthesis prompt:
+    ``## Executive Summary`` (paragraphs), ``## Key Findings`` (bullets)
+    and ``## Recommendations`` (bullets).  Returns ``{}`` when *content*
+    is empty or carries no executive summary.
+    """
+    if not content:
+        return {}
+    result: dict[str, Any] = {
+        "executive_summary": "",
+        "key_findings": [],
+        "recommendations": [],
+    }
+    current_section = ""
+    summary_lines: list[str] = []
+
+    def is_bullet(text: str) -> bool:
+        return bool(re.match(r"^(?:[-*]|\d+[.)])\s+\S", text))
+
+    def bullet_text(text: str) -> str:
+        return re.sub(r"^(?:[-*]|\d+[.)])\s+", "", text).strip()
+
+    for raw in content.splitlines():
+        line = raw.rstrip()
+        stripped = line.strip()
+        if stripped.startswith("## "):
+            current_section = stripped.lstrip("#").strip().lower()
+            continue
+        if not current_section:
+            continue
+        if current_section in ("executive summary", "summary", "overview"):
+            if stripped and not line.startswith(("---", "***")):
+                summary_lines.append(stripped)
+        elif current_section in ("key findings", "findings", "main findings"):
+            if is_bullet(stripped):
+                item = bullet_text(stripped)
+                if item:
+                    result["key_findings"].append(item)
+        elif current_section in ("recommendations", "next steps", "action items"):
+            if is_bullet(stripped):
+                item = bullet_text(stripped)
+                if item:
+                    result["recommendations"].append(item)
+
+    result["executive_summary"] = "\n\n".join(summary_lines).strip()
+    if not result["executive_summary"]:
+        return {}
+    return result
 
 
 def _llm_json_extract(
@@ -3914,6 +4359,8 @@ def _report_data_to_dict(
         "domain": report_data.domain,
         "collection_id": report_data.collection_id,
         "executive_summary": report_data.executive_summary,
+        "key_findings": report_data.key_findings,
+        "recommendations": report_data.recommendations,
         "source_tier_badge": source_tier_badge,
         "sections": [
             {
@@ -3976,6 +4423,8 @@ def _render_report_json(report_data: ReportData, period: str = "weekly") -> str:
     output = {
         "title": report_data.title,
         "summary": report_data.executive_summary,
+        "key_findings": report_data.key_findings,
+        "recommendations": report_data.recommendations,
         "entries": entries_list,
         "metadata": {
             "generated_at": report_data.generated_at,
@@ -4036,6 +4485,8 @@ def _render_report_template(report_data: ReportData, source_tier_badge: bool = T
         domain=report_data.domain,
         collection_id=report_data.collection_id,
         executive_summary=report_data.executive_summary,
+        key_findings=report_data.key_findings,
+        recommendations=report_data.recommendations,
         source_tier_badge=source_tier_badge,
         sections=[
             {
@@ -4706,38 +5157,32 @@ def generate_tutorial(
         for e in entries
     )
 
-    prompt = (
-        f"You are a tutorial designer creating content for a {target_audience} "
-        f"audience ({audience_desc}). "
-        "Given the following knowledge base entries, structure them into a "
-        "coherent learning path. "
-        "Return a JSON object with the following fields:\n"
-        '  - "title": tutorial title (string)\n'
-        '  - "duration": estimated reading/completion time (string, e.g. "45 minutes")\n'
-        '  - "prerequisites": comma-separated prerequisites (string)\n'
-        '  - "objectives": array of 3-5 learning objective strings\n'
-        '  - "content": array of section objects, each with:\n'
-        '      - "heading": section heading\n'
-        '      - "body": 2-4 paragraph section content\n'
-        '      - "code_example": optional code/example snippet (string or null)\n'
-        '      - "code_language": language for the code snippet (string or null)\n'
-        '      - "key_takeaway": one-line takeaway (string or null)\n'
-        '  - "exercises": array of exercise objects, each with:\n'
-        '      - "title": exercise title\n'
-        '      - "description": exercise description\n'
-        '      - "hint": optional hint (string or null)\n'
-        '      - "solution": optional solution (string or null)\n'
-        '  - "summary": 2-3 sentence summary of the tutorial\n'
-        '  - "further_reading": array of reference strings\n\n'
-        f"KB Entries:\n{entry_summaries}\n\n"
-        "Return all fields in a single JSON object. Adapt depth, terminology, "
-        f"and examples specifically for a {target_audience} audience."
-    )
-
-    if custom_instructions:
-        prompt += f"\n\nAdditional instructions: {custom_instructions}"
+    if format == "agent":
+        prompt = _build_tutorial_json_prompt(
+            target_audience, audience_desc, entry_summaries, custom_instructions
+        )
+    else:
+        prompt = _build_tutorial_markdown_prompt(
+            target_audience, audience_desc, entry_summaries, custom_instructions
+        )
 
     llm_result = _call_llm_for_tutorial(prompt)
+
+    # -- Deterministic completeness (markdown path) --------------------------
+    # DeepSeek-V4-Flash does not reliably emit the tutorial schema as
+    # parseable JSON or markdown with a stable shape.  Ensure a domain that
+    # HAS entries never renders the all-empty template: replace an unusable
+    # LLM result entirely and fill any still-missing sections from KB entries.
+    if format == "markdown":
+        if not _tutorial_has_content(llm_result):
+            logger.warning(
+                "Tutorial LLM output unusable for domain '%s' (missing "
+                "objectives/content); falling back to KB-derived tutorial",
+                domain,
+            )
+        llm_result = _ensure_tutorial_complete(
+            llm_result, domain, entries, target_audience
+        )
 
     # -- Build template context -------------------------------------------
     generated_at = datetime.now(timezone.utc).isoformat()
@@ -4877,7 +5322,293 @@ def _call_llm_for_tutorial(prompt: str) -> dict[str, Any]:
         logger.error("Tutorial generation failed: %s", exc)
         return {}
     content: str = response.choices[0].message.content or ""
-    return _parse_json_response(content)
+    if not content:
+        return {}
+    parsed = _parse_json_response(content)
+    if parsed:
+        return parsed
+    return _parse_tutorial_markdown(content)
+
+
+def _build_tutorial_json_prompt(
+    target_audience: str,
+    audience_desc: str,
+    entry_summaries: str,
+    custom_instructions: str,
+) -> str:
+    """Build the structured-JSON tutorial prompt (agent-native format path)."""
+    prompt = (
+        f"You are a tutorial designer creating content for a {target_audience} "
+        f"audience ({audience_desc}). "
+        "Given the following knowledge base entries, structure them into a "
+        "coherent learning path. "
+        "Return a JSON object with the following fields:\n"
+        '  - "title": tutorial title (string)\n'
+        '  - "duration": estimated reading/completion time (string, e.g. "45 minutes")\n'
+        '  - "prerequisites": comma-separated prerequisites (string)\n'
+        '  - "objectives": array of 3-5 learning objective strings\n'
+        '  - "content": array of section objects, each with:\n'
+        '      - "heading": section heading\n'
+        '      - "body": 2-4 paragraph section content\n'
+        '      - "code_example": optional code/example snippet (string or null)\n'
+        '      - "code_language": language for the code snippet (string or null)\n'
+        '      - "key_takeaway": one-line takeaway (string or null)\n'
+        '  - "exercises": array of exercise objects, each with:\n'
+        '      - "title": exercise title\n'
+        '      - "description": exercise description\n'
+        '      - "hint": optional hint (string or null)\n'
+        '      - "solution": optional solution (string or null)\n'
+        '  - "summary": 2-3 sentence summary of the tutorial\n'
+        '  - "further_reading": array of reference strings\n\n'
+        f"KB Entries:\n{entry_summaries}\n\n"
+        "Return all fields in a single JSON object. Adapt depth, terminology, "
+        f"and examples specifically for a {target_audience} audience."
+    )
+    if custom_instructions:
+        prompt += f"\n\nAdditional instructions: {custom_instructions}"
+    return prompt
+
+
+def _build_tutorial_markdown_prompt(
+    target_audience: str,
+    audience_desc: str,
+    entry_summaries: str,
+    custom_instructions: str,
+) -> str:
+    """Build the flat-markdown tutorial prompt (robust markdown render path).
+
+    Plain markdown with fixed heading markers is far more reliably emitted by
+    the default model than the nested tutorial JSON schema, and the response is
+    parsed by heading instead of ``json.loads``.
+    """
+    prompt = (
+        f"You are a tutorial designer creating content for a {target_audience} "
+        f"audience ({audience_desc}). "
+        "Given the following knowledge base entries, structure them into a "
+        "coherent learning path. "
+        "Return plain Markdown with this exact structure:\n\n"
+        "# <tutorial title>\n"
+        "Duration: <estimated reading/completion time, e.g. '45 minutes'>\n"
+        "Prerequisites: <comma-separated prerequisites or 'None'>\n\n"
+        "## Learning Objectives\n"
+        "- <objective 1>\n"
+        "- <objective 2>\n"
+        "- <objective 3>\n\n"
+        "## Content\n"
+        "### <section heading 1>\n"
+        "<2-4 paragraphs of section content>\n"
+        "### <section heading 2>\n"
+        "<2-4 paragraphs of section content>\n\n"
+        "## Exercises\n"
+        "- <exercise 1>\n"
+        "- <exercise 2>\n\n"
+        "## Summary\n"
+        "<2-3 sentence summary>\n\n"
+        "## Further Reading\n"
+        "- <reference 1>\n"
+        "- <reference 2>\n\n"
+        "Use exactly the heading names above. Do NOT wrap your answer in a "
+        "code fence or emit JSON.\n\n"
+        f"KB Entries:\n{entry_summaries}\n\n"
+        "Adapt depth, terminology, and examples specifically for a "
+        f"{target_audience} audience."
+    )
+    if custom_instructions:
+        prompt += f"\n\nAdditional instructions: {custom_instructions}"
+    return prompt
+
+
+def _parse_tutorial_markdown(content: str) -> dict[str, Any]:
+    """Parse a markdown tutorial response into the tutorial context schema.
+
+    Handles the structure requested by ``_build_tutorial_markdown_prompt``:
+    ``# title``, optional ``Duration:`` / ``Prerequisites:`` lines,
+    ``## Learning Objectives`` bullets, ``## Content`` with ``### <heading>``
+    subsections, ``## Exercises`` bullets or ``### Exercise N:`` headings,
+    ``## Summary`` paragraph and ``## Further Reading`` bullets.  Returns
+    ``{}`` when *content* is empty.
+    """
+    if not content:
+        return {}
+    result: dict[str, Any] = {
+        "title": "",
+        "duration": "",
+        "prerequisites": "",
+        "objectives": [],
+        "content": [],
+        "exercises": [],
+        "summary": "",
+        "further_reading": [],
+    }
+    current_section = ""
+    content_heading = ""
+    content_body: list[str] = []
+    exercise_title = ""
+    exercise_body: list[str] = []
+
+    def flush_content() -> None:
+        nonlocal content_heading, content_body
+        if content_heading:
+            result["content"].append(
+                {
+                    "heading": content_heading,
+                    "body": "\n\n".join(line.strip() for line in content_body).strip(),
+                }
+            )
+            content_heading = ""
+            content_body = []
+
+    def flush_exercise() -> None:
+        nonlocal exercise_title, exercise_body
+        if exercise_title:
+            result["exercises"].append(
+                {
+                    "title": exercise_title,
+                    "description": "\n\n".join(
+                        line.strip() for line in exercise_body
+                    ).strip(),
+                }
+            )
+            exercise_title = ""
+            exercise_body = []
+
+    def is_bullet(text: str) -> bool:
+        return bool(
+            re.match(r"^(?:[-*]|\d+[.)])\s+\S", text)
+        )
+
+    def bullet_text(text: str) -> str:
+        return re.sub(r"^(?:[-*]|\d+[.)])\s+", "", text).strip()
+
+    for raw in content.splitlines():
+        line = raw.rstrip()
+        stripped = line.strip()
+        if line.startswith("# ") and not line.startswith("## "):
+            result["title"] = stripped.lstrip("#").strip()
+            continue
+        if not current_section and (
+            stripped.lower().startswith("duration:")
+            or stripped.lower().startswith("prerequisites:")
+        ):
+            key, _, value = stripped.partition(":")
+            result[key.strip().lower()] = value.strip()
+            continue
+        if stripped.startswith("## "):
+            flush_content()
+            flush_exercise()
+            current_section = stripped.lstrip("#").strip()
+            continue
+        if current_section in ("Learning Objectives", "Learning Goals"):
+            if is_bullet(stripped):
+                item = bullet_text(stripped)
+                if item:
+                    result["objectives"].append(item)
+            continue
+        if current_section == "Content":
+            if stripped.startswith("### "):
+                flush_content()
+                content_heading = stripped.lstrip("#").strip()
+                content_body = []
+            elif content_heading and stripped:
+                content_body.append(stripped)
+            continue
+        if current_section in ("Exercises", "Practice", "Practice Exercises"):
+            if stripped.startswith("### "):
+                flush_exercise()
+                heading = stripped.lstrip("#").strip()
+                exercise_title = re.sub(
+                    r"^Exercise\s*(\d+)?\s*[:.)-]?\s*",
+                    "",
+                    heading,
+                    flags=re.IGNORECASE,
+                ).strip() or heading
+                exercise_body = []
+            elif is_bullet(stripped):
+                flush_exercise()
+                item = bullet_text(stripped)
+                if item:
+                    result["exercises"].append({"title": item, "description": ""})
+            elif exercise_title and stripped:
+                exercise_body.append(stripped)
+            continue
+        if current_section in ("Summary", "Conclusion", "Wrap-Up"):
+            if stripped:
+                result["summary"] = (result["summary"] + " " + stripped).strip()
+            continue
+        if current_section in ("Further Reading", "References", "Resources"):
+            if is_bullet(stripped):
+                item = bullet_text(stripped)
+                if item:
+                    result["further_reading"].append(item)
+            elif stripped and not line.startswith(("---", "***")):
+                result["further_reading"].append(stripped)
+            continue
+    flush_content()
+    flush_exercise()
+    return result
+
+
+def _tutorial_has_content(result: dict[str, Any]) -> bool:
+    """True when a tutorial LLM result carries real objectives and content."""
+    return bool(result.get("objectives")) and bool(result.get("content"))
+
+
+def _entry_derived_sections(
+    entries: list[dict[str, Any]],
+) -> tuple[list[str], list[dict[str, str]], list[dict[str, str]], list[str]]:
+    """Derive objectives/content/exercises/further-reading from KB entries."""
+    objectives: list[str] = []
+    content: list[dict[str, str]] = []
+    exercises: list[dict[str, str]] = []
+    further_reading: list[str] = []
+    for index, entry in enumerate(entries):
+        title = entry.get("title") or f"Entry {index + 1}"
+        summary = entry.get("summary") or "(no summary available)"
+        if len(objectives) < 5:
+            objectives.append(title)
+        content.append({"heading": title, "body": summary})
+        exercises.append(
+            {
+                "title": f"What is the key finding in '{title}'?",
+                "description": (
+                    f"Summarize the main finding or conclusion of the entry "
+                    f"'{title}' in one or two sentences."
+                ),
+            }
+        )
+        url = entry.get("source_url")
+        if url and url not in further_reading:
+            further_reading.append(url)
+    return objectives[:5], content, exercises, further_reading[:20]
+
+
+def _ensure_tutorial_complete(
+    llm_result: dict[str, Any],
+    domain: str,
+    entries: list[dict[str, Any]],
+    target_audience: str,
+) -> dict[str, Any]:
+    """Guarantee the markdown tutorial never renders the all-empty template.
+
+    Keeps every usable field from *llm_result* (title, duration, objectives,
+    content, …) and fills any missing or empty section from the KB entries,
+    so a domain that HAS entries always produces a complete tutorial.
+    """
+    objectives, content, exercises, further_reading = _entry_derived_sections(entries)
+    return {
+        "title": llm_result.get("title") or f"{domain} — Tutorial",
+        "duration": llm_result.get("duration") or f"{len(entries)} minutes",
+        "prerequisites": llm_result.get("prerequisites") or "None",
+        "objectives": llm_result.get("objectives") or objectives,
+        "content": llm_result.get("content") or content,
+        "exercises": llm_result.get("exercises") or exercises,
+        "summary": llm_result.get("summary") or (
+            f"This tutorial walks through {len(entries)} knowledge base "
+            f"entries in the {domain} domain, covering the key findings "
+            f"for a {target_audience} audience."
+        ),
+        "further_reading": llm_result.get("further_reading") or further_reading,
+    }
 
 
 def _render_tutorial_template(context: dict[str, Any]) -> str:

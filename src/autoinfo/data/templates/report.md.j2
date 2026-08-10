@@ -12,6 +12,22 @@
 
 {{ executive_summary }}
 
+{% if key_findings %}
+## Key Findings
+
+{% for f in key_findings %}
+- {{ f }}
+{% endfor %}
+
+{% endif %}
+{% if recommendations %}
+## Recommendations
+
+{% for r in recommendations %}
+- {{ r }}
+{% endfor %}
+
+{% endif %}
 ---
 
 ## Sections

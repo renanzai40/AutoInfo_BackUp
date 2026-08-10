@@ -19,7 +19,6 @@ import pytest
 
 from autoinfo.models import ExtractionResult
 
-
 # Fixtures
 # ---------------------------------------------------------------------------
 
@@ -165,6 +164,10 @@ class TestCrossDomainReport:
             patch.object(
                 _get_llm_extractor_class(), "extract", mock_extract
             ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
+            ),
         ):
             mock_store = MagicMock()
             mock_store.list_entries.return_value = medical_entries
@@ -194,6 +197,10 @@ class TestCrossDomainReport:
             patch("autoinfo.output.KBStore") as mock_kb_cls,
             patch.object(
                 _get_llm_extractor_class(), "extract", mock_extract
+            ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
             ),
         ):
             mock_store = MagicMock()
@@ -240,6 +247,10 @@ class TestCrossDomainReport:
             patch.object(
                 _get_llm_extractor_class(), "extract", mock_extract
             ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
+            ),
         ):
             mock_store = MagicMock()
 
@@ -281,6 +292,10 @@ class TestCrossDomainReport:
             patch("autoinfo.output.KBStore") as mock_kb_cls,
             patch.object(
                 _get_llm_extractor_class(), "extract", mock_extract
+            ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
             ),
         ):
             mock_store = MagicMock()
@@ -346,6 +361,10 @@ class TestCrossDomainReport:
             patch.object(
                 _get_llm_extractor_class(), "extract", mock_extract
             ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
+            ),
         ):
             mock_store = MagicMock()
             mock_store.list_entries.return_value = medical_entries
@@ -375,6 +394,10 @@ class TestCrossDomainReport:
             patch("autoinfo.output.KBStore") as mock_kb_cls,
             patch.object(
                 _get_llm_extractor_class(), "extract", mock_extract
+            ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
             ),
         ):
             mock_store = MagicMock()

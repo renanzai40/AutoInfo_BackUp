@@ -99,6 +99,56 @@ def test_classify_cell_accepts_tuple_form(spec):
     ) == cm.NOT_APPLICABLE
 
 
+def test_capability_boundary_required_cell_is_not_applicable(spec):
+    """A required cell annotated capability: not-implemented is a deliberate
+    capability boundary — it must render 不适用not-applicable, NEVER 空gap or
+    未配置unconfigured, whether or not the LLM is available."""
+    cell = {"domain": "medical-research", "product": "tutorial", "format": "html"}
+    assert ("medical-research", "tutorial", "html") in cm.not_implemented_cells_set(spec)
+    assert cm.classify_cell(
+        cell, EMPTY_PRODUCED, llm_available=True, spec=spec
+    ) == cm.NOT_APPLICABLE
+    assert cm.classify_cell(
+        cell, EMPTY_PRODUCED, llm_available=False, spec=spec
+    ) == cm.NOT_APPLICABLE
+    assert cm.classify_cell(cell, EMPTY_PRODUCED, llm_available=True, spec=spec) != cm.GAP
+    assert cm.classify_cell(
+        cell, EMPTY_PRODUCED, llm_available=False, spec=spec
+    ) != cm.UNCONFIGURED
+
+
+def test_capability_boundary_with_evidence_is_produced(spec):
+    """Evidence trumps the capability annotation: a not-implemented cell that
+    somehow has produced artifacts still renders 有produced."""
+    cell = {"domain": "medical-research", "product": "tutorial", "format": "html"}
+    produced = {("medical-research", "tutorial", "html")}
+    assert cm.classify_cell(cell, produced, llm_available=True, spec=spec) == cm.PRODUCED
+
+
+def test_implemented_required_cell_without_evidence_is_still_gap(spec):
+    """capability: implemented required cells stay real gaps when empty —
+    the annotation must NOT blanket-exempt required cells from gap status."""
+    cell = {"domain": "medical-research", "product": "tutorial", "format": "markdown"}
+    assert ("medical-research", "tutorial", "markdown") not in cm.not_implemented_cells_set(spec)
+    assert cm.classify_cell(cell, EMPTY_PRODUCED, llm_available=True, spec=spec) == cm.GAP
+
+
+def test_required_cells_set_contains_all_required_cells(spec):
+    """required_cells_set (gap-domain) is a superset of the implemented cells
+    while not_implemented_cells_set holds only the capability boundaries."""
+    required = cm.required_cells_set(spec)
+    not_impl = cm.not_implemented_cells_set(spec)
+    assert required
+    assert not_impl
+    assert not_impl <= required
+    for c in spec["required_cells"]:
+        triple = (c["domain"], c["product"], c["format"])
+        if c["capability"] == "implemented":
+            assert triple in required and triple not in not_impl
+        else:
+            assert triple in not_impl
+
+
 # ---------------------------------------------------------------------------
 # Spec file validity
 # ---------------------------------------------------------------------------
@@ -123,7 +173,8 @@ def test_spec_has_at_least_10_required_cells(spec):
     required = spec["required_cells"]
     assert len(required) >= 10
     for cell in required:
-        assert set(cell) == {"domain", "product", "format"}
+        assert set(cell) == {"domain", "product", "format", "capability"}
+        assert cell["capability"] in {"implemented", "not-implemented"}
         assert cell["domain"] in spec["domains"]
         assert cell["product"] in spec["products"]
         assert cell["format"] in spec["formats"]
