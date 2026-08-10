@@ -24,8 +24,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from autoinfo.config import Config, QualityGateConfig, get_config_path, load_config
-from autoinfo.kb import KBStore, PromotionRejected
+from autoinfo.config import Config, DomainConfig, QualityGateConfig, get_config_path, load_config
+from autoinfo.kb import _FTS5_STOPWORDS, KBStore, PromotionRejected
 from autoinfo.keywords import KeywordsFile, KeywordState
 from autoinfo.llm import LLMExtractor
 from autoinfo.models import Item
@@ -45,13 +45,39 @@ from autoinfo.quality import (
 logger = logging.getLogger(__name__)
 
 # Minimal stop sets for keyword auto-discovery (Step e in processing pipeline)
+# — augmented with the richer FTS5 stopword list from kb.py.
 _STOP_WORDS: frozenset[str] = frozenset({
     "the", "this", "that", "with", "from", "have", "been", "were",
     "their", "which", "about", "study", "also", "show", "shown",
     "using", "used", "may", "results", "result", "method", "methods",
     "however", "conclusion", "background", "objective", "aim",
-})
+}) | _FTS5_STOPWORDS
 _STOP_PHRASES: frozenset[str] = frozenset({"", "  ", "   "})
+
+
+def _is_valid_discovery_keyword(candidate: str, min_length: int = 2) -> bool:
+    """Return ``True`` when *candidate* is fit for keyword auto-discovery.
+
+    A candidate passes when, after trimming and lower-casing, it is at
+    least ``min_length`` chars, contains at least one letter, and is not
+    a stopword or a stopword-only phrase.  Multi-word candidates are
+    additionally rejected when any constituent word is digit/punctuation
+    only (e.g. ``"results 2024"``).
+    """
+    text = candidate.strip().lower()
+    if not text or len(text) < min_length:
+        return False
+    if text in _STOP_PHRASES or text in _STOP_WORDS:
+        return False
+    if not any(ch.isalpha() for ch in text):
+        return False
+    words = text.split()
+    if len(words) > 1:
+        if any(not any(ch.isalpha() for ch in w) for w in words):
+            return False
+        if all(w in _STOP_WORDS for w in words):
+            return False
+    return True
 
 # Parallel processing (issue #136): LLM extraction dominates per-item latency,
 # so items are processed concurrently in a bounded thread pool.  Default 5
@@ -109,7 +135,7 @@ def detect_language(text: str) -> str:
     if len(text.strip()) < 20:
         return "unknown"
     try:
-        from langdetect import LangDetectException as _LDE
+        from langdetect import LangDetectException as _LDE  # noqa: N814
         from langdetect import detect_langs
     except ImportError:
         logger.debug("langdetect not installed — language detection disabled")
@@ -271,7 +297,7 @@ def _read_progress(domain: str) -> dict:
         with sqlite3.connect(str(db_path)) as conn:
             _init_progress_table(conn)
             row = conn.execute(
-                "SELECT last_processed_index, total_items FROM processing_progress WHERE domain = ?",
+                "SELECT last_processed_index, total_items FROM processing_progress WHERE domain = ?",  # noqa: E501
                 (domain,),
             ).fetchone()
             if row is not None:
@@ -627,8 +653,9 @@ def run_processing(
     # return extra columns (created_at, cefr, etc.) that KBEntry doesn't
     # accept as constructor args.
     from dataclasses import fields as _dc_fields
+
     from autoinfo.models import KBEntry
-    _KB_FIELDS = {f.name for f in _dc_fields(KBEntry)}
+    _KB_FIELDS = {f.name for f in _dc_fields(KBEntry)}  # noqa: N806
     existing_entries_raw = kb_store.list_entries(domain, limit=10000)
     existing_entries: list[KBEntry] = [
         KBEntry(**{k: v for k, v in row.items() if k in _KB_FIELDS})
@@ -665,6 +692,16 @@ def run_processing(
         for d in config.domains:
             if d.name == domain:
                 gate_config.update(d.quality_gates)
+                break
+
+    # Resolve the domain config for keyword auto-discovery (#179): toggle,
+    # AUTO_ADDED cap and minimum candidate length.  Defaults (on / 100 / 2)
+    # apply when the domain omits the fields, preserving pre-#179 behavior.
+    domain_cfg: DomainConfig | None = None
+    if config:
+        for d in config.domains:
+            if d.name == domain:
+                domain_cfg = d
                 break
 
     # Resolve source quality tiers from domain config (for G1 propagation)
@@ -820,7 +857,7 @@ def run_processing(
                     )
                     g4_model = f"{g4_provider}/{g4_model_name}"
                     g4_gate_config = gate_config.get("G4-SummaryFactual") if gate_config else None
-                    g4 = G4FactualConsistency(model=g4_model, json_mode=proc_config.llm.json_mode if proc_config else False, timeout=llm_timeout)
+                    g4 = G4FactualConsistency(model=g4_model, json_mode=proc_config.llm.json_mode if proc_config else False, timeout=llm_timeout)  # noqa: E501
                     g4_result = g4.check(item, extraction, gate_config=g4_gate_config)
                     quality_results["G4-SummaryFactual"] = g4_result
 
@@ -944,7 +981,9 @@ def run_processing(
                             )
                         else:
                             # Pre-checks pass → run LLM judge (gate 5)
-                            from autoinfo.translation_qa import calculate_quality_score  # noqa: PLC0415
+                            from autoinfo.translation_qa import (
+                                calculate_quality_score,  # noqa: PLC0415
+                            )
 
                             g5_scores = llm_judge(
                                 source_text, target_text,
@@ -1136,24 +1175,26 @@ def run_processing(
             # thread) because KeywordsFile is not thread-safe.
             discovered: list[str] = []
             if extraction:
+                min_len = (
+                    domain_cfg.auto_keyword_min_length if domain_cfg else 2
+                )
                 # Collect entity names as keyword candidates
                 for entity in extraction.entities:
                     name = entity.get("name", "").strip().lower()
-                    if name and len(name) > 1:
+                    if _is_valid_discovery_keyword(name, min_length=min_len):
                         discovered.append(name)
                 # Collect key-point phrases as keyword candidates
                 for kp in extraction.key_points:
                     words = [w.strip().lower() for w in kp.split() if len(w.strip()) > 2]
                     # Use short phrases (2-4 words) as single keywords
                     for i in range(len(words)):
-                        # Single words that aren't stop-word-ish
                         w = words[i]
-                        if len(w) > 3 and w not in _STOP_WORDS:
+                        if _is_valid_discovery_keyword(w, min_length=min_len):
                             discovered.append(w)
                     for n in (2, 3):
                         phrases = [" ".join(words[i:i + n]) for i in range(len(words) - n + 1)]
                         for p in phrases:
-                            if p not in _STOP_PHRASES:
+                            if _is_valid_discovery_keyword(p, min_length=min_len):
                                 discovered.append(p)
 
             if discovered:
@@ -1230,17 +1271,43 @@ def run_processing(
             result.passed_gates += stats["passed_gates"]
             result.errors.extend(stats["errors"])
 
-            # Keyword auto-discovery writes (single-threaded — file I/O)
-            for kw, source_name in stats["discovered"]:
-                try:
-                    kf.add_keyword(
-                        domain=domain,
-                        keyword=kw,
-                        state=KeywordState.AUTO_ADDED,
-                        source=f"auto-discovery:{source_name}",
-                    )
-                except Exception:
-                    logger.debug("Failed to add discovered keyword '%s':", kw, exc_info=True)
+            # Keyword auto-discovery writes (single-threaded — file I/O).
+            # Toggle + cap (#179): when disabled nothing is written; once the
+            # domain's AUTO_ADDED count reaches the cap, further new keywords
+            # are skipped (never an error).
+            discovery_enabled = (
+                domain_cfg.auto_keyword_discovery if domain_cfg else True
+            )
+            max_auto = domain_cfg.max_auto_keywords if domain_cfg else 100
+            if discovery_enabled and stats["discovered"]:
+                entries = kf.load(domain)
+                existing = {e.keyword: e for e in entries}
+                auto_count = sum(
+                    1 for e in entries if e.state == KeywordState.AUTO_ADDED
+                )
+                for kw, source_name in stats["discovered"]:
+                    current = existing.get(kw)
+                    if current is None:
+                        if auto_count >= max_auto:
+                            continue
+                        auto_count += 1
+                    elif current.state != KeywordState.AUTO_ADDED:
+                        # Re-adding a non-AUTO_ADDED keyword flips it to
+                        # AUTO_ADDED, which consumes cap budget too.
+                        if auto_count >= max_auto:
+                            continue
+                        auto_count += 1
+                    try:
+                        stored = kf.add_keyword(
+                            domain=domain,
+                            keyword=kw,
+                            state=KeywordState.AUTO_ADDED,
+                            source=f"auto-discovery:{source_name}",
+                        )
+                    except Exception:
+                        logger.debug("Failed to add discovered keyword '%s':", kw, exc_info=True)
+                        continue
+                    existing[kw] = stored
 
             # Per-item progress output — flushed so it survives a killed run
             if progress_enabled:

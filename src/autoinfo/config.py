@@ -209,6 +209,10 @@ class DomainConfig:
     delivery_gates: dict[str, DeliveryGateConfig] = field(default_factory=dict)
     ttl_days: int = 90
     freshness_threshold: float = 0.5
+    # Keyword auto-discovery (#179): defaults keep pre-#179 behavior.
+    auto_keyword_discovery: bool = True
+    max_auto_keywords: int = 100
+    auto_keyword_min_length: int = 2
 
     def __post_init__(self):
         """Apply domain-specific TTL defaults for built-in demo domains."""
@@ -631,6 +635,11 @@ def _dict_to_config(raw: dict[str, Any]) -> Config:
                 webhook_urls=list(d.get("webhook_urls", [])),
                 quality_gates=domain_quality_gates,
                 delivery_gates=domain_delivery_gates,
+                auto_keyword_discovery=_as_bool(
+                    d.get("auto_keyword_discovery", True)
+                ),
+                max_auto_keywords=int(d.get("max_auto_keywords", 100)),
+                auto_keyword_min_length=int(d.get("auto_keyword_min_length", 2)),
             )
         )
 
@@ -1099,6 +1108,12 @@ def config_to_dict(config: Config) -> dict[str, Any]:
             domain_dict["extract_fields"] = domain.extract_fields
         if domain.search_mode != "keyword":
             domain_dict["search_mode"] = domain.search_mode
+        if not domain.auto_keyword_discovery:
+            domain_dict["auto_keyword_discovery"] = False
+        if domain.max_auto_keywords != 100:
+            domain_dict["max_auto_keywords"] = domain.max_auto_keywords
+        if domain.auto_keyword_min_length != 2:
+            domain_dict["auto_keyword_min_length"] = domain.auto_keyword_min_length
         if domain.webhook_urls:
             domain_dict["webhook_urls"] = domain.webhook_urls
         if domain.quality_gates:
