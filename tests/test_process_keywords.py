@@ -23,12 +23,11 @@ import pytest
 
 from autoinfo.config import Config, DomainConfig, config_to_dict, load_config
 from autoinfo.kb import KBStore
-from autoinfo.keywords import KeywordState, KeywordsFile
+from autoinfo.keywords import KeywordsFile, KeywordState
 from autoinfo.llm import LLMExtractor
 from autoinfo.models import ExtractionResult, Item, KBEntry
 from autoinfo.process import run_processing
 from autoinfo.quality import QualityResult
-
 
 # ===================================================================
 # Fixtures / helpers
