@@ -1371,6 +1371,82 @@ class TestMCPGenerateReport:
             )
         assert "error_code" in result
 
+    def test_handle_generate_report_with_product_passes_registry_template(self):
+        """product='premium-briefing' forwards the registry template to generate_report."""
+        from autoinfo.output import PRODUCT_TEMPLATES
+        from autoinfo.mcp.server import _handle_generate_report
+
+        _row = next(
+            r for r in PRODUCT_TEMPLATES if r["name"] == "premium-briefing"
+        )
+        fake_entry = {"id": "x", "title": "t", "content": "c"}
+        with patch("autoinfo.kb.KBStore.list_entries", return_value=[fake_entry]), \
+             patch("autoinfo.output.generate_report",
+                   return_value="# Premium Briefing\n\nDeep analysis") as mock_gen:
+            result = _handle_generate_report(
+                domain="medical-research",
+                format="markdown",
+                period="monthly",
+                product="premium-briefing",
+            )
+        assert result["success"] is True
+        assert "# Premium Briefing" in result["content"]
+        assert mock_gen.call_args.kwargs["product_template"] is _row["template"]
+
+    def test_handle_generate_report_unknown_product_returns_error_envelope(self):
+        """Unknown product returns the canonical error envelope with valid names."""
+        from autoinfo.output import PRODUCT_TEMPLATES
+        from autoinfo.mcp.server import _handle_generate_report
+
+        result = _handle_generate_report(
+            domain="medical-research",
+            format="markdown",
+            period="monthly",
+            product="bogus-product",
+        )
+        assert result["success"] is False
+        assert result["error"]["code"] == "ValidationError"
+        assert result["error"]["actionable"] is True
+        assert "bogus-product" in result["error"]["message"]
+        _valid = {r["name"] for r in PRODUCT_TEMPLATES}
+        for name in _valid:
+            assert name in result["error"]["message"]
+
+    def test_handle_generate_report_column_still_wires_product_template(self):
+        """Existing report_type='column' behavior unchanged when product absent."""
+        from autoinfo.output import PRODUCT_TEMPLATES
+        from autoinfo.mcp.server import _handle_generate_report
+
+        _row = next(r for r in PRODUCT_TEMPLATES if r["name"] == "column")
+        fake_entry = {"id": "x", "title": "t", "content": "c"}
+        with patch("autoinfo.kb.KBStore.list_entries", return_value=[fake_entry]), \
+             patch("autoinfo.output.generate_report",
+                   return_value="# Column\n\nbody") as mock_gen:
+            result = _handle_generate_report(
+                domain="medical-research",
+                format="markdown",
+                period="monthly",
+                report_type="column",
+            )
+        assert result["success"] is True
+        assert mock_gen.call_args.kwargs["product_template"] is _row["template"]
+
+    def test_handle_generate_report_without_product_no_template(self):
+        """No product param -> generate_report receives product_template=None."""
+        from autoinfo.mcp.server import _handle_generate_report
+
+        fake_entry = {"id": "x", "title": "t", "content": "c"}
+        with patch("autoinfo.kb.KBStore.list_entries", return_value=[fake_entry]), \
+             patch("autoinfo.output.generate_report",
+                   return_value="# Report\n\nContent") as mock_gen:
+            result = _handle_generate_report(
+                domain="medical-research",
+                format="markdown",
+                period="monthly",
+            )
+        assert result["success"] is True
+        assert mock_gen.call_args.kwargs["product_template"] is None
+
     def test_mcp_tool_registered(self):
         """generate_report is listed in the health_check tools_count."""
         from autoinfo.mcp.server import _handle_health_check

@@ -2,6 +2,26 @@
 
 All notable changes to the AutoInfo project will be documented in this file.
 
+## v1.10 (Unreleased, 2026-08-11) — output-quality-mega wave
+
+### Added
+- **2 new product template files (product count stays 8)** — `premium-briefing.md.j2` (market-report-anchored: numbered takeaways with So-what/Risk/Actions) and `enterprise-briefing.md.j2` (one-page exec summary + Key Metrics table + Action Required + Risk matrix) in `src/autoinfo/data/templates/`, giving the already-registered premium-briefing/enterprise-briefing products dedicated templates.
+- **Per-product LLM synthesis fields** — implications/risks/action_required/key_metrics synthesized per product template and carried into agent-format JSON-LD output; JSON-LD schema extended (`docs/schemas/knowledge-digest-v1.json` optional fields).
+- **MCP `product` params + CLI `--product`** — `generate_report(product=...)` and `generate_digest(product=...)` MCP params; `--product` flag on `output digest`/`output report`.
+- **Collector fulltext depth** — `fetch_depth` threaded through collection dispatch (`_handler_settings`); Unpaywall (OA fulltext via web.py trafilatura), RSS (entry.link fulltext), YouTube (transcript download), GDELT (article fulltext) — each gated by `fetch_depth: fulltext`, 8000-char cap, graceful fallback on failure. Scoped re-collection proved ~4x deeper content on the medical-research deliverable domain.
+- **KB product-analysis metadata + faceted filter** — product analysis fields persisted to KB entry `custom_fields["product_analysis"]`; `search_knowledge_base(filter_custom_fields=...)` faceted filter on custom_fields JSON (no new MCP tool, no new store).
+- **2 new validation scenarios → 67 total (61 functional + 6 regression)** — `scenarios/regression/regression-product-routing.yaml` (product routing through generate_report/generate_digest) + `scenarios/output-agent-interaction.yaml` (agent-format output carries per-product fields, verified via filter_custom_fields).
+
+### Changed
+- **magazine-digest routing fixed** — `gen_domain_products.py` now routes magazine-digest via `generate_digest`.
+- **Guard-first product-type resolution** — `_resolve_report_product_type` mirrors `_resolve_digest_product_type`; digest render-context normalization via `_normalize_digest_product_context`.
+
+### Fixed
+- **Report-synthesis robustness** — bounded retry loop + dedicated product-sections prompt so synthesis failures no longer block product output.
+
+### Infrastructure
+- Test suite now ~3575 tests (was ~3390; final gate: 3574 passed / 21 skipped / 0 errors).
+
 ## v1.9 (Unreleased, 2026-08-05) — M0-M7 consolidated wave summary
 
 ### Breaking

@@ -257,6 +257,23 @@ SAMPLE_CAPTIONS_RESPONSE: dict[str, Any] = {
     ],
 }
 
+# SRT payload returned by the captions.download endpoint (tfmt=srt)
+SAMPLE_SRT_TRANSCRIPT: str = (
+    "1\r\n"
+    "00:00:00,000 --> 00:00:03,000\r\n"
+    "Never gonna give you up\r\n"
+    "Never gonna let you down\r\n"
+    "\r\n"
+    "2\r\n"
+    "00:00:03,000 --> 00:00:06,000\r\n"
+    "Never gonna run around and desert you\r\n"
+)
+
+EXPECTED_TRANSCRIPT_TEXT: str = (
+    "Never gonna give you up Never gonna let you down\n"
+    "Never gonna run around and desert you"
+)
+
 
 # ---------------------------------------------------------------------------
 # Helper: create a mock httpx.Response
@@ -267,6 +284,14 @@ def _mock_response(data: dict[str, Any]) -> MagicMock:
     """Create a mock httpx.Response that returns the given JSON data."""
     mock = MagicMock(spec=httpx.Response)
     mock.json.return_value = data
+    mock.raise_for_status.return_value = None
+    return mock
+
+
+def _mock_text_response(text: str) -> MagicMock:
+    """Create a mock httpx.Response that returns raw text (e.g. SRT)."""
+    mock = MagicMock(spec=httpx.Response)
+    mock.text = text
     mock.raise_for_status.return_value = None
     return mock
 
@@ -886,9 +911,12 @@ class TestYouTubeFetchCaptions:
     @patch("autoinfo.collectors.youtube.httpx.get")
     def test_fetch_captions_returns_caption_info(self, mock_get: MagicMock) -> None:
         """fetch_captions should return caption metadata for a video."""
-        mock_get.return_value = _mock_response(SAMPLE_CAPTIONS_RESPONSE)
+        mock_get.side_effect = [
+            _mock_response(SAMPLE_CAPTIONS_RESPONSE),
+            _mock_text_response(SAMPLE_SRT_TRANSCRIPT),
+        ]
 
-        handler = YouTubeHandler({"api_key": "test-key"})
+        handler = YouTubeHandler({"api_key": "test-key", "max_rps": 1000})
         result = handler.fetch_captions("dQw4w9WgXcQ")
 
         assert result is not None
@@ -934,6 +962,107 @@ class TestYouTubeFetchCaptions:
         result = handler.fetch_captions("dQw4w9WgXcQ")
 
         assert result is None
+
+    @patch("autoinfo.collectors.youtube.httpx.get")
+    def test_fetch_captions_downloads_transcript(self, mock_get: MagicMock) -> None:
+        """fetch_captions should download and parse the SRT transcript."""
+        mock_get.side_effect = [
+            _mock_response(SAMPLE_CAPTIONS_RESPONSE),
+            _mock_text_response(SAMPLE_SRT_TRANSCRIPT),
+        ]
+
+        handler = YouTubeHandler({"api_key": "test-key", "max_rps": 1000})
+        result = handler.fetch_captions("dQw4w9WgXcQ")
+
+        assert result is not None
+        assert result["caption_id"] == "AUieDaYb_caption_english"
+        assert result["language"] == "en"
+        assert result["track_kind"] == "standard"
+        assert result["name"] == "English"
+        assert result["transcript"] == EXPECTED_TRANSCRIPT_TEXT
+
+        # Second request must hit the captions.download endpoint with tfmt=srt
+        download_url = mock_get.call_args_list[1][0][0]
+        assert "/youtube/v3/captions/AUieDaYb_caption_english" in download_url
+        assert "tfmt=srt" in download_url
+
+    @patch("autoinfo.collectors.youtube.httpx.get")
+    def test_fetch_captions_download_failure_returns_empty_transcript(
+        self, mock_get: MagicMock,
+    ) -> None:
+        """A failed transcript download should keep metadata with empty transcript."""
+        mock_get.side_effect = [
+            _mock_response(SAMPLE_CAPTIONS_RESPONSE),
+            httpx.NetworkError("Connection refused"),
+        ]
+
+        handler = YouTubeHandler({"api_key": "test-key", "max_rps": 1000})
+        result = handler.fetch_captions("dQw4w9WgXcQ")
+
+        assert result is not None
+        assert result["caption_id"] == "AUieDaYb_caption_english"
+        assert result["transcript"] == ""
+
+
+# ---------------------------------------------------------------------------
+# Tests: fetch with fetch_depth=fulltext transcript enrichment
+# ---------------------------------------------------------------------------
+
+
+class TestYouTubeFetchFulltext:
+    """Tests for fetch() transcript enrichment when fetch_depth is fulltext."""
+
+    @patch("autoinfo.collectors.youtube.httpx.get")
+    def test_fetch_fulltext_content_contains_transcript(self, mock_get: MagicMock) -> None:
+        """With fetch_depth=fulltext, item content should carry the transcript."""
+        mock_get.side_effect = [
+            _mock_response(SAMPLE_SINGLE_RESPONSE),
+            _mock_response(SAMPLE_CAPTIONS_RESPONSE),
+            _mock_text_response(SAMPLE_SRT_TRANSCRIPT),
+        ]
+
+        handler = YouTubeHandler({
+            "query": "first video",
+            "api_key": "test-key",
+            "fetch_depth": "fulltext",
+            "max_rps": 1000,
+        })
+        items = handler.fetch(limit=10)
+
+        assert len(items) == 1
+        assert "Never gonna give you up" in items[0]["content"]
+        assert EXPECTED_TRANSCRIPT_TEXT in items[0]["content"]
+
+    @patch("autoinfo.collectors.youtube.httpx.get")
+    def test_fetch_default_uses_description(self, mock_get: MagicMock) -> None:
+        """Default (non-fulltext) fetch keeps description content and skips captions."""
+        mock_get.return_value = _mock_response(SAMPLE_SINGLE_RESPONSE)
+
+        handler = YouTubeHandler({"query": "first video", "api_key": "test-key"})
+        items = handler.fetch(limit=10)
+
+        assert len(items) == 1
+        assert items[0]["content"] == "The first YouTube video ever uploaded."
+        mock_get.assert_called_once()  # search only — no captions calls
+
+    @patch("autoinfo.collectors.youtube.httpx.get")
+    def test_fetch_fulltext_falls_back_to_description(self, mock_get: MagicMock) -> None:
+        """When transcript is unavailable, fulltext fetch falls back to description."""
+        mock_get.side_effect = [
+            _mock_response(SAMPLE_SINGLE_RESPONSE),
+            _mock_response({"kind": "youtube#captionListResponse", "items": []}),
+        ]
+
+        handler = YouTubeHandler({
+            "query": "first video",
+            "api_key": "test-key",
+            "fetch_depth": "fulltext",
+            "max_rps": 1000,
+        })
+        items = handler.fetch(limit=10)
+
+        assert len(items) == 1
+        assert items[0]["content"] == "The first YouTube video ever uploaded."
 
 
 # ---------------------------------------------------------------------------

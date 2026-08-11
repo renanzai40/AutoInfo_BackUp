@@ -108,6 +108,7 @@ AutoInfo/
 │       ├── collectors/              # 30 collector handlers (PubMed, Semantic Scholar, DBLP, OpenAlex, USPTO, NYT, Yahoo Finance, Quandl, RSS, Web, webhook, email, PDF, Reddit, Spotify, YouTube, Bilibili, Apple Podcasts, AP API, Reuters MCP, SSRN, GDELT, HuggingFace/Kaggle, Unpaywall/CORE, HackerNews, AKShare, SEC EDGAR, edX sitemap)
 │       ├── llm.py                   # LLM extraction engine
 │       ├── output/                   # Output generation package (digest, report, tutorial, presentation, export; formats: Markdown/HTML/JSON/PDF/Audio/Agent/EPUB/MOBI/Audiobook) — __init__.py + ebook.py (B23: EPUB/MOBI/audiobook) + video.py + seo.py
+│       ├── data/                     # Domain configs (domains/*/sources.yaml) + 8 output product templates (incl. premium-briefing.md.j2, enterprise-briefing.md.j2)
 │       ├── cefr.py                  # CEFR classification (EN/ZH/JA)
 │       ├── quality.py               # Quality gates G0-G5, D1-D3 delivery gates
 │       ├── delivery.py              # Delivery channel abstraction (13 channels)
@@ -137,6 +138,7 @@ Collected Item → 01-Raw → 02-Draft → 03-Wiki
 | **Agent promotes Draft→Wiki via `promote_kb_draft`** | AutoInfo's KB is a **database** for raw/processed data production, not a human-curated knowledge base (director decision 2026-08-08). Promotion is a production step, executed by the agent with no human gate — maximum automation, agent as user. A human promote/approval step would cripple production throughput. |
 | **03-Wiki is append-only** | Once promoted, entries stay. Agent cannot demote or delete Wiki entries. Deprecation (tag `status: deprecated`) only upon explicit human command. |
 | **Source metadata is mandatory** | Every Raw entry must have `source_url`, `source_type`, `source_platform`. |
+| **Product-analysis metadata** | Per-product analysis fields persist in entry `custom_fields["product_analysis"]` — uses the existing custom_fields metadata dict (no schema/rule change); filterable via `search_knowledge_base(filter_custom_fields=...)`. |
 
 ### Collection Pipeline
 
@@ -197,12 +199,12 @@ Hard/soft split with retry-first, block-last philosophy. G0 (Schema Integrity) a
 | **Source** | `add_source` (idempotent), `add_sources` (batch), `remove_source`, `test_source`, `list_sources`, `get_source_health`, `get_feeds` |
 | **Topic** | `add_topic`, `remove_topic`, `list_topics`, `list_keywords`, `approve_keyword`, `reject_keyword`, `suggest_keywords`, `topic_group_add`, `topic_group_remove` |
 | **Collection** | `collect_sources` (with dry_run, domain-less), `get_collection_progress`, `get_collection_status`, `process_collection` (with batch, check_factual, check_translation), `get_processing_progress`, `batch_run`, `clean_cache` |
-| **KB** | `search_knowledge_base` (hybrid, cross-domain), `get_kb_entry`, `list_summaries`, `get_summary`, `create_kb_entry`, `create_kb_draft`, `reject_kb_draft`, `promote_kb_draft` (agent promotion Draft→Wiki), `list_kb_tier` (01-Raw/02-Draft/03-Wiki), `reindex_kb`, `flag_for_knowledge_base` |
+| **KB** | `search_knowledge_base` (hybrid, cross-domain, faceted `filter_custom_fields` on custom_fields JSON), `get_kb_entry`, `list_summaries`, `get_summary`, `create_kb_entry`, `create_kb_draft`, `reject_kb_draft`, `promote_kb_draft` (agent promotion Draft→Wiki), `list_kb_tier` (01-Raw/02-Draft/03-Wiki), `reindex_kb`, `flag_for_knowledge_base` |
 | **KB Relations** | `link_items`, `get_item_relations` |
 | **KB Versioning** | `get_entry_history`, `restore_entry_version` |
 | **KB Monitor** | `get_collection_stats`, `get_collection_diff` |
 | **KB Graph** | `query_knowledge_graph`, `knowledge_graph_export` |
-| **Output** | `list_output_templates`, `generate_digest` (format=md/html/json/agent), `generate_report` (format=md/json/pdf/html/audio/agent), `generate_cross_domain_report`, `generate_tutorial` (format=md/agent), `generate_presentation` (format=md/agent), `localize_content` |
+| **Output** | `list_output_templates`, `generate_digest` (format=md/html/json/agent, `product=` premium-briefing/magazine-digest/...), `generate_report` (format=md/json/pdf/html/audio/agent, `product=` premium-briefing/enterprise-briefing/...), `generate_cross_domain_report`, `generate_tutorial` (format=md/agent), `generate_presentation` (format=md/agent), `localize_content` |
 | **Delivery Schedule** | `add_delivery_schedule`, `list_delivery_schedules`, `remove_delivery_schedule` |
 | **Export/Import** | `export_kb` (format=md/json/sqlite/pdf/csv/graphml/agent/bundle), `import_kb` |
 | **CEFR** | `classify_cefr`, `cefr_batch` |
@@ -225,7 +227,7 @@ Hard/soft split with retry-first, block-last philosophy. G0 (Schema Integrity) a
 | **Observability** | `trace_item`, `get_metrics`, `get_prometheus_metrics`, `diagnose_system` |
 | **Agent Callbacks** | `set_agent_callback`, `list_agent_callbacks`, `remove_agent_callback` (push delivers canonical `{event, payload, schema_version: 1, trace_id, product_id}` via durable SQLite outbox) |
 | **Audit** | `query_audit_log` |
-| **Validation** | `list_validation_scenarios`, `run_validation_scenario` (65 scenarios = 60 functional + 5 regression in `scenarios/regression/`; M7T52: sources-gap-closure + output-column + sources-a6-keyed; E8 wave: per-scenario timeout, recovery_steps + partial-pass, per-step trace + root-cause report, regression flywheel, enduser-journey + UX metrics; #157: requires_http env gate; #156: premium-briefing/magazine-digest/enterprise-briefing + full source coverage) |
+| **Validation** | `list_validation_scenarios`, `run_validation_scenario` (67 scenarios = 61 functional + 6 regression in `scenarios/regression/`; M7T52: sources-gap-closure + output-column + sources-a6-keyed; E8 wave: per-scenario timeout, recovery_steps + partial-pass, per-step trace + root-cause report, regression flywheel, enduser-journey + UX metrics; #157: requires_http env gate; #156: premium-briefing/magazine-digest/enterprise-briefing + full source coverage; output-quality-mega wave: regression-product-routing + output-agent-interaction) |
 
 **Discovery flow**: `health_check()` → `tools/list` (MCP auto-discovery) → `list_domains()` → `get_domain_schema(domain)` → `list_available_models()` → `list_output_templates(domain)`.
 
@@ -260,6 +262,7 @@ The table indexes every pattern; the five most-used are inlined below.
 | Set up a delivery schedule | `add_delivery_schedule(cron, output_type, channel)` |
 | Export KB as bundle | `export_kb(format="bundle")` → ZIP |
 | Generate a specialized report | `generate_report(report_type, target_audience)` |
+| Generate a differentiated product briefing | `generate_report(product="premium-briefing")` / `generate_digest(product="magazine-digest")` — dedicated template + per-product synthesis fields |
 | Run MCP-native validation | `list_validation_scenarios` / `run_validation_scenario` |
 | Monitor long-running jobs | poll `get_collection_progress(job_id)` |
 
@@ -269,7 +272,7 @@ The table indexes every pattern; the five most-used are inlined below.
 
 **Configure the LLM (BYOK)**: `configure_llm(api_key, provider, model)` stores an env var reference (`${AUTOINFO_LLM_API_KEY}`), never the raw key. If missing, the 14 LLM-required tools return `LLM_NOT_CONFIGURED` at dispatch. Full variable catalog: `docs/dev/required-api-keys.md`.
 
-**Search KB**: `search_knowledge_base(domain, query, mode="hybrid")` (FTS5 + vector), `mode="vector"` (semantic only), or `mode="faceted"` with `filters={...}`. Omit `domain` to search across all domains.
+**Search KB**: `search_knowledge_base(domain, query, mode="hybrid")` (FTS5 + vector), `mode="vector"` (semantic only), or `mode="faceted"` with `filters={...}`; `filter_custom_fields={...}` facets on custom_fields JSON (e.g. `{"product_analysis.action_required": ""}`). Omit `domain` to search across all domains.
 
 **Handle MCP errors**: All tools return `{success, error: {code, message, actionable}}`. Read `error.code`, follow the remediation hint in `error.message` (`actionable: true` marks that a hint exists, e.g. `DOMAIN_NOT_FOUND` says "Use `add_domain()`"). `process_collection` with no cached items returns `{status: "noop"}`, not an error.
 
@@ -339,15 +342,15 @@ Never hand-edit runtime artifacts to fix behavior — fix the source.
 |-----------|--------|
 | Config system | ✅ LLM task config, per-task model, fallback chains, schema versioning |
 | CLI | ✅ 28 command groups (init, doctor, collect, process, status, summaries, sources, topics, topic-group, domain, audit, kb, output, cron, knowledge, cefr, email, keywords, clean, cost, billing, enduser, portal, trace, import-kb, query-collected, alert-rules, agent-callback) |
-| Collection | ✅ 30 collector handlers (PubMed, Semantic Scholar, DBLP, OpenAlex, USPTO, NYT, Yahoo Finance, Quandl, RSS, Web, webhook, email, PDF, Reddit, Spotify, YouTube, Bilibili, Apple Podcasts, AP API, Reuters MCP, SSRN, GDELT, HuggingFace/Kaggle, Unpaywall/CORE, HackerNews, AKShare, SEC EDGAR, edX sitemap), scheduled via crond |
+| Collection | ✅ 30 collector handlers (PubMed, Semantic Scholar, DBLP, OpenAlex, USPTO, NYT, Yahoo Finance, Quandl, RSS, Web, webhook, email, PDF, Reddit, Spotify, YouTube, Bilibili, Apple Podcasts, AP API, Reuters MCP, SSRN, GDELT, HuggingFace/Kaggle, Unpaywall/CORE, HackerNews, AKShare, SEC EDGAR, edX sitemap), scheduled via crond; `fetch_depth: fulltext` threading (unpaywall/rss/youtube/gdelt, 8000-char cap) |
 | LLM extraction | ✅ Custom extraction fields, TL;DR, key points, entities, G4 factual consistency, token usage tracking |
 | Translation QA pipeline | ✅ 5 lite quality gates, back-translation verification, terminology guardrails, composite scoring, translator-qa-skill |
 | Quality gates | ✅ 6 hard/soft (G0-G5: G0/G4 hard, G1-G3/G5 soft) + 3 delivery gates (D1-D3) + per-domain config |
 | KB pipeline | ✅ 4-tier KB pipeline (00-Inbox → 01-Raw → 02-Draft → 03-Wiki; note: 00-Inbox is scaffolded but deprecated — 01-Raw is the sole entry point), git versioning + SHA tracking |
 | KB import | ✅ 4 formats (PDF, Markdown, HTML, JSON) → 01-Raw via `import_kb` MCP tool |
-| Search | ✅ Hybrid (FTS5 keyword + sqlite-vec vector), faceted (7 filters) |
+| Search | ✅ Hybrid (FTS5 keyword + sqlite-vec vector), faceted (7 filters + `filter_custom_fields` on custom_fields JSON) |
 | Q&A | ✅ FTS5 + LLM synthesis with source citations |
-| Output generation | ✅ Digest (Markdown/HTML/JSON/PDF/EPUB/Audiobook), report (Markdown/JSON/HTML/Audio/Agent/EPUB/Audiobook), tutorial (Markdown), presentation (Markdown), export (Markdown/JSON/SQLite/PDF/RSS/CSV/GraphML/Agent/Bundle/Sitemap/EPUB/MOBI) (Jinja2 + LLM, Reveal.js CDN, ebooklib EPUB3 + calibre MOBI) |
+| Output generation | ✅ Digest (Markdown/HTML/JSON/PDF/EPUB/Audiobook), report (Markdown/JSON/HTML/Audio/Agent/EPUB/Audiobook), tutorial (Markdown), presentation (Markdown), export (Markdown/JSON/SQLite/PDF/RSS/CSV/GraphML/Agent/Bundle/Sitemap/EPUB/MOBI) (Jinja2 + LLM, Reveal.js CDN, ebooklib EPUB3 + calibre MOBI); 8 product templates incl. premium-briefing/enterprise-briefing + per-product LLM synthesis |
 | Agent-native JSON output | ✅ `format="agent"` returns JSON-LD (`@type: KnowledgeDigest`) for LLM re-consumption |
 | JSON-LD schemas | ✅ `docs/schemas/{knowledge-digest,knowledge-tutorial,knowledge-presentation,knowledge-base-export}-v1.json` (JSON Schema draft-07) pin `@context`/`@type` via `const`; validated by M4T35 round-trip tests |
 | Audio output | ✅ TTS-rendered digest/report as MP3 (OpenAI TTS); `format="audiobook"` = chaptered MP3 + ZIP (ID3v2.3 CHAP/CTOC via mutagen) |
@@ -411,9 +414,9 @@ Never hand-edit runtime artifacts to fix behavior — fix the source.
 | Cost dashboard MCP | ✅ cost_dashboard MCP tool |
 | Cost allocation MCP | ✅ cost_allocation MCP tool |
 | Demo domains | ✅ 13 demo domains (medical-research, ai-commercial, financial-intelligence, tech-ai-developer, language-learning, online-video, financial-news, online-education, legal-compliance, general-news, gaming, b2b, retail) |
-| Validation scenarios | ✅ 65 scenarios (60 functional + 5 regression in `scenarios/regression/`, REGRESSION marker, recursive-glob auto-load) |
+| Validation scenarios | ✅ 67 scenarios (61 functional + 6 regression in `scenarios/regression/`, REGRESSION marker, recursive-glob auto-load) |
 | Validation execution | ✅ Per-step `timeout_seconds`; per-step `recovery_steps` (run after primary failure) + partial-pass (`min_passing`/`pass_ratio`); per-step trace (step_index/duration/arguments/trace_id + llm_meta model/tokens/duration); `expect.error_actionable` envelope assertion; root-cause report (`## Blockers` / `## Per-step trace` / `## Regression failures`) |
-| Regression flywheel | ✅ `scenarios/regression/` (regression-collect-int-id #104, regression-llm-key-resolution #119, regression-period-enum #126, regression-report-structure #121, regression-source-301 #135) + `coverage_audit.py` "Regression scenarios: N (issues: ...)" + `.github/ISSUE_TEMPLATE/bug_report.md` mandatory 回归场景 field |
+| Regression flywheel | ✅ `scenarios/regression/` (regression-collect-int-id #104, regression-llm-key-resolution #119, regression-period-enum #126, regression-report-structure #121, regression-source-301 #135, regression-product-routing) + `coverage_audit.py` "Regression scenarios: N (issues: ...)" + `.github/ISSUE_TEMPLATE/bug_report.md` mandatory 回归场景 field |
 | Validation delivery | ✅ `scripts/validation_delivery.py` builds 01-RAW/02-PROCESSED/03-KB/04-MATRIX (E8 matrix + coverage-gaps.json, Oracle R8 unconfigured-vs-gap)/06-REJECTED + validation-report.md + manifest.json (per-file authenticity + D1-D3 gates + UX metrics) |
 | End-user coverage matrix (E8) | ✅ `scripts/coverage_matrix.py` + `docs/dev/specs/end-user-matrix.yaml` |
 | End-user journey validation | ✅ `enduser-journey.yaml` scenario; UX metrics UX_OK/completion_rate ≥ 0.8; error-boundary asserts `actionable` field |
@@ -421,7 +424,7 @@ Never hand-edit runtime artifacts to fix behavior — fix the source.
 | LLM fallback chain | ✅ Shared `llm.call_with_fallback` — every LLM call site (extraction + 17 standalone) walks `[primary] + config.llm.fallback`; first successful model wins, aggregate error surfaces last failure |
 | Dead-source detection | ✅ Semantic Scholar 429 → `SourceFailure` (fail-fast); arXiv rss/bio → rss/q-bio fix |
 | CLI module entry | ✅ `python -m autoinfo.cli` runs the same Typer app; `collect` live per-source progress printer |
-| Test suite | ✅ ~3390 tests collected (includes validation wave E1-E9 scenarios + regression suite + #141-#164 regression guards + kb-curation wave + hermetic config-seam fixes) |
+| Test suite | ✅ ~3575 tests collected (3574 passed / 21 skipped / 0 errors at final gate; includes validation wave E1-E9 scenarios + regression suite + #141-#164 regression guards + kb-curation wave + hermetic config-seam fixes) |
 | Delivery schedules | ✅ add_delivery_schedule, list_delivery_schedules, remove_delivery_schedules MCP tools, cron-integrated |
 | Standardized error envelope | ✅ All MCP + REST API errors return `{success: false, error: {code, message, actionable}}`; 28 ErrorCode values; `error_dict()` deprecated |
 | REST success envelope | ✅ REST API success responses return `{success: true, data: ...}` (breaking change v1.9; migration: `docs/archive/migration-v1.9.md`); dashboard JS unwraps transparently |

@@ -23,10 +23,15 @@ import re
 from pathlib import Path
 from typing import Any
 
+import pytest
 import yaml
 
 from autoinfo.collect import _build_handler
-from autoinfo.config import SourceConfig, VALID_SOURCE_TYPES
+from autoinfo.collectors.gdelt import GDELTHandler
+from autoinfo.collectors.rss import RSSHandler
+from autoinfo.collectors.unpaywall import UnpaywallHandler
+from autoinfo.collectors.youtube import YouTubeHandler
+from autoinfo.config import VALID_SOURCE_TYPES, SourceConfig
 
 DEMO_DIR = Path(__file__).resolve().parents[1] / "src" / "autoinfo" / "data" / "domains"
 
@@ -232,3 +237,100 @@ def test_valid_source_types_parity_with_build_handler() -> None:
         f"  In VALID_SOURCE_TYPES but not in _build_handler or _NON_DISPATCH_TYPES: "
         f"{sorted(extra)}"
     )
+
+
+# ---------------------------------------------------------------------------
+# fetch_depth threading through dispatch (todo 14 — Phase B content depth)
+# ---------------------------------------------------------------------------
+# A source with ``fetch_depth: fulltext`` must reach its handler carrying the
+# value, so the fulltext collectors (unpaywall / rss / youtube / gdelt) can
+# branch on it. Handlers that receive only a settings dict must see it inside
+# their ``config``; RSS (which receives only ``source_name``) must expose it
+# as a handler attribute. Sources WITHOUT an explicit ``fetch_depth`` keep the
+# ``"abstract"`` default — backward compatible.
+
+
+@pytest.mark.parametrize(
+    "source, handler_cls, settings_key",
+    [
+        (
+            SourceConfig(
+                name="oa-fulltext",
+                type="unpaywall",
+                fetch_depth="fulltext",
+                settings={"provider": "core"},
+            ),
+            UnpaywallHandler,
+            "provider",
+        ),
+        (
+            SourceConfig(
+                name="yt-fulltext",
+                type="youtube",
+                fetch_depth="fulltext",
+                settings={"query": "machine learning"},
+            ),
+            YouTubeHandler,
+            "query",
+        ),
+        (
+            SourceConfig(
+                name="news-fulltext",
+                type="gdelt",
+                fetch_depth="fulltext",
+                settings={"maxrecords": 50},
+            ),
+            GDELTHandler,
+            "maxrecords",
+        ),
+    ],
+)
+def test_fetch_depth_reaches_settings_based_handlers(
+    source: SourceConfig,
+    handler_cls: type[Any],
+    settings_key: str,
+) -> None:
+    """``fetch_depth: fulltext`` on the source is visible on the constructed
+    settings-based handler (unpaywall / youtube / gdelt)."""
+    handler = _build_handler(source)
+    assert isinstance(handler, handler_cls)
+    assert handler.config.get("fetch_depth") == "fulltext"
+    # Original settings survive alongside the injected fetch_depth.
+    assert handler.config.get(settings_key) is not None
+    # The shared SourceConfig settings dict is never mutated.
+    assert "fetch_depth" not in source.settings
+
+
+def test_fetch_depth_reaches_rss_handler() -> None:
+    """RSS (which receives only ``source_name``) still sees per-source
+    ``fetch_depth`` on the constructed handler."""
+    handler = _build_handler(
+        SourceConfig(
+            name="feed-fulltext",
+            type="rss",
+            url="https://example.com/rss",
+            fetch_depth="fulltext",
+        )
+    )
+    assert isinstance(handler, RSSHandler)
+    assert handler.source_name == "feed-fulltext"
+    assert handler.fetch_depth == "fulltext"
+
+
+def test_fetch_depth_defaults_to_abstract_when_unset() -> None:
+    """Sources without an explicit ``fetch_depth`` behave identically to
+    today: the ``"abstract"`` default flows through the dispatch."""
+    rss = _build_handler(SourceConfig(name="feed", type="rss", url="https://example.com/rss"))
+    assert isinstance(rss, RSSHandler)
+    assert rss.fetch_depth == "abstract"
+
+    for source in (
+        SourceConfig(name="oa", type="unpaywall"),
+        SourceConfig(name="yt", type="youtube"),
+        SourceConfig(name="news", type="gdelt"),
+    ):
+        handler = _build_handler(source)
+        assert handler.config.get("fetch_depth") == "abstract"
+        assert isinstance(
+            handler, (UnpaywallHandler, YouTubeHandler, GDELTHandler)
+        )

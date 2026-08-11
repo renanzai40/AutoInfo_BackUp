@@ -763,6 +763,243 @@ class TestConstantsSchemaAlignment:
         assert _JSONLD_BASE_EXPORT["@type"] == SCHEMA_EXPORT["properties"]["@type"]["const"]
 
 
+# ---------------------------------------------------------------------------
+# Per-product synthesis fields (output-quality-mega, todo 7) — product
+# families: premium-briefing / enterprise-briefing / magazine-digest.
+# ---------------------------------------------------------------------------
+
+_PRODUCT_SYNTHESIS: dict[str, Any] = {
+    "executive_summary": "This week's key developments focus on IVF technology.",
+    "key_findings": [
+        {"topic": "Time-lapse imaging", "detail": "Improved live birth rates."},
+        {"topic": "AI embryo selection", "detail": "Lacks prospective validation."},
+    ],
+    "trends": ["Increasing AI use in embryo selection"],
+    "recommendations": ["Consider time-lapse imaging as standard of care"],
+    "implications": [
+        "Clinics should evaluate time-lapse imaging adoption.",
+        "Regulators should watch for unvalidated AI selection tools.",
+    ],
+    "risks": [
+        {
+            "title": "Validation lag",
+            "likelihood": "high",
+            "impact": "medium",
+            "mitigation": "Run prospective trials before standardizing.",
+        },
+    ],
+    "action_required": [
+        "Run a pilot evaluation of time-lapse imaging across two clinics.",
+    ],
+    "key_metrics": [
+        {"metric": "Live birth rate", "value": "48.2% vs 39.5%", "source": "time-lapse RCT"},
+    ],
+}
+
+_PRODUCT_KEYS = ("implications", "risks", "action_required", "key_metrics")
+
+
+def _registry_template(name: str) -> Any:
+    """Return the ProductTemplate instance of a PRODUCT_TEMPLATES row."""
+    from autoinfo.output import PRODUCT_TEMPLATES
+
+    for row in PRODUCT_TEMPLATES:
+        if row["name"] == name:
+            return row["template"]
+    raise AssertionError(f"{name} ProductTemplate row missing from PRODUCT_TEMPLATES")
+
+
+# ===========================================================================
+# Test class: per-product analysis fields in format="agent" output (todo 22)
+# ===========================================================================
+
+
+class TestAgentProductFields:
+    """format="agent" must surface the per-product analysis fields.
+
+    ``_render_agent_json`` copies ``implications`` / ``risks`` /
+    ``action_required`` (and ``key_metrics`` for enterprise-briefing) from
+    the synthesis into the JSON-LD payload on BOTH the digest and report
+    paths when a product template is used; default digest/report agent
+    output carries no new keys.
+    """
+
+    def test_digest_premium_briefing_agent_has_product_fields(
+        self, cjk_and_english_entries: list[dict]
+    ) -> None:
+        """Digest premium-briefing agent output carries the three fields."""
+        from autoinfo.output import generate_digest
+
+        with patch("autoinfo.output.KBStore") as mock_kb_cls:
+            mock_kb_cls.return_value = _mock_kb_store(cjk_and_english_entries)
+            with patch(
+                "autoinfo.output._call_llm_for_digest",
+                return_value=_PRODUCT_SYNTHESIS,
+            ):
+                result = generate_digest(
+                    domain="medical-research",
+                    period="weekly",
+                    format="agent",
+                    product_template=_registry_template("premium-briefing"),
+                )
+
+        assert isinstance(result, str)
+        data = json.loads(result)
+        assert data["@type"] == "KnowledgeDigest"
+        for field in ("implications", "risks", "action_required"):
+            assert field in data, f"Missing product field: {field}"
+            assert isinstance(data[field], list)
+            assert len(data[field]) >= 1, f"Empty product field: {field}"
+        # Product-path output must validate against the published schema
+        # (knowledge-digest-v1.json optional properties, todo 23).
+        _validate_against_schema(data, SCHEMA_DIGEST)
+
+    def test_digest_enterprise_briefing_agent_has_key_metrics(
+        self, cjk_and_english_entries: list[dict]
+    ) -> None:
+        """Enterprise-briefing agent output additionally carries key_metrics."""
+        from autoinfo.output import generate_digest
+
+        with patch("autoinfo.output.KBStore") as mock_kb_cls:
+            mock_kb_cls.return_value = _mock_kb_store(cjk_and_english_entries)
+            with patch(
+                "autoinfo.output._call_llm_for_digest",
+                return_value=_PRODUCT_SYNTHESIS,
+            ):
+                result = generate_digest(
+                    domain="medical-research",
+                    period="weekly",
+                    format="agent",
+                    product_template=_registry_template("enterprise-briefing"),
+                )
+
+        data = json.loads(result)
+        for field in _PRODUCT_KEYS:
+            assert field in data, f"Missing product field: {field}"
+            assert isinstance(data[field], list)
+            assert len(data[field]) >= 1, f"Empty product field: {field}"
+        # Enterprise path carries all 4 optional fields — the full product
+        # shape must validate against the published schema (todo 23).
+        _validate_against_schema(data, SCHEMA_DIGEST)
+
+    def test_report_premium_briefing_agent_has_product_fields(
+        self, cjk_and_english_entries: list[dict]
+    ) -> None:
+        """Report premium-briefing agent output carries the three fields."""
+        from autoinfo.output import generate_report
+
+        with patch("autoinfo.output.KBStore") as mock_kb_cls:
+            mock_kb_cls.return_value = _mock_kb_store(cjk_and_english_entries)
+            with patch("autoinfo.output._group_by_theme", return_value=_GROUPINGS):
+                with patch(
+                    "autoinfo.output._generate_executive_summary",
+                    return_value=_PRODUCT_SYNTHESIS,
+                ):
+                    with patch(
+                        "autoinfo.llm.LLMExtractor",
+                        return_value=MagicMock(),
+                    ):
+                        result = generate_report(
+                            domain="medical-research",
+                            format="agent",
+                            period="monthly",
+                            product_template=_registry_template("premium-briefing"),
+                        )
+
+        assert isinstance(result, str)
+        data = json.loads(result)
+        assert data["@type"] == "KnowledgeDigest"
+        for field in ("implications", "risks", "action_required"):
+            assert field in data, f"Missing product field: {field}"
+            assert isinstance(data[field], list)
+            assert len(data[field]) >= 1, f"Empty product field: {field}"
+        # Product-path output must validate against the published schema
+        # (knowledge-digest-v1.json optional properties, todo 23).
+        _validate_against_schema(data, SCHEMA_DIGEST)
+
+    def test_report_enterprise_briefing_agent_has_key_metrics(
+        self, cjk_and_english_entries: list[dict]
+    ) -> None:
+        """Enterprise report agent output additionally carries key_metrics."""
+        from autoinfo.output import generate_report
+
+        with patch("autoinfo.output.KBStore") as mock_kb_cls:
+            mock_kb_cls.return_value = _mock_kb_store(cjk_and_english_entries)
+            with patch("autoinfo.output._group_by_theme", return_value=_GROUPINGS):
+                with patch(
+                    "autoinfo.output._generate_executive_summary",
+                    return_value=_PRODUCT_SYNTHESIS,
+                ):
+                    with patch(
+                        "autoinfo.llm.LLMExtractor",
+                        return_value=MagicMock(),
+                    ):
+                        result = generate_report(
+                            domain="medical-research",
+                            format="agent",
+                            period="monthly",
+                            product_template=_registry_template("enterprise-briefing"),
+                        )
+
+        data = json.loads(result)
+        for field in _PRODUCT_KEYS:
+            assert field in data, f"Missing product field: {field}"
+            assert isinstance(data[field], list)
+            assert len(data[field]) >= 1, f"Empty product field: {field}"
+        # Enterprise path carries all 4 optional fields — the full product
+        # shape must validate against the published schema (todo 23).
+        _validate_against_schema(data, SCHEMA_DIGEST)
+
+    def test_default_digest_agent_output_unchanged(
+        self, cjk_and_english_entries: list[dict]
+    ) -> None:
+        """Default digest agent output must not gain the product keys."""
+        from autoinfo.output import generate_digest
+
+        with patch("autoinfo.output.KBStore") as mock_kb_cls:
+            mock_kb_cls.return_value = _mock_kb_store(cjk_and_english_entries)
+            with patch(
+                "autoinfo.output._call_llm_for_digest",
+                return_value=_DIGEST_LLM_RESULT,
+            ):
+                result = generate_digest(
+                    domain="medical-research",
+                    period="weekly",
+                    format="agent",
+                )
+
+        data = json.loads(result)
+        for field in _PRODUCT_KEYS:
+            assert field not in data, f"Unexpected product key on default digest: {field}"
+
+    def test_default_report_agent_output_unchanged(
+        self, cjk_and_english_entries: list[dict]
+    ) -> None:
+        """Default report agent output must not gain the product keys."""
+        from autoinfo.output import generate_report
+
+        with patch("autoinfo.output.KBStore") as mock_kb_cls:
+            mock_kb_cls.return_value = _mock_kb_store(cjk_and_english_entries)
+            with patch("autoinfo.output._group_by_theme", return_value=_GROUPINGS):
+                with patch(
+                    "autoinfo.output._generate_executive_summary",
+                    return_value="Executive summary for the report.",
+                ):
+                    with patch(
+                        "autoinfo.llm.LLMExtractor",
+                        return_value=MagicMock(),
+                    ):
+                        result = generate_report(
+                            domain="medical-research",
+                            format="agent",
+                            period="monthly",
+                        )
+
+        data = json.loads(result)
+        for field in _PRODUCT_KEYS:
+            assert field not in data, f"Unexpected product key on default report: {field}"
+
+
 # ===========================================================================
 # Test class: CLI format flag parity (RED: these should fail before CLI edit)
 # ===========================================================================

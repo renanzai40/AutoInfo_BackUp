@@ -16,12 +16,10 @@ Test categories:
 
 from __future__ import annotations
 
-import time
 from typing import Any
 from unittest.mock import MagicMock, patch
 
 import httpx
-import pytest
 
 from autoinfo.collectors.gdelt import GDELTHandler
 from autoinfo.models import Item
@@ -73,6 +71,14 @@ SAMPLE_SINGLE_RESPONSE: dict[str, Any] = {
             "language": "English",
             "socialimage": "https://bbc.com/images/ai-med.jpg",
             "tone": "3.2",
+        },
+    ]
+}
+
+SAMPLE_RESPONSE_NO_URL: dict[str, Any] = {
+    "articles": [
+        {
+            "title": "Article With No URL Field",
         },
     ]
 }
@@ -711,6 +717,119 @@ class TestGDELTRequiresKey:
     def test_requires_key_returns_false(self) -> None:
         """GDELT DOC 2.0 API is free — requires_key should return False."""
         assert GDELTHandler.requires_key() is False
+
+
+# ---------------------------------------------------------------------------
+# Tests: fetch_depth=fulltext article body enrichment
+# ---------------------------------------------------------------------------
+
+
+class TestGDELTFulltext:
+    """Tests for ``fetch_depth="fulltext"`` article body enrichment.
+
+    When fulltext is enabled, each article's ``source_url`` is fetched via
+    the web.py trafilatura path and the title-only content is replaced by
+    the extracted article body (truncated to the 8000-char cap).  Failures
+    degrade per-article to the title — one blocked URL must never break
+    the batch.  The default (non-fulltext) behavior is unchanged.
+    """
+
+    @patch("autoinfo.collectors.gdelt.httpx.get")
+    @patch("autoinfo.collectors.web.WebHandler.fetch")
+    def test_fulltext_replaces_title_with_article_body(
+        self, mock_web: MagicMock, mock_get: MagicMock
+    ) -> None:
+        """Fulltext content should come from the fetched article body."""
+        mock_get.return_value = _mock_response(SAMPLE_SINGLE_RESPONSE)
+        mock_item = MagicMock()
+        mock_item.content = "Full article body fetched from the source page."
+        mock_web.return_value = [mock_item]
+
+        handler = GDELTHandler({"fetch_depth": "fulltext"})
+        items = handler.fetch(query="test", limit=10)
+
+        assert (
+            items[0]["content"]
+            == "Full article body fetched from the source page."
+        )
+        mock_web.assert_called_once_with("https://bbc.com/news/tech-innovation")
+
+        item = handler.to_item(items[0])
+        assert item.content == "Full article body fetched from the source page."
+
+    @patch("autoinfo.collectors.gdelt.httpx.get")
+    @patch("autoinfo.collectors.web.WebHandler.fetch")
+    def test_fulltext_empty_extraction_keeps_title(
+        self, mock_web: MagicMock, mock_get: MagicMock
+    ) -> None:
+        """When extraction yields nothing, the title-only content is kept."""
+        mock_get.return_value = _mock_response(SAMPLE_SINGLE_RESPONSE)
+        mock_web.return_value = []
+
+        handler = GDELTHandler({"fetch_depth": "fulltext"})
+        items = handler.fetch(query="test", limit=10)
+
+        assert items[0]["content"] == "AI Breakthrough in Medical Diagnostics"
+        assert items[0]["title"] == "AI Breakthrough in Medical Diagnostics"
+
+    @patch("autoinfo.collectors.gdelt.httpx.get")
+    @patch("autoinfo.collectors.web.WebHandler.fetch")
+    def test_fulltext_extraction_raising_keeps_title(
+        self, mock_web: MagicMock, mock_get: MagicMock
+    ) -> None:
+        """A raising extraction must degrade to the title, not break the batch."""
+        mock_get.return_value = _mock_response(SAMPLE_SINGLE_RESPONSE)
+        mock_web.side_effect = RuntimeError("network down")
+
+        handler = GDELTHandler({"fetch_depth": "fulltext"})
+        items = handler.fetch(query="test", limit=10)
+
+        assert len(items) == 1
+        assert items[0]["content"] == items[0]["title"]
+
+    @patch("autoinfo.collectors.gdelt.httpx.get")
+    @patch("autoinfo.collectors.web.WebHandler.fetch")
+    def test_fulltext_content_truncated_at_cap(
+        self, mock_web: MagicMock, mock_get: MagicMock
+    ) -> None:
+        """Fetched bodies longer than 8000 chars must be truncated."""
+        mock_get.return_value = _mock_response(SAMPLE_SINGLE_RESPONSE)
+        mock_item = MagicMock()
+        mock_item.content = "x" * 20000
+        mock_web.return_value = [mock_item]
+
+        handler = GDELTHandler({"fetch_depth": "fulltext"})
+        items = handler.fetch(query="test", limit=10)
+
+        assert len(items[0]["content"]) == 8000
+
+    @patch("autoinfo.collectors.gdelt.httpx.get")
+    @patch("autoinfo.collectors.web.WebHandler.fetch")
+    def test_default_fetch_depth_does_not_fetch_fulltext(
+        self, mock_web: MagicMock, mock_get: MagicMock
+    ) -> None:
+        """Default (non-fulltext) behavior must remain title-only."""
+        mock_get.return_value = _mock_response(SAMPLE_SINGLE_RESPONSE)
+
+        handler = GDELTHandler()  # default fetch_depth
+        items = handler.fetch(query="test", limit=10)
+
+        assert items[0]["content"] == "AI Breakthrough in Medical Diagnostics"
+        mock_web.assert_not_called()
+
+    @patch("autoinfo.collectors.gdelt.httpx.get")
+    @patch("autoinfo.collectors.web.WebHandler.fetch")
+    def test_fulltext_missing_url_keeps_title(
+        self, mock_web: MagicMock, mock_get: MagicMock
+    ) -> None:
+        """Articles without a source_url keep their title-only content."""
+        mock_get.return_value = _mock_response(SAMPLE_RESPONSE_NO_URL)
+
+        handler = GDELTHandler({"fetch_depth": "fulltext"})
+        items = handler.fetch(query="test", limit=10)
+
+        assert items[0]["content"] == "Article With No URL Field"
+        mock_web.assert_not_called()
 
 
 # ---------------------------------------------------------------------------

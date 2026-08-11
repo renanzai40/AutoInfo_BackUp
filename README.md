@@ -70,18 +70,22 @@ LLM-based structured extraction, summarization, and a queryable knowledge base.
 - **Cron health monitoring** — `autoinfo cron health` CLI with heartbeat tracking and missed-schedule detection
 - **SQLite backup** — `make backup` target plus `scripts/backup-db.sh` and `scripts/restore-db.sh` for automated KB and user-store backups (keeps last 7)
 - **17 new collectors** — DBLP, NYT, OpenAlex, Reddit, Spotify, YouTube, Bilibili, Apple Podcasts, Semantic Scholar, USPTO, plus paid AP API and Reuters MCP handlers (v1.6), plus SSRN, GDELT, Yahoo Finance, Quandl, HuggingFace/Kaggle, Unpaywall/CORE (v1.8.4), plus HackerNews (Unreleased 2026-08-04), plus AKShare, SEC EDGAR, edX sitemap (2026-08-05). 30 total collector handlers across all source types.
+- **Collector fulltext depth** — `fetch_depth: fulltext` threaded through collection dispatch: Unpaywall (OA fulltext via trafilatura), RSS (entry.link fulltext), YouTube (transcript download), GDELT (article fulltext) — 8000-char cap, graceful fallback on failure; scoped re-collection proved ~4x deeper content on the medical-research deliverable domain
 - **Bundle export** — `export_kb(format="bundle")` creates a ZIP archive containing JSON data, Markdown summary, YAML metadata, and a weasyprint-rendered PDF report (with graceful fallback)
 - **Cross-domain reports & digests** — `generate_report()` and `generate_digest()` accept a `domains` parameter for multi-domain synthesis. New MCP tool `generate_cross_domain_report` for cross-domain analysis.
 - **Specialized report types** — `report_type` parameter: `industry`, `competitive`, `trend`, `daily-briefing` — each with customized section structure and LLM prompts
+- **Differentiated product templates** — 8 product families with dedicated Jinja2 templates, incl. `premium-briefing` (market-report-anchored numbered takeaways with So-what/Risk/Actions) and `enterprise-briefing` (one-page exec summary + Key Metrics table + Action Required + Risk matrix). Guard-first product-type resolution + digest render-context normalization; `generate_report(product=...)` / `generate_digest(product=...)` / CLI `--product`
+- **Per-product LLM synthesis** — implications/risks/action_required/key_metrics fields synthesized per product template and carried into agent-format JSON-LD output
 - **Delivery schedule automation** — `add_delivery_schedule` MCP tool for cron-based periodic output generation + delivery. Integrates with `autoinfo cron run`.
 - **Content simplification (E14)** — `simplify_content` MCP tool rewrites text to a target CEFR reading level (A1-C1) using LLM, with original/simplified level classification and verification flag
 - **Single-article payment (E12)** — `create_checkout_session` supports `mode="payment"` for one-time article purchases; `check_access(article_id=...)` fast path verifies article entitlement grants
 - **Source credibility score (E9)** — Deterministic `source_score` (0-100) derived from quality tier, persisted on KBEntry, surfaced in search results and G1 gate details
+- **Product-analysis KB metadata** — per-product analysis fields (implications/risks/action_required/key_metrics) persisted to KB entry `custom_fields["product_analysis"]`; `search_knowledge_base(filter_custom_fields=...)` adds faceted filtering on custom_fields JSON
 - **RAW product variants (E11)** — RAW product carries `variants: ["api_feed", "webhook", "bulk_export"]` field distinguishing the three RAW delivery modes
 - **Podcast RSS publishing (C11)** — RSS 2.0 delivery channel with `<enclosure>` + `itunes:*` namespace for podcast feed generation; audio output auto-persists MP3 to disk
 - **Validated source types** — `VALID_SOURCE_TYPES` frozenset (29 types) as single source of truth for source type validation across MCP and CLI
-- **Agent-native validation** — `list_validation_scenarios` / `run_validation_scenario` MCP tools execute validation scenarios through the MCP surface (plus CLI subprocess and REST HTTP steps): each step makes a real call and asserts on the `{success, data}` envelope; env-gated steps report `unconfigured` (never silently skipped), and `llm_assert` runs a real model call for semantic checks. 65 scenarios (60 functional + 5 regression). Per-step `timeout_seconds` guards runaway steps; failed steps can declare `recovery_steps` (run after the primary failure); scenarios support partial-pass via `min_passing` (int) / `pass_ratio` (float); `requires_http` gates steps that need a live REST server (reports `unconfigured` when offline). Results carry a per-step execution trace (step_index/duration/arguments/trace_id + llm_meta model/tokens/duration); `run_validation_scenario` output includes a root-cause report with `## Blockers` and `## Per-step trace` sections.
-- **Validation regression flywheel** — `scenarios/regression/` subdirectory (5 regression scenarios, REGRESSION marker) auto-loads via recursive glob; `coverage_audit.py` prints a "Regression scenarios: N (issues: ...)" metric; `.github/ISSUE_TEMPLATE/bug_report.md` carries a mandatory 回归场景 (regression scenario) field so every bug ships with a scenario.
+- **Agent-native validation** — `list_validation_scenarios` / `run_validation_scenario` MCP tools execute validation scenarios through the MCP surface (plus CLI subprocess and REST HTTP steps): each step makes a real call and asserts on the `{success, data}` envelope; env-gated steps report `unconfigured` (never silently skipped), and `llm_assert` runs a real model call for semantic checks. 67 scenarios (61 functional + 6 regression). Per-step `timeout_seconds` guards runaway steps; failed steps can declare `recovery_steps` (run after the primary failure); scenarios support partial-pass via `min_passing` (int) / `pass_ratio` (float); `requires_http` gates steps that need a live REST server (reports `unconfigured` when offline). Results carry a per-step execution trace (step_index/duration/arguments/trace_id + llm_meta model/tokens/duration); `run_validation_scenario` output includes a root-cause report with `## Blockers` and `## Per-step trace` sections.
+- **Validation regression flywheel** — `scenarios/regression/` subdirectory (6 regression scenarios, REGRESSION marker) auto-loads via recursive glob; `coverage_audit.py` prints a "Regression scenarios: N (issues: ...)" metric; `.github/ISSUE_TEMPLATE/bug_report.md` carries a mandatory 回归场景 (regression scenario) field so every bug ships with a scenario.
 - **Validation delivery packaging** — `scripts/validation_delivery.py` builds 01-RAW / 02-PROCESSED / 03-KB / 04-MATRIX / 06-REJECTED plus `validation-report.md` and `manifest.json` with per-file authenticity, D1-D3 delivery gates, and UX metrics (UX_OK/completion_rate ≥ 0.8). Output scenarios persist `collect_artifacts` for post-run inspection.
 - **End-user coverage matrix (E8)** — `scripts/coverage_matrix.py` generates the end-user feature coverage matrix from `docs/dev/specs/end-user-matrix.yaml`; surfaced as the 04-MATRIX section in validation delivery plus Oracle R8 unconfigured-vs-gap analysis. Scenario library exercises 8/8 products, 7/7 formats, and 27/27 source platforms (issue #156 closed).
 - **End-user journey validation** — `enduser-journey.yaml` scenario drives the full B1 lifecycle with UX metrics (UX_OK/completion_rate ≥ 0.8) measured in validation packaging; the error-boundary scenario asserts the `actionable` field of the error envelope.
@@ -96,15 +100,15 @@ LLM-based structured extraction, summarization, and a queryable knowledge base.
 |-----------|--------|
 | Config system | ✅ LLM task config, per-task model, fallback chains, schema versioning |
 | CLI | ✅ 28 command groups (init, doctor, collect, process, status, summaries, sources, topics, topic-group, domain, audit, kb, output, cron, knowledge, cefr, email, keywords, clean, cost, billing, enduser, portal, trace, import-kb, query-collected, alert-rules, agent-callback) |
-| Collection | ✅ 30 collector handlers (PubMed, Semantic Scholar, DBLP, OpenAlex, USPTO, NYT, Yahoo Finance, Quandl, RSS, Web, webhook, email, PDF, Reddit, Spotify, YouTube, Bilibili, Apple Podcasts, plus paid AP API and Reuters MCP, plus SSRN, GDELT, HuggingFace/Kaggle, Unpaywall/CORE, HackerNews, AKShare, SEC EDGAR, edX sitemap), scheduled via crond |
+| Collection | ✅ 30 collector handlers (PubMed, Semantic Scholar, DBLP, OpenAlex, USPTO, NYT, Yahoo Finance, Quandl, RSS, Web, webhook, email, PDF, Reddit, Spotify, YouTube, Bilibili, Apple Podcasts, plus paid AP API and Reuters MCP, plus SSRN, GDELT, HuggingFace/Kaggle, Unpaywall/CORE, HackerNews, AKShare, SEC EDGAR, edX sitemap), scheduled via crond; `fetch_depth: fulltext` threading (unpaywall/rss/youtube/gdelt, 8000-char cap) |
 | LLM extraction | ✅ Custom extraction fields, TL;DR, key points, entities, G4 factual consistency, token usage tracking |
 | Translation QA pipeline | ✅ 5 lite quality gates, back-translation verification, terminology guardrails, composite scoring, translator-qa-skill |
 | Quality gates | ✅ 6 hard/soft (G0-G5: G0/G4 hard, G1-G3/G5 soft) + 3 delivery gates (D1-D3) + per-domain config |
 | KB pipeline | ✅ 4-tier KB pipeline (00-Inbox → 01-Raw → 02-Draft → 03-Wiki; note: 00-Inbox is scaffolded but deprecated — 01-Raw is the sole entry point), git versioning + SHA tracking |
 | KB import | ✅ 4 formats (PDF, Markdown, HTML, JSON) → 01-Raw via `import_kb` MCP tool |
-| Search | ✅ Hybrid (FTS5 keyword + sqlite-vec vector), faceted (7 filters) |
+| Search | ✅ Hybrid (FTS5 keyword + sqlite-vec vector), faceted (7 filters + `filter_custom_fields` on custom_fields JSON) |
 | Q&A | ✅ FTS5 + LLM synthesis with source citations |
-| Output generation | ✅ Digest (Markdown/HTML/JSON/PDF/EPUB/Audiobook), report (Markdown/JSON/HTML/Audio/Agent/EPUB/Audiobook), tutorial (Markdown), presentation (Markdown), export (Markdown/JSON/SQLite/PDF/RSS/CSV/GraphML/Agent/Bundle/Sitemap/EPUB/MOBI) (Jinja2 + LLM, Reveal.js CDN, ebooklib EPUB3 + calibre MOBI) |
+| Output generation | ✅ Digest (Markdown/HTML/JSON/PDF/EPUB/Audiobook), report (Markdown/JSON/HTML/Audio/Agent/EPUB/Audiobook), tutorial (Markdown), presentation (Markdown), export (Markdown/JSON/SQLite/PDF/RSS/CSV/GraphML/Agent/Bundle/Sitemap/EPUB/MOBI) (Jinja2 + LLM, Reveal.js CDN, ebooklib EPUB3 + calibre MOBI); 8 product templates incl. premium-briefing/enterprise-briefing + per-product LLM synthesis |
 | Agent-native JSON output | ✅ `format="agent"` returns JSON-LD (`@type: KnowledgeDigest`) for LLM re-consumption |
 | Audio output | ✅ TTS-rendered digest/report as MP3 (OpenAI TTS) via `format='audio'`; `format='audiobook'` = chaptered MP3 + ZIP (ID3v2.3 CHAP/CTOC via mutagen) |
 | Translation | ✅ LLM-based source→target |
@@ -166,9 +170,9 @@ LLM-based structured extraction, summarization, and a queryable knowledge base.
 | Cost allocation MCP | ✅ cost_allocation MCP tool |
 | Demo domains | ✅ medical-research, ai-commercial, financial-intelligence, tech-ai-developer, language-learning, online-video, financial-news, online-education, legal-compliance, general-news, gaming, b2b, retail |
 | Delivery schedules | ✅ add_delivery_schedule, list_delivery_schedules, remove_delivery_schedule MCP tools, cron-integrated |
-| Validation scenarios | ✅ 65 scenarios (60 functional + 5 regression in `scenarios/regression/`, REGRESSION marker, recursive-glob auto-load) |
+| Validation scenarios | ✅ 67 scenarios (61 functional + 6 regression in `scenarios/regression/`, REGRESSION marker, recursive-glob auto-load) |
 | Validation execution | ✅ Per-step `timeout_seconds`; per-step `recovery_steps` + partial-pass (`min_passing`/`pass_ratio`); per-step trace (step_index/duration/arguments/trace_id + llm_meta); root-cause report (`## Blockers` / `## Per-step trace` / `## Regression failures`) |
-| Regression flywheel | ✅ `scenarios/regression/` (5 scenarios) + `coverage_audit.py` "Regression scenarios: N" metric + `.github/ISSUE_TEMPLATE/bug_report.md` mandatory 回归场景 field |
+| Regression flywheel | ✅ `scenarios/regression/` (6 scenarios) + `coverage_audit.py` "Regression scenarios: N" metric + `.github/ISSUE_TEMPLATE/bug_report.md` mandatory 回归场景 field |
 | Validation delivery | ✅ `scripts/validation_delivery.py` builds 01-RAW/02-PROCESSED/03-KB/04-MATRIX/06-REJECTED + validation-report.md + manifest.json (per-file authenticity + D1-D3 gates + UX metrics UX_OK/completion_rate ≥ 0.8) |
 | End-user coverage matrix (E8) | ✅ `scripts/coverage_matrix.py` + `docs/dev/specs/end-user-matrix.yaml`; surfaced as 04-MATRIX + coverage-gaps.json |
 | End-user journey validation | ✅ `enduser-journey.yaml` scenario + UX metrics; error-boundary asserts `actionable` field |
@@ -176,7 +180,7 @@ LLM-based structured extraction, summarization, and a queryable knowledge base.
 | LLM fallback chain | ✅ Shared `llm.call_with_fallback` — every LLM call site (extraction + 17 standalone) walks `[primary] + config.llm.fallback`; first successful model wins |
 | Dead-source detection | ✅ Semantic Scholar 429 → `SourceFailure` (fail-fast); arXiv rss/bio → rss/q-bio fix |
 | CLI module entry | ✅ `python -m autoinfo.cli` runs the same Typer app; `collect` live per-source progress printer |
-| Test suite | ✅ ~3390 tests collected (includes validation wave E1-E9 scenarios + regression suite + #141-#164 regression guards + kb-curation wave + hermetic config-seam fixes) |
+| Test suite | ✅ ~3575 tests collected (3574 passed / 21 skipped / 0 errors at final gate; includes validation wave E1-E9 scenarios + regression suite + #141-#164 regression guards + kb-curation wave + hermetic config-seam fixes) |
 
 ## Quick Start
 
@@ -209,7 +213,7 @@ AutoInfo is agent-first: every capability is an MCP tool. Connect your agent
 
 1. **Health** — `health_check()` → `{status, version, tools_count}`
 2. **Discover** — `list_domains()` → `get_domain_schema("<domain>")` → `list_available_models()`
-3. **Validate** — `list_validation_scenarios()` (65 scenarios: 60 functional + 5 regression) → `run_validation_scenario(scenario="system-health")`
+3. **Validate** — `list_validation_scenarios()` (67 scenarios: 61 functional + 6 regression) → `run_validation_scenario(scenario="system-health")`
 
 Validation is the fastest way to prove the system works: each scenario makes
 real MCP / CLI / REST calls and asserts on the `{success, data}` envelope.
@@ -376,7 +380,7 @@ autoinfo topic-group add|remove     # Topic grouping (MCP topic_group_add/remove
 autoinfo domain add|list|show|remove|activate|deactivate|import  # Domain management (import --from-demo supports all 13 demo domains)
 autoinfo audit query                # Query immutable audit log
 autoinfo kb search|create-draft|promote|reject-draft|list-tiers|reindex
-autoinfo output digest|report|tutorial|presentation|export|translate|list-templates  # report accepts --type --domains
+autoinfo output digest|report|tutorial|presentation|export|translate|list-templates  # digest/report accept --product; report accepts --type --domains
 autoinfo cron run|list-schedules|add-schedule|remove-schedule|install|uninstall|health  # health = heartbeat + missed-schedule detection
 autoinfo cefr classify|batch        # CEFR text classification
 autoinfo email send-digest --user-id <id>|config  # SMTP email sending (--user-id for content_preference filtering)
@@ -404,12 +408,12 @@ autoinfo agent-callback add|list|remove  # Agent push callbacks (MCP parity)
 | **Source** | add_source (idempotent), add_sources (batch), remove_source, test_source (with extract_fields + tier warnings), list_sources, get_source_health, get_feeds |
 | **Topic** | add_topic, remove_topic, list_topics, topic_group_add, topic_group_remove, list_keywords, approve_keyword, reject_keyword, suggest_keywords |
 | **Collection** | collect_sources (with dry_run, domain-less), get_collection_progress, get_collection_status, process_collection (with batch, check_factual, check_translation), get_processing_progress, batch_run, clean_cache |
-| **KB** | search_knowledge_base (hybrid, cross-domain), get_kb_entry, list_summaries, get_summary, create_kb_entry, create_kb_draft (from Raw only), reject_kb_draft, promote_kb_draft (agent promotion Draft→Wiki), list_kb_tier (01-Raw/02-Draft/03-Wiki), reindex_kb, flag_for_knowledge_base |
+| **KB** | search_knowledge_base (hybrid, cross-domain, faceted `filter_custom_fields` on custom_fields JSON), get_kb_entry, list_summaries, get_summary, create_kb_entry, create_kb_draft (from Raw only), reject_kb_draft, promote_kb_draft (agent promotion Draft→Wiki), list_kb_tier (01-Raw/02-Draft/03-Wiki), reindex_kb, flag_for_knowledge_base |
 | **KB Relations** | link_items, get_item_relations |
 | **KB Versioning** | get_entry_history, restore_entry_version |
 | **KB Monitor** | get_collection_stats, get_collection_diff |
 | **KB Graph** | query_knowledge_graph, knowledge_graph_export |
-| **Output** | list_output_templates, generate_digest (md/html/json/agent), generate_report (md/json/pdf/html/audio/agent), generate_cross_domain_report, generate_tutorial (md/agent), generate_presentation (md/agent), localize_content, export_kb (md/json/sqlite/pdf/csv/graphml/agent/bundle) |
+| **Output** | list_output_templates, generate_digest (md/html/json/agent, `product=` premium-briefing/magazine-digest/...), generate_report (md/json/pdf/html/audio/agent, `product=` premium-briefing/enterprise-briefing/...), generate_cross_domain_report, generate_tutorial (md/agent), generate_presentation (md/agent), localize_content, export_kb (md/json/sqlite/pdf/csv/graphml/agent/bundle) |
 | **Export/Import** | export_kb, import_kb |
 | **CEFR** | classify_cefr (EN/ZH/JA), cefr_batch |
 | **Keywords** | approve_keyword, reject_keyword, suggest_keywords |
@@ -462,7 +466,7 @@ make lint        # ruff check + mypy
 
 ## Known Limitations
 
-AutoInfo has evolved through v1.3-v1.8.4 with major feature additions at each release. See [CHANGELOG.md](CHANGELOG.md) for the full version history. Notable v1.8.2-v1.8.4 additions: bundle export, delivery schedules, podcast RSS publishing (C11), HackerNews collector, MCP-native validation toolset (44→57→59 scenarios in 2026-08-05→07, incl. the 5-scenario regression flywheel; the kb-curation wave grew it to 65 on 2026-08-08), B23 ebook/audiobook output, version unification at 1.8.1 (see `src/autoinfo/_version.py`). The following items remain explicitly deferred:
+AutoInfo has evolved through v1.3-v1.8.4 with major feature additions at each release. See [CHANGELOG.md](CHANGELOG.md) for the full version history. Notable v1.8.2-v1.8.4 additions: bundle export, delivery schedules, podcast RSS publishing (C11), HackerNews collector, MCP-native validation toolset (44→57→59 scenarios in 2026-08-05→07, incl. the 5-scenario regression flywheel; the kb-curation wave grew it to 65 on 2026-08-08; the output-quality-mega wave grew it to 67 on 2026-08-11 with premium-briefing/enterprise-briefing templates + collector fulltext depth), B23 ebook/audiobook output, version unification at 1.8.1 (see `src/autoinfo/_version.py`). The following items remain explicitly deferred:
 
 | Feature | Status | Notes |
 |---------|--------|-------|

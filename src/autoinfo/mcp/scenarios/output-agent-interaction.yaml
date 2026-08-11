@@ -1,0 +1,223 @@
+# Output-quality-mega (Phase C — analysis interaction, todo 25): a downstream
+# agent must be able to query the product-analysis metadata end-to-end.
+# Todo 22 put implications/risks/action_required/key_metrics in the agent
+# JSON-LD, todo 23 pinned the schema, todo 24 persisted them into KB entry
+# custom_fields["product_analysis"].  This scenario closes the loop:
+#   (a) premium-briefing agent render persists the per-product fields onto
+#       the linked KB entries (todo-24 path),
+#   (b) the EXISTING search tool's faceted filter (filter_custom_fields, a
+#       new filter key on search_knowledge_base — no new tool, decision D2)
+#       returns exactly the action_required subset,
+#   (c) a follow-up query_collected over the filtered entries answers with
+#       [N] source citations.
+#
+# Deterministic (requires_env: []): the LLM seams (autoinfo.output
+# _call_llm_for_digest, autoinfo.qa _call_llm_for_qa) and the output
+# KBStore are patched in the subprocess (same pattern as the Phase A
+# regression scenario regression-product-routing.yaml), while the search
+# filter runs REAL SQL against a REAL SQLite KB in an ABSOLUTE temp cwd
+# (tempfile.mkdtemp, try/finally cleanup) — no LLM key, no network, no
+# configured domain.  Failure means the faceted surface or the
+# persistence/search contract regressed — never a silent skip.
+name: output-agent-interaction
+description: "Output-quality-mega Phase C: product-analysis metadata searchable via faceted filter + end-to-end agent interaction (premium-briefing agent render → filter by action_required → follow-up query_collected with citations)"
+category: output
+requires_env: []
+steps:
+  - name: "premium-briefing agent render persists product analysis; faceted filter returns the action_required subset"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile
+      from datetime import datetime, timedelta, timezone
+      from pathlib import Path
+      from unittest.mock import patch
+      from autoinfo.kb import KBStore
+      from autoinfo.models import Item
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_digest
+
+      NOW = datetime.now(timezone.utc)
+      def iso(days_ago):
+          return (NOW - timedelta(days=days_ago)).isoformat()
+
+      SYNTH = {
+          "executive_summary": "IVF technology advanced with time-lapse imaging and AI selection.",
+          "key_findings": [
+              {"topic": "Time-lapse imaging", "detail": "Significant improvement in live birth rates."},
+              {"topic": "AI embryo selection", "detail": "Promising but lacks prospective validation."},
+          ],
+          "recommendations": ["Support prospective AI validation trials."],
+          "implications": ["Clinics should evaluate time-lapse imaging adoption."],
+          "risks": [{"title": "Validation lag", "likelihood": "high", "impact": "medium",
+                     "mitigation": "Run prospective trials."}],
+          "action_required": ["Fund prospective AI validation trials."],
+      }
+
+      class FakeKB:
+          def __init__(self, real):
+              self._real = real
+          def list_entries(self, domain=None, date_from=None, limit=200, **kw):
+              return self._real.index.list_entries(domain=domain or "", date_from=date_from, limit=limit)
+          def list_kb_tier(self, domain=None, tier="02-Draft", limit=10000):
+              return []
+          def update_entry_metadata(self, entry_id, metadata):
+              return self._real.update_entry_metadata(entry_id, metadata)
+          def get_entry_by_source_url(self, source_url):
+              return self._real.get_entry_by_source_url(source_url)
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      tmp = Path(tempfile.mkdtemp(prefix="agent-interaction-a-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          store = KBStore(base_path=Path("knowledge"))
+          for i, title in enumerate(["Time-lapse imaging improves IVF outcomes",
+                                     "AI embryo selection systematic review",
+                                     "IVF clinic workflows"]):
+              store.store_entry(Item(id=f"med-{i}", source_name="pubmed", source_type="api",
+                  source_url=f"https://example.com/ivf-{i}", title=title,
+                  content=f"{title}. Relevant IVF content for the briefing.",
+                  collected_at=iso(2), domain="medical-research", topic_tags=["IVF"]))
+          store.store_entry(Item(id="ai-0", source_name="arxiv", source_type="api",
+              source_url="https://example.com/market", title="LLM market trends",
+              content="Large language models dominate AI investment.",
+              collected_at=iso(3), domain="ai-commercial", topic_tags=["LLM"]))
+
+          fake = FakeKB(store)
+          with patch("autoinfo.output.KBStore", return_value=fake), \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              out = generate_digest(domain="medical-research", period="weekly",
+                                    format="agent",
+                                    product_template=tmpl("premium-briefing"))
+          assert isinstance(out, str), type(out)
+          assert "\"@type\": \"KnowledgeDigest\"" in out, "not agent JSON-LD"
+          assert "\"action_required\"" in out, "product fields missing from agent output"
+
+          subset = store.search_knowledge_base(
+              "IVF", domain="medical-research",
+              filter_custom_fields={"product_analysis.action_required": ""})
+          assert subset["total_count"] == 3, subset["total_count"]
+          ids = {e["entry_id"] for e in subset["entries"]}
+          assert ids == {
+              "medical-research-ivf-time-lapse-imaging-improves-ivf-outcomes",
+              "medical-research-ivf-ai-embryo-selection-systematic-review",
+              "medical-research-ivf-ivf-clinic-workflows",
+          }, ids
+
+          plain = store.search_knowledge_base("IVF", domain="medical-research")
+          assert plain["total_count"] == 3, "default search changed"
+
+          disc = store.search_knowledge_base(
+              "market",
+              filter_custom_fields={"product_analysis.action_required": ""})
+          assert disc["total_count"] == 0, "entry without metadata leaked through"
+
+          neg = store.search_knowledge_base(
+              "IVF", domain="medical-research",
+              filter_custom_fields={"product_analysis.key_metrics": ""})
+          assert neg["total_count"] == 0, "unpersisted field matched"
+
+          print("AGENT_INTERACTION_FILTER_OK", subset["total_count"])
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["AGENT_INTERACTION_FILTER_OK 3"]
+
+  - name: "follow-up query_collected over the filtered entries cites sources"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile
+      from datetime import datetime, timedelta, timezone
+      from pathlib import Path
+      from unittest.mock import patch
+      from autoinfo.kb import KBStore
+      from autoinfo.models import Item
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_digest
+      from autoinfo.qa import query_collected
+
+      NOW = datetime.now(timezone.utc)
+      def iso(days_ago):
+          return (NOW - timedelta(days=days_ago)).isoformat()
+
+      SYNTH = {
+          "executive_summary": "IVF technology advanced with time-lapse imaging and AI selection.",
+          "key_findings": [
+              {"topic": "Time-lapse imaging", "detail": "Significant improvement in live birth rates."},
+              {"topic": "AI embryo selection", "detail": "Promising but lacks prospective validation."},
+          ],
+          "recommendations": ["Support prospective AI validation trials."],
+          "implications": ["Clinics should evaluate time-lapse imaging adoption."],
+          "risks": [{"title": "Validation lag", "likelihood": "high", "impact": "medium",
+                     "mitigation": "Run prospective trials."}],
+          "action_required": ["Fund prospective AI validation trials."],
+      }
+
+      class FakeKB:
+          def __init__(self, real):
+              self._real = real
+          def list_entries(self, domain=None, date_from=None, limit=200, **kw):
+              return self._real.index.list_entries(domain=domain or "", date_from=date_from, limit=limit)
+          def list_kb_tier(self, domain=None, tier="02-Draft", limit=10000):
+              return []
+          def update_entry_metadata(self, entry_id, metadata):
+              return self._real.update_entry_metadata(entry_id, metadata)
+          def get_entry_by_source_url(self, source_url):
+              return self._real.get_entry_by_source_url(source_url)
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      tmp = Path(tempfile.mkdtemp(prefix="agent-interaction-b-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          store = KBStore(base_path=Path("knowledge"))
+          store.store_entry(Item(id="med-0", source_name="pubmed", source_type="api",
+              source_url="https://example.com/ivf-0",
+              title="Time-lapse imaging improves IVF outcomes",
+              content="Time-lapse embryo imaging improves embryo selection in IVF cycles.",
+              collected_at=iso(1), domain="medical-research", topic_tags=["IVF"]))
+          store.store_entry(Item(id="med-1", source_name="pubmed", source_type="api",
+              source_url="https://example.com/ivf-1",
+              title="AI embryo selection systematic review",
+              content="AI models show promise but lack prospective validation in IVF.",
+              collected_at=iso(2), domain="medical-research", topic_tags=["IVF"]))
+
+          fake = FakeKB(store)
+          with patch("autoinfo.output.KBStore", return_value=fake), \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              generate_digest(domain="medical-research", period="weekly",
+                              format="agent",
+                              product_template=tmpl("premium-briefing"))
+
+          subset = store.search_knowledge_base(
+              "IVF", domain="medical-research",
+              filter_custom_fields={"product_analysis.action_required": ""})
+          assert subset["total_count"] == 2, subset["total_count"]
+          ids = [e["entry_id"] for e in subset["entries"]]
+
+          with patch("autoinfo.qa._call_llm_for_qa",
+                     return_value="According to [1] and [2], clinics should "
+                                  "fund prospective AI validation trials."):
+              qa = query_collected("What actions are required for IVF?",
+                                   domain="medical-research",
+                                   content_ids=ids, store=store)
+          assert "[1]" in qa["answer"], qa["answer"]
+          assert "[2]" in qa["answer"], qa["answer"]
+          assert len(qa["sources"]) == 2, qa["sources"]
+          print("AGENT_INTERACTION_QA_OK", len(qa["sources"]))
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["AGENT_INTERACTION_QA_OK 2"]

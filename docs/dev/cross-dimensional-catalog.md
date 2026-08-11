@@ -14,7 +14,7 @@
 >
 > **Cell status:** 🔴 = Never Designed (gap), 🟡 = Spec'd Not Impl / Partially Impl, 🟢 = Spec Outdated, 🟠 = Architecture Gap
 >
-> **Last updated:** 2026-08-05 (M0-M7 consolidated docs sweep; B24/D11/A7/A19/A20/A26/A27/D13 cells updated to implemented/部分覆盖 — see "2026-08-05 更新" section)
+> **Last updated:** 2026-08-11 (output-quality-mega: premium-briefing/enterprise-briefing differentiated rendering + per-product LLM synthesis fields + product selection on MCP/CLI + `filter_custom_fields` faceted search over `product_analysis` KB metadata + `fetch_depth` fulltext; scenarios 65→67 — see "2026-08-11 更新" section)
 
 ---
 
@@ -28,7 +28,8 @@
 6. [2026-08-02 V1 更新](#2026-08-02-v1-更新)
 7. [2026-08-03 更新 — Agent-native validation toolset](#2026-08-03-更新--agent-native-validation-toolset)
 8. [Feasibility Verdicts (absorbed from enduser-coverage-matrix)](#feasibility-verdicts-absorbed-from-enduser-coverage-matrix-2026-08-02)
-9. [Appendix: Existing Gap ID Cross-Reference](#appendix-existing-gap-id-cross-reference)
+9. [2026-08-11 更新 — Output-quality-mega](#2026-08-11-更新--output-quality-mega)
+10. [Appendix: Existing Gap ID Cross-Reference](#appendix-existing-gap-id-cross-reference)
 
 ---
 
@@ -66,7 +67,7 @@ Each cell: 🟢 = Fully delivered / complete, 🟡 = Partially delivered / gaps 
 
 | Lifecycle → | B2.1 Discover | B2.2 Connect | B2.3 Configure | B2.4 Operate | B2.5 Monitor | B2.6 Update |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
-| **A1 Collection** | 🟢 `list_available_platforms` | 🟢 MCP tools auto-discovered | 🟢 `add_source`, `add_topic`, `add_schedule` | 🟢 `collect_sources`, `process_collection`, `batch_run` | 🟢 Cron health with heartbeat, missed-detection, alerts | 🟢 Source config is mutable |
+| **A1 Collection** | 🟢 `list_available_platforms` | 🟢 MCP tools auto-discovered | 🟢 `add_source`, `add_topic`, `add_schedule` | 🟢 `collect_sources` (with `fetch_depth` threaded through dispatch + fulltext for unpaywall/RSS/YouTube/GDELT, 2026-08-11), `process_collection`, `batch_run` | 🟢 Cron health with heartbeat, missed-detection, alerts | 🟢 Source config is mutable |
 
 | Lifecycle → | B3.1 Define | B3.2 Configure | B3.3 Monitor | B3.4 Iterate | B3.5 Scale |
 |-------------|:---:|:---:|:---:|:---:|:---:|
@@ -94,7 +95,7 @@ Each cell: 🟢 = Fully delivered / complete, 🟡 = Partially delivered / gaps 
 
 | Lifecycle → | B2.1 Discover | B2.2 Connect | B2.3 Configure | B2.4 Operate | B2.5 Monitor | B2.6 Update |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
-| **A3 Knowledge Base** | 🟢 KB tools listed | 🟢 Full KB tool set | 🟢 `reindex_kb`, `list_kb_tier` | 🟢 `create_kb_draft`, `search_knowledge_base`, `query_knowledge_graph` | 🟢 `compare_versions` registered, `merge_items` partially | 🟢 KB is mutable (soft-delete, restore) |
+| **A3 Knowledge Base** | 🟢 KB tools listed | 🟢 Full KB tool set | 🟢 `reindex_kb`, `list_kb_tier` | 🟢 `create_kb_draft`, `search_knowledge_base` (with `filter_custom_fields` faceted filter over `custom_fields["product_analysis"]` metadata, 2026-08-11), `query_knowledge_graph` | 🟢 `compare_versions` registered, `merge_items` partially | 🟢 KB is mutable (soft-delete, restore) |
 
 | Lifecycle → | B3.1 Define | B3.2 Configure | B3.3 Monitor | B3.4 Iterate | B3.5 Scale |
 |-------------|:---:|:---:|:---:|:---:|:---:|
@@ -104,11 +105,11 @@ Each cell: 🟢 = Fully delivered / complete, 🟡 = Partially delivered / gaps 
 
 | Lifecycle → | B1.1 Discover | B1.2 Trial | B1.3 Subscribe | B1.4 Consume | B1.5 Renew | B1.6 Churn |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
-| **A4 Products** | 🔴 No product catalog / storefront | 🔴 No trial product preview | 🟢 8 templates with free/premium/enterprise tiers, `check_access` gates delivery (B24 column premium + D11 magazine-digest added 2026-08-05) | 🟡 Products deliver but lifecycle is not tracked | 🔴 No renewal product regeneration | 🔴 No product archive on churn |
+| **A4 Products** | 🔴 No product catalog / storefront | 🔴 No trial product preview | 🟢 8 templates (5 free + 2 premium + 1 enterprise) with free/premium/enterprise tiers, `check_access` gates delivery (B24 column premium + D11 magazine-digest added 2026-08-05; premium-briefing/enterprise-briefing now render differentiated layouts with per-product LLM synthesis fields implications/risks/action_required/key_metrics, 2026-08-11) | 🟡 Products deliver but lifecycle is not tracked | 🔴 No renewal product regeneration | 🔴 No product archive on churn |
 
 | Lifecycle → | B2.1 Discover | B2.2 Connect | B2.3 Configure | B2.4 Operate | B2.5 Monitor | B2.6 Update |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
-| **A4 Products** | 🟢 `list_products`, `get_product` MCP exists | 🟢 MCP tools | 🟢 Product templates exist (RAW, PROCESSED) | 🟡 Products are generated but lifecycle state machine is 0% implemented | 🔴 No product engagement metrics | 🟡 Template config is mutable via code |
+| **A4 Products** | 🟢 `list_products`, `get_product` MCP exists | 🟢 MCP tools | 🟢 Product templates exist (RAW, PROCESSED); product selection via `generate_report`/`generate_digest` `product` params (MCP) + `--product` (CLI), 2026-08-11 | 🟡 Products are generated with per-product routing (premium-briefing/enterprise-briefing/magazine-digest render through own template families, 2026-08-11) but lifecycle state machine is 0% implemented | 🔴 No product engagement metrics | 🟡 Template config is mutable via code |
 
 | Lifecycle → | B3.1 Define | B3.2 Configure | B3.3 Monitor | B3.4 Iterate | B3.5 Scale |
 |-------------|:---:|:---:|:---:|:---:|:---:|
@@ -360,7 +361,7 @@ Gaps where code exists but is incomplete, broken by design, or has significant m
 - **Affected Stages:** A4 (Products), A5 (Delivery)
 - **Affected Users:** B1 (End User — no self-service upgrade), B3 (Director — cannot configure tier graduation)
 - **Existing Cross-Ref:** AUD-01, A-01
-- **Evidence:** `billing.py:657` `check_access()` works. `output/__init__.py:1768-1808` — 4 free + 1 premium + 1 enterprise templates. `Subscription` model at `models.py:340` has `tier`, `channels`, `domains`, `products`, `platform_limit`, `domain_limit`, `raw_access`, `processed_access`. Stripe checkout session creation + webhook processing exist in `billing.py:235`.
+- **Evidence:** `billing.py:657` `check_access()` works. `output/__init__.py:1768-1808` — 8 templates (5 free + 2 premium + 1 enterprise). `Subscription` model at `models.py:340` has `tier`, `channels`, `domains`, `products`, `platform_limit`, `domain_limit`, `raw_access`, `processed_access`. Stripe checkout session creation + webhook processing exist in `billing.py:235`.
 - **Status:** 🟡 Resolved — core gating infrastructure exists, templates are tiered. Remaining: self-service upgrade UX (P2), consumption-based graduation (P3).
 
 #### CD-025: Payment Provider Abstraction Layer
@@ -416,7 +417,7 @@ Gaps where code exists but is incomplete, broken by design, or has significant m
 - **Affected Stages:** A4 (Products)
 - **Affected Users:** B1 (End User — tiered product access works), B3 (Director — templates are tiered)
 - **Existing Cross-Ref:** AUD-01 (merged with CD-024)
-- **Evidence:** `output/__init__.py:1768-1808` — 4 free + 1 premium + 1 enterprise templates. `billing.py:657` (`check_access`). Templates: weekly-briefing(free), deep-dive(free), weekly-roundup(free), alert-stream(free), daily-quick-scan was removed, now 4 free; premium-briefing(premium), executive-summary(enterprise).
+- **Evidence:** `output/__init__.py:1768-1808` — 8 templates (5 free + 2 premium + 1 enterprise). `billing.py:657` (`check_access`). Templates: weekly-briefing(free), deep-dive(free), weekly-roundup(free), alert-stream(free), magazine-digest(free); column(premium), premium-briefing(premium); executive-summary(enterprise).
 - **Status:** 🟢 Resolved — templates are tiered, gating works. Merged into CD-024 for remaining items.
 
 ---
@@ -638,7 +639,7 @@ Priorities are assigned based on:
 
 | ID | Gap | Reason | Effort |
 |----|-----|--------|--------|
-| CD-024 | Self-service upgrade UX | Core gating ✅, templates tiered ✅ (4 free + 1 premium + 1 enterprise). Remaining: self-service free→paid transition flow | 3-5 days |
+| CD-024 | Self-service upgrade UX | Core gating ✅, templates tiered ✅ (8 templates: 5 free + 2 premium + 1 enterprise). Remaining: self-service free→paid transition flow | 3-5 days |
 | CD-040 | Consumption feedback loop | Data collection ✅ (ConsumptionEvent + ConsumptionStore). Remaining: use consumption data for personalization/ranking | 5-8 days |
 | CD-005 | Admin dashboard | No visual operations view | 5-10 days |
 | CD-006 | Notification framework unification | Notifications exist but scattered (notifications.py, alerts.py, cron.py); no central template system | 3-5 days |
@@ -794,7 +795,7 @@ All open CD gaps (CD-001..CD-042 minus the 12 already resolved/merged) remain op
 
 ## 2026-08-03 更新 — Agent-native validation toolset
 
-Landed after the 2026-08-02 audit: `list_validation_scenarios` / `run_validation_scenario` MCP tools (src/autoinfo/mcp/server.py:9586,9594) backed by a standalone executor (src/autoinfo/mcp/validation.py). 65 scenario YAMLs in src/autoinfo/mcp/scenarios/ cover 145/145 MCP tools (145 MCP tools), all 28 CLI groups, and 8 REST endpoints (verified via scripts/coverage_audit.py — MISSING: 0). Scenarios execute through the MCP surface plus real CLI subprocess and REST HTTP steps; `llm_assert` steps run real model calls; env-gated steps report `unconfigured` (Director User BYOK obligation). Scenario authoring contract: docs/dev/validation-scenario-contract.md.
+Landed after the 2026-08-02 audit: `list_validation_scenarios` / `run_validation_scenario` MCP tools (src/autoinfo/mcp/server.py:9586,9594) backed by a standalone executor (src/autoinfo/mcp/validation.py). 67 scenario YAMLs (61 functional + 6 regression; 65→67 on 2026-08-11 with output-agent-interaction + regression-product-routing) in src/autoinfo/mcp/scenarios/ cover 145/145 MCP tools (145 MCP tools), all 28 CLI groups, and 8 REST endpoints (verified via scripts/coverage_audit.py — MISSING: 0). Scenarios execute through the MCP surface plus real CLI subprocess and REST HTTP steps; `llm_assert` steps run real model calls; env-gated steps report `unconfigured` (Director User BYOK obligation). Scenario authoring contract: docs/dev/validation-scenario-contract.md.
 
 **Cell-impact**: no matrix cell flips — validation is a B2/B3 operational capability strengthening A7 Operations (B2.5 Monitor) and the B2 lifecycle (validation of collection/extraction/delivery), not a new pipeline stage or user lifecycle transition. Tool count is now 141 (was 139 at the 08-02 audit).
 
@@ -826,6 +827,35 @@ Landed 2026-08-05 (M0-M7 merged plan waves). These add collectors, demo domains,
 ### Open CD gaps unaffected
 
 All open CD gaps (CD-001..CD-042 minus resolved/merged) remain open. B24/D11 are product-template additions within the already-evaluated A4 Products stage — they do not close CD-017/CD-022 (product lifecycle state machine still 0%). The enduser-coverage-matrix's B24/D11 item rows were updated to ⚠️ (column premium / magazine digest) in its 第 11 次 note.
+
+---
+
+## 2026-08-11 更新 — Output-quality-mega（产品差异化渲染 + 产品分析元数据 + 内容深度）
+
+Landed 2026-08-11 (output-quality-mega plan). Product-template routing, per-product LLM synthesis, and KB analysis-metadata round-trip — closing the **format-differentiation** gap in the A4 output cells for the B2 (agent) and B1 (end-user) user dimensions. Following the established convention, cells strengthened by these features are noted without status flips unless a gap actually closes.
+
+### New features landed
+
+| Feature | Code location | Summary |
+|---------|---------------|---------|
+| **Premium/enterprise briefing rendering** | `output/__init__.py` `_resolve_report_product_type`; `data/templates/{premium-briefing,enterprise-briefing}.md.j2` | `premium-briefing` (premium tier) + `enterprise-briefing` (enterprise tier) previously fell back to the default report layout (product_type hardcoded to "report" for every non-column product); they now render through their own template families (guard-first on-disk lookup, mirrors `_resolve_digest_product_type`). |
+| **magazine-digest routing fix** | `output/__init__.py` `_resolve_digest_product_type` + `_normalize_digest_product_context` | magazine-digest now routes via the `generate_digest` digest path (was routed through generate_report); digest-path context flattened to the §2.1 flat keys (executive_summary/key_findings) shared with the report path. |
+| **Per-product LLM synthesis fields** | `output/__init__.py` `_DIGEST_PRODUCT_FIELD_DESCRIPTIONS` | `implications` / `risks` / `action_required` (index-aligned 1:1 with key_findings) on premium-briefing / magazine-digest / enterprise-briefing; `key_metrics` additionally on enterprise-briefing. Emitted in the agent JSON-LD on product paths ONLY — default digest/report agent output unchanged (round-trip contract). |
+| **Product selection on MCP + CLI** | `mcp/server.py` `generate_report`/`generate_digest` `product` params; `cli/output.py` `--product` | Agents (MCP) and humans (CLI) select the product template explicitly; unknown names rejected against the `PRODUCT_TEMPLATES` registry. |
+| **Product-analysis KB metadata** | `kb.py` `update_entry_metadata`; output `_persist_product_analysis_to_kb` | Product-derived analysis persisted to KB entry `custom_fields["product_analysis"]` (implications/risks/action_required/key_metrics) via the existing custom_fields metadata dict — no schema/rule change. |
+| **Faceted filter over custom fields** | `kb.py` `search_fts5`/`search_knowledge_base` `filter_custom_fields`; MCP `search_knowledge_base` | New faceted filter key (dot-path into `custom_fields`, e.g. `product_analysis.action_required`); empty value matches "exists and non-empty", other values match equality. No new MCP tool, no new store. |
+| **Content depth: fetch_depth + fulltext** | `collect.py` dispatch; `collectors/{unpaywall,rss,youtube,gdelt}.py` | `fetch_depth` threaded through source dispatch; unpaywall/RSS/YouTube/GDELT fulltext retrieval (deeper content). |
+| **2 new validation scenarios** | `scenarios/output-agent-interaction.yaml`; `scenarios/regression/regression-product-routing.yaml` | Scenarios 65→67 (61 functional + 6 regression): (a) end-to-end agent interaction — generate premium-briefing → filter KB by `action_required` → `query_collected` with citations; (b) product-template routing regression guard (differentiated sections must render). |
+
+### Cell-impact statement
+
+- **A4 Products (B1.3 Subscribe, B2.3 Configure, B2.4 Operate):** premium-briefing/enterprise-briefing now render differentiated layouts with per-product LLM synthesis fields; product selection exposed via MCP `product` params and CLI `--product`; magazine-digest routed through the digest path. The B1.3/B2.3 cells stay 🟢 (tiered templates were already delivered); B2.4 stays 🟡 — generation is now per-product routed, but the product lifecycle state machine (CD-017/CD-022) remains 0% implemented.
+- **A3 Knowledge Base (B2.4 Operate):** `filter_custom_fields` makes product-analysis metadata (`custom_fields["product_analysis"]`) queryable/filterable — agent-format output is now queryable end-to-end (generate → filter → query). Cell stays 🟢.
+- **A1 Collection (B2.4 Operate):** `fetch_depth` + fulltext retrieval (unpaywall/RSS/YouTube/GDELT) deepen collected content. Cell stays 🟢.
+
+### Open CD gaps unaffected
+
+All open CD gaps (CD-001..CD-042 minus resolved/merged) remain open. The format-differentiation closure is an enhancement within the already-evaluated A4 Products stage — it does not close CD-017/CD-022 (product lifecycle state machine still 0%) nor CD-024 (self-service upgrade UX). The enduser-coverage-matrix's B1/B3/E5/A11/A15/A18/A25 item rows were noted with the new capabilities in its 第 12 次 note; no coverage-status flips.
 
 ---
 
@@ -940,4 +970,4 @@ Maps existing gap IDs from other (now archived) documents to CD-NNN. Kept for hi
 
 ---
 
-*End of Cross-Dimensional Catalog. 42 gaps cataloged across 5 types (12 resolved/merged after codebase reality check), with full priority matrix and implementation roadmap + feasibility verdicts (absorbed from enduser-coverage-matrix, `docs/dev/enduser-coverage-matrix.md`). Last updated 2026-08-05 (V1 completion audit + stale-item fix + validation toolset + H-section fold-in + M0-M7 consolidated sweep: 3 new source types, 4 new demo domains, B24 column + D11 magazine-digest products). This is the keystone product definition document — start here, then navigate to the relevant spec in `docs/dev/specs/`.*
+*End of Cross-Dimensional Catalog. 42 gaps cataloged across 5 types (12 resolved/merged after codebase reality check), with full priority matrix and implementation roadmap + feasibility verdicts (absorbed from enduser-coverage-matrix, `docs/dev/enduser-coverage-matrix.md`). Last updated 2026-08-11 (V1 completion audit + stale-item fix + validation toolset + H-section fold-in + M0-M7 consolidated sweep: 3 new source types, 4 new demo domains, B24 column + D11 magazine-digest products + output-quality-mega: premium-briefing/enterprise-briefing differentiated rendering, per-product LLM synthesis fields, product selection on MCP/CLI, `filter_custom_fields` over `product_analysis` KB metadata, `fetch_depth` fulltext, scenarios 65→67). This is the keystone product definition document — start here, then navigate to the relevant spec in `docs/dev/specs/`.*

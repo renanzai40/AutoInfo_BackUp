@@ -6,13 +6,16 @@ deterministic and fast — no real API calls, no real credentials.
 
 from __future__ import annotations
 
+import logging
 import os
 from typing import Any
 from unittest.mock import MagicMock, patch
 
 import httpx
+import pytest
 
-from autoinfo.collectors.unpaywall import UnpaywallHandler
+from autoinfo.collectors.unpaywall import FULLTEXT_CONTENT_CAP, UnpaywallHandler
+from autoinfo.models import Item
 
 # ---------------------------------------------------------------------------
 # Sample API response data
@@ -852,3 +855,209 @@ class TestUnpaywallToItem:
 
         assert item.source_url == "https://doi.org/10.9999/nonoa.2026"
         assert item.raw_data["is_oa"] is False
+
+
+# ---------------------------------------------------------------------------
+# Tests: fetch_depth == "fulltext" OA content extraction
+# ---------------------------------------------------------------------------
+
+
+class TestUnpaywallFulltextFetchDepth:
+    """Tests for the ``fetch_depth == "fulltext"`` content-depth mode.
+
+    In fulltext mode the handler reuses the web.py trafilatura path
+    (``WebHandler.fetch``) to extract OA full text into ``content``;
+    any failure must degrade gracefully to the mapped content (title).
+    """
+
+    LONG_EXTRACTED_TEXT: str = (
+        "This is the extracted full text of the open access article. "
+        "It contains several sentences of substantive scholarly "
+        "discussion that go far beyond the article title."
+    ) * 5
+
+    @staticmethod
+    def _mock_unpaywall_response(
+        payload: dict[str, Any], mock_get: MagicMock
+    ) -> None:
+        mock_response = MagicMock(spec=httpx.Response)
+        mock_response.json.return_value = payload
+        mock_response.raise_for_status.return_value = None
+        mock_get.return_value = mock_response
+
+    @staticmethod
+    def _extracted_item(text: str) -> Item:
+        return Item(
+            id="web-item",
+            source_name="web",
+            source_type="web",
+            source_url="https://repository.example.com/paper123",
+            title="",
+            content=text,
+        )
+
+    @patch("autoinfo.collectors.unpaywall.WebHandler.fetch")
+    @patch("autoinfo.collectors.unpaywall.httpx.get")
+    @patch.dict(os.environ, {"AUTOINFO_UNPAYWALL_EMAIL": "tester@example.com"})
+    def test_fulltext_mode_extracts_oa_content(
+        self, mock_get: MagicMock, mock_web_fetch: MagicMock
+    ) -> None:
+        """fetch_depth=fulltext with oa_url yields content length >> title."""
+        self._mock_unpaywall_response(SAMPLE_UNPAYWALL_SINGLE_OA, mock_get)
+        mock_web_fetch.return_value = [
+            self._extracted_item(self.LONG_EXTRACTED_TEXT)
+        ]
+
+        handler = UnpaywallHandler({"fetch_depth": "fulltext"})
+        items = handler.fetch(query="anything", limit=10)
+
+        assert len(items) == 1
+        assert items[0]["content"] == self.LONG_EXTRACTED_TEXT
+        assert len(items[0]["content"]) > len(items[0]["title"]) * 5
+        # The web.py path must be called with the OA URL.
+        mock_web_fetch.assert_called_once_with(
+            "https://repository.example.com/paper123"
+        )
+
+    @patch("autoinfo.collectors.unpaywall.WebHandler.fetch")
+    @patch("autoinfo.collectors.unpaywall.httpx.get")
+    @patch.dict(os.environ, {"AUTOINFO_UNPAYWALL_EMAIL": "tester@example.com"})
+    def test_fulltext_mode_empty_extraction_keeps_title(
+        self,
+        mock_get: MagicMock,
+        mock_web_fetch: MagicMock,
+        caplog: pytest.LogCaptureFixture,
+    ) -> None:
+        """Empty extraction should keep the title and log a warning."""
+        self._mock_unpaywall_response(SAMPLE_UNPAYWALL_SINGLE_OA, mock_get)
+        mock_web_fetch.return_value = []
+
+        handler = UnpaywallHandler({"fetch_depth": "fulltext"})
+        with caplog.at_level(
+            logging.WARNING, logger="autoinfo.collectors.unpaywall"
+        ):
+            items = handler.fetch(query="anything", limit=10)
+
+        assert len(items) == 1
+        assert items[0]["content"] == "Test Paper with OA Fulltext"
+        assert any(
+            r.levelno == logging.WARNING and "fulltext" in r.message
+            for r in caplog.records
+        )
+
+    @patch("autoinfo.collectors.unpaywall.WebHandler.fetch")
+    @patch("autoinfo.collectors.unpaywall.httpx.get")
+    @patch.dict(os.environ, {"AUTOINFO_UNPAYWALL_EMAIL": "tester@example.com"})
+    def test_fulltext_mode_extraction_raise_keeps_title(
+        self,
+        mock_get: MagicMock,
+        mock_web_fetch: MagicMock,
+        caplog: pytest.LogCaptureFixture,
+    ) -> None:
+        """A raising extraction should keep the title and log a warning."""
+        self._mock_unpaywall_response(SAMPLE_UNPAYWALL_SINGLE_OA, mock_get)
+        mock_web_fetch.side_effect = RuntimeError("extraction boom")
+
+        handler = UnpaywallHandler({"fetch_depth": "fulltext"})
+        with caplog.at_level(
+            logging.WARNING, logger="autoinfo.collectors.unpaywall"
+        ):
+            items = handler.fetch(query="anything", limit=10)
+
+        assert len(items) == 1
+        assert items[0]["content"] == "Test Paper with OA Fulltext"
+        assert any(
+            r.levelno == logging.WARNING and "fulltext" in r.message
+            for r in caplog.records
+        )
+
+    @patch("autoinfo.collectors.unpaywall.WebHandler.fetch")
+    @patch("autoinfo.collectors.unpaywall.httpx.get")
+    @patch.dict(os.environ, {"AUTOINFO_UNPAYWALL_EMAIL": "tester@example.com"})
+    def test_fulltext_mode_no_oa_url_unchanged(
+        self, mock_get: MagicMock, mock_web_fetch: MagicMock
+    ) -> None:
+        """fetch_depth=fulltext without an OA URL leaves content unchanged."""
+        self._mock_unpaywall_response(SAMPLE_UNPAYWALL_NON_OA, mock_get)
+
+        handler = UnpaywallHandler({"fetch_depth": "fulltext"})
+        items = handler.fetch(query="anything", limit=10)
+
+        assert len(items) == 1
+        assert items[0]["content"] == "Paywalled Paper"
+        mock_web_fetch.assert_not_called()
+
+    @patch("autoinfo.collectors.unpaywall.WebHandler.fetch")
+    @patch("autoinfo.collectors.unpaywall.httpx.get")
+    @patch.dict(os.environ, {"AUTOINFO_UNPAYWALL_EMAIL": "tester@example.com"})
+    def test_default_fetch_depth_unchanged(
+        self, mock_get: MagicMock, mock_web_fetch: MagicMock
+    ) -> None:
+        """Without fetch_depth=fulltext, content stays the title."""
+        self._mock_unpaywall_response(SAMPLE_UNPAYWALL_SINGLE_OA, mock_get)
+
+        handler = UnpaywallHandler({})
+        items = handler.fetch(query="anything", limit=10)
+
+        assert len(items) == 1
+        assert items[0]["content"] == "Test Paper with OA Fulltext"
+        mock_web_fetch.assert_not_called()
+
+    @patch("autoinfo.collectors.unpaywall.WebHandler.fetch")
+    @patch("autoinfo.collectors.unpaywall.httpx.get")
+    @patch.dict(os.environ, {"AUTOINFO_UNPAYWALL_EMAIL": "tester@example.com"})
+    def test_fulltext_mode_truncates_to_cap(
+        self, mock_get: MagicMock, mock_web_fetch: MagicMock
+    ) -> None:
+        """Extracted content should be truncated to the 8000-char cap."""
+        self._mock_unpaywall_response(SAMPLE_UNPAYWALL_SINGLE_OA, mock_get)
+        mock_web_fetch.return_value = [self._extracted_item("x" * 20000)]
+
+        handler = UnpaywallHandler({"fetch_depth": "fulltext"})
+        items = handler.fetch(query="anything", limit=10)
+
+        assert items[0]["content"] == "x" * FULLTEXT_CONTENT_CAP
+        assert len(items[0]["content"]) == FULLTEXT_CONTENT_CAP
+
+    @patch("autoinfo.collectors.unpaywall.WebHandler.fetch")
+    @patch("autoinfo.collectors.unpaywall.httpx.get")
+    @patch.dict(os.environ, {"AUTOINFO_UNPAYWALL_EMAIL": "tester@example.com"})
+    def test_fulltext_mode_content_cap_configurable(
+        self, mock_get: MagicMock, mock_web_fetch: MagicMock
+    ) -> None:
+        """The content cap should be overridable via config."""
+        self._mock_unpaywall_response(SAMPLE_UNPAYWALL_SINGLE_OA, mock_get)
+        mock_web_fetch.return_value = [self._extracted_item("y" * 5000)]
+
+        handler = UnpaywallHandler(
+            {"fetch_depth": "fulltext", "content_cap": 100}
+        )
+        items = handler.fetch(query="anything", limit=10)
+
+        assert items[0]["content"] == "y" * 100
+
+    @patch("autoinfo.collectors.unpaywall.WebHandler.fetch")
+    @patch("autoinfo.collectors.unpaywall.httpx.get")
+    @patch.dict(os.environ, {"AUTOINFO_UNPAYWALL_EMAIL": "tester@example.com"})
+    def test_fulltext_mode_falls_back_to_oa_url_pdf(
+        self, mock_get: MagicMock, mock_web_fetch: MagicMock
+    ) -> None:
+        """When oa_url extraction is empty, oa_url_pdf should be tried."""
+        self._mock_unpaywall_response(SAMPLE_UNPAYWALL_SINGLE_OA, mock_get)
+        # First attempt (oa_url) empty, second attempt (oa_url_pdf) yields text.
+        mock_web_fetch.side_effect = [
+            [],
+            [self._extracted_item(self.LONG_EXTRACTED_TEXT)],
+        ]
+
+        handler = UnpaywallHandler({"fetch_depth": "fulltext"})
+        items = handler.fetch(query="anything", limit=10)
+
+        assert items[0]["content"] == self.LONG_EXTRACTED_TEXT
+        assert mock_web_fetch.call_count == 2
+        assert mock_web_fetch.call_args_list[0].args[0] == (
+            "https://repository.example.com/paper123"
+        )
+        assert mock_web_fetch.call_args_list[1].args[0] == (
+            "https://repository.example.com/paper123.pdf"
+        )

@@ -120,6 +120,21 @@ Each source tracks its own collection state in a per-source JSON file:
 
 On `collect`, the handler requests **only items newer than** `last_collected_at` (or since `last_item_id` for paginated APIs). `--force-full` ignores this and re-fetches everything, re-running dedup.
 
+### 1.6 Fetch Depth & Fulltext Fetching
+
+Each source carries a `fetch_depth` setting (`SourceConfig.fetch_depth`, default `"abstract"`, values `"abstract"` / `"fulltext"`). The dispatch layer threads it into collection: `collect.py` injects the per-source `fetch_depth` into the handler `config` before invoking it, so handlers that read `fetch_depth` switch their fetch behavior while handlers that ignore it are unaffected (the key is inert). `autoinfo domain import` / CLI source management preserve and round-trip the setting.
+
+When `fetch_depth == "fulltext"`, the following collectors fetch the full article body instead of metadata/abstract only:
+
+| Collector | Fulltext source | Cap / fallback |
+|-----------|-----------------|----------------|
+| **unpaywall** | Open-access full text via Unpaywall/CORE (OA PDF/HTML → extracted text) | 8000-char cap (`FULLTEXT_CONTENT_CAP`); falls back to abstract if no OA full text is available |
+| **rss** | The entry's link target (fetches + extracts the linked article) | 8000-char cap (`FULLTEXT_MAX_CHARS`); falls back to the feed description |
+| **youtube** | Video transcript retrieval | Falls back to description when no captions/transcript are available |
+| **gdelt** | The linked news article | 8000-char cap (`FULLTEXT_CONTENT_CAP`); falls back to GDELT-provided metadata |
+
+The fulltext content is used for deeper extraction (G4 factual checks, custom fields) while the abstract-level path stays cheap for high-volume sources.
+
 ---
 
 ## 2. KB Pipeline (§12.4, 12.7) (executes in B2.4 Operate stage)
@@ -185,6 +200,22 @@ This provides full history, diff between versions, and recovery. No explicit "ve
 ### 2.5 SHA Tracking
 
 Each KB entry's YAML frontmatter includes `content_sha: <sha256(content + metadata)>`. When re-processing produces a different SHA, the old entry is preserved (git retains history) and the new entry gets a new path (new slug with `-v2` suffix).
+
+### 2.6 Product Analysis Metadata
+
+Differentiated product generation (premium-briefing / enterprise-briefing / magazine-digest — see delivery.md §1.1) persists its per-product LLM analysis onto the source KB entries via `KBStore.update_entry_metadata` (no new store, no new tool). The analysis lives in the entry's existing `custom_fields` dict under the reserved key:
+
+```yaml
+custom_fields:
+  product_analysis:            # written by _persist_product_analysis_to_kb during product generation
+    product: "premium-briefing"
+    implications: ["So-what per key_findings entry ..."]     # list[str], index-aligned with key_findings
+    risks: ["..."]                                            # list[str], index-aligned
+    action_required: ["..."]                                  # list[str], index-aligned (premium/enterprise)
+    key_metrics: [{"metric": "...", "value": "...", "source": "..."}]  # enterprise only
+```
+
+The persisted analysis is **searchable**: `search_knowledge_base(filter_custom_fields={"product_analysis.action_required": ""})` returns entries whose product analysis prescribes an action (presence match), and `{"product_analysis.product": "premium-briefing"}` narrows to a specific product (exact match). See mcp-tools.md for the `filter_custom_fields` semantics (dot-path into `custom_fields`, `""` = presence, non-empty = exact match, path-injection validated).
 
 ---
 

@@ -176,6 +176,94 @@ class TestErrorHandling:
 
 
 # ---------------------------------------------------------------------------
+# Fulltext enrichment (fetch_depth == "fulltext")
+# ---------------------------------------------------------------------------
+
+
+class TestRSSFulltext:
+    """Verify ``fetch_depth="fulltext"`` fetches article bodies via the web.py path."""
+
+    def test_fulltext_fetch_carries_article_body(
+        self, atom_feed_path: str
+    ) -> None:
+        """A fulltext item carries the fetched article body as content."""
+        from unittest import mock
+
+        from autoinfo.collectors.web import WebHandler
+
+        body = "Full article body text extracted via the web.py trafilatura path."
+        body_item = Item(
+            id="web-1",
+            source_name="web",
+            source_type="web",
+            source_platform="web",
+            source_url="https://example.com/entry1",
+            title="Fetched title",
+            content=body,
+            content_type="text",
+        )
+
+        handler = RSSHandler(fetch_depth="fulltext")
+        with mock.patch.object(WebHandler, "fetch", return_value=[body_item]):
+            items = handler.fetch(atom_feed_path)
+
+        assert items[0].content == body
+
+    def test_default_depth_keeps_summary_and_skips_fetch(
+        self, atom_feed_path: str
+    ) -> None:
+        """Without ``fetch_depth`` the summary is unchanged and no fetch occurs."""
+        from unittest import mock
+
+        from autoinfo.collectors.web import WebHandler
+
+        handler = RSSHandler()
+        with mock.patch.object(WebHandler, "fetch") as mocked_fetch:
+            items = handler.fetch(atom_feed_path)
+
+        mocked_fetch.assert_not_called()
+        assert "summary for atom entry one" in items[0].content
+
+    def test_fulltext_failure_keeps_summary(self, atom_feed_path: str) -> None:
+        """A per-entry fetch failure keeps the feed summary."""
+        from unittest import mock
+
+        from autoinfo.collectors.web import WebHandler
+
+        handler = RSSHandler(fetch_depth="fulltext")
+        with mock.patch.object(WebHandler, "fetch", return_value=[]):
+            items = handler.fetch(atom_feed_path)
+
+        assert "summary for atom entry one" in items[0].content
+
+    def test_fulltext_truncates_at_cap(self, atom_feed_path: str) -> None:
+        """Fulltext content is capped at 8000 characters."""
+        from unittest import mock
+
+        from autoinfo.collectors.rss import FULLTEXT_MAX_CHARS
+        from autoinfo.collectors.web import WebHandler
+
+        long_body = "x" * 12000
+        body_item = Item(
+            id="web-1",
+            source_name="web",
+            source_type="web",
+            source_platform="web",
+            source_url="https://example.com/entry1",
+            title="Fetched title",
+            content=long_body,
+            content_type="text",
+        )
+
+        handler = RSSHandler(fetch_depth="fulltext")
+        with mock.patch.object(WebHandler, "fetch", return_value=[body_item]):
+            items = handler.fetch(atom_feed_path)
+
+        assert len(items[0].content) == FULLTEXT_MAX_CHARS == 8000
+        assert items[0].content == long_body[:FULLTEXT_MAX_CHARS]
+
+
+# ---------------------------------------------------------------------------
 # Edge cases
 # ---------------------------------------------------------------------------
 

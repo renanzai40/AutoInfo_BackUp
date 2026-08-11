@@ -13,16 +13,16 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 
 | Metric | Value |
 |--------|-------|
-| Total files | 39 |
-| Total lines | 20732 |
-| Active files | 30 |
+| Total files | 41 |
+| Total lines | 21984 |
+| Active files | 32 |
 | Archived files | 9 |
 | Category — archive | 9 files / 4932 lines |
 | Category — known-limitations | 1 files / 255 lines |
-| Category — skills | 2 files / 631 lines |
-| Category — specs | 12 files / 7747 lines |
+| Category — skills | 3 files / 785 lines |
+| Category — specs | 12 files / 8424 lines |
 | Category — validation-reports | 2 files / 219 lines |
-| Category — docs/dev | 13 files / 6948 lines |
+| Category — docs/dev | 14 files / 7369 lines |
 
 ## Inventory
 
@@ -37,33 +37,35 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `archive/launch-validation-report.md` | 273 | archive | archived | — |
 | `archive/migration-v1.9.md` | 58 | archive | archived | — |
 | `archive/reports/global-content-paid-research-report-trae.md` | 973 | archive | archived | — |
+| `autoinfo-validation-master-plan/part-12-final-verdict.md` | 381 | docs/dev | active | — |
 | `dev/acceptance-framework.md` | 494 | docs/dev | active | — |
 | `dev/agent-alerting.md` | 129 | docs/dev | active | — |
-| `dev/cli-mcp-rest-parity.md` | 464 | docs/dev | active | — |
-| `dev/cross-dimensional-catalog.md` | 943 | docs/dev | active | — |
+| `dev/cli-mcp-rest-parity.md` | 466 | docs/dev | active | — |
+| `dev/cross-dimensional-catalog.md` | 973 | docs/dev | active | — |
 | `dev/director-user-guide.md` | 756 | docs/dev | active | — |
 | `dev/enduser-capabilities-guide.md` | 372 | docs/dev | active | — |
-| `dev/enduser-coverage-matrix.md` | 478 | docs/dev | active | — |
+| `dev/enduser-coverage-matrix.md` | 480 | docs/dev | active | — |
 | `dev/founder-expectations.md` | 471 | docs/dev | active | — |
 | `dev/mcp-usage-examples.md` | 324 | docs/dev | active | — |
 | `dev/new-domain-guide.md` | 935 | docs/dev | active | — |
 | `dev/required-api-keys.md` | 127 | docs/dev | active | — |
 | `dev/research/综合报告-资讯付费与AI触达研究.md` | 702 | docs/dev | active | — |
-| `dev/specs/data-models.md` | 735 | specs | active | — |
-| `dev/specs/delivery.md` | 1227 | specs | active | — |
-| `dev/specs/end-user-matrix.yaml` | 247 | specs | active | — |
+| `dev/specs/data-models.md` | 745 | specs | active | — |
+| `dev/specs/delivery.md` | 1244 | specs | active | — |
+| `dev/specs/end-user-matrix.yaml` | 866 | specs | active | — |
 | `dev/specs/expectations.md` | 1188 | specs | active | — |
 | `dev/specs/market-positioning.md` | 404 | specs | active | market-positioning |
 | `dev/specs/mcp-tools.md` | 85 | specs | active | — |
 | `dev/specs/multi-tenancy-auth.md` | 770 | specs | active | — |
 | `dev/specs/operations.md` | 933 | specs | active | — |
 | `dev/specs/ops-runbook.md` | 1022 | specs | active | — |
-| `dev/specs/pipeline.md` | 512 | specs | active | — |
+| `dev/specs/pipeline.md` | 543 | specs | active | — |
 | `dev/specs/quality-gates.md` | 183 | specs | active | — |
 | `dev/specs/user-lifecycle-definition.md` | 441 | specs | active | — |
 | `dev/validation-reports/README.md` | 53 | validation-reports | active | — |
 | `dev/validation-reports/acceptance-2026-08-08.md` | 166 | validation-reports | active | — |
-| `dev/validation-scenario-contract.md` | 753 | docs/dev | active | — |
+| `dev/validation-scenario-contract.md` | 759 | docs/dev | active | — |
 | `known-limitations/blocked-sources.md` | 255 | known-limitations | active | — |
-| `skills/autoinfo-skill/SKILL.md` | 262 | skills | active | — |
+| `skills/autoinfo-skill/SKILL.md` | 295 | skills | active | — |
+| `skills/autoinfo-skill/onboarding-walkthrough.md` | 121 | skills | active | — |
 | `skills/translator-qa-skill/SKILL.md` | 369 | skills | active | — |

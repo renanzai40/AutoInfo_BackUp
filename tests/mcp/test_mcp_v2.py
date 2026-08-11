@@ -514,6 +514,49 @@ class TestSearchKnowledgeBaseStub:
         assert "entries" in result
         assert "count" in result
 
+    @patch("autoinfo.mcp.server._detect_kb_status", return_value="operational")
+    def test_forwards_custom_fields_filter(
+        self, mock_status: MagicMock
+    ) -> None:
+        """output-quality-mega todo 25: the faceted filter key
+        ``filter_custom_fields`` must reach ``KBStore.search_knowledge_base``
+        through the existing tool — no new tool is added."""
+        from autoinfo.mcp.server import _handle_search_knowledge_base
+
+        with patch("autoinfo.kb.KBStore") as kb_cls:
+            kb = MagicMock()
+            kb.search_knowledge_base.return_value = {"entries": [], "count": 0}
+            kb_cls.return_value = kb
+
+            _handle_search_knowledge_base(
+                query="IVF",
+                domain="medical-research",
+                filter_custom_fields={"product_analysis.action_required": ""},
+            )
+
+            kwargs = kb.search_knowledge_base.call_args.kwargs
+            assert kwargs["filter_custom_fields"] == {
+                "product_analysis.action_required": ""
+            }
+            assert kwargs["query"] == "IVF"
+
+    @patch("autoinfo.mcp.server._detect_kb_status", return_value="operational")
+    def test_without_custom_fields_filter_defaults_none(
+        self, mock_status: MagicMock
+    ) -> None:
+        """Default search behaviour unchanged: no filter_custom_fields is sent."""
+        from autoinfo.mcp.server import _handle_search_knowledge_base
+
+        with patch("autoinfo.kb.KBStore") as kb_cls:
+            kb = MagicMock()
+            kb.search_knowledge_base.return_value = {"entries": [], "count": 0}
+            kb_cls.return_value = kb
+
+            _handle_search_knowledge_base(query="IVF", domain="medical-research")
+
+            kwargs = kb.search_knowledge_base.call_args.kwargs
+            assert kwargs.get("filter_custom_fields") is None
+
 
 class TestFlagForKnowledgeBaseStub:
     def test_returns_result_not_stub(self) -> None:
@@ -591,6 +634,35 @@ class TestToolRegistrationV2:
 
         schema = by_name["test_source"].inputSchema
         assert "url" in schema.get("required", [])
+
+    @pytest.mark.asyncio
+    async def test_output_tools_accept_product_param(self) -> None:
+        """generate_digest and generate_report schemas declare the product param."""
+        tools = await mcp_server.list_tools()
+        by_name = {t.name: t for t in tools}
+
+        digest_schema = by_name["generate_digest"].inputSchema
+        assert "product" in digest_schema["properties"]
+        assert digest_schema["properties"]["product"]["type"] == "string"
+        assert "product" not in digest_schema.get("required", [])
+
+        report_schema = by_name["generate_report"].inputSchema
+        assert "product" in report_schema["properties"]
+        assert report_schema["properties"]["product"]["type"] == "string"
+        assert "product" not in report_schema.get("required", [])
+
+    @pytest.mark.asyncio
+    async def test_search_schema_declares_custom_fields_filter(self) -> None:
+        """output-quality-mega todo 25: the existing search tool's schema
+        carries the new faceted filter key — no new tool is added."""
+        tools = await mcp_server.list_tools()
+        by_name = {t.name: t for t in tools}
+
+        schema = by_name["search_knowledge_base"].inputSchema
+        props = schema["properties"]
+        assert "filter_custom_fields" in props
+        assert props["filter_custom_fields"]["type"] == "object"
+        assert "filter_custom_fields" not in schema.get("required", [])
 
 
 # ======================================================================

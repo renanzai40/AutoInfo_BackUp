@@ -59,10 +59,21 @@ collect_sources(domain="medical-research", dry_run=true)
 ### Generate and deliver output
 ```
 generate_digest(domain="medical-research", period="week")
+generate_digest(domain="medical-research", period="week", product="magazine-digest")
+  → per-title clustered digest product (digest-path routing)
 generate_report(domain="medical-research", format="pdf", topic="IVF breakthroughs")
+generate_report(domain="medical-research", topic="IVF breakthroughs", product="premium-briefing")
+generate_report(domain="medical-research", topic="Q3 M&A review", product="enterprise-briefing")
 generate_presentation(domain="medical-research", topic="Latest Findings")
 send_email_digest(to="user@example.com", subject="Weekly Digest", body=digest)
 ```
+`product=` selects a differentiated product template (8 total: digest, report,
+tutorial, presentation, premium-briefing, column, magazine-digest,
+enterprise-briefing). `premium-briefing` / `enterprise-briefing` are report-path
+products with per-item `implications` / `risks` / `action_required` /
+`key_metrics` analysis; `magazine-digest` is a digest-path product. The analysis
+persists to the KB entries' `custom_fields["product_analysis"]` and is retrievable
+via search faceting (below).
 
 ### Compare changes over time
 ```
@@ -210,7 +221,7 @@ server restarts, and failed pushes are requeued at process start.
 
 ### Run Agent-native validation
 ```
-list_validation_scenarios() → 65 built-in scenarios
+list_validation_scenarios() → 67 built-in scenarios (61 functional + 6 regression)
 run_validation_scenario(scenario="sources-gap-closure") → {status, summary, steps}
 ```
 Each scenario executes real MCP calls (plus real CLI subprocesses and REST HTTP
@@ -220,18 +231,40 @@ fake-passed. `llm_assert` steps run a real model call for semantic checks.
 `requires_env` at scenario level (e.g. `AUTOINFO_LLM_API_KEY`, `FRED_API_KEY`,
 `FINNHUB_API_KEY`) gates LLM/keyed scenarios.
 
-### Generate column & magazine-digest products
+### Generate differentiated product briefings
 ```
 list_output_templates() → 8 product templates (digest, report, tutorial,
   presentation, premium-briefing, column, magazine-digest, enterprise-briefing)
 generate_report(domain="medical-research", report_type="column",
   target_audience="clinician") → premium paid deep-dive column (G15-gated)
+generate_report(domain="medical-research", product="premium-briefing") → tiered
+  briefing with per-item implications/risks/action_required analysis
+generate_report(domain="medical-research", product="enterprise-briefing") → adds
+  per-item key_metrics (metric/value/source)
+generate_digest(domain="medical-research", product="magazine-digest") → per-title
+  clustered digest via the digest generation path
 ```
-`report_type="column"` (B24) renders via the premium `column` ProductTemplate;
-the `magazine-digest` (D11) free template clusters per-title RSS and is
-selected by passing the template's `ProductTemplate` row to the digest
-renderer's `product_template` parameter (see `PRODUCT_TEMPLATES` in
+`report_type="column"` (B24) renders via the premium `column` ProductTemplate.
+The premium-briefing / enterprise-briefing templates resolve guard-first via the
+report product resolver (`_resolve_report_product_type`, mirrors the digest
+resolver); magazine-digest routes through `generate_digest`'s product resolver
+(D11 — digest path, not report path). All differentiated products carry per-product
+LLM synthesis fields (`implications`, `risks`, `action_required`, `key_metrics`)
+index-aligned with `key_findings`, persisted to the KB entries' metadata
+(`custom_fields["product_analysis"]`, see `PRODUCT_TEMPLATES` in
 `src/autoinfo/output/__init__.py`).
+
+### Search KB with custom-field facets
+```
+search_knowledge_base(domain="medical-research", query="embryo",
+  filter_custom_fields={"product_analysis.action_required": ""})
+  → entries with a non-empty product_analysis.action_required (presence match)
+search_knowledge_base(domain="medical-research", query="embryo",
+  filter_custom_fields={"product_analysis.product": "premium-briefing"})
+  → entries analyzed for a specific product (exact match)
+```
+`filter_custom_fields` facets on the entry `custom_fields` JSON via dot-path
+(`""` = presence, non-empty = exact match; path-injection validated).
 
 ## Important Constraints
 

@@ -373,8 +373,8 @@ AutoInfo is an agent-facing tool: the primary consumer of its documentation is a
 
 Two layers, judged separately:
 
-- **(a) Test layer** — the pytest suite (~3390 tests) that verifies the code itself. Industry best practice: organized by subject, mirroring the `src/` package structure; named by subject, not issue number; pyramid-shaped (many fast unit tests, few integration, very few end-to-end).
-- **(b) Validation layer** — the agent-facing scenario suite (65 scenarios, 60 functional + 5 regression) executed through the MCP surface by an agent (agent as tester / validator). This layer is the executable specification at the top of the pyramid: real-surface calls, `unconfigured` never passes, per-step trace + root-cause report, regression flywheel. **Judged compliant with best practice as of 2026-08-08**; it is retained as positive acceptance evidence.
+- **(a) Test layer** — the pytest suite (~3575 tests) that verifies the code itself. Industry best practice: organized by subject, mirroring the `src/` package structure; named by subject, not issue number; pyramid-shaped (many fast unit tests, few integration, very few end-to-end).
+- **(b) Validation layer** — the agent-facing scenario suite (67 scenarios, 61 functional + 6 regression) executed through the MCP surface by an agent (agent as tester / validator). This layer is the executable specification at the top of the pyramid: real-surface calls, `unconfigured` never passes, per-step trace + root-cause report, regression flywheel. **Judged compliant with best practice as of 2026-08-08**; it is retained as positive acceptance evidence.
 
 ### Binary acceptance criteria
 

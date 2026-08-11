@@ -122,8 +122,18 @@ quality_tier: 1          # 1-4, propagated from source config (G1 input)
 source_score: 90.0       # 0-100 deterministic credibility score from quality_tier via SOURCE_TIER_SCORE_MAP (E9)
 status: "active"       # "active" | "deleted" | "stale"
 tier: "01-raw"         # "01-raw" | "02-draft" | "03-wiki"
+custom_fields:        # optional — domain extraction fields plus reserved product analysis key
+  key_findings: ["..."]
+  product_analysis:   # written during differentiated product generation (premium-briefing / enterprise-briefing / magazine-digest)
+    product: "premium-briefing"
+    implications: ["so-what per key_findings entry"]   # list[str], index-aligned 1:1 with key_findings
+    risks: ["..."]                                     # list[str], index-aligned
+    action_required: ["..."]                           # list[str], index-aligned (premium/enterprise)
+    key_metrics: [{"metric": "...", "value": "...", "source": "..."}]  # list[dict], enterprise only
 ---
 ```
+
+`custom_fields["product_analysis"]` is persisted via `KBStore.update_entry_metadata` at product-generation time (no new store/tool) and is filterable through `search_knowledge_base(filter_custom_fields={...})` — dot-path into `custom_fields`, `""` = presence, non-empty = exact match, path-injection validated (see mcp-tools.md).
 
 ---
 

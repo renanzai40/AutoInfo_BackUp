@@ -14,11 +14,16 @@
 |---------|----------|-------------|----------------|----------------|---------------|
 | **Digest** | `generate_digest()` | Curated summary of recent items per topic | Jinja2 | Markdown, HTML, Plain Text, **Audio (TTS MP3)** | D1, D3 |
 | **Report** | `generate_report()` | Structured deep-dive on a topic with analysis | Jinja2 + LLM | Markdown, JSON, PDF, HTML, **Audio (TTS MP3)** | D1, D2, D3 |
+| **Premium Briefing** | `generate_report(product="premium-briefing")` | Premium differentiated report product: per-item **implications / risks / action_required** analysis layered on the base synthesis (G15-gated tiered product) | Jinja2 + LLM | Markdown, HTML, JSON, PDF, Audio, Agent | D1, D2, D3 |
+| **Enterprise Briefing** | `generate_report(product="enterprise-briefing")` | Enterprise differentiated report product: adds per-item **key_metrics** (metric/value/source) on top of the premium analysis fields | Jinja2 + LLM | Markdown, HTML, JSON, PDF, Audio, Agent | D1, D2, D3 |
+| **Magazine Digest** | `generate_digest(product="magazine-digest")` | Per-title clustered digest (D11) — routed through the **digest** generation path (`generate_digest`), not the report path | Jinja2 + LLM | Markdown, HTML, JSON, Agent | D1, D2, D3 |
 | **Tutorial** | `generate_tutorial()` | Step-by-step learning content built from KB | Jinja2 + LLM | Markdown, HTML | D1, D2 |
 | **Presentation** | `generate_presentation()` | Slide deck generated from KB entries | Jinja2 + Reveal.js CDN | HTML | D1, D2 |
 | **Agent-Native JSON** | `generate_digest(format="agent")` | Structured JSON-LD optimized for LLM re-consumption | LLM renderer | JSON-LD (`@type: "KnowledgeDigest"`) | D1, D2 |
 | **KB Export** | `export_kb()` | Bulk export of KB entries | Export renderer | Markdown, JSON, SQLite, PDF, CSV, GraphML, **Bundle (ZIP)** | D1, D2 |
 | **RAW Feed** | `list_products()` / `get_product()` (type=`raw`) | Raw KB items delivered as API feed, webhook stream, or bulk export. `Product.variants` distinguishes the three modes: `["api_feed", "webhook", "bulk_export"]` (E11). | N/A (direct KB read) | API JSON, webhook payload, export bundle | D1, D3 |
+
+**Differentiated product templates** (8 templates in `PRODUCT_TEMPLATES`, `src/autoinfo/output/__init__.py`): `digest`, `report`, `tutorial`, `presentation`, `premium-briefing`, `column`, `magazine-digest`, `enterprise-briefing`. The `premium-briefing` and `enterprise-briefing` templates are resolved guard-first via `_resolve_report_product_type` (mirrors the digest resolver `_resolve_digest_product_type`) and render only when the request names the product — a `generate_report(product="premium-briefing")` call resolves to the differentiated template before any fallback to the standard report template. `magazine-digest` is a digest-path product: `generate_digest(product="magazine-digest")` routes through the digest renderer (D11 fix: previously mis-routed via the report path).
 
 ### 1.2 Generation Pipeline
 
@@ -27,13 +32,14 @@
 ```
 1. Agent calls the generate_digest() MCP tool (or generate_report, generate_tutorial, etc.)
 2. Fetch relevant 02-Draft entries (by topic + date range)
-3. Load Jinja2 template (built-in or custom)
+3. Load Jinja2 template (built-in or custom; `product` param resolves a differentiated product template guard-first — `premium-briefing`/`enterprise-briefing` via `_resolve_report_product_type`, `magazine-digest` via `_resolve_digest_product_type`)
 4. Build template context:
    - entries: list of draft entries
    - domain_config: current domain settings
    - frontmatter_context: resolved from template frontmatter
    - generated_at: current timestamp
    - custom_globals: user-defined variables
+   - llm_synthesis: per-product LLM synthesis (see below)
 5. Render template → Markdown
 6. Run delivery gates (D1-D3):
    - D1: completeness check
@@ -41,6 +47,10 @@
    - D3: freshness check
 7. Return rendered product or raise gate failure
 ```
+
+**Dual-context render contract** — differentiated product templates are rendered with a **normalized flat context**, not the raw nested digest context: `_normalize_digest_product_context` flattens the `llm_synthesis` structure into top-level keys so product templates can reference `{{ implications }}` / `{{ risks }}` / `{{ action_required }}` / `{{ key_metrics }}` directly (the standard digest/report templates keep the nested context unchanged). Product templates that request per-item analysis receive **per-product LLM synthesis fields**: `implications` and `risks` (all products), `action_required` (premium/enterprise), `key_metrics` (enterprise only) — each a `list[str]` (or `list[dict[str, str]]` for metrics: `metric` / `value` / `source`) **index-aligned 1:1 with `key_findings`** so every finding carries its so-what analysis. The product analysis is persisted to the KB entries' `custom_fields["product_analysis"]` via `KBStore.update_entry_metadata` (see pipeline.md §2.6).
+
+**Report-synthesis robustness** — `_generate_executive_summary` retries the §2.4 product sections with a bounded retry loop (up to 4 attempts with backoff) and a dedicated small prompt when the base synthesis omits the product sections, so a partial LLM omission degrades to a retry, not a section gap.
 
 ### 1.3 Template Frontmatter Context Variables
 
@@ -108,6 +118,12 @@ The Agent-Native JSON format is a structured JSON-LD schema designed for LLM re-
   "trends": [
     {"topic": "Biomarker discovery", "direction": "accelerating", "evidence": "3 new studies this week"}
   ],
+  "product_analysis": {
+    "implications": ["Biomarker A panel could enter clinical validation within 12 months"],
+    "risks": ["Small cohort (n=450) limits statistical power"],
+    "action_required": ["Track follow-up validation trial", "Monitor competitor assay filings"],
+    "key_metrics": [{"metric": "Sensitivity", "value": "89%", "source": "Study table 3"}]
+  },
   "metadata": {
     "entry_count": 15,
     "total_tokens": 4500,
@@ -126,6 +142,7 @@ The Agent-Native JSON format is a structured JSON-LD schema designed for LLM re-
 - `quality_gates` array tells agent what checks were passed
 - `@context` enables JSON-LD consumption by semantic web tools
 - Format is generated by the LLM renderer (not Jinja2) — the LLM receives the digest context and outputs structured JSON-LD
+- `product_analysis` (optional) carries the per-product synthesis fields — `implications`, `risks`, `action_required`, `key_metrics` — index-aligned with `key_findings` when generated for a differentiated product template (premium-briefing / enterprise-briefing / magazine-digest); absent for standard digest/report renders. The JSON-LD schema in `docs/schemas/knowledge-digest-v1.json` was extended with these optional fields.
 
 **Usage**: `generate_digest(domain, period, format="agent")` returns the agent-native JSON. The MCP tool serializes the LLM output into the structured schema. Agent uses this for: re-synthesis into own knowledge base, cross-domain analysis, caching for offline access, or direct presentation to end user.
 
@@ -134,8 +151,8 @@ The Agent-Native JSON format is a structured JSON-LD schema designed for LLM re-
 | Tool | Parameters | Returns |
 |------|-----------|---------|
 | `list_output_templates(domain)` | domain | List of available template names with description |
-| `generate_digest(domain, period, topic, template, format, template_vars)` | Required: domain. Optional: all others. | Rendered product in requested format |
-| `generate_report(domain, topic, template, format, template_vars)` | Same pattern | Rendered report |
+| `generate_digest(domain, period, topic, template, format, template_vars, product)` | Required: domain. Optional: all others. `product` selects a differentiated digest-path product template (e.g. `magazine-digest`). | Rendered product in requested format |
+| `generate_report(domain, topic, template, format, template_vars, product)` | Same pattern. `product="premium-briefing"` / `"enterprise-briefing"` select the differentiated briefing templates (guard-first resolution). | Rendered report |
 | `generate_tutorial(domain, topic, template, format, template_vars)` | Same pattern | Rendered tutorial |
 | `generate_presentation(domain, topic, template, template_vars)` | Same pattern | HTML presentation |
 | `localize_content(content, source_language, target_language)` | content + language params | Translated content |

@@ -14,9 +14,11 @@ Covers:
 
 from __future__ import annotations
 
+import json
 import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
 import pytest
 import yaml
@@ -654,3 +656,268 @@ class TestSearchTierSoftBoost:
         ids = [e["entry_id"] for e in result_all["entries"]]
         assert ids.index("fresh-draft-1") < ids.index("stale-wiki-1")
         assert isinstance(result["total_count"], int)
+
+
+# ===================================================================
+# Custom-fields faceted filter (output-quality-mega, todo 25)
+# ===================================================================
+
+
+class TestSearchCustomFieldsFilter:
+    """Faceted filtering on the ``custom_fields`` JSON column.
+
+    Todo 24 (output-quality-mega) persists per-product analysis fields
+    (``{"product_analysis": {"implications", "risks", "action_required",
+    "key_metrics"}}``) onto KB entries via ``update_entry_metadata``.
+    A downstream agent must be able to find those entries with the
+    EXISTING ``search_knowledge_base`` tool — via the new
+    ``filter_custom_fields`` faceted filter key.
+
+    Semantics: each key is a dot-path into ``custom_fields``; an
+    empty-string value matches entries where the field exists and is
+    non-empty; any other value matches entries where the field's JSON
+    value equals that text.  Default search (no filter) is unchanged.
+    """
+
+    @pytest.fixture
+    def store(self, tmp_path: Path) -> KBStore:
+        return KBStore(base_path=tmp_path / "knowledge")
+
+    @staticmethod
+    def _entry(
+        entry_id: str,
+        title: str,
+        product_analysis: dict[str, Any] | None,
+    ) -> KBEntry:
+        custom_fields: dict[str, Any] = {}
+        if product_analysis is not None:
+            custom_fields["product_analysis"] = product_analysis
+        return KBEntry(
+            entry_id=entry_id,
+            title=title,
+            domain="medical-research",
+            tier="01-Raw",
+            source_url=f"https://example.com/{entry_id}",
+            source_type="api",
+            source_platform="pubmed",
+            collected_at="2026-07-15T10:00:00Z",
+            summary=f"{title} — IVF embryo selection content.",
+            tags=["IVF", "embryo"],
+            quality_tier=1,
+            relevance_score=90.0,
+            dedup_status="unique",
+            file_path="",
+            custom_fields=custom_fields,
+        )
+
+    @staticmethod
+    def _seed(
+        store: KBStore, entries: list[KBEntry]
+    ) -> None:
+        for entry in entries:
+            store.index.index_entry(entry)
+            store.index.index_entry_fts5(entry, content=entry.summary)
+
+    def _seed_mixed(self, store: KBStore) -> list[str]:
+        """Two entries with action_required, one without."""
+        entries = [
+            self._entry(
+                "pa-001",
+                "Time-lapse imaging improves IVF outcomes",
+                {
+                    "implications": ["Clinics should evaluate adoption."],
+                    "action_required": ["Fund prospective validation trials."],
+                },
+            ),
+            self._entry(
+                "pa-002",
+                "AI embryo selection systematic review",
+                {
+                    "risks": [
+                        {
+                            "title": "Validation lag",
+                            "likelihood": "high",
+                            "impact": "medium",
+                            "mitigation": "Run prospective trials.",
+                        }
+                    ],
+                    "action_required": ["Run prospective AI validation trials."],
+                },
+            ),
+            self._entry("pa-003", "LLM market trends", None),
+        ]
+        self._seed(store, entries)
+        return ["pa-001", "pa-002"]
+
+    def test_presence_filter_returns_subset(
+        self, store: KBStore
+    ) -> None:
+        expected = self._seed_mixed(store)
+
+        result = store.search_knowledge_base(
+            "IVF",
+            filter_custom_fields={"product_analysis.action_required": ""},
+        )
+        assert result["total_count"] == 2
+        ids = {e["entry_id"] for e in result["entries"]}
+        assert ids == set(expected)
+
+    def test_presence_filter_ignores_field_without_value(
+        self, store: KBStore
+    ) -> None:
+        """A field persisted as an empty container is treated as absent."""
+        self._seed(
+            store,
+            [
+                self._entry(
+                    "pa-empty",
+                    "IVF with empty action list",
+                    {"action_required": []},
+                ),
+                self._entry(
+                    "pa-full",
+                    "IVF with actions",
+                    {"action_required": ["Fund a trial."]},
+                ),
+            ],
+        )
+
+        result = store.search_knowledge_base(
+            "IVF",
+            filter_custom_fields={"product_analysis.action_required": ""},
+        )
+        assert result["total_count"] == 1
+        assert result["entries"][0]["entry_id"] == "pa-full"
+
+    def test_value_filter_exact_match(
+        self, store: KBStore
+    ) -> None:
+        self._seed_mixed(store)
+        exact = '["Fund prospective validation trials."]'
+
+        result = store.search_knowledge_base(
+            "IVF",
+            filter_custom_fields={"product_analysis.action_required": exact},
+        )
+        assert result["total_count"] == 1
+        assert result["entries"][0]["entry_id"] == "pa-001"
+
+        no_match = store.search_knowledge_base(
+            "IVF",
+            filter_custom_fields={
+                "product_analysis.action_required": '["No such action."]'
+            },
+        )
+        assert no_match["total_count"] == 0
+
+    def test_default_search_unchanged(self, store: KBStore) -> None:
+        self._seed_mixed(store)
+
+        plain = store.search_knowledge_base("IVF")
+        assert plain["total_count"] == 3
+
+        filtered = store.search_knowledge_base(
+            "IVF",
+            filter_custom_fields={"product_analysis.key_metrics": ""},
+        )
+        assert filtered["total_count"] == 0
+
+    def test_fts5_fallback_like_path_applies_filter(
+        self, store: KBStore
+    ) -> None:
+        """The LIKE fallback path applies the same custom-fields filter."""
+        # "NOT" is an FTS5 keyword — MATCH 'not' raises OperationalError,
+        # so search falls back to the LIKE path; "notes" contains "not".
+        self._seed(
+            store,
+            [
+                self._entry(
+                    "pa-like-1",
+                    "Clinical notes on IVF outcomes",
+                    {"action_required": ["Fund a trial."]},
+                ),
+                self._entry(
+                    "pa-like-2",
+                    "Notes on embryo transfer",
+                    None,
+                ),
+            ],
+        )
+
+        unfiltered = store.search_knowledge_base("NOT")
+        assert unfiltered["method"] == "like"
+        assert unfiltered["total_count"] == 2
+
+        result = store.search_knowledge_base(
+            "NOT",
+            filter_custom_fields={"product_analysis.action_required": ""},
+        )
+        assert result["method"] == "like"
+        assert result["total_count"] == 1
+        assert result["entries"][0]["entry_id"] == "pa-like-1"
+
+    def test_invalid_path_rejected(self, store: KBStore) -> None:
+        self._seed_mixed(store)
+        with pytest.raises(ValueError, match="filter_custom_fields"):
+            store.search_knowledge_base(
+                "IVF",
+                filter_custom_fields={
+                    'product_analysis.action_required"; DROP TABLE entries --': ""
+                },
+            )
+
+    def test_filter_via_update_entry_metadata_path(
+        self, store: KBStore
+    ) -> None:
+        """Todo-24 persistence path: update_entry_metadata then faceted search."""
+        self._seed(
+            store,
+            [
+                self._entry("pa-raw-1", "IVF raw entry", None),
+                self._entry("pa-raw-2", "IVF raw entry two", None),
+            ],
+        )
+        # The todo-24 shape: {"product_analysis": {...}} merged into
+        # custom_fields by KBStore.update_entry_metadata.
+        assert store.update_entry_metadata(
+            "pa-raw-1",
+            {"product_analysis": {"action_required": ["Fund prospective trials."]}},
+        )
+        assert not store.update_entry_metadata(
+            "no-such-entry",
+            {"product_analysis": {"action_required": ["x"]}},
+        )
+
+        meta = store.get_entry("pa-raw-1")
+        assert meta is not None
+        cf = json.loads(meta["custom_fields"])
+        assert cf["product_analysis"]["action_required"] == [
+            "Fund prospective trials."
+        ]
+
+        result = store.search_knowledge_base(
+            "IVF",
+            filter_custom_fields={"product_analysis.action_required": ""},
+        )
+        assert result["total_count"] == 1
+        assert result["entries"][0]["entry_id"] == "pa-raw-1"
+
+    def test_index_level_presence_filter(
+        self, tmp_path: Path
+    ) -> None:
+        """Low-level SQLiteIndex filter (used by the LIKE path)."""
+        index = SQLiteIndex(tmp_path / "idx.db")
+        index.init_db()
+        entries = [
+            self._entry("idx-1", "IVF article one", {"action_required": ["A"]}),
+            self._entry("idx-2", "IVF article two", None),
+        ]
+        for entry in entries:
+            index.index_entry(entry)
+            index.index_entry_fts5(entry, content=entry.summary)
+
+        result = index.search_fts5(
+            "IVF", filter_custom_fields={"product_analysis.action_required": ""}
+        )
+        assert result["total_count"] == 1
+        assert result["entries"][0]["entry_id"] == "idx-1"

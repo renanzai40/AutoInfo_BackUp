@@ -3,6 +3,7 @@
 > AutoInfo v1.9 (Unreleased, 2026-08-05) vs 综合报告-资讯付费与AI触达研究.md  
 > Mapping: Report Dimension → Code Coverage → Validation Plan Coverage → Gap  
 > 2026-08-05 更新（第 11 次，M0-M7 全波次文档结算）：**3 个新 source types（26→29：`akshare`/`sec_edgar`/`edx_sitemap`，M2T18-21 专有 handler 落地）+ 4 个新 demo 域（9→13：general-news/gaming/b2b/retail，M3T24）+ 音乐源并入 online-video（M3T25，D10 走 Apple 无 key RSS）+ B24 付费专栏 `report_type="column"`（M5T40，premium + G15 门控）+ D11 杂志摘要 `magazine-digest` 产品模板（M5T41，templates 6→8）+ A6/A7 env-gated 验证场景（M7T52，`sources-a6-keyed` FRED/Finnhub + `sources-gap-closure` 覆盖新类型，scenarios 44→47）+ **万方 OUTCOME A（M3T31）：静态头 X-Ca-AppKey/APPCODE 可鉴权，但元数据端点为 POST-only，`http_api` 当前 GET-only → 配置源已合并 online-education（文档化+待 POST 传输扩展，不当作已实现）**。16 项 item 行按计划更新（A7→⚠️ akshare+cninfo+wind-gated、A19→⚠️ 知乎日报+得到+wechat2rss、A20→⚠️ bluesky+mastodon、A26→⚠️ ncpssd+万方[POST-blocked]或文档化、A27→⚠️ coursera+edx、D13→⚠️ sec_edgar+新闻稿组合、A6→⚠️ env-gated 待 key、A22→⚠️ medium、A25→✅ crossref 已存在验证完成、B24→⚠️ column premium、D10→⚠️ apple rss、D11→⚠️ magazine digest、D12/D14/D15/D16→⚠️ 新域；C6 维持）；**覆盖率从 item 表全量重算**（双向覆盖口径统一为 Code 与 Plan 双非 ❌，与 C/E 维既有口径一致）：Code 83→89/99（84%→**90%**）、Validation 83→89（84%→**90%**）、双向 73→86（74%→**87%**，D 维双向按"有对应 Demo 域"口径 9→13）；完全未覆盖 10/99（A28/B21/B22/B25/C9/C10/C12/C13/E13/E15）。
+> 2026-08-11 更新（第 12 次，output-quality-mega）：**2 个简报产品模板差异化渲染** — premium-briefing（premium 档）+ enterprise-briefing（enterprise 档）不再回退默认 report 布局，走各自模板族（`data/templates/{premium-briefing,enterprise-briefing}.md.j2`，`_resolve_report_product_type`）；magazine-digest 改经 `generate_digest` digest 路径（`_resolve_digest_product_type` + `_normalize_digest_product_context`，上下文扁平化为 §2.1 flat keys）。**按产品 LLM 合成字段**（`implications`/`risks`/`action_required` 与 key_findings 1:1 对齐，enterprise-briefing 另含 `key_metrics`）仅在产品路径 agent JSON-LD 输出，默认 digest/report agent 输出不变（round-trip 契约）。**产品选择暴露于 MCP（generate_report/generate_digest `product` 参数）+ CLI（`--product`）**。**KB 侧闭环**：产品分析元数据持久化至 KB entry `custom_fields["product_analysis"]`（`update_entry_metadata`），`search_knowledge_base` 新增 `filter_custom_fields` 分面过滤（点路径如 `product_analysis.action_required`，无新工具、无新存储）——agent 格式输出可查询/可过滤（E5 强化）。**内容深度**：`fetch_depth` 贯穿源分发 + unpaywall/RSS/YouTube/GDELT 全文抓取（A11/A15/A18/A25 强化）。**验证**：2 个新场景 — `output-agent-interaction`（端到端 generate → 过滤 action_required → query_collected 带引用）+ `regression-product-routing`（产品路由回归），scenarios 65→**67**（61 functional + 6 regression）。B1/B3/E5/A11/A15/A18/A25 行 Code 列补充说明，**无 item 行状态翻转**，覆盖率维持 Code 90% / Validation 90% / 双向 87%。
 > 2026-08-04 更新（第 10 次）：**B23 电子书/音频书输出实现落地（用户指定要做）** — 新增 `src/autoinfo/output/ebook.py`（404 行）：`render_epub`（ebooklib EPUB3，markdown→xhtml `output_format="xhtml"` 保证 XML 合法 + `set_language(lang)` 支持中文，TOC/spine/NCX/Nav/封面/DC 元数据）、`render_mobi`（calibre `ebook-convert --mobi-file-type=both` 含 KF8 承载中文，300s 超时 + 缺 calibre 明确报错）、`render_audiobook`（复用 `_render_audio` 分章 TTS → 章节 MP3 + ZIP bundle + mutagen ID3v2.3 CHAP/CTOC 章节化单 MP3，mutagen 缺失或打标失败自动降级纯拼接）。接入 `generate_digest`/`generate_report`（format="epub"/"audiobook"，章节从 digest context/report sections 结构拆分）+ `export_kb`（format="epub"/"mobi" 写 exports/，镜像 `_export_pdf` 结果结构）+ MCP server 3 处 tool enum/描述 + 3 处 base64 返回分支（epub→`application/epub+zip`、audiobook→`audio/mpeg`）。`pyproject.toml` 新增 `[ebook]` extra（ebooklib>=0.20 + mutagen>=1.47，all 包含）。测试 `tests/output/test_output_ebook.py` 7 个全过（roundtrip/CJK/lxml well-formed/空输入/空章节体回归/audiobook 降级/mobi 缺 calibre 报错）。B23 行由 ❌ 升 ✅，**P2 可工程化缺口 3→2**（余 A28 TikTok、E15 A2A），总覆盖率 83%→**84%**（83/99）。
 > 2026-08-04 更新（第 9 次）：**绕过路径调研（2026-08-04 librarian 实证，全部活体核实）** — P3 六项均获替代路径：**A7** Wind Alice 个人版（2026-03 发布，每日赠 1000 积分，官方 MCP `wind-skills`）+ AKShare + cninfo 公告 → EOD/基本面级可覆盖（tick/终端级仍无解）；**A19** 知乎日报官方 JSON API（`news-at.zhihu.com/api/4/news/latest` 实测活体无需鉴权）+ RSSHub `/dedao/*`（零配置）+ wewe-rss/wechat2rss（微信读书系，wechat2rss 后端实测活体）→ 三个平台均可覆盖；**A20** Bluesky Jetstream（免费实时 firehose）+ Mastodon 替代 X，微博 RSSHub cookie 路由、抖音开放平台 hotsearch 限时免费 → 部分覆盖（小红书仍无解）；**A26** NSSD 已迁移合并至 ncpssd.cn（免费 2500 万条 + 期刊优先发布）+ 万方开放平台官方 API（X-Ca-AppKey/APPCODE）+ 维普 OA 平台（oa.cqvip.com 实测活体）→ 社科期刊可覆盖（知网国内全文仍无解）；**A27** Coursera 公开目录 API（`api.coursera.org/api/courses.v1` 实测活体 23,348 门课免 key）+ edX sitemap 爬取（官方 Catalog API 仍 beta 审批制）→ 可覆盖；**D13** LinkedIn 原生无合法路径 → 以 SEC EDGAR + BusinessWire/PRNewswire RSS + 公司 newsroom RSS 组合替代公司级情报。**B23 用户指定要做**：实现方案就绪（ebooklib EPUB3 + calibre `ebook-convert` MOBI + `_render_audio` 分章 TTS 音频书）。10 项 ⚠️ 部分覆盖全部给出补齐路径（A6 注册 FRED+Finnhub 免费 key 即完成、D12/D14/D15/D16 用现有 collector 自建 demo 域、B24 复用 report_type 模板、D10 走 Apple 无 key RSS 避开 Spotify 2026-02 收紧等），详见 H 节与 ④ 节。
 > 2026-08-04 更新（第 8 次）：**全量场景核对（报告 §4/§3.1/§5.1/§2.1/§6.5/§8.3/§9）** — 报告 §4 平台清单 **48/48 全覆盖**（§4.1 学术 12 平台 → A1/A2/A3/A23/A25/A26；§4.2 财经 10 平台 → A6/A7/A8；§4.3 新闻 8 平台 → A9/A10/A18；§4.4 知识付费 6 平台 → A19/A22；§4.5 社交/UGC 8 平台 → A14/A15/A17/A20/A28；§4.6 播客 4 平台 → A16/A29），§5.1 十三渠道 + C14 全覆盖，§2.1 十五领域 + 零售 D16 全覆盖，§6.5 七类 AI 使用场景全部映射（追问/新闻/摘要→E5，可信度→E9，跨源→B8，翻译→B20，简化→E14），§8.3 六种商业模式（订阅→E2，单篇→E12，API 许可→E11，终端 SaaS→E3/E2，AI 训练授权→E10，RaaS→E13 明确不做），§9 协议生态（MCP→E1，A2A→E15 未实现）。§10.2 建议表 4 个顾问性平台名（雪球→A6/A8 零售金融类目、Kimi→C4、字节扣子/腾讯元器→C8）为推荐提及非独立场景，按类目覆盖。核对方式：`grep` 全平台名 × 矩阵行逐一比对 + 人工复核。
@@ -29,21 +30,21 @@
 | A8 | **财经/零售数据** | Quandl, Yahoo Finance | ✅ QuandlHandler + YahooFinanceHandler | ✅ Part 1 Q2b.13-17 | ✅ |
 | A9 | **新闻（企业级）** | Reuters Connect, AP | ✅ APHandler + ReutersMCPHandler | ✅ Part 1 Q2b.18-23 | ✅ |
 | A10 | **新闻（免费 API）** | NYT API | ✅ NYTHandler | ✅ Part 1 Q2b.24-26 | ✅ |
-| A11 | **商业新闻 RSS** | TechCrunch, Crunchbase | ✅ ai-commercial 域 | ✅ Part 1 Q2 | ✅ |
+| A11 | **商业新闻 RSS** | TechCrunch, Crunchbase | ✅ ai-commercial 域（RSS 全文 `fetch_depth`，2026-08-11） | ✅ Part 1 Q2 | ✅ |
 | A12 | **中文科技** | 36氪 | ✅ 36kr（RSS 域内源） | ✅ Part 1 Q2b.27 | ✅ |
 | A13 | **开发者社区** | GitHub Trending, HackerNews | ✅ HackerNewsHandler（Firebase API，2026-08-04 专有 handler）+ GitHub Trending（RSS） | ✅ Part 1 Q2 | ✅ |
 | A14 | **社交讨论** | Reddit | ✅ RedditHandler | ✅ Part 1 Q2b.28-30 | ✅ |
-| A15 | **视频元数据** | YouTube | ✅ YouTubeHandler | ✅ Part 1 Q2b.31-33 | ✅ |
+| A15 | **视频元数据** | YouTube | ✅ YouTubeHandler（全文 `fetch_depth`，2026-08-11） | ✅ Part 1 Q2b.31-33 | ✅ |
 | A16 | **播客元数据** | Spotify, Apple Podcasts | ✅ SpotifyHandler + ApplePodcastsHandler | ✅ Part 1 Q2b.34-39 | ✅ |
 | A17 | **中文视频** | B站 | ✅ BilibiliHandler | ✅ Part 1 Q2b.40-42 | ✅ |
-| A18 | **付费新闻/通讯社** | WSJ, FT, 财新, 新华社, 人民日报 | ✅ GDELTHandler（GDELT 免费，无 key，3 个月窗口）+ Google News RSS | ✅ Part 1 Q2b.45（GDELT E2E） | ✅ |
+| A18 | **付费新闻/通讯社** | WSJ, FT, 财新, 新华社, 人民日报 | ✅ GDELTHandler（GDELT 免费，无 key，3 个月窗口；全文 `fetch_depth`，2026-08-11）+ Google News RSS | ✅ Part 1 Q2b.45（GDELT E2E） | ✅ |
 | A19 | **中文知识平台** | 知乎, 得到, 微信公众号 | ⚠️ 知乎日报 JSON API（免鉴权）+ RSSHub `/dedao/*` + wewe-rss/wechat2rss 文档化路径（zhihu-daily/wechat2rss 已合入 general-news、得到已合入 online-education）；知乎热榜/公众号全量仍无解 | ⚠️ 文档化（源配置已合入，无独立场景） | ⚠️（知乎日报+得到+wechat2rss） |
 | A20 | **社交/微博** | X/Twitter, 微博, 抖音, 小红书 | ⚠️ Bluesky（`json_path: "posts"`）+ Mastodon（`json_path: "$"` 根数组，M2T22）general-news 域源；微博/抖音 RSSHub cookie 路由文档化；小红书 ❌ | ⚠️ http_api `"$"` 扩展测试（41 passed）+ 源配置合入 | ⚠️（bluesky+mastodon；微博/抖音文档化） |
 | A21 | **通用爬虫** | 任意 Web 页面 | ✅ Web + Playwright | ✅ Part 1 Q2 | ✅ |
 | A22 | **创作者订阅平台** | Substack, Patreon, Medium | ⚠️ Substack 经通用 RSS（tech-ai-developer 域）；Medium RSS（`medium.com/feed/@user` 文档化）；Patreon ❌ 无通用 RSS | ⚠️ Part 1 Q6b.2（Substack RSS） | ⚠️（medium） |
 | A23 | **社科/法律工作论文** | SSRN | ✅ SSRNHandler（RSS 接入，同 Substack 模式） | ✅ Part 1 Q2b.44（SSRN E2E） | ✅ |
 | A24 | **开源数据集** | Hugging Face, Kaggle | ✅ HuggingFaceHandler（HF datasets-server 公开 API + Kaggle API） | ✅ Part 1 Q2b.49（HF/Kaggle E2E，46 mock tests） | ✅ |
-| A25 | **学术付费数据库** | Elsevier/Scopus, Springer Nature, IEEE Xplore | ✅ UnpaywallHandler + COREHandler（OA 全文子集，非机构付费全文）+ Crossref REST（`api.crossref.org/works` 元数据发现） | ✅ Part 1 Q2b.46/Q2b.47（Unpaywall/CORE OA E2E）+ Crossref 源已存在于 medical-research（验证完成） | ✅（crossref 已存在验证完成；机构付费全文仍为许可上限） |
+| A25 | **学术付费数据库** | Elsevier/Scopus, Springer Nature, IEEE Xplore | ✅ UnpaywallHandler + COREHandler（OA 全文子集，非机构付费全文；Unpaywall 全文 `fetch_depth`，2026-08-11）+ Crossref REST（`api.crossref.org/works` 元数据发现） | ✅ Part 1 Q2b.46/Q2b.47（Unpaywall/CORE OA E2E）+ Crossref 源已存在于 medical-research（验证完成） | ✅（crossref 已存在验证完成；机构付费全文仍为许可上限） |
 | A26 | **中文期刊库** | 知网 CNKI, 万方, 维普 | ⚠️ ncpssd.cn 文档化（RSSHub `/ncpssd/newlist`）+ 万方开放平台源已合并 online-education（OUTCOME A：静态头可鉴权，**POST-only 端点待 http_api POST 传输扩展**，文档化不当作已实现）+ 维普 OA oa.cqvip.com 文档化；知网国内 ❌ | ⚠️ 源配置合入 + 万方鉴权实证（M3T31）；POST 传输未实现故不标 ✅ | ⚠️（ncpssd+万方[POST-blocked]或文档化） |
 | A27 | **MOOC/在线学位** | Coursera, edX | ⚠️ `edx_sitemap` collector（M2T21，robots.txt 合规）+ Coursera 公开目录 API 源（online-education 域，`page_param: start` 分页）；edX 官方 Catalog API 仍 beta 审批制 | ⚠️ `sources-gap-closure` 覆盖 edx_sitemap 类型注册（M7T52）+ EdxSitemapHandler 12 tests | ⚠️（coursera+edx） |
 | A28 | **海外短视频** | TikTok | ❌ 未接入（Research API 需学术审核） | ❌ 未测试 | ❌ |
@@ -67,9 +68,9 @@
 
 | # | 产品形态 | 报告识别 | AutoInfo Code | Validation Plan | 覆盖状态 |
 |:-:|---------|:--------:|:-------------:|:---------------:|:--------:|
-| B1 | **文本文摘（Digest）** | 日报/早报 | ✅ generate_digest | ⚠️ Part 9 (需 LLM) | ✅ |
+| B1 | **文本文摘（Digest）** | 日报/早报 | ✅ generate_digest（`product` 参数 + premium-briefing/enterprise-briefing 模板差异化渲染 + 按产品 LLM 合成字段 implications/risks/action_required/key_metrics，2026-08-11） | ⚠️ Part 9 (需 LLM) | ✅ |
 | B2 | **研究报告（Research Report）** | 深度分析 | ✅ generate_report(researcher) | ✅ Part 2 Q9 | ✅ |
-| B3 | **执行摘要（Executive Summary）** | 决策层简报 | ✅ target_audience=executive | ✅ Part 2 Q9 | ✅ |
+| B3 | **执行摘要（Executive Summary）** | 决策层简报 | ✅ target_audience=executive + premium-briefing 产品模板（implications/risks/action_required 合成字段，2026-08-11） | ✅ Part 2 Q9 | ✅ |
 | B4 | **投资者简报（Investor Brief）** | 投资信号 | ✅ target_audience=investor | ✅ Part 2 Q9 | ✅ |
 | B5 | **教程/培训** | 知识教育 | ✅ generate_tutorial | ✅ Part 2 Q9 | ✅ |
 | B6 | **演示文稿** | 会议/汇报 | ✅ generate_presentation | ✅ Part 2 Q9 | ✅ |
@@ -182,7 +183,7 @@
 | E2 | **付费用户管理** | 订阅经济 $7,388 亿 | ✅ Stripe 集成 (878行, 51测试: 42 mock + 9 stripe-mock 集成) | ✅ Part 13 Q65e + TestStripeLifecycle 集成回归 (skipif 无 stripe-mock) | ✅ |
 | E3 | **用量追踪/计费** | Zuora SEI | ✅ CostMeter + ConsumptionEvent | ✅ Part 13 Q65h (cost E2E) | ✅ |
 | E4 | **多渠道分发** | 6+ 渠道 | ✅ 13 delivery adapters（含 push） | ✅ Part 13 Q63.17-63.19 | ✅ |
-| E5 | **RAG 输出** | Agent 检索的基础 | ✅ MCP KB search tools | ✅ Part 4 | ✅ |
+| E5 | **RAG 输出** | Agent 检索的基础 | ✅ MCP KB search tools（`filter_custom_fields` 分面过滤 `custom_fields["product_analysis"]` 元数据，2026-08-11） | ✅ Part 4 | ✅ |
 | E6 | **个性化推荐** | Perez 76% 用 Agent 购物 | ✅ `recommend_content` MCP 工具 | ✅ Part 04 36b.7/36b.8 | ✅ |
 | E7 | **定时任务/告警** | Cron 式触达 | ✅ cron scheduler | ✅ Part 9 Q54.5+Q55.10 (跨进程, 2026-08-02) | ✅ |
 | E8 | **Webhook/A2A 集成** | MCP+A2A 双轨 | ✅ webhook+delivery | ✅ Part 03 Q25.3-25.5 | ✅ |
@@ -282,6 +283,7 @@
 8. **新发现 gap**: #99 LLM response_format 空结果无保护, #100 多域 init 未复制全部 sources.yaml, #101 cron 假重复因测试残留, #102 lxml 未申明为直接依赖 — 已全部修复（v1.8.3），见下方 G 节
 9. **可行性判定（H 节）**：排除 6 项纯无解后分母为 **93**；零成本可覆盖 86/93（92%），加小额付费（Wind 个人版、微博/抖音）约 88/93（95%）；真 100% 卡在 **4 个死结**（X 涨价、小红书、LinkedIn 原生、公众号全量；Coursera 已于第 9 次调研解除）。**2026-08-05（第 11 次）**：替代路径落地后 P3 清空，无纯无解项；剩余死结均为原生/终端级内容上限（见 H4）
 10. **V1 实现清单（H 节）— 已完成 2026-08-02**：10 项生产实现全部落地（A23 SSRN / A24 HuggingFace-Kaggle / A25 Unpaywall-CORE OA 子集 / A18 GDELT / A29 中文播客 / E12 单篇支付 / E14 内容简化 / E11 RAW 变体 / E9 source_score / C11 播客 RSS），全部免费零成本，无外部依赖。验证补齐 5 项中 **B15 PDF ✅ 已完成**（weasyprint 超时配置化）、**E7 cron 跨进程 ✅ 已完成**（Part 9 Q54.5+Q55.10）、**E11 RAW 变体 ✅ 已完成**；**A6 FRED/Alpha Vantage ➖ SKIPPED**（场景已加 Part 1 Q2b.48，env-gated 待免费 key）、**C6 SMTP ➖ SKIPPED**（场景已加 Part 9 Q56a.4，env-gated 待 SMTP 凭证）——两项待凭证回归，不 FAIL。
+11. **2026-08-11（第 12 次，output-quality-mega）**：产品差异化渲染（premium-briefing/enterprise-briefing 模板族 + magazine-digest 改走 digest 路径）+ 按产品 LLM 合成字段（implications/risks/action_required/key_metrics）+ 产品选择暴露 MCP/CLI + KB 产品分析元数据闭环（`filter_custom_fields` 分面过滤）+ `fetch_depth` 全文深度（unpaywall/RSS/YouTube/GDELT）。均为既有 ✅ 行的强化，**无 item 行状态翻转**，覆盖率维持 Code 90% / Validation 90% / 双向 87%；验证场景 65→**67**（+`output-agent-interaction` 端到端 generate→过滤 action_required→query_collected、+`regression-product-routing` 路由回归）。
 
 ---
 

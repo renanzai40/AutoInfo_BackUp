@@ -411,6 +411,71 @@ class TestMcpHandler:
 
         assert "error_code" in result
 
+    @patch("autoinfo.mcp.server.logger")
+    def test_handler_digest_with_product_passes_registry_template(
+        self, mock_logger: MagicMock, kb_store_with_entries
+    ) -> None:
+        """Handler forwards the PRODUCT_TEMPLATES row for product to generate_digest."""
+        from autoinfo.output import PRODUCT_TEMPLATES
+        from autoinfo.mcp.server import _handle_generate_digest
+
+        _row = next(
+            r for r in PRODUCT_TEMPLATES if r["name"] == "magazine-digest"
+        )
+        with patch(
+            "autoinfo.output.generate_digest",
+            return_value="# Magazine Digest -- test\n\ncurated content",
+        ) as mock_generate:
+            result = _handle_generate_digest(
+                domain="medical-research",
+                period="weekly",
+                format="markdown",
+                product="magazine-digest",
+            )
+
+        assert result["success"] is True
+        assert "# Magazine Digest" in result["content"]
+        assert mock_generate.call_args.kwargs["product_template"] is _row["template"]
+
+    @patch("autoinfo.mcp.server.logger")
+    def test_handler_digest_unknown_product_returns_error_envelope(
+        self, mock_logger: MagicMock, kb_store_with_entries
+    ) -> None:
+        """Unknown product returns the canonical error envelope with valid names."""
+        from autoinfo.output import PRODUCT_TEMPLATES
+        from autoinfo.mcp.server import _handle_generate_digest
+
+        result = _handle_generate_digest(
+            domain="medical-research", product="no-such-product"
+        )
+
+        assert result["success"] is False
+        assert result["error"]["code"] == "ValidationError"
+        assert result["error"]["actionable"] is True
+        assert "no-such-product" in result["error"]["message"]
+        _valid = {r["name"] for r in PRODUCT_TEMPLATES}
+        for name in _valid:
+            assert name in result["error"]["message"]
+
+    @patch("autoinfo.mcp.server.logger")
+    def test_handler_digest_without_product_unchanged(
+        self, mock_logger: MagicMock, kb_store_with_entries
+    ) -> None:
+        """No product param -> generate_digest receives product_template=None."""
+        from autoinfo.mcp.server import _handle_generate_digest
+
+        with patch(
+            "autoinfo.output.generate_digest",
+            return_value="# Weekly Digest -- test\n\ncontent",
+        ) as mock_generate:
+            result = _handle_generate_digest(
+                domain="medical-research", period="weekly", format="markdown"
+            )
+
+        assert result["success"] is True
+        assert "# Weekly Digest" in result["content"]
+        assert mock_generate.call_args.kwargs["product_template"] is None
+
 
 # ---------------------------------------------------------------------------
 # Tests: CLI wiring
