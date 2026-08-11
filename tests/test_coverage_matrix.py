@@ -40,6 +40,15 @@ def spec() -> dict:
     return yaml.safe_load(SPEC.read_text(encoding="utf-8"))
 
 
+@pytest.fixture(scope="module")
+def demo_domain_sources(spec: dict) -> dict[str, set[str]]:
+    """Map every domain referenced by ``required_sources`` to its configured
+    source names, parsed from the demo domain ``sources.yaml`` files
+    (``src/autoinfo/data/domains/<domain>/sources.yaml``)."""
+    domains = sorted({r["domain"] for r in spec.get("required_sources", [])})
+    return {d: set(_demo_domain_source_names(d)) for d in domains}
+
+
 EMPTY_PRODUCED: frozenset = frozenset()
 
 
@@ -199,6 +208,56 @@ def test_spec_llm_gated_products_listed(spec):
     assert {"premium-briefing", "column", "magazine-digest", "enterprise-briefing",
             "tutorial", "presentation"} <= gated
     assert "digest" not in gated and "report" not in gated
+
+
+# ---------------------------------------------------------------------------
+# Config-layer completeness — required_sources vs demo domain sources.yaml
+# (issue #195): every ``required_sources`` entry must exist as a ``name:`` in
+# the domain's demo sources.yaml, so a SOURCE_COVERAGE gap can only be a
+# data-evidence gap (no live collection ran), never a config gap.
+# ---------------------------------------------------------------------------
+
+
+def _demo_domain_source_names(domain: str) -> list[str]:
+    """Return the configured source ``name``s of a demo domain.
+
+    Reads ``src/autoinfo/data/domains/<domain>/sources.yaml`` — the scaffold
+    that ``init`` / ``add_domain`` copy into the project config. The file has
+    a top-level ``sources:`` list; every item carries a ``name:`` key (some
+    names are quoted YAML strings, e.g. the multi-byte-dash Substack entry).
+    """
+    path = ROOT / "src" / "autoinfo" / "data" / "domains" / domain / "sources.yaml"
+    raw = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    return [s["name"] for s in raw.get("sources", []) if "name" in s]
+
+
+def test_required_sources_all_configured_in_demo_domains(spec, demo_domain_sources):
+    """Regression guard for issue #195: the config layer is complete.
+
+    Pins the invariant that every ``required_sources`` entry has a matching
+    ``name:`` in the domain's demo ``sources.yaml`` — a future config
+    regression (renamed/removed source) fails CI here. With the config layer
+    complete, the remaining SOURCE_COVERAGE gaps reported by the matrix are
+    data-evidence gaps (no live collection ran for those platforms), not
+    configuration gaps.
+    """
+    missing = [
+        (r["domain"], r["source"])
+        for r in spec.get("required_sources", [])
+        if r["source"] not in demo_domain_sources.get(r["domain"], set())
+    ]
+    assert not missing, (
+        "required_sources entries with no demo sources.yaml match: "
+        + ", ".join(f"{domain}/{source}" for domain, source in missing)
+    )
+
+
+def test_required_kb_tier_domains_have_demo_configs(spec, demo_domain_sources):
+    """KB-tier requirements only reference demo domains with configs — the
+    KB_TIER_COVERAGE gaps (02-Draft awaiting processing runs) are data-evidence
+    gaps, not missing domain configs."""
+    for req in spec.get("required_kb_tiers", []):
+        assert req["domain"] in demo_domain_sources
 
 
 # ---------------------------------------------------------------------------

@@ -840,6 +840,15 @@ llm_gated_products:
 
 # Required source coverage: the 2 configured demo domains must collect from
 # every configured source in that domain (medical-research: 7, tech-ai-dev: 8).
+#
+# Config-layer status (issue #195): the config layer is COMPLETE — every
+# required source below has a matching `name:` entry in the domain's
+# `src/autoinfo/data/domains/<domain>/sources.yaml`, pinned by
+# tests/test_coverage_matrix.py (test_required_sources_all_configured_in_demo_domains).
+# Any SOURCE_COVERAGE gap the matrix reports is therefore a DATA-EVIDENCE gap:
+# the platform is configured but no live collection run has produced raw data
+# for it yet. Closing a gap = run `collect` for that domain, then re-render the
+# matrix — no config change required.
 required_sources:
   - {domain: medical-research, source: pubmed}
   - {domain: medical-research, source: semantic-scholar}
@@ -857,6 +866,12 @@ required_sources:
 
 # Required KB-tier coverage: the data pipeline must reach each tier for
 # the configured demo domains.
+#
+# Data-evidence status (issue #195): both demo domains have configs (see
+# required_sources above). A KB_TIER_COVERAGE gap means the pipeline has not
+# yet produced entries for that tier in this checkout — e.g. 02-Draft needs a
+# processing run (01-Raw -> 02-Draft) for the domain. Closing a gap = run
+# `process` for that domain, then re-render the matrix.
 required_kb_tiers:
   - {domain: medical-research, tier: 01-Raw}
   - {domain: medical-research, tier: 02-Draft}
