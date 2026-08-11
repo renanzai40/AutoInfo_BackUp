@@ -3,6 +3,16 @@
 Provides ``run_doctor()`` used by ``autoinfo doctor`` to validate the
 runtime environment, configuration, LLM connectivity, and source
 reachability.
+
+Source reachability probes run concurrently and are time-bounded so a slow or
+unreachable source cannot stall the whole run (GitHub issue #193):
+
+* ``AUTOINFO_DOCTOR_SOURCE_TIMEOUT`` — per-probe budget in seconds
+  (default 5.0); a probe still running after this is reported as
+  ``probe timed out``.
+* ``AUTOINFO_DOCTOR_TOTAL_TIMEOUT`` — wall-clock budget in seconds for the
+  whole batch of probes (default 30.0); probes that never got their chance
+  are reported as ``skipped: total probe deadline exceeded``.
 """
 
 from __future__ import annotations
@@ -12,6 +22,7 @@ import os
 import sqlite3
 import sys
 import time
+from concurrent.futures import Future, ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
 
@@ -102,12 +113,13 @@ def run_doctor() -> dict[str, Any]:
     if config_path and not config_errors:
         try:
             cfg = load_config(config_path)
+            probes: list[tuple[str, str]] = []
             for domain in cfg.domains:
                 if not domain.active:
                     continue
                 for src in domain.sources:
-                    src_result = _check_source(src.url, src.name)
-                    sources_status.append(src_result)
+                    probes.append((src.url, src.name))
+            sources_status = _probe_sources(probes)
         except Exception:
             pass
 
@@ -136,6 +148,92 @@ def run_doctor() -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 _TIMEOUT_S = 10
+
+# Bounded source probing (GitHub issue #193): probes run concurrently with a
+# per-probe budget and an overall wall-clock budget so ``autoinfo doctor``
+# cannot be stalled by many unreachable sources.  Overridable via the
+# AUTOINFO_DOCTOR_SOURCE_TIMEOUT / AUTOINFO_DOCTOR_TOTAL_TIMEOUT env vars
+# (read inside _probe_sources so monkeypatch.setenv works in tests).
+_SOURCE_PROBE_TIMEOUT_S = 5.0
+_TOTAL_PROBE_TIMEOUT_S = 30.0
+_SOURCE_PROBE_WORKERS = 16
+
+
+def _probe_error(name: str, detail: str) -> dict[str, Any]:
+    """Per-source error entry with the canonical dict key shape."""
+    return {"name": name, "status": "error", "latency_ms": 0.0, "detail": detail}
+
+
+def _probe_sources(probes: list[tuple[str, str]]) -> list[dict[str, Any]]:
+    """Probe source URLs concurrently, bounded in time (GitHub issue #193).
+
+    Previously every active source was probed serially with a 10s connect
+    timeout each — ~70 sources could take minutes.  Probes now run in a
+    thread pool; the batch stops waiting once the total budget is exceeded
+    (draining non-blocking) and every source still yields exactly one entry
+    dict, in configuration order, so consumers always see all sources.
+
+    Timeouts are configured via env vars (see module docstring):
+    ``AUTOINFO_DOCTOR_SOURCE_TIMEOUT`` (per-probe, default 5.0s) and
+    ``AUTOINFO_DOCTOR_TOTAL_TIMEOUT`` (batch, default 30.0s).
+    """
+    if not probes:
+        return []
+
+    source_timeout = float(
+        os.environ.get("AUTOINFO_DOCTOR_SOURCE_TIMEOUT", str(_SOURCE_PROBE_TIMEOUT_S))
+    )
+    total_timeout = float(
+        os.environ.get("AUTOINFO_DOCTOR_TOTAL_TIMEOUT", str(_TOTAL_PROBE_TIMEOUT_S))
+    )
+
+    deadline = time.monotonic() + total_timeout
+    pool = ThreadPoolExecutor(max_workers=_SOURCE_PROBE_WORKERS)
+    pending: dict[Future[dict[str, Any]], tuple[str, int, float]] = {}
+    for idx, (url, name) in enumerate(probes):
+        submitted_at = time.monotonic()
+        pending[pool.submit(_check_source, url, name)] = (name, idx, submitted_at)
+
+    results: list[tuple[int, dict[str, Any]]] = []
+    try:
+        while pending and time.monotonic() < deadline:
+            try:
+                for fut in as_completed(pending, timeout=deadline - time.monotonic()):
+                    name, idx, _ = pending.pop(fut)
+                    results.append(_collect_probe(fut, name, idx))
+            except TimeoutError:
+                break  # total probe budget exhausted — stop waiting
+        # Non-blocking drain: probes that finished in the last instant yield
+        # their result; everything else gets a per-source entry so no source
+        # is dropped.  "probe timed out" vs "skipped" distinguishes a probe
+        # that consumed its own budget from one cut short by the total cap.
+        now = time.monotonic()
+        for fut, (name, idx, submitted_at) in pending.items():
+            try:
+                results.append((idx, fut.result(timeout=0)))
+            except TimeoutError:
+                detail = (
+                    "probe timed out"
+                    if now - submitted_at >= source_timeout
+                    else "skipped: total probe deadline exceeded"
+                )
+                results.append((idx, _probe_error(name, detail)))
+            except Exception as exc:
+                results.append((idx, _probe_error(name, str(exc))))
+    finally:
+        pool.shutdown(wait=False, cancel_futures=True)
+
+    results.sort(key=lambda item: item[0])
+    return [entry for _, entry in results]
+
+
+def _collect_probe(
+    fut: Future[dict[str, Any]], name: str, idx: int
+) -> tuple[int, dict[str, Any]]:
+    try:
+        return idx, fut.result(timeout=0)
+    except Exception as exc:
+        return idx, _probe_error(name, str(exc))
 
 
 def _check_source(url: str, name: str) -> dict[str, Any]:
