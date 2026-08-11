@@ -5,6 +5,10 @@
 # temp backup and the final step restores them, leaving _keywords.yaml
 # byte-identical to its pre-run state.  The restore step is a no-op when no
 # backup exists (backup step failed — nothing was mutated).
+# The approve/reject steps target preset keywords that are not guaranteed to
+# exist in the runtime store, so two kind: cli steps seed them (auto_added
+# state, source "scenario-seed") between the backup and the mutations;
+# the final restore reverts the additions.
 # suggest_keywords is LLM-required and covered by the llm-gated scenario.
 name: keyword-management
 description: "Keyword lifecycle: list, approve, reject (self-cleaning via backup/restore)"
@@ -36,6 +40,22 @@ steps:
     expect:
       success: true
       data_has: ["domain", "topic", "topics"]
+
+  - name: "seed keyword 'multicenter' before approve"
+    kind: cli
+    tool: _cli_cleanup
+    command: "python3 -c \"from autoinfo.keywords import KeywordsFile; e=KeywordsFile().add_keyword(domain='medical-research', keyword='multicenter', state='auto_added', source='scenario-seed'); print('SEEDED:multicenter')\""
+    expect:
+      exit_code: 0
+      stdout_has: ["SEEDED:multicenter"]
+
+  - name: "seed keyword 'time-lapse embryo imaging' before reject"
+    kind: cli
+    tool: _cli_cleanup
+    command: "python3 -c \"from autoinfo.keywords import KeywordsFile; e=KeywordsFile().add_keyword(domain='medical-research', keyword='time-lapse embryo imaging', state='auto_added', source='scenario-seed'); print('SEEDED:time-lapse embryo imaging')\""
+    expect:
+      exit_code: 0
+      stdout_has: ["SEEDED:time-lapse embryo imaging"]
 
   - name: "approve_keyword changes keyword to verified state"
     tool: approve_keyword

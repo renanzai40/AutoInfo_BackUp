@@ -138,6 +138,106 @@ class TestLoadScenarios:
 
 
 # ============================================================================
+# Unit tests: keyword-management scenario seeds (issue #194)
+# ============================================================================
+
+
+class TestKeywordManagementScenario:
+    """The packaged keyword-management scenario must seed its own keywords.
+
+    Regression for #194: the scenario approves ``multicenter`` and rejects
+    ``time-lapse embryo imaging``, but those keywords no longer exist in the
+    runtime keyword store.  Because approve/reject return ``None`` (and the
+    MCP layer surfaces ``KEYWORD_NOT_FOUND``) for unknown keywords, the
+    scenario must create both keywords via ``kind: cli`` seed steps that run
+    BEFORE the mutating MCP steps — while keeping the backup/restore
+    self-cleaning contract (backup first, restore last).
+    """
+
+    @pytest.fixture()
+    def scenario(self) -> dict[str, Any]:
+        matches = [sc for sc in load_scenarios() if sc["name"] == "keyword-management"]
+        assert len(matches) == 1, (
+            f"expected exactly one keyword-management scenario, got {len(matches)}"
+        )
+        return matches[0]
+
+    @staticmethod
+    def _seed_step_index(steps: list[dict[str, Any]], keyword: str) -> int:
+        """Index of the kind: cli step that seeds *keyword* via add_keyword."""
+        for i, step in enumerate(steps):
+            command = step.get("command", "")
+            if step.get("kind") == "cli" and "add_keyword" in command and keyword in command:
+                return i
+        raise AssertionError(f"no seed step calls add_keyword for {keyword!r}")
+
+    @staticmethod
+    def _mutate_step_index(
+        steps: list[dict[str, Any]], keyword: str, tool: str
+    ) -> int:
+        """Index of the mcp step that approves/rejects *keyword* via *tool*."""
+        for i, step in enumerate(steps):
+            if (
+                step.get("tool") == tool
+                and step.get("arguments", {}).get("keyword") == keyword
+            ):
+                return i
+        raise AssertionError(f"no {tool} step found for keyword {keyword!r}")
+
+    def test_seed_steps_precede_approve_reject(self, scenario: dict[str, Any]) -> None:
+        """Each keyword is seeded by a cli step before its mutate step."""
+        steps = scenario["steps"]
+        for keyword, tool in (
+            ("multicenter", "approve_keyword"),
+            ("time-lapse embryo imaging", "reject_keyword"),
+        ):
+            seed_i = self._seed_step_index(steps, keyword)
+            mutate_i = self._mutate_step_index(steps, keyword, tool)
+            assert seed_i < mutate_i, (
+                f"seed step for {keyword!r} (index {seed_i}) must run before "
+                f"{tool} step (index {mutate_i})"
+            )
+
+    def test_seed_steps_expect_success_marker(self, scenario: dict[str, Any]) -> None:
+        """Seed steps must pass (exit_code 0) and print a SEEDED marker."""
+        steps = scenario["steps"]
+        for keyword in ("multicenter", "time-lapse embryo imaging"):
+            step = steps[self._seed_step_index(steps, keyword)]
+            expect = step.get("expect", {})
+            assert expect.get("exit_code") == 0, (
+                f"seed step for {keyword!r} must expect exit_code 0, got {expect}"
+            )
+            markers = expect.get("stdout_has", [])
+            assert any("SEEDED" in m and keyword in m for m in markers), (
+                f"seed step for {keyword!r} must expect a 'SEEDED:{keyword}' "
+                f"stdout marker, got {markers}"
+            )
+
+    def test_self_cleaning_order(self, scenario: dict[str, Any]) -> None:
+        """Backup runs first, seeds in between, restore runs last."""
+        steps = scenario["steps"]
+        backup_i = next(
+            i
+            for i, step in enumerate(steps)
+            if step.get("kind") == "cli" and "copyfile" in step.get("command", "")
+        )
+        restore_i = next(
+            i
+            for i, step in enumerate(steps)
+            if step.get("kind") == "cli" and "KEYWORDS_RESTORED" in step.get("command", "")
+        )
+        assert restore_i == len(steps) - 1, (
+            f"restore step (index {restore_i}) must be last of {len(steps)} steps"
+        )
+        for keyword in ("multicenter", "time-lapse embryo imaging"):
+            seed_i = self._seed_step_index(steps, keyword)
+            assert backup_i < seed_i < restore_i, (
+                f"seed step for {keyword!r} (index {seed_i}) must run after "
+                f"backup (index {backup_i}) and before restore (index {restore_i})"
+            )
+
+
+# ============================================================================
 # Unit tests: list_scenarios
 # ============================================================================
 
