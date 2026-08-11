@@ -25,7 +25,10 @@ from autoinfo.output import (
     generate_tutorial,
 )
 
-DOMAINS = ["medical-research", "tech-ai-developer"]
+DOMAINS = ["medical-research", "ai-commercial", "financial-intelligence",
+           "tech-ai-developer", "language-learning", "online-video",
+           "financial-news", "online-education", "legal-compliance",
+           "general-news", "gaming", "b2b", "retail"]
 PRODUCTS = ["digest", "report", "tutorial", "presentation",
             "premium-briefing", "column", "magazine-digest", "enterprise-briefing"]
 FORMATS = ["markdown", "html", "json", "agent", "audio", "epub", "audiobook"]
@@ -106,12 +109,17 @@ def gen_one(domain: str, product: str, fmt: str) -> tuple[bool, str]:
 async def main() -> None:
     dry = "--dry-run" in sys.argv
     cells = [(d, p, f) for d in DOMAINS for p in PRODUCTS for f in FORMATS]
-    # Only required cells
+    # Only required cells; not-implemented capability cells are design
+    # boundaries (never generated — they render as not-applicable).
     import yaml
     spec = yaml.safe_load(
         (Path(__file__).resolve().parent.parent / "docs/dev/specs/end-user-matrix.yaml").read_text()
     )
-    required = {(c["domain"], c["product"], c["format"]) for c in spec["required_cells"]}
+    required = {
+        (c["domain"], c["product"], c["format"])
+        for c in spec["required_cells"]
+        if c.get("capability") == "implemented"
+    }
     todo = [c for c in cells if c in required and not cell_evidence(*c)]
     print(f"required={len(required)} todo={len(todo)} (already produced={len(required)-len(todo)})")
     if dry:

@@ -136,7 +136,7 @@ required_cells:
   - {domain: medical-research, product: premium-briefing, format: epub, capability: not-implemented}
   - {domain: medical-research, product: premium-briefing, format: audiobook, capability: not-implemented}
   - {domain: medical-research, product: column, format: markdown, capability: implemented}
-  - {domain: medical-research, product: column, format: html, capability: implemented}
+  - {domain: medical-research, product: column, format: html, capability: not-implemented}
   - {domain: medical-research, product: column, format: json, capability: not-implemented}
   - {domain: medical-research, product: column, format: agent, capability: not-implemented}
   - {domain: medical-research, product: column, format: audio, capability: not-implemented}
@@ -192,7 +192,7 @@ required_cells:
   - {domain: ai-commercial, product: premium-briefing, format: epub, capability: not-implemented}
   - {domain: ai-commercial, product: premium-briefing, format: audiobook, capability: not-implemented}
   - {domain: ai-commercial, product: column, format: markdown, capability: implemented}
-  - {domain: ai-commercial, product: column, format: html, capability: implemented}
+  - {domain: ai-commercial, product: column, format: html, capability: not-implemented}
   - {domain: ai-commercial, product: column, format: json, capability: not-implemented}
   - {domain: ai-commercial, product: column, format: agent, capability: not-implemented}
   - {domain: ai-commercial, product: column, format: audio, capability: not-implemented}
@@ -248,7 +248,7 @@ required_cells:
   - {domain: financial-intelligence, product: premium-briefing, format: epub, capability: not-implemented}
   - {domain: financial-intelligence, product: premium-briefing, format: audiobook, capability: not-implemented}
   - {domain: financial-intelligence, product: column, format: markdown, capability: implemented}
-  - {domain: financial-intelligence, product: column, format: html, capability: implemented}
+  - {domain: financial-intelligence, product: column, format: html, capability: not-implemented}
   - {domain: financial-intelligence, product: column, format: json, capability: not-implemented}
   - {domain: financial-intelligence, product: column, format: agent, capability: not-implemented}
   - {domain: financial-intelligence, product: column, format: audio, capability: not-implemented}
@@ -304,7 +304,7 @@ required_cells:
   - {domain: tech-ai-developer, product: premium-briefing, format: epub, capability: not-implemented}
   - {domain: tech-ai-developer, product: premium-briefing, format: audiobook, capability: not-implemented}
   - {domain: tech-ai-developer, product: column, format: markdown, capability: implemented}
-  - {domain: tech-ai-developer, product: column, format: html, capability: implemented}
+  - {domain: tech-ai-developer, product: column, format: html, capability: not-implemented}
   - {domain: tech-ai-developer, product: column, format: json, capability: not-implemented}
   - {domain: tech-ai-developer, product: column, format: agent, capability: not-implemented}
   - {domain: tech-ai-developer, product: column, format: audio, capability: not-implemented}
@@ -360,7 +360,7 @@ required_cells:
   - {domain: language-learning, product: premium-briefing, format: epub, capability: not-implemented}
   - {domain: language-learning, product: premium-briefing, format: audiobook, capability: not-implemented}
   - {domain: language-learning, product: column, format: markdown, capability: implemented}
-  - {domain: language-learning, product: column, format: html, capability: implemented}
+  - {domain: language-learning, product: column, format: html, capability: not-implemented}
   - {domain: language-learning, product: column, format: json, capability: not-implemented}
   - {domain: language-learning, product: column, format: agent, capability: not-implemented}
   - {domain: language-learning, product: column, format: audio, capability: not-implemented}
@@ -416,7 +416,7 @@ required_cells:
   - {domain: online-video, product: premium-briefing, format: epub, capability: not-implemented}
   - {domain: online-video, product: premium-briefing, format: audiobook, capability: not-implemented}
   - {domain: online-video, product: column, format: markdown, capability: implemented}
-  - {domain: online-video, product: column, format: html, capability: implemented}
+  - {domain: online-video, product: column, format: html, capability: not-implemented}
   - {domain: online-video, product: column, format: json, capability: not-implemented}
   - {domain: online-video, product: column, format: agent, capability: not-implemented}
   - {domain: online-video, product: column, format: audio, capability: not-implemented}
@@ -472,7 +472,7 @@ required_cells:
   - {domain: financial-news, product: premium-briefing, format: epub, capability: not-implemented}
   - {domain: financial-news, product: premium-briefing, format: audiobook, capability: not-implemented}
   - {domain: financial-news, product: column, format: markdown, capability: implemented}
-  - {domain: financial-news, product: column, format: html, capability: implemented}
+  - {domain: financial-news, product: column, format: html, capability: not-implemented}
   - {domain: financial-news, product: column, format: json, capability: not-implemented}
   - {domain: financial-news, product: column, format: agent, capability: not-implemented}
   - {domain: financial-news, product: column, format: audio, capability: not-implemented}
@@ -528,7 +528,7 @@ required_cells:
   - {domain: online-education, product: premium-briefing, format: epub, capability: not-implemented}
   - {domain: online-education, product: premium-briefing, format: audiobook, capability: not-implemented}
   - {domain: online-education, product: column, format: markdown, capability: implemented}
-  - {domain: online-education, product: column, format: html, capability: implemented}
+  - {domain: online-education, product: column, format: html, capability: not-implemented}
   - {domain: online-education, product: column, format: json, capability: not-implemented}
   - {domain: online-education, product: column, format: agent, capability: not-implemented}
   - {domain: online-education, product: column, format: audio, capability: not-implemented}
@@ -584,7 +584,7 @@ required_cells:
   - {domain: legal-compliance, product: premium-briefing, format: epub, capability: not-implemented}
   - {domain: legal-compliance, product: premium-briefing, format: audiobook, capability: not-implemented}
   - {domain: legal-compliance, product: column, format: markdown, capability: implemented}
-  - {domain: legal-compliance, product: column, format: html, capability: implemented}
+  - {domain: legal-compliance, product: column, format: html, capability: not-implemented}
   - {domain: legal-compliance, product: column, format: json, capability: not-implemented}
   - {domain: legal-compliance, product: column, format: agent, capability: not-implemented}
   - {domain: legal-compliance, product: column, format: audio, capability: not-implemented}
@@ -640,7 +640,7 @@ required_cells:
   - {domain: general-news, product: premium-briefing, format: epub, capability: not-implemented}
   - {domain: general-news, product: premium-briefing, format: audiobook, capability: not-implemented}
   - {domain: general-news, product: column, format: markdown, capability: implemented}
-  - {domain: general-news, product: column, format: html, capability: implemented}
+  - {domain: general-news, product: column, format: html, capability: not-implemented}
   - {domain: general-news, product: column, format: json, capability: not-implemented}
   - {domain: general-news, product: column, format: agent, capability: not-implemented}
   - {domain: general-news, product: column, format: audio, capability: not-implemented}
@@ -696,7 +696,7 @@ required_cells:
   - {domain: gaming, product: premium-briefing, format: epub, capability: not-implemented}
   - {domain: gaming, product: premium-briefing, format: audiobook, capability: not-implemented}
   - {domain: gaming, product: column, format: markdown, capability: implemented}
-  - {domain: gaming, product: column, format: html, capability: implemented}
+  - {domain: gaming, product: column, format: html, capability: not-implemented}
   - {domain: gaming, product: column, format: json, capability: not-implemented}
   - {domain: gaming, product: column, format: agent, capability: not-implemented}
   - {domain: gaming, product: column, format: audio, capability: not-implemented}
@@ -752,7 +752,7 @@ required_cells:
   - {domain: b2b, product: premium-briefing, format: epub, capability: not-implemented}
   - {domain: b2b, product: premium-briefing, format: audiobook, capability: not-implemented}
   - {domain: b2b, product: column, format: markdown, capability: implemented}
-  - {domain: b2b, product: column, format: html, capability: implemented}
+  - {domain: b2b, product: column, format: html, capability: not-implemented}
   - {domain: b2b, product: column, format: json, capability: not-implemented}
   - {domain: b2b, product: column, format: agent, capability: not-implemented}
   - {domain: b2b, product: column, format: audio, capability: not-implemented}
@@ -808,7 +808,7 @@ required_cells:
   - {domain: retail, product: premium-briefing, format: epub, capability: not-implemented}
   - {domain: retail, product: premium-briefing, format: audiobook, capability: not-implemented}
   - {domain: retail, product: column, format: markdown, capability: implemented}
-  - {domain: retail, product: column, format: html, capability: implemented}
+  - {domain: retail, product: column, format: html, capability: not-implemented}
   - {domain: retail, product: column, format: json, capability: not-implemented}
   - {domain: retail, product: column, format: agent, capability: not-implemented}
   - {domain: retail, product: column, format: audio, capability: not-implemented}

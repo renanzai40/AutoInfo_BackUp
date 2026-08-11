@@ -1770,12 +1770,30 @@ class SQLiteIndex:
                 ).fetchall()
 
             method = "fts5"
+            fts5_syntax_error = False
             try:
                 rows = _fts5_rows(safe_query)
             except sqlite3.OperationalError:
+                # FTS5 MATCH syntax error (e.g. query is a bare FTS5
+                # keyword like "NOT") — the LIKE path is the only way to
+                # search; fall through with an empty result set.
                 rows = []
+                fts5_syntax_error = True
 
-            if not rows:
+            # A hyphenated pseudo-token like ``t9ztoken-no-such-term-zzz``
+            # is split by _escape_fts5_query into 5 tokens, and FTS5 AND
+            # semantics already decide "no match".  Multi-word
+            # (natural-language) queries may still legitimately need the
+            # OR/LIKE fallback chain (long questions match nothing under
+            # pure AND).  Single-token queries must NOT fall back: OR/LIKE
+            # lets a common fragment (e.g. ``term`` in long-term/short-term)
+            # match unrelated entries, breaking the negative path (issue
+            # #191).  Exception: a FTS5 syntax error leaves no other path,
+            # so the LIKE fallback is kept for that case.
+            is_multiword = " " in query.strip()
+            meaningful: list[str] = []
+
+            if not rows and is_multiword:
                 # Step 2 — retry with OR semantics across the meaningful
                 # (non-stopword) terms, since FTS5 MATCH defaults to AND
                 # semantics and long questions can match nothing.
@@ -1791,10 +1809,10 @@ class SQLiteIndex:
                     except sqlite3.OperationalError:
                         rows = []
 
-            if not rows:
+            if not rows and (is_multiword or fts5_syntax_error):
                 # Step 3 — LIKE fallback across title, summary, tags
                 method = "like"
-                like_terms = meaningful or _split_search_terms(query)
+                like_terms = meaningful if is_multiword else _split_search_terms(query)
                 like_parts: list[str] = []
                 like_params: list[Any] = []
                 for term in like_terms:

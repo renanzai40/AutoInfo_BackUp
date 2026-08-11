@@ -15,7 +15,6 @@ from autoinfo.output import (
     _render_audio_openai,
 )
 
-
 # ---------------------------------------------------------------------------
 # Helpers for mocking edge_tts
 # ---------------------------------------------------------------------------
@@ -241,31 +240,31 @@ class TestFallback:
             assert mock_post.called
             assert result == b"fallback-mp3"
 
-    def test_local_falls_back_on_runtime_error(
+    def test_local_runtime_error_reraises_without_openai_fallback(
         self, monkeypatch: pytest.MonkeyPatch
     ) -> None:
+        # engine="local" re-raises synthesis failures (never falls back to
+        # OpenAI — the user chose local explicitly); ImportError still
+        # falls back, covered by the not-installed sibling test above.
         monkeypatch.setenv("AUTOINFO_LLM_API_KEY", "sk-fallback")
 
         fake_comm = _register_fake_edge_tts()
         try:
             async def mock_stream():
                 raise RuntimeError("TTS service unavailable")
+                yield  # unreachable; makes this an async generator (edge-tts stream() yields)
 
             instance = MagicMock()
             instance.stream = MagicMock(return_value=mock_stream())
             fake_comm.return_value = instance
 
-            mock_response = MagicMock()
-            mock_response.content = b"fallback-openai"
-            mock_response.raise_for_status = MagicMock()
-
-            with patch("httpx.post", return_value=mock_response) as mock_post:
-                result = _render_audio("Hello", engine="local")
+            with patch("httpx.post") as mock_post:
+                with pytest.raises(RuntimeError, match="TTS service unavailable"):
+                    _render_audio("Hello", engine="local")
         finally:
             _cleanup_fake_edge_tts()
 
-        assert mock_post.called
-        assert result == b"fallback-openai"
+        mock_post.assert_not_called()
 
 
 # ---------------------------------------------------------------------------

@@ -826,8 +826,9 @@ class TestSearchCustomFieldsFilter:
         self, store: KBStore
     ) -> None:
         """The LIKE fallback path applies the same custom-fields filter."""
-        # "NOT" is an FTS5 keyword — MATCH 'not' raises OperationalError,
-        # so search falls back to the LIKE path; "notes" contains "not".
+        # "zzzz" has no FTS5 match (AND + OR both fail); "note" is an
+        # unstemmed FTS5 token so MATCH 'note' misses "notes" — the search
+        # falls back to the LIKE path, where %note% matches both entries.
         self._seed(
             store,
             [
@@ -844,12 +845,12 @@ class TestSearchCustomFieldsFilter:
             ],
         )
 
-        unfiltered = store.search_knowledge_base("NOT")
+        unfiltered = store.search_knowledge_base("zzzz note")
         assert unfiltered["method"] == "like"
         assert unfiltered["total_count"] == 2
 
         result = store.search_knowledge_base(
-            "NOT",
+            "zzzz note",
             filter_custom_fields={"product_analysis.action_required": ""},
         )
         assert result["method"] == "like"

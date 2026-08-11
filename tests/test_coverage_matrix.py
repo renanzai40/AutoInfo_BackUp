@@ -213,6 +213,9 @@ def test_parse_persisted_path():
     assert cm.parse_persisted_path(
         "outputs/tech-ai-developer/magazine-digest-markdown-20260806-120000.md"
     ) == ("tech-ai-developer", "magazine-digest", "markdown")
+    assert cm.parse_persisted_path(
+        "outputs/ai-commercial/digest-markdown-20260810-paygrade.md"
+    ) == ("ai-commercial", "digest", "markdown")
     assert cm.parse_persisted_path("outputs/x/audio-20260806-120000.mp3") is None
     assert cm.parse_persisted_path("knowledge/medical-research/01-Raw/x.md") is None
     assert cm.parse_persisted_path("outputs/medical-research/README.md") is None

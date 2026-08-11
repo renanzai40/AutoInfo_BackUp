@@ -370,6 +370,24 @@ def render_audiobook(
     if not chapters:
         raise ValueError("Cannot build an audiobook with zero chapters")
 
+    # Skip chapters whose body is empty / whitespace-only / markdown-only
+    # (e.g. a digest section with no content).  Rendering empty text raises
+    # ValueError("Cannot render empty text as audio") from _render_audio and
+    # would abort the whole audiobook (2026-08-11 batch regression: 4/4
+    # digest-audiobook cells failed this way).  A silent chapter skip keeps
+    # the audiobook buildable; chapters with no body after stripping
+    # markdown are dropped from the chapter list.
+    from autoinfo.output import _strip_markdown  # noqa: PLC0415
+
+    usable: list[tuple[str, str]] = []
+    for heading, body in chapters:
+        plain = _strip_markdown(body or "")
+        if plain and plain.strip():
+            usable.append((heading, body))
+    if not usable:
+        raise ValueError("Cannot build an audiobook with zero non-empty chapters")
+    chapters = usable
+
     tmp_dir = (
         Path(tempfile.gettempdir())
         / "autoinfo"

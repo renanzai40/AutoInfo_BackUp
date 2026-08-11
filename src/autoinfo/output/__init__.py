@@ -2949,6 +2949,23 @@ def generate_digest(
             date_from=date_from,
             limit=query_limit,
         )
+        # Data-staleness fallback: when no entry falls inside the period
+        # window (e.g. collectors last ran weeks ago), the digest would be
+        # an empty shell — unacceptable for a paying end user.  Relax the
+        # date filter to the full domain set so the product still delivers
+        # content (2026-08-11: online-education had 8 entries, all
+        # collected 2026-07-2x, weekly window 08-04..08-11 → 0 entries →
+        # empty digest/json/agent shells).
+        if not entries:
+            logger.info(
+                "No entries for domain '%s' in period %s..%s — falling "
+                "back to full domain set",
+                domain, date_from, date_to,
+            )
+            entries = store.list_entries(
+                domain=domain,
+                limit=query_limit,
+            )
 
     # --- Parse tags for each entry (they come as JSON strings from SQLite) ----
     for entry in entries:
@@ -3141,7 +3158,13 @@ def generate_digest(
                     except (json.JSONDecodeError, TypeError):
                         pass
                 else:
-                    rendered = rendered.rstrip() + "\n\n" + attribution
+                    # Text formats get a plain attribution footer. Binary
+                    # formats (audio/epub/audiobook) carry base64 payloads —
+                    # appending text would corrupt the base64 and make
+                    # b64decode fail with "string argument should contain
+                    # only ASCII characters" (F46 regression, 2026-08-11).
+                    if format not in ("audio", "epub", "audiobook"):
+                        rendered = rendered.rstrip() + "\n\n" + attribution
 
     # --- Record consumption event (CD-018) -----------------------------------
     if user_id:
@@ -3770,7 +3793,13 @@ def generate_report(
                     except (json.JSONDecodeError, TypeError):
                         pass
                 else:
-                    rendered = rendered.rstrip() + "\n\n" + attribution
+                    # Text formats get a plain attribution footer. Binary
+                    # formats (audio/epub/audiobook) carry base64 payloads —
+                    # appending text would corrupt the base64 and make
+                    # b64decode fail with "string argument should contain
+                    # only ASCII characters" (F46 regression, 2026-08-11).
+                    if format not in ("audio", "epub", "audiobook"):
+                        rendered = rendered.rstrip() + "\n\n" + attribution
 
     # --- Record consumption event (CD-018) -----------------------------------
     if user_id:
@@ -5765,7 +5794,14 @@ def generate_tutorial(
     # parseable JSON or markdown with a stable shape.  Ensure a domain that
     # HAS entries never renders the all-empty template: replace an unusable
     # LLM result entirely and fill any still-missing sections from KB entries.
-    if format == "markdown":
+    if format in ("markdown", "agent"):
+        # Deterministic completeness: DeepSeek-V4-Flash does not reliably
+        # emit the tutorial schema as parseable JSON/markdown.  A domain
+        # that HAS entries must never render an empty tutorial — for
+        # markdown AND agent (agent consumes the same KB-derived content;
+        # without this, an empty LLM result yields slides/steps=[] shells,
+        # e.g. 26 empty tutorial-agent artifacts in the 2026-08-11 fill
+        # run).
         if not _tutorial_has_content(llm_result):
             logger.warning(
                 "Tutorial LLM output unusable for domain '%s' (missing "
@@ -6329,10 +6365,14 @@ def generate_presentation(
 
     # -- Build LLM prompt -------------------------------------------------
     audience_desc = _AUDIENCE_DESCRIPTIONS.get(target_audience, "general audience")
+    # Cap KB entries sent to the LLM: DeepSeek-V4-Flash is a reasoning
+    # model — a long prompt burns max_tokens on reasoning_content and
+    # emits empty/truncated content (issue #178). 10 representative
+    # entries (title + summary) keep the prompt well under the safe
+    # threshold while still grounding the deck in domain facts.
     entry_summaries = "\n".join(
-        f"- [{e.get('entry_id', '?')}] {e.get('title', '?')}: "
-        f"{e.get('summary', '(no summary)')}"
-        for e in topic_entries[:100]  # cap entries sent to LLM
+        f"- {e.get('title', '?')}: {e.get('summary', '(no summary)')[:220]}"
+        for e in topic_entries[:10]  # cap entries sent to LLM (#178)
     )
 
     prompt = (
@@ -6371,23 +6411,32 @@ def generate_presentation(
         "generated_at": generated_at,
     }
 
+    # Issue #182 audit-feedback: a presentation with zero slides or only a
+    # header stub (LLM empty-content, DeepSeek #178) must NOT be persisted.
+    # Raise so callers skip the artifact instead of shipping a 240-byte shell.
+    # Applies to markdown AND agent: agent previously returned the JSON-LD
+    # shell directly (slides=[]), producing 13 empty presentation-agent
+    # artifacts in the 2026-08-11 fill run.
+    slides = llm_result.get("slides") or []
+    # Render the markdown form purely as a content-completeness check for
+    # agent output (same template context, same content).
+    rendered = _render_presentation_template(context, format=format)
+    rendered_check = (
+        _render_presentation_template(context, format="markdown")
+        if format == "agent"
+        else rendered
+    )
+    if not allow_empty and (len(slides) < 1 or len(rendered_check.strip()) < 500):
+        raise ValueError(
+            f"Presentation generation produced no usable content for "
+            f"domain={domain!r} topic={topic!r} (slides={len(slides)}, "
+            f"chars={len(rendered_check.strip())})"
+        )
+
     # -- Agent-native JSON-LD format ----------------------------------------
     if format == "agent":
         return _render_presentation_agent_json(llm_result, domain, topic, target_audience, generated_at, topic_entries)  # noqa: E501
 
-    # -- Render via Jinja2 template ---------------------------------------
-    rendered = _render_presentation_template(context, format=format)
-
-    # Issue #182 audit-feedback: a presentation with zero slides or only a
-    # header stub (LLM empty-content, DeepSeek #178) must NOT be persisted.
-    # Raise so callers skip the artifact instead of shipping a 240-byte shell.
-    slides = llm_result.get("slides") or []
-    if not allow_empty and (len(slides) < 1 or len(rendered.strip()) < 500):
-        raise ValueError(
-            f"Presentation generation produced no usable content for "
-            f"domain={domain!r} topic={topic!r} (slides={len(slides)}, "
-            f"chars={len(rendered.strip())})"
-        )
     return rendered
 
 
@@ -6780,10 +6829,14 @@ def _render_audio(
                 "Install with: pip install 'autoinfo[tts]'"
             )
         except Exception:
-            logger.warning(
-                "Local TTS (edge-tts) failed — falling back to OpenAI TTS.",
-                exc_info=True,
-            )
+            # edge-tts is configured as the engine; a synthesis failure is
+            # NOT a reason to fall back to OpenAI — the user chose local
+            # explicitly (e.g. no api.openai.com route), and OpenAI may be
+            # unreachable (2026-08-11: WSL has no route to api.openai.com,
+            # so the fallback turns a clean edge-tts error into a
+            # misleading "OpenAI TTS network error" after 150s+).  Re-raise
+            # so callers can retry or surface the real error.
+            raise
 
     # --- Whisper engine (OpenAI Whisper model via TTS API) ---
     if resolved_engine == "whisper":
@@ -6981,6 +7034,12 @@ def _render_audio_edge_tts(
 ) -> bytes:
     """Render *text* as MP3 audio using the edge-tts library (local, free).
 
+    Auto-selects a voice matching the dominant script when the configured
+    voice cannot speak it: edge-tts ``en-US-JennyNeural`` raises
+    ``NoAudioReceived`` for CJK-heavy text, which surfaced as 4 failing
+    digest-audiobook cells (2026-08-11).  Text containing CJK codepoints
+    uses ``zh-CN-XiaoxiaoNeural``; otherwise the requested voice is used.
+
     Raises
     ------
     ImportError
@@ -6992,8 +7051,20 @@ def _render_audio_edge_tts(
 
     import edge_tts  # noqa: PLC0415
 
+    # CJK detection (CJK Unified Ideographs, Hiragana/Katakana, Hangul).
+    cjk_ranges = (
+        (0x4E00, 0x9FFF),   # CJK Unified Ideographs
+        (0x3040, 0x30FF),   # Hiragana + Katakana
+        (0xAC00, 0xD7AF),   # Hangul Syllables
+    )
+    has_cjk = any(
+        any(lo <= ord(ch) <= hi for lo, hi in cjk_ranges)
+        for ch in text
+    )
+    effective_voice = "zh-CN-XiaoxiaoNeural" if has_cjk else voice
+
     async def _synthesize() -> bytes:
-        communicate = edge_tts.Communicate(text, voice)
+        communicate = edge_tts.Communicate(text, effective_voice)
         chunks: list[bytes] = []
         async for chunk in communicate.stream():
             if chunk["type"] == "audio":
