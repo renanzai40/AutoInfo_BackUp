@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import logging
 import os
+import re
 import time
 import uuid
 from typing import Any
@@ -170,7 +171,10 @@ class YouTubeHandler(BaseHandler):
             List of parsed video dictionaries, each with mapped fields:
             ``id``, ``title``, ``content``, ``author``, ``published_date``,
             ``source_url``, ``channel_id``, ``channel_title``,
-            ``thumbnail_url``.  Returns an empty list on error.
+            ``thumbnail_url``.  When ``fetch_depth == "fulltext"`` is set
+            in the handler config, ``content`` is enriched with the
+            caption transcript (falling back to the description when the
+            transcript is unavailable).  Returns an empty list on error.
         """
         if not self.api_key:
             logger.warning("YouTube API key is required. Set AUTOINFO_YOUTUBE_API_KEY.")
@@ -245,6 +249,8 @@ class YouTubeHandler(BaseHandler):
             for item in items_raw:
                 try:
                     video = self._map_video(item)
+                    if self.config.get("fetch_depth") == "fulltext":
+                        self._enrich_fulltext(video)
                     all_videos.append(video)
                 except Exception as exc:
                     logger.debug(
@@ -276,7 +282,9 @@ class YouTubeHandler(BaseHandler):
             language: Preferred caption language (default ``"en"``).
 
         Returns:
-            Dict with ``caption_id``, ``language``, ``track_kind``, or
+            Dict with ``caption_id``, ``language``, ``track_kind``,
+            ``name``, and ``transcript`` (the downloaded caption track
+            parsed to plain text; ``""`` when the download fails), or
             ``None`` if not available or on error.
         """
         if not self.api_key:
@@ -318,7 +326,75 @@ class YouTubeHandler(BaseHandler):
             "language": snippet.get("language", ""),
             "track_kind": snippet.get("trackKind", ""),
             "name": snippet.get("name", ""),
+            "transcript": self._download_transcript(chosen.get("id", "")),
         }
+
+    def _download_transcript(self, caption_id: str) -> str:
+        """Download and parse the SRT transcript for a caption track.
+
+        Uses the Captions API download endpoint (``tfmt=srt``) through the
+        same :meth:`_request` machinery as the metadata list call, then
+        strips SRT timing blocks to plain text.  Returns an empty string
+        on any failure (missing id, HTTP/network error, unparseable text).
+        """
+        if not caption_id:
+            return ""
+        url = (
+            f"{CAPTIONS_BASE_URL}/{caption_id}"
+            f"?{urlencode({'key': self.api_key, 'tfmt': 'srt'})}"
+        )
+        try:
+            resp = self._request(url)
+        except Exception as exc:
+            logger.warning(
+                "Caption track download failed for caption %s: %s",
+                caption_id,
+                exc,
+            )
+            return ""
+        return self._parse_srt(resp.text)
+
+    @staticmethod
+    def _parse_srt(srt_text: str) -> str:
+        """Convert SRT subtitle text to plain transcript text.
+
+        Each SRT block is ``index``, ``timestamp``, then text lines; the
+        index and timestamp lines are stripped and remaining text joined.
+
+        Args:
+            srt_text: Raw SRT caption payload.
+
+        Returns:
+            Plain-text transcript, or ``""`` when nothing parseable.
+        """
+        paragraphs: list[str] = []
+        for block in re.split(r"\r?\n\s*\r?\n", srt_text.strip()):
+            lines = [ln.strip() for ln in block.splitlines() if ln.strip()]
+            if len(lines) < 3:
+                continue
+            paragraphs.append(" ".join(lines[2:]))
+        return "\n".join(paragraphs)
+
+    def _enrich_fulltext(self, video: dict[str, Any]) -> None:
+        """Replace description content with the caption transcript.
+
+        Called from :meth:`fetch` when the handler config has
+        ``fetch_depth == "fulltext"``.  On failure (no captions, failed
+        download, no video id) the description content is kept as-is.
+        """
+        video_id = video.get("id") or ""
+        if not video_id:
+            return
+        captions = self.fetch_captions(video_id)
+        transcript = (captions or {}).get("transcript") or ""
+        if transcript:
+            video["content"] = transcript
+            return
+        logger.warning(
+            "fetch_depth=fulltext but transcript unavailable for video %s; "
+            "falling back to description",
+            video_id,
+        )
 
     @staticmethod
     def requires_key() -> bool:

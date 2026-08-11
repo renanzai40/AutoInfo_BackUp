@@ -5,10 +5,16 @@ the `Unpaywall API <https://unpaywall.org/products/api>`_ (free tier:
 100 000 requests/day) and optionally from the
 `CORE API <https://api.core.ac.uk/docs/swagger>`_ (requires API key).
 
-**Metadata + OA link only** — no PDF downloads, no full-text parsing.
-The ``is_oa`` field and ``best_oa_location.url`` drive the
+**Metadata + OA link by default** — no PDF downloads, no full-text
+parsing.  The ``is_oa`` field and ``best_oa_location.url`` drive the
 ``source_url`` of each item so downstream consumers can fetch the
 full-text themselves if needed.
+
+When ``fetch_depth == "fulltext"`` (injected into ``config`` by the
+collection pipeline), the handler additionally extracts the OA full
+text via the web.py trafilatura path (``WebHandler.fetch``) and stores
+it in ``content``, truncated to a configurable cap.  Any extraction
+failure degrades gracefully back to the mapped content (title).
 
 Usage::
 
@@ -32,6 +38,7 @@ from urllib.parse import urlencode
 import httpx
 
 from autoinfo.collectors.base import BaseHandler
+from autoinfo.collectors.web import WebHandler
 from autoinfo.models import Item
 
 logger = logging.getLogger(__name__)
@@ -52,6 +59,10 @@ RETRY_DELAYS: list[int] = [2, 4, 8]  # exponential backoff in seconds
 
 # Polite rate limiting: 1 request per second
 MIN_REQUEST_INTERVAL: float = 1.0
+
+# Max chars of OA fulltext kept in ``content`` (LLM cost control);
+# overridable per source via the ``content_cap`` config key.
+FULLTEXT_CONTENT_CAP: int = 8000
 
 # HTTP headers
 USER_AGENT: str = "mailto:autoinfo-collector@example.com"
@@ -220,12 +231,20 @@ class UnpaywallHandler(BaseHandler):
                   default ``None`` = no filter)
                 - ``max_rps``: requests per second rate limit
                   (default ``1.0``)
+                - ``fetch_depth``: ``"fulltext"`` enables OA full-text
+                  extraction via the web.py trafilatura path
+                  (default ``None`` = metadata only)
+                - ``content_cap``: max chars of extracted full text
+                  (default :data:`FULLTEXT_CONTENT_CAP`)
         """
         if config is None:
             config = {}
         self.config: dict[str, Any] = config
         self.provider: str = config.get("provider", "unpaywall").lower()
         self.max_rps: float = float(config.get("max_rps", 1.0))
+        self.content_cap: int = int(
+            config.get("content_cap", FULLTEXT_CONTENT_CAP)
+        )
         self._last_request_time: float = 0.0
 
     # ------------------------------------------------------------------
@@ -251,10 +270,11 @@ class UnpaywallHandler(BaseHandler):
 
     @staticmethod
     def note() -> str | None:
-        """Return a note about the API's metadata-only behaviour."""
+        """Return a note about the handler's content-depth behaviour."""
         return (
-            "Unpaywall/CORE collector fetches metadata + OA links only. "
-            "No PDF downloads or full-text storage. "
+            "Unpaywall/CORE collector fetches metadata + OA links; with "
+            "fetch_depth=fulltext it also extracts the OA full text via "
+            "the web.py trafilatura path. "
             "Use the returned source_url to access the full text externally."
         )
 
@@ -346,6 +366,10 @@ class UnpaywallHandler(BaseHandler):
 
         Returns:
             List of article dicts, each with standardised fields.
+            When ``fetch_depth == "fulltext"``, articles carrying an OA
+            URL are enriched with the extracted full text in ``content``
+            (truncated to ``content_cap``); extraction failures keep the
+            mapped content (title for Unpaywall).
             Returns an empty list on error, missing credentials,
             or if *limit* ≤ 0.
         """
@@ -373,8 +397,59 @@ class UnpaywallHandler(BaseHandler):
             return []
 
         if self.provider == "core":
-            return self._fetch_core(q, limit)
-        return self._fetch_unpaywall(q, limit)
+            articles = self._fetch_core(q, limit)
+        else:
+            articles = self._fetch_unpaywall(q, limit)
+
+        if self.config.get("fetch_depth") == "fulltext":
+            return [self._maybe_fetch_fulltext(a) for a in articles]
+        return articles
+
+    # ------------------------------------------------------------------
+    # Fulltext enrichment (fetch_depth == "fulltext")
+    # ------------------------------------------------------------------
+
+    def _maybe_fetch_fulltext(self, article: dict[str, Any]) -> dict[str, Any]:
+        """Attempt OA full-text extraction for *article*.
+
+        Active only when ``fetch_depth == "fulltext"`` and the article
+        carries an OA URL.  Reuses the web.py trafilatura path
+        (``WebHandler.fetch``) to fetch and extract the open-access
+        page; tries ``oa_url`` then ``oa_url_pdf``.  Replaces ``content``
+        with the extracted text truncated to :attr:`content_cap`.
+
+        On any failure (no OA URL, fetch error, empty extraction) the
+        article is returned unchanged with a warning logged — collection
+        never breaks.
+        """
+        candidates = [
+            str(article.get("oa_url") or "").strip(),
+            str(article.get("oa_url_pdf") or "").strip(),
+        ]
+        attempted: str = ""
+        for url in candidates:
+            if not url:
+                continue
+            attempted = url
+            try:
+                items = WebHandler().fetch(url)
+            except Exception as exc:
+                logger.debug("OA fulltext fetch raised for %s: %s", url, exc)
+                continue
+            if items:
+                text = (items[0].content or "").strip()
+                if text:
+                    article["content"] = text[: self.content_cap]
+                    return article
+
+        if attempted:
+            logger.warning(
+                "Unpaywall fulltext extraction failed for %s; "
+                "keeping mapped content for '%s'.",
+                attempted,
+                article.get("title") or article.get("id") or "",
+            )
+        return article
 
     # ------------------------------------------------------------------
     # Unpaywall backend

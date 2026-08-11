@@ -600,6 +600,20 @@ def _collect_from_source(
     )
 
 
+def _handler_settings(source_config: SourceConfig) -> dict[str, Any]:
+    """Build the ``config=`` dict passed to settings-based handlers.
+
+    Copies the source's ``settings`` (never mutating the shared
+    ``SourceConfig``) and injects the per-source ``fetch_depth``, so any
+    settings-based handler can branch on content depth (``fulltext`` vs
+    ``abstract``) without receiving the full ``SourceConfig``.  Handlers
+    that do not read ``fetch_depth`` are unaffected — the key is inert.
+    """
+    settings = dict(source_config.settings or {})
+    settings["fetch_depth"] = source_config.fetch_depth
+    return settings
+
+
 def _build_handler(source_config: SourceConfig) -> Any:
     """Build the appropriate handler for a source configuration.
 
@@ -639,12 +653,12 @@ def _build_handler(source_config: SourceConfig) -> Any:
     if stype == "nyt":
         from autoinfo.collectors.nyt import NYTHandler
 
-        return NYTHandler(config=source_config.settings or {})
+        return NYTHandler(config=_handler_settings(source_config))
 
     if stype == "openalex":
         from autoinfo.collectors.openalex import OpenAlexHandler
 
-        return OpenAlexHandler(config=source_config.settings or {})
+        return OpenAlexHandler(config=_handler_settings(source_config))
 
     if stype == "ap_api":
         from autoinfo.collectors.ap_api import APAPIHandler
@@ -659,37 +673,37 @@ def _build_handler(source_config: SourceConfig) -> Any:
     if stype == "reddit":
         from autoinfo.collectors.reddit import RedditHandler
 
-        return RedditHandler(config=source_config.settings or {})
+        return RedditHandler(config=_handler_settings(source_config))
 
     if stype == "spotify":
         from autoinfo.collectors.spotify import SpotifyHandler
 
-        return SpotifyHandler(config=source_config.settings or {})
+        return SpotifyHandler(config=_handler_settings(source_config))
 
     if stype == "youtube":
         from autoinfo.collectors.youtube import YouTubeHandler
 
-        return YouTubeHandler(config=source_config.settings or {})
+        return YouTubeHandler(config=_handler_settings(source_config))
 
     if stype == "bilibili":
         from autoinfo.collectors.bilibili import BilibiliHandler
 
-        return BilibiliHandler(config=source_config.settings or {})
+        return BilibiliHandler(config=_handler_settings(source_config))
 
     if stype == "apple_podcasts":
         from autoinfo.collectors.apple_podcasts import ApplePodcastsHandler
 
-        return ApplePodcastsHandler(config=source_config.settings or {})
+        return ApplePodcastsHandler(config=_handler_settings(source_config))
 
     if stype == "unpaywall":
         from autoinfo.collectors.unpaywall import UnpaywallHandler
 
-        return UnpaywallHandler(config=source_config.settings or {})
+        return UnpaywallHandler(config=_handler_settings(source_config))
 
     if stype == "gdelt":
         from autoinfo.collectors.gdelt import GDELTHandler
 
-        return GDELTHandler(config=source_config.settings or {})
+        return GDELTHandler(config=_handler_settings(source_config))
 
     if stype == "yahoo_finance":
         from autoinfo.collectors.yahoo_finance import YahooFinanceHandler
@@ -707,7 +721,7 @@ def _build_handler(source_config: SourceConfig) -> Any:
         provider = "kaggle" if stype == "kaggle" else "huggingface"
         return HuggingFaceHandler(
             config={
-                **(source_config.settings or {}),
+                **_handler_settings(source_config),
                 "provider": provider,
             },
         )
@@ -715,7 +729,10 @@ def _build_handler(source_config: SourceConfig) -> Any:
     if stype == "rss":
         from autoinfo.collectors.rss import RSSHandler
 
-        return RSSHandler(source_name=source_config.name)
+        return RSSHandler(
+            source_name=source_config.name,
+            fetch_depth=source_config.fetch_depth,
+        )
 
     if stype == "web":
         from autoinfo.collectors.web import WebHandler
@@ -735,7 +752,7 @@ def _build_handler(source_config: SourceConfig) -> Any:
     if stype == "ssrn":
         from autoinfo.collectors.ssrn import SSRNHandler
 
-        return SSRNHandler(config=source_config.settings or {})
+        return SSRNHandler(config=_handler_settings(source_config))
 
     if stype == "hackernews":
         from autoinfo.collectors.hackernews import HackerNewsHandler
@@ -745,17 +762,17 @@ def _build_handler(source_config: SourceConfig) -> Any:
     if stype == "akshare":
         from autoinfo.collectors.akshare import AKShareHandler
 
-        return AKShareHandler(config=source_config.settings or {})
+        return AKShareHandler(config=_handler_settings(source_config))
 
     if stype == "sec_edgar":
         from autoinfo.collectors.sec_edgar import SecEdgarHandler
 
-        return SecEdgarHandler(config=source_config.settings or {})
+        return SecEdgarHandler(config=_handler_settings(source_config))
 
     if stype == "edx_sitemap":
         from autoinfo.collectors.edx_sitemap import EdxSitemapHandler
 
-        return EdxSitemapHandler(config=source_config.settings or {})
+        return EdxSitemapHandler(config=_handler_settings(source_config))
 
     if stype == "api":
         from autoinfo.collectors.http_api import HttpApiHandler

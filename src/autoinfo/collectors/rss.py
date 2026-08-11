@@ -13,9 +13,12 @@ from typing import Any
 import feedparser
 
 from autoinfo.collectors.base import BaseHandler, SourceFailure
+from autoinfo.collectors.web import WebHandler
 from autoinfo.models import Item
 
 logger = logging.getLogger(__name__)
+
+FULLTEXT_MAX_CHARS = 8000
 
 # ---------------------------------------------------------------------------
 # Handler
@@ -36,8 +39,9 @@ class RSSHandler(BaseHandler):
             print(item.title, item.source_url)
     """
 
-    def __init__(self, source_name: str = "rss") -> None:
+    def __init__(self, source_name: str = "rss", fetch_depth: str = "abstract") -> None:
         self.source_name = source_name
+        self.fetch_depth = fetch_depth
 
     # ------------------------------------------------------------------
     # Public API
@@ -93,9 +97,12 @@ class RSSHandler(BaseHandler):
             raise SourceFailure(f"RSS feed returned zero entries: {url}")
 
         items: list[Item] = []
+        web_handler = WebHandler() if self.fetch_depth == "fulltext" else None
         for i, entry in enumerate(parsed.entries):
             try:
                 item = self._entry_to_item(entry, url)
+                if web_handler is not None:
+                    self._enrich_fulltext(item, web_handler)
                 items.append(item)
             except Exception as exc:
                 logger.warning(
@@ -149,6 +156,26 @@ class RSSHandler(BaseHandler):
             collected_at=collected_at,
             raw_data={"feed_url": feed_url},
         )
+
+    def _enrich_fulltext(self, item: Item, web_handler: WebHandler) -> None:
+        """Replace the feed summary with the fetched article body (fulltext mode).
+
+        Fetches ``item.source_url`` (the entry ``link``) through the web.py
+        trafilatura path, truncating to ``FULLTEXT_MAX_CHARS``.  On any
+        failure the original summary is kept and a debug log is emitted —
+        one bad article must not break the whole feed.
+        """
+        link = item.source_url
+        try:
+            fetched = web_handler.fetch(link)
+            body = fetched[0].content if fetched else ""
+        except Exception as exc:
+            logger.debug("Fulltext fetch failed for %s: %s", link, exc)
+            return
+        if not body:
+            logger.debug("No extractable fulltext for %s", link)
+            return
+        item.content = body[:FULLTEXT_MAX_CHARS]
 
 
 # ---------------------------------------------------------------------------

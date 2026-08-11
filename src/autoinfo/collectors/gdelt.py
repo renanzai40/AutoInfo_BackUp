@@ -30,6 +30,7 @@ from urllib.parse import urlencode
 import httpx
 
 from autoinfo.collectors.base import BaseHandler
+from autoinfo.collectors.web import WebHandler
 from autoinfo.models import Item
 
 logger = logging.getLogger(__name__)
@@ -50,6 +51,9 @@ MIN_REQUEST_INTERVAL: float = 5.0
 
 # Default timespan: 3 months (in months)
 DEFAULT_TIMESPAN: str = "3m"
+
+# Fulltext enrichment: truncation cap for fetched article bodies (controls LLM cost)
+FULLTEXT_CONTENT_CAP: int = 8000
 
 
 # ---------------------------------------------------------------------------
@@ -192,6 +196,47 @@ class GDELTHandler(BaseHandler):
             "tone": tone,
         }
 
+    def _enrich_fulltext(self, article: dict[str, Any]) -> None:
+        """Replace title-only content with the article body from its URL.
+
+        Fetches the article's ``source_url`` via the web.py trafilatura
+        path and stores the extracted text (truncated to
+        :data:`FULLTEXT_CONTENT_CAP`) as ``content``.  Any failure —
+        missing URL, network error, empty extraction — keeps the title
+        content and logs at debug level, so one blocked article never
+        breaks the batch.
+        """
+        url = article.get("source_url") or ""
+        if not url:
+            logger.debug(
+                "GDELT fulltext: no source_url for article '%s'; "
+                "keeping title content.",
+                article.get("title", ""),
+            )
+            return
+
+        try:
+            web_items = WebHandler().fetch(url)
+        except Exception as exc:
+            logger.debug(
+                "GDELT fulltext extraction failed for %s: %s; "
+                "keeping title content.",
+                url,
+                exc,
+            )
+            return
+
+        body = web_items[0].content if web_items else ""
+        if not body:
+            logger.debug(
+                "GDELT fulltext extraction returned no content for %s; "
+                "keeping title content.",
+                url,
+            )
+            return
+
+        article["content"] = body[:FULLTEXT_CONTENT_CAP]
+
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
@@ -267,9 +312,12 @@ class GDELTHandler(BaseHandler):
             return []
 
         articles: list[dict[str, Any]] = data.get("articles") or []
+        fulltext_enabled = self.config.get("fetch_depth") == "fulltext"
         for item in articles:
             try:
                 article = self._map_article(item)
+                if fulltext_enabled:
+                    self._enrich_fulltext(article)
                 all_articles.append(article)
             except Exception as exc:
                 logger.debug(
