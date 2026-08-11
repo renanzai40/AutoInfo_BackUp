@@ -219,6 +219,25 @@ _FTS5_SPECIAL = re.compile(r'[\^"():+\-!~{}\[\]\\\\*?]')
 _FTS5_KEYWORDS = frozenset({"AND", "OR", "NOT", "NEAR"})
 
 
+_CUSTOM_FIELD_PATH_RE = re.compile(
+    r"^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)*$"
+)
+
+
+def _validate_custom_field_path(path: str) -> None:
+    """Validate a ``custom_fields`` dot-path used inside ``json_extract``.
+
+    Only identifier characters and single dots are allowed, so a caller
+    can never inject JSON-path syntax (``$``, brackets, quotes) into the
+    ``$.<path>`` expression built by :meth:`SQLiteIndex.search_fts5`.
+    """
+    if not _CUSTOM_FIELD_PATH_RE.match(path):
+        raise ValueError(
+            f"filter_custom_fields path {path!r} is not a valid dot-path "
+            "(letters, digits, underscores and single dots only)"
+        )
+
+
 def _escape_fts5_query(query: str) -> str:
     """Escape a user query string for safe use with FTS5 MATCH.
 
@@ -743,6 +762,22 @@ class SQLiteIndex:
             row = conn.execute(
                 "SELECT * FROM entries WHERE entry_id = ?",
                 (entry_id,),
+            ).fetchone()
+            return dict(row) if row else None
+
+    def get_entry_by_source_url(self, source_url: str) -> dict[str, Any] | None:
+        """Return the most recent entry whose ``source_url`` exactly matches.
+
+        Used by the output pipeline to link report-path agent entries
+        (which hardcode ``entry_id: ""``) back to their KB entries.
+        """
+        if not source_url:
+            return None
+        with self._connect() as conn:
+            row = conn.execute(
+                "SELECT * FROM entries WHERE source_url = ? "
+                "ORDER BY collected_at DESC LIMIT 1",
+                (source_url,),
             ).fetchone()
             return dict(row) if row else None
 
@@ -1474,6 +1509,41 @@ class SQLiteIndex:
                 ),
             )
 
+    def update_entry_custom_fields(
+        self, entry_id: str, fields: dict[str, Any]
+    ) -> bool:
+        """Merge *fields* into the entry's ``custom_fields`` JSON column.
+
+        The ``custom_fields`` column is the KB metadata dict path: it is
+        stored as JSON, returned by :meth:`get_entry` (and therefore by
+        ``KBStore.get_entry`` / MCP ``get_kb_entry``), and written at
+        index time from ``KBEntry.custom_fields``.  This method updates
+        the column in place without touching the rest of the row, so
+        unrelated columns (tags, source_url, ...) survive.
+
+        Unlike ``INSERT OR REPLACE`` via :meth:`index_entry`, this is a
+        targeted merge: keys in *fields* overwrite existing keys of the
+        same name; everything else is preserved.
+
+        Returns ``True`` when the entry exists and was updated, ``False``
+        when no entry with *entry_id* was found.
+        """
+        existing = self.get_entry(entry_id)
+        if existing is None:
+            return False
+        raw = existing.get("custom_fields") or "{}"
+        try:
+            current = json.loads(raw) if isinstance(raw, str) else dict(raw)
+        except (json.JSONDecodeError, TypeError):
+            current = {}
+        current.update(fields)
+        with self._connect() as conn:
+            conn.execute(
+                "UPDATE entries SET custom_fields = ? WHERE entry_id = ?",
+                (json.dumps(current, ensure_ascii=False), entry_id),
+            )
+        return True
+
     # ------------------------------------------------------------------
     # FTS5 full-text search
     # ------------------------------------------------------------------
@@ -1527,6 +1597,7 @@ class SQLiteIndex:
         filter_content_type: str | None = None,
         filter_language: str | None = None,
         filter_user_id: str | None = None,
+        filter_custom_fields: dict[str, str] | None = None,
     ) -> dict[str, Any]:
         """Search the knowledge base using FTS5 full-text search.
 
@@ -1576,6 +1647,15 @@ class SQLiteIndex:
         filter_user_id:
             Only include entries with this exact ``user_id``.
             When ``None``, no user_id filter is applied (returns all).
+        filter_custom_fields:
+            Faceted filter over the ``custom_fields`` JSON column (todo
+            25, output-quality-mega — product-analysis metadata search).
+            Each key is a dot-path into ``custom_fields`` (e.g.
+            ``"product_analysis.action_required"``); an empty-string
+            value matches entries where the field exists and is
+            non-empty, any other value matches entries where the
+            field's JSON value equals that text.  ``None`` applies no
+            custom-fields filter (default behaviour unchanged).
         """
         safe_query = _escape_fts5_query(query)
         if not safe_query:
@@ -1640,6 +1720,29 @@ class SQLiteIndex:
             if filter_user_id is not None:
                 conds.append(f"{prefix}.user_id = ?")
                 params.append(filter_user_id)
+
+            if filter_custom_fields:
+                for path, expected in filter_custom_fields.items():
+                    _validate_custom_field_path(path)
+                    json_path = f"$.{path}"
+                    if expected == "":
+                        # Presence: the field must exist with a non-empty
+                        # value.  json_type() is NULL when the path is
+                        # missing; a JSON null / empty container / empty
+                        # string is treated as absent.
+                        conds.append(
+                            f"(json_type({prefix}.custom_fields, ?) IS NOT NULL "
+                            f"AND json_type({prefix}.custom_fields, ?) != 'null' "
+                            f"AND json_extract({prefix}.custom_fields, ?) "
+                            f"NOT IN ('[]', '{{}}', '\"\"'))"
+                        )
+                        params.extend([json_path, json_path, json_path])
+                    else:
+                        conds.append(
+                            f"CAST(json_extract({prefix}.custom_fields, ?) "
+                            f"AS TEXT) = ?"
+                        )
+                        params.extend([json_path, expected])
 
             return conds, params
 
@@ -2945,6 +3048,15 @@ class KBStore:
             return None
         return self.get_entry(meta[0]["entry_id"])
 
+    def get_entry_by_source_url(self, source_url: str) -> dict[str, Any] | None:
+        """Return the full entry dict whose ``source_url`` exactly matches.
+
+        Used by the output pipeline to link report-path agent entries
+        (which hardcode ``entry_id: ""``) back to their KB entries by
+        source URL (todo 24, output-quality-mega).
+        """
+        return self.index.get_entry_by_source_url(source_url)
+
     def delete_entry(
         self,
         entry_id: str,
@@ -3845,6 +3957,24 @@ class KBStore:
             "importance": importance,
         }
 
+    def update_entry_metadata(self, entry_id: str, metadata: dict[str, Any]) -> bool:
+        """Merge *metadata* into the entry's ``custom_fields`` JSON column.
+
+        This is the KB metadata dict path: ``KBEntry.custom_fields`` ↔
+        ``entries.custom_fields`` (SQLite JSON column), surfaced by
+        :meth:`get_entry` / MCP ``get_kb_entry``.  The output pipeline
+        uses it to persist product-derived analysis fields
+        (``{"product_analysis": {...}}``) onto the KB entries a product
+        output was generated from (todo 24, output-quality-mega).
+
+        The merge is key-wise: keys in *metadata* overwrite existing keys
+        of the same name; all other custom_fields keys are preserved.
+
+        Returns ``True`` when the entry exists and was updated, ``False``
+        when no entry with *entry_id* was found.
+        """
+        return self.index.update_entry_custom_fields(entry_id, metadata)
+
     # ------------------------------------------------------------------
     # Knowledge graph — entity & relation storage
     # ------------------------------------------------------------------
@@ -4022,6 +4152,7 @@ class KBStore:
         filter_language: str | None = None,
         filter_user_id: str | None = None,
         include_stale: bool = False,
+        filter_custom_fields: dict[str, str] | None = None,
     ) -> dict[str, Any]:
         """Search the knowledge base.
 
@@ -4060,6 +4191,15 @@ class KBStore:
             If ``False`` (default), stale entries are demoted to the
             bottom of search results.  If ``True``, stale entries are
             mixed normally with fresh entries.
+        filter_custom_fields:
+            Faceted filter over the ``custom_fields`` JSON column (todo
+            25, output-quality-mega — product-analysis metadata search).
+            Each key is a dot-path into ``custom_fields`` (e.g.
+            ``"product_analysis.action_required"``); an empty-string
+            value matches entries where the field exists and is
+            non-empty, any other value matches entries where the
+            field's JSON value equals that text.  ``None`` applies no
+            custom-fields filter (default behaviour unchanged).
 
         Returns
         -------
@@ -4083,6 +4223,7 @@ class KBStore:
             filter_content_type=filter_content_type,
             filter_language=filter_language,
             filter_user_id=filter_user_id,
+            filter_custom_fields=filter_custom_fields,
         )
 
         # Resolve domain-specific TTL and freshness threshold from config.
