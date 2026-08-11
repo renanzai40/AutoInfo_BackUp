@@ -292,6 +292,51 @@ steps:
         assert result["summary"]["failed"] == 0
         assert result["summary"]["total"] == 2
 
+    async def test_collect_artifacts_skips_excluded_paths(
+        self, tmp_path: Path, monkeypatch
+    ) -> None:
+        """collect_artifacts never collects non-deliverable artifacts (#192).
+
+        Rejected KB promotion drafts under ``knowledge/_failed/<domain>/**``
+        and internal ``outputs/coverage-matrix/**`` reports must be absent
+        from the artifacts list, while a legit file next to them is kept.
+        """
+        # Trailing "**" matches only dirs on Python < 3.13 (CPython gh-70303),
+        # so all patterns follow the "**/*.ext" convention the packaged
+        # scenarios use — otherwise 3.12 collects zero files here.
+        sd = self._write_scenario(
+            tmp_path,
+            "artifact-glob",
+            "name: artifact-glob\ndescription: Test\n"
+            'collect_artifacts: ["knowledge/**/*.md", "outputs/**/*.md"]\n'
+            "steps:\n"
+            "  - name: step\n    tool: fake_tool\n    arguments: {}\n"
+            "    expect:\n      success: true\n",
+        )
+        cwd = tmp_path / "cwd"
+        legit = cwd / "knowledge" / "medical-research" / "01-Raw" / "x" / "entry.md"
+        legit.parent.mkdir(parents=True)
+        legit.write_text("# Legit entry\n", encoding="utf-8")
+        rejected = cwd / "knowledge" / "_failed" / "medical-research" / "rejected.md"
+        rejected.parent.mkdir(parents=True)
+        rejected.write_text("# Rejected draft\n", encoding="utf-8")
+        matrix = cwd / "outputs" / "coverage-matrix" / "matrix-report.md"
+        matrix.parent.mkdir(parents=True)
+        matrix.write_text("# Coverage Matrix\n", encoding="utf-8")
+
+        monkeypatch.chdir(cwd)
+        result = await run_scenario(
+            "artifact-glob", dispatch=self._fake_dispatch, scenarios_dir=sd
+        )
+        artifact_paths = {a["path"] for a in result["artifacts"]}
+        assert str(legit) in artifact_paths, f"legit artifact missing: {artifact_paths}"
+        assert not any("_failed" in p for p in artifact_paths), (
+            f"_failed draft leaked into artifacts: {artifact_paths}"
+        )
+        assert not any("coverage-matrix" in p for p in artifact_paths), (
+            f"coverage-matrix report leaked into artifacts: {artifact_paths}"
+        )
+
     async def test_assertion_mismatch_fails(self, scenario_dir: Path) -> None:
         """An assertion mismatch should report failed step."""
         # Step 3 expects data_has: ["missing_key"] which is not in the response

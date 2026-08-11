@@ -32,6 +32,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 # E7 (#131): reuse the production D1-D3 orchestration from autoinfo.quality
 # UNMODIFIED; aliased because the wrapper below is also named run_delivery_gates.
+# #192: shared non-deliverable-artifact predicate (also enforced at the
+# collect_artifacts source in autoinfo.mcp.validation).
+from autoinfo.mcp.validation import is_excluded_artifact
 from autoinfo.quality import run_delivery_gates as _quality_run_delivery_gates  # noqa: PLC0415
 
 
@@ -887,6 +890,10 @@ def _package(artifacts: list[dict[str, Any]], results: list[dict[str, Any]], out
     for a in artifacts:
         src = Path(a["path"])
         if not src.exists():
+            continue
+        # #192: defensive — exclude non-deliverable artifacts even if they
+        # arrive from a caller that did not filter at collection time.
+        if is_excluded_artifact(src.as_posix()):
             continue
         rel = src.as_posix()
         bucket = _bucket(src)

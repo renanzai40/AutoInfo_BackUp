@@ -364,6 +364,50 @@ def test_bucket_classification(tmp_path: Path):
     assert vd._bucket(Path("knowledge/medical-research/02-Draft/d.md")) == "KB"
     assert vd._bucket(Path("knowledge/medical-research/03-Wiki/w.md")) == "KB"
     assert vd._bucket(Path("outputs/digest.md")) == "PROCESSED"
+    # #192: non-deliverable artifacts (rejected KB promotion drafts under
+    # knowledge/_failed/, internal coverage-matrix reports) are excluded by
+    # the shared predicate, so they never classify into RAW/KB/PROCESSED.
+    assert vd.is_excluded_artifact("knowledge/_failed/medical-research/rejected.md")
+    assert vd.is_excluded_artifact("outputs/coverage-matrix/matrix-report.md")
+    assert not vd.is_excluded_artifact("outputs/digest.md")
+    assert not vd.is_excluded_artifact(
+        "knowledge/medical-research/01-Raw/x/2026-08-06-a.md"
+    )
+
+
+def test_package_skips_excluded_artifacts(tmp_path: Path, monkeypatch):
+    """Excluded artifacts never enter the delivery package (#192).
+
+    knowledge/_failed/<domain>/ drafts and outputs/coverage-matrix/ reports
+    must be absent from the zip and the manifest, while a legit output file
+    next to them is still delivered.
+    """
+    legit = tmp_path / "outputs" / "digest.md"
+    legit.parent.mkdir(parents=True)
+    legit.write_text(
+        "# T\n\n## Executive Summary\n\ns\n\n### Key Findings\n\nk\n\n### Recommendations\n\nr\n",
+        encoding="utf-8",
+    )
+    rejected_draft = tmp_path / "knowledge" / "_failed" / "medical-research" / "rejected.md"
+    rejected_draft.parent.mkdir(parents=True)
+    rejected_draft.write_text("# Rejected draft\n", encoding="utf-8")
+    matrix = tmp_path / "outputs" / "coverage-matrix" / "matrix-report.md"
+    matrix.parent.mkdir(parents=True)
+    matrix.write_text("# Coverage Matrix\n", encoding="utf-8")
+
+    zip_path = _package_with(
+        tmp_path, [legit, rejected_draft, matrix], monkeypatch, _all_pass_gates
+    )
+    names = _zip_names(zip_path)
+    assert any(n.endswith("/digest.md") for n in names), f"legit file missing: {names}"
+    assert not any("_failed" in n for n in names), f"_failed leaked: {names}"
+    assert not any(
+        "coverage-matrix" in n for n in names
+    ), f"coverage-matrix leaked: {names}"
+    manifest = _zip_manifest(zip_path)
+    for entry in manifest["files"]:
+        assert "_failed" not in entry["file"], f"_failed in manifest: {entry}"
+        assert "coverage-matrix" not in entry["file"], f"coverage-matrix in manifest: {entry}"
 
 
 # ---------------------------------------------------------------------------

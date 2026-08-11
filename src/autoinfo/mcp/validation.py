@@ -1224,6 +1224,19 @@ def _unconfigured_scenario_result(
     return result
 
 
+def is_excluded_artifact(relpath: str) -> bool:
+    """True when a relative artifact path is a non-deliverable file (#192).
+
+    Rejects rejected KB promotion drafts under a ``_failed/`` directory
+    segment (``knowledge/_failed/<domain>/**``) and internal coverage-matrix
+    reports under a ``coverage-matrix`` directory segment
+    (``outputs/coverage-matrix/**``) so end-user validation packages never
+    contain them.
+    """
+    segments = Path(relpath).as_posix().split("/")
+    return "_failed" in segments or "coverage-matrix" in segments
+
+
 async def run_scenario(
     name: str,
     dispatch: Callable[[str, dict[str, Any]], Awaitable[dict[str, Any]]],
@@ -1419,7 +1432,9 @@ async def run_scenario(
         artifacts = []
         for pattern in collect_patterns:
             for path in sorted(Path.cwd().glob(pattern)):
-                if path.is_file():
+                # #192: never collect non-deliverable artifacts (rejected
+                # KB promotion drafts under _failed/, coverage-matrix reports).
+                if path.is_file() and not is_excluded_artifact(str(path)):
                     artifacts.append({
                         "pattern": pattern,
                         "path": str(path),
