@@ -1,0 +1,83 @@
+{# premium-briefing — Premium tier (access_level "premium").
+   Numbered takeaways with per-takeaway implication, risk/opportunity,
+   action items, and data references. Dual-context contract: renders
+   non-empty under BOTH report-shaped and digest-shaped (post-normalization)
+   flat key contexts. Keys: §2.1 of phaseA-template-spec.md. #}
+
+# {{ title | default('AutoInfo Premium Briefing') }}
+
+**Domain**: {{ domain | default('') }}
+**Generated**: {{ generated_at | default('') }}
+
+---
+
+## Executive Summary
+
+{% if executive_summary %}
+{{ executive_summary }}
+{% else %}
+_No executive summary available for this period._
+{% endif %}
+
+---
+
+## Key Takeaways
+
+{% for f in key_findings %}
+### {{ loop.index }}. {{ f }}
+
+{% if implications and implications|length > loop.index0 %}
+> **So what**: {{ implications[loop.index0] }}
+{% else %}
+> _No implication captured for this takeaway._
+{% endif %}
+
+{% if risks and risks|length > loop.index0 %}
+**Risk / Opportunity:** {{ risks[loop.index0].title | default('') }} — likelihood {{ risks[loop.index0].likelihood | default('') }} / impact {{ risks[loop.index0].impact | default('') }}; mitigation: {{ risks[loop.index0].mitigation | default('') }}
+{% else %}
+_No material risks or opportunities identified for this takeaway._
+{% endif %}
+
+{% if action_required and action_required|length > loop.index0 %}
+**Actions:** {{ action_required[loop.index0] }}
+{% else %}
+_No follow-up actions suggested._
+{% endif %}
+{% else %}
+_No key takeaways were extracted for this period._
+{% endfor %}
+
+{% set _kf_len = key_findings|default([])|length %}
+{% if risks and risks|length > _kf_len %}
+## Risks & Opportunities
+
+{% for r in risks %}
+{% if loop.index0 >= _kf_len %}
+- **{{ r.title | default('') }}** — likelihood {{ r.likelihood | default('') }} / impact {{ r.impact | default('') }}; mitigation: {{ r.mitigation | default('') }}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if action_required and action_required|length > _kf_len %}
+## Recommended Actions
+
+{% for a in action_required %}
+{% if loop.index0 >= _kf_len %}
+- [ ] {{ a }}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+---
+
+## References
+
+{% for ref in references %}
+1. **{{ ref.title | default('') }}**{% if ref.source_url %} — {{ ref.source_url }}{% endif %}{% if ref.source_platform %} ({{ ref.source_platform }}){% endif %}
+{% else %}
+_No source references available for this briefing._
+{% endfor %}
+
+---
+
+*AutoInfo Premium Briefing · {{ domain | default('') }} · {{ generated_at | default('') }}*

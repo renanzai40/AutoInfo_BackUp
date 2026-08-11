@@ -27,6 +27,7 @@ import re
 import shutil
 import sqlite3
 import tarfile
+import time
 import uuid
 import xml.etree.ElementTree as ET
 import zipfile
@@ -89,6 +90,30 @@ _JSONLD_DIGEST: dict[str, str] = {
     "@context": "https://autoinfo.ai/schemas/knowledge-digest-v1",
     "@type": "KnowledgeDigest",
 }
+
+# Optional per-product analysis keys of the digest JSON-LD shape (spec §2.4,
+# todo 7; surfaced into the agent payload by _render_agent_json, todo 22;
+# pinned by docs/schemas/knowledge-digest-v1.json, todo 23). Emitted on
+# product paths ONLY (premium-briefing / enterprise-briefing /
+# magazine-digest) when the synthesis carries them; ABSENT from default
+# digest/report agent output (round-trip contract — see
+# TestAgentProductFields.test_default_*_agent_output_unchanged). Deliberately
+# NOT runtime values of _JSONLD_DIGEST: this dict is spread verbatim into
+# every agent payload, so carrying the keys here would leak them into default
+# output and break the serialized contract. Shapes:
+#   implications:    list[str]            # "so-what" per key_findings entry
+#   risks:           list[dict[str, str]] # title / likelihood / impact / mitigation
+#   action_required: list[str]            # action per key_findings entry
+#   key_metrics:     list[dict[str, str]] # metric / value / source (enterprise)
+
+# Per-product analysis fields shared by the agent JSON-LD payload
+# (_render_agent_json) and the KB metadata persistence (_persist_product_analysis_to_kb).
+_PRODUCT_ANALYSIS_FIELDS: tuple[str, ...] = (
+    "implications",
+    "risks",
+    "action_required",
+    "key_metrics",
+)
 
 _JSONLD_TUTORIAL: dict[str, str] = {
     "@context": "https://autoinfo.ai/schemas/knowledge-tutorial-v1",
@@ -2281,6 +2306,38 @@ def _resolve_digest_product_type(template: ProductTemplate, variant: str) -> str
     return "digest"
 
 
+def _resolve_report_product_type(
+    template: ProductTemplate, variant: str, report_type: str
+) -> str:
+    """Map a ProductTemplate instance back to its report template family.
+
+    ``generate_report``'s *product_template* parameter is expected to be a
+    row's ``template`` from :data:`PRODUCT_TEMPLATES`. Rows whose name has
+    a flat template file of its own (e.g. ``premium-briefing`` →
+    ``premium-briefing.md.j2``, ``enterprise-briefing`` →
+    ``enterprise-briefing.md.j2``, ``column`` → ``column.md.j2``) render
+    through their own family; every other row — and any non-registry
+    template — keeps the default ``report`` family, so the base ``report``
+    row still renders ``report.md.j2`` unchanged. The ``column`` report
+    type keeps its own family even for non-registry templates (T40
+    backward compatibility).
+
+    This mirrors the ``column`` selection previously hardcoded at the
+    render site and the guard-first identity lookup of
+    :func:`_resolve_digest_product_type`: the on-disk existence check
+    ensures a registry name can never point at a template that does not
+    exist (FileNotFoundError trap from the T40
+    premium-briefing/enterprise-briefing rows).
+    """
+    for row in PRODUCT_TEMPLATES:
+        if row["template"] is template:
+            name: str = row["name"]
+            if (_TEMPLATES_DIR / f"{name}.{variant}.j2").is_file():
+                return name
+            return "column" if report_type == "column" else "report"
+    return "column" if report_type == "column" else "report"
+
+
 def list_output_templates(domain: str = "") -> dict[str, Any]:
     """List available output templates for a domain.
 
@@ -2320,9 +2377,48 @@ _DIGEST_FIELD_DESCRIPTIONS = [
     "list actionable recommendations if any",
 ]
 
+# Product-family field sections appended to the digest synthesis prompt
+# (spec §2.4, todo 7). Keyed by the resolved product family so the default
+# ``digest`` family stays unchanged. ``implications`` / ``risks`` /
+# ``action_required`` are index-aligned 1:1 with ``key_findings`` (spec
+# §5.2-5.4 per-takeaway pairing); ``key_metrics`` is enterprise-only.
+_DIGEST_PRODUCT_BASE_FIELDS: list[str] = [
+    '"implications": ["So-what implication for finding 1", ...], one item per '
+    "key_findings entry, index-aligned 1:1 (item N matches finding N)",
+    '"risks": [{"title": "Risk title", "likelihood": "high|medium|low", '
+    '"impact": "high|medium|low", "mitigation": "Mitigation action"}], '
+    "one item per key_findings entry, same order",
+    '"action_required": ["Action for finding 1", ...], one item per '
+    "key_findings entry, index-aligned 1:1",
+]
 
-def _build_digest_llm_prompt(entries: list[dict[str, Any]]) -> str:
-    """Build the user prompt for LLM digest synthesis."""
+_DIGEST_ENTERPRISE_METRICS_FIELDS: list[str] = [
+    '"key_metrics": [{"metric": "Metric name", "value": "Quantified value", '
+    '"source": "Entry/study/dataset"}], quantified metrics only '
+    "(enterprise decision-support table)",
+]
+
+_DIGEST_PRODUCT_FIELD_DESCRIPTIONS: dict[str, list[str]] = {
+    "premium-briefing": _DIGEST_PRODUCT_BASE_FIELDS,
+    "magazine-digest": _DIGEST_PRODUCT_BASE_FIELDS,
+    "enterprise-briefing": (
+        _DIGEST_PRODUCT_BASE_FIELDS + _DIGEST_ENTERPRISE_METRICS_FIELDS
+    ),
+}
+
+
+def _build_digest_llm_prompt(
+    entries: list[dict[str, Any]], product_family: str = "digest"
+) -> str:
+    """Build the user prompt for LLM digest synthesis.
+
+    For product template families (``premium-briefing`` /
+    ``enterprise-briefing`` / ``magazine-digest``) the requested field set
+    additionally includes the §2.4 product fields — ``implications`` /
+    ``risks`` / ``action_required`` (index-aligned with ``key_findings``),
+    plus ``key_metrics`` for enterprise-briefing — keyed by the resolved
+    family. The default ``digest`` family is unchanged (spec §2.4, todo 7).
+    """
     lines: list[str] = [
         "Synthesize the following knowledge base entries into a digest.",
         "",
@@ -2352,6 +2448,12 @@ def _build_digest_llm_prompt(entries: list[dict[str, Any]]) -> str:
     lines.append("Now generate a JSON digest with the following fields:")
     for desc in _DIGEST_FIELD_DESCRIPTIONS:
         lines.append(f"  - {desc}")
+    product_descs = _DIGEST_PRODUCT_FIELD_DESCRIPTIONS.get(product_family, [])
+    if product_descs:
+        lines.append("")
+        lines.append("Additional product fields:")
+        for desc in product_descs:
+            lines.append(f"  - {desc}")
     lines.append("")
     lines.append("Return all fields in a single JSON object.")
 
@@ -2542,6 +2644,93 @@ def _build_attribution_footer(
 
     # Default: markdown
     return f"---\n\n## Source Attribution\n\n{body}\n"
+
+
+def _normalize_digest_product_context(
+    context: dict[str, Any], domain: str
+) -> dict[str, Any]:
+    """Normalize the digest context to the flat §2.1 product-template shape.
+
+    The digest path renders product templates with a context that nests the
+    LLM synthesis under ``llm_synthesis``; product templates
+    (``premium-briefing`` / ``enterprise-briefing`` / ``magazine-digest``)
+    read only the FLAT keys pinned by ``phaseA-template-spec.md`` §2.1 —
+    the same shape the report path produces via :func:`_report_data_to_dict`.
+    This flattens the digest context to that dual-context contract:
+
+    - ``executive_summary`` ← ``llm_synthesis["executive_summary"]``
+      (``""`` when absent)
+    - ``key_findings`` ← ``llm_synthesis["key_findings"]`` converted to
+      ``list[str]``: each ``{topic, detail}`` dict becomes ``"Topic: detail"``
+      when both parts are non-empty; otherwise the present part alone;
+      fully empty items are dropped (spec §2.3 rule 2)
+    - ``recommendations`` ← ``llm_synthesis["recommendations"]``
+    - ``references`` ← derived from ``entries`` with the report-path item
+      shape ``{title, source_url, source_type, source_platform, domain}``
+      (spec §2.3 rule 4; ``entry.get("domain", <domain>)`` fallback)
+    - product-specific fields (todo 7): ``implications``, ``risks``,
+      ``action_required``, ``key_metrics`` ← flattened from
+      ``llm_synthesis`` when present, else ``[]`` — generic, so any new
+      synthesis field flows through automatically
+
+    All other top-level digest keys (``title``, ``domain``, ``generated_at``,
+    ``period``, ``entries``, …) are kept untouched — templates must simply
+    not read them (spec §2.3 rule 6).
+    """
+    synthesis_raw = context.get("llm_synthesis")
+    synthesis = synthesis_raw if isinstance(synthesis_raw, dict) else {}
+
+    # --- Flattened top-level keys ------------------------------------------
+    flat: dict[str, Any] = dict(context)
+    flat["executive_summary"] = str(synthesis.get("executive_summary") or "")
+
+    raw_findings = synthesis.get("key_findings", [])
+    findings: list[str] = []
+    if isinstance(raw_findings, list):
+        for item in raw_findings:
+            if isinstance(item, str):
+                text = item.strip()
+                if text:
+                    findings.append(text)
+                continue
+            if not isinstance(item, dict):
+                continue
+            topic = str(item.get("topic") or "").strip()
+            detail = str(item.get("detail") or "").strip()
+            if topic and detail:
+                findings.append(f"{topic}: {detail}")
+            elif topic:
+                findings.append(topic)
+            elif detail:
+                findings.append(detail)
+    flat["key_findings"] = findings
+
+    raw_recommendations = synthesis.get("recommendations", [])
+    flat["recommendations"] = (
+        raw_recommendations if isinstance(raw_recommendations, list) else []
+    )
+
+    # --- References derived from entries (report-path item shape) ----------
+    raw_entries = context.get("entries")
+    entries_list = raw_entries if isinstance(raw_entries, list) else []
+    flat["references"] = [
+        {
+            "title": e.get("title", ""),
+            "source_url": e.get("source_url", ""),
+            "source_type": e.get("source_type", ""),
+            "source_platform": e.get("source_platform", ""),
+            "domain": e.get("domain", domain),
+        }
+        for e in entries_list
+        if isinstance(e, dict)
+    ]
+
+    # --- Product-specific fields (todo 7), flattened generically ----------
+    for synthesis_field in ("implications", "risks", "action_required", "key_metrics"):
+        value = synthesis.get(synthesis_field, [])
+        flat[synthesis_field] = value if isinstance(value, list) else []
+
+    return flat
 
 
 # ---------------------------------------------------------------------------
@@ -2837,9 +3026,22 @@ def generate_digest(
         entries = active_entries
 
     # --- LLM synthesis -------------------------------------------------------
+    # Resolve the product template family up front (spec §2.4, todo 7) so the
+    # synthesis prompt can request the product-specific fields; the render
+    # site below reuses this resolution. Agent format is content-equivalent
+    # to markdown, so its family resolves against the markdown template file
+    # (todo 22) — otherwise premium-briefing/enterprise-briefing agent output
+    # would never request the per-product synthesis fields.
+    variant = FORMAT_TO_VARIANT.get(format, format)
+    family_variant = "md" if variant == "agent" else variant
+    digest_family = (
+        _resolve_digest_product_type(product_template, family_variant)
+        if product_template is not None
+        else "digest"
+    )
     llm_synthesis: dict[str, Any] = {}
     if entries:
-        prompt = _build_digest_llm_prompt(entries)
+        prompt = _build_digest_llm_prompt(entries, product_family=digest_family)
         if custom_instructions:
             prompt += f"\n\nAdditional instructions: {custom_instructions}"
         audience = _normalize_report_audience(target_audience)
@@ -2867,16 +3069,22 @@ def generate_digest(
     }
 
     # --- Render --------------------------------------------------------------
-    if product_template is not None:
-        variant = FORMAT_TO_VARIANT.get(format, format)
-        product_type = _resolve_digest_product_type(product_template, variant)
-        rendered = product_template.render(product_type, variant, context)
+    if format == "agent":
+        # Product templates only carry markdown variants, so agent format
+        # always renders the JSON-LD payload — which surfaces the
+        # per-product synthesis fields when present (todo 22).
+        rendered = _render_agent_json(entries, context)
+        # Persist the per-product analysis fields to the linked KB entries
+        # (todo 24) — no-op when the synthesis carries no product fields.
+        _persist_product_analysis_to_kb(store, entries, llm_synthesis)
+    elif product_template is not None:
+        product_type = digest_family
+        pt_context = _normalize_digest_product_context(context, domain)
+        rendered = product_template.render(product_type, variant, pt_context)
     elif format == "json":
         rendered = _render_json(context)
     elif format == "html":
         rendered = _render_digest_html(context)
-    elif format == "agent":
-        rendered = _render_agent_json(entries, context)
     elif format == "audio":
         markdown_text = _render_markdown(context)
         mp3_bytes = _render_audio(markdown_text)
@@ -3023,6 +3231,10 @@ class ReportData:
     executive_summary: str = ""
     key_findings: list[str] = field(default_factory=list)
     recommendations: list[str] = field(default_factory=list)
+    implications: list[str] = field(default_factory=list)
+    risks: list[dict[str, Any]] = field(default_factory=list)
+    action_required: list[str] = field(default_factory=list)
+    key_metrics: list[dict[str, Any]] = field(default_factory=list)
     sections: list[ReportSection] = field(default_factory=list)
     references: list[dict[str, Any]] = field(default_factory=list)
     appendices: list[dict[str, Any]] = field(default_factory=list)
@@ -3306,14 +3518,29 @@ def generate_report(
             )
 
     # -- Generate executive summary via LLM --------------------------------
+    # Resolve the product template family up front (spec §2.4, todo 7) so
+    # the synthesis can request the product-specific fields; the render
+    # site below reuses this resolution. Agent format is content-equivalent
+    # to markdown, so its family resolves against the markdown template file
+    # (todo 22) — otherwise premium-briefing/enterprise-briefing agent output
+    # would never request the per-product synthesis fields.
+    variant = FORMAT_TO_VARIANT.get(format, format)
+    family_variant = "md" if variant == "agent" else variant
+    report_family = (
+        _resolve_report_product_type(product_template, family_variant, report_type)
+        if product_template is not None
+        else ("column" if report_type == "column" else "report")
+    )
     summary_result = _generate_executive_summary(
         extractor, entries, groupings, effective_instructions,
         target_audience=target_audience,
         domains=report_domains if is_cross_domain else None,
+        product_family=report_family,
     )
     # The synthesis returns a dict of ``{executive_summary, key_findings,
-    # recommendations}``.  Accept a bare string for backward compatibility
-    # (legacy callers / direct mocks) — treated as summary only.
+    # recommendations}`` (plus the §2.4 product fields for product template
+    # families).  Accept a bare string for backward compatibility (legacy
+    # callers / direct mocks) — treated as summary only.
     if isinstance(summary_result, dict):
         executive_summary = summary_result.get("executive_summary", "") or ""
         key_findings = [
@@ -3322,10 +3549,38 @@ def generate_report(
         recommendations = [
             str(r) for r in (summary_result.get("recommendations") or [])
         ]
+        implications = [
+            str(i) for i in (summary_result.get("implications") or [])
+        ]
+        action_required = [
+            str(a) for a in (summary_result.get("action_required") or [])
+        ]
+        risks = [
+            {
+                k: str(v)
+                for k, v in r.items()
+                if k in ("title", "likelihood", "impact", "mitigation")
+            }
+            for r in (summary_result.get("risks") or [])
+            if isinstance(r, dict)
+        ]
+        key_metrics = [
+            {
+                k: str(v)
+                for k, v in m.items()
+                if k in ("metric", "value", "source")
+            }
+            for m in (summary_result.get("key_metrics") or [])
+            if isinstance(m, dict)
+        ]
     else:
         executive_summary = str(summary_result or "")
         key_findings = []
         recommendations = []
+        implications = []
+        risks = []
+        action_required = []
+        key_metrics = []
 
     # -- Build report data -------------------------------------------------
     sections = [
@@ -3357,6 +3612,10 @@ def generate_report(
         executive_summary=executive_summary,
         key_findings=key_findings,
         recommendations=recommendations,
+        implications=implications,
+        risks=risks,
+        action_required=action_required,
+        key_metrics=key_metrics,
         sections=sections,
         references=references,
     )
@@ -3371,12 +3630,60 @@ def generate_report(
     }
 
     # -- Render -------------------------------------------------------------
-    if product_template is not None:
-        variant = FORMAT_TO_VARIANT.get(format, format)
+    if format == "agent":
+        # Build entry-like dicts from report items for JSON-LD rendering
+        agent_entries: list[dict[str, Any]] = []
+        for section in report_data.sections:
+            for item in section.items:
+                agent_entries.append({
+                    "entry_id": "",
+                    "title": item.get("title", ""),
+                    "summary": item.get("summary", ""),
+                    "source_url": item.get("source_url", ""),
+                    "source_platform": "",
+                    "collected_at": item.get("date", ""),
+                    "relevance_score": item.get("relevance_score", 0),
+                    "tags": [],
+                })
+        # The llm_synthesis carries the per-product analysis fields from
+        # ReportData (todo 7); _render_agent_json surfaces them (todo 22).
+        agent_context: dict[str, Any] = {
+            "domain": report_title_domain,
+            "period": period,
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "llm_synthesis": {
+                "executive_summary": report_data.executive_summary,
+                "key_findings": report_data.key_findings,
+                "trends": [],
+                "recommendations": report_data.recommendations,
+                "implications": report_data.implications,
+                "risks": report_data.risks,
+                "action_required": report_data.action_required,
+                "key_metrics": report_data.key_metrics,
+            },
+            "target_audience": target_audience,
+        }
+        rendered = _render_agent_json(agent_entries, agent_context)
+        # Persist the per-product analysis fields to the linked KB entries
+        # (todo 24). Report-path agent entries hardcode entry_id "" — the
+        # helper falls back to source_url matching.
+        _persist_product_analysis_to_kb(
+            kb_store,
+            agent_entries,
+            {
+                "implications": report_data.implications,
+                "risks": report_data.risks,
+                "action_required": report_data.action_required,
+                "key_metrics": report_data.key_metrics,
+            },
+        )
+    elif product_template is not None:
         pt_context = _report_data_to_dict(report_data, source_tier_badge=source_tier_badge)
-        # The "column" product renders through its own template family
-        # (column.md.j2); every other product type keeps the report family.
-        product_type = "column" if report_type == "column" else "report"
+        # The report product resolves to its own template family when the
+        # registry row has an on-disk template (premium-briefing,
+        # enterprise-briefing, column); everything else keeps the report
+        # family ("column" stays column for T40 backward compatibility).
+        product_type = report_family
         rendered = product_template.render(product_type, variant, pt_context)
     elif format == "json":
         rendered = _render_report_json(report_data, period=period)
@@ -3425,34 +3732,6 @@ def generate_report(
             report_data.title if hasattr(report_data, "title") else report_title_domain,
             sections=report_sections,
         )
-    elif format == "agent":
-        # Build entry-like dicts from report items for JSON-LD rendering
-        agent_entries: list[dict[str, Any]] = []
-        for section in report_data.sections:
-            for item in section.items:
-                agent_entries.append({
-                    "entry_id": "",
-                    "title": item.get("title", ""),
-                    "summary": item.get("summary", ""),
-                    "source_url": item.get("source_url", ""),
-                    "source_platform": "",
-                    "collected_at": item.get("date", ""),
-                    "relevance_score": item.get("relevance_score", 0),
-                    "tags": [],
-                })
-        agent_context: dict[str, Any] = {
-            "domain": report_title_domain,
-            "period": period,
-            "generated_at": datetime.now(timezone.utc).isoformat(),
-            "llm_synthesis": {
-                "executive_summary": report_data.executive_summary,
-                "key_findings": report_data.key_findings,
-                "trends": [],
-                "recommendations": report_data.recommendations,
-            },
-            "target_audience": target_audience,
-        }
-        rendered = _render_agent_json(agent_entries, agent_context)
     else:
         rendered = _render_report_template(
             report_data, source_tier_badge=source_tier_badge
@@ -4101,34 +4380,54 @@ def _normalize_report_audience(target_audience: str) -> str:
     return "general"
 
 
-def _generate_executive_summary(
-    extractor: LLMExtractor,
+# Bounded smaller-prompt retry budgets for the report synthesis (F3 fix,
+# round 1): the configured LLM endpoint returned EMPTY completions for
+# synthesis prompts ≳ ~11.9K chars (F3 size sweep: 11,908–12,827 → empty
+# 5/5; ≤10,734 → OK).  When the primary call comes back without a usable
+# executive summary, the synthesis re-calls with an entries-detail block
+# condensed to these budgets so the total prompt lands near ~5–7K chars.
+_RETRY_MAX_DETAIL_ENTRIES = 12
+_RETRY_MAX_ENTRY_SUMMARY_CHARS = 80
+_RETRY_DETAIL_CHAR_BUDGET = 4000
+
+# Round-2 (F3 re-verification): the endpoint's empty-completion behavior is
+# no longer size-gated — bad windows (~40–60 min) return genuine empty
+# completions at ALL prompt sizes, including the condensed ~5.9–6.1K retry
+# prompt (0/11 probes).  So the single retry became a bounded multi-attempt
+# loop (attempt 1 = full-size prompt; attempts 2+ = the condensed prompt)
+# with a short sleep between attempts — long enough to bridge a flapping
+# endpoint window, short enough that one ``generate_report`` still completes.
+# Both bounds are injectable for tests (no real sleeps under pytest).
+_RETRY_MAX_ATTEMPTS = 4
+_RETRY_BACKOFF_SECONDS = 60.0
+
+# Budgets for the round-2 dedicated product-sections prompt: a small second
+# call (issued only for product families when the base synthesis succeeded
+# but the parsed result lacks the §2.4 sections) that carries the produced
+# executive summary + findings (bounded) so the total stays ~2–3.5K chars,
+# far below any prompt-size concern.
+_DEDICATED_PRODUCT_PROMPT_MAX_FINDINGS = 12
+_DEDICATED_PRODUCT_PROMPT_MAX_FINDING_CHARS = 200
+_DEDICATED_PRODUCT_PROMPT_MAX_SUMMARY_CHARS = 1000
+
+
+def _build_report_entries_detail(
     entries: list[dict[str, Any]],
     groupings: list[dict[str, Any]],
-    custom_instructions: str = "",
-    target_audience: str = "",
-    domains: list[str] | None = None,
-) -> dict[str, Any]:
-    """Generate the report synthesis (summary + findings + recommendations).
+    max_detail_entries: int = 40,
+    max_entry_summary_chars: int = 120,
+    detail_char_budget: int | None = None,
+) -> str:
+    """Build the theme-grouped entry detail block embedded in the synthesis
+    prompt.
 
-    Asks the LLM for flat Markdown with ``## Executive Summary`` /
-    ``## Key Findings`` / ``## Recommendations`` headings — the default
-    model emits markdown far more reliably than a nested JSON schema —
-    and parses it by heading (see :func:`_parse_report_markdown`).
-
-    Falls back to a legacy single-string JSON summary via the extractor,
-    and finally to a bullet-list summary, so the report is never empty.
-    Returns a dict ``{"executive_summary": str, "key_findings": list[str],
-    "recommendations": list[str]}`` — never raises.
+    Defaults reproduce the original behavior exactly (40 highest-relevance
+    entries × 120-char summaries).  *detail_char_budget* caps the block's
+    total length; when the cap is hit, remaining entries are dropped and a
+    truncation note appended — used by the smaller-prompt retry in
+    :func:`_generate_executive_summary` so the prompt stays within the size
+    the configured LLM endpoint reliably answers.
     """
-    # Build a compact detail block of ACTUAL entry content so the LLM has
-    # concrete material to analyze. Theme-count summaries alone produce
-    # boilerplate / meta-narrative prose, so feed the highest-relevance
-    # entries (capped to keep the prompt short) with their titles and summary
-    # excerpts.
-    max_detail_entries = 40
-    max_entry_summary_chars = 120
-
     ranked = sorted(
         (e for g in groupings for e in g["entries"]),
         key=lambda e: float(e.get("relevance_score") or 0.0),
@@ -4137,20 +4436,44 @@ def _generate_executive_summary(
     picked_ids = {id(e) for e in ranked}
 
     detail_lines: list[str] = []
+    truncated = False
     for g in groupings:
+        if truncated:
+            break
         picked = [e for e in g["entries"] if id(e) in picked_ids]
         for e in picked:
-            detail_lines.append(
+            line = (
                 f"- [{g['theme']}] {e.get('title', '')}: "
                 f"{(e.get('summary') or '')[: max_entry_summary_chars]}"
             )
-        if len(picked) < len(g["entries"]):
+            if detail_char_budget is not None:
+                if len("\n".join(detail_lines + [line])) > detail_char_budget:
+                    truncated = True
+                    break
+            detail_lines.append(line)
+        if not truncated and len(picked) < len(g["entries"]):
             detail_lines.append(
                 f"- [{g['theme']}] (+{len(g['entries']) - len(picked)} more "
                 "entries in this theme)"
             )
-    entries_detail = "\n".join(detail_lines) or "(no entries)"
+    if truncated:
+        detail_lines.append("(further entries omitted for brevity)")
+    return "\n".join(detail_lines) or "(no entries)"
 
+
+def _build_report_synthesis_prompt(
+    entries_detail: str,
+    custom_instructions: str = "",
+    target_audience: str = "",
+    domains: list[str] | None = None,
+    product_family: str = "report",
+) -> str:
+    """Assemble the report-synthesis prompt.
+
+    Shared by the primary call and the truncated-prompt retry in
+    :func:`_generate_executive_summary` so both request and parse the same
+    structure (including the §2.4 product sections for product families).
+    """
     cross_domain_prefix = ""
     if domains and len(domains) >= 2:
         cross_domain_prefix = (
@@ -4181,15 +4504,190 @@ def _generate_executive_summary(
     )
     if custom_instructions:
         prompt += f"\n\nAdditional instructions: {custom_instructions}"
+    # -- Product-specific synthesis sections (todo 7, spec §2.4) -------------
+    product_structure = _REPORT_PRODUCT_SYNTHESIS_PROMPTS.get(product_family, "")
+    if product_structure:
+        prompt += f"\n\n{product_structure}"
     # -- Structured audience adaptation -----------------------------------
     audience = _normalize_report_audience(target_audience)
     audience_prompt = _REPORT_AUDIENCE_PROMPTS.get(audience, "")
     if audience_prompt:
         prompt += f"\n\n{audience_prompt}"
+    return prompt
 
-    # Primary path: flat markdown synthesis (reliable with the default model).
-    parsed = _parse_report_markdown(_call_llm_for_report_synthesis(prompt))
+
+def _report_product_fields_for_family(product_family: str) -> tuple[str, ...]:
+    """Required §2.4 product fields for a product synthesis family.
+
+    Returns ``()`` for the default ``report`` family and any unknown family
+    so the dedicated product-sections prompt never fires outside the product
+    template families (backward compatibility).  ``key_metrics`` is
+    enterprise-only.
+    """
+    if product_family not in _REPORT_PRODUCT_SYNTHESIS_PROMPTS:
+        return ()
+    fields: tuple[str, ...] = ("implications", "risks", "action_required")
+    if product_family == "enterprise-briefing":
+        fields += ("key_metrics",)
+    return fields
+
+
+def _build_product_sections_prompt(
+    parsed: dict[str, Any],
+    product_family: str,
+    max_findings: int = _DEDICATED_PRODUCT_PROMPT_MAX_FINDINGS,
+    max_finding_chars: int = _DEDICATED_PRODUCT_PROMPT_MAX_FINDING_CHARS,
+    max_summary_chars: int = _DEDICATED_PRODUCT_PROMPT_MAX_SUMMARY_CHARS,
+) -> str:
+    """Build the small dedicated prompt that asks the model to emit ONLY the
+    §2.4 product sections for an already-produced synthesis.
+
+    Carries the produced executive summary and key findings (both bounded so
+    the total stays ~2–3.5K chars, far below any prompt-size concern) plus
+    the family's section format spec, so the response parses with
+    :func:`_parse_report_markdown` (``require_exec_summary=False``).  The
+    callers only merge the product fields back, so any model output outside
+    the requested sections is ignored.
+    """
+    summary = (parsed.get("executive_summary") or "").strip()
+    if len(summary) > max_summary_chars:
+        summary = summary[:max_summary_chars].rstrip() + "..."
+    findings = "\n".join(
+        f"- {(str(f) or '').strip()[:max_finding_chars].rstrip()}"
+        for f in (parsed.get("key_findings") or [])[:max_findings]
+    )
+    return (
+        "You are a report synthesis assistant. Below are the executive summary "
+        "and key findings already produced for a briefing. Emit ONLY the "
+        "additional product sections listed below — do NOT repeat the "
+        "executive summary, key findings, recommendations, or any other "
+        "content.\n\n"
+        f"## Executive Summary\n{summary or '(none)'}\n\n"
+        f"## Key Findings\n{findings or '(none)'}\n\n"
+        + _REPORT_PRODUCT_SYNTHESIS_PROMPTS[product_family]
+    )
+
+
+def _generate_executive_summary(
+    extractor: LLMExtractor,
+    entries: list[dict[str, Any]],
+    groupings: list[dict[str, Any]],
+    custom_instructions: str = "",
+    target_audience: str = "",
+    domains: list[str] | None = None,
+    product_family: str = "report",
+    *,
+    max_synthesis_attempts: int = _RETRY_MAX_ATTEMPTS,
+    retry_backoff_seconds: float = _RETRY_BACKOFF_SECONDS,
+    sleep_fn: Callable[[float], None] = time.sleep,
+) -> dict[str, Any]:
+    """Generate the report synthesis (summary + findings + recommendations).
+
+    Asks the LLM for flat Markdown with ``## Executive Summary`` /
+    ``## Key Findings`` / ``## Recommendations`` headings — the default
+    model emits markdown far more reliably than a nested JSON schema —
+    and parses it by heading (see :func:`_parse_report_markdown`).
+
+    For product template families (``premium-briefing`` /
+    ``enterprise-briefing`` / ``magazine-digest``) the requested structure
+    additionally includes the §2.4 product sections — ``## Implications`` /
+    ``## Risks & Opportunities`` / ``## Action Required`` (index-aligned
+    with Key Findings), plus ``## Key Metrics`` for enterprise-briefing —
+    keyed by the resolved family. The default ``report`` family is
+    unchanged (spec §2.4, todo 7).
+
+    Falls back to a legacy single-string JSON summary via the extractor,
+    and finally to a bullet-list summary, so the report is never empty.
+    When an attempt returns empty (or the parsed result lacks an executive
+    summary) — the configured endpoint flaps with genuine empty completions
+    for ~40–60-min "bad windows" at ALL prompt sizes — the call is retried
+    with a condensed entries-detail prompt (see
+    :func:`_build_report_entries_detail`) up to *max_synthesis_attempts*
+    times total, sleeping *retry_backoff_seconds* via *sleep_fn* between
+    attempts, so one ``generate_report`` can bridge an endpoint bad window
+    without an unbounded loop (round-2 F3 fix; both bounds injectable for
+    tests).  Attempt 1 uses the full-size prompt; attempts 2+ reuse the
+    condensed prompt.
+
+    For product families, when the synthesis succeeds but the parsed result
+    lacks required §2.4 product fields (the model often omits the trailing
+    sections), a SECOND small dedicated prompt (see
+    :func:`_build_product_sections_prompt`) is issued — bounded to at most
+    one call — asking for ONLY those sections, and the parsed sections are
+    merged into the result.
+    Returns a dict ``{"executive_summary": str, "key_findings": list[str],
+    "recommendations": list[str]}`` — never raises.
+    """
+    entries_detail = _build_report_entries_detail(entries, groupings)
+    prompt = _build_report_synthesis_prompt(
+        entries_detail,
+        custom_instructions=custom_instructions,
+        target_audience=target_audience,
+        domains=domains,
+        product_family=product_family,
+    )
+    retry_prompt = _build_report_synthesis_prompt(
+        _build_report_entries_detail(
+            entries,
+            groupings,
+            max_detail_entries=_RETRY_MAX_DETAIL_ENTRIES,
+            max_entry_summary_chars=_RETRY_MAX_ENTRY_SUMMARY_CHARS,
+            detail_char_budget=_RETRY_DETAIL_CHAR_BUDGET,
+        ),
+        custom_instructions=custom_instructions,
+        target_audience=target_audience,
+        domains=domains,
+        product_family=product_family,
+    )
+    retry_prompt_usable = len(retry_prompt) < len(prompt)
+
+    # Primary path: flat markdown synthesis (reliable with the default model),
+    # with a bounded multi-attempt retry loop against endpoint bad windows.
+    parsed: dict[str, Any] = {}
+    for attempt in range(1, max_synthesis_attempts + 1):
+        if attempt > 1:
+            if not retry_prompt_usable:
+                break
+            logger.info(
+                "Report synthesis attempt %d/%d returned no executive summary; "
+                "sleeping %.0fs then retrying with condensed prompt "
+                "(%d -> %d chars)",
+                attempt - 1,
+                max_synthesis_attempts,
+                retry_backoff_seconds,
+                len(prompt),
+                len(retry_prompt),
+            )
+            sleep_fn(retry_backoff_seconds)
+        attempt_prompt = prompt if attempt == 1 else retry_prompt
+        parsed = _parse_report_markdown(
+            _call_llm_for_report_synthesis(attempt_prompt)
+        )
+        if parsed.get("executive_summary"):
+            break
+
     if parsed.get("executive_summary"):
+        # Round-2 F3 fix: the model often omits the trailing §2.4 product
+        # sections even when the synthesis succeeds.  For product families,
+        # when any required section is missing/empty, issue ONE small
+        # dedicated prompt (decoupled from the base synthesis call) and
+        # merge the parsed sections back.
+        product_fields = _report_product_fields_for_family(product_family)
+        if product_fields and any(not parsed.get(f) for f in product_fields):
+            sections_prompt = _build_product_sections_prompt(parsed, product_family)
+            logger.info(
+                "Report synthesis succeeded but product sections (%s) missing; "
+                "issuing dedicated small prompt (%d chars)",
+                ", ".join(f for f in product_fields if not parsed.get(f)),
+                len(sections_prompt),
+            )
+            sections_parsed = _parse_report_markdown(
+                _call_llm_for_report_synthesis(sections_prompt),
+                require_exec_summary=False,
+            )
+            for field in product_fields:
+                if sections_parsed.get(field):
+                    parsed[field] = sections_parsed[field]
         return parsed
 
     # Legacy path: single-string JSON summary via the extractor.
@@ -4267,13 +4765,23 @@ def _call_llm_for_report_synthesis(prompt: str) -> str:
     return content.strip()
 
 
-def _parse_report_markdown(content: str) -> dict[str, Any]:
+def _parse_report_markdown(
+    content: str, require_exec_summary: bool = True
+) -> dict[str, Any]:
     """Parse a Markdown report synthesis into the report context schema.
 
     Handles the structure requested by the report-synthesis prompt:
     ``## Executive Summary`` (paragraphs), ``## Key Findings`` (bullets)
-    and ``## Recommendations`` (bullets).  Returns ``{}`` when *content*
-    is empty or carries no executive summary.
+    and ``## Recommendations`` (bullets).  For product template families
+    (spec §2.4, todo 7) it also parses ``## Implications`` (bullets →
+    ``list[str]``), ``## Risks & Opportunities`` (``|``-delimited bullets →
+    ``list[dict]`` ``{title, likelihood, impact, mitigation}``),
+    ``## Action Required`` (bullets → ``list[str]``) and ``## Key Metrics``
+    (``|``-delimited bullets → ``list[dict]`` ``{metric, value, source}``).
+    Returns ``{}`` when *content* is empty, or when *content* carries no
+    executive summary and *require_exec_summary* is set (default).  The
+    dedicated product-sections response (which intentionally omits the
+    executive summary) is parsed with ``require_exec_summary=False``.
     """
     if not content:
         return {}
@@ -4281,6 +4789,10 @@ def _parse_report_markdown(content: str) -> dict[str, Any]:
         "executive_summary": "",
         "key_findings": [],
         "recommendations": [],
+        "implications": [],
+        "risks": [],
+        "action_required": [],
+        "key_metrics": [],
     }
     current_section = ""
     summary_lines: list[str] = []
@@ -4312,9 +4824,42 @@ def _parse_report_markdown(content: str) -> dict[str, Any]:
                 item = bullet_text(stripped)
                 if item:
                     result["recommendations"].append(item)
+        elif current_section == "implications":
+            if is_bullet(stripped):
+                item = bullet_text(stripped)
+                if item:
+                    result["implications"].append(item)
+        elif current_section in ("risks & opportunities", "risks", "risk matrix"):
+            if is_bullet(stripped):
+                parts = [p.strip() for p in bullet_text(stripped).split("|")]
+                if len(parts) >= 4 and parts[0]:
+                    result["risks"].append(
+                        {
+                            "title": parts[0],
+                            "likelihood": parts[1],
+                            "impact": parts[2],
+                            "mitigation": " | ".join(parts[3:]),
+                        }
+                    )
+        elif current_section in ("action required", "actions"):
+            if is_bullet(stripped):
+                item = bullet_text(stripped)
+                if item:
+                    result["action_required"].append(item)
+        elif current_section in ("key metrics", "metrics"):
+            if is_bullet(stripped):
+                parts = [p.strip() for p in bullet_text(stripped).split("|")]
+                if len(parts) >= 3 and parts[0]:
+                    result["key_metrics"].append(
+                        {
+                            "metric": parts[0],
+                            "value": parts[1],
+                            "source": " | ".join(parts[2:]),
+                        }
+                    )
 
     result["executive_summary"] = "\n\n".join(summary_lines).strip()
-    if not result["executive_summary"]:
+    if require_exec_summary and not result["executive_summary"]:
         return {}
     return result
 
@@ -4351,7 +4896,10 @@ def _report_data_to_dict(
 
     Maps ``ReportSection.items`` → ``entries`` to match the variable
     names expected by the report templates (``report.md.j2``,
-    ``report.html.j2``).
+    ``report.html.j2``).  Also surfaces the §2.1 product fields
+    (``implications`` / ``risks`` / ``action_required`` / ``key_metrics``,
+    spec §2.4, todo 7) — empty lists for plain reports, so existing callers
+    are unchanged.
     """
     return {
         "title": report_data.title,
@@ -4361,6 +4909,10 @@ def _report_data_to_dict(
         "executive_summary": report_data.executive_summary,
         "key_findings": report_data.key_findings,
         "recommendations": report_data.recommendations,
+        "implications": report_data.implications,
+        "risks": report_data.risks,
+        "action_required": report_data.action_required,
+        "key_metrics": report_data.key_metrics,
         "source_tier_badge": source_tier_badge,
         "sections": [
             {
@@ -5027,6 +5579,46 @@ _REPORT_TYPE_PROMPTS: dict[str, str] = {
 }
 
 _VALID_REPORT_TYPES: list[str] = list(_REPORT_TYPE_PROMPTS.keys())
+
+# Product-family synthesis sections appended to the report-synthesis prompt
+# (spec §2.4, todo 7), keyed by the resolved product family so the default
+# ``report`` family stays unchanged. ``implications`` / ``risks`` /
+# ``action_required`` are index-aligned 1:1 with ``key_findings`` (spec
+# §5.2-5.4 per-takeaway pairing); ``key_metrics`` is enterprise-only.
+# The ``|``-delimited line formats below are parsed by
+# :func:`_parse_report_markdown` into ``{title, likelihood, impact,
+# mitigation}`` / ``{metric, value, source}`` dicts.
+_REPORT_PRODUCT_BASE_SECTIONS = (
+    "Additionally, append these product sections with exactly one item per "
+    "Key Finding bullet, index-aligned 1:1 (item N corresponds to Key "
+    "Finding N):\n\n"
+    "## Implications\n"
+    "- <implication for finding 1>\n"
+    "- <implication for finding 2>\n\n"
+    "## Risks & Opportunities\n"
+    "- <risk title> | <likelihood> | <impact> | <mitigation>\n"
+    "(one bullet per finding, same order; likelihood/impact values: "
+    "High/Medium/Low)\n\n"
+    "## Action Required\n"
+    "- <action for finding 1>\n"
+    "- <action for finding 2>\n"
+    "(index-aligned with Key Findings; concise imperative sentences)"
+)
+
+_REPORT_ENTERPRISE_METRICS_SECTION = (
+    "\n\n## Key Metrics\n"
+    "- <metric> | <value> | <source>\n"
+    "(quantified metrics from the entries only; one bullet per metric; "
+    "source names the entry, study, or dataset)"
+)
+
+_REPORT_PRODUCT_SYNTHESIS_PROMPTS: dict[str, str] = {
+    "premium-briefing": _REPORT_PRODUCT_BASE_SECTIONS,
+    "magazine-digest": _REPORT_PRODUCT_BASE_SECTIONS,
+    "enterprise-briefing": (
+        _REPORT_PRODUCT_BASE_SECTIONS + _REPORT_ENTERPRISE_METRICS_SECTION
+    ),
+}
 
 _REPORT_AUDIENCE_DESCRIPTIONS: dict[str, str] = {
     "researcher": "technical depth, citations, methodology focus, statistical rigor",
@@ -6581,6 +7173,65 @@ def _render_json(context: dict[str, Any]) -> str:
 # ---------------------------------------------------------------------------
 
 
+def _persist_product_analysis_to_kb(
+    store: KBStore,
+    link_entries: list[dict[str, Any]],
+    product_fields: dict[str, Any],
+) -> None:
+    """Persist populated product analysis fields to the linked KB entries.
+
+    Called after agent rendering (todo 24, output-quality-mega): when a
+    product output (premium-briefing / enterprise-briefing / magazine-digest)
+    carries the per-product analysis fields, they are written as JSON
+    metadata (``{"product_analysis": {...}}``) onto the KB entries the
+    output was generated from, via the existing KB metadata dict path
+    (``KBStore.update_entry_metadata`` → ``entries.custom_fields`` SQLite
+    column → surfaced by ``KBStore.get_entry`` / MCP ``get_kb_entry``).
+
+    Linkage: entries are matched by ``entry_id`` when present (digest path);
+    otherwise by ``source_url`` (report-path agent entries hardcode
+    ``entry_id: ""``).
+
+    Backward compatible: when no product field is populated (default
+    digest/report), nothing is persisted. Failures are logged and never
+    break output generation.
+    """
+    populated = {
+        field: product_fields[field]
+        for field in _PRODUCT_ANALYSIS_FIELDS
+        if product_fields.get(field)
+    }
+    if not populated:
+        return
+    metadata = {"product_analysis": populated}
+    seen: set[tuple[str, str]] = set()
+    for entry in link_entries:
+        entry_id = str(entry.get("entry_id") or "")
+        source_url = str(entry.get("source_url") or "")
+        if not entry_id and not source_url:
+            continue
+        if (entry_id, source_url) in seen:
+            continue
+        seen.add((entry_id, source_url))
+        try:
+            target_id = entry_id
+            if not target_id:
+                found = store.get_entry_by_source_url(source_url)
+                if found is None:
+                    continue
+                target_id = str(found.get("entry_id") or "")
+                if not target_id:
+                    continue
+            store.update_entry_metadata(target_id, metadata)
+        except Exception:
+            logger.warning(
+                "Failed to persist product analysis metadata for %r — "
+                "output unaffected",
+                entry_id or source_url,
+                exc_info=True,
+            )
+
+
 def _render_agent_json(
     entries: list[dict[str, Any]],
     context: dict[str, Any],
@@ -6699,6 +7350,13 @@ def _render_agent_json(
         "trends": trends,
         "metadata": metadata,
     }
+    # Surface the per-product analysis fields (todo 22) — implications /
+    # risks / action_required / key_metrics — copied from the synthesis so a
+    # downstream agent can query/filter them. Emitted only when populated,
+    # so default digest/report agent output stays unchanged.
+    for synthesis_field in _PRODUCT_ANALYSIS_FIELDS:
+        if llm_synthesis.get(synthesis_field):
+            output[synthesis_field] = llm_synthesis[synthesis_field]
 
     return json.dumps(output, indent=2, ensure_ascii=False, default=str)
 

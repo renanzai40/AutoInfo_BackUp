@@ -34,6 +34,9 @@ def gen_one(domain: str, product: str) -> str:
     if product == "column":
         return generate_report(domain=domain, period="weekly", format="markdown",
                                report_type="column", product_template=tmpl)
+    if product == "magazine-digest":
+        return generate_digest(domain=domain, period="weekly", format="markdown",
+                               product_template=tmpl)
     return generate_report(domain=domain, period="weekly", format="markdown",
                            product_template=tmpl)
 

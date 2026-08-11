@@ -1,0 +1,87 @@
+{# enterprise-briefing — enterprise-tier paid briefing (access_level "enterprise").
+   One-page executive summary + quantified Key Metrics table + Action Required
+   checklist + Risk matrix + numbered references. Dual-context contract: renders
+   from the FLAT normalized context provided by BOTH the report path
+   (generate_report with product_template, via _report_data_to_dict) and the
+   digest path (generate_digest with product_template, post-normalization).
+   Reads ONLY the §2.1 flat-contract keys: title, executive_summary,
+   key_findings, recommendations, references, generated_at, domain,
+   implications, risks, action_required, key_metrics. strict-undefined is OFF
+   in the ProductTemplate environment, but every optional key is still guarded
+   explicitly (per-section empty-state rules in spec §6). #}
+# {{ title|default('AutoInfo Enterprise Briefing', true) }}
+
+**Domain**: {{ domain|default('') }}  
+**Generated**: {{ generated_at|default('') }}  
+
+---
+
+## Executive Summary
+
+{% if executive_summary %}
+{{ executive_summary }}
+{% else %}
+_No executive summary available for this period._
+{% endif %}
+
+{% if key_findings %}
+## Key Findings
+
+{% for f in key_findings %}
+- {{ f }}
+{% endfor %}
+
+{% endif %}
+## Key Metrics
+
+{% if key_metrics %}
+| Metric | Value | Source |
+|--------|-------|--------|
+{% for m in key_metrics %}
+| {{ m.metric }} | {{ m.value }} | {{ m.source }} |
+{% endfor %}
+{% else %}
+_No quantified metrics in this period._
+{% endif %}
+
+## Action Required
+
+{% for a in action_required %}
+- [ ] {{ a }}
+{% else %}
+_No actions required in this period._
+{% endfor %}
+
+{% if recommendations %}
+## Recommendations
+
+{% for r in recommendations %}
+- {{ r }}
+{% endfor %}
+
+{% endif %}
+## Risk Matrix
+
+{% if risks %}
+| Risk | Likelihood | Impact | Mitigation |
+|------|-----------|--------|------------|
+{% for r in risks %}
+| {{ r.title }} | {{ r.likelihood }} | {{ r.impact }} | {{ r.mitigation }} |
+{% endfor %}
+{% else %}
+_No material risks identified in this period._
+{% endif %}
+
+---
+
+## References
+
+{% for ref in references %}
+1. **{{ ref.title }}**{% if ref.source_url %} — {{ ref.source_url }}{% endif %}{% if ref.source_platform %} ({{ ref.source_platform }}){% endif %}
+{% else %}
+_No source references available for this briefing._
+{% endfor %}
+
+---
+
+*AutoInfo Enterprise Briefing · {{ domain|default('') }} · {{ generated_at|default('') }}*

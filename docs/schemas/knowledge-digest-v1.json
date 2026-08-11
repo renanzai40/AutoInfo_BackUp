@@ -63,6 +63,45 @@
         "format": { "type": "string", "description": "Report empty-KB variant only: the requested output format." }
       },
       "additionalProperties": true
+    },
+    "implications": {
+      "type": "array",
+      "description": "Per-product analysis (spec §2.4, todo 7): one 'so-what' implication per key_findings entry, index-aligned 1:1. Optional — present only on product paths (premium-briefing / enterprise-briefing / magazine-digest) when the synthesis carries it; absent on default digest/report agent output.",
+      "items": { "type": "string" }
+    },
+    "risks": {
+      "type": "array",
+      "description": "Per-product analysis: one risk object per key_findings entry, same order. Optional — product paths only.",
+      "items": {
+        "type": "object",
+        "required": ["title", "likelihood", "impact", "mitigation"],
+        "properties": {
+          "title": { "type": "string" },
+          "likelihood": { "type": "string", "description": "high|medium|low." },
+          "impact": { "type": "string", "description": "high|medium|low." },
+          "mitigation": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "action_required": {
+      "type": "array",
+      "description": "Per-product analysis: one action per key_findings entry, index-aligned 1:1. Optional — product paths only.",
+      "items": { "type": "string" }
+    },
+    "key_metrics": {
+      "type": "array",
+      "description": "Per-product analysis (enterprise-briefing only): quantified decision-support metrics. Optional — product paths only.",
+      "items": {
+        "type": "object",
+        "required": ["metric", "value", "source"],
+        "properties": {
+          "metric": { "type": "string" },
+          "value": { "type": "string" },
+          "source": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
     }
   },
   "additionalProperties": true,
