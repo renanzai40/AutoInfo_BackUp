@@ -17,12 +17,30 @@ from __future__ import annotations
 
 import json
 import os
+from typing import Any, cast
 
 import typer
 
-from autoinfo.output import export_kb
+from autoinfo.output import PRODUCT_TEMPLATES, ProductTemplate, export_kb
 
 app = typer.Typer(help="Generate digests, reports, tutorials, presentations, exports, and translations")
+
+
+def _resolve_product_template(product: str) -> ProductTemplate | None:
+    """Resolve a ``--product`` name to its registry ``ProductTemplate``.
+
+    Empty string (flag omitted) returns ``None`` so the existing call
+    shape is preserved.  Unknown names print the valid registry names and
+    exit with code 1.
+    """
+    if not product:
+        return None
+    for row in PRODUCT_TEMPLATES:
+        if row["name"] == product:
+            return cast(ProductTemplate, row["template"])
+    valid = ", ".join(row["name"] for row in PRODUCT_TEMPLATES)
+    typer.echo(f"Error: Unknown product '{product}'. Valid products: {valid}", err=True)
+    raise typer.Exit(code=1)
 
 
 @app.command(name="list-templates")
@@ -61,6 +79,11 @@ def digest(
     format: str = typer.Option(
         "markdown", "--format", help="Output format (markdown, html, json, agent)"
     ),
+    product: str = typer.Option(
+        "",
+        "--product",
+        help="Product template name (see output list-templates)",
+    ),
     user_id: str = typer.Option(
         "",
         "--user-id",
@@ -74,10 +97,18 @@ def digest(
     """
     from autoinfo.output import generate_digest
 
+    product_template = _resolve_product_template(product)
+
     try:
-        result = generate_digest(
-            domain=domain, period=period, format=format, user_id=user_id
-        )
+        kwargs: dict[str, Any] = {
+            "domain": domain,
+            "period": period,
+            "format": format,
+            "user_id": user_id,
+        }
+        if product_template is not None:
+            kwargs["product_template"] = product_template
+        result = generate_digest(**kwargs)
         typer.echo(result)
     except ValueError as exc:
         typer.echo(f"Error: {exc}", err=True)
@@ -109,6 +140,11 @@ def report(
         "--domains",
         help="Domains for cross-domain report (repeatable, e.g. --domains X --domains Y)",
     ),
+    product: str = typer.Option(
+        "",
+        "--product",
+        help="Product template name (see output list-templates)",
+    ),
     user_id: str = typer.Option(
         "",
         "--user-id",
@@ -130,6 +166,8 @@ def report(
         typer.echo("Error: Provide --domain or --domains to specify report scope.", err=True)
         raise typer.Exit(code=1)
 
+    product_template = _resolve_product_template(product)
+
     try:
         kwargs: dict[str, Any] = {
             "domain": domain or (domains[0] if domains else "unknown"),
@@ -139,6 +177,8 @@ def report(
             "report_type": report_type,
             "user_id": user_id,
         }
+        if product_template is not None:
+            kwargs["product_template"] = product_template
         if len(domains) >= 2:
             kwargs["domains"] = domains
 

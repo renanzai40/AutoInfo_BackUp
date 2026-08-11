@@ -2230,6 +2230,7 @@ def _handle_search_knowledge_base(
     filter_language: str | None = None,
     user_id: str | None = None,
     include_stale: bool = False,
+    filter_custom_fields: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     """Search the knowledge base using FTS5 full-text search.
 
@@ -2246,6 +2247,14 @@ def _handle_search_knowledge_base(
     include_stale:
         If False (default), stale entries are demoted to the bottom
         of search results.
+    filter_custom_fields:
+        Faceted filter over the ``custom_fields`` JSON column (todo 25,
+        output-quality-mega — product-analysis metadata search).  Each
+        key is a dot-path into ``custom_fields`` (e.g.
+        ``"product_analysis.action_required"``); an empty-string value
+        matches entries where the field exists and is non-empty, any
+        other value matches entries where the field's JSON value equals
+        that text.
     """
     from autoinfo.kb import KBStore
 
@@ -2278,6 +2287,7 @@ def _handle_search_knowledge_base(
         filter_language=filter_language,
         filter_user_id=user_id,
         include_stale=include_stale,
+        filter_custom_fields=filter_custom_fields,
     )
 
 
@@ -2734,6 +2744,7 @@ def _handle_generate_digest(
     recipients: list[str] | None = None,
     user_id: str = "",
     max_items: int = 0,
+    product: str = "",
     persist: bool = False,
 ) -> dict[str, Any]:
     """Generate a digest of KB entries for *domain* over the given *period*.
@@ -2744,6 +2755,31 @@ def _handle_generate_digest(
 
     from autoinfo.kb import KBStore
     from autoinfo.output import generate_digest as _generate_digest
+
+    product_template = None
+    if product:
+        from autoinfo.output import PRODUCT_TEMPLATES
+
+        _product_row = next(
+            (row for row in PRODUCT_TEMPLATES if row["name"] == product),
+            None,
+        )
+        if _product_row is None:
+            _valid = ", ".join(
+                sorted(row["name"] for row in PRODUCT_TEMPLATES)
+            )
+            return {
+                "error_code": ErrorCode.VALIDATION_ERROR.value,
+                "message": f"Unknown product '{product}'. Valid products: {_valid}",
+                "actionable": True,
+                "success": False,
+                "error": {
+                    "code": ErrorCode.VALIDATION_ERROR.value,
+                    "message": f"Unknown product '{product}'. Valid products: {_valid}",
+                    "actionable": True,
+                },
+            }
+        product_template = _product_row["template"]
 
     _period_days = {"daily": 1, "weekly": 7, "monthly": 30}
     _days = _period_days.get(period, 7)
@@ -2772,6 +2808,7 @@ def _handle_generate_digest(
             recipients=recipients,
             user_id=user_id,
             max_items=max_items,
+            product_template=product_template,
         )
         if format in ("json", "agent"):
             # Parse JSON string back to dict for structured MCP response
@@ -2829,6 +2866,7 @@ def _handle_generate_report(
     target_audience: str = "",
     user_id: str = "",
     report_type: str = "standard",
+    product: str = "",
     persist: bool = False,
 ) -> dict[str, Any]:
     """Generate a structured report for *domain* over the given *period*.
@@ -2840,6 +2878,37 @@ def _handle_generate_report(
     from autoinfo.kb import KBStore
     from autoinfo.output import generate_report as _generate_report
 
+    product_template = None
+    if product:
+        from autoinfo.output import PRODUCT_TEMPLATES
+
+        _product_row = next(
+            (row for row in PRODUCT_TEMPLATES if row["name"] == product),
+            None,
+        )
+        if _product_row is None:
+            _valid = ", ".join(
+                sorted(row["name"] for row in PRODUCT_TEMPLATES)
+            )
+            return {
+                "error_code": ErrorCode.VALIDATION_ERROR.value,
+                "message": f"Unknown product '{product}'. Valid products: {_valid}",
+                "actionable": True,
+                "success": False,
+                "error": {
+                    "code": ErrorCode.VALIDATION_ERROR.value,
+                    "message": f"Unknown product '{product}'. Valid products: {_valid}",
+                    "actionable": True,
+                },
+            }
+        product_template = _product_row["template"]
+    elif report_type == "column":
+        from autoinfo.output import PRODUCT_TEMPLATES
+
+        product_template = next(
+            (row["template"] for row in PRODUCT_TEMPLATES if row["name"] == "column"),
+            None,
+        )
     _period_days = {"daily": 1, "weekly": 7, "monthly": 30}
     _days = _period_days.get(period, 7)
     _date_from = (date.today() - timedelta(days=_days)).isoformat()
@@ -2857,14 +2926,6 @@ def _handle_generate_report(
         }
 
     try:
-        product_template = None
-        if report_type == "column":
-            from autoinfo.output import PRODUCT_TEMPLATES
-
-            product_template = next(
-                (row["template"] for row in PRODUCT_TEMPLATES if row["name"] == "column"),
-                None,
-            )
         result = _generate_report(domain=domain, format=format, period=period, custom_instructions=custom_instructions, target_audience=target_audience, user_id=user_id, report_type=report_type, product_template=product_template)
         if format in ("json", "agent"):
             import json as _json
@@ -7635,6 +7696,11 @@ async def list_tools() -> list[Tool]:
                         "type": "string",
                         "description": "Optional user_id filter — only entries belonging to this user",
                     },
+                    "filter_custom_fields": {
+                        "type": "object",
+                        "additionalProperties": {"type": "string"},
+                        "description": "Faceted filter over the custom_fields JSON column (product-analysis metadata). Each key is a dot-path into custom_fields (e.g. 'product_analysis.action_required'); an empty-string value matches entries where the field exists and is non-empty, any other value matches entries where the field's JSON value equals that text.",
+                    },
                     "include_stale": {
                         "type": "boolean",
                         "description": "If false (default), stale entries are demoted to the bottom of search results. If true, stale entries are mixed normally with fresh results.",
@@ -8291,6 +8357,17 @@ async def list_tools() -> list[Tool]:
                         "description": "Optional maximum number of KB entries to include (default: 0 = use built-in limit of 200). Can be auto-set from stored user preferences when user_id is provided.",
                         "default": 0,
                     },
+                    "product": {
+                        "type": "string",
+                        "description": (
+                            "Optional product name from the PRODUCT_TEMPLATES registry "
+                            "(e.g. magazine-digest, premium-briefing, enterprise-briefing, "
+                            "column). When provided, the digest is rendered through that "
+                            "product's template family (e.g. magazine-digest.md.j2). "
+                            "Valid products: digest, report, tutorial, presentation, "
+                            "premium-briefing, column, magazine-digest, enterprise-briefing."
+                        ),
+                    },
                     "persist": {
                         "type": "boolean",
                         "description": "When true, write the generated artifact to outputs/<domain>/ and return its persisted_path in the envelope (default: false).",
@@ -8354,6 +8431,17 @@ async def list_tools() -> list[Tool]:
                         "description": "Report type: standard (default), industry, competitive, trend, daily-briefing, column",
                         "default": "standard",
                         "enum": ["standard", "industry", "competitive", "trend", "daily-briefing", "column"],
+                    },
+                    "product": {
+                        "type": "string",
+                        "description": (
+                            "Optional product name from the PRODUCT_TEMPLATES registry "
+                            "(e.g. premium-briefing, enterprise-briefing, column). When "
+                            "provided, the report is rendered through that product's "
+                            "template family. Valid products: digest, report, tutorial, "
+                            "presentation, premium-briefing, column, magazine-digest, "
+                            "enterprise-briefing."
+                        ),
                     },
                     "persist": {
                         "type": "boolean",

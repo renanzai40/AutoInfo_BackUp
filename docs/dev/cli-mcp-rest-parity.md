@@ -155,7 +155,7 @@ CLI human mode prints text + exit 0; CLI `--json` mirrors the MCP shape exactly.
 
 | Capability | CLI | MCP | REST | Status | Notes |
 |------------|-----|-----|------|--------|-------|
-| Search KB (hybrid) | `kb search` | `search_knowledge_base` | `GET /api/v1/search` | ✓ | REST search mirrors hybrid |
+| Search KB (hybrid) | `kb search` | `search_knowledge_base` | `GET /api/v1/search` | ✓ | REST search mirrors hybrid; MCP-only `filter_custom_fields` param (custom_fields dot-path facet: `""` = presence, non-empty = exact match) — not exposed via CLI/REST |
 | Get KB entry | `kb list` | `get_kb_entry` | `GET /api/v1/entries/{entry_id}` | ✓ | |
 | List summaries | `summaries list` | `list_summaries` | — | ✓ CLI+MCP | |
 | Get summary | `summaries show` | `get_summary` | — | ✓ CLI+MCP | |
@@ -192,7 +192,9 @@ CLI human mode prints text + exit 0; CLI `--json` mirrors the MCP shape exactly.
 | Capability | CLI | MCP | REST | Status | Notes |
 |------------|-----|-----|------|--------|-------|
 | Generate digest | `output digest` | `generate_digest` | — | ✓ CLI+MCP | formats: md/html/json/agent |
+| Digest product template | `output digest --product` | `generate_digest` `product` param | — | ✓ CLI+MCP | CLI `--product` → `product_template`; MCP `product` param |
 | Generate report | `output report` | `generate_report` | — | ✓ CLI+MCP | formats: md/json/pdf/html/audio/agent |
+| Report product template | `output report --product` | `generate_report` `product` param | — | ✓ CLI+MCP | CLI `--product` → `product_template`; MCP `product` param |
 | Cross-domain report | `output report --domains` | `generate_cross_domain_report` | — | ✓ CLI+MCP | |
 | Generate tutorial | `output tutorial` | `generate_tutorial` | — | ✓ CLI+MCP | md/agent |
 | Generate presentation | `output presentation` | `generate_presentation` | — | ✓ CLI+MCP | md/agent |
@@ -382,7 +384,7 @@ CLI human mode prints text + exit 0; CLI `--json` mirrors the MCP shape exactly.
 
 | Capability | CLI | MCP | REST | Status | Notes |
 |------------|-----|-----|------|--------|-------|
-| List validation scenarios | — | `list_validation_scenarios` | — | MCP-only | 65 scenarios |
+| List validation scenarios | — | `list_validation_scenarios` | — | MCP-only | 67 scenarios (61 functional + 6 regression) |
 | Run validation scenario | — | `run_validation_scenario` | — | MCP-only | Scenario steps may invoke CLI/REST internally |
 
 ### REST-only endpoints (no CLI / MCP counterpart)
