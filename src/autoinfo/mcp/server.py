@@ -1049,8 +1049,17 @@ def _handle_deactivate_domain(name: str) -> dict[str, Any]:
     }
 
 
-def _handle_remove_domain(name: str) -> dict[str, Any]:
+def _handle_remove_domain(name: str, confirm: bool = True, actor: str = "agent") -> dict[str, Any]:
     """Remove a domain configuration. Preserves all collected data on disk."""
+    if not confirm:
+        return {
+            "error_code": ErrorCode.CONFIRMATION_REQUIRED.value,
+            "message": (
+                "This operation is destructive and requires confirmation. "
+                "Pass confirm=True to proceed."
+            ),
+            "actionable": True,
+        }
     try:
         config = _load_config()
     except Exception as exc:
@@ -1524,7 +1533,7 @@ def _handle_add_sources(sources: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def _handle_remove_source(source_id: str, confirm: bool = True) -> dict[str, Any]:
+def _handle_remove_source(source_id: str, confirm: bool = True, actor: str = "agent") -> dict[str, Any]:
     """Remove a source by its source_id (``domain:name``)."""
     if not confirm:
         return {
@@ -1747,7 +1756,7 @@ def _handle_add_topic(
     }
 
 
-def _handle_remove_topic(domain: str, topic_id: str, confirm: bool = True) -> dict[str, Any]:
+def _handle_remove_topic(domain: str, topic_id: str, confirm: bool = True, actor: str = "agent") -> dict[str, Any]:
     """Remove a topic by its topic_id (``domain:name``)."""
     if not confirm:
         return {
@@ -2576,7 +2585,7 @@ def _handle_promote_kb_draft(
         return _error_dict(exc)
 
 
-def _handle_demote_kb_wiki(entry_id: str, actor: str = "director") -> dict[str, Any]:
+def _handle_demote_kb_wiki(entry_id: str, actor: str = "agent") -> dict[str, Any]:
     """Demote a 03-Wiki entry back to 02-Draft (director-only backdoor).
 
     Content is preserved: the file moves from ``03-Wiki/`` to ``02-Draft/``
@@ -2599,7 +2608,7 @@ def _handle_demote_kb_wiki(entry_id: str, actor: str = "director") -> dict[str, 
         )
 
 
-def _handle_force_promote(draft_id: str, actor: str = "director") -> dict[str, Any]:
+def _handle_force_promote(draft_id: str, actor: str = "agent") -> dict[str, Any]:
     """Force-promote a 02-Draft entry to 03-Wiki, skipping the admission gate.
 
     Director-only backdoor: provenance / G0 / G1 / G3 / G4 checks are not
@@ -3565,7 +3574,7 @@ def _handle_add_schedule(
         return _error_dict(exc)
 
 
-def _handle_remove_schedule(name: str, confirm: bool = False) -> dict[str, Any]:
+def _handle_remove_schedule(name: str, confirm: bool = False, actor: str = "agent") -> dict[str, Any]:
     """Remove a collection schedule."""
     if not confirm:
         return {
@@ -5317,7 +5326,7 @@ def _handle_get_prometheus_metrics(name: str, arguments: dict) -> dict[str, Any]
 def _handle_soft_delete_entry(name: str, arguments: dict) -> dict[str, Any]:
     from autoinfo.kb import KBStore
     store = KBStore()
-    actor = arguments.get("actor") or "director"
+    actor = arguments.get("actor") or "agent"
     purge = arguments.get("purge", False)
     try:
         if purge:
@@ -6234,7 +6243,11 @@ def _handle_recommend_content(
         }
     except Exception as exc:
         logger.error("recommend_content failed: %s", exc)
-        return {"error": str(exc), "items": [], "count": 0}
+        return error_response(
+            code=ErrorCode.INTERNAL_ERROR,
+            message=str(exc),
+            actionable=True,
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -6694,6 +6707,8 @@ def _handle_clean_cache(
     outputs: bool = False,
     everything: bool = False,
     dry_run: bool = False,
+    confirm: bool = False,
+    actor: str = "agent",
 ) -> dict[str, Any]:
     """Remove cached artifacts and temporary files.
 
@@ -6713,6 +6728,12 @@ def _handle_clean_cache(
     dict
         ``{items_removed, dry_run, targets}``.
     """
+    if everything and not confirm:
+        return error_response(
+            code=ErrorCode.CONFIRMATION_REQUIRED,
+            message="clean_cache(everything=True) requires confirm=true — this deletes the entire knowledge/ directory and database",
+            actionable=True,
+        )
     import shutil
 
     targets: list[str] = []
@@ -7051,7 +7072,7 @@ async def list_tools() -> list[Tool]:
         ),
         Tool(
             name="remove_domain",
-            description="Remove a domain configuration. Preserves all collected data on disk.",
+            description="Remove a domain configuration. Preserves all collected data on disk. Requires confirm=True (destructive operation).",
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -7059,8 +7080,16 @@ async def list_tools() -> list[Tool]:
                         "type": "string",
                         "description": "Domain name to remove",
                     },
+                    "confirm": {
+                        "type": "boolean",
+                        "description": "Must be True to remove a domain (destructive operation)",
+                    },
+                    "actor": {
+                        "type": "string",
+                        "description": "Required. Actor requesting this destructive operation (must be passed explicitly)",
+                    },
                 },
-                "required": ["name"],
+                "required": ["name", "confirm", "actor"],
             },
         ),
         Tool(
@@ -7240,8 +7269,12 @@ async def list_tools() -> list[Tool]:
                         "description": "Must be True to confirm this destructive operation",
                         "default": False,
                     },
+                    "actor": {
+                        "type": "string",
+                        "description": "Required. Actor requesting this destructive operation (must be passed explicitly)",
+                    },
                 },
-                "required": ["source_id"],
+                "required": ["source_id", "actor"],
             },
         ),
         Tool(
@@ -7322,8 +7355,12 @@ async def list_tools() -> list[Tool]:
                         "description": "Must be True to confirm this destructive operation",
                         "default": False,
                     },
+                    "actor": {
+                        "type": "string",
+                        "description": "Required. Actor requesting this destructive operation (must be passed explicitly)",
+                    },
                 },
-                "required": ["domain", "topic_id"],
+                "required": ["domain", "topic_id", "actor"],
             },
         ),
         Tool(
@@ -8175,11 +8212,10 @@ async def list_tools() -> list[Tool]:
                     },
                     "actor": {
                         "type": "string",
-                        "description": "Acting director (must be in AUTOINFO_DIRECTOR_ACTORS)",
-                        "default": "director",
+                        "description": "Required. Acting director (must be whitelisted in AUTOINFO_DIRECTOR_ACTORS)",
                     },
                 },
-                "required": ["entry_id"],
+                "required": ["entry_id", "actor"],
             },
         ),
         Tool(
@@ -8200,11 +8236,10 @@ async def list_tools() -> list[Tool]:
                     },
                     "actor": {
                         "type": "string",
-                        "description": "Acting director (must be in AUTOINFO_DIRECTOR_ACTORS)",
-                        "default": "director",
+                        "description": "Required. Acting director (must be whitelisted in AUTOINFO_DIRECTOR_ACTORS)",
                     },
                 },
-                "required": ["draft_id"],
+                "required": ["draft_id", "actor"],
             },
         ),
         Tool(
@@ -8970,8 +9005,12 @@ async def list_tools() -> list[Tool]:
                         "description": "Must be True to confirm this destructive operation",
                         "default": False,
                     },
+                    "actor": {
+                        "type": "string",
+                        "description": "Required. Actor requesting this destructive operation (must be passed explicitly)",
+                    },
                 },
-                "required": ["name"],
+                "required": ["name", "actor"],
             },
         ),
         Tool(
@@ -9890,11 +9929,10 @@ async def list_tools() -> list[Tool]:
                     },
                     "actor": {
                         "type": "string",
-                        "description": "Acting actor. 03-Wiki entries require an actor whitelisted in AUTOINFO_DIRECTOR_ACTORS (default 'director')",
-                        "default": "director",
+                        "description": "Required. Acting actor. 03-Wiki entries require an actor whitelisted in AUTOINFO_DIRECTOR_ACTORS",
                     },
                 },
-                "required": ["entry_id"],
+                "required": ["entry_id", "actor"],
             },
         ),
         Tool(
@@ -9915,8 +9953,12 @@ async def list_tools() -> list[Tool]:
                 "type": "object",
                 "properties": {
                     "entry_id": {"type": "string"},
+                    "actor": {
+                        "type": "string",
+                        "description": "Required. Actor requesting this destructive operation (must be passed explicitly)",
+                    },
                 },
-                "required": ["entry_id"],
+                "required": ["entry_id", "actor"],
             },
         ),
         Tool(
@@ -9938,8 +9980,12 @@ async def list_tools() -> list[Tool]:
                 "properties": {
                     "user_id": {"type": "string"},
                     "purge": {"type": "boolean"},
+                    "actor": {
+                        "type": "string",
+                        "description": "Required. Actor requesting this destructive operation (must be passed explicitly)",
+                    },
                 },
-                "required": ["user_id"],
+                "required": ["user_id", "actor"],
             },
         ),
         # -- Trace (1) -------------------------------------------------------
@@ -10448,8 +10494,16 @@ async def list_tools() -> list[Tool]:
                         "description": "Show what would be deleted without deleting",
                         "default": False,
                     },
+                    "confirm": {
+                        "type": "boolean",
+                        "description": "Required. Must be True when everything=True — this deletes the entire knowledge/ directory and database",
+                    },
+                    "actor": {
+                        "type": "string",
+                        "description": "Required. Actor requesting this destructive operation (must be passed explicitly)",
+                    },
                 },
-                "required": [],
+                "required": ["actor", "confirm"],
             },
         ),
         # -- Channel Health (1) -------------------------------------------
@@ -10628,7 +10682,7 @@ async def list_tools() -> list[Tool]:
         ),
     ]
 
-# -- LLM-required tools (14) ------------------------------------------------
+# -- LLM-required tools (17) ------------------------------------------------
 # Tools in this set require LLM configuration to function.  When the LLM
 # is not configured (no api_key), call_tool will block them with a clear
 # error response before dispatching to the handler.
@@ -10647,6 +10701,9 @@ _LLM_REQUIRED_TOOLS: frozenset[str] = frozenset({
     "process_collection",
     "recommend_content",
     "simplify_content",
+    "promote_kb_draft",
+    "batch_run",
+    "run_validation_scenario",
 })
 
 
@@ -10815,7 +10872,7 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
         # the audit trail records the attempt as a real mutation.  The
         # handlers repeat the check so direct handler calls stay safe too.
         if name in ("demote_kb_wiki", "force_promote"):
-            actor = arguments.get("actor") or "director"
+            actor = arguments.get("actor") or "agent"
             if not is_director(actor):
                 _dispatch_audit["code"] = "director_only"
                 return [

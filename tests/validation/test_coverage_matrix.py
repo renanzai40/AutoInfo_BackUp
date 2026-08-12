@@ -25,7 +25,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 SPEC = ROOT / "docs" / "dev" / "specs" / "end-user-matrix.yaml"
 SCRIPT = ROOT / "scripts" / "coverage_matrix.py"
 

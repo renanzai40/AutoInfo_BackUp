@@ -445,7 +445,7 @@ class TestAgentExport:
     def test_validates_against_kb_export_schema(self, project_dir: Path) -> None:
         """Agent export validates against docs/schemas/knowledge-base-export-v1.json."""
         schema_path = (
-            Path(__file__).resolve().parent.parent
+            Path(__file__).resolve().parents[2]
             / "docs"
             / "schemas"
             / "knowledge-base-export-v1.json"

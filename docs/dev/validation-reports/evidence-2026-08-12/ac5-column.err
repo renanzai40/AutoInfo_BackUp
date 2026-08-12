@@ -1,0 +1,14 @@
+Promotion rejected for medical-research-draft-mrna-validation-draft (source-score-below-threshold, relevance-below-threshold) — marker written to /mnt/d/贯维/AutoInfo/knowledge/_failed/medical-research/medical-research-draft-mrna-validation-draft.md
+[92m13:00:47 - LiteLLM:WARNING[0m: get_model_cost_map.py:271 - LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: The read operation timed out. Falling back to local backup.
+Failed to parse LLM response as JSON: 
+Failed to parse LLM response as JSON: 
+Failed to parse LLM response as JSON: {
+  "groups": [
+    {
+      "theme": "Machine Learning Models for IVF Outcome Prediction",
+      "entry_ids": [
+        "medical-research-clinical-pregnancy-rate-machine-learning-based-analysis-of-fac
+Failed to parse LLM response as JSON: 
+Failed to parse LLM response as JSON: 
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides three knowledge base entries from medical research and asks for them to be grouped into 3-5 themes. The entries cover embryonic aneuploidy in recurrent pregnancy lo

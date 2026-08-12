@@ -24,7 +24,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 SCENARIOS_DIR = ROOT / "src" / "autoinfo" / "mcp" / "scenarios"
 KB_PROMOTE_YAML = SCENARIOS_DIR / "kb-promote.yaml"
 

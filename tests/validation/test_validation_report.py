@@ -21,7 +21,7 @@ from typing import Any
 
 import pytest
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 
 # Load the real scripts/validation_report.py (same pattern as the sibling
 # test_validation_delivery.py) so the tests exercise the script's own code.

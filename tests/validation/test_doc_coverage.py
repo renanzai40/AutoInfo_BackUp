@@ -18,7 +18,7 @@ from pathlib import Path
 
 import pytest
 
-BLOCKED_SOURCES_PATH = Path(__file__).resolve().parents[1] / "docs" / "known-limitations" / "blocked-sources.md"
+BLOCKED_SOURCES_PATH = Path(__file__).resolve().parents[2] / "docs" / "known-limitations" / "blocked-sources.md"
 
 
 @pytest.fixture(scope="module")

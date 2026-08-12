@@ -23,7 +23,7 @@ steps:
       format: markdown
       data: |
         ---
-        source_url: https://example.com/kb-import-export-scenario
+        source_url: https://kb-import-export.autoinfo.test/kb-import-export-scenario
         source_type: web
         source_platform: web
         title: KB Import Export Scenario Entry
@@ -67,7 +67,7 @@ cleanup_steps:
       store = KBStore()
       removed = []
       eid = 'medical-research-general-kb-import-export-scenario-entry'
-      marker = 'https://example.com/kb-import-export-scenario'
+      marker = 'https://kb-import-export.autoinfo.test/kb-import-export-scenario'
       meta = store.index.get_entry(eid)
       if meta is not None:
           if meta.get('source_url') != marker:

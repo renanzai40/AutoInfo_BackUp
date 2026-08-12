@@ -18,7 +18,7 @@ steps:
       domain: medical-research
       title: "KB Graph Scenario Item A"
       content: "Fixture A for the kb-graph validation scenario."
-      source_url: https://example.com/kb-graph-scenario-item-a
+      source_url: https://kb-graph.autoinfo.test/kb-graph-scenario-item-a
       source_type: web
     expect:
       success: true
@@ -30,7 +30,7 @@ steps:
       domain: medical-research
       title: "KB Graph Scenario Item B"
       content: "Fixture B for the kb-graph validation scenario."
-      source_url: https://example.com/kb-graph-scenario-item-b
+      source_url: https://kb-graph.autoinfo.test/kb-graph-scenario-item-b
       source_type: web
     expect:
       success: true
@@ -88,9 +88,9 @@ cleanup_steps:
       from autoinfo.kb import KBStore
       store = KBStore()
       markers = [('medical-research-general-kb-graph-scenario-item-a',
-                  'https://example.com/kb-graph-scenario-item-a'),
+                  'https://kb-graph.autoinfo.test/kb-graph-scenario-item-a'),
                  ('medical-research-general-kb-graph-scenario-item-b',
-                  'https://example.com/kb-graph-scenario-item-b')]
+                  'https://kb-graph.autoinfo.test/kb-graph-scenario-item-b')]
       removed = []
       for eid, url in markers:
           meta = store.index.get_entry(eid)

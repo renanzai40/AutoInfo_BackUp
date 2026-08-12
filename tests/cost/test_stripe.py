@@ -414,6 +414,7 @@ class TestHandleWebhookDispatch:
         assert result["new_status"] == "suspended"  # past_due -> suspended
         mock_update.assert_called_once_with(
             user_id="user_abc",
+            stripe_subscription_id="sub_test456",
             status="suspended",
         )
 
@@ -1268,6 +1269,7 @@ class TestStripeLifecycle:
             )
             mock_upd.assert_called_once_with(
                 user_id=end_user_id,
+                stripe_subscription_id=subscription_id,
                 status=expected_status,
             )
 

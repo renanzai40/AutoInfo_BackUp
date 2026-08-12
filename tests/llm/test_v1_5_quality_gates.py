@@ -548,7 +548,7 @@ class TestD2FormatIntegrity:
     @requires_fitz
     def test_valid_pdf_passes(self) -> None:
         """Valid PDF parsed with fitz → passes with metadata."""
-        pdf_path = Path(__file__).parent / "fixtures" / "sample.pdf"
+        pdf_path = Path(__file__).resolve().parents[1] / "fixtures" / "sample.pdf"
         pdf_body = pdf_path.read_bytes()
         product = {
             "product_type": "PROCESSED",

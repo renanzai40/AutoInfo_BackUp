@@ -33,7 +33,7 @@ from autoinfo.collectors.unpaywall import UnpaywallHandler
 from autoinfo.collectors.youtube import YouTubeHandler
 from autoinfo.config import VALID_SOURCE_TYPES, SourceConfig
 
-DEMO_DIR = Path(__file__).resolve().parents[1] / "src" / "autoinfo" / "data" / "domains"
+DEMO_DIR = Path(__file__).resolve().parents[2] / "src" / "autoinfo" / "data" / "domains"
 
 # All 9 demo domains (5 legacy + 4 added by M3T24)
 DOMAINS: list[str] = [

@@ -18,7 +18,7 @@ from typing import Any
 
 import pytest
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 AUDIT_SCRIPT = ROOT / "scripts" / "coverage_audit.py"
 BUG_TEMPLATE = ROOT / ".github" / "ISSUE_TEMPLATE" / "bug_report.md"
 

@@ -236,12 +236,12 @@ class TestAllV01TestsPass:
 
     V01_TEST_FILES = [
         "tests/cli/test_cli_commands.py",
-        "tests/test_collection.py",
-        "tests/test_integration.py",
+        "tests/collectors/test_collection.py",
+        "tests/integration/test_integration.py",
         "tests/kb/test_kb.py",
         "tests/llm/test_llm.py",
         "tests/mcp/test_mcp_server.py",
-        "tests/test_process.py",
+        "tests/kb/test_process.py",
         "tests/collectors/test_pubmed_handler.py",
         "tests/llm/test_quality.py",
         "tests/collectors/test_rss_handler.py",
@@ -250,7 +250,7 @@ class TestAllV01TestsPass:
     @pytest.mark.slow
     def test_all_v01_tests_pass(self) -> None:
         """Run all v0.1 test files as a subprocess and verify exit code 0."""
-        project_root = Path(__file__).resolve().parent.parent
+        project_root = Path(__file__).resolve().parents[2]
         cmd = [
             sys.executable,
             "-m",

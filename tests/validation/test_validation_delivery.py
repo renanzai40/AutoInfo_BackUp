@@ -20,7 +20,7 @@ from typing import Any
 import pytest
 import yaml
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 
 # Load the real scripts/validation_delivery.py (same pattern as the sibling
 # E3 test_validation_coverage.py) so the tests exercise the script's own code.

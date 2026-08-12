@@ -30,9 +30,9 @@ from autoinfo.collectors.semantic_scholar import SemanticScholarHandler
 from autoinfo.collectors.uspto import USPTOHandler
 from autoinfo.config import SourceConfig
 
-DEMO_DIR = Path(__file__).resolve().parents[1] / "src" / "autoinfo" / "data" / "domains"
+DEMO_DIR = Path(__file__).resolve().parents[2] / "src" / "autoinfo" / "data" / "domains"
 SCENARIOS_DIR = (
-    Path(__file__).resolve().parents[1] / "src" / "autoinfo" / "mcp" / "scenarios"
+    Path(__file__).resolve().parents[2] / "src" / "autoinfo" / "mcp" / "scenarios"
 )
 
 

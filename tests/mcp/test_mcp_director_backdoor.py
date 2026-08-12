@@ -101,11 +101,13 @@ class TestToolManifest:
         soft = by_name["soft_delete_entry"]
         assert "actor" in soft.inputSchema["properties"]
 
-    def test_backdoor_tool_schemas_require_entry_id(self) -> None:
+    def test_backdoor_tool_schemas_require_actor(self) -> None:
+        """Actor is required on the backdoor tools — omitting it must be
+        rejected, never silently defaulted to a privileged role."""
         tools = anyio.run(list_tools)
         by_name = {t.name: t for t in tools}
-        assert by_name["demote_kb_wiki"].inputSchema["required"] == ["entry_id"]
-        assert by_name["force_promote"].inputSchema["required"] == ["draft_id"]
+        assert by_name["demote_kb_wiki"].inputSchema["required"] == ["entry_id", "actor"]
+        assert by_name["force_promote"].inputSchema["required"] == ["draft_id", "actor"]
 
 
 # ===================================================================
@@ -130,13 +132,14 @@ class TestDispatchGuard:
         assert env["success"] is False
         assert env["error"]["code"] == "DIRECTOR_ONLY"
 
-    def test_dispatch_default_actor_passes_guard(self, kb_dir: Path) -> None:
-        """No actor argument → defaults to 'director' → reaches the store
-        (proven by a store error, not a DIRECTOR_ONLY refusal)."""
+    def test_dispatch_default_actor_refused(self, kb_dir: Path) -> None:
+        """No actor argument → defaults to non-privileged 'agent' → the
+        dispatch guard refuses with DIRECTOR_ONLY (never silently treated
+        as director)."""
         text = anyio.run(call_tool, "force_promote", {"draft_id": "ghost"})[0].text
         env = _parse_envelope(text)
         assert env["success"] is False
-        assert env["error"]["code"] != "DIRECTOR_ONLY"
+        assert env["error"]["code"] == "DIRECTOR_ONLY"
 
     def test_dispatch_actor_env_whitelist(
         self, monkeypatch: pytest.MonkeyPatch

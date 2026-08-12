@@ -159,6 +159,22 @@ def generate(version: str, run_id: str) -> Path:
                 f"{summary.get('unconfigured', 0)} unconfigured)"
             )
     lines.append("")
+    # --- Scenario leak warnings (B-03) ---
+    # A leak is a hygiene failure even on a passing scenario: fixtures that
+    # should have been cleaned up still live in the user's KB.  Surface them
+    # regardless of scenario status.
+    leak_warnings = [
+        w
+        for sc in scenarios
+        for w in sc.get("warnings", [])
+        if w.startswith("SCENARIO_LEAK")
+    ]
+    if leak_warnings:
+        lines.append("### Scenario leak warnings (B-03)")
+        lines.append("")
+        for w in leak_warnings:
+            lines.append(f"- {w}")
+        lines.append("")
     lines.append("## Blockers")
     lines.append("")
     failed_scenarios = [sc for sc in scenarios if sc.get("status") == "failed"]
