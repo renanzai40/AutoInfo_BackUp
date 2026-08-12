@@ -896,10 +896,19 @@ def _package(artifacts: list[dict[str, Any]], results: list[dict[str, Any]], out
     # rejected list and per-artifact side effects stay deterministic.
     _GATE_MAX_WORKERS = 6
     pending: list[tuple[int, Path, Path, str]] = []
+    # #206: the same source file may be declared by several scenarios'
+    # collect_artifacts, so dedupe by source path.  Without this, the
+    # parallel prep copies it N times and the reassembly move hits a
+    # missing dest on the second occurrence (FileNotFoundError).
+    seen_srcs: set[str] = set()
     for idx, a in enumerate(artifacts):
         src = Path(a["path"])
         if not src.exists():
             continue
+        src_key = src.as_posix()
+        if src_key in seen_srcs:
+            continue
+        seen_srcs.add(src_key)
         # #192: defensive — exclude non-deliverable artifacts even if they
         # arrive from a caller that did not filter at collection time.
         if is_excluded_artifact(src.as_posix()):
@@ -948,7 +957,15 @@ def _package(artifacts: list[dict[str, Any]], results: list[dict[str, Any]], out
         if quality == "FAIL":
             rej_dest = rej_dir / _tier_subpath(src)
             rej_dest.parent.mkdir(parents=True, exist_ok=True)
-            shutil.move(dest, rej_dest)
+            if dest.exists():
+                shutil.move(dest, rej_dest)
+            else:
+                # #206: defensive — the source may have been consumed by an
+                # earlier duplicate entry; record the rejection without moving.
+                try:
+                    shutil.copy2(src, rej_dest)
+                except OSError:
+                    pass
             rejected.append({
                 "file": str(rej_dest.relative_to(stage)),
                 "source": rel,
