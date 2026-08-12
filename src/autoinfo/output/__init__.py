@@ -3661,11 +3661,11 @@ def generate_report(
         for section in report_data.sections:
             for item in section.items:
                 agent_entries.append({
-                    "entry_id": "",
+                    "entry_id": item.get("entry_id", ""),
                     "title": item.get("title", ""),
                     "summary": item.get("summary", ""),
                     "source_url": item.get("source_url", ""),
-                    "source_platform": "",
+                    "source_platform": item.get("source_platform", ""),
                     "collected_at": item.get("date", ""),
                     "relevance_score": item.get("relevance_score", 0),
                     "tags": [],
