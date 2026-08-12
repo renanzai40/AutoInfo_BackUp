@@ -46,6 +46,9 @@
 7. **agent JSON-LD 的 entry 字段按类型不同**：KnowledgeDigest=entries(source_url+source_platform)；KnowledgePresentation=slides(内容)+sources(来源)；KnowledgeTutorial=steps/exercises(内容)+source_entries(来源)——authenticity 必须按 @type 分支检查，不能一刀切
 8. **生成端硬编码空字段**：generate_report agent 渲染曾 `source_platform: ""` 写死（KB 数据有值但产物空）——修生成端后**必须重新生成旧产物**（已生成的不变）
 9. **_json_entries 对顶层含 _ENTRY_KEYS 交集的 dict 会整体当 entry**：KnowledgeTutorial 顶层有 title → 被误当 1 个 entry——按 @type 特判（source_entries）绕过
+10. **html 模板必须输出 D1 三键章节**：report.html.j2 只有 Executive Summary，缺 Key Findings/Recommendations → D1 永远拒 report-html（模板 + 传参一起改，改完必须重新生成旧产物）
+11. **适配层 product_type 粒度**：_build_product_output 曾把 product_type 全标 "PROCESSED" → quality.py D1 无法按产品分支——改为透传 _detect_product_type 结果（presentation/report/column/...），RAW 保持
+12. **presentation 完整性语义 = slide 内容**：D1 三键不适用 deck——product_type==presentation 时 body 内容 ≥200 chars 即 pass（无需改模板视觉）
 
 ### 复盘（为什么 9 次）
 

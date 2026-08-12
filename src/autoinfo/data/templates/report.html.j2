@@ -228,6 +228,32 @@
   </section>
   {% endif %}
 
+  {% if key_findings %}
+  <section class="report-section" id="key-findings">
+    <h2>Key Findings</h2>
+    <div class="section-content">
+      <ul class="key-findings">
+        {% for finding in key_findings %}
+        <li>{{ finding }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+  {% endif %}
+
+  {% if recommendations %}
+  <section class="report-section" id="recommendations">
+    <h2>Recommendations</h2>
+    <div class="section-content">
+      <ul class="recommendations">
+        {% for rec in recommendations %}
+        <li>{{ rec }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+  {% endif %}
+
   {% for section in sections %}
   <section class="report-section" id="{{ section.id }}">
     <h2>{{ section.heading }}</h2>

@@ -3607,6 +3607,49 @@ def generate_report(
         action_required = []
         key_metrics = []
 
+    # -- Issue #217 follow-up: empty LLM synthesis → KB-derived fallback ----
+    # DeepSeek empty/truncated synthesis (issue #178) must not ship a
+    # section-less report: D1 rejects key_findings/summary/recommendations.
+    # Derive those sections deterministically from the KB entries actually
+    # used in the report — real domain content, never fabricated.
+    if not executive_summary or not key_findings or not recommendations:
+        logger.info(
+            "LLM synthesis empty/partial for report (domain=%s, "
+            "exec_summary=%d chars, key_findings=%d, recommendations=%d) — "
+            "KB-derived fallback",
+            domain,
+            len(executive_summary or ""),
+            len(key_findings),
+            len(recommendations),
+        )
+        ranked = sorted(
+            (e for e in entries),
+            key=lambda e: float(e.get("relevance_score") or 0.0),
+            reverse=True,
+        )
+        if not executive_summary:
+            executive_summary = (
+                f"{domain} intelligence briefing — {len(entries)} KB entries "
+                f"across {len(groupings)} themes, distilled from the tracked "
+                f"source set."
+            )
+        if not key_findings:
+            key_findings = [
+                (
+                    f"{e.get('title', 'Untitled entry')} — "
+                    f"{str(e.get('summary') or '(no summary)')[:160]}"
+                )
+                for e in ranked[:5]
+                if e.get("title")
+            ]
+        if not recommendations:
+            recommendations = [
+                f"Monitor {e.get('title', 'this topic')} for follow-up "
+                "developments and validation from additional sources."
+                for e in ranked[:3]
+                if e.get("title")
+            ]
+
     # -- Build report data -------------------------------------------------
     sections = [
         ReportSection(
@@ -5188,6 +5231,8 @@ def _render_report_html(report_data: ReportData, period: str = "weekly") -> str:
         generated_at=report_data.generated_at,
         executive_summary=exec_summary,
         executive_summary_html=exec_summary_html,
+        key_findings=report_data.key_findings,
+        recommendations=report_data.recommendations,
         sections=html_sections,
         references=html_references,
         structured_data=structured_data,
