@@ -599,25 +599,61 @@ def check_authenticity(file_path: Path) -> dict[str, Any]:
             "reason": "no structured source entries found in payload — nothing to verify",
         }
     problems: list[str] = []
-    for i, entry in enumerate(entries):
-        url = entry.get("source_url", "")
-        if not isinstance(url, str) or not url.strip():
-            problems.append(f"entry[{i}] missing source_url")
-        elif "example.com" in url:
-            problems.append(f"entry[{i}] placeholder source_url: {url}")
-        # source_type is required for raw collection payloads but is not
-        # part of agent JSON-LD entries (KnowledgeDigest etc. carry
-        # source_platform instead) — only require source_platform there
+    is_agent_ld = bool(parsed.get("@type")) if isinstance(parsed, dict) else False
+    if is_agent_ld and parsed.get("@type") == "KnowledgePresentation":
+        # Slides are content, not source entries; the deck's provenance
+        # lives in the top-level "sources" list (issue #217).
+        sources = parsed.get("sources") or []
+        for i, src in enumerate(sources):
+            if not isinstance(src, dict):
+                continue
+            url = src.get("source_url", "")
+            if not isinstance(url, str) or not url.strip():
+                problems.append(f"sources[{i}] missing source_url")
+        if not sources:
+            return {
+                "authenticity": "pass",
+                "reason": "presentation has no provenance sources — nothing to verify",
+            }
+    elif is_agent_ld and parsed.get("@type") == "KnowledgeTutorial":
+        # Tutorial content (steps/exercises) is authored material; its
+        # provenance lives in the top-level "source_entries" list
         # (issue #217).
-        is_agent_ld = bool(parsed.get("@type")) if isinstance(parsed, dict) else False
-        for field in (() if is_agent_ld else ("source_type", "source_platform")):
-            val = entry.get(field, "")
-            if not isinstance(val, str) or not val.strip():
-                problems.append(f"entry[{i}] missing {field}")
-        if is_agent_ld:
-            val = entry.get("source_platform", "")
-            if not isinstance(val, str) or not val.strip():
-                problems.append(f"entry[{i}] missing source_platform")
+        source_entries = parsed.get("source_entries") or []
+        for i, src in enumerate(source_entries):
+            if not isinstance(src, dict):
+                continue
+            url = src.get("source_url", "")
+            if not isinstance(url, str) or not url.strip():
+                problems.append(f"source_entries[{i}] missing source_url")
+            plat = src.get("source_platform", "")
+            if not isinstance(plat, str) or not plat.strip():
+                problems.append(f"source_entries[{i}] missing source_platform")
+        if not source_entries:
+            return {
+                "authenticity": "pass",
+                "reason": "tutorial has no provenance source_entries — nothing to verify",
+            }
+    else:
+        for i, entry in enumerate(entries):
+            url = entry.get("source_url", "")
+            if not isinstance(url, str) or not url.strip():
+                problems.append(f"entry[{i}] missing source_url")
+            elif "example.com" in url:
+                problems.append(f"entry[{i}] placeholder source_url: {url}")
+            # source_type is required for raw collection payloads but is not
+            # part of agent JSON-LD entries (KnowledgeDigest etc. carry
+            # source_platform instead) — only require source_platform there
+            # (issue #217).
+            if is_agent_ld:
+                val = entry.get("source_platform", "")
+                if not isinstance(val, str) or not val.strip():
+                    problems.append(f"entry[{i}] missing source_platform")
+            else:
+                for field in ("source_type", "source_platform"):
+                    val = entry.get(field, "")
+                    if not isinstance(val, str) or not val.strip():
+                        problems.append(f"entry[{i}] missing {field}")
     if problems:
         shown = "; ".join(problems[:6])
         if len(problems) > 6:
