@@ -927,6 +927,7 @@ async def _execute_step(
     dispatch: Callable[[str, dict[str, Any]], Awaitable[dict[str, Any]]] | None,
     step_index: int,
     trace_id: str,
+    timeout: float = 180.0,
 ) -> dict[str, Any]:
     """Execute a single scenario step (kind: mcp|cli|http) and return its result.
 
@@ -942,6 +943,11 @@ async def _execute_step(
     Runs the same real-execution path used by the main loop (never mocked),
     including ``llm_assert`` judging when configured.  The caller derives
     pass/fail/unconfigured counts and overall status from the result.
+
+    *timeout* (seconds) is forwarded to the subprocess runners so a
+    scenario-level timeout override (#203) also applies to ``kind: cli``
+    and ``kind: http`` steps — previously those defaulted to 180s/60s
+    regardless of the scenario declaration.
     """
     start = time.monotonic()
     expect = step_def.get("expect", {})
@@ -950,12 +956,13 @@ async def _execute_step(
 
     try:
         if kind == "cli":
-            env = await asyncio.to_thread(_run_cli_step, step_def["command"])
+            env = await asyncio.to_thread(_run_cli_step, step_def["command"], timeout)
         elif kind == "http":
             env = await asyncio.to_thread(
                 _run_http_step,
                 step_def.get("method", "GET"),
                 step_def["url"],
+                timeout=timeout,
                 **step_def.get("http_options", {}),
             )
         else:
@@ -1090,7 +1097,7 @@ async def _execute_step_timed(
     start = time.monotonic()
     try:
         return await asyncio.wait_for(
-            _execute_step(step_def, dispatch, step_index, trace_id),
+            _execute_step(step_def, dispatch, step_index, trace_id, timeout=timeout),
             timeout=timeout,
         )
     except asyncio.TimeoutError:
