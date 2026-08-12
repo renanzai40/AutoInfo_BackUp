@@ -1723,6 +1723,44 @@ class D1ProductCompleteness:
                 },
             )
 
+        # Presentation products (markdown/html decks) are complete when the
+        # deck carries real slide content; the key_findings/summary/
+        # recommendations contract does not apply to decks (issue #217
+        # follow-up).
+        if product_type == "presentation":
+            import re as _re  # noqa: PLC0415
+
+            body = str(product_output.get("body") or "")
+            text_len = len(_re.sub(r"<[^>]+>", " ", body).strip())
+            if text_len >= 200:
+                return QualityResult(
+                    gate_name="D1-ProductCompleteness",
+                    passed=True,
+                    score=1.0,
+                    details={
+                        "required_sections": ["body"],
+                        "all_present": True,
+                        "presentation_format": True,
+                        "content_chars": text_len,
+                    },
+                )
+            return QualityResult(
+                gate_name="D1-ProductCompleteness",
+                passed=self.action_on_failure != "block",
+                score=0.0,
+                flagged=True,
+                details={
+                    "action": self.action_on_failure,
+                    "presentation_format": True,
+                    "missing_sections": [],
+                    "empty_sections": ["body"],
+                    "error": (
+                        f"presentation incomplete: only {text_len} content "
+                        "chars"
+                    ),
+                },
+            )
+
         missing: list[str] = []
         empty: list[str] = []
 

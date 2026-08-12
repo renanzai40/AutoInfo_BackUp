@@ -522,6 +522,12 @@ def _build_product_output(file_path: Path, bucket: str) -> dict[str, Any]:
         except Exception:  # noqa: BLE001
             body = ""
         format_type = _detect_product_type(file_path, str(body))
+        if product_type != "RAW":
+            # Carry the inferred product (presentation/report/column/...) so
+            # the D1 gate can apply product-appropriate completeness rules
+            # (issue #217 follow-up: presentation decks are slide content,
+            # not key_findings/summary/recommendations).
+            product_type = format_type
         sections = _apply_format_sections(
             _sections_from_headings(str(body), format_type), format_type
         )
