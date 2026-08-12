@@ -515,6 +515,7 @@ def _build_product_output(file_path: Path, bucket: str) -> dict[str, Any]:
     entries: list[dict[str, Any]] = []
     sections: dict[str, Any] = {}
     body: Any = ""
+    parsed: Any = None
     if fmt in ("markdown", "html"):
         try:
             body = file_path.read_text(encoding="utf-8", errors="replace")
@@ -552,7 +553,7 @@ def _build_product_output(file_path: Path, bucket: str) -> dict[str, Any]:
     key_findings = sections.get("key_findings")
     summary = sections.get("summary")
     recommendations = sections.get("recommendations")
-    return {
+    out: dict[str, Any] = {
         "product_type": product_type,
         "format": fmt or "markdown",
         "body": body,
@@ -561,6 +562,13 @@ def _build_product_output(file_path: Path, bucket: str) -> dict[str, Any]:
         "recommendations": recommendations if recommendations not in (None, "") else [],
         "entries": entries,
     }
+    # Agent JSON-LD payloads (@type: KnowledgeDigest/KnowledgeReport/
+    # KnowledgePresentation/...) carry their contract marker here so the
+    # D1 gate applies the agent-native completeness check instead of the
+    # markdown sections check (issue #217).
+    if isinstance(parsed, dict) and "@type" in parsed:
+        out["@type"] = parsed["@type"]
+    return out
 
 
 def check_authenticity(file_path: Path) -> dict[str, Any]:
