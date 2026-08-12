@@ -615,7 +615,11 @@ def run_processing(
 
         # If the cache grew (new items collected), restart from 0 so nothing
         # is missed.  If it shrank, also reset to avoid an out-of-range slice.
-        if persisted_total != total_items:
+        # Issue #213: quantity alone is a weak signal — a re-collect can
+        # produce the same count with entirely new items, leaving a stale
+        # cursor at the end that silently skips them.  A cursor past the end
+        # also indicates stale progress; reset in both cases.
+        if persisted_total != total_items or start_index >= total_items:
             start_index = 0
 
         items_slice = cached_items[start_index : start_index + batch_size]
