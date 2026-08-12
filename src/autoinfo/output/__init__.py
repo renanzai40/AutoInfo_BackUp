@@ -16,6 +16,7 @@ Usage::
 
 from __future__ import annotations
 
+import asyncio
 import base64
 import concurrent.futures
 import html
@@ -28,6 +29,7 @@ import shutil
 import sqlite3
 import tarfile
 import time
+import threading
 import uuid
 import xml.etree.ElementTree as ET
 import zipfile
@@ -7027,6 +7029,29 @@ def _render_audio_whisper(
         )
 
 
+def _run_coro_in_new_thread(coro: Any) -> Any:
+    """Run *coro* in a fresh thread with its own event loop.
+
+    ``asyncio.run`` cannot be called from a running event loop, so callers
+    already inside one offload the coroutine to a dedicated thread here;
+    the worker's result or exception is propagated back verbatim.
+    """
+    result: dict[str, Any] = {"value": None, "error": None}
+
+    def _worker() -> None:
+        try:
+            result["value"] = asyncio.run(coro)
+        except BaseException as exc:  # noqa: BLE001
+            result["error"] = exc
+
+    thread = threading.Thread(target=_worker)
+    thread.start()
+    thread.join()
+    if result["error"] is not None:
+        raise result["error"]
+    return result["value"]
+
+
 def _render_audio_edge_tts(
     text: str,
     voice: str = DEFAULT_LOCAL_TTS_VOICE,
@@ -7039,6 +7064,9 @@ def _render_audio_edge_tts(
     ``NoAudioReceived`` for CJK-heavy text, which surfaced as 4 failing
     digest-audiobook cells (2026-08-11).  Text containing CJK codepoints
     uses ``zh-CN-XiaoxiaoNeural``; otherwise the requested voice is used.
+    When the caller is already inside a running event loop, synthesis is
+    offloaded to a new thread running its own fresh loop instead of
+    ``asyncio.run`` (which would raise in that context).
 
     Raises
     ------
@@ -7074,7 +7102,17 @@ def _render_audio_edge_tts(
         return b"".join(chunks)
 
     try:
-        mp3_bytes = asyncio.run(asyncio.wait_for(_synthesize(), timeout=timeout))
+        try:
+            asyncio.get_running_loop()
+            running = True
+        except RuntimeError:
+            running = False
+        if running:
+            mp3_bytes = _run_coro_in_new_thread(
+                asyncio.wait_for(_synthesize(), timeout=timeout)
+            )
+        else:
+            mp3_bytes = asyncio.run(asyncio.wait_for(_synthesize(), timeout=timeout))
     except asyncio.TimeoutError:
         raise RuntimeError(
             f"Local TTS (edge-tts) timed out after {timeout:.0f}s"
