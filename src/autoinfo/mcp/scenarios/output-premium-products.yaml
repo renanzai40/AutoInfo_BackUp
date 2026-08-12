@@ -12,6 +12,9 @@
 # AUTOINFO_LLM_API_KEY this scenario reports unconfigured, never skipped.
 name: output-premium-products
 description: "Issue #156 — premium-briefing, magazine-digest, and enterprise-briefing generation via PRODUCT_TEMPLATES"
+# Issue #203: enterprise-briefing synthesis runs several LLM rounds and
+# exceeds the 180s default per-step timeout; raise the cap for this scenario.
+timeout: 900
 category: output
 requires_env: ["AUTOINFO_LLM_API_KEY"]
 requires_domain: ["medical-research", "general-news"]

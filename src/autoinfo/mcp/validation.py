@@ -1312,6 +1312,12 @@ async def run_scenario(
             f"Unknown validation scenario: {name}. Available: {available}"
         )
 
+    # Scenario-level per-step timeout override (#203): long-running steps
+    # such as enterprise-briefing generation exceed the 180s default.
+    # Scenarios may declare a top-level ``timeout`` (seconds) to raise the
+    # cap for every step in that scenario.
+    timeout = float(scenario.get("timeout", timeout))
+
     requires_env: list[str] = scenario.get("requires_env", [])
     missing_env = [v for v in requires_env if not os.environ.get(v)]
     if missing_env:
