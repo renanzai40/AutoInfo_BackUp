@@ -6420,6 +6420,21 @@ def generate_presentation(
     # shell directly (slides=[]), producing 13 empty presentation-agent
     # artifacts in the 2026-08-11 fill run.
     slides = llm_result.get("slides") or []
+    if not slides:
+        # Issue #220: LLM synthesis returned no usable slides (DeepSeek
+        # empty/partial content).  Fall back to KB-derived slides so the
+        # deck carries real domain content instead of failing or shipping
+        # an empty shell.  Content is drawn verbatim from KB entries —
+        # never fabricated.
+        slides = _fallback_slides_from_entries(topic_entries, slide_count)
+        if slides:
+            llm_result = dict(llm_result)
+            llm_result["slides"] = slides
+            context["slides"] = slides
+            if not context.get("description"):
+                context["description"] = (
+                    f"KB-derived presentation for {domain} ({len(slides)} slides)"
+                )
     # Render the markdown form purely as a content-completeness check for
     # agent output (same template context, same content).
     rendered = _render_presentation_template(context, format=format)
@@ -6486,6 +6501,38 @@ def _render_presentation_agent_json(
         },
     }
     return json.dumps(output, indent=2, ensure_ascii=False, default=str)
+
+
+def _fallback_slides_from_entries(
+    entries: list[dict[str, Any]],
+    slide_count: int,
+) -> list[dict[str, Any]]:
+    """Build KB-derived slides when LLM synthesis returns no usable slides.
+
+    Issue #220: DeepSeek occasionally returns empty/partial presentation
+    content.  Rather than failing (or shipping an empty shell), fall back
+    to slides drawn verbatim from KB entries — one slide per entry (capped
+    at *slide_count*).  Content is real domain material, never fabricated.
+    """
+    slides: list[dict[str, Any]] = []
+    for e in entries[:slide_count]:
+        title = str(e.get("title") or "Untitled")[:80]
+        summary = str(e.get("summary") or "").strip()
+        if not summary:
+            continue
+        bullets = summary.split(".")[:3]
+        bullets = [b.strip().rstrip(".") for b in bullets if b.strip()]
+        slides.append(
+            {
+                "title": title,
+                "content": summary[:600],
+                "bullets": bullets,
+                "notes": "KB-derived slide (LLM synthesis returned no slides)",
+            }
+        )
+        if len(slides) >= slide_count:
+            break
+    return slides
 
 
 def _call_llm_for_presentation(prompt: str, slide_count: int) -> dict[str, Any]:
