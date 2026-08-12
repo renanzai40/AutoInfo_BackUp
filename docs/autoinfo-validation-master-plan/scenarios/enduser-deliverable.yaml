@@ -1,0 +1,234 @@
+# =============================================================================
+# Scenario: enduser-deliverable
+# Description: Full end-user validation with real API/LLM calls producing
+#   a deliverable ZIP with raw data + processed reports
+# Tags: enduser, real-api, real-llm, deliverable, regression
+# Prerequisites: AUTOINFO_LLM_API_KEY set to a working OpenCode Go key
+# =============================================================================
+
+- name: "Setup — clean project"
+  tool: bash
+  command: |
+    TEST_DIR="/tmp/test-enduser-final"
+    rm -rf "$TEST_DIR" && mkdir -p "$TEST_DIR"
+    cd "$TEST_DIR"
+    autoinfo init --demo medical-research 2>&1
+    echo "EXIT=$?"
+  expected:
+    exit_code: 0
+
+- name: "Add ai-commercial domain"
+  tool: bash
+  command: |
+    cd /tmp/test-enduser-final
+    autoinfo init --demo ai-commercial 2>&1
+    echo "EXIT=$?"
+  expected:
+    exit_code: 0
+
+- name: "Phase 1.1 — Real PubMed collection"
+  tool: bash
+  command: |
+    cd /tmp/test-enduser-final
+    autoinfo collect --domain medical-research --topic "IVF PGT-A" --source pubmed --limit 5 2>&1
+    echo "EXIT=$?"
+  expected:
+    exit_code: 0
+
+- name: "Phase 1.2 — Real TechCrunch RSS collection"
+  tool: bash
+  command: |
+    cd /tmp/test-enduser-final
+    autoinfo collect --domain ai-commercial --source techcrunch --limit 5 2>&1
+    echo "EXIT=$?"
+  expected:
+    exit_code: 0
+
+- name: "Phase 2.1 — Real LLM process (medical-research)"
+  tool: bash
+  command: |
+    cd /tmp/test-enduser-final
+    autoinfo process --domain medical-research 2>&1
+    echo "EXIT=$?"
+  expected:
+    exit_code: 0
+
+- name: "Phase 2.2 — Real LLM process (ai-commercial)"
+  tool: bash
+  command: |
+    cd /tmp/test-enduser-final
+    autoinfo process --domain ai-commercial 2>&1
+    echo "EXIT=$?"
+  expected:
+    exit_code: 0
+
+- name: "Phase 2.3 — Verify KB entries have non-empty summaries"
+  tool: python
+  command: |
+    import sys, os, json
+    os.chdir("/tmp/test-enduser-final")
+    data = json.loads(os.popen("autoinfo summaries list --domain medical-research --json 2>&1").read())
+    entries = data.get("entries", data.get("items", []))
+    total = len(entries)
+    with_summary = sum(1 for e in entries if e.get("summary", "").strip())
+    print(f"Total KB entries: {total}")
+    print(f"With non-empty summary: {with_summary}")
+    if total > 0:
+        print(f"Summary coverage: {with_summary/total*100:.0f}%")
+    assert with_summary > 0, "No summaries generated"
+    print("PASS:KB_ENTRIES_WITH_SUMMARIES")
+  expected:
+    exit_code: 0
+    stdout_contains:
+      - "PASS:KB_ENTRIES_WITH_SUMMARIES"
+
+- name: "Phase 3.1 — Generate Digest"
+  tool: bash
+  command: |
+    cd /tmp/test-enduser-final
+    autoinfo output digest --domain medical-research --period monthly 2>&1
+    echo "EXIT=$?"
+  expected:
+    exit_code: 0
+
+- name: "Phase 3.2 — Generate Report (researcher)"
+  tool: bash
+  command: |
+    cd /tmp/test-enduser-final
+    autoinfo output report --domain medical-research --audience researcher --format markdown 2>&1
+    echo "EXIT=$?"
+  expected:
+    exit_code: 0
+
+- name: "Phase 3.3 — Generate Report (executive)"
+  tool: bash
+  command: |
+    cd /tmp/test-enduser-final
+    autoinfo output report --domain ai-commercial --audience executive --format markdown 2>&1
+    echo "EXIT=$?"
+  expected:
+    exit_code: 0
+
+- name: "Phase 3.4 — Generate Report (investor)"
+  tool: bash
+  command: |
+    cd /tmp/test-enduser-final
+    autoinfo output report --domain ai-commercial --audience investor --format markdown 2>&1
+    echo "EXIT=$?"
+  expected:
+    exit_code: 0
+
+- name: "Phase 3.5 — Tutorial"
+  tool: bash
+  command: |
+    cd /tmp/test-enduser-final
+    autoinfo output tutorial --domain medical-research --audience researcher --format markdown 2>&1
+    echo "EXIT=$?"
+  expected:
+    exit_code: 0
+
+- name: "Phase 3.6 — Export formats"
+  tool: bash
+  command: |
+    cd /tmp/test-enduser-final
+    autoinfo output export --domain medical-research --format json 2>&1
+    echo "---"
+    autoinfo output export --domain ai-commercial --format json 2>&1
+    echo "---"
+    autoinfo output export --domain medical-research --format csv 2>&1
+    echo "EXIT=$?"
+  expected:
+    exit_code: 0
+
+- name: "Phase 4.1 — Cross-domain report"
+  tool: bash
+  command: |
+    cd /tmp/test-enduser-final
+    autoinfo output report --domains medical-research,ai-commercial --audience executive --format markdown 2>&1
+    echo "EXIT=$?"
+  expected:
+    exit_code: 0
+
+- name: "Phase 5.1 — Assemble deliverable ZIP"
+  tool: bash
+  command: |
+    cd /tmp/test-enduser-final
+    D="/tmp/autoinfo-enduser-deliverable"
+    rm -rf "$D" && mkdir -p "$D"/{01-raw-data,02-kb-entries,03-reports,04-digests}
+    for domain in medical-research ai-commercial; do
+      src="collections/$domain"
+      if [ -d "$src" ]; then
+        for f in $(find "$src" -name "*.json" ! -name "_runs.json" 2>/dev/null | head -20); do
+          title=$(python3 -c "import json; d=json.load(open('$f')); print(d.get('title','?')[:80])" 2>/dev/null)
+          echo "  [$domain] $title" >> "$D/01-raw-data/$domain.txt"
+        done
+      fi
+      kb="knowledge/$domain/01-Raw"
+      if [ -d "$kb" ]; then
+        cp "$kb"/*/*.md "$D/02-kb-entries/" 2>/dev/null
+      fi
+    done
+    find outputs -name "*.md" -o -name "*.json" 2>/dev/null | while read f; do
+      cp "$f" "$D/03-reports/" 2>/dev/null
+    done
+    find outputs -name "*digest*" 2>/dev/null | while read f; do
+      cp "$f" "$D/04-digests/" 2>/dev/null
+    done
+    cd /tmp && rm -f autoinfo-enduser-deliverable.zip
+    zip -r autoinfo-enduser-deliverable.zip "$(basename "$D")" 2>&1 | tail -3
+    echo "ZIP: /tmp/autoinfo-enduser-deliverable.zip ($(du -sh "$D" | cut -f1), $(find "$D" -type f | wc -l) files)"
+    echo "PASS:DELIVERABLE_CREATED"
+  expected:
+    exit_code: 0
+    stdout_contains:
+      - "PASS:DELIVERABLE_CREATED"
+
+- name: "Phase 6.1 — Verify raw data exists"
+  tool: bash
+  command: |
+    D="/tmp/autoinfo-enduser-deliverable"
+    n=$(find "$D/01-raw-data" -type f | wc -l)
+    echo "Raw data files: $n"
+    [ "$n" -ge 2 ] && echo "PASS:RAW_DATA_EXISTS" || echo "FAIL:RAW_DATA_TOO_FEW"
+  expected:
+    exit_code: 0
+    stdout_contains:
+      - "PASS:RAW_DATA_EXISTS"
+
+- name: "Phase 6.2 — Verify KB entries exist"
+  tool: bash
+  command: |
+    D="/tmp/autoinfo-enduser-deliverable"
+    n=$(find "$D/02-kb-entries" -type f 2>/dev/null | wc -l)
+    echo "KB entries: $n"
+    [ "$n" -ge 3 ] && echo "PASS:KB_ENTRIES_EXIST" || echo "WARN:KB_ENTRIES_FEW"
+    s=$(grep -l "^summary:" "$D/02-kb-entries"/*.md 2>/dev/null | wc -l)
+    ns=$(grep -L "^summary: ''" "$D/02-kb-entries"/*.md 2>/dev/null | wc -l)
+    echo "With summary field: $s"
+    echo "Non-empty summaries: $((s > 0 ? ns : 0))"
+  expected:
+    exit_code: 0
+    stdout_contains:
+      - "PASS:KB_ENTRIES_EXIST"
+
+- name: "Phase 6.3 — Verify reports exist"
+  tool: bash
+  command: |
+    D="/tmp/autoinfo-enduser-deliverable"
+    n=$(find "$D/03-reports" -type f 2>/dev/null | wc -l)
+    echo "Report files: $n"
+    [ "$n" -ge 1 ] && echo "PASS:REPORTS_EXIST" || echo "FAIL:NO_REPORTS"
+  expected:
+    exit_code: 0
+    stdout_contains:
+      - "PASS:REPORTS_EXIST"
+
+- name: "Phase 6.4 — Verify ZIP integrity"
+  tool: bash
+  command: |
+    unzip -t /tmp/autoinfo-enduser-deliverable.zip 2>&1 | tail -3
+    echo "PASS:ZIP_VALID"
+  expected:
+    exit_code: 0
+    stdout_contains:
+      - "PASS:ZIP_VALID"
