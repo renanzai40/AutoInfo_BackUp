@@ -6774,10 +6774,10 @@ def _render_audio(
     timeout:
         HTTP request timeout in seconds (default 120).
     engine:
-        TTS engine: ``"openai"`` (default), ``"local"`` (edge-tts),
+        TTS engine: ``"local"`` (edge-tts, default), ``"openai"``,
         or ``"whisper"`` (OpenAI Whisper model via TTS API).
         When *None*, reads from the ``tts.engine`` config key, falling
-        back to ``"openai"``.
+        back to ``"local"``.
     local_voice:
         Voice name for the local engine (edge-tts).  Defaults to
         ``"en-US-JennyNeural"``.  Ignored for ``engine="openai"``
@@ -6918,7 +6918,11 @@ def _render_video_scaffold(
 def _get_tts_engine_from_config() -> str:
     """Read the ``tts.engine`` setting from the project config.
 
-    Returns ``"openai"`` when the config is missing or the key is not set.
+    Returns "local" (edge-tts) when the config is missing or the key
+    is not set.  The OpenAI TTS endpoint is unreachable from the project's
+    deployment environment (WSL has no route to api.openai.com), so the
+    local engine is the sane default (#210); "tts.engine: openai" remains
+    available for environments that can reach the endpoint.
     """
     try:
         config_path = get_config_path()
@@ -6929,7 +6933,7 @@ def _get_tts_engine_from_config() -> str:
                 return engine.engine
     except Exception:
         pass
-    return "openai"
+    return "local"
 
 
 def _render_audio_openai(

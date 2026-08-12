@@ -426,15 +426,16 @@ class TTSConfig:
     Attributes
     ----------
     engine:
-        TTS engine to use. ``"openai"`` (default) for OpenAI TTS API,
-        ``"local"`` for edge-tts (free, offline-capable),
+        TTS engine to use. ``"local"`` (default, edge-tts, free and
+        works where api.openai.com is unreachable — #210),
+        ``"openai"`` for OpenAI TTS API,
         ``"whisper"`` for OpenAI Whisper model via TTS API.
     local_voice:
         Voice for the local engine (edge-tts).  See
         https://github.com/rany2/edge-tts#voices-list
         for available voices.  Defaults to ``"en-US-JennyNeural"``.
     """
-    engine: str = "openai"
+    engine: str = "local"
     local_voice: str = "en-US-JennyNeural"
 
 
