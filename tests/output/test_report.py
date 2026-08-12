@@ -369,9 +369,40 @@ class TestGenerateReport:
 
         assert "This report covers" in report
 
-    def test_ungrouped_entries_go_to_additional_topics(
+    def test_fallback_sections_non_empty_after_llm_empty_synthesis(
         self, sample_entries: list[dict]
     ) -> None:
+        """Issue #217: when every LLM synthesis path comes back empty, the
+        report's deterministic fallback must still carry non-empty
+        key_findings / recommendations derived from the real entries, so
+        D1 (product completeness) does not block the report."""
+        mock_extract = MagicMock(
+            side_effect=[
+                _make_grouping_result(),
+                _make_empty_extraction(),
+            ]
+        )
+
+        with (
+            patch("autoinfo.output.KBStore") as mock_kb_cls,
+            patch.object(
+                _get_llm_extractor_class(), "extract", mock_extract
+            ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
+            ),
+        ):
+            mock_store = MagicMock()
+            mock_store.list_entries.return_value = sample_entries
+            mock_kb_cls.return_value = mock_store
+
+            report = _call_report("medical-research")
+
+        # Fallback sections are entry-derived, never empty (D1 passes).
+        assert "This report covers" in report
+        assert "## Key Findings" in report
+        assert "IVF" in report or "time-lapse" in report
         """Entries not matched by LLM grouping appear in 'Additional Topics'."""
         mock_extract = MagicMock(
             side_effect=[

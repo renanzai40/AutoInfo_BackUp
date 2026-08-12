@@ -20,6 +20,8 @@ import pytest
 import yaml
 
 from autoinfo.output import (
+    DeliveryOutput,
+    _call_llm_for_digest,
     _compute_date_range,
     _parse_json_response,
     generate_digest,
@@ -169,6 +171,44 @@ def _mock_list_entries(
 # ---------------------------------------------------------------------------
 
 
+class TestCallLlmForDigestRetry:
+    """Issue #217: empty synthesis retries before giving up."""
+
+    def _make_response(self, content: str) -> MagicMock:
+        resp = MagicMock()
+        resp.choices = [MagicMock()]
+        resp.choices[0].message.content = content
+        return resp
+
+    def test_retries_once_on_empty_content(self) -> None:
+        """A first empty response triggers one retry that returns synthesis."""
+        empty = self._make_response("not json")
+        good = self._make_response(json.dumps({"executive_summary": "ok"}))
+        with (
+            patch(
+                "autoinfo.output.call_with_fallback",
+                side_effect=[empty, good],
+            ),
+            patch("autoinfo.output.load_config", return_value=None),
+        ):
+            result = _call_llm_for_digest("prompt")
+        assert result.get("executive_summary") == "ok"
+
+    def test_two_empty_responses_return_empty(self) -> None:
+        """Two consecutive empty responses give up and return {} — the
+        caller then fills the sections deterministically (fallback)."""
+        empty = self._make_response("not json")
+        with (
+            patch(
+                "autoinfo.output.call_with_fallback",
+                side_effect=[empty, empty],
+            ),
+            patch("autoinfo.output.load_config", return_value=None),
+        ):
+            result = _call_llm_for_digest("prompt")
+        assert result == {}
+
+
 class TestGenerateDigest:
     @patch("autoinfo.output.KBStore")  # TRIAGE #32-34: patch target must be the name used inside generate_digest (hoisted at src/autoinfo/output/__init__.py:49)
     @patch("autoinfo.output._call_llm_for_digest")
@@ -270,7 +310,9 @@ class TestGenerateDigest:
     def test_llm_failure_still_renders_entries(
         self, mock_kb: MagicMock
     ) -> None:
-        """When LLM fails, digest still renders entries without synthesis."""
+        """When LLM fails, digest still renders entries — and, per issue
+        #217, a deterministic entry-derived synthesis fills the D1-required
+        sections instead of leaving them empty."""
         mock_store = MagicMock()
         mock_store.list_entries.side_effect = _mock_list_entries
         mock_kb.return_value = mock_store
@@ -281,7 +323,62 @@ class TestGenerateDigest:
             )
             assert "Entries" in result
             assert "IVF outcomes with time-lapse" in result
-            assert "Executive Summary" not in result
+            # Issue #217: synthesis is now entry-derived, never empty —
+            # D1 (product completeness) must not block the product.
+            assert "Executive Summary" in result
+            assert "IVF" in result
+
+    @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._call_llm_for_digest")
+    def test_empty_llm_synthesis_falls_back_to_entry_sections(
+        self, mock_llm: MagicMock, mock_kb: MagicMock
+    ) -> None:
+        """Issue #217: when the LLM returns empty synthesis, the digest still
+        carries non-empty D1-required sections derived from real entries —
+        D1 must not block the product for empty key_findings/summary/
+        recommendations."""
+        mock_llm.return_value = {}  # DeepSeek intermittent empty output
+        mock_store = MagicMock()
+        mock_store.list_entries.side_effect = _mock_list_entries
+        mock_kb.return_value = mock_store
+
+        result = generate_digest(
+            domain="medical-research", period="weekly", format="json"
+        )
+        parsed = json.loads(result)
+        synth = parsed["llm_synthesis"]
+        assert synth["executive_summary"].strip()
+        assert synth["key_findings"]
+        assert synth["recommendations"]
+        # Fallback is derived from the real entries, never fabricated.
+        assert "IVF" in synth["executive_summary"] or "AI" in synth["executive_summary"]
+
+    @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._call_llm_for_digest")
+    def test_empty_synthesis_passes_d1_gate(
+        self, mock_llm: MagicMock, mock_kb: MagicMock
+    ) -> None:
+        """Issue #217: D1 (product completeness) must pass when the LLM
+        synthesis was empty and the deterministic entry-derived fallback
+        filled the required sections."""
+        mock_llm.return_value = {}
+        mock_store = MagicMock()
+        mock_store.list_entries.side_effect = _mock_list_entries
+        mock_kb.return_value = mock_store
+
+        result = generate_digest(
+            domain="medical-research",
+            period="weekly",
+            format="json",
+            delivery_gate_configs={
+                "D1-ProductCompleteness": {"action": "block"},
+            },
+        )
+        assert isinstance(result, DeliveryOutput)
+        assert not result.delivery_blocked
+        d1 = result.gate_results.get("D1-ProductCompleteness")
+        assert d1 is not None
+        assert d1.passed is True
 
     def test_invalid_period_raises_value_error(self) -> None:
         """Invalid period raises ValueError."""

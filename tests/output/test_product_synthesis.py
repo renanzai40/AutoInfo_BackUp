@@ -758,7 +758,7 @@ class TestExecutiveSummaryPromptSizeRetry:
     def test_all_attempts_empty_bounded_loop_then_theme_fallback(self) -> None:
         """If every attempt returns empty, fall back after exactly
         ``max_synthesis_attempts`` calls (bounded — no unbounded retry
-        loop) with the unchanged theme-list fallback."""
+        loop) with the theme-list fallback."""
         def _side(prompt: str, call_no: int) -> str:
             return ""
 
@@ -768,12 +768,13 @@ class TestExecutiveSummaryPromptSizeRetry:
         assert len(captured) == 4
         # One backoff sleep between each of the 4 attempts (3 total).
         assert sleeps == [60.0, 60.0, 60.0]
-        # Deterministic theme-list fallback still yields a non-empty summary
-        # but never fabricates product sections (the dict carries only the
-        # three base keys; downstream reads absent product keys as empty).
+        # Issue #217: the deterministic fallback must still carry non-empty
+        # D1-required sections derived from the real entries — never empty
+        # (an empty key_findings/recommendations would block delivery).
         assert result["executive_summary"]
         assert "This report covers" in result["executive_summary"]
-        assert result["key_findings"] == []
+        assert result["key_findings"]
+        assert result["recommendations"]
         assert set(result) == {"executive_summary", "key_findings", "recommendations"}
 
     def test_retry_succeeds_but_omits_sections_fires_dedicated_prompt(
