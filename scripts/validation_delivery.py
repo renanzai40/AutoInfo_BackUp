@@ -25,6 +25,7 @@ import re
 import shutil
 import sys
 import zipfile
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
 
@@ -887,7 +888,15 @@ def _package(artifacts: list[dict[str, Any]], results: list[dict[str, Any]], out
     bucket_dirs = {"RAW": raw_dir, "KB": kb_dir, "PROCESSED": proc_dir}
     manifest = []
     rejected = []
-    for a in artifacts:
+
+    # Issue #204: D1-D3 gate evaluation makes synchronous blocking LLM calls
+    # (~40s each). The evaluation is read-only on files and side-effect free,
+    # so run it concurrently across artifacts with a fixed-size pool, then
+    # reassemble the results in the original artifact order so the manifest,
+    # rejected list and per-artifact side effects stay deterministic.
+    _GATE_MAX_WORKERS = 6
+    pending: list[tuple[int, Path, Path, str]] = []
+    for idx, a in enumerate(artifacts):
         src = Path(a["path"])
         if not src.exists():
             continue
@@ -895,23 +904,37 @@ def _package(artifacts: list[dict[str, Any]], results: list[dict[str, Any]], out
         # arrive from a caller that did not filter at collection time.
         if is_excluded_artifact(src.as_posix()):
             continue
-        rel = src.as_posix()
         bucket = _bucket(src)
         dest = bucket_dirs[bucket] / _tier_subpath(src)
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, dest)
-        try:
-            gate_eval = run_delivery_gates(src, bucket)
-        except Exception as exc:  # noqa: BLE001 — one bad file must never break delivery
-            gate_eval = {
-                "gates": {
-                    "D1": {"passed": False, "details": {"error": f"gate evaluation error: {exc}"}},
-                    "D2": {"passed": True, "details": {}},
-                    "D3": {"passed": True, "details": {}},
-                    "authenticity": {"authenticity": "fail", "reason": f"check error: {exc}"},
-                },
-                "quality": "FAIL",
-            }
+        pending.append((idx, src, dest, bucket))
+
+    gate_evals: dict[int, dict[str, Any]] = {}
+    with ThreadPoolExecutor(max_workers=_GATE_MAX_WORKERS) as executor:
+        futures = {
+            executor.submit(run_delivery_gates, src, bucket): idx
+            for idx, src, _dest, bucket in pending
+        }
+        for fut in as_completed(futures):
+            idx = futures[fut]
+            try:
+                gate_eval = fut.result()
+            except Exception as exc:  # noqa: BLE001 — one bad file must never break delivery
+                gate_eval = {
+                    "gates": {
+                        "D1": {"passed": False, "details": {"error": f"gate evaluation error: {exc}"}},
+                        "D2": {"passed": True, "details": {}},
+                        "D3": {"passed": True, "details": {}},
+                        "authenticity": {"authenticity": "fail", "reason": f"check error: {exc}"},
+                    },
+                    "quality": "FAIL",
+                }
+            gate_evals[idx] = gate_eval
+
+    for idx, src, dest, bucket in pending:
+        rel = src.as_posix()
+        gate_eval = gate_evals[idx]
         gates = gate_eval.get("gates", {})
         quality = gate_eval.get("quality", "FAIL")
         entry = {
