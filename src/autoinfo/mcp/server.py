@@ -756,11 +756,11 @@ def _handle_get_kb_entry(entry_id: str, user_id: str | None = None) -> dict[str,
     store = KBStore()
     entry = store.get_entry(entry_id)
     if entry is None:
-        return {
-            "error_code": ErrorCode.NOT_FOUND.value,
-            "message": f"Entry '{entry_id}' not found",
-            "actionable": True,
-        }
+        return error_response(
+            code=ErrorCode.NOT_FOUND,
+            message=f"Entry '{entry_id}' not found",
+            actionable=True,
+        )
     return entry
 
 
@@ -1225,11 +1225,11 @@ def _handle_get_domain_schema(domain: str) -> dict[str, Any]:
 
     domain_cfg = _find_domain(config, domain)
     if domain_cfg is None:
-        return {
-            "error_code": ErrorCode.DOMAIN_NOT_FOUND.value,
-            "message": f"Domain '{domain}' is not configured. Use add_domain(name='{domain}') to create it.",
-            "actionable": True,
-        }
+        return error_response(
+            code=ErrorCode.DOMAIN_NOT_FOUND,
+            message=f"Domain '{domain}' is not configured. Use add_domain(name='{domain}') to create it.",
+            actionable=True,
+        )
 
     sources = [
         {"name": s.name, "type": s.type, "url": s.url, "quality_tier": s.quality_tier, "tos_classification": s.tos_classification, "requires_key": s.requires_key}
@@ -1593,10 +1593,18 @@ def _handle_test_source(url: str, type: str = "api") -> dict[str, Any]:
     """Test whether a source URL is reachable."""
     type_error = _validate_source_type(type)
     if type_error:
-        return {"reachable": False, "error_code": ErrorCode.VALIDATION_ERROR.value, "message": type_error, "actionable": True}
+        return error_response(
+            code=ErrorCode.VALIDATION_ERROR,
+            message=type_error,
+            actionable=True,
+        )
     url_error = _validate_url(url, source_type=type)
     if url_error:
-        return {"reachable": False, "error_code": ErrorCode.VALIDATION_ERROR.value, "message": url_error, "actionable": True}
+        return error_response(
+            code=ErrorCode.VALIDATION_ERROR,
+            message=url_error,
+            actionable=True,
+        )
     key_status = _source_key_status(type)
     key_missing_hint = ""
     if key_status["key_required"] and not key_status["key_configured"]:
@@ -1634,20 +1642,18 @@ def _handle_test_source(url: str, type: str = "api") -> dict[str, Any]:
             result["warning"] = key_missing_hint.strip()
         return result
     except httpx.TimeoutException:
-        return {
-            "reachable": False,
-            "error_code": ErrorCode.TIMEOUT.value,
-            "message": f"Request to '{url}' timed out.{key_missing_hint}",
-            "actionable": True,
-        }
+        return error_response(
+            code=ErrorCode.TIMEOUT,
+            message=f"Request to '{url}' timed out.{key_missing_hint}",
+            actionable=True,
+        )
     except Exception as exc:
         hint = f" {key_missing_hint.strip()}" if key_missing_hint else ""
-        return {
-            "reachable": False,
-            "error_code": ErrorCode.INTERNAL_ERROR.value,
-            "message": f"{exc}{hint}",
-            "actionable": True,
-        }
+        return error_response(
+            code=ErrorCode.INTERNAL_ERROR,
+            message=f"{exc}{hint}",
+            actionable=True,
+        )
 
 
 def _infer_format(content_type: str, content_preview: str) -> str:
@@ -2135,11 +2141,11 @@ def _handle_extract_fields(content_id: str, schema: list[str]) -> dict[str, Any]
     store = KBStore()
     entry = store.get_entry(content_id)
     if entry is None:
-        return {
-            "error_code": ErrorCode.NOT_FOUND.value,
-            "message": f"Entry '{content_id}' not found",
-            "actionable": True,
-        }
+        return error_response(
+            code=ErrorCode.NOT_FOUND,
+            message=f"Entry '{content_id}' not found",
+            actionable=True,
+        )
 
     # Reconstruct a minimal Item from the KB entry's stored content
     item = Item(
@@ -3206,11 +3212,11 @@ def _handle_generate_presentation(
             persist, domain, "presentation", format, result,
         )
     except ValueError as exc:
-        return {
-            "error_code": ErrorCode.VALIDATION_ERROR.value,
-            "message": str(exc),
-            "actionable": True,
-        }
+        return error_response(
+            code=ErrorCode.VALIDATION_ERROR,
+            message=str(exc),
+            actionable=True,
+        )
     except Exception as exc:
         logger.exception("Presentation generation failed for domain '%s'", domain)
         return _error_dict(exc)
@@ -3251,26 +3257,26 @@ def _handle_send_email_digest(
         return _error_dict(exc)
 
     if not config.email.enabled:
-        return {
-            "error_code": ErrorCode.EMAIL_NOT_ENABLED.value,
-            "message": (
+        return error_response(
+            code=ErrorCode.EMAIL_NOT_ENABLED,
+            message=(
                 "Email delivery is not enabled. "
                 "Set 'email.enabled: true' in .autoinfo/config.yaml "
                 "and configure email.smtp_host, email.from_addr, "
                 "and email.to_addrs."
             ),
-            "actionable": True,
-        }
+            actionable=True,
+        )
 
     try:
         result = _send_email(domain=domain, period=period, config=config, user_id=user_id)
         return result
     except RuntimeError as exc:
-        return {
-            "error_code": ErrorCode.EMAIL_SEND_FAILED.value,
-            "message": str(exc),
-            "actionable": True,
-        }
+        return error_response(
+            code=ErrorCode.EMAIL_SEND_FAILED,
+            message=str(exc),
+            actionable=True,
+        )
     except Exception as exc:
         logger.exception("Email digest send failed for domain '%s'", domain)
         return _error_dict(exc)
@@ -3755,25 +3761,25 @@ def _handle_remove_delivery_schedule(
 ) -> dict[str, Any]:
     """Remove a delivery schedule by ID."""
     if not confirm:
-        return {
-            "error_code": ErrorCode.CONFIRMATION_REQUIRED.value,
-            "message": (
+        return error_response(
+            code=ErrorCode.CONFIRMATION_REQUIRED,
+            message=(
                 "This operation is destructive and requires confirmation. "
                 "Pass confirm=True to proceed."
             ),
-            "actionable": True,
-        }
+            actionable=True,
+        )
     try:
         from autoinfo.delivery.scheduler import DeliveryScheduler
 
         scheduler = DeliveryScheduler()
         removed = scheduler.remove_schedule(schedule_id)
         if not removed:
-            return {
-                "error_code": ErrorCode.SCHEDULE_NOT_FOUND.value,
-                "message": f"Delivery schedule '{schedule_id}' not found",
-                "actionable": True,
-            }
+            return error_response(
+                code=ErrorCode.SCHEDULE_NOT_FOUND,
+                message=f"Delivery schedule '{schedule_id}' not found",
+                actionable=True,
+            )
         return {
             "removed": True,
             "schedule_id": schedule_id,
@@ -4246,14 +4252,14 @@ def _handle_get_project_assets(type: str = "") -> dict[str, Any]:
 def _handle_archive_project(reason: str = "", confirm: bool = False) -> dict[str, Any]:
     """Archive the current project (refuses unless published to 03-Wiki)."""
     if not confirm:
-        return {
-            "error_code": ErrorCode.CONFIRMATION_REQUIRED.value,
-            "message": (
+        return error_response(
+            code=ErrorCode.CONFIRMATION_REQUIRED,
+            message=(
                 "This operation is destructive and requires confirmation. "
                 "Pass confirm=True to proceed."
             ),
-            "actionable": True,
-        }
+            actionable=True,
+        )
     try:
         from autoinfo.kb import KBStore
 
@@ -4267,16 +4273,16 @@ def _handle_archive_project(reason: str = "", confirm: bool = False) -> dict[str
         has_published = False
 
     if not has_published:
-        return {
-            "error_code": ErrorCode.NOT_PUBLISHED.value,
-            "message": (
+        return error_response(
+            code=ErrorCode.NOT_PUBLISHED,
+            message=(
                 "Cannot archive project: no entries have been promoted to "
                 "03-Wiki. Publish at least one Draft entry before archiving. "
                 "Use create_kb_draft raw_ids=[...] title=... to create a Draft, "
                 "then the human director can promote it to 03-Wiki."
             ),
-            "actionable": True,
-        }
+            actionable=True,
+        )
 
     return {
         "status": "refused_by_design",
@@ -4556,11 +4562,11 @@ def _handle_get_gate_config(domain: str, gate: str) -> dict[str, Any]:
 
     domain_cfg = _find_domain(config, domain)
     if domain_cfg is None:
-        return {
-            "error_code": ErrorCode.DOMAIN_NOT_FOUND.value,
-            "message": f"Domain '{domain}' is not configured. Use add_domain(name='{domain}') to create it.",
-            "actionable": True,
-        }
+        return error_response(
+            code=ErrorCode.DOMAIN_NOT_FOUND,
+            message=f"Domain '{domain}' is not configured. Use add_domain(name='{domain}') to create it.",
+            actionable=True,
+        )
 
     from dataclasses import asdict as _asdict
 
@@ -4582,11 +4588,11 @@ def _handle_get_gate_config(domain: str, gate: str) -> dict[str, Any]:
         gate_type = "delivery"
 
     if gate_config is None:
-        return {
-            "error_code": "GateNotFound",
-            "message": f"Gate '{gate}' is not configured for domain '{domain}'",
-            "actionable": True,
-        }
+        return error_response(
+            code="GateNotFound",
+            message=f"Gate '{gate}' is not configured for domain '{domain}'",
+            actionable=True,
+        )
 
     # Remove internal fields from serialization
     gate_config.pop("name", None)
@@ -5100,18 +5106,18 @@ def _handle_remove_alert_rule(id: str) -> dict[str, Any]:
     try:
         removed = remove_alert_rule(id)
     except Exception as exc:
-        return {
-            "error_code": ErrorCode.INTERNAL_ERROR.value,
-            "message": f"Failed to remove alert rule: {exc}",
-            "actionable": True,
-        }
+        return error_response(
+            code=ErrorCode.INTERNAL_ERROR,
+            message=f"Failed to remove alert rule: {exc}",
+            actionable=True,
+        )
 
     if not removed:
-        return {
-            "error_code": "AlertRuleNotFound",
-            "message": f"Alert rule '{id}' not found",
-            "actionable": True,
-        }
+        return error_response(
+            code="AlertRuleNotFound",
+            message=f"Alert rule '{id}' not found",
+            actionable=True,
+        )
 
     return {
         "removed": True,
@@ -5998,11 +6004,11 @@ def _handle_enduser_delete(user_id: str) -> dict[str, Any]:
         return _error_dict(exc)
 
     if not ok:
-        return {
-            "error_code": ErrorCode.NOT_FOUND.value,
-            "message": f"End-user '{user_id}' not found",
-            "actionable": True,
-        }
+        return error_response(
+            code=ErrorCode.NOT_FOUND,
+            message=f"End-user '{user_id}' not found",
+            actionable=True,
+        )
 
     return success_response({"user_id": user_id, "deleted": True})
 
@@ -6080,18 +6086,18 @@ def _handle_remove_agent_callback(callback_id: str) -> dict[str, Any]:
         removed = remove_agent_callback(callback_id)
         if removed:
             return {"callback_id": callback_id, "removed": True}
-        return {
-            "error_code": ErrorCode.NOT_FOUND.value,
-            "message": f"Callback '{callback_id}' not found",
-            "actionable": True,
-        }
+        return error_response(
+            code=ErrorCode.NOT_FOUND,
+            message=f"Callback '{callback_id}' not found",
+            actionable=True,
+        )
     except Exception as exc:
         logger.exception("remove_agent_callback failed")
-        return {
-            "error_code": ErrorCode.INTERNAL_ERROR.value,
-            "message": str(exc),
-            "actionable": True,
-        }
+        return error_response(
+            code=ErrorCode.INTERNAL_ERROR,
+            message=str(exc),
+            actionable=True,
+        )
 
 
 # ---------------------------------------------------------------------------
