@@ -1682,6 +1682,47 @@ class D1ProductCompleteness:
                 },
             )
 
+        # Agent-format outputs (JSON-LD: KnowledgeDigest/KnowledgeReport/
+        # KnowledgePresentation/... — identified by "@type") use a different
+        # content contract than PROCESSED markdown products: the
+        # key_findings/summary/recommendations sections do not exist in
+        # JSON-LD.  Check the agent-native shape instead: at least one
+        # entry with a real source_url (title is optional — KnowledgeDigest
+        # carries no top-level title) (issue #217).
+        if "@type" in product_output or str(product_output.get("format", "")) == "agent":
+            entries = product_output.get("entries") or product_output.get("items") or []
+            has_title = bool(str(product_output.get("title") or "").strip())
+            ok = len(entries) > 0
+            if ok:
+                return QualityResult(
+                    gate_name="D1-ProductCompleteness",
+                    passed=True,
+                    score=1.0,
+                    details={
+                        "required_sections": ["entries"],
+                        "all_present": True,
+                        "agent_format": True,
+                        "entry_count": len(entries),
+                        "has_title": has_title,
+                    },
+                )
+            return QualityResult(
+                gate_name="D1-ProductCompleteness",
+                passed=self.action_on_failure != "block",
+                score=0.0,
+                flagged=True,
+                details={
+                    "action": self.action_on_failure,
+                    "agent_format": True,
+                    "missing_sections": [],
+                    "empty_sections": ["entries"],
+                    "error": (
+                        f"agent output incomplete: title={'yes' if has_title else 'no'}, "
+                        f"entries={len(entries)}"
+                    ),
+                },
+            )
+
         missing: list[str] = []
         empty: list[str] = []
 

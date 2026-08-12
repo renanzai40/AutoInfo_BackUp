@@ -583,7 +583,8 @@ def check_authenticity(file_path: Path) -> dict[str, Any]:
         if fm:
             reason += f" (frontmatter fields: {', '.join(sorted(fm)[:6])})"
         return {"authenticity": "pass", "reason": reason}
-    entries = _json_entries(_parse_json_payload(file_path))
+    parsed = _parse_json_payload(file_path)
+    entries = _json_entries(parsed)
     if not entries:
         return {
             "authenticity": "pass",
@@ -596,10 +597,19 @@ def check_authenticity(file_path: Path) -> dict[str, Any]:
             problems.append(f"entry[{i}] missing source_url")
         elif "example.com" in url:
             problems.append(f"entry[{i}] placeholder source_url: {url}")
-        for field in ("source_type", "source_platform"):
+        # source_type is required for raw collection payloads but is not
+        # part of agent JSON-LD entries (KnowledgeDigest etc. carry
+        # source_platform instead) — only require source_platform there
+        # (issue #217).
+        is_agent_ld = bool(parsed.get("@type")) if isinstance(parsed, dict) else False
+        for field in (() if is_agent_ld else ("source_type", "source_platform")):
             val = entry.get(field, "")
             if not isinstance(val, str) or not val.strip():
                 problems.append(f"entry[{i}] missing {field}")
+        if is_agent_ld:
+            val = entry.get("source_platform", "")
+            if not isinstance(val, str) or not val.strip():
+                problems.append(f"entry[{i}] missing source_platform")
     if problems:
         shown = "; ".join(problems[:6])
         if len(problems) > 6:
