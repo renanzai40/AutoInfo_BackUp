@@ -782,7 +782,9 @@ def _dict_to_config(raw: dict[str, Any]) -> Config:
         ),
         cost_alerts=cost_alerts,
         tts=TTSConfig(
-            engine=str(tts_raw.get("engine", "openai")),
+            # Issue #210/#218: default must match TTSConfig.engine ("local").
+            # The dataclass default alone is bypassed by this YAML parser.
+            engine=str(tts_raw.get("engine", "local")),
             local_voice=str(tts_raw.get("local_voice", "en-US-JennyNeural")),
         ),
         output=OutputConfig(
