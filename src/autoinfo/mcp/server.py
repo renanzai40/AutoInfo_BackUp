@@ -2087,13 +2087,36 @@ def _handle_suggest_keywords(
         try:
             parsed = json.loads(content)
         except json.JSONDecodeError:
-            # LLM returned empty or non-JSON content — surface a graceful
-            # error instead of a raw traceback so validation can report it.
+            # LLM returned empty or non-JSON content.  Fall back to a
+            # deterministic keyword extraction from the text itself so the
+            # tool still returns useful suggestions instead of failing
+            # (issue #215; DeepSeek-V4-Flash occasionally returns empty
+            # content for longer prompts).
+            import re
+
+            from autoinfo.process import _is_valid_discovery_keyword
+
+            words = re.findall(r"[A-Za-z][A-Za-z\-]{3,}", text)
+            seen: list[str] = []
+            for w in words:
+                wl = w.lower()
+                if wl not in seen and _is_valid_discovery_keyword(wl):
+                    seen.append(wl)
+                if len(seen) >= limit:
+                    break
+            if seen:
+                return {
+                    "domain": domain,
+                    "suggestions": seen,
+                    "count": len(seen),
+                    "source": "deterministic-fallback",
+                }
             return error_response(
                 code=ErrorCode.EMPTY_RESULT,
                 message=(
                     "Keyword suggestion failed: LLM returned empty or "
-                    "non-JSON content. Retry the request."
+                    "non-JSON content and no keywords could be extracted "
+                    "from the text. Retry the request."
                 ),
                 actionable=True,
             )
