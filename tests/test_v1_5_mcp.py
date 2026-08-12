@@ -126,12 +126,13 @@ class TestGetGateConfig:
     def test_get_nonexistent_gate(self, cwd_patch: Path) -> None:
         """Non-existent gate returns error."""
         result = _handle_get_gate_config(domain="medical-research", gate="NONEXISTENT")
-        assert "error_code" in result
+        assert "error" in result
+        assert result["error"]["code"] == "GateNotFound"
 
     def test_get_nonexistent_domain(self, cwd_patch_no_domain: Path) -> None:
         """Non-existent domain returns error."""
         result = _handle_get_gate_config(domain="missing-domain", gate="G0")
-        assert result.get("error_code") == ErrorCode.DOMAIN_NOT_FOUND.value
+        assert result["error"]["code"] == ErrorCode.DOMAIN_NOT_FOUND.value
 
 
 # ===================================================================
@@ -307,7 +308,7 @@ class TestAlertRuleMCPHandlers:
             # The alerts module handles missing file gracefully
             result = _handle_remove_alert_rule(id="non-existent-id")
             # Should get an error since the rule doesn't exist
-            assert "error_code" in result or result.get("removed") is False
+            assert "error" in result or result.get("removed") is False
 
 
 # ===================================================================
@@ -357,8 +358,8 @@ class TestMCPEdgeCases:
     ) -> None:
         """When gate exists neither at domain nor global level, error is returned."""
         result = _handle_get_gate_config(domain="medical-research", gate="G9")
-        assert "error_code" in result
-        assert result.get("error_code") != ErrorCode.DOMAIN_NOT_FOUND.value
+        assert "error" in result
+        assert result["error"]["code"] != ErrorCode.DOMAIN_NOT_FOUND.value
 
     def test_set_gate_on_domain_without_existing_gates(
         self, tmp_path: Path
