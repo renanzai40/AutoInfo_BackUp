@@ -49,3 +49,4 @@ if the decision changes, write a new ADR and mark the old one `Superseded by NNN
 | [0003](0003-llm-fallback-chain.md) | LLM `call_with_fallback` — primary + ordered fallback walk | Accepted |
 | [0004](0004-reasoning-model-json-mode-thinking.md) | Reasoning models: never send `response_format`, disable thinking by default | Accepted |
 | [0005](0005-unified-success-error-envelope.md) | Unified `{success, data}` / `{success, error{code,message,actionable}}` envelope (v1.9) | Accepted |
+| [0006](0006-dev-process-workflow-charter.md) | Adopt the 7-stage agent-driven development workflow (2026-08-13) | Accepted |

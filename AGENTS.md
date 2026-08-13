@@ -447,6 +447,7 @@ Never hand-edit runtime artifacts to fix behavior — fix the source.
 
 ## References
 
+- `docs/dev/workflow-charter.md` — Development workflow charter (7-stage process + 3 support methods, English index; canonical methodology: `docs/dev/七阶段AI开发流程-用CodingAgent交付成品的方法论.md`; adoption decision: `docs/adr/0006-dev-process-workflow-charter.md`)
 - `docs/dev/mcp-usage-examples.md` — Full worked MCP tool workflow examples (moved from Common Patterns)
 - `docs/dev/required-api-keys.md` — Full catalog of API keys and environment variables
 - `docs/dev/founder-expectations.md` — D3 index (simplified after split; see `docs/archive/founder-expectations-pre-split.md` for full original)

@@ -13,18 +13,18 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 
 | Metric | Value |
 |--------|-------|
-| Total files | 62 |
-| Total lines | 25958 |
-| Active files | 53 |
+| Total files | 65 |
+| Total lines | 26332 |
+| Active files | 56 |
 | Archived files | 9 |
 | Category — archive | 9 files / 4932 lines |
 | Category — known-limitations | 1 files / 255 lines |
 | Category — schemas | 4 files / 397 lines |
 | Category — skills | 3 files / 785 lines |
-| Category — adr | 7 files / 311 lines |
+| Category — adr | 8 files / 384 lines |
 | Category — specs | 12 files / 8746 lines |
 | Category — validation-reports | 8 files / 2620 lines |
-| Category — docs/dev | 17 files / 7851 lines |
+| Category — docs/dev | 19 files / 8152 lines |
 | Category — docs/root | 1 files / 61 lines |
 
 ## Inventory
@@ -36,7 +36,8 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `adr/0003-llm-fallback-chain.md` | 44 | adr | active | adr |
 | `adr/0004-reasoning-model-json-mode-thinking.md` | 48 | adr | active | adr |
 | `adr/0005-unified-success-error-envelope.md` | 49 | adr | active | adr |
-| `adr/README.md` | 51 | adr | active | adr-index |
+| `adr/0006-dev-process-workflow-charter.md` | 72 | adr | active | adr |
+| `adr/README.md` | 52 | adr | active | adr-index |
 | `adr/TEMPLATE.md` | 32 | adr | active | adr |
 | `archive/agent-tester-validation.md` | 663 | archive | archived | — |
 | `archive/end-user-sla.md` | 126 | archive | archived | — |
@@ -84,6 +85,8 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/validation-reports/evidence-2026-08-12/ac5-report-standard.md` | 813 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-tutorial-student.md` | 501 | validation-reports | active | — |
 | `dev/validation-scenario-contract.md` | 768 | docs/dev | active | — |
+| `dev/workflow-charter.md` | 67 | docs/dev | active | workflow-charter |
+| `dev/七阶段AI开发流程-用CodingAgent交付成品的方法论.md` | 234 | docs/dev | active | methodology |
 | `glossary.md` | 61 | docs/root | active | glossary |
 | `known-limitations/blocked-sources.md` | 255 | known-limitations | active | — |
 | `schemas/knowledge-base-export-v1.json` | 72 | schemas | active | — |
