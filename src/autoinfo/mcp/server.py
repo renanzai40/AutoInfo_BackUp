@@ -11018,7 +11018,7 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
         elif name == "reject_keyword":
             result = _handle_reject_keyword(**arguments)
         elif name == "suggest_keywords":
-            result = _handle_suggest_keywords(**arguments)
+            result = await asyncio.to_thread(_handle_suggest_keywords, **arguments)
 
         # -- Collection / Processing (5) ----------------------------------
         # collect/process/batch_run are long-running sync handlers; offload
@@ -11080,7 +11080,7 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
         elif name == "list_kb_tier":
             result = _handle_list_kb_tier(**arguments)
         elif name == "promote_kb_draft":
-            result = _handle_promote_kb_draft(**arguments)
+            result = await asyncio.to_thread(_handle_promote_kb_draft, **arguments)
         elif name == "demote_kb_wiki":
             result = _handle_demote_kb_wiki(**arguments)
         elif name == "force_promote":
@@ -11099,25 +11099,25 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
 
         # -- CEFR Classification (1) ----------------------------------------
         elif name == "classify_cefr":
-            result = _handle_classify_cefr(**arguments)
+            result = await asyncio.to_thread(_handle_classify_cefr, **arguments)
         elif name == "cefr_batch":
-            result = _handle_cefr_batch(**arguments)
+            result = await asyncio.to_thread(_handle_cefr_batch, **arguments)
 
         # -- Output (6) ---------------------------------------------------
         elif name == "list_output_templates":
             result = _handle_list_output_templates(**arguments)
         elif name == "generate_digest":
-            result = _handle_generate_digest(**arguments)
+            result = await asyncio.to_thread(_handle_generate_digest, **arguments)
         elif name == "generate_report":
-            result = _handle_generate_report(**arguments)
+            result = await asyncio.to_thread(_handle_generate_report, **arguments)
         elif name == "generate_cross_domain_report":
-            result = _handle_generate_cross_domain_report(**arguments)
+            result = await asyncio.to_thread(_handle_generate_cross_domain_report, **arguments)
         elif name == "generate_tutorial":
-            result = _handle_generate_tutorial(**arguments)
+            result = await asyncio.to_thread(_handle_generate_tutorial, **arguments)
         elif name == "generate_presentation":
-            result = _handle_generate_presentation(**arguments)
+            result = await asyncio.to_thread(_handle_generate_presentation, **arguments)
         elif name == "localize_content":
-            result = _handle_localize_content(**arguments)
+            result = await asyncio.to_thread(_handle_localize_content, **arguments)
 
         # -- Export / Import (2) -----------------------------------------------
         elif name == "export_kb":
@@ -11133,7 +11133,7 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
 
         # -- Custom Extraction (2) ----------------------------------------
         elif name == "extract_fields":
-            result = _handle_extract_fields(**arguments)
+            result = await asyncio.to_thread(_handle_extract_fields, **arguments)
         elif name == "get_extraction":
             result = _handle_get_extraction(**arguments)
 
@@ -11159,7 +11159,7 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
 
         # -- Q&A (1) -------------------------------------------------------
         elif name == "query_collected":
-            result = _handle_query_collected(**arguments)
+            result = await asyncio.to_thread(_handle_query_collected, **arguments)
 
         # -- Source Health / Feedback (2) ----------------------------------
         elif name == "get_source_health":
@@ -11331,11 +11331,11 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
 
         # -- Recommendation (1) --------------------------------------------
         elif name == "recommend_content":
-            result = _handle_recommend_content(**arguments)
+            result = await asyncio.to_thread(_handle_recommend_content, **arguments)
 
         # -- Simplification (1) --------------------------------------------
         elif name == "simplify_content":
-            result = _handle_simplify_content(**arguments)
+            result = await asyncio.to_thread(_handle_simplify_content, **arguments)
 
         # -- Validation (2) ------------------------------------------------
         elif name == "list_validation_scenarios":
