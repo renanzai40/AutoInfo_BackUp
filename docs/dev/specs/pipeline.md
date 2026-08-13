@@ -366,6 +366,24 @@ When the primary model fails (timeout, rate limit, server error), AutoInfo itera
 
 ---
 
+### 3.5 LLM Concurrency, Rate Limiting & Retry (2026-08-13 llm-concurrency-remediation wave)
+
+Every LLM call route through `llm.call_with_fallback` (llm.py) and inherits the same concurrency controls; gate semantics (G0-G5 thresholds/actions/retry-block) are **unchanged** — limiter and backoff wrap the calls, they do not alter gate outcomes.
+
+**Per-provider shared rate limiting** — `_PROVIDER_SEMAPHORES` (llm.py) holds one `threading.Semaphore` per `(provider, base_url)`; `AUTOINFO_LLM_MAX_CONCURRENCY` env override (default 4, clamped ≥1) bounds in-flight requests per provider. Enforced across **every** fan-out path: process workers, post-extraction gates, cefr_batch, output grouping, MCP `asyncio.to_thread` handlers, and the fallback chain itself (each chain entry walks under the same limiter). There is no single global process-wide lock.
+
+**429/5xx jittered backoff** — HTTP 429 and 5xx are retried inside `call_with_fallback` with jittered exponential backoff: at most 3 total attempts (2 retries), base 1.0s, factor 2, cap 8s, jitter ±25%. Non-retryable 4xx (400/403/404) surface immediately, never retried; after the final attempt the last error surfaces.
+
+**Per-task model routing** — `_resolve_task_llm_config` (config.py) resolves the model per task and feeds `call_with_fallback(task=)` → `_build_config_with_model` (process.py, which disables task routing for explicit model overrides). Extraction/classification tasks use the task-config model, else the base model. Judgment calls (G4 factual, G5 translation, llm_judge) resolve to the release-pinned `JUDGMENT_MODEL = "deepseek-v4-flash"` constant in config.py — a release-level decision, so judgment never drifts with runtime task config.
+
+**Processing parallelism** — `AUTOINFO_PROCESS_WORKERS` (default 5, env-clamped 1..16; cap raised 8→16 probe-gated: 0 rate limits at workers 1/4/8/16 × 12 with bounded p95, see `scripts/test_llm_concurrency.py`) bounds the per-item extraction thread pool. Post-extraction gates G3/G4/G5/CEFR run concurrently per item under `AUTOINFO_SUBTASK_CAP` (default 4); canonical gate order, G3 retry loop, G4 hard-gate 3× retry and the G0-G5 report order are preserved. The CEFR classification LLM call runs **outside** `_STORAGE_LOCK` (only its storage writes take the lock).
+
+**MCP & output parallelism** — `AUTOINFO_CEFR_BATCH_WORKERS` (default 8, never more than the text count) bounds `cefr_batch` fan-out with order preserved and per-item errors; 14 sync LLM handlers (suggest_keywords, classify_cefr, cefr_batch, extract_fields, generate_digest, generate_report, generate_cross_domain_report, generate_tutorial, generate_presentation, localize_content, query_collected, recommend_content, simplify_content, promote_kb_draft) are offloaded via `asyncio.to_thread`; `_group_by_theme` batch loop is parallelized (max 4 workers, batch size `_GROUPING_BATCH_SIZE`=8 unchanged, results collected by index so order is preserved, exec-summary calls remain serial).
+
+**Probe** — `scripts/test_llm_concurrency.py` accepts `--workers N` / `--total N` and reports `p95` (95th percentile of per-call durations) and `rate_limit_count`; no-args keeps the serial baseline + (1,3,5) sequence.
+
+---
+
 ## 4. Custom Extraction & Q&A (§12.5, 12.8)
 
 ### 4.1 Custom Extraction

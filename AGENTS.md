@@ -288,7 +288,9 @@ AutoInfo uses LiteLLM under the hood. Standard OpenAI-format providers work.
 | api_key | ${AUTOINFO_LLM_API_KEY} | Set via env var or config |
 | json_mode | False | `response_format={"type":"json_object"}` sent only when `json_mode` is True AND `reasoning_model` is False (reasoning providers reject the param). |
 | reasoning_model | False | Mark the model as a reasoning model (DeepSeek R1/V4 style). When True: (1) `response_format` is always skipped, (2) chain-of-thought is disabled by default via `additional_body={"thinking":{"type":"disabled"}}` — reasoning consumes the shared `max_tokens` budget *before* content, so leaving it on truncates JSON output (finish_reason=length). Judgment gates (G4 factual, G5 translation, llm_judge, translation QA judge, validation-scenario judge) re-enable thinking with raised `max_tokens` via `disable_thinking=False`. |
-| fallback | [] | Ordered `llm.fallback` list — each entry: `provider`, `model`, optional `base_url`/`api_key`. Every LLM call path (extraction, validation judge, quality gates, translation QA, output generation, keyword suggest, Q&A, CEFR) walks `[primary] + fallback` via `llm.call_with_fallback`; the first successful model wins. |
+| fallback | [] | Ordered `llm.fallback` list — each entry: `provider`, `model`, optional `base_url`/`api_key`. Every LLM call path (extraction, validation judge, quality gates, translation QA, output generation, keyword suggest, Q&A, CEFR) walks `[primary] + fallback` via `llm.call_with_fallback`; the first successful model wins. Every chain entry runs under the same per-provider limiter and 429/5xx backoff (below). |
+| max_concurrency | 4 | Per-provider shared rate limiting: `AUTOINFO_LLM_MAX_CONCURRENCY` env override (clamped ≥1, unparsable → default) bounds in-flight requests per `(provider, base_url)` via a shared `threading.Semaphore` in `call_with_fallback` (llm.py `_PROVIDER_SEMAPHORES`). Enforced across **every** fan-out path — process workers, post-extraction gates, cefr_batch, output grouping, MCP `to_thread` handlers, fallback chain. No single global process-wide lock. |
+| 429/5xx backoff | 3 attempts (2 retries) | Jittered exponential backoff on HTTP 429 and 5xx inside `call_with_fallback`: base 1.0s, factor 2, cap 8s, jitter ±25% (llm.py `MAX_LLM_ATTEMPTS`/`BACKOFF_*`). Non-retryable 4xx (400/403/404) surface immediately — never retried. After the final attempt the last error surfaces. |
 
 **Precedence** (highest to lowest):
 1. MCP tool parameter (e.g. `init_project(llm_provider="openai")`)
@@ -298,7 +300,7 @@ AutoInfo uses LiteLLM under the hood. Standard OpenAI-format providers work.
 
 **Custom endpoint** (e.g. OpenCode Go, Ollama, Azure): set `provider="openai"`, `base_url` to your endpoint, `api_key` via env var, `model` to your model name.
 
-**Fallback example** (`.autoinfo/config.yaml`):
+**Fallback example** (`.autoinfo/config.yaml`) — this is now the **actual configured fallback** (2026-08-13): `mimo-v2.5` on the same gateway (`https://opencode.ai/zen/go/v1`) inherits the primary's API key (no `api_key` entry):
 ```yaml
 llm:
   provider: openai
@@ -308,6 +310,8 @@ llm:
     - model: mimo-v2.5
       base_url: https://opencode.ai/zen/go/v1
 ```
+
+**Per-task model routing** (2026-08-13): `_resolve_task_llm_config` (config.py) resolves the model per task and feeds `call_with_fallback(task=)` → `_build_config_with_model` (process.py). Extraction/classification tasks use the task-config model (else the base model). Judgment calls (G4 factual, G5 translation, llm_judge) resolve to the release-pinned `JUDGMENT_MODEL = "deepseek-v4-flash"` constant (config.py, beside `LLMConfig`) — a release-level decision, never runtime task-config drift.
 
 ## `.omo/` Workspace
 
@@ -423,11 +427,11 @@ Never hand-edit runtime artifacts to fix behavior — fix the source.
 | Validation delivery | ✅ `scripts/validation_delivery.py` builds 01-RAW/02-PROCESSED/03-KB/04-MATRIX (E8 matrix + coverage-gaps.json, Oracle R8 unconfigured-vs-gap)/06-REJECTED + validation-report.md + manifest.json (per-file authenticity + D1-D3 gates + UX metrics) |
 | End-user coverage matrix (E8) | ✅ `scripts/coverage_matrix.py` + `docs/dev/specs/end-user-matrix.yaml` |
 | End-user journey validation | ✅ `enduser-journey.yaml` scenario; UX metrics UX_OK/completion_rate ≥ 0.8; error-boundary asserts `actionable` field |
-| LLM timeout + parallel processing | ✅ `LLMConfig.timeout` (default 120.0) threaded through LLM calls; `AUTOINFO_PROCESS_WORKERS` ThreadPoolExecutor; MCP `asyncio.to_thread` offload |
-| LLM fallback chain | ✅ Shared `llm.call_with_fallback` — every LLM call site (extraction + 17 standalone) walks `[primary] + config.llm.fallback`; first successful model wins, aggregate error surfaces last failure |
+| LLM timeout + parallel processing | ✅ `LLMConfig.timeout` (default 120.0) threaded through LLM calls; `AUTOINFO_PROCESS_WORKERS` ThreadPoolExecutor (default 5, env-clamped cap 16, probe-gated: 0 rate limits at workers 1/4/8/16 with bounded p95); post-extraction gates G3/G4/G5/CEFR run concurrently per item (`AUTOINFO_SUBTASK_CAP` default 4, order + retry + report semantics preserved); CEFR classification runs outside `_STORAGE_LOCK` (storage writes still serialized); MCP `asyncio.to_thread` offload (14 sync LLM handlers) |
+| LLM fallback chain | ✅ Shared `llm.call_with_fallback` — every LLM call site (extraction + 17 standalone) walks `[primary] + config.llm.fallback` (actual config: `mimo-v2.5` same-gateway, inherits primary key); first successful model wins, aggregate error surfaces last failure; per-provider shared rate limiting + jittered 429/5xx backoff enforced on every chain entry and all fan-out paths |
 | Dead-source detection | ✅ Semantic Scholar 429 → `SourceFailure` (fail-fast); arXiv rss/bio → rss/q-bio fix |
 | CLI module entry | ✅ `python -m autoinfo.cli` runs the same Typer app; `collect` live per-source progress printer |
-| Test suite | ✅ ~3640 tests collected (incl. order-dependency fixes landed 2026-08-12; includes validation wave E1-E9 scenarios + regression suite + #141-#164 regression guards + kb-curation wave + hermetic config-seam fixes) |
+| Test suite | ✅ ~3728 tests collected (incl. order-dependency fixes landed 2026-08-12; includes validation wave E1-E9 scenarios + regression suite + #141-#164 regression guards + kb-curation wave + hermetic config-seam fixes + llm-concurrency wave) |
 | Delivery schedules | ✅ add_delivery_schedule, list_delivery_schedules, remove_delivery_schedule MCP tools, cron-integrated |
 | Standardized error envelope | ✅ All MCP + REST API errors return `{success: false, error: {code, message, actionable}}`; 28 ErrorCode values; `error_dict()` deprecated |
 | REST success envelope | ✅ REST API success responses return `{success: true, data: ...}` (breaking change v1.9; migration: `docs/archive/migration-v1.9.md`); dashboard JS unwraps transparently |

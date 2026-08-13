@@ -71,7 +71,7 @@ Each cell: 🟢 = Fully delivered / complete, 🟡 = Partially delivered / gaps 
 
 | Lifecycle → | B3.1 Configure | B3.2 Monitor | B3.3 Intervene | B3.4 Iterate | B3.5 Scale |
 |-------------|:---:|:---:|:---:|:---:|:---:|
-| **A1 Collection** | 🟢 `add_domain`, `add_source` | 🟢 `activate_domain`, source health | 🟡 No collection pipeline dashboard | 🟢 Sources are editable | 🟡 Domain-less collect + batch_run orchestration; no rate limiting |
+| **A1 Collection** | 🟢 `add_domain`, `add_source` | 🟢 `activate_domain`, source health | 🟡 No collection pipeline dashboard | 🟢 Sources are editable | 🟡 Domain-less collect + batch_run orchestration; LLM calls rate-limited per provider (2026-08-13), API-surface quotas still missing |
 
 #### A2 Extraction
 
@@ -85,7 +85,7 @@ Each cell: 🟢 = Fully delivered / complete, 🟡 = Partially delivered / gaps 
 
 | Lifecycle → | B3.1 Configure | B3.2 Monitor | B3.3 Intervene | B3.4 Iterate | B3.5 Scale |
 |-------------|:---:|:---:|:---:|:---:|:---:|
-| **A2 Extraction** | 🟢 Custom extraction field schema | 🟢 Per-domain LLM config | 🟡 No extraction quality dashboard | 🟢 Gates are configurable | 🟢 Batch processing via batch_size + batch_run MCP tool |
+| **A2 Extraction** | 🟢 Custom extraction field schema | 🟢 Per-domain LLM config | 🟡 No extraction quality dashboard | 🟢 Gates are configurable | 🟢 Batch processing via batch_size + batch_run MCP tool; process workers cap 16 (probe-gated) + post-extraction gates G3/G4/G5/CEFR concurrent per item (`AUTOINFO_SUBTASK_CAP`=4) + per-provider LLM rate limiting & 429/5xx backoff (2026-08-13) |
 
 #### A3 Knowledge Base
 
@@ -196,11 +196,11 @@ Concepts that have never been designed — no spec, no code, no MCP tools.
 - **Evidence:** `activate_trial()` takes an `enduser_id` parameter directly — no identity verification. `send_to_enduser` takes an ID with no session context.
 
 #### CD-003: Rate Limiting / Abuse Prevention
-- **Description:** No rate limiting on any API surface (MCP, REST API, CLI). No per-tenant or per-user request quotas. No backpressure mechanism. A single user can saturate all resources.
+- **Description:** No rate limiting on any API surface (MCP, REST API, CLI). No per-tenant or per-user request quotas. No backpressure mechanism. A single user can saturate all resources. **Partial (2026-08-13)**: LLM-provider rate limiting is now implemented — every LLM call path (process workers, post-extraction gates, cefr_batch, output grouping, MCP `to_thread` handlers, fallback chain) serializes through a shared per-`(provider, base_url)` semaphore (`AUTOINFO_LLM_MAX_CONCURRENCY`, default 4) with jittered 429/5xx backoff inside `llm.call_with_fallback`; API-surface request quotas remain unimplemented.
 - **Affected Stages:** A1 (Collection), A2 (Extraction), A7 (Operations)
 - **Affected Users:** B2 (Direct Agent — no API limits), B3 (Director — no abuse protection)
 - **Existing Cross-Ref:** None (new)
-- **Evidence:** `collect_sources`, `process_collection`, and all MCP tools have zero rate limiting code. `batch_run` has no concurrency cap.
+- **Evidence:** LLM calls in `llm.py` `call_with_fallback` acquire the per-provider `threading.Semaphore` (`_PROVIDER_SEMAPHORES`); `process_collection`/`batch_run` LLM fan-out bounded by `AUTOINFO_PROCESS_WORKERS` (cap 16) + `AUTOINFO_SUBTASK_CAP` (4). MCP/REST/CLI request-quota code still absent.
 
 #### CD-004: [RESOLVED] Cron Reliability & Backup
 - **Description:** Cron scheduling exists (`add_schedule`, `run_schedules`). **Heartbeat tracking** (`_heartbeat_path`, `_load_heartbeat`, `_save_heartbeat`), **missed-schedule detection** (`health = "missed"`), and **email alerts for missed schedules** (`_send_missed_alerts`) are all implemented in `cli/cron.py`. `autoinfo cron health` CLI shows per-schedule health (ok/missed/error/unknown). `get_schedule_status` MCP tool is registered.

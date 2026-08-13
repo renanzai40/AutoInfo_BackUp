@@ -26,11 +26,21 @@ All notable changes to the AutoInfo project will be documented in this file.
 - **Coverage-matrix evidence scan** — `scan_evidence` double-path bug (`--evidence outputs` produced zero cells), manifest/zip scanning bounded to validation-deliveries/ + outputs/ (project-root rglob was slow), video cells now recognized. Evidence: produced 0→26 (video 13/13 domains), source_gaps 89→38. (`5db457b`)
 - **RSS fetch timeout guard** — `feedparser.parse` has no timeout and hung the whole collect run (language-learning stalled 124s); fetch over httpx with 30s timeout, keep `file://` + URL-encoded local-path support. (`5db457b`)
 
+### Perf (2026-08-13 llm-concurrency-remediation wave)
+- **Per-provider shared rate limiting + jittered 429/5xx backoff** — `call_with_fallback` (llm.py) acquires a shared `threading.Semaphore` per `(provider, base_url)` (`_PROVIDER_SEMAPHORES`; `AUTOINFO_LLM_MAX_CONCURRENCY` env, default 4, clamped ≥1) and retries HTTP 429/5xx with jittered exponential backoff (3 total attempts, base 1.0s ×2, cap 8s, jitter ±25%; non-retryable 4xx never retried). Shared limiter enforced across every fan-out path — process workers, post-extraction gates, cefr_batch, output grouping, MCP `to_thread` handlers, fallback chain. (`da5362a`)
+- **mimo-v2.5 same-gateway fallback configured** — `.autoinfo/config.yaml` `llm.fallback` now points at `mimo-v2.5` on `https://opencode.ai/zen/go/v1` (inherits the primary API key; probe-verified). (`894c760`)
+- **Process worker cap 8→16, probe-gated** — `AUTOINFO_PROCESS_WORKERS` cap raised to 16 (default workers still 5; probe showed 0 rate limits at workers 1/4/8/16 × 12 with bounded p95, 35-64s); new `AUTOINFO_SUBTASK_CAP` (default 4) bounds post-extraction G3/G4/G5/CEFR concurrency per item with gate order, retry loops and G0-G5 report order preserved. (`e587cf4`, `cc5939c`, `c11635f`)
+- **CEFR out of the storage lock + batch parallelized** — CEFR classification LLM call moved outside `_STORAGE_LOCK` (storage writes still serialized); `cefr_batch` fan-out bounded by `AUTOINFO_CEFR_BATCH_WORKERS` (default 8) with order preserved and per-item errors. (`ef58dce`, `b9a9b7e`)
+- **MCP event-loop offload** — 14 sync LLM handlers (suggest_keywords, classify_cefr, cefr_batch, extract_fields, generate_digest, generate_report, generate_cross_domain_report, generate_tutorial, generate_presentation, localize_content, query_collected, recommend_content, simplify_content, promote_kb_draft) offloaded via `asyncio.to_thread` (MCP tool surface unchanged: still 145 tools / 17 LLM-required). (`d41b844`)
+- **`_group_by_theme` parallelized** — output grouping batch loop runs up to 4 workers (`_GROUPING_BATCH_SIZE`=8 unchanged), results collected by index so order is preserved; exec-summary calls remain serial. (`798555c`)
+- **Per-task model routing + pinned judgment model** — `_resolve_task_llm_config` (config.py) → `call_with_fallback(task=)` → `_build_config_with_model` (process.py); extraction/classification use the task-config model (else base model); G4/G5/llm_judge judgment calls resolve to the release-pinned `JUDGMENT_MODEL = "deepseek-v4-flash"` constant — never runtime task-config drift. (`bb007ab`)
+- **Probe CLI** — `scripts/test_llm_concurrency.py` gains `--workers N` / `--total N` and reports `p95` + `rate_limit_count` (no-args keeps serial baseline + (1,3,5) sequence). (`e587cf4`)
+
 ### Fixed
 - **Report-synthesis robustness** — bounded retry loop + dedicated product-sections prompt so synthesis failures no longer block product output.
 
 ### Infrastructure
-- Test suite now ~3640 tests (3640 collected via `pytest --collect-only`, 2026-08-13).
+- Test suite now ~3728 tests (3728 collected via `pytest --collect-only`, 2026-08-13).
 
 ### Fixed (2026-08-10 quality wave)
 - **#179 keyword hygiene** — stopword filtering, toggle/cap auto-discovered keywords (`cccad4a`, `f889e09`).
