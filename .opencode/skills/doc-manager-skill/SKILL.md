@@ -3,7 +3,7 @@ name: doc-manager-skill
 description: AutoInfo project documentation inventory, change-impact analysis, and doc-update workflow.
   Load this skill whenever code changes may affect project documentation.
 author: AutoInfo
-version: 2.2.1
+version: 2.3.0
 ---
 
 # AutoInfo Documentation Manager Skill
@@ -129,6 +129,22 @@ LLM-required tools 17, REST port 8741, test count ~3640.
 2. Regenerate `docs/dev/doc-inventory.md` — line counts change whenever you
    edit docs.
 3. No broken relative links (`docs/...`, `src/...` resolve).
+
+### Step 5 — Promote major-wave plans (per ADR-0006, option c)
+When a development **wave completes (or is interrupted)** and it was *major*
+(2+ modules touched, public interface changed, or multi-session work), promote
+its plan from the runtime workspace `.omo/plans/<wave>.md` to the durable
+archive `docs/dev/plans/<wave>.md`:
+
+1. Copy the plan; add `<!-- doc-type: plan -->` marker; append an **Outcome**
+   section (shipped commits, plan-vs-actual deltas, lessons backfilled where).
+2. Interrupted wave: keep the plan, mark `<!-- status: interrupted -->`, list
+   the next un-done step at the top so a future session can resume.
+3. Small single-module waves: **skip** — their value is distilled into
+   ADR/CHANGELOG already (stage-7 backfill).
+4. Regenerate the inventory (`python3 scripts/doc_inventory.py` + `--check`).
+
+The criteria and mechanics are defined in `docs/dev/plans/README.md`.
 4. README renders (GitHub/PyPI); AGENTS.md stays parseable for agents;
    CHANGELOG entries match actual changes.
 5. If you changed a term used across ≥2 docs: confirm `docs/glossary.md` owns

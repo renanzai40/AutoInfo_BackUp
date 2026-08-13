@@ -24,7 +24,7 @@ domain feature may loop 2-4 several times.
 | 2 | Research (研究) | `docs/dev/research/`, `docs/archive/` | `.omo/notepads/` |
 | 3 | Prototyping (原型) | validation scenarios (`src/autoinfo/mcp/scenarios/`) | `.omo/` scratch |
 | 4 | PRD (需求规格) | `docs/dev/specs/` (expectations, pipeline, delivery, ...) | `.omo/plans/` |
-| 5 | Issue breakdown (拆解) | GitHub issues + Kanban (blocking links) | `.omo/plans/` |
+| 5 | Issue breakdown (拆解) | GitHub issues + Kanban (blocking links) | `.omo/plans/` → **promote major waves** to `docs/dev/plans/` |
 | 6 | AFK implementation (实现) | `src/` + `tests/` (commit per issue) | — |
 | 7 | Review → next product (复盘) | acceptance runs (`docs/dev/validation-reports/`), `docs/glossary.md`, skills (`.opencode/skills/`) | `.omo/evidence/` |
 

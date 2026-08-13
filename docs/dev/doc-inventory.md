@@ -13,9 +13,9 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 
 | Metric | Value |
 |--------|-------|
-| Total files | 65 |
-| Total lines | 26332 |
-| Active files | 56 |
+| Total files | 66 |
+| Total lines | 26382 |
+| Active files | 57 |
 | Archived files | 9 |
 | Category — archive | 9 files / 4932 lines |
 | Category — known-limitations | 1 files / 255 lines |
@@ -24,7 +24,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | Category — adr | 8 files / 384 lines |
 | Category — specs | 12 files / 8746 lines |
 | Category — validation-reports | 8 files / 2620 lines |
-| Category — docs/dev | 19 files / 8152 lines |
+| Category — docs/dev | 20 files / 8202 lines |
 | Category — docs/root | 1 files / 61 lines |
 
 ## Inventory
@@ -62,6 +62,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/founder-expectations.md` | 471 | docs/dev | active | — |
 | `dev/mcp-usage-examples.md` | 324 | docs/dev | active | — |
 | `dev/new-domain-guide.md` | 935 | docs/dev | active | — |
+| `dev/plans/README.md` | 50 | docs/dev | active | plan-index |
 | `dev/required-api-keys.md` | 127 | docs/dev | active | — |
 | `dev/research/综合报告-资讯付费与AI触达研究.md` | 702 | docs/dev | active | — |
 | `dev/specs/data-models.md` | 766 | specs | active | — |
