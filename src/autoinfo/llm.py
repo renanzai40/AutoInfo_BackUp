@@ -20,7 +20,9 @@ from __future__ import annotations
 import json
 import logging
 import os
+import random
 import re
+import threading
 import time
 from typing import Any, Optional
 
@@ -68,6 +70,106 @@ DEFAULT_SCHEMA: list[str] = ["tl_dr", "key_points", "entities", "relevance_score
 # Default fields that are ALWAYS included in extraction prompts, even when
 # custom schema fields are specified.
 DEFAULT_FIELDS: list[str] = ["tl_dr", "key_points", "entities", "relevance_score"]
+
+# ---------------------------------------------------------------------------
+# Per-provider shared rate limiting + 429/5xx jittered backoff
+# ---------------------------------------------------------------------------
+
+# Default concurrency per (provider, base_url); override via the
+# AUTOINFO_LLM_MAX_CONCURRENCY environment variable (read once at
+# semaphore creation).
+DEFAULT_MAX_CONCURRENCY = 4
+
+# Bounded retry loop: at most 3 total attempts (2 retries) per chain entry.
+MAX_LLM_ATTEMPTS = 3
+
+# Exponential backoff: base 1.0s, factor 2, cap 8s, jitter +/-25%.
+BACKOFF_BASE_SECONDS = 1.0
+BACKOFF_FACTOR = 2.0
+BACKOFF_CAP_SECONDS = 8.0
+BACKOFF_JITTER = 0.25
+
+# Registry of shared semaphores keyed by (provider, base_url).  Get-or-create
+# is guarded by a module-level lock so concurrent first-time callers never
+# create duplicate semaphores for the same provider endpoint.
+_PROVIDER_SEMAPHORES: dict[tuple[str, str], threading.Semaphore] = {}
+_PROVIDER_SEMAPHORES_LOCK = threading.Lock()
+
+
+def _max_concurrency() -> int:
+    """Resolve the per-provider concurrency (env override, default 4).
+
+    ``AUTOINFO_LLM_MAX_CONCURRENCY`` is read at registry creation time;
+    values below 1 clamp to 1, unparsable values fall back to the default.
+    """
+    raw = os.environ.get("AUTOINFO_LLM_MAX_CONCURRENCY", "")
+    if raw.isdigit():
+        return max(1, int(raw))
+    return DEFAULT_MAX_CONCURRENCY
+
+
+def get_provider_semaphore(provider: str, base_url: str) -> threading.Semaphore:
+    """Get-or-create the shared semaphore for a ``(provider, base_url)`` pair.
+
+    All concurrent LLM callers of the same provider endpoint share this
+    semaphore, bounding in-flight requests per provider — there is no single
+    global process-wide lock.
+    """
+    key = (provider, base_url)
+    with _PROVIDER_SEMAPHORES_LOCK:
+        semaphore = _PROVIDER_SEMAPHORES.get(key)
+        if semaphore is None:
+            semaphore = threading.Semaphore(_max_concurrency())
+            _PROVIDER_SEMAPHORES[key] = semaphore
+        return semaphore
+
+
+def _error_status(exc: Exception) -> int | None:
+    """Extract an HTTP status from a provider error, when one is present.
+
+    Handles LiteLLM ``HTTPException`` subclasses (``status_code``), stubs and
+    providers exposing only ``status``, and ``httpx``-style errors carrying a
+    ``response`` object with ``status_code``.
+    """
+    for attr in ("status_code", "status"):
+        status = getattr(exc, attr, None)
+        if isinstance(status, int):
+            return status
+        if isinstance(status, str) and status.isdigit():
+            return int(status)
+    response = getattr(exc, "response", None)
+    if response is not None:
+        status = getattr(response, "status_code", None)
+        if isinstance(status, int):
+            return status
+    return None
+
+
+def _is_retryable_error(exc: Exception) -> bool:
+    """Whether *exc* warrants a retry: HTTP 429 or any 5xx status.
+
+    Any other status (including non-retryable 4xx like 400/403/404) or an
+    error without an HTTP status surfaces immediately — no retry.
+    """
+    status = _error_status(exc)
+    if status is None:
+        return False
+    if status == 429:
+        return True
+    return 500 <= status <= 599
+
+
+def _backoff_delay(attempt: int) -> float:
+    """Jittered exponential backoff delay for retry *attempt* (0-based).
+
+    ``base 1.0s * factor 2**attempt``, capped at 8s, with +/-25% uniform
+    jitter so concurrent retriers do not stampede in lockstep.
+    """
+    raw = min(
+        BACKOFF_BASE_SECONDS * (BACKOFF_FACTOR**attempt), BACKOFF_CAP_SECONDS
+    )
+    jitter = raw * BACKOFF_JITTER
+    return max(0.0, raw - jitter + random.uniform(0.0, 2.0 * jitter))
 
 # ---------------------------------------------------------------------------
 # Extractor
@@ -536,6 +638,13 @@ def call_with_fallback(
     historical 2000.  A task-level ``llm.tasks[<task>].max_tokens``
     resolved via :func:`autoinfo.config._resolve_task_llm_config` therefore
     reaches the request payload (issue #178).
+
+    Every actual provider call is guarded by a per-provider shared
+    semaphore (keyed ``(provider, base_url)``, default width 4, override
+    ``AUTOINFO_LLM_MAX_CONCURRENCY``) and retried on HTTP 429 / 5xx with
+    jittered exponential backoff — at most ``MAX_LLM_ATTEMPTS`` attempts
+    (2 retries) per chain entry, base 1.0s / factor 2 / cap 8s / +/-25%
+    jitter.  The last error of the final attempt surfaces.
     """
     _litellm = LLMExtractor._get_litellm()
     if _litellm is None:
@@ -568,6 +677,8 @@ def call_with_fallback(
 
     chain: list[dict[str, str]] = [{
         "model": primary,
+        # Effective provider for rate-limiting keying (shared semaphore).
+        "provider": provider,
         # Primary base_url defaults to config.llm.base_url (issue #147
         # follow-up: callers like cefr/quality/qa/keywords pass no base_url,
         # so without this the primary silently hits the provider default
@@ -585,6 +696,7 @@ def call_with_fallback(
             fb_key = os.environ.get(fb_key[2:-1], "")
         chain.append({
             "model": fb_full,
+            "provider": fb_provider,
             "base_url": fb.base_url or "",
             "api_key": fb_key,
         })
@@ -594,35 +706,57 @@ def call_with_fallback(
 
     for entry in chain:
         attempted.append(entry["model"])
-        try:
-            response = _litellm.completion(
-                **_completion_request(
-                    entry,
-                    messages,
-                    max_tokens=max_tokens,
-                    temperature=temperature,
-                    json_mode=json_mode,
-                    reasoning_model=reasoning_model,
-                    timeout=timeout,
-                    disable_thinking=disable_thinking,
-                )
-            )
-            if entry["model"] != primary:
-                logger.info(
-                    "Fallback to %s succeeded after primary %s failed",
+        # Shared per-provider semaphore: bounds concurrent in-flight calls to
+        # this (provider, base_url) across every LLM caller in the process.
+        semaphore = get_provider_semaphore(entry["provider"], entry["base_url"])
+        entry_error: Optional[Exception] = None
+        for attempt in range(MAX_LLM_ATTEMPTS):
+            try:
+                with semaphore:
+                    response = _litellm.completion(
+                        **_completion_request(
+                            entry,
+                            messages,
+                            max_tokens=max_tokens,
+                            temperature=temperature,
+                            json_mode=json_mode,
+                            reasoning_model=reasoning_model,
+                            timeout=timeout,
+                            disable_thinking=disable_thinking,
+                        )
+                    )
+                if entry["model"] != primary:
+                    logger.info(
+                        "Fallback to %s succeeded after primary %s failed",
+                        entry["model"],
+                        primary,
+                    )
+                return response
+            except Exception as exc:
+                entry_error = exc
+                last_exception = exc
+                # Only HTTP 429 / 5xx retry (jittered backoff, up to
+                # MAX_LLM_ATTEMPTS total); everything else surfaces
+                # immediately and the chain moves to the next model.
+                if not _is_retryable_error(exc) or attempt >= MAX_LLM_ATTEMPTS - 1:
+                    break
+                delay = _backoff_delay(attempt)
+                logger.warning(
+                    "LLM model %s attempt %d/%d failed (%s); retrying in %.2fs",
                     entry["model"],
-                    primary,
+                    attempt + 1,
+                    MAX_LLM_ATTEMPTS,
+                    exc,
+                    delay,
                 )
-            return response
-        except Exception as exc:
-            last_exception = exc
-            logger.warning(
-                "LLM model %s failed (attempted %d/%d): %s",
-                entry["model"],
-                len(attempted),
-                len(chain),
-                exc,
-            )
+                time.sleep(delay)
+        logger.warning(
+            "LLM model %s failed (attempted %d/%d): %s",
+            entry["model"],
+            len(attempted),
+            len(chain),
+            entry_error,
+        )
 
     raise RuntimeError(
         f"All LLM models (primary + fallback) failed: {', '.join(attempted)}"
