@@ -323,6 +323,7 @@ class LLMExtractor:
             max_tokens=2000,
             temperature=0.1,
             json_mode=self._should_use_json_mode(),
+            reasoning_model=self._reasoning_model,
             timeout=self._timeout,
             config=self._config,
         )
@@ -459,6 +460,7 @@ def _completion_request(
     json_mode: bool,
     reasoning_model: bool,
     timeout: float | None,
+    disable_thinking: bool = True,
 ) -> dict[str, Any]:
     """Build the LiteLLM completion kwargs for a single chain *entry*.
 
@@ -466,6 +468,13 @@ def _completion_request(
     effective reasoning-model flag is ``False`` — reasoning providers
     reject the parameter, so callers rely on the prompt plus
     :func:`parse_json_response` instead (issue #178).
+
+    ``disable_thinking`` (default True for reasoning models) sends
+    ``thinking={"type": "disabled"}`` so the model's chain-of-thought does
+    not consume the shared ``max_tokens`` budget — on DeepSeek-style
+    reasoning endpoints the reasoning pass runs *before* the content pass,
+    so a small budget (e.g. 2000) can be exhausted by thinking alone,
+    truncating the JSON output mid-object (finish_reason=length).
     """
     kwargs: dict[str, Any] = {
         "model": entry["model"],
@@ -476,6 +485,12 @@ def _completion_request(
         "api_key": entry["api_key"] or None,
         "timeout": timeout,
     }
+    if reasoning_model and disable_thinking:
+        # Supported by DeepSeek R1/V4 endpoints; rejected by non-reasoning
+        # providers, so gate on the reasoning flag only. LiteLLM forwards
+        # extra body params via additional_body (thinking is not an OpenAI
+        # SDK kwarg).
+        kwargs["additional_body"] = {"thinking": {"type": "disabled"}}
     if json_mode and not reasoning_model:
         kwargs["response_format"] = {"type": "json_object"}
     return kwargs
@@ -493,6 +508,7 @@ def call_with_fallback(
     reasoning_model: bool | None = None,
     timeout: float | None = None,
     config: Config | None = None,
+    disable_thinking: bool = True,
 ) -> Any:
     """Call LiteLLM through the configured primary + fallback model chain.
 
@@ -588,6 +604,7 @@ def call_with_fallback(
                     json_mode=json_mode,
                     reasoning_model=reasoning_model,
                     timeout=timeout,
+                    disable_thinking=disable_thinking,
                 )
             )
             if entry["model"] != primary:
