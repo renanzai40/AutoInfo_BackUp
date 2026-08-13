@@ -918,15 +918,27 @@ def run_processing(
             item._detected_language = detected_lang
 
             # Step b: quality gates.  G1/G1-ToS/G2 are deterministic (no LLM)
-            # and run inline via run_quality_gates with the G3 config stripped
-            # — the serial G3 result is discarded because G3 (LLM relevance)
-            # runs concurrently with G4/G5/CEFR below.
+            # and run inline via run_quality_gates.  G3 (LLM relevance) runs
+            # concurrently with G4/G5/CEFR below — but only when there is
+            # another post-extraction task to overlap with.  When there is
+            # not, the serial call keeps the full gate config and its G3
+            # result is authoritative, preserving the pre-parallelization
+            # contract (e.g. a mocked G3 archive action).
             item_source_config: dict[str, Any] = {}
             if item.source_name in source_tiers:
                 item_source_config = {"quality_tier": source_tiers[item.source_name]}
-            det_gate_config = dict(gate_config) if gate_config else None
-            if det_gate_config is not None:
-                det_gate_config.pop("G3-RelevanceScoring", None)
+            run_concurrent_g3 = (
+                (check_factual and bool(extraction.tl_dr))
+                or check_translation
+                or (config is not None and config.cefr.enabled)
+            )
+            serial_gate_config: dict[str, QualityGateConfig] | None = gate_config
+            if run_concurrent_g3:
+                # G3 will be re-run concurrently — strip its config from the
+                # serial call so the serial G3 stays the cheap lexical score.
+                serial_gate_config = dict(gate_config) if gate_config else None
+                if serial_gate_config is not None:
+                    serial_gate_config.pop("G3-RelevanceScoring", None)
             quality_results = run_quality_gates(
                 item,
                 context={
@@ -934,34 +946,24 @@ def run_processing(
                     "existing_entries": existing_entries,
                     "topic_keywords": topic_keywords,
                 },
-                gate_config=det_gate_config if det_gate_config else None,
+                gate_config=serial_gate_config if serial_gate_config else None,
                 llm_timeout=llm_timeout,
             )
-            quality_results.pop("G3-RelevanceScoring", None)
+            if run_concurrent_g3:
+                quality_results.pop("G3-RelevanceScoring", None)
 
-            # Step b1: post-extraction concurrent gates — G3, G4 (when
-            # enabled), G5 (when enabled) and the CEFR LLM classification
-            # depend only on the extraction output and run CONCURRENTLY with
-            # a per-item sub-task cap (default 4) so total in-flight stays
-            # bounded at process workers × sub-task cap; each gate's LLM call
-            # additionally serializes through the shared per-provider
-            # semaphore in llm.call_with_fallback.  The pool is created via
-            # the module-qualified class (NOT the imported
-            # ``ThreadPoolExecutor`` name) so tests that patch the outer
-            # pool's class are unaffected.
+            # Step b1: post-extraction concurrent gates — G4 (when enabled),
+            # G5 (when enabled), the CEFR LLM classification and G3 (when
+            # another task exists to overlap with) depend only on the
+            # extraction output and run CONCURRENTLY with a per-item sub-task
+            # cap (default 4) so total in-flight stays bounded at process
+            # workers × sub-task cap; each gate's LLM call additionally
+            # serializes through the shared per-provider semaphore in
+            # llm.call_with_fallback.  The pool is created via the
+            # module-qualified class (NOT the imported ``ThreadPoolExecutor``
+            # name) so tests that patch the outer pool's class are
+            # unaffected.
             sub_tasks: list[tuple[str, Callable[[], Any]]] = []
-
-            def _run_g3() -> QualityResult:
-                g3_config = (
-                    gate_config.get("G3-RelevanceScoring") if gate_config else None
-                )
-                threshold = 30
-                if g3_config is not None and g3_config.threshold is not None:
-                    threshold = int(g3_config.threshold)
-                g3 = G3RelevanceScoring(timeout=llm_timeout)
-                return g3.check(item, topic_keywords, threshold, g3_config)
-
-            sub_tasks.append(("G3-RelevanceScoring", _run_g3))
 
             if check_factual and extraction.tl_dr:
                 def _run_g4() -> QualityResult:
@@ -1191,35 +1193,51 @@ def run_processing(
                             {"item_id": item.id, "error": str(exc)}
                         )
                 sub_tasks.append(("cefr", _run_cefr))
+            if sub_tasks:
+                # G3 joins the concurrent phase only when there is another
+                # post-extraction task to overlap with (see Step b above);
+                # otherwise the serial G3 result stays authoritative.
+                def _run_g3() -> QualityResult:
+                    g3_config = (
+                        gate_config.get("G3-RelevanceScoring") if gate_config else None
+                    )
+                    threshold = 30
+                    if g3_config is not None and g3_config.threshold is not None:
+                        threshold = int(g3_config.threshold)
+                    g3 = G3RelevanceScoring(timeout=llm_timeout)
+                    return g3.check(item, topic_keywords, threshold, g3_config)
+
+                sub_tasks.append(("G3-RelevanceScoring", _run_g3))
             # Step b2: run the concurrent gates and emit their results in
             # canonical G0→G5 order regardless of completion order.
-            gate_outcomes: dict[str, Any] = {}
-            with concurrent.futures.ThreadPoolExecutor(
-                max_workers=min(_resolve_subtask_cap(), len(sub_tasks)),
-                thread_name_prefix="gate",
-            ) as pool:
-                futures = {pool.submit(fn): name for name, fn in sub_tasks}
-                for fut in as_completed(futures):
-                    gate_outcomes[futures[fut]] = fut.result()
-            quality_results["G3-RelevanceScoring"] = gate_outcomes[
-                "G3-RelevanceScoring"
-            ]
-            g4_result = gate_outcomes.get("G4-SummaryFactual")
-            if g4_result is not None:
-                quality_results["G4-SummaryFactual"] = g4_result
-                # G4 hard gate: block action → skip storage
-                # (G4 already writes its own diagnostics to _failed/ internally)
-                if g4_result.details.get("action") == "block":
-                    item_log["status"] = "g4_blocked"
-                    logger.warning(
-                        "G4 blocked item %s — skipping storage",
-                        item.id,
-                    )
-                    stats["logged"] = False
-                    return item_log, stats
-            g5_result = gate_outcomes.get("G5-TranslationAccuracy")
-            if g5_result is not None:
-                quality_results["G5-TranslationAccuracy"] = g5_result
+            if sub_tasks:
+                gate_outcomes: dict[str, Any] = {}
+                with concurrent.futures.ThreadPoolExecutor(
+                    max_workers=min(_resolve_subtask_cap(), len(sub_tasks)),
+                    thread_name_prefix="gate",
+                ) as pool:
+                    futures = {pool.submit(fn): name for name, fn in sub_tasks}
+                    for fut in as_completed(futures):
+                        gate_outcomes[futures[fut]] = fut.result()
+                g3_result = gate_outcomes.get("G3-RelevanceScoring")
+                if g3_result is not None:
+                    quality_results["G3-RelevanceScoring"] = g3_result
+                g4_result = gate_outcomes.get("G4-SummaryFactual")
+                if g4_result is not None:
+                    quality_results["G4-SummaryFactual"] = g4_result
+                    # G4 hard gate: block action → skip storage
+                    # (G4 already writes its own diagnostics to _failed/ internally)
+                    if g4_result.details.get("action") == "block":
+                        item_log["status"] = "g4_blocked"
+                        logger.warning(
+                            "G4 blocked item %s — skipping storage",
+                            item.id,
+                        )
+                        stats["logged"] = False
+                        return item_log, stats
+                g5_result = gate_outcomes.get("G5-TranslationAccuracy")
+                if g5_result is not None:
+                    quality_results["G5-TranslationAccuracy"] = g5_result
 
             g1 = quality_results.get("G1-SourceAuthority")
             g2 = quality_results.get("G2-Dedup")
