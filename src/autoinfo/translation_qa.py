@@ -282,9 +282,10 @@ def llm_judge_translation(
                 {"role": "user", "content": user_prompt},
             ],
             json_mode=json_mode,
-            max_tokens=1000,
+            max_tokens=2000,
             temperature=0.1,
             timeout=timeout,
+            disable_thinking=False,
         )
 
         content: str = response.choices[0].message.content  # type: ignore[union-attr]

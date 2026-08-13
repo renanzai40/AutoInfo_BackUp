@@ -245,7 +245,7 @@ B2 **does not**:
 
 ### 3.3 B2 MCP Tool Gaps
 
-> ✅ **Resolved 2026-08-04** — all tools previously listed as "backend exists, MCP not registered" in this gap table are now registered (141/141 tools). This includes `compare_versions` (Knowledge Lifecycle), `get_schedule_status` (Cron), and the End User tools `get_delivery_log`, `send_to_enduser`, `activate_trial`, `check_trial_expiry`, `update_preferences`. No MCP surface gaps remain.
+> ✅ **Resolved 2026-08-04** — all tools previously listed as "backend exists, MCP not registered" in this gap table are now registered (145/145 tools). This includes `compare_versions` (Knowledge Lifecycle), `get_schedule_status` (Cron), and the End User tools `get_delivery_log`, `send_to_enduser`, `activate_trial`, `check_trial_expiry`, `update_preferences`. No MCP surface gaps remain.
 
 ---
 

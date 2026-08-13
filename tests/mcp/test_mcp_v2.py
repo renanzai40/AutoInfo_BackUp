@@ -22,6 +22,7 @@ import pytest
 from mcp.types import CallToolRequest, CallToolRequestParams, TextContent
 
 from autoinfo.mcp import server as mcp_server
+from autoinfo.mcp.errors import ErrorCode
 from autoinfo.mcp.server import (
     _error_response,
     _handle_add_source,
@@ -160,8 +161,8 @@ class TestGetDomainSchema:
 
     def test_unknown_domain_returns_error(self, tmp_config: Path) -> None:
         result = _handle_get_domain_schema(domain="nonexistent")
-        assert "error_code" in result
-        assert result["error_code"] == "DomainNotFound"
+        assert result["success"] is False
+        assert result["error"]["code"] == "DomainNotFound"
 
     def test_extract_fields_structure(self, tmp_config: Path) -> None:
         result = _handle_get_domain_schema(domain="medical-research")
@@ -374,7 +375,8 @@ class TestTestSource:
             from autoinfo.mcp.server import _handle_test_source
 
             result = _handle_test_source(url="https://nonexistent.example.com")
-            assert result["reachable"] is False
+            assert result["success"] is False
+            assert "error" in result
 
     def test_timeout_returns_structured_error(self) -> None:
         from httpx import TimeoutException
@@ -383,8 +385,8 @@ class TestTestSource:
             from autoinfo.mcp.server import _handle_test_source
 
             result = _handle_test_source(url="https://slow.example.com")
-            assert result["reachable"] is False
-            assert result["error_code"] == "Timeout"
+            assert result["success"] is False
+            assert result["error"]["code"] == ErrorCode.TIMEOUT.value
 
     def test_successful_response(self) -> None:
         mock_response = MagicMock()

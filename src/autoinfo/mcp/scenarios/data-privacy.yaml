@@ -25,7 +25,7 @@ steps:
           id=str(uuid4()),
           source_name='web',
           source_type='web',
-          source_url='https://example.com/data-privacy-scenario-entry',
+          source_url='https://data-privacy.autoinfo.test/data-privacy-scenario-entry',
           source_platform='web',
           title='Data Privacy Scenario Fixture Entry',
           content='Fixture entry owned by the data-privacy validation scenario.',
@@ -97,7 +97,7 @@ cleanup_steps:
       from autoinfo.kb import KBStore
       store = KBStore()
       eid = 'medical-research-general-data-privacy-scenario-fixture-entry'
-      marker = 'https://example.com/data-privacy-scenario-entry'
+      marker = 'https://data-privacy.autoinfo.test/data-privacy-scenario-entry'
       removed = []
       meta = store.index.get_entry(eid)
       if meta is not None:

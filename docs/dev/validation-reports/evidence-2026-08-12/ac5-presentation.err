@@ -1,0 +1,5 @@
+[92m13:00:46 - LiteLLM:WARNING[0m: get_model_cost_map.py:271 - LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: The read operation timed out. Falling back to local backup.
+Failed to parse LLM digest response as JSON: {
+  "title": "Medical Research Frontiers: Strategic Overview for Executives",
+  "description": "An executive briefing on emerging research frontiers in crisis medicine and intergenerational maternal h
+Error: Presentation generation produced no usable content for domain='medical-research' topic='MRI research frontiers' (slides=0, chars=288)

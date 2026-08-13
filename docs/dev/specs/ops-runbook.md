@@ -43,7 +43,7 @@ AutoInfo's primary datastore is a SQLite database file. All state lives in three
 
 | Location | Content | Backup Priority | Frequency |
 |----------|---------|-----------------|-----------|
-| `{project}/.autoinfo/data.db` | SQLite — KB entries, summaries, users, subscriptions, delivery logs, audit logs, cost logs | 🔴 P0 | Hourly |
+| `{project}/autoinfo.db` | SQLite — KB entries, summaries, users, subscriptions, delivery logs, audit logs, cost logs | 🔴 P0 | Hourly |
 | `{project}/knowledge/` | Markdown KB files (git-tracked) | 🟡 P1 | Daily (covered by git push) |
 | `{project}/.autoinfo/config.yaml` | Domain config, sources, topics, schedules, alert rules | 🟡 P1 | On change + daily |
 | `{project}/collections/` | Raw JSON cache | 🟢 P2 | Weekly (rebuildable via re-collection) |
@@ -69,7 +69,7 @@ The `autoinfo-backup` script wraps `sqlite3 .backup` with retention and verifica
 set -euo pipefail
 
 PROJECT_DIR="${AUTOINFO_PROJECT_DIR:-$(pwd)}"
-DB_PATH="${PROJECT_DIR}/.autoinfo/data.db"
+DB_PATH="${PROJECT_DIR}/autoinfo.db"
 BACKUP_ROOT="${AUTOINFO_BACKUP_DIR:-/var/backups/autoinfo}"
 RETENTION_HOURLY=24    # Keep 24 hourly backups
 RETENTION_DAILY=7      # Keep 7 daily backups
@@ -163,10 +163,10 @@ sqlite3 /tmp/autoinfo-restored.db "PRAGMA integrity_check;"
 # Expected output: "ok"
 
 # 6. Move into place
-cp /tmp/autoinfo-restored.db /path/to/project/.autoinfo/data.db
+cp /tmp/autoinfo-restored.db /path/to/project/autoinfo.db
 
 # 7. (Optional) Replay WAL if available
-# sqlite3 /path/to/project/.autoinfo/data.db ".recover" > recovered.sql
+# sqlite3 /path/to/project/autoinfo.db ".recover" > recovered.sql
 
 # 8. Restart services
 systemctl start autoinfo-mcp autoinfo-api
@@ -313,15 +313,15 @@ After any restore, run the following verification checklist:
 
 ```bash
 # 1. SQLite integrity
-sqlite3 .autoinfo/data.db "PRAGMA integrity_check;"
+sqlite3 autoinfo.db "PRAGMA integrity_check;"
 # Expected: "ok"
 
 # 2. Foreign key consistency
-sqlite3 .autoinfo/data.db "PRAGMA foreign_key_check;"
+sqlite3 autoinfo.db "PRAGMA foreign_key_check;"
 # Expected: no rows returned
 
 # 3. KB tier consistency (every Draft must have a Raw parent)
-sqlite3 .autoinfo/data.db "
+sqlite3 autoinfo.db "
   SELECT COUNT(*) FROM kb_entries e
   WHERE tier = '02-Draft'
   AND e.id NOT IN (
@@ -378,7 +378,7 @@ python -m autoinfo.cli output digest --domain {domain} --period daily --dry-run
 ## 3. Monitoring & Alerting
 
 > **Cross-ref:** CD-004 (Cron Reliability & Backup), CD-007 (Delivery Channel Health Monitoring), CD-013 (Live Operations Dashboard).
-> **Current gap:** Prometheus endpoint exists with 11 metrics. No alert rules defined. No PagerDuty/webhook integration. No runbook templates.
+> **Current gap:** Prometheus endpoint exists with 8 metrics. No alert rules defined. No PagerDuty/webhook integration. No runbook templates.
 
 ### 3.1 Prometheus Metrics Reference
 
@@ -390,11 +390,21 @@ See `operations.md` §4.3 for the canonical Prometheus metrics reference (endpoi
 
 | Metric | Type | Purpose |
 |--------|------|---------|
-| `autoinfo_cron_last_success_timestamp` | Gauge | Missed schedule detection (staleness check on this value) |
-| `autoinfo_db_size_bytes` | Gauge | Disk usage alerting |
-| `autoinfo_channel_health{channel, status}` | Gauge | Per-channel delivery health (CD-007) |
-| `autoinfo_backup_last_success_timestamp` | Gauge | Backup failure detection (CD-004) |
-| `autoinfo_api_errors_total{endpoint, status_code}` | Counter | API error rate tracking |
+| `items_collected_total` | Counter | Collection throughput — missed-schedule detection (liveness check on this counter) |
+| `items_processed_total` | Counter | Processing throughput — KB pipeline liveness |
+| `extraction_tokens_total` | Counter | LLM token consumption — flat-line signals extraction failures (no direct LLM error metric) |
+| `errors_total` | Counter | Pipeline/API error rate tracking |
+| `storage_bytes` | Gauge | KB storage usage — closest exported proxy for disk-usage alerting |
+| `delivery_failures_total` | Counter | Failed deliveries — proxy for per-channel health (CD-007) |
+| `billing_stripe_sync_failures_total` | Counter | Billing sync failures (Stripe) |
+| `active_users` | Gauge | Active end-user profile count |
+
+**Not exported** (spec-only; alerts referencing them cannot fire today):
+
+| Metric | Type | Purpose |
+|--------|------|---------|
+| `autoinfo_backup_last_success_timestamp` | Gauge | Backup failure detection (CD-004) — requires new metric |
+| `autoinfo_channel_health{channel, status}` | Gauge | Per-channel delivery health (CD-007) — requires new metric |
 
 ### 3.2 Alert Rules Specification
 
@@ -427,6 +437,8 @@ groups:
           runbook: "§3.5 Runbook: DB Full"
 
       # P0: Backup has not succeeded in 36 hours
+      # Note: `autoinfo_backup_last_success_timestamp` is NOT exported yet
+      # (spec-only, see §3.1). This alert is dormant until the metric ships.
       - alert: BackupNotSucceeded
         expr: (time() - autoinfo_backup_last_success_timestamp) > 129600
         for: 1h
@@ -438,72 +450,76 @@ groups:
           description: "Last successful backup was {{ $value | humanizeDuration }} ago. Risk of data loss exceeds RPO."
           runbook: "§3.5 Runbook: DB Full"
 
-      # P0: Delivery failure rate exceeds 20% over 15 minutes
-      - alert: DeliveryFailureRateHigh
-        expr: |
-          rate(autoinfo_deliveries_total{success="false"}[15m])
-          /
-          rate(autoinfo_deliveries_total[15m]) > 0.20
+      # P0: Delivery failure volume exceeds 10 in 15 minutes.
+      # `delivery_failures_total` is a pure failure counter (no success/failure
+      # label split), so the alert fires on absolute failure volume.
+      - alert: DeliveryFailuresHigh
+        expr: increase(delivery_failures_total[15m]) > 10
         for: 5m
         labels:
           severity: P0
           component: delivery
         annotations:
-          summary: "Delivery failure rate > 20% for domain {{ $labels.domain }}"
-          description: "{{ $value | humanizePercentage }} of deliveries are failing. End users are not receiving products."
+          summary: "More than 10 delivery failures in 15 minutes"
+          description: "End users may not be receiving products. Check delivery channels and the outbox."
           runbook: "§3.5 Runbook: Channel Down"
 
   - name: autoinfo_warning
     rules:
-      # P1: Cron collection missed (no collection in 2x expected interval)
+      # P1: Cron collection missed (no items collected in 2x expected interval).
+      # No cron timestamp metric is exported — `items_collected_total` liveness
+      # (rate == 0) is the proxy.
       - alert: CronCollectionMissed
-        expr: (time() - autoinfo_cron_last_success_timestamp{domain!=""}) > 7200
+        expr: rate(items_collected_total[2h]) == 0
         for: 30m
         labels:
           severity: P1
           component: cron
         annotations:
-          summary: "Cron collection missed for domain {{ $labels.domain }}"
-          description: "Last successful collection was {{ $value | humanizeDuration }} ago. Scheduled collection may have failed silently."
+          summary: "No items collected in the last 2 hours"
+          description: "Scheduled collection may have failed silently — no items were collected in 2 hours."
           runbook: "§3.5 Runbook: Cron Missed"
 
-      # P1: LLM API error rate exceeds 10%
-      - alert: LLMAPIErrorRateHigh
-        expr: |
-          rate(autoinfo_llm_tokens_total{task_type="extraction"}[15m])
-          /
-          rate(autoinfo_llm_tokens_total[15m]) < 0.90
+      # P1: LLM extraction stalled (no tokens consumed in 15m).
+      # No direct LLM error metric exists — a flat `extraction_tokens_total`
+      # is the proxy for failing extraction calls.
+      - alert: LLMExtractionStalled
+        expr: rate(extraction_tokens_total[15m]) == 0
         for: 10m
         labels:
           severity: P1
           component: llm
         annotations:
-          summary: "LLM API error rate elevated for {{ $labels.model }}"
+          summary: "LLM extraction stalled (no tokens consumed in 15m)"
           description: "LLM extraction may be failing. Check API key validity and provider status."
           runbook: "§3.5 Runbook: LLM API Failure"
 
-      # P1: Channel health degraded (any channel returning errors)
-      - alert: ChannelHealthDegraded
-        expr: autoinfo_channel_health{status="error"} == 1
+      # P1: Delivery failures detected (any in 10 minutes).
+      # No per-channel health metric is exported — `delivery_failures_total`
+      # is the proxy (CD-007).
+      - alert: DeliveryFailuresDetected
+        expr: rate(delivery_failures_total[10m]) > 0
         for: 10m
         labels:
           severity: P1
           component: delivery
         annotations:
-          summary: "Delivery channel {{ $labels.channel }} is reporting errors"
-          description: "Channel {{ $labels.channel }} has been in error state for 10+ minutes. Delivered products may be silently dropped."
+          summary: "Delivery failures detected in the last 10 minutes"
+          description: "Delivered products may be silently dropped. Check the delivery log and channels."
           runbook: "§3.5 Runbook: Channel Down"
 
-      # P1: KB staleness ratio exceeds 50%
-      - alert: KBStalenessHigh
-        expr: autoinfo_staleness_ratio > 0.50
+      # P1: KB processing stalled (no items processed in 1 hour).
+      # No staleness metric is exported — `items_processed_total` flat-line is
+      # the KB-liveness proxy.
+      - alert: KBProcessingStalled
+        expr: rate(items_processed_total[1h]) == 0
         for: 1h
         labels:
           severity: P1
           component: knowledge_base
         annotations:
-          summary: "Knowledge base staleness ratio > 50% for domain {{ $labels.domain }}"
-          description: "More than half of KB entries are stale. Consider re-collection or TTL adjustment."
+          summary: "No KB items processed in the last hour"
+          description: "The KB pipeline may be stalled. Check processing jobs and LLM availability."
           runbook: "https://wiki.internal/autoinfo/stale-content"
 
   - name: autoinfo_info
@@ -511,27 +527,29 @@ groups:
       # P2: Error rate spike (5x baseline)
       - alert: ErrorRateSpike
         expr: |
-          rate(autoinfo_gate_failures_total[1h])
+          rate(errors_total[1h])
           >
-          rate(autoinfo_gate_failures_total[24h]) * 5
+          rate(errors_total[24h]) * 5
         for: 15m
         labels:
           severity: P2
           component: quality
         annotations:
-          summary: "Gate failure rate spiking for domain {{ $labels.domain }}"
-          description: "Hourly gate failure rate is 5x the 24h baseline. May indicate source quality change or extraction regression."
+          summary: "Error rate spiking"
+          description: "Hourly error rate is 5x the 24h baseline. May indicate source quality change or extraction regression."
 
-      # P2: Collection latency p95 exceeds 30s
-      - alert: CollectionLatencyHigh
-        expr: histogram_quantile(0.95, rate(autoinfo_collection_duration_seconds_bucket[1h])) > 30
+      # P2: Collection stalled (no items collected in 30 minutes).
+      # No collection duration histogram is exported, so sustained zero
+      # throughput stands in for latency issues.
+      - alert: CollectionStalled
+        expr: rate(items_collected_total[30m]) == 0
         for: 30m
         labels:
           severity: P2
           component: collection
         annotations:
-          summary: "Collection p95 latency > 30s for source {{ $labels.source }}"
-          description: "Source may be slow or unresponsive. Consider timeout adjustment or source health check."
+          summary: "No items collected in the last 30 minutes"
+          description: "Sources may be slow or unresponsive. Consider timeout adjustment or source health check."
 ```
 
 ### 3.3 PagerDuty / Webhook Integration
@@ -619,7 +637,7 @@ Each runbook follows a standard format: Detection → Triage → Resolution → 
 
 #### Runbook: Cron Missed (P1)
 
-**Detection:** `CronCollectionMissed` alert fires. `autoinfo_cron_last_success_timestamp` is stale.
+**Detection:** `CronCollectionMissed` alert fires — `rate(items_collected_total[2h]) == 0` (no items collected in 2h).
 
 **Triage (5 min):**
 1. Check if crond is running: `systemctl status crond`
@@ -636,7 +654,7 @@ Each runbook follows a standard format: Detection → Triage → Resolution → 
 **Verification (5 min):**
 1. Manually trigger: `python -m autoinfo.cli cron run --name <schedule>`
 2. Verify items collected: `python -m autoinfo.cli status --domain <domain>`
-3. Verify `autoinfo_cron_last_success_timestamp` updated
+3. Verify `items_collected_total` counter is advancing
 4. Resolve alert in PagerDuty / monitoring
 
 **If unresolved after 30 min:** Escalate to P0. Page on-call engineer.
@@ -648,23 +666,23 @@ Each runbook follows a standard format: Detection → Triage → Resolution → 
 **Detection:** `DiskSpaceCritical` alert fires. Disk usage > 90%.
 
 **Triage (5 min):**
-1. Identify space consumers: `du -sh /var/backups/autoinfo/*`, `du -sh .autoinfo/data.db*`
-2. Check for WAL file bloat: `ls -lah .autoinfo/data.db-wal`
+1. Identify space consumers: `du -sh /var/backups/autoinfo/*`, `du -sh autoinfo.db*`
+2. Check for WAL file bloat: `ls -lah autoinfo.db-wal`
 3. Check for old collection cache: `du -sh collections/`
 4. Check for large log files: `du -sh logs/`
 
 **Resolution (15 min):**
 - **Old backups exceeding retention:** Manual cleanup of expired backup files: `find /var/backups/autoinfo/hourly -mtime +1 -delete`
-- **WAL bloat:** Run `sqlite3 data.db "PRAGMA wal_checkpoint(TRUNCATE);"` to checkpoint and truncate WAL
+- **WAL bloat:** Run `sqlite3 autoinfo.db "PRAGMA wal_checkpoint(TRUNCATE);"` to checkpoint and truncate WAL
 - **Collection cache:** Run `python -m autoinfo.cli clean` to clear old cache files
 - **Log files:** Rotate logs: `logrotate -f /etc/logrotate.d/autoinfo`
-- **DB grown unexpectedly:** Run `sqlite3 data.db "VACUUM;"` to reclaim space (may take minutes on large DB)
+- **DB grown unexpectedly:** Run `sqlite3 autoinfo.db "VACUUM;"` to reclaim space (may take minutes on large DB)
 
 **If disk > 95%:** Immediate action — stop collection services to prevent DB corruption: `systemctl stop autoinfo-collector`
 
 **Verification (5 min):**
 1. Re-check disk usage: `df -h /var`
-2. Verify DB integrity: `sqlite3 data.db "PRAGMA integrity_check;"`
+2. Verify DB integrity: `sqlite3 autoinfo.db "PRAGMA integrity_check;"`
 3. Trigger test collection to confirm writes work
 4. Resolve alert
 
@@ -672,7 +690,7 @@ Each runbook follows a standard format: Detection → Triage → Resolution → 
 
 #### Runbook: Channel Down (P0/P1)
 
-**Detection:** `DeliveryFailureRateHigh` or `ChannelHealthDegraded` alert fires.
+**Detection:** `DeliveryFailuresHigh` or `DeliveryFailuresDetected` alert fires.
 
 **Triage (5 min):**
 1. Identify affected channel from alert labels
@@ -695,14 +713,14 @@ All subsequent deliveries for this channel → routed to email until channel rec
 **Verification (5 min):**
 1. Send test delivery: `python -m autoinfo.cli output digest --domain <domain> --dry-run`
 2. Verify test delivery reaches channel
-3. Verify `autoinfo_channel_health{status="ok"}` metric updated
+3. Verify `delivery_failures_total` counter is not increasing
 4. Resume normal delivery routing
 
 ---
 
 #### Runbook: LLM API Failure (P1)
 
-**Detection:** `LLMAPIErrorRateHigh` alert fires. Extraction/processing failures increasing.
+**Detection:** `LLMExtractionStalled` alert fires — `rate(extraction_tokens_total[15m]) == 0`. Extraction/processing failures increasing.
 
 **Triage (5 min):**
 1. Check LLM provider status page (OpenAI, OpenRouter, DeepSeek, etc.)
@@ -728,7 +746,7 @@ All subsequent deliveries for this channel → routed to email until channel rec
 **Verification (5 min):**
 1. Run test extraction: `python -m autoinfo.cli process --domain <domain> --batch-size 1`
 2. Verify extraction succeeds with fallback model
-3. Monitor `autoinfo_llm_tokens_total` metric for recovery
+3. Monitor `extraction_tokens_total` metric for recovery
 4. Switch back to primary model when provider recovers
 
 ---

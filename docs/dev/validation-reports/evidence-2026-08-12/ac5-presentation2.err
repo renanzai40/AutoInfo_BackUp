@@ -1,0 +1,2 @@
+Failed to parse LLM digest response as JSON: 
+Error: Presentation generation produced no usable content for domain='medical-research' topic='MRI research frontiers' (slides=0, chars=288)

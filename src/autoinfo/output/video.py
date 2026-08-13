@@ -1,9 +1,15 @@
-"""Video output pipeline — TTS narration + slideshow assembly.
+"""Video output pipeline — HyperFrames (HTML + GSAP -> MP4) renderer.
 
-Generates video content from structured report data using:
-1. TTS audio narration (via existing _render_audio from output.py)
-2. Slide images (via PIL/Pillow)
-3. FFmpeg assembly — concat demuxer + xfade transitions + audio overlay
+Generates video content from structured report data using the HyperFrames
+pipeline (ported from AutoMedia, 2026-08-13):
+
+1. TTS audio narration (via existing ``_render_audio`` from output.py)
+2. HyperFrames project scaffold (theme + scene planning + layout diversity)
+3. ``bun x hyperframes render`` — headless Chrome + GSAP animation -> MP4
+
+The old PIL+FFmpeg slideshow path is superseded; the pipeline now generates
+a real HyperFrames project directory (package.json / meta.json /
+hyperframes.json / index.html / compositions/*.html / assets/audio/).
 """
 
 from __future__ import annotations
@@ -15,22 +21,269 @@ import os
 import shutil
 import subprocess
 import tempfile
-from typing import Optional
+import time
 
 logger = logging.getLogger(__name__)
+
+# Directory containing the ported AutoMedia assets (themes + templates).
+_ASSETS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "video_assets")
 
 
 @dataclass
 class VideoConfig:
-    """Configuration for video generation."""
+    """Configuration for HyperFrames video generation."""
 
-    fps: int = 1
+    fps: int = 30
     resolution: tuple[int, int] = (1920, 1080)
-    bg_color: str = "#1a1a2e"
-    font_color: str = "#ffffff"
-    font_size: int = 48
+    theme: str = "terminal-green"
+    quality: str = "draft"  # draft | standard | high
     tts_speed: float = 1.0
-    transition: str = "fade"
+    transition: str = "fade"  # kept for backward compat
+    bg_color: str = ""  # kept for backward compat; theme overrides
+    font_color: str = ""  # kept for backward compat; theme overrides
+    font_size: int = 30  # kept for backward compat; scene templates own sizes
+    scene_mode: str = "auto"  # auto | A | B | C | D (AutoMedia scene patterns)
+    theme_mood: str = ""  # filter themes by mood (light/dark/tech/editorial/...)
+
+
+# ---------------------------------------------------------------------------
+# Theme library (ported from AutoMedia theme-palettes.json / od-themes.json)
+# ---------------------------------------------------------------------------
+
+
+def _load_themes() -> dict:
+    """Load the merged theme library (36 palettes + 8 brand themes)."""
+    themes: dict = {}
+    for filename in ("theme_palettes.json", "od_themes.json"):
+        path = os.path.join(_ASSETS_DIR, "themes", filename)
+        if not os.path.isfile(path):
+            continue
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+        themes.update(data.get("themes", {}))
+    return themes
+
+
+def _flatten_theme(raw: dict) -> dict:
+    """Flatten a theme entry's ``variables`` dict into dotted keys.
+
+    Themes in the ported library are heterogeneous — not every palette
+    declares every CSS variable (e.g. 14/36 lack ``--font-display``).  Missing
+    variables get safe defaults so any theme renders without template errors.
+    """
+    flat = {"dark": raw.get("dark", False), "mood": raw.get("mood", [])}
+    for var_name, value in raw.get("variables", {}).items():
+        key = var_name.lstrip("-").replace("-", "_")
+        flat[key] = value
+    # Defaults for variables that only some themes declare.
+    flat.setdefault("font_display", "system-ui, sans-serif")
+    flat.setdefault("surface_2", flat.get("surface", "#1a1a2e"))
+    flat.setdefault("border", "rgba(128,128,128,0.2)")
+    flat.setdefault("border_strong", "rgba(128,128,128,0.35)")
+    flat.setdefault("radius", "12px")
+    flat.setdefault("radius_lg", "16px")
+    flat.setdefault("shadow", "0 4px 12px rgba(0,0,0,0.3)")
+    flat.setdefault("grad", f"linear-gradient(135deg, {flat.get('accent', '#00ff88')}, {flat.get('bg', '#0a0a0a')})")
+    flat.setdefault("good", flat.get("accent", "#00ff88"))
+    flat.setdefault("warn", "#ffaa00")
+    flat.setdefault("bad", "#ff6464")
+    return flat
+
+
+def select_theme(config: VideoConfig | None = None) -> dict:
+    """Select a flattened theme dict from the ported library.
+
+    Picks ``config.theme`` if it exists; otherwise filters by
+    ``config.theme_mood`` (first match) and falls back to the default
+    ``terminal-green`` (brand-safe dark tech theme).
+    """
+    themes = _load_themes()
+    cfg = config or VideoConfig()
+
+    if cfg.theme in themes:
+        return _flatten_theme(themes[cfg.theme])
+
+    if cfg.theme_mood:
+        for name, t in themes.items():
+            if cfg.theme_mood in t.get("mood", []):
+                logger.info("theme %r chosen by mood %r", name, cfg.theme_mood)
+                return _flatten_theme(t)
+
+    if "terminal-green" in themes:
+        logger.warning("theme %r not found — falling back to terminal-green", cfg.theme)
+        return _flatten_theme(themes["terminal-green"])
+
+    # Last resort: first theme in the library.
+    name, t = next(iter(themes.items()))
+    logger.warning("no themes loaded — using first theme %r", name)
+    return _flatten_theme(t)
+
+
+# ---------------------------------------------------------------------------
+# Scene planning — AutoMedia scene patterns (A/B/C/D) + layout diversity
+# ---------------------------------------------------------------------------
+
+# Visual layout patterns (AutoMedia visual-layouts.md, 6 types).  Each scene
+# picks a layout; adjacent scenes must differ (5-scene video uses >= 4 layouts).
+LAYOUTS: dict[str, dict] = {
+    "centered-hero": {
+        "label": "Centered Hero",
+        "html": """
+    <div class="clip scene-title" id="scene-title" data-start="0" data-duration="{{ duration }}" data-track-index="0"
+         style="top: 380px; left: 10%; width: 80%; text-align: center; color: var(--accent); font-family: var(--font-display);">
+      {{ heading | e }}
+    </div>
+    <div class="clip scene-body" id="scene-body" data-start="1.2" data-duration="{{ duration }}" data-track-index="1"
+         style="top: 520px; left: 16%; width: 68%; text-align: center; color: var(--text-2);">
+      {{ body | e }}
+    </div>
+""",
+        "animations": """
+    tl.from("#scene .scene-title", { opacity: 0, y: -40, duration: 0.9, ease: "power3.out" }, 0);
+    tl.from("#scene .scene-body", { opacity: 0, y: 24, duration: 0.7, ease: "power3.out" }, 0.9);
+""",
+    },
+    "split-screen": {
+        "label": "Split Screen",
+        "html": """
+    <div class="clip scene-title" id="scene-title" data-start="0" data-duration="{{ duration }}" data-track-index="0"
+         style="top: 300px; left: 10%; width: 80%; color: var(--text-1); font-family: var(--font-display);">
+      {{ heading | e }}
+    </div>
+    <div class="clip scene-body" id="scene-body" data-start="0.8" data-duration="{{ duration }}" data-track-index="1"
+         style="top: 400px; left: 10%; width: 36%; padding: 40px; background: var(--surface); border-radius: var(--radius-lg); border: 2px solid var(--accent); color: var(--text-1);">
+      {{ body_left | default(body, true) | e }}
+    </div>
+    <div class="clip scene-body" id="scene-body" data-start="1.2" data-duration="{{ duration }}" data-track-index="2"
+         style="top: 400px; right: 10%; width: 36%; padding: 40px; background: var(--surface-2); border-radius: var(--radius-lg); border: 2px solid var(--border); color: var(--text-2);">
+      {{ body_right | default(body, true) | e }}
+    </div>
+""",
+        "animations": """
+    tl.from("#scene .scene-title", { opacity: 0, y: -30, duration: 0.8, ease: "power3.out" }, 0);
+    tl.from("#scene .scene-body", { opacity: 0, x: -50, duration: 0.8, ease: "power3.out" }, 0.7);
+    tl.from("#scene .scene-body:nth-of-type(3)", { opacity: 0, x: 50, duration: 0.8, ease: "power3.out" }, 1.0);
+""",
+    },
+    "card-grid": {
+        "label": "Card Grid",
+        "html": """
+    <div class="clip scene-title" id="scene-title" data-start="0" data-duration="{{ duration }}" data-track-index="0"
+         style="top: 300px; left: 10%; width: 80%; color: var(--text-1); font-family: var(--font-display);">
+      {{ heading | e }}
+    </div>
+    <div class="clip scene-body" id="scene-body" data-start="0.8" data-duration="{{ duration }}" data-track-index="1"
+         style="top: 400px; left: 10%; width: 80%; color: var(--text-2);">
+      {{ body | e }}
+    </div>
+    {% for card in cards %}<div class="clip scene-body" id="scene-body" data-start="{{ 1.0 + loop.index0 * 0.4 }}" data-duration="{{ duration }}" data-track-index="{{ 2 + loop.index }}"
+         style="top: {{ 500 + (loop.index0 % 2) * 160 }}px; left: {{ 10 + (loop.index0 % 3) * 28 }}%; width: 24%; padding: 24px; background: var(--surface); border-radius: var(--radius-lg); color: var(--text-1);">
+      {{ card | e }}
+    </div>
+    {% endfor %}
+""",
+        "animations": """
+    tl.from("#scene .scene-title", { opacity: 0, y: -30, duration: 0.8, ease: "power3.out" }, 0);
+    tl.from("#scene .scene-body", { opacity: 0, y: 20, duration: 0.6, ease: "power3.out" }, 0.7);
+    tl.from("#scene .clip[data-track-index] .scene-body", {}, 0);
+    tl.from("#scene div.clip[data-track-index]:not([data-track-index='0']):not([data-track-index='1'])", { opacity: 0, scale: 0.9, stagger: 0.25, duration: 0.6, ease: "power2.out" }, 1.0);
+""",
+    },
+    "data-dashboard": {
+        "label": "Data Dashboard",
+        "html": """
+    <div class="clip scene-title" id="scene-title" data-start="0" data-duration="{{ duration }}" data-track-index="0"
+         style="top: 300px; left: 10%; width: 80%; color: var(--accent); font-family: var(--font-display);">
+      {{ heading | e }}
+    </div>
+    <div class="clip scene-body" id="scene-body" data-start="0.6" data-duration="{{ duration }}" data-track-index="1"
+         style="top: 400px; left: 10%; width: 80%; color: var(--text-2); font-size: 44px; font-weight: 600;">
+      {{ body | e }}
+    </div>
+    {% for stat in stats %}<div class="clip scene-body" id="scene-body" data-start="{{ 0.8 + loop.index0 * 0.5 }}" data-duration="{{ duration }}" data-track-index="{{ 2 + loop.index }}"
+         style="top: {{ 560 + (loop.index0 // 4) * 140 }}px; left: {{ 10 + (loop.index0 % 4) * 20 }}%; width: 16%; text-align: center;">
+      <div style="font-size: 48px; font-weight: 700; color: var(--accent);">{{ stat.value | e }}</div>
+      <div style="font-size: 24px; color: var(--text-3); margin-top: 8px;">{{ stat.label | e }}</div>
+    </div>
+    {% endfor %}
+""",
+        "animations": """
+    tl.from("#scene .scene-title", { opacity: 0, y: -30, duration: 0.8, ease: "power3.out" }, 0);
+    tl.from("#scene .scene-body:nth-of-type(2)", { opacity: 0, y: 20, duration: 0.6, ease: "power3.out" }, 0.6);
+    tl.from("#scene div.clip[data-track-index]:not([data-track-index='0']):not([data-track-index='1'])", { opacity: 0, scale: 0.8, stagger: 0.2, duration: 0.6, ease: "back.out(1.4)" }, 0.9);
+""",
+    },
+    "timeline-flow": {
+        "label": "Timeline / Flow",
+        "html": """
+    <div class="clip scene-title" id="scene-title" data-start="0" data-duration="{{ duration }}" data-track-index="0"
+         style="top: 300px; left: 10%; width: 80%; color: var(--text-1); font-family: var(--font-display);">
+      {{ heading | e }}
+    </div>
+    <div class="clip scene-body" id="scene-body" data-start="0.6" data-duration="{{ duration }}" data-track-index="1"
+         style="top: 400px; left: 10%; width: 80%; color: var(--text-2);">
+      {{ body | e }}
+    </div>
+    {% for step in steps %}<div class="clip scene-body" id="scene-body" data-start="{{ 0.8 + loop.index0 * 0.6 }}" data-duration="{{ duration }}" data-track-index="{{ 2 + loop.index }}"
+         style="top: {{ 500 + loop.index0 * 90 }}px; left: 16%; width: 68%; padding-left: 60px; position: absolute; color: var(--text-1);">
+      <span style="position: absolute; left: 0; width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: var(--bg); text-align: center; line-height: 40px; font-weight: 700;">{{ loop.index }}</span>
+      {{ step | e }}
+    </div>
+    {% endfor %}
+""",
+        "animations": """
+    tl.from("#scene .scene-title", { opacity: 0, y: -30, duration: 0.8, ease: "power3.out" }, 0);
+    tl.from("#scene .scene-body:nth-of-type(2)", { opacity: 0, y: 20, duration: 0.6, ease: "power3.out" }, 0.6);
+    tl.from("#scene div.clip[data-track-index]:not([data-track-index='0']):not([data-track-index='1'])", { opacity: 0, x: -60, stagger: 0.35, duration: 0.7, ease: "power3.out" }, 0.9);
+""",
+    },
+    "fullscreen-narrative": {
+        "label": "Full-screen Narrative",
+        "html": """
+    <div class="clip scene-title" id="scene-title" data-start="0" data-duration="{{ duration }}" data-track-index="0"
+         style="top: 380px; left: 10%; width: 80%; font-size: 64px; color: var(--accent); font-family: var(--font-display);">
+      {{ heading | e }}
+    </div>
+    <div class="clip scene-body" id="scene-body" data-start="1.0" data-duration="{{ duration }}" data-track-index="1"
+         style="top: 520px; left: 14%; width: 72%; color: var(--text-1); font-size: 36px;">
+      {{ body | e }}
+    </div>
+""",
+        "animations": """
+    tl.from("#scene .scene-title", { opacity: 0, y: -50, duration: 1.0, ease: "power3.out" }, 0);
+    tl.from("#scene .scene-body", { opacity: 0, y: 30, duration: 0.8, ease: "power3.out" }, 0.8);
+""",
+    },
+}
+
+# Ordered layout rotation — guarantees adjacent-scene diversity (>=4 of 6
+# layouts for a 5-scene video, matching AutoMedia Gate VQ).
+_LAYOUT_ORDER = [
+    "centered-hero",
+    "split-screen",
+    "card-grid",
+    "data-dashboard",
+    "timeline-flow",
+    "fullscreen-narrative",
+]
+
+
+def _pick_layouts(n_scenes: int) -> list[str]:
+    """Assign a layout per scene with mandatory adjacent diversity."""
+    if n_scenes <= 0:
+        return []
+    if n_scenes == 1:
+        return ["centered-hero"]
+    if n_scenes == 2:
+        return ["centered-hero", "split-screen"]
+    # Rotate through the full library; >= 4 distinct layouts for n >= 5.
+    layouts = [_LAYOUT_ORDER[i % len(_LAYOUT_ORDER)] for i in range(n_scenes)]
+    return layouts
+
+
+# ---------------------------------------------------------------------------
+# TTS narration (reuses the existing engine from output.py)
+# ---------------------------------------------------------------------------
 
 
 def generate_audio_narration(
@@ -86,575 +339,267 @@ def generate_audio_narration(
     return audio_path
 
 
-def generate_slide_images(
-    title: str,
+# ---------------------------------------------------------------------------
+# HyperFrames project scaffold
+# ---------------------------------------------------------------------------
+
+
+def _probe_audio_duration(audio_path: str) -> float:
+    """Probe audio duration in seconds via ffprobe (0.0 on failure)."""
+    ffprobe = shutil.which("ffprobe")
+    if ffprobe is None:
+        return 0.0
+    try:
+        out = subprocess.run(
+            [ffprobe, "-v", "quiet", "-print_format", "json", "-show_format", audio_path],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        info = json.loads(out.stdout or "{}")
+        return float(info.get("format", {}).get("duration", 0.0))
+    except (json.JSONDecodeError, ValueError, subprocess.TimeoutExpired):
+        return 0.0
+
+
+def _split_narration_into_scenes(
     sections: list[dict],
-    output_dir: str,
-    resolution: tuple[int, int] = (1920, 1080),
-) -> list[str]:
-    """Generate slide images from content sections using PIL.
+    total_duration: float,
+) -> list[dict]:
+    """Assign per-scene start/duration from TTS length by character ratio.
 
-    Args:
-        title: Report title
-        sections: List of dicts with 'heading' and 'body' keys
-        output_dir: Directory to write image files
-        resolution: (width, height) tuple
-
-    Returns:
-        List of paths to generated image files
+    Mirrors AutoMedia's scene-frame-boundary math, including the float
+    precision safety margin (-0.01s per scene) that prevents HyperFrames
+    ``overlapping_clips_same_track`` lint failures.
     """
-    try:
-        from PIL import Image, ImageDraw, ImageFont
-    except ImportError:
-        logger.warning("Pillow not installed — using placeholder images instead")
-        return _generate_placeholder_images(title, sections, output_dir, resolution)
-
-    os.makedirs(output_dir, exist_ok=True)
-    paths: list[str] = []
-    width, height = resolution
-
-    # --- Resolve fonts ---
-    try:
-        font = ImageFont.truetype(
-            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 48
+    if not sections:
+        return []
+    char_lens = [max(len(s.get("heading", "")) + len(s.get("body", "")), 1) for s in sections]
+    total_chars = sum(char_lens)
+    scenes: list[dict] = []
+    cumsum = 0.0
+    for i, (section, clen) in enumerate(zip(sections, char_lens)):
+        start = cumsum / total_chars * total_duration
+        end = (cumsum + clen) / total_chars * total_duration
+        duration = max(1.5, end - start - 0.01)  # float-safety margin
+        scenes.append(
+            {
+                "name": section.get("heading", f"Section {i + 1}")[:40],
+                "start": round(start, 3),
+                "duration": round(duration, 3),
+                "heading": section.get("heading", ""),
+                "body": section.get("body", ""),
+            }
         )
-        small_font = ImageFont.truetype(
-            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 32
-        )
-    except (OSError, IOError):
-        font = ImageFont.load_default()
-        small_font = ImageFont.load_default()
+        cumsum += clen
+    return scenes
 
-    # --- Title slide ---
-    img = Image.new("RGB", (width, height), color="#1a1a2e")
-    draw = ImageDraw.Draw(img)
-    draw.text((100, height // 2 - 50), title, fill="white", font=font)
-    draw.text(
-        (100, height // 2 + 20),
-        "AutoInfo Video Summary",
-        fill="#888888",
-        font=small_font,
+
+def _render_jinja(template_name: str, **ctx) -> str:
+    """Render a template from the ported assets dir."""
+    from jinja2 import Environment, FileSystemLoader, StrictUndefined
+
+    env = Environment(
+        loader=FileSystemLoader(os.path.join(_ASSETS_DIR, "templates")),
+        undefined=StrictUndefined,
+        autoescape=False,
     )
-
-    title_path = os.path.join(output_dir, "slide_000.png")
-    img.save(title_path)
-    paths.append(title_path)
-
-    # --- Content slides ---
-    for i, section in enumerate(sections, start=1):
-        img = Image.new("RGB", (width, height), color="#16213e")
-        draw = ImageDraw.Draw(img)
-        heading = section.get("heading", f"Section {i}")
-        body = section.get("body", "")
-
-        draw.text((100, 100), heading, fill="#e94560", font=font)
-
-        # Word-wrap body text
-        y = 200
-        words = body.split()
-        line = ""
-        for word in words:
-            test_line = f"{line} {word}".strip()
-            # Rough char-based wrapping (~55 chars per line)
-            if len(test_line) > 55:
-                draw.text((100, y), line, fill="white", font=small_font)
-                y += 45
-                line = word
-            else:
-                line = test_line
-        if line:
-            draw.text((100, y), line, fill="white", font=small_font)
-
-        slide_path = os.path.join(output_dir, f"slide_{i:03d}.png")
-        img.save(slide_path)
-        paths.append(slide_path)
-
-    logger.info("Generated %d slide images in %s", len(paths), output_dir)
-    return paths
+    return env.get_template(template_name).render(**ctx)
 
 
-def _generate_placeholder_images(
+def _write_scene_composition(
+    compositions_dir: str,
+    index: int,
+    scene: dict,
+    layout_name: str,
+    theme: dict,
+) -> None:
+    """Write one scene composition HTML (layout + GSAP timeline)."""
+    layout = LAYOUTS[layout_name]
+    html = _render_jinja(
+        "scene.html.j2",
+        theme=theme,
+        loop={"index": index},
+        duration=scene["duration"],
+        layout={
+            "name": layout["label"],
+            "html": layout["html"],
+            "animations": layout["animations"],
+        },
+        heading=scene["heading"],
+        body=scene["body"],
+        body_left=scene.get("heading"),
+        body_right=scene.get("body"),
+        cards=scene.get("cards", []),
+        stats=scene.get("stats", []),
+        steps=scene.get("steps", []),
+    )
+    path = os.path.join(compositions_dir, f"{index:02d}-scene.html")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(html)
+
+
+def generate_hyperframes_project(
     title: str,
     sections: list[dict],
     output_dir: str,
-    resolution: tuple[int, int],
-) -> list[str]:
-    """Generate simple text-based placeholder images when Pillow is unavailable."""
-    os.makedirs(output_dir, exist_ok=True)
-    paths: list[str] = []
-    width, height = resolution
-
-    # Create minimal SVG-like text files as placeholders
-    placeholder_path = os.path.join(output_dir, "slide_000.txt")
-    with open(placeholder_path, "w") as f:
-        f.write(f"SLIDE 0: {title}\n")
-        for s in sections:
-            f.write(f"  - {s.get('heading', '')}: {s.get('body', '')[:80]}\n")
-    paths.append(placeholder_path)
-
-    for i, section in enumerate(sections, start=1):
-        spath = os.path.join(output_dir, f"slide_{i:03d}.txt")
-        with open(spath, "w") as f:
-            f.write(f"SLIDE {i}: {section.get('heading', f'Section {i}')}\n")
-            f.write(f"{section.get('body', '')}\n")
-        paths.append(spath)
-
-    return paths
-
-
-# ---------------------------------------------------------------------------
-# FFmpeg video rendering engine
-# ---------------------------------------------------------------------------
-
-
-def render_video(
-    audio_path: str,
-    image_paths: list[str],
-    output_path: str,
+    audio_path: str | None = None,
     config: VideoConfig | None = None,
 ) -> str:
-    """Render a video from images and audio narration using FFmpeg.
+    """Generate a complete HyperFrames project directory.
 
-    Supports two rendering modes:
-
-    - **Concat demuxer** (``transition="none"``): Images played sequentially
-      with per-slide duration derived from audio length. Simple, fast,
-      no transitions.
-    - **Xfade** (``transition="fade"``): Crossfade transitions between each
-      adjacent slide pair using FFmpeg ``xfade`` filter.
-
-    Audio is overlaid with ``-c:a aac`` and the video is truncated to
-    match audio duration (``-shortest``).
-
-    Parameters
-    ----------
-    audio_path : str
-        Path to the audio narration file (MP3 format recommended).
-    image_paths : list[str]
-        Ordered list of image file paths (PNG recommended).  Non-existent
-        files are silently filtered out.
-    output_path : str
-        Path where the output MP4 file will be written.
-    config : VideoConfig, optional
-        Configuration for resolution, FPS, background colour, and
-        transition type.  Uses defaults when ``None``.
-
-    Returns
-    -------
-    str
-        Absolute path to the rendered video file.
-
-    Raises
-    ------
-    FileNotFoundError
-        If ``ffmpeg`` is not installed, or if *audio_path* does not exist.
-    ValueError
-        If *image_paths* is empty or contains no valid image files.
-    RuntimeError
-        If the FFmpeg subprocess exits with a non-zero code, or if the
-        output file is missing or smaller than 100 bytes.
+    Returns the project directory path.  The caller then runs
+    :func:`render_hyperframes` to produce the MP4.
     """
-    if config is None:
-        config = VideoConfig()
+    cfg = config or VideoConfig()
+    theme = select_theme(cfg)
 
-    # --- Validate inputs --------------------------------------------------
-    if not image_paths:
-        raise ValueError("image_paths must not be empty")
+    os.makedirs(output_dir, exist_ok=True)
 
-    if not os.path.isfile(audio_path):
-        raise FileNotFoundError(f"Audio file not found: {audio_path}")
+    # --- Copy project skeleton files ---
+    for name in ("package.json", "hyperframes.json"):
+        src = os.path.join(_ASSETS_DIR, "templates", name)
+        if os.path.isfile(src):
+            shutil.copy(src, os.path.join(output_dir, name))
 
-    # Resolve valid image file paths (filter out non-existent ones)
-    valid_images: list[str] = [
-        str(p) for p in image_paths if os.path.isfile(str(p))
-    ]
-    if not valid_images:
-        raise ValueError(
-            f"No valid image files found among {len(image_paths)} paths"
+    # --- Audio ---
+    has_audio = bool(audio_path and os.path.isfile(audio_path))
+    if has_audio:
+        audio_dir = os.path.join(output_dir, "assets", "audio")
+        os.makedirs(audio_dir, exist_ok=True)
+        shutil.copy(audio_path, os.path.join(audio_dir, "narration.mp3"))
+        total_duration = _probe_audio_duration(audio_path)
+    else:
+        total_duration = float(len(sections) * 8)  # fallback 8s per scene
+
+    if total_duration <= 0:
+        total_duration = float(len(sections) * 8)
+
+    # --- Scene planning ---
+    scenes = _split_narration_into_scenes(sections, total_duration)
+    layout_names = _pick_layouts(len(scenes))
+
+    # --- meta.json (scene start/duration) ---
+    meta = _render_jinja(
+        "meta.json.j2",
+        title=title,
+        target_duration=int(total_duration),
+        scenes=[{"name": s["name"], "start": s["start"], "duration": s["duration"]} for s in scenes],
+    )
+    with open(os.path.join(output_dir, "meta.json"), "w", encoding="utf-8") as f:
+        f.write(meta)
+
+    # --- compositions/ ---
+    compositions_dir = os.path.join(output_dir, "compositions")
+    os.makedirs(compositions_dir, exist_ok=True)
+    for i, scene in enumerate(scenes, start=1):
+        _write_scene_composition(compositions_dir, i, scene, layout_names[i - 1], theme)
+
+    # --- index.html (root composition + audio track + scene hosts) ---
+    index_html = _render_jinja(
+        "index.html.j2",
+        theme=theme,
+        title=title,
+        total_duration=total_duration,
+        has_audio=has_audio,
+        scenes=[{"start": s["start"], "duration": s["duration"]} for s in scenes],
+    )
+    with open(os.path.join(output_dir, "index.html"), "w", encoding="utf-8") as f:
+        f.write(index_html)
+
+    logger.info(
+        "HyperFrames project generated: %s (%d scenes, %.1fs audio, theme=%s)",
+        output_dir,
+        len(scenes),
+        total_duration,
+        cfg.theme,
+    )
+    return output_dir
+
+
+# ---------------------------------------------------------------------------
+# HyperFrames render (bun x hyperframes)
+# ---------------------------------------------------------------------------
+
+
+def _find_binary(name: str) -> str:
+    """Locate an executable on PATH (bun, ffmpeg, ffprobe)."""
+    path = shutil.which(name)
+    if path is None:
+        raise FileNotFoundError(
+            f"'{name}' not found on PATH. "
+            f"HyperFrames rendering requires: bun (https://bun.sh), "
+            f"and ffmpeg/ffprobe for audio probing."
         )
+    return path
 
-    # --- Locate FFmpeg / ffprobe ------------------------------------------
-    ffmpeg_path = _find_binary("ffmpeg")
-    ffprobe_path = _find_binary("ffprobe")
 
-    # --- Determine per-slide duration from audio length -------------------
-    audio_duration = _probe_audio_duration(ffprobe_path, audio_path)
-    if audio_duration <= 0:
-        # Fallback: 5 seconds per slide
-        audio_duration = float(len(valid_images) * 5)
+def render_hyperframes(
+    project_dir: str,
+    output_path: str,
+    quality: str = "draft",
+    timeout: float = 600,
+) -> str:
+    """Render a HyperFrames project to MP4 via ``bun x hyperframes render``.
 
-    per_slide_duration = audio_duration / len(valid_images)
-    if per_slide_duration < 0.5:
-        per_slide_duration = 5.0  # minimum 5s per slide
+    Runs ``lint`` first (fail fast on composition errors), then the render
+    at the requested quality.  Raises RuntimeError on lint/render failure
+    or missing output.
+    """
+    bun = _find_binary("bun")
 
-    # --- Ensure output directory exists -----------------------------------
+    # --- lint gate (G3 equivalent) ---
+    lint = subprocess.run(
+        [bun, "x", "hyperframes", "lint"],
+        cwd=project_dir,
+        capture_output=True,
+        text=True,
+        timeout=timeout,
+    )
+    if lint.returncode != 0:
+        raise RuntimeError(
+            f"HyperFrames lint failed:\n{lint.stdout}\n{lint.stderr}"
+        )
+    logger.info("HyperFrames lint passed: %s", project_dir)
+
+    # --- render ---
     out_dir = os.path.dirname(output_path)
     if out_dir:
         os.makedirs(out_dir, exist_ok=True)
 
-    width, height = config.resolution
-
-    # --- Route to concat or xfade renderer --------------------------------
-    if config.transition == "none" or len(valid_images) == 1:
-        _render_concat_video(
-            ffmpeg_path=ffmpeg_path,
-            image_paths=valid_images,
-            audio_path=audio_path,
-            output_path=output_path,
-            width=width,
-            height=height,
-            fps=config.fps,
-            per_slide_duration=per_slide_duration,
-        )
-    else:
-        _render_xfade_video(
-            ffmpeg_path=ffmpeg_path,
-            image_paths=valid_images,
-            audio_path=audio_path,
-            output_path=output_path,
-            width=width,
-            height=height,
-            fps=config.fps,
-            per_slide_duration=per_slide_duration,
-            transition_type=config.transition,
+    render = subprocess.run(
+        [
+            bun, "x", "hyperframes", "render",
+            "--output", output_path,
+            "--quality", quality,
+        ],
+        cwd=project_dir,
+        capture_output=True,
+        text=True,
+        timeout=timeout,
+    )
+    if render.returncode != 0:
+        raise RuntimeError(
+            f"HyperFrames render failed (quality={quality}):\n"
+            f"{render.stdout}\n{render.stderr}"
         )
 
-    # --- Post-render validation -------------------------------------------
     if not os.path.isfile(output_path) or os.path.getsize(output_path) < 100:
         raise RuntimeError(
             f"Video output is missing or too small: {output_path}"
         )
 
     logger.info(
-        "Video rendered: %s (%d slides, %.1fs audio, transition=%s)",
+        "Video rendered via HyperFrames: %s (%d bytes, quality=%s)",
         output_path,
-        len(valid_images),
-        audio_duration,
-        config.transition,
+        os.path.getsize(output_path),
+        quality,
     )
     return output_path
 
 
 # ---------------------------------------------------------------------------
-# FFmpeg binary discovery
-# ---------------------------------------------------------------------------
-
-
-def _find_binary(name: str) -> str:
-    """Locate an executable on PATH.
-
-    Parameters
-    ----------
-    name : str
-        Binary name (e.g. ``"ffmpeg"``, ``"ffprobe"``).
-
-    Returns
-    -------
-    str
-        Absolute path to the binary.
-
-    Raises
-    ------
-    FileNotFoundError
-        If the binary cannot be found on ``$PATH``.
-    """
-    path = shutil.which(name)
-    if path is None:
-        raise FileNotFoundError(
-            f"'{name}' not found on PATH. "
-            f"Install FFmpeg to generate videos: https://ffmpeg.org/download.html"
-        )
-    return path
-
-
-# ---------------------------------------------------------------------------
-# Audio duration probing (ffprobe)
-# ---------------------------------------------------------------------------
-
-
-def _probe_audio_duration(ffprobe_path: str, audio_path: str) -> float:
-    """Probe the duration of an audio file using ffprobe.
-
-    Parameters
-    ----------
-    ffprobe_path : str
-        Path to the ``ffprobe`` binary.
-    audio_path : str
-        Path to the audio file.
-
-    Returns
-    -------
-    float
-        Duration in seconds.  Returns ``0.0`` if probing fails.
-    """
-    try:
-        result = subprocess.run(
-            [
-                ffprobe_path,
-                "-v", "quiet",
-                "-print_format", "json",
-                "-show_format",
-                audio_path,
-            ],
-            capture_output=True,
-            text=True,
-            timeout=30,
-        )
-        if result.returncode != 0:
-            logger.warning(
-                "ffprobe exited with code %d: %s",
-                result.returncode,
-                result.stderr,
-            )
-            return 0.0
-
-        data = json.loads(result.stdout)
-        duration_str = data.get("format", {}).get("duration", "0")
-        return float(duration_str)
-    except (subprocess.TimeoutExpired, json.JSONDecodeError, ValueError, OSError) as exc:
-        logger.warning("Failed to probe audio duration: %s", exc)
-        return 0.0
-
-
-# ---------------------------------------------------------------------------
-# Concat demuxer renderer (no transitions)
-# ---------------------------------------------------------------------------
-
-
-def _render_concat_video(
-    ffmpeg_path: str,
-    image_paths: list[str],
-    audio_path: str,
-    output_path: str,
-    width: int,
-    height: int,
-    fps: int,
-    per_slide_duration: float,
-) -> None:
-    """Render video using FFmpeg concat demuxer (no transitions).
-
-    Creates a temporary ``filelist.txt`` with each image and its duration,
-    then pipes it to ``ffmpeg -f concat``.  Audio is overlaid and the
-    output is truncated to the shorter of video/audio (``-shortest``).
-
-    The temp file is cleaned up on both success and failure.
-    """
-    concat_file: str | None = None
-    try:
-        # Write concat file list
-        fd, concat_file = tempfile.mkstemp(
-            suffix=".txt", prefix="autoinfo_concat_"
-        )
-        with os.fdopen(fd, "w") as f:
-            for img in image_paths:
-                f.write(f"file '{img}'\n")
-                f.write(f"duration {per_slide_duration}\n")
-            # Final image needs to be listed again for concat demuxer
-            # to hold on the last frame
-            if image_paths:
-                f.write(f"file '{image_paths[-1]}'\n")
-
-        cmd = [
-            ffmpeg_path,
-            "-y",                          # overwrite output
-            "-f", "concat",
-            "-safe", "0",
-            "-i", concat_file,
-            "-i", audio_path,
-            "-c:v", "libx264",
-            "-preset", "fast",
-            "-pix_fmt", "yuv420p",
-            "-s", f"{width}x{height}",
-            "-r", str(fps),
-            "-c:a", "aac",
-            "-b:a", "128k",
-            "-shortest",
-            output_path,
-        ]
-
-        logger.debug("Running FFmpeg concat: %s", " ".join(cmd))
-        _run_ffmpeg(cmd)
-
-    finally:
-        # Clean up temp concat file
-        if concat_file and os.path.isfile(concat_file):
-            try:
-                os.unlink(concat_file)
-            except OSError:
-                pass
-
-
-# ---------------------------------------------------------------------------
-# Xfade renderer (crossfade transitions)
-# ---------------------------------------------------------------------------
-
-
-def _render_xfade_video(
-    ffmpeg_path: str,
-    image_paths: list[str],
-    audio_path: str,
-    output_path: str,
-    width: int,
-    height: int,
-    fps: int,
-    per_slide_duration: float,
-    transition_type: str = "fade",
-) -> None:
-    """Render video with crossfade transitions between slides.
-
-    Each image is fed as a separate input via ``-loop 1 -t DUR``.
-    The filter_complex chain:
-
-    1. Scales each input to *width* × *height* (letterboxed).
-    2. Chains ``xfade`` filters between adjacent scaled streams.
-    3. Outputs to ``yuv420p`` pixel format.
-
-    The transition duration is derived from *per_slide_duration* (min 0.5 s,
-    max half the slide duration).
-
-    Parameters
-    ----------
-    transition_type : str
-        ``xfade`` transition name (e.g. ``"fade"``, ``"fadeblack"``,
-        ``"fadewhite"``, ``"slideleft"``, ``"slideright"``).
-        Falls back to ``"fade"`` for unknown values.
-    """
-    # Map friendly names to FFmpeg xfade transition names
-    _XFADE_TRANSITIONS: dict[str, str] = {
-        "fade": "fade",
-        "fadeblack": "fadeblack",
-        "fadewhite": "fadewhite",
-        "slideleft": "slideleft",
-        "slideright": "slideright",
-        "slideup": "slideup",
-        "slidedown": "slidedown",
-        "circlecrop": "circlecrop",
-        "rectcrop": "rectcrop",
-        "distance": "distance",
-        "wipeleft": "wipeleft",
-        "wiperight": "wiperight",
-        "wipeup": "wipeup",
-        "wipedown": "wipedown",
-        "dissolve": "dissolve",
-        "pixelize": "pixelize",
-    }
-    xfade_name = _XFADE_TRANSITIONS.get(transition_type, "fade")
-
-    # Transition duration: 1 second or 1/3 of slide duration, whichever is
-    # smaller, but at least 0.5 seconds.
-    transition_dur = max(0.5, min(1.0, per_slide_duration / 3))
-
-    num_images = len(image_paths)
-
-    # Build ffmpeg command
-    cmd: list[str] = [ffmpeg_path, "-y"]
-
-    # --- Inputs -----------------------------------------------------------
-    # Each image as a separate input looped for per_slide_duration seconds
-    for img in image_paths:
-        cmd += [
-            "-loop", "1",
-            "-t", f"{per_slide_duration:.3f}",
-            "-i", img,
-        ]
-    # Audio input
-    cmd += ["-i", audio_path]
-
-    # --- Filter complex ---------------------------------------------------
-    filter_parts: list[str] = []
-
-    # Step 1: Scale & pad each image input
-    for i in range(num_images):
-        filter_parts.append(
-            f"[{i}:v]scale={width}:{height}:force_original_aspect_ratio=decrease,"
-            f"pad={width}:{height}:(ow-iw)/2:(oh-ih)/2,setsar=1[v{i}]"
-        )
-
-    # Step 2: Chain xfade transitions
-    current_input = "[v0]"
-    for i in range(1, num_images):
-        offset = i * per_slide_duration - i * transition_dur
-        if offset < 0:
-            offset = 0.0
-        label = f"f{i - 1}"
-        filter_parts.append(
-            f"{current_input}[v{i}]xfade=transition={xfade_name}:"
-            f"duration={transition_dur:.3f}:offset={offset:.3f},"
-            f"format=yuv420p[{label}]"
-        )
-        current_input = f"[{label}]"
-
-    filter_complex = ";\n".join(filter_parts)
-
-    # Final video label
-    if num_images == 1:
-        final_video_label = "[v0]"
-    else:
-        final_video_label = f"[f{num_images - 2}]"
-
-    cmd += [
-        "-filter_complex", filter_complex,
-        "-map", final_video_label,
-        "-map", f"{num_images}:a",
-        "-c:v", "libx264",
-        "-preset", "fast",
-        "-pix_fmt", "yuv420p",
-        "-r", str(fps),
-        "-c:a", "aac",
-        "-b:a", "128k",
-        "-shortest",
-        output_path,
-    ]
-
-    logger.debug("Running FFmpeg xfade: %s", " ".join(cmd))
-    _run_ffmpeg(cmd)
-
-
-# ---------------------------------------------------------------------------
-# Subprocess runner
-# ---------------------------------------------------------------------------
-
-
-def _run_ffmpeg(cmd: list[str], timeout: float = 300) -> None:
-    """Run an FFmpeg command and raise on failure.
-
-    Parameters
-    ----------
-    cmd : list[str]
-        FFmpeg command and arguments.
-    timeout : float
-        Maximum runtime in seconds (default 300).
-
-    Raises
-    ------
-    RuntimeError
-        If the subprocess exits with a non-zero code or times out.
-    """
-    try:
-        result = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            timeout=timeout,
-        )
-        if result.returncode != 0:
-            stderr_tail = result.stderr.strip().split("\n")[-5:]
-            raise RuntimeError(
-                f"FFmpeg exited with code {result.returncode}:\n"
-                + "\n".join(stderr_tail)
-            )
-    except subprocess.TimeoutExpired as exc:
-        raise RuntimeError(
-            f"FFmpeg timed out after {timeout}s: {exc}"
-        ) from exc
-    except FileNotFoundError:
-        raise FileNotFoundError(
-            "ffmpeg executable not found at runtime"
-        )
-
-
-# ---------------------------------------------------------------------------
-# High-level "video report" pipeline (images + audio → MP4)
+# Public entry — full pipeline
 # ---------------------------------------------------------------------------
 
 
@@ -665,119 +610,53 @@ def generate_report_video(
     config: VideoConfig | None = None,
     voice: str = "default",
 ) -> str:
-    """Full pipeline: slides → narration → FFmpeg → MP4.
+    """Generate a video report: TTS -> HyperFrames project -> MP4.
 
-    Convenience wrapper that calls :func:`generate_audio_narration` and
-    :func:`generate_slide_images`, then assembles the result with
-    :func:`render_video`.
+    Args:
+        title: Report title
+        sections: List of dicts with 'heading' and 'body' keys
+        output_path: Optional output MP4 path (default: temp dir)
+        config: Optional VideoConfig
+        voice: TTS voice name
 
-    Temporary artefacts (audio MP3 and slide PNGs) are written to a
-    temporary directory (or next to *output_path*) and cleaned up
-    after a successful render.  On failure the artefacts are left
-    in place for post-mortem inspection.
+    Returns:
+        Absolute path to the rendered MP4.
 
-    Parameters
-    ----------
-    title : str
-        Report / video title.
-    sections : list[dict]
-        Section dicts with ``"heading"`` and ``"body"`` keys.
-    output_path : str, optional
-        Destination path for the MP4 file.  Defaults to
-        ``<TMPDIR>/autoinfo_video_<timestamp>.mp4``.
-    config : VideoConfig, optional
-        Video render settings.
-    voice : str
-        TTS voice name forwarded to :func:`generate_audio_narration`.
-
-    Returns
-    -------
-    str
-        Absolute path to the rendered MP4 file.
-
-    Raises
-    ------
-    FileNotFoundError
-        If FFmpeg is not installed.
-    RuntimeError
-        If TTS audio generation or video assembly fails.
+    Raises:
+        FileNotFoundError: bun / ffmpeg missing
+        RuntimeError: TTS / lint / render failure
     """
-    if config is None:
-        config = VideoConfig()
+    cfg = config or VideoConfig()
 
-    # --- Prepare working directory ----------------------------------------
     work_dir = tempfile.mkdtemp(prefix="autoinfo_video_")
-
+    audio_path: str | None = None
     try:
-        # 1. Generate audio narration
-        audio_path = generate_audio_narration(
+        # 1. TTS narration
+        audio_dir = os.path.join(work_dir, "audio")
+        audio_path = generate_audio_narration(title, sections, audio_dir, voice=voice)
+
+        # 2. HyperFrames project
+        project_dir = os.path.join(work_dir, "project")
+        generate_hyperframes_project(
             title=title,
             sections=sections,
-            output_dir=work_dir,
-            voice=voice,
-        )
-
-        # 2. Generate slide images
-        slide_paths = generate_slide_images(
-            title=title,
-            sections=sections,
-            output_dir=work_dir,
-            resolution=config.resolution,
-        )
-
-        # Filter to actual image files (Pillow path produces .png; placeholder
-        # path produces .txt — skip those)
-        real_images = [
-            p for p in slide_paths
-            if os.path.isfile(p) and p.lower().endswith((".png", ".jpg", ".jpeg"))
-        ]
-        if not real_images:
-            raise RuntimeError(
-                "No slide images were generated (Pillow may be missing)"
-            )
-
-        # 3. Determine output path
-        if output_path is None:
-            import time
-
-            output_path = os.path.join(
-                work_dir,
-                f"autoinfo_video_{int(time.time())}.mp4",
-            )
-
-        # 4. Render video via FFmpeg
-        render_video(
+            output_dir=project_dir,
             audio_path=audio_path,
-            image_paths=real_images,
-            output_path=output_path,
-            config=config,
+            config=cfg,
         )
 
-        # 5. Clean up temp artefacts (keep only the MP4)
-        _cleanup_temp_artefacts(work_dir, output_path)
+        # 3. Render
+        if output_path is None:
+            output_path = os.path.join(
+                work_dir, f"autoinfo_video_{int(time.time())}.mp4"
+            )
+        render_hyperframes(project_dir, output_path, quality=cfg.quality)
 
-        return output_path
-
+        return os.path.abspath(output_path)
     except Exception:
-        logger.warning(
-            "Video generation failed — artefacts preserved in %s",
-            work_dir,
-            exc_info=True,
-        )
+        # Preserve work_dir on failure for post-mortem inspection.
+        logger.error("Video generation failed; work dir kept at %s", work_dir, exc_info=True)
         raise
-
-
-def _cleanup_temp_artefacts(work_dir: str, output_path: str) -> None:
-    """Remove temporary audio/image artefacts, keeping only the MP4."""
-    keep = os.path.abspath(output_path)
-    for entry in os.listdir(work_dir):
-        full = os.path.join(work_dir, entry)
-        if os.path.abspath(full) == keep:
-            continue
-        try:
-            if os.path.isfile(full):
-                os.unlink(full)
-            elif os.path.isdir(full):
-                shutil.rmtree(full, ignore_errors=True)
-        except OSError:
-            pass
+    else:
+        # Clean up the temp project on success — only the MP4 matters.
+        shutil.rmtree(work_dir, ignore_errors=True)

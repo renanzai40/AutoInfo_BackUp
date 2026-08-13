@@ -43,7 +43,7 @@ Returns structured health with composite score. On degraded status, inspect
 2. If LLM is missing, LLM-required tools return LLM_NOT_CONFIGURED (not a raw auth error) — see docs/dev/required-api-keys.md
 ```
 
-Any of the 14 LLM-required tools (e.g. `process_collection`, `generate_digest`,
+Any of the 17 LLM-required tools (e.g. `process_collection`, `generate_digest`,
 `suggest_keywords`) return `ErrorCode.LLM_NOT_CONFIGURED` at dispatch when no
 key is configured.
 
@@ -264,7 +264,7 @@ targeting.
 ## Run MCP-native validation
 
 ```
-1. list_validation_scenarios() → returns available scenario names (67 built-in across all MCP categories, CLI, and REST API surfaces)
+1. list_validation_scenarios() → returns available scenario names (68 built-in across all MCP categories, CLI, and REST API surfaces)
 2. run_validation_scenario(scenario="system-health") → executes steps in-process (real tool calls, real subprocesses for CLI steps, real HTTP requests for REST steps), returns {success, data: {scenario, status: passed|failed|unconfigured, summary, steps}}
 3. Scenarios with requires_env (e.g. llm-gated needs AUTOINFO_LLM_API_KEY) return status "unconfigured" when env vars are missing — never silently skipped, never fake-passed. Director User must provide BYOK keys during onboarding.
 4. Steps may use llm_assert — a real LLM call judges the tool output against a natural-language assertion (semantic validation, not just structure checks)

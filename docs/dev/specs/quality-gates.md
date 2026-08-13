@@ -28,6 +28,8 @@ Each quality gate operates at a specific pipeline stage, evaluates a different s
 
 **Key rule**: G0-G3 are **mandatory** on every collected item. G4-G5 are **opt-in** (require explicit flags because they make LLM calls). **CurationGate** runs at Draft→Wiki promotion time (see §3.1). D1-D3 run **only for PROCESSED products**; RAW products skip all delivery gates.
 
+**Concurrency note (gate semantics unchanged, 2026-08-13)**: post-extraction gates G3/G4/G5/CEFR run concurrently per item (bounded by `AUTOINFO_SUBTASK_CAP`, default 4; canonical gate order, G3 retry loop, G4 hard-gate 3× retry and the G0-G5 report order are preserved). All gate LLM calls route through `llm.call_with_fallback` and inherit the shared per-provider rate limiter (`AUTOINFO_LLM_MAX_CONCURRENCY`, default 4) + jittered 429/5xx backoff; G4/G5 judgment calls resolve to the release-pinned `JUDGMENT_MODEL` (see [`pipeline.md`](pipeline.md) §3.5).
+
 Pipeline diagram:
 
 ```
@@ -58,9 +60,10 @@ Raw Item ─→ [G0][G1][G2][G3] ─→ 01-Raw KB ─→ LLM Extract ─→ 02-D
 |------|----------|---------------|----------------|------------------------------|----------|
 | **G0: Schema integrity** | 🔴 Hard | Entry structure, mandatory fields (`source_url`, `source_type`, `source_platform`), frontmatter validity | Retry once (re-parse) | Block item; log full parse diagnostics | 🔴 P0 |
 | **G1: Source authority** | 🟡 Soft | Source quality tier check. Items from Tier 3+ flagged. User's minimum tier enforced. Computes a deterministic `source_score` (0-100) from `quality_tier` via `SOURCE_TIER_SCORE_MAP` (tier1=90, tier2=70, tier3=50, tier4=30) — see `src/autoinfo/quality.py`. The `quality_tier` is propagated from source config at collect time (`source_config.quality_tier` takes precedence over `item.quality_tier`). The score map is overridable via `QualityGateConfig.source_score_map`. The resulting `source_score` is persisted on the `KBEntry` and surfaced in search results (E9). | No retry (tier is static) | Hide from default view; store with warning flag | 🔴 P0 |
+| **G1-ToS: Terms-of-Service Compliance (F46)** | 🟡 Soft | ToS compliance check against the source's quality tier → ToS map (`_TIER_TOS_MAP` in `src/autoinfo/quality.py`, gate `G1TosCompliance`, `gate_name` `G1-TosCompliance`): Open/Licensed/Restricted/Sensitive tiers map to their ToS obligations (attribution, output controls); violations are flagged, never block. | No retry (static tier→ToS map) | Flag item with ToS violation detail; store with warning flag | 🟡 P1 |
 | **G2: Dedup** | 🟡 Soft | URL exact match + fuzzy title match (within configurable window, default 30 days). | No retry (deterministic) | Skip duplicate; log "already collected [date]" | 🔴 P0 |
 | **G3: Relevance scoring** | 🟡 Soft | LLM-based relevance score against user's topics and keywords. Score 0-100. | Retry 2x with different model | Below threshold → archived (stored but not shown) | 🔴 P0 |
-| **G4: Summary factual consistency** | 🔴 Hard | LLM verifies: does the generated summary contradict the source text? | Retry 3x with escalating context (different model each retry) | Block item; flag for human review with full diff | 🟡 P1 |
+| **G4: Summary factual consistency** | 🔴 Hard | LLM verifies: does the generated summary contradict the source text? Judgment calls re-enable reasoning-model chain-of-thought (`disable_thinking=False`) with a raised budget (2000 tokens) — reasoning improves contradiction detection; CoT is disabled elsewhere to avoid token-budget truncation of JSON output. | Retry 3x with escalating context (different model each retry) | Block item; flag for human review with full diff | 🟡 P1 |
 | **G5: Translation accuracy** | 🟡 Soft | Multi-round verification: (1) faithfulness to original, (2) back-translation consistency, (3) domain terminology compliance, (4) style/tone match. Composite quality score 0-100. | Retry 2x with escalating context | Flag translation issues at each round; store both versions with per-round diagnostics; below-threshold scores trigger human review prompt | 🟡 P1 |
 | **CurationGate: Promotion admission** | 🔴 Hard | Admission for Draft→Wiki promotion (`check_promotion_admission` in `src/autoinfo/promotion.py`): (a) provenance completeness: `source_raw_ids` non-empty and every 01-Raw reference resolves with `source_url`/`source_type`/`source_platform`; (b) G0 schema re-check on the draft; (c) G1 `source_score` ≥ threshold (default 30); (d) G3 `relevance_score` ≥ threshold (default 30); (e) G4 factual re-check on the final body text (LLM, **on by default**: a fail is a hard reject). Deterministic checks (a)-(d) accumulate every rejection reason; G4 only runs when they are clean (fail-fast, no wasted LLM spend). | Hard: reject immediately (G4 3× retry with escalating context first); no retry for deterministic checks | Block promotion; typed `PromotionRejected` with per-component reason codes; entry stays 02-Draft; `_failed/` marker written | 🔴 P0 |
 
@@ -160,7 +163,7 @@ quality_gates:
 
 ## 8. ErrorCode & Error Response System
 
-The MCP server uses a unified error response system (`src/autoinfo/mcp/errors.py`) that provides consistent error classification across all 145 MCP tools. The `ErrorCode` enum (28 values) covers all known failure modes and includes seven codes added since v1.8:
+The MCP server uses a unified error response system (`src/autoinfo/mcp/errors.py`) that provides consistent error classification across all 145 MCP tools. The `ErrorCode` enum (28 values) covers all known failure modes and includes eight codes added since v1.8 (incl. `DIRECTOR_ONLY`):
 
 | Code | Value | Purpose |
 |------|-------|---------|
@@ -171,8 +174,9 @@ The MCP server uses a unified error response system (`src/autoinfo/mcp/errors.py
 | `NO_CACHED_ITEMS` | `"NoCachedItems"` | No cached collection items to process (v1.8.1) |
 | `EMPTY_RESULT` | `"EmptyResult"` | Operation produced an empty result (v1.8.1) |
 | `CONFIG_NOT_FOUND` | `"ConfigNotFound"` | Project configuration not found (v1.8.1) |
+| `DIRECTOR_ONLY` | `"DIRECTOR_ONLY"` | Director-only tool dispatched to a non-director actor — e.g. `force_promote` / `demote_kb_wiki` / `soft_delete_entry` purge (actor whitelist `AUTOINFO_DIRECTOR_ACTORS`, default `director`) |
 
-These seven codes extend the existing 20 error codes (`NotFound`, `DomainNotFound`, `ValidationError`, `InvalidSourceId`, `SourceNotFound`, `Timeout`, `TopicNotFound`, `KeywordNotFound`, `EmailNotEnabled`, `EmailSendFailed`, `InvalidCronExpression`, `ScheduleAlreadyExists`, `ScheduleNotFound`, `NotPublished`, `CollectionFailed`, `ProcessingFailed`, `InvalidSection`, `UnknownTool`, `ConfirmationRequired`, `InternalError`). The three v1.8 codes (`AuthRequired`, `RateLimited`, `SessionExpired`) remain reserved for future use; the four v1.8.1 codes (`LLMNotConfigured`, `NoCachedItems`, `EmptyResult`, `ConfigNotFound`) are actively thrown — `LLM_NOT_CONFIGURED` is dispatched centrally by `call_tool` for all 14 LLM-required tools.
+These eight codes extend the existing 20 error codes (`NotFound`, `DomainNotFound`, `ValidationError`, `InvalidSourceId`, `SourceNotFound`, `Timeout`, `TopicNotFound`, `KeywordNotFound`, `EmailNotEnabled`, `EmailSendFailed`, `InvalidCronExpression`, `ScheduleAlreadyExists`, `ScheduleNotFound`, `NotPublished`, `CollectionFailed`, `ProcessingFailed`, `InvalidSection`, `UnknownTool`, `ConfirmationRequired`, `InternalError`). The three v1.8 codes (`AuthRequired`, `RateLimited`, `SessionExpired`) remain reserved for future use; the four v1.8.1 codes (`LLMNotConfigured`, `NoCachedItems`, `EmptyResult`, `ConfigNotFound`) are actively thrown — `LLM_NOT_CONFIGURED` is dispatched centrally by `call_tool` for all 17 LLM-required tools.
 
 **Dual-format responses**: Error responses are backward-compatible via two formats:
 

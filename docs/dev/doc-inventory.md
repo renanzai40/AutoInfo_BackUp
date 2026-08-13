@@ -2,7 +2,7 @@
 
 # Documentation Inventory
 
-AUTO-GENERATED inventory of Markdown/YAML files under `docs/`, produced by `scripts/doc_inventory.py`. **Do not edit by hand.** Regenerate:
+AUTO-GENERATED inventory of Markdown/YAML/JSON files under `docs/`, produced by `scripts/doc_inventory.py`. **Do not edit by hand.** Regenerate:
 
 ```bash
 python3 scripts/doc_inventory.py          # regenerate this file
@@ -13,21 +13,32 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 
 | Metric | Value |
 |--------|-------|
-| Total files | 41 |
-| Total lines | 21984 |
-| Active files | 32 |
+| Total files | 66 |
+| Total lines | 26402 |
+| Active files | 57 |
 | Archived files | 9 |
 | Category — archive | 9 files / 4932 lines |
 | Category — known-limitations | 1 files / 255 lines |
+| Category — schemas | 4 files / 397 lines |
 | Category — skills | 3 files / 785 lines |
-| Category — specs | 12 files / 8424 lines |
-| Category — validation-reports | 2 files / 219 lines |
-| Category — docs/dev | 14 files / 7369 lines |
+| Category — adr | 8 files / 384 lines |
+| Category — specs | 12 files / 8766 lines |
+| Category — validation-reports | 8 files / 2620 lines |
+| Category — docs/dev | 20 files / 8202 lines |
+| Category — docs/root | 1 files / 61 lines |
 
 ## Inventory
 
 | Relative path | Lines | Category | Status | Doc-type |
 |---------------|------:|----------|--------|----------|
+| `adr/0001-kb-pipeline-raw-sole-entry.md` | 41 | adr | active | adr |
+| `adr/0002-draft-to-wiki-agent-promotion.md` | 46 | adr | active | adr |
+| `adr/0003-llm-fallback-chain.md` | 44 | adr | active | adr |
+| `adr/0004-reasoning-model-json-mode-thinking.md` | 48 | adr | active | adr |
+| `adr/0005-unified-success-error-envelope.md` | 49 | adr | active | adr |
+| `adr/0006-dev-process-workflow-charter.md` | 72 | adr | active | adr |
+| `adr/README.md` | 52 | adr | active | adr-index |
+| `adr/TEMPLATE.md` | 32 | adr | active | adr |
 | `archive/agent-tester-validation.md` | 663 | archive | archived | — |
 | `archive/end-user-sla.md` | 126 | archive | archived | — |
 | `archive/epics-issue-97-coverage-verdict.md` | 109 | archive | archived | — |
@@ -37,35 +48,52 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `archive/launch-validation-report.md` | 273 | archive | archived | — |
 | `archive/migration-v1.9.md` | 58 | archive | archived | — |
 | `archive/reports/global-content-paid-research-report-trae.md` | 973 | archive | archived | — |
+| `autoinfo-validation-master-plan/LOOP-LOG.md` | 57 | docs/dev | active | — |
+| `autoinfo-validation-master-plan/part-02-cli-depth-results-q10-q18.md` | 170 | docs/dev | active | — |
 | `autoinfo-validation-master-plan/part-12-final-verdict.md` | 381 | docs/dev | active | — |
+| `autoinfo-validation-master-plan/scenarios/enduser-deliverable.yaml` | 234 | docs/dev | active | — |
 | `dev/acceptance-framework.md` | 494 | docs/dev | active | — |
 | `dev/agent-alerting.md` | 129 | docs/dev | active | — |
 | `dev/cli-mcp-rest-parity.md` | 466 | docs/dev | active | — |
-| `dev/cross-dimensional-catalog.md` | 973 | docs/dev | active | — |
+| `dev/cross-dimensional-catalog.md` | 982 | docs/dev | active | — |
 | `dev/director-user-guide.md` | 756 | docs/dev | active | — |
 | `dev/enduser-capabilities-guide.md` | 372 | docs/dev | active | — |
-| `dev/enduser-coverage-matrix.md` | 480 | docs/dev | active | — |
+| `dev/enduser-coverage-matrix.md` | 483 | docs/dev | active | — |
 | `dev/founder-expectations.md` | 471 | docs/dev | active | — |
 | `dev/mcp-usage-examples.md` | 324 | docs/dev | active | — |
 | `dev/new-domain-guide.md` | 935 | docs/dev | active | — |
+| `dev/plans/README.md` | 50 | docs/dev | active | plan-index |
 | `dev/required-api-keys.md` | 127 | docs/dev | active | — |
 | `dev/research/综合报告-资讯付费与AI触达研究.md` | 702 | docs/dev | active | — |
-| `dev/specs/data-models.md` | 745 | specs | active | — |
-| `dev/specs/delivery.md` | 1244 | specs | active | — |
-| `dev/specs/end-user-matrix.yaml` | 866 | specs | active | — |
+| `dev/specs/data-models.md` | 766 | specs | active | — |
+| `dev/specs/delivery.md` | 1266 | specs | active | — |
+| `dev/specs/end-user-matrix.yaml` | 1122 | specs | active | — |
 | `dev/specs/expectations.md` | 1188 | specs | active | — |
 | `dev/specs/market-positioning.md` | 404 | specs | active | market-positioning |
 | `dev/specs/mcp-tools.md` | 85 | specs | active | — |
 | `dev/specs/multi-tenancy-auth.md` | 770 | specs | active | — |
-| `dev/specs/operations.md` | 933 | specs | active | — |
-| `dev/specs/ops-runbook.md` | 1022 | specs | active | — |
-| `dev/specs/pipeline.md` | 543 | specs | active | — |
-| `dev/specs/quality-gates.md` | 183 | specs | active | — |
+| `dev/specs/operations.md` | 930 | specs | active | — |
+| `dev/specs/ops-runbook.md` | 1040 | specs | active | — |
+| `dev/specs/pipeline.md` | 567 | specs | active | — |
+| `dev/specs/quality-gates.md` | 187 | specs | active | — |
 | `dev/specs/user-lifecycle-definition.md` | 441 | specs | active | — |
 | `dev/validation-reports/README.md` | 53 | validation-reports | active | — |
 | `dev/validation-reports/acceptance-2026-08-08.md` | 166 | validation-reports | active | — |
-| `dev/validation-scenario-contract.md` | 759 | docs/dev | active | — |
+| `dev/validation-reports/acceptance-2026-08-12.md` | 113 | validation-reports | active | — |
+| `dev/validation-reports/evidence-2026-08-12/AC5-verdict.md` | 34 | validation-reports | active | — |
+| `dev/validation-reports/evidence-2026-08-12/ac5-column.md` | 796 | validation-reports | active | — |
+| `dev/validation-reports/evidence-2026-08-12/ac5-digest-weekly.md` | 144 | validation-reports | active | — |
+| `dev/validation-reports/evidence-2026-08-12/ac5-report-standard.md` | 813 | validation-reports | active | — |
+| `dev/validation-reports/evidence-2026-08-12/ac5-tutorial-student.md` | 501 | validation-reports | active | — |
+| `dev/validation-scenario-contract.md` | 768 | docs/dev | active | — |
+| `dev/workflow-charter.md` | 67 | docs/dev | active | workflow-charter |
+| `dev/七阶段AI开发流程-用CodingAgent交付成品的方法论.md` | 234 | docs/dev | active | methodology |
+| `glossary.md` | 61 | docs/root | active | glossary |
 | `known-limitations/blocked-sources.md` | 255 | known-limitations | active | — |
+| `schemas/knowledge-base-export-v1.json` | 72 | schemas | active | — |
+| `schemas/knowledge-digest-v1.json` | 154 | schemas | active | — |
+| `schemas/knowledge-presentation-v1.json` | 72 | schemas | active | — |
+| `schemas/knowledge-tutorial-v1.json` | 99 | schemas | active | — |
 | `skills/autoinfo-skill/SKILL.md` | 295 | skills | active | — |
 | `skills/autoinfo-skill/onboarding-walkthrough.md` | 121 | skills | active | — |
 | `skills/translator-qa-skill/SKILL.md` | 369 | skills | active | — |

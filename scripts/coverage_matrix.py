@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Generate the end-user coverage matrix report (E8, issue #131).
 
-Reads ``docs/dev/specs/end-user-matrix.yaml`` (sparse spec: 13 demo domains
-x 8 products x 7 formats) plus real evidence — ``outputs/**`` persisted
+Reads ``docs/dev/specs/end-user-matrix.yaml`` (spec: 13 demo domains
+x 8 products x 8 formats) plus real evidence — ``outputs/**`` persisted
 artifacts (``outputs/<domain>/<product>-<format>-<stamp>.<ext>``, written by
 the MCP ``persist`` path) and the ``manifest.json`` from
 ``scripts/validation_delivery.py`` (bare or inside its ``*.zip`` archive) —
@@ -55,7 +55,10 @@ SCENARIO_PRODUCTS = {
     "premium-briefing", "column", "magazine-digest",
     "enterprise-briefing",
 }
-SCENARIO_FORMATS = {"markdown", "html", "json", "agent", "audio", "epub", "audiobook"}
+SCENARIO_FORMATS = {
+    "markdown", "html", "json", "agent", "audio", "video",
+    "epub", "audiobook",
+}
 # Well-known source tokens appearing in scenario yaml (name/step values).
 SCENARIO_SOURCES = {
     "pubmed", "openalex", "crossref", "dblp", "arxiv", "semantic-scholar",
@@ -72,6 +75,7 @@ FORMAT_EXT = {
     "json": ".json",
     "agent": ".json",
     "audio": ".mp3",
+    "video": ".mp4",
     "epub": ".epub",
     "audiobook": ".zip",
 }
@@ -82,8 +86,8 @@ FORMAT_EXT = {
 # Stamp variants: standard %Y%m%d-%H%M%S (persist path) and the
 # regenerate_paygrade.py literal "YYYYmmdd-paygrade" (issue #182 sweep).
 _PERSISTED_RE = re.compile(
-    r"^(?P<product>.+?)-(?P<format>markdown|html|json|agent|audio|epub|audiobook)"
-    r"-\d{8}(?:-\d{6}|-paygrade)(?P<ext>\.md|\.json|\.html|\.mp3|\.epub|\.zip)$"
+    r"^(?P<product>.+?)-(?P<format>markdown|html|json|agent|audio|video|epub|audiobook)"
+    r"-\d{8}(?:-\d{6}|-paygrade)(?P<ext>\.md|\.json|\.html|\.mp3|\.mp4|\.epub|\.zip)$"
 )
 
 Cell = tuple[str, str, str]  # (domain, product, format)
@@ -217,31 +221,57 @@ def scan_evidence(evidence_dir: str | Path) -> set[Cell]:
 
     produced: set[Cell] = set()
 
-    outputs_dir = root / "outputs"
+    # The evidence dir may be the project root (contains outputs/) or the
+    # outputs/ dir itself — handle both so `--evidence .` and
+    # `--evidence outputs` behave identically.
+    outputs_dir = root / "outputs" if (root / "outputs").is_dir() else root
     if outputs_dir.is_dir():
         for f in outputs_dir.rglob("*"):
             if not f.is_file():
                 continue
-            cell = parse_persisted_path(f.as_posix())
+            # Normalise to the expected outputs/<domain>/<file> shape so
+            # parse_persisted_path resolves the domain + product + format.
+            parts = f.as_posix().split("/")
+            try:
+                out_idx = parts.index("outputs")
+            except ValueError:
+                out_idx = -1
+            if out_idx >= 0 and out_idx + 2 <= len(parts) - 1:
+                rel = "/".join(parts[out_idx:])
+            else:
+                rel = f"outputs/{parts[-2]}/{parts[-1]}"
+            cell = parse_persisted_path(rel)
             if cell is not None:
                 produced.add(cell)
 
-    for mf in root.rglob("manifest.json"):
-        try:
-            data = json.loads(mf.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError):
+    # Manifest / zip scanning is bounded to validation-deliveries/ and
+    # outputs/ — rglob over the whole project root (--evidence .) is slow
+    # and finds stray manifests in unrelated dirs.
+    scan_roots = [
+        root / "validation-deliveries",
+        root / "outputs" / "validation-deliveries",
+        root / "outputs",
+    ]
+    for mf_root in scan_roots:
+        if not mf_root.is_dir():
             continue
-        produced |= _cells_from_manifest(data)
+        for mf in mf_root.rglob("manifest.json"):
+            try:
+                data = json.loads(mf.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                continue
+            produced |= _cells_from_manifest(data)
 
-    for zp in root.rglob("*.zip"):
-        try:
-            with zipfile.ZipFile(zp) as zf:
-                if "manifest.json" not in zf.namelist():
-                    continue
-                data = json.loads(zf.read("manifest.json").decode("utf-8"))
-        except (OSError, zipfile.BadZipFile, json.JSONDecodeError, KeyError):
-            continue
-        produced |= _cells_from_manifest(data)
+    for zp_root in scan_roots:
+        for zp in zp_root.rglob("*.zip"):
+            try:
+                with zipfile.ZipFile(zp) as zf:
+                    if "manifest.json" not in zf.namelist():
+                        continue
+                    data = json.loads(zf.read("manifest.json").decode("utf-8"))
+            except (OSError, zipfile.BadZipFile, json.JSONDecodeError, KeyError):
+                continue
+            produced |= _cells_from_manifest(data)
 
     return produced
 
@@ -406,6 +436,47 @@ def scan_scenario_library(
             if s in low:
                 out["sources"].add(s)
     return out
+
+
+def _channel_token(channel: str) -> str:
+    """Map a spec channel name to a scenario-library scan token."""
+    return {
+        "social_video": "social",
+        "search_ai_overview": "search",
+        "tv_broadcast": "tv",
+        "ai_chatbot": "chatbot",
+        "owned_website_app": "web",
+        "push_notification": "push",
+        "email_newsletter": "email",
+        "mobile_app": "app",
+        "podcast_directory": "podcast",
+        "rss_feed": "rss",
+        "browser_navigation": "browser",
+        "affiliate": "affiliate",
+        "mcp_a2a_agent": "mcp",
+        "wechat_ecosystem": "wechat",
+    }.get(channel, channel)
+
+
+def _capability_token(capability: str) -> str:
+    """Map a spec capability name to a scenario-library scan token."""
+    return {
+        "mcp_exposure": "mcp",
+        "paid_user_management": "subscription",
+        "usage_metering": "cost",
+        "multi_channel_delivery": "delivery",
+        "rag_output": "query",
+        "personalized_recommendation": "recommend",
+        "scheduled_tasks": "cron",
+        "webhook_integration": "webhook",
+        "source_credibility": "source_score",
+        "content_compliance": "tos",
+        "api_data_licensing": "raw",
+        "single_article_payment": "checkout",
+        "raas_performance_pricing": "raas",
+        "content_simplification": "simplify",
+        "a2a_protocol": "a2a",
+    }.get(capability, capability)
 
 
 # ---------------------------------------------------------------------------
@@ -592,10 +663,50 @@ def render_report(
         f"— missing: {', '.join(miss_formats) or 'none'}"
     )
     lines.append(
-        f"- Source tokens exercised: {len(sc['sources'])}/27 (best-effort "
-        f"text scan) — missing: {', '.join(sorted(set(spec_sources) - sc['sources'])) or 'none'}"
+        f"- Source tokens exercised: {len(sc['sources'])}/{len(spec_sources)} "
+        f"(best-effort text scan) — missing: "
+        f"{', '.join(sorted(set(spec_sources) - sc['sources'])) or 'none'}"
     )
     lines.append("")
+
+    # --- CHANNEL_COVERAGE / CAPABILITY_COVERAGE (v3 dimensions) ---
+    channels = spec.get("channels", [])
+    if channels:
+        lines.append("## CHANNEL_COVERAGE")
+        lines.append("")
+        lines.append(
+            "Distribution channels (report §5.1 + §10.2 China touchpoints) "
+            "declared in the spec — delivery adapters live in "
+            "`src/autoinfo/delivery/__init__.py::_CHANNEL_REGISTRY`; "
+            "scenario-library exercise status is best-effort text scan:"
+        )
+        lines.append("")
+        lines.append("| Channel | Scenario library |")
+        lines.append("|---------|------------------|")
+        for ch in channels:
+            token = _channel_token(ch)
+            exercised = "✅" if token in sc["sources"] else "—"
+            lines.append(f"| {ch} | {exercised} |")
+        lines.append("")
+
+    capabilities = spec.get("capabilities", [])
+    if capabilities:
+        lines.append("## CAPABILITY_COVERAGE")
+        lines.append("")
+        lines.append(
+            "Agent capabilities (report §6.5 usage scenarios / §8.3 business "
+            "models) declared in the spec — each maps to MCP tools in "
+            "`src/autoinfo/mcp/server.py`; scenario-library exercise status "
+            "is best-effort text scan:"
+        )
+        lines.append("")
+        lines.append("| Capability | Scenario library |")
+        lines.append("|------------|------------------|")
+        for cap in capabilities:
+            token = _capability_token(cap)
+            exercised = "✅" if token in sc["sources"] else "—"
+            lines.append(f"| {cap} | {exercised} |")
+        lines.append("")
 
     return "\n".join(lines) + "\n"
 

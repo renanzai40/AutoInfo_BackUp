@@ -188,7 +188,6 @@ class YouTubeHandler(BaseHandler):
             logger.warning("YouTube fetch called with empty query; returning empty list.")
             return []
 
-        page_size = min(limit, MAX_RESULTS_PER_PAGE)
         all_videos: list[dict[str, Any]] = []
         next_page_token: str | None = None
         pages_requested = 0

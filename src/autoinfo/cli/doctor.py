@@ -192,12 +192,12 @@ def _print_verbose(v: dict[str, Any]) -> None:
         typer.echo(f"    Log entries: {cost.get('log_count', 0)}")
         by_type = cost.get("by_type", {})
         if by_type:
-            typer.echo(f"    By type:")
+            typer.echo("    By type:")
             for t, c in sorted(by_type.items(), key=lambda x: x[1], reverse=True):
                 typer.echo(f"      {t}: ${c:.6f}")
         llm_models = cost.get("llm_models", {})
         if llm_models:
-            typer.echo(f"    LLM models:")
+            typer.echo("    LLM models:")
             for mdl, info in llm_models.items():
                 tokens = info.get("total_tokens", 0)
                 calls = info.get("call_count", 0)
@@ -205,7 +205,7 @@ def _print_verbose(v: dict[str, Any]) -> None:
                 typer.echo(f"      {mdl}: {tokens:,} tokens, {calls} calls, ${cst:.6f}")
         api_srcs = cost.get("api_sources", {})
         if api_srcs:
-            typer.echo(f"    API sources:")
+            typer.echo("    API sources:")
             for src_name, info in api_srcs.items():
                 calls = info.get("call_count", 0)
                 cst = info.get("cost", 0)

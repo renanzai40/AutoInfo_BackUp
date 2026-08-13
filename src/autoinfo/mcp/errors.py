@@ -7,11 +7,9 @@ functions to build error responses in the shape expected by agents.
 
 from __future__ import annotations
 
-import json
 from enum import Enum
 from typing import Any, TypedDict
 
-from mcp.types import TextContent
 
 
 class ErrorCode(str, Enum):

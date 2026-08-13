@@ -7,14 +7,21 @@ and Atom feeds into :class:`Item <autoinfo.models.Item>` instances.
 from __future__ import annotations
 
 import logging
+import os
+import urllib.parse
 from datetime import timezone
 from typing import Any
 
 import feedparser
+import httpx
 
 from autoinfo.collectors.base import BaseHandler, SourceFailure
 from autoinfo.collectors.web import WebHandler
 from autoinfo.models import Item
+
+# feedparser 6.x has no timeout support; fetch over httpx with a bounded
+# timeout first so a hung feed cannot stall the whole collect run.
+_RSS_FETCH_TIMEOUT = 30  # seconds
 
 logger = logging.getLogger(__name__)
 
@@ -68,8 +75,25 @@ class RSSHandler(BaseHandler):
             structured failure instead of a silent empty list (issue #135).
         """
         try:
-            parsed = feedparser.parse(url, agent="AutoInfo/1.8 (autoinfo@example.com)")
-        except Exception as exc:
+            # Local file (path or file:// URI — tests/offline fixtures)
+            # parses directly; remote URLs are fetched over httpx with a
+            # bounded timeout — feedparser itself has no timeout and can
+            # hang on a dead feed. file:// paths may carry URL-encoded
+            # characters (e.g. %E8 for non-ASCII) — decode before isfile.
+            local_path = (
+                urllib.parse.unquote(url[7:]) if url.startswith("file://") else url
+            )
+            if os.path.isfile(local_path):
+                with open(local_path, "rb") as fh:
+                    parsed = feedparser.parse(fh.read(), agent="AutoInfo/1.8 (autoinfo@example.com)")
+            else:
+                resp = httpx.get(url, timeout=_RSS_FETCH_TIMEOUT, follow_redirects=True)
+                resp.raise_for_status()
+                parsed = feedparser.parse(resp.content, agent="AutoInfo/1.8 (autoinfo@example.com)")
+        except httpx.TimeoutException as exc:
+            logger.error("RSS fetch timed out for %s: %s", url, exc)
+            raise SourceFailure(f"RSS fetch timed out for {url}: {exc}") from exc
+        except (httpx.HTTPError, Exception) as exc:
             logger.error("RSS fetch failed for %s: %s", url, exc)
             raise SourceFailure(f"RSS fetch failed for {url}: {exc}") from exc
 

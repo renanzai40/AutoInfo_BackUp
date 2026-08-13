@@ -1,0 +1,187 @@
+{
+  "meta": {
+    "source": "Open Design design systems — 150 个品牌级系统中精选的视频适用主题",
+    "count": 8,
+    "date": "2026-06-13",
+    "description": "视频美学精选 — Open Design 的完整设计语言不只含色值，还包括字阶/间距/用法规则",
+    "note": "这些主题来自专业设计系统，比纯色值主题(html-ppt-skill)多了一层排版层次和视觉一致性"
+  },
+  "themes": {
+    "od-warm-editorial": {
+      "name": "Warm Editorial — Open Design",
+      "dark": false,
+      "mood": ["light", "editorial", "warm"],
+      "description": "杂志感暖调。暖白纸底 + 陶土红点缀，适合深度分析/长内容视频",
+      "variables": {
+        "--bg": "#FAF7F2",
+        "--surface": "#FFFFFF",
+        "--text-1": "#1C1A17",
+        "--text-2": "#8A817A",
+        "--text-3": "#B0A8A0",
+        "--accent": "#C0512F",
+        "--accent-2": "#2F5B4F",
+        "--radius": "12px",
+        "--radius-sm": "8px",
+        "--radius-lg": "16px",
+        "--shadow": "0 2px 16px rgba(28,26,23,0.06)",
+        "--shadow-lg": "0 4px 24px rgba(28,26,23,0.10)",
+        "--font-sans": "'Söhne', -apple-system, system-ui, sans-serif",
+        "--font-display": "'GT Sectra', 'Times New Roman', serif"
+      }
+    },
+    "od-stripe": {
+      "name": "Stripe — Open Design",
+      "dark": true,
+      "mood": ["dark", "premium", "tech"],
+      "description": "深紫暗色，高级科技感。适合 B2B/金融/高端产品推广",
+      "variables": {
+        "--bg": "#061B31",
+        "--surface": "#0F2440",
+        "--text-1": "#F0F4F8",
+        "--text-2": "#8BA0B8",
+        "--text-3": "#5A7088",
+        "--accent": "#635BFF",
+        "--accent-2": "#00D4AA",
+        "--radius": "8px",
+        "--radius-sm": "4px",
+        "--radius-lg": "12px",
+        "--shadow": "0 2px 8px rgba(0,0,0,0.2)",
+        "--shadow-lg": "0 8px 32px rgba(0,0,0,0.3)",
+        "--font-sans": "'Inter', -apple-system, system-ui, sans-serif",
+        "--font-display": "'Inter', 'SF Pro Display', sans-serif"
+      }
+    },
+    "od-claude": {
+      "name": "Claude (Anthropic) — Open Design",
+      "dark": false,
+      "mood": ["light", "editorial", "warm", "human"],
+      "description": "温暖米色调，人文感强。适合分析/观点向内容",
+      "variables": {
+        "--bg": "#F5F4ED",
+        "--surface": "#FFFFFF",
+        "--text-1": "#1A1A1A",
+        "--text-2": "#8A8680",
+        "--text-3": "#B0ACA5",
+        "--accent": "#C96442",
+        "--accent-2": "#D4A88C",
+        "--radius": "8px",
+        "--radius-sm": "4px",
+        "--radius-lg": "12px",
+        "--shadow": "0 1px 3px rgba(0,0,0,0.06)",
+        "--shadow-lg": "0 4px 16px rgba(0,0,0,0.08)",
+        "--font-sans": "-apple-system, system-ui, sans-serif",
+        "--font-display": "'SF Pro Display', system-ui, sans-serif"
+      }
+    },
+    "od-linear": {
+      "name": "Linear — Open Design",
+      "dark": true,
+      "mood": ["dark", "tech", "clean"],
+      "description": "深蓝暗色，干净利落。适合开发者工具/技术产品视频",
+      "variables": {
+        "--bg": "#1C1C24",
+        "--surface": "#23252A",
+        "--text-1": "#E2E4E7",
+        "--text-2": "#8B8D94",
+        "--text-3": "#5C5E66",
+        "--accent": "#5E6AD2",
+        "--accent-2": "#7170FF",
+        "--radius": "6px",
+        "--radius-sm": "4px",
+        "--radius-lg": "10px",
+        "--shadow": "0 2px 8px rgba(0,0,0,0.25)",
+        "--shadow-lg": "0 6px 24px rgba(0,0,0,0.35)",
+        "--font-sans": "'Inter', -apple-system, system-ui, sans-serif",
+        "--font-display": "'Inter', 'SF Pro Display', sans-serif"
+      }
+    },
+    "od-minimal": {
+      "name": "Minimal — Open Design",
+      "dark": false,
+      "mood": ["light", "clean", "editorial"],
+      "description": "极致简约。浅灰底 + 黑色强调，适合纯内容驱动视频",
+      "variables": {
+        "--bg": "#F4F4F1",
+        "--surface": "#FFFFFF",
+        "--text-1": "#0C0C09",
+        "--text-2": "#6B6B66",
+        "--text-3": "#9C9C96",
+        "--accent": "#0C0C09",
+        "--accent-2": "#312C85",
+        "--radius": "4px",
+        "--radius-sm": "2px",
+        "--radius-lg": "8px",
+        "--shadow": "0 1px 2px rgba(0,0,0,0.04)",
+        "--shadow-lg": "0 4px 12px rgba(0,0,0,0.06)",
+        "--font-sans": "'Inter', -apple-system, system-ui, sans-serif",
+        "--font-display": "'Inter', 'SF Pro Display', sans-serif"
+      }
+    },
+    "od-hud": {
+      "name": "HUD — Open Design",
+      "dark": true,
+      "mood": ["dark", "tech", "terminal"],
+      "description": "终端绿暗色，科幻感。适合 CLI/开发者/技术深度内容",
+      "variables": {
+        "--bg": "#111316",
+        "--surface": "#1E2328",
+        "--text-1": "#E8EAED",
+        "--text-2": "#8E9399",
+        "--text-3": "#5C6168",
+        "--accent": "#00FF41",
+        "--accent-2": "#00CC33",
+        "--radius": "4px",
+        "--radius-sm": "2px",
+        "--radius-lg": "8px",
+        "--shadow": "0 2px 8px rgba(0,255,65,0.08)",
+        "--shadow-lg": "0 4px 20px rgba(0,255,65,0.15)",
+        "--font-sans": "'JetBrains Mono', 'IBM Plex Mono', monospace",
+        "--font-display": "'JetBrains Mono', monospace"
+      }
+    },
+    "od-opencode": {
+      "name": "OpenCode AI — Open Design",
+      "dark": true,
+      "mood": ["dark", "tech", "developer"],
+      "description": "深色开发者感。棕黑底 + 蓝强调，适合 AI 编码工具/开发者产品",
+      "variables": {
+        "--bg": "#201D1D",
+        "--surface": "#2A2727",
+        "--text-1": "#FDFCFC",
+        "--text-2": "#ADABAB",
+        "--text-3": "#646262",
+        "--accent": "#007AFF",
+        "--accent-2": "#5856D6",
+        "--radius": "8px",
+        "--radius-sm": "4px",
+        "--radius-lg": "12px",
+        "--shadow": "0 2px 8px rgba(0,0,0,0.3)",
+        "--shadow-lg": "0 6px 24px rgba(0,0,0,0.4)",
+        "--font-sans": "system-ui, -apple-system, sans-serif",
+        "--font-display": "'SF Pro Display', system-ui, sans-serif"
+      }
+    },
+    "od-vercel": {
+      "name": "Vercel — Open Design",
+      "dark": false,
+      "mood": ["light", "modern", "clean", "tech"],
+      "description": "极简白+黑，现代科技感。适合任何通用场景",
+      "variables": {
+        "--bg": "#FFFFFF",
+        "--surface": "#FAFAFA",
+        "--text-1": "#111111",
+        "--text-2": "#666666",
+        "--text-3": "#999999",
+        "--accent": "#000000",
+        "--accent-2": "#DE1D8D",
+        "--radius": "8px",
+        "--radius-sm": "4px",
+        "--radius-lg": "12px",
+        "--shadow": "0 1px 2px rgba(0,0,0,0.04)",
+        "--shadow-lg": "0 4px 16px rgba(0,0,0,0.06)",
+        "--font-sans": "'Inter', -apple-system, system-ui, sans-serif",
+        "--font-display": "'Inter', 'SF Pro Display', sans-serif"
+      }
+    }
+  }
+}

@@ -28,8 +28,8 @@ import re
 import shutil
 import sqlite3
 import tarfile
-import time
 import threading
+import time
 import uuid
 import xml.etree.ElementTree as ET
 import zipfile
@@ -2969,6 +2969,19 @@ def generate_digest(
                 limit=query_limit,
             )
 
+    # --- Archive/deprecated exclusion ----------------------------------------
+    digest_active: list[dict[str, Any]] = []
+    for entry in entries:
+        cf = entry.get("custom_fields") or "{}"
+        try:
+            cf_dict = json.loads(cf) if isinstance(cf, str) else dict(cf)
+        except (json.JSONDecodeError, TypeError):
+            cf_dict = {}
+        if cf_dict.get("status") in ("archived", "deprecated"):
+            continue
+        digest_active.append(entry)
+    entries = digest_active
+
     # --- Parse tags for each entry (they come as JSON strings from SQLite) ----
     for entry in entries:
         tags_raw = entry.get("tags", "")
@@ -3122,8 +3135,6 @@ def generate_digest(
         else:
             ebook_result = render_audiobook(ebook_chapters)
         rendered = ebook_result["data_b64"]
-    elif format == "video":
-        rendered = _render_video_scaffold(context, digest_title_domain, sections=None)
     else:
         rendered = _render_markdown(context)
 
@@ -3943,6 +3954,11 @@ _DEFAULT_DOMAIN_GUIDANCE = (
 # enough to return reliable JSON even for very long entry lists.
 _GROUPING_BATCH_SIZE = 8
 
+# Bounded worker pool for the per-batch grouping LLM calls.  Each call still
+# goes through the shared per-provider semaphore (llm.call_with_fallback), so
+# provider-level concurrency stays bounded even when the pool is this wide.
+_GROUPING_MAX_WORKERS = 4
+
 
 def _group_by_theme(
     extractor: LLMExtractor,
@@ -3997,13 +4013,45 @@ def _group_by_theme(
         entries[i : i + batch_size] for i in range(0, len(entries), batch_size)
     ]
 
-    merged: list[dict[str, Any]] = []
-    for batch in batches:
-        merged.extend(
-            _group_batch_by_theme(extractor, batch, domain=domain, domains=domains)
-        )
+    merged = _run_grouping_batches(
+        extractor, batches, domain=domain, domains=domains
+    )
 
     return _ensure_all_entries_grouped(_merge_theme_groups(merged), entries)
+
+
+def _run_grouping_batches(
+    extractor: LLMExtractor,
+    batches: list[list[dict[str, Any]]],
+    domain: str = "",
+    domains: list[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Run the per-batch LLM grouping calls with a bounded thread pool.
+
+    Batches are processed concurrently (bounded by ``_GROUPING_MAX_WORKERS``
+    workers) while ``_group_batch_by_theme`` results are collected by index,
+    so the final grouping list preserves the exact sequential batch order.
+    Each LLM call inside still routes through :func:`call_with_fallback` and
+    its shared per-provider semaphore, so per-provider concurrency stays
+    bounded regardless of the pool width.
+
+    Per-batch error behavior is identical to the sequential loop: a batch
+    that fails (or whose LLM call raises) falls back to deterministic
+    grouping inside ``_group_batch_by_theme``; if one ever raised, the first
+    failing batch's exception surfaces in batch order after the pool has
+    finished, exactly as the sequential ``for`` loop would.
+    """
+    workers = min(len(batches), _GROUPING_MAX_WORKERS)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
+        per_batch = list(
+            pool.map(
+                lambda batch: _group_batch_by_theme(
+                    extractor, batch, domain=domain, domains=domains
+                ),
+                batches,
+            )
+        )
+    return [g for batch_result in per_batch for g in batch_result]
 
 
 def _group_batch_by_theme(
@@ -6976,13 +7024,13 @@ def _render_video_scaffold(
     if isinstance(resolution, list):
         resolution = tuple(resolution)
     vcfg = VideoConfig(
-        fps=context.get("fps", 1),
+        fps=context.get("fps", 30),
         resolution=resolution,
-        transition=context.get("transition", "fade"),
-        bg_color=context.get("bg_color", "#1a1a2e"),
-        font_color=context.get("font_color", "#ffffff"),
-        font_size=context.get("font_size", 48),
+        theme=context.get("theme", "terminal-green"),
+        quality=context.get("quality", "draft"),
         tts_speed=context.get("tts_speed", 1.0),
+        scene_mode=context.get("scene_mode", "auto"),
+        theme_mood=context.get("theme_mood", ""),
     )
 
     output_path = os.path.join(output_dir, f"report_{timestamp}.mp4")

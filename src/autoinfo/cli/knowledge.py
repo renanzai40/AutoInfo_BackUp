@@ -19,8 +19,6 @@ from xml.etree import ElementTree as ET
 
 import typer
 
-from autoinfo.kb import KBStore
-
 knowledge_app = typer.Typer(help="Knowledge graph operations")
 graph_app = typer.Typer(help="Knowledge graph operations")
 
@@ -192,6 +190,8 @@ def export(
             err=True,
         )
         raise typer.Exit(code=1)
+
+    from autoinfo.kb import KBStore
 
     store = KBStore()
     data = store.export_knowledge_graph(domain=domain)

@@ -201,7 +201,7 @@ class TestKbListTiers:
             patch("autoinfo.config.get_config_path", return_value=tmp_project / ".autoinfo" / "config.yaml"),
         ):
             instance = MockStore.return_value
-            instance.list_kb_tier.return_value = []
+            instance.count_entries_by_tier.return_value = 0
 
             result = cli_runner.invoke(
                 app,
@@ -223,7 +223,7 @@ class TestKbListTiers:
             patch("autoinfo.config.get_config_path", return_value=tmp_project / ".autoinfo" / "config.yaml"),
         ):
             instance = MockStore.return_value
-            instance.list_kb_tier.return_value = []
+            instance.count_entries_by_tier.return_value = 0
 
             result = cli_runner.invoke(
                 app,

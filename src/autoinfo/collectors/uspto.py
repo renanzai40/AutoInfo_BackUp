@@ -302,9 +302,6 @@ class USPTOHandler(BaseHandler):
             ) from exc
         root = ET.fromstring(resp.text)
 
-        # RSS 2.0 namespace
-        ns = {"atom": "http://www.w3.org/2005/Atom"}
-
         patents: list[dict[str, Any]] = []
         items_found = 0
 

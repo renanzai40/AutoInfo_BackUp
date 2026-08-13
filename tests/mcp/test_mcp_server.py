@@ -571,9 +571,9 @@ class TestGetKBEntry:
         mock_instance.get_entry.return_value = None
 
         result = _handle_get_kb_entry(entry_id="nonexistent")
-        assert "error_code" in result
-        assert result["error_code"] == "NotFound"
-        assert "nonexistent" in result["message"]
+        assert result["success"] is False
+        assert result["error"]["code"] == "NotFound"
+        assert "nonexistent" in result["error"]["message"]
 
 
 # ======================================================================
@@ -960,9 +960,9 @@ class TestTestSourceKeyWarning:
                 url="https://api.nytimes.com/svc",
                 type="nyt",
             )
-        assert result["reachable"] is False
-        assert "error_code" in result
-        assert "AUTOINFO_NYT_API_KEY" in result["message"]
+        assert result["success"] is False
+        assert "error" in result
+        assert "AUTOINFO_NYT_API_KEY" in result["error"]["message"]
 
 
 # ======================================================================

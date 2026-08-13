@@ -551,19 +551,16 @@ MCP tool: `trace_item(trace_id)` returns full pipeline timeline for an item.
 
 Available at `http://localhost:8741/metrics` (configurable port):
 
-| Metric | Type | Labels |
-|--------|------|--------|
-| `autoinfo_collections_total` | Counter | domain, source, status |
-| `autoinfo_collection_duration_seconds` | Histogram | domain, source |
-| `autoinfo_processing_total` | Counter | domain, task_type |
-| `autoinfo_processing_duration_seconds` | Histogram | domain, task_type |
-| `autoinfo_llm_tokens_total` | Counter | domain, model, task_type |
-| `autoinfo_llm_cost_total` | Counter | domain, model |
-| `autoinfo_deliveries_total` | Counter | domain, channel, success |
-| `autoinfo_delivery_duration_seconds` | Histogram | domain, channel |
-| `autoinfo_gate_failures_total` | Counter | domain, gate, action |
-| `autoinfo_kb_entries_total` | Gauge | domain, tier |
-| `autoinfo_staleness_ratio` | Gauge | domain |
+| Metric | Type | Description |
+|--------|------|-------------|
+| `items_collected_total` | Counter | Total items collected across all domains |
+| `items_processed_total` | Counter | Total items successfully processed (LLM extraction) |
+| `extraction_tokens_total` | Counter | Total LLM tokens consumed during extraction |
+| `errors_total` | Counter | Total pipeline errors recorded |
+| `active_users` | Gauge | Active (non-cancelled) end-user profiles |
+| `storage_bytes` | Gauge | KB storage usage (bytes used by knowledge base Markdown files) |
+| `billing_stripe_sync_failures_total` | Counter | stripe_customer_id persistence failures in billing sync |
+| `delivery_failures_total` | Counter | Failed deliveries (agent callback outbox failures) |
 
 > **Canonical metrics reference** — `ops-runbook.md` §3.1 points here.
 

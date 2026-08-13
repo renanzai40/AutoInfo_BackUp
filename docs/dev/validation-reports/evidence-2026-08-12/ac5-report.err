@@ -1,0 +1,12 @@
+Promotion rejected for medical-research-draft-mrna-validation-draft (source-score-below-threshold, relevance-below-threshold) — marker written to /mnt/d/贯维/AutoInfo/knowledge/_failed/medical-research/medical-research-draft-mrna-validation-draft.md
+[92m12:52:05 - LiteLLM:WARNING[0m: get_model_cost_map.py:271 - LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: _ssl.c:1063: The handshake operation timed out. Falling back to local backup.
+Failed to parse LLM response as JSON: 
+Failed to parse LLM response as JSON: 
+Failed to parse LLM response as JSON: 
+Failed to parse LLM response as JSON: {"groups":[{"theme":"In Vitro Fertilization and Reproductive Health","entry_ids":["medical-research-anti-m-llerian-hormone-analytical-reliability-and-patient-experience-of-a-microblade-based-self-coll
+Failed to parse LLM response as JSON: 
+Failed to parse LLM response as JSON: {"tl_dr": "This collection summarizes eight recent medical research studies spanning reproductive health, infectious disease AI surveillance, surgical precision, and pharmacotherapy. Key topics includ
+Failed to parse LLM response as JSON: 
+Failed to parse LLM response as JSON: 
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This collection summarizes three retrospective

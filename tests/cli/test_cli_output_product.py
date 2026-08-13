@@ -83,7 +83,12 @@ class TestOutputCommandProduct:
             domain="medical-research",
             period="weekly",
             format="markdown",
+            custom_instructions="",
+            target_audience="",
+            include_stale=False,
+            recipients=None,
             user_id="",
+            max_items=0,
             product_template=_registry_template("magazine-digest"),
         )
 
@@ -126,7 +131,12 @@ class TestOutputCommandProduct:
             domain="medical-research",
             period="weekly",
             format="markdown",
+            custom_instructions="",
+            target_audience="",
+            include_stale=False,
+            recipients=None,
             user_id="",
+            max_items=0,
         )
 
     @patch("autoinfo.output.generate_report", return_value="# report")

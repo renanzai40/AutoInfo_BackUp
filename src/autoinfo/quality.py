@@ -25,7 +25,7 @@ from typing import Any, Literal
 
 import yaml
 
-from autoinfo.config import QualityGateConfig
+from autoinfo.config import JUDGMENT_MODEL, QualityGateConfig
 from autoinfo.llm import call_with_fallback, parse_json_response
 from autoinfo.models import ExtractionResult, Item, KBEntry
 
@@ -1140,7 +1140,7 @@ class G4FactualConsistency:
 
     def __init__(
         self,
-        model: str = "openrouter/deepseek/deepseek-chat",
+        model: str = JUDGMENT_MODEL,
         collections_path: str | Path = "collections",
         json_mode: bool = False,
         timeout: float | None = None,
@@ -1243,11 +1243,12 @@ class G4FactualConsistency:
                         {"role": "user", "content": user_content},
                     ],
                     json_mode=self._json_mode,
-                    max_tokens=500,
+                    max_tokens=2000,
                     temperature=0.0,
                     timeout=self._timeout,
                     api_key=llm_api_key,
                     base_url=llm_base_url,
+                    disable_thinking=False,
                 )
 
                 raw_content: str = response.choices[0].message.content
@@ -1442,7 +1443,7 @@ class G5TranslationAccuracy:
 
     def __init__(
         self,
-        model: str = "openrouter/deepseek/deepseek-chat",
+        model: str = JUDGMENT_MODEL,
         json_mode: bool = False,
         timeout: float | None = None,
     ) -> None:
@@ -1505,11 +1506,12 @@ class G5TranslationAccuracy:
                     },
                 ],
                 json_mode=self._json_mode,
-                max_tokens=500,
+                max_tokens=1500,
                 temperature=0.0,
                 timeout=self._timeout,
                 api_key=llm_api_key,
                 base_url=llm_base_url,
+                disable_thinking=False,
             )
 
             content: str = response.choices[0].message.content  # type: ignore[union-attr]
@@ -2746,7 +2748,7 @@ def llm_judge(
 ) -> dict[str, Any]:
     """Gate 5: LLM-based quality eval (faithfulness, terminology, style, readability 0-100)."""
     if model is None:
-        model = _resolve_llm_model()
+        model = JUDGMENT_MODEL
     if timeout is None:
         timeout = _resolve_llm_timeout()
 
@@ -2766,11 +2768,12 @@ def llm_judge(
             model=model,
             messages=[{"role": "user", "content": prompt}],
             json_mode=json_mode,
-            max_tokens=1000,
+            max_tokens=2000,
             temperature=0.0,
             timeout=timeout,
             api_key=llm_api_key,
             base_url=llm_base_url,
+            disable_thinking=False,
         )
         parsed = parse_json_response(resp.choices[0].message.content)
     except Exception as e:

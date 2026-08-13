@@ -454,10 +454,11 @@ def _llm_judge(assertion: str, tool_output: Any) -> dict[str, Any]:
     response = call_with_fallback(
         messages=[{"role": "user", "content": prompt}],
         model=llm_cfg["model"],
-        max_tokens=500,
+        max_tokens=1500,
         temperature=0.0,
         base_url=llm_cfg["api_base"],
         api_key=llm_cfg["api_key"] or None,
+        disable_thinking=False,
     )
     duration = time.monotonic() - start
     content = response.choices[0].message.content  # type: ignore[union-attr]
@@ -1183,6 +1184,33 @@ async def _execute_step_with_recovery(
     return sr
 
 
+def _scan_autoinfo_test_leaks() -> list[str]:
+    """Return entry_ids of 01-Raw KB entries whose source_url hostname ends
+    with the reserved scenario-test domain ``.autoinfo.test``.
+
+    Scenarios write their fixtures under ``https://<scenario>.autoinfo.test/...``
+    so this marker can never collide with real content.  Any such entry still
+    indexed after a scenario run means the scenario's cleanup failed (B-03
+    guard): the entry is reported, never auto-deleted.
+    """
+    try:
+        from autoinfo.kb import KBStore
+
+        store = KBStore()
+    except Exception:
+        return []
+    try:
+        with store.index._connect() as conn:
+            rows = conn.execute(
+                "SELECT entry_id FROM entries "
+                "WHERE tier = '01-Raw' AND source_url LIKE '%autoinfo.test%' "
+                "ORDER BY entry_id"
+            ).fetchall()
+            return [str(r["entry_id"]) for r in rows]
+    except Exception:
+        return []
+
+
 def _unconfigured_scenario_result(
     scenario: dict[str, Any], trace_id: str, reason: str
 ) -> dict[str, Any]:
@@ -1502,6 +1530,17 @@ async def run_scenario(
         result["cleanup"] = cleanup
     if artifacts is not None:
         result["artifacts"] = artifacts
+    # --- SCENARIO_LEAK guard (B-03): detect validation fixtures left in the
+    # real KB.  Scenarios write entries under the reserved ``*.autoinfo.test``
+    # hostname; any 01-Raw entry still carrying that hostname after cleanup
+    # means a scenario leaked a fixture into the user's knowledge base.
+    # Reported as a warning (never auto-deleted, never changes status).
+    leaks = _scan_autoinfo_test_leaks()
+    if leaks:
+        result["warnings"] = [
+            "SCENARIO_LEAK: %d scenario fixture(s) left in 01-Raw: %s"
+            % (len(leaks), ", ".join(leaks))
+        ]
     for _key in ("regression", "regression_issue"):
         if _key in scenario:
             result[_key] = scenario[_key]

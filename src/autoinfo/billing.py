@@ -519,6 +519,7 @@ def _handle_subscription_updated(event: dict[str, Any]) -> dict[str, Any]:
         mapped_status = _map_stripe_status(status)
         update_profile(
             user_id=end_user_id,
+            stripe_subscription_id=subscription_id,
             status=mapped_status,
         )
     except Exception as exc:

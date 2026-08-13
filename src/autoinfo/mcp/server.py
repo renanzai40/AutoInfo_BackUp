@@ -46,6 +46,7 @@ from __future__ import annotations
 
 import asyncio
 import base64
+import concurrent.futures
 import json
 import logging
 import os
@@ -1049,8 +1050,17 @@ def _handle_deactivate_domain(name: str) -> dict[str, Any]:
     }
 
 
-def _handle_remove_domain(name: str) -> dict[str, Any]:
+def _handle_remove_domain(name: str, confirm: bool = True, actor: str = "agent") -> dict[str, Any]:
     """Remove a domain configuration. Preserves all collected data on disk."""
+    if not confirm:
+        return {
+            "error_code": ErrorCode.CONFIRMATION_REQUIRED.value,
+            "message": (
+                "This operation is destructive and requires confirmation. "
+                "Pass confirm=True to proceed."
+            ),
+            "actionable": True,
+        }
     try:
         config = _load_config()
     except Exception as exc:
@@ -1524,7 +1534,7 @@ def _handle_add_sources(sources: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def _handle_remove_source(source_id: str, confirm: bool = True) -> dict[str, Any]:
+def _handle_remove_source(source_id: str, confirm: bool = True, actor: str = "agent") -> dict[str, Any]:
     """Remove a source by its source_id (``domain:name``)."""
     if not confirm:
         return {
@@ -1747,7 +1757,7 @@ def _handle_add_topic(
     }
 
 
-def _handle_remove_topic(domain: str, topic_id: str, confirm: bool = True) -> dict[str, Any]:
+def _handle_remove_topic(domain: str, topic_id: str, confirm: bool = True, actor: str = "agent") -> dict[str, Any]:
     """Remove a topic by its topic_id (``domain:name``)."""
     if not confirm:
         return {
@@ -2576,7 +2586,7 @@ def _handle_promote_kb_draft(
         return _error_dict(exc)
 
 
-def _handle_demote_kb_wiki(entry_id: str, actor: str = "director") -> dict[str, Any]:
+def _handle_demote_kb_wiki(entry_id: str, actor: str = "agent") -> dict[str, Any]:
     """Demote a 03-Wiki entry back to 02-Draft (director-only backdoor).
 
     Content is preserved: the file moves from ``03-Wiki/`` to ``02-Draft/``
@@ -2599,7 +2609,7 @@ def _handle_demote_kb_wiki(entry_id: str, actor: str = "director") -> dict[str, 
         )
 
 
-def _handle_force_promote(draft_id: str, actor: str = "director") -> dict[str, Any]:
+def _handle_force_promote(draft_id: str, actor: str = "agent") -> dict[str, Any]:
     """Force-promote a 02-Draft entry to 03-Wiki, skipping the admission gate.
 
     Director-only backdoor: provenance / G0 / G1 / G3 / G4 checks are not
@@ -2691,6 +2701,7 @@ _PERSIST_EXT_BY_FORMAT: dict[str, str] = {
     "markdown": ".md",
     "html": ".html",
     "audio": ".mp3",
+    "video": ".mp4",
     "epub": ".epub",
     "audiobook": ".zip",
 }
@@ -2736,7 +2747,7 @@ def _persist_output(
             )
         else:
             _path.write_text(str(content), encoding="utf-8")
-    elif format in ("audio", "epub", "audiobook"):
+    elif format in ("audio", "video", "epub", "audiobook"):
         _path.write_bytes(base64.b64decode(content))
     else:
         _path.write_text(str(content), encoding="utf-8")
@@ -2858,6 +2869,18 @@ def _handle_generate_digest(
                     "content": result,
                 },
                 persist, domain, "digest", "audio", result,
+            )
+        if format == "video":
+            # _render_video_scaffold returns a JSON status blob with video_path.
+            import json as _json2
+
+            try:
+                parsed = _json2.loads(result)
+            except (ValueError, TypeError):
+                parsed = {"status": "ok", "video_path": result}
+            return _maybe_persist_output(
+                {"success": True, "format": "video", **parsed},
+                persist, domain, "digest", "video", result,
             )
         if format in ("epub", "audiobook"):
             return _maybe_persist_output(
@@ -2986,6 +3009,23 @@ def _handle_generate_report(
                     "content": result,
                 },
                 persist, domain, _persist_product, "audio", result,
+            )
+        if format == "video":
+            import json as _json3
+
+            try:
+                parsed = _json3.loads(result)
+            except (ValueError, TypeError):
+                parsed = {"status": "ok", "video_path": result}
+            return _maybe_persist_output(
+                {
+                    "success": True,
+                    "domain": domain,
+                    "format": "video",
+                    "period": period,
+                    **parsed,
+                },
+                persist, domain, "report", "video", result,
             )
         if format in ("epub", "audiobook"):
             return _maybe_persist_output(
@@ -3117,6 +3157,24 @@ def _handle_generate_cross_domain_report(
                     "content": result,
                 },
                 persist, domains[0], "report", "audio", result,
+            )
+        if format == "video":
+            import json as _json4
+
+            try:
+                parsed = _json4.loads(result)
+            except (ValueError, TypeError):
+                parsed = {"status": "ok", "video_path": result}
+            return _maybe_persist_output(
+                {
+                    "success": True,
+                    "domain": domains[0],
+                    "domains": domains,
+                    "format": "video",
+                    "period": period,
+                    **parsed,
+                },
+                persist, domains[0], "report", "video", result,
             )
         if format in ("epub", "audiobook"):
             return _maybe_persist_output(
@@ -3569,7 +3627,7 @@ def _handle_add_schedule(
         return _error_dict(exc)
 
 
-def _handle_remove_schedule(name: str, confirm: bool = False) -> dict[str, Any]:
+def _handle_remove_schedule(name: str, confirm: bool = False, actor: str = "agent") -> dict[str, Any]:
     """Remove a collection schedule."""
     if not confirm:
         return {
@@ -4597,21 +4655,27 @@ def _handle_get_gate_config(domain: str, gate: str) -> dict[str, Any]:
 
     from dataclasses import asdict as _asdict
 
+    # Normalise the queried gate name to its canonical long form — config
+    # keys are stored as e.g. "G3-RelevanceScoring" (short "G3" accepted).
+    from autoinfo.config import _GATE_CONFIG_KEY_MAP as _gate_map
+
+    gate_key = _gate_map.get(gate, gate)
+
     # Check quality gates first, then delivery gates, then global defaults
     gate_config: dict[str, Any] | None = None
     gate_type: str = ""
 
-    if gate in domain_cfg.quality_gates:
-        gate_config = _asdict(domain_cfg.quality_gates[gate])
+    if gate_key in domain_cfg.quality_gates:
+        gate_config = _asdict(domain_cfg.quality_gates[gate_key])
         gate_type = "quality"
-    elif gate in domain_cfg.delivery_gates:
-        gate_config = _asdict(domain_cfg.delivery_gates[gate])
+    elif gate_key in domain_cfg.delivery_gates:
+        gate_config = _asdict(domain_cfg.delivery_gates[gate_key])
         gate_type = "delivery"
-    elif gate in config.quality_gates:
-        gate_config = _asdict(config.quality_gates[gate])
+    elif gate_key in config.quality_gates:
+        gate_config = _asdict(config.quality_gates[gate_key])
         gate_type = "quality"
-    elif gate in config.delivery_gates:
-        gate_config = _asdict(config.delivery_gates[gate])
+    elif gate_key in config.delivery_gates:
+        gate_config = _asdict(config.delivery_gates[gate_key])
         gate_type = "delivery"
 
     if gate_config is None:
@@ -5321,7 +5385,7 @@ def _handle_get_prometheus_metrics(name: str, arguments: dict) -> dict[str, Any]
 def _handle_soft_delete_entry(name: str, arguments: dict) -> dict[str, Any]:
     from autoinfo.kb import KBStore
     store = KBStore()
-    actor = arguments.get("actor") or "director"
+    actor = arguments.get("actor") or "agent"
     purge = arguments.get("purge", False)
     try:
         if purge:
@@ -6238,7 +6302,11 @@ def _handle_recommend_content(
         }
     except Exception as exc:
         logger.error("recommend_content failed: %s", exc)
-        return {"error": str(exc), "items": [], "count": 0}
+        return error_response(
+            code=ErrorCode.INTERNAL_ERROR,
+            message=str(exc),
+            actionable=True,
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -6459,17 +6527,37 @@ def _handle_cefr_batch(
 
     results: list[dict[str, Any]] = []
     errors = 0
-    for t in texts:
-        try:
-            result = classify_text(text=t, lang=lang, model_config=model_config)
-            results.append({
-                "text": t,
-                "cefr_level": result["cefr_level"],
-                "confidence": result["confidence"],
-            })
-        except Exception as exc:
-            results.append({"text": t, "error": str(exc)})
-            errors += 1
+
+    # Bounded fan-out: at most 8 concurrent classifications (env override
+    # AUTOINFO_CEFR_BATCH_WORKERS), never more than the number of texts.
+    # Each per-text task runs through classify_text -> call_with_fallback,
+    # which acquires the shared per-provider semaphore (llm.py) so the
+    # fan-out stays rate-limited.  Futures are keyed by original index and
+    # collected in insertion order, preserving the sequential response order.
+    max_workers = min(len(texts), 8)
+    raw_workers = os.environ.get("AUTOINFO_CEFR_BATCH_WORKERS", "")
+    if raw_workers.isdigit():
+        max_workers = min(len(texts), max(1, int(raw_workers)))
+
+    with concurrent.futures.ThreadPoolExecutor(
+        max_workers=max_workers,
+        thread_name_prefix="cefr-batch",
+    ) as pool:
+        futures = {
+            i: pool.submit(classify_text, text=t, lang=lang, model_config=model_config)
+            for i, t in enumerate(texts)
+        }
+        for i, future in futures.items():
+            try:
+                result = future.result()
+                results.append({
+                    "text": texts[i],
+                    "cefr_level": result["cefr_level"],
+                    "confidence": result["confidence"],
+                })
+            except Exception as exc:
+                results.append({"text": texts[i], "error": str(exc)})
+                errors += 1
 
     return {
         "results": results,
@@ -6698,6 +6786,8 @@ def _handle_clean_cache(
     outputs: bool = False,
     everything: bool = False,
     dry_run: bool = False,
+    confirm: bool = False,
+    actor: str = "agent",
 ) -> dict[str, Any]:
     """Remove cached artifacts and temporary files.
 
@@ -6717,6 +6807,12 @@ def _handle_clean_cache(
     dict
         ``{items_removed, dry_run, targets}``.
     """
+    if everything and not confirm:
+        return error_response(
+            code=ErrorCode.CONFIRMATION_REQUIRED,
+            message="clean_cache(everything=True) requires confirm=true — this deletes the entire knowledge/ directory and database",
+            actionable=True,
+        )
     import shutil
 
     targets: list[str] = []
@@ -7055,7 +7151,7 @@ async def list_tools() -> list[Tool]:
         ),
         Tool(
             name="remove_domain",
-            description="Remove a domain configuration. Preserves all collected data on disk.",
+            description="Remove a domain configuration. Preserves all collected data on disk. Requires confirm=True (destructive operation).",
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -7063,8 +7159,16 @@ async def list_tools() -> list[Tool]:
                         "type": "string",
                         "description": "Domain name to remove",
                     },
+                    "confirm": {
+                        "type": "boolean",
+                        "description": "Must be True to remove a domain (destructive operation)",
+                    },
+                    "actor": {
+                        "type": "string",
+                        "description": "Required. Actor requesting this destructive operation (must be passed explicitly)",
+                    },
                 },
-                "required": ["name"],
+                "required": ["name", "confirm", "actor"],
             },
         ),
         Tool(
@@ -7244,8 +7348,12 @@ async def list_tools() -> list[Tool]:
                         "description": "Must be True to confirm this destructive operation",
                         "default": False,
                     },
+                    "actor": {
+                        "type": "string",
+                        "description": "Required. Actor requesting this destructive operation (must be passed explicitly)",
+                    },
                 },
-                "required": ["source_id"],
+                "required": ["source_id", "actor"],
             },
         ),
         Tool(
@@ -7326,8 +7434,12 @@ async def list_tools() -> list[Tool]:
                         "description": "Must be True to confirm this destructive operation",
                         "default": False,
                     },
+                    "actor": {
+                        "type": "string",
+                        "description": "Required. Actor requesting this destructive operation (must be passed explicitly)",
+                    },
                 },
-                "required": ["domain", "topic_id"],
+                "required": ["domain", "topic_id", "actor"],
             },
         ),
         Tool(
@@ -8179,11 +8291,10 @@ async def list_tools() -> list[Tool]:
                     },
                     "actor": {
                         "type": "string",
-                        "description": "Acting director (must be in AUTOINFO_DIRECTOR_ACTORS)",
-                        "default": "director",
+                        "description": "Required. Acting director (must be whitelisted in AUTOINFO_DIRECTOR_ACTORS)",
                     },
                 },
-                "required": ["entry_id"],
+                "required": ["entry_id", "actor"],
             },
         ),
         Tool(
@@ -8204,11 +8315,10 @@ async def list_tools() -> list[Tool]:
                     },
                     "actor": {
                         "type": "string",
-                        "description": "Acting director (must be in AUTOINFO_DIRECTOR_ACTORS)",
-                        "default": "director",
+                        "description": "Required. Acting director (must be whitelisted in AUTOINFO_DIRECTOR_ACTORS)",
                     },
                 },
-                "required": ["draft_id"],
+                "required": ["draft_id", "actor"],
             },
         ),
         Tool(
@@ -8357,7 +8467,7 @@ async def list_tools() -> list[Tool]:
                         "default": "markdown",
                         "enum": [
                             "markdown", "html", "json", "agent", "audio",
-                            "epub", "audiobook",
+                            "video", "epub", "audiobook",
                         ],
                     },
                     "custom_instructions": {
@@ -8435,7 +8545,7 @@ async def list_tools() -> list[Tool]:
                         "default": "markdown",
                         "enum": [
                             "markdown", "json", "html", "agent", "audio",
-                            "epub", "audiobook",
+                            "video", "epub", "audiobook",
                         ],
                     },
                     "period": {
@@ -8509,7 +8619,7 @@ async def list_tools() -> list[Tool]:
                             "audiobook"
                         ),
                         "default": "markdown",
-                        "enum": ["markdown", "json", "html", "agent", "audio", "epub", "audiobook"],
+                        "enum": ["markdown", "json", "html", "agent", "audio", "video", "epub", "audiobook"],
                     },
                     "period": {
                         "type": "string",
@@ -8974,8 +9084,12 @@ async def list_tools() -> list[Tool]:
                         "description": "Must be True to confirm this destructive operation",
                         "default": False,
                     },
+                    "actor": {
+                        "type": "string",
+                        "description": "Required. Actor requesting this destructive operation (must be passed explicitly)",
+                    },
                 },
-                "required": ["name"],
+                "required": ["name", "actor"],
             },
         ),
         Tool(
@@ -9894,11 +10008,10 @@ async def list_tools() -> list[Tool]:
                     },
                     "actor": {
                         "type": "string",
-                        "description": "Acting actor. 03-Wiki entries require an actor whitelisted in AUTOINFO_DIRECTOR_ACTORS (default 'director')",
-                        "default": "director",
+                        "description": "Required. Acting actor. 03-Wiki entries require an actor whitelisted in AUTOINFO_DIRECTOR_ACTORS",
                     },
                 },
-                "required": ["entry_id"],
+                "required": ["entry_id", "actor"],
             },
         ),
         Tool(
@@ -9919,8 +10032,12 @@ async def list_tools() -> list[Tool]:
                 "type": "object",
                 "properties": {
                     "entry_id": {"type": "string"},
+                    "actor": {
+                        "type": "string",
+                        "description": "Required. Actor requesting this destructive operation (must be passed explicitly)",
+                    },
                 },
-                "required": ["entry_id"],
+                "required": ["entry_id", "actor"],
             },
         ),
         Tool(
@@ -9942,8 +10059,12 @@ async def list_tools() -> list[Tool]:
                 "properties": {
                     "user_id": {"type": "string"},
                     "purge": {"type": "boolean"},
+                    "actor": {
+                        "type": "string",
+                        "description": "Required. Actor requesting this destructive operation (must be passed explicitly)",
+                    },
                 },
-                "required": ["user_id"],
+                "required": ["user_id", "actor"],
             },
         ),
         # -- Trace (1) -------------------------------------------------------
@@ -10452,8 +10573,16 @@ async def list_tools() -> list[Tool]:
                         "description": "Show what would be deleted without deleting",
                         "default": False,
                     },
+                    "confirm": {
+                        "type": "boolean",
+                        "description": "Required. Must be True when everything=True — this deletes the entire knowledge/ directory and database",
+                    },
+                    "actor": {
+                        "type": "string",
+                        "description": "Required. Actor requesting this destructive operation (must be passed explicitly)",
+                    },
                 },
-                "required": [],
+                "required": ["actor", "confirm"],
             },
         ),
         # -- Channel Health (1) -------------------------------------------
@@ -10632,7 +10761,7 @@ async def list_tools() -> list[Tool]:
         ),
     ]
 
-# -- LLM-required tools (14) ------------------------------------------------
+# -- LLM-required tools (17) ------------------------------------------------
 # Tools in this set require LLM configuration to function.  When the LLM
 # is not configured (no api_key), call_tool will block them with a clear
 # error response before dispatching to the handler.
@@ -10651,6 +10780,9 @@ _LLM_REQUIRED_TOOLS: frozenset[str] = frozenset({
     "process_collection",
     "recommend_content",
     "simplify_content",
+    "promote_kb_draft",
+    "batch_run",
+    "run_validation_scenario",
 })
 
 
@@ -10819,7 +10951,7 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
         # the audit trail records the attempt as a real mutation.  The
         # handlers repeat the check so direct handler calls stay safe too.
         if name in ("demote_kb_wiki", "force_promote"):
-            actor = arguments.get("actor") or "director"
+            actor = arguments.get("actor") or "agent"
             if not is_director(actor):
                 _dispatch_audit["code"] = "director_only"
                 return [
@@ -10896,7 +11028,7 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
         elif name == "reject_keyword":
             result = _handle_reject_keyword(**arguments)
         elif name == "suggest_keywords":
-            result = _handle_suggest_keywords(**arguments)
+            result = await asyncio.to_thread(_handle_suggest_keywords, **arguments)
 
         # -- Collection / Processing (5) ----------------------------------
         # collect/process/batch_run are long-running sync handlers; offload
@@ -10958,7 +11090,7 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
         elif name == "list_kb_tier":
             result = _handle_list_kb_tier(**arguments)
         elif name == "promote_kb_draft":
-            result = _handle_promote_kb_draft(**arguments)
+            result = await asyncio.to_thread(_handle_promote_kb_draft, **arguments)
         elif name == "demote_kb_wiki":
             result = _handle_demote_kb_wiki(**arguments)
         elif name == "force_promote":
@@ -10977,25 +11109,25 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
 
         # -- CEFR Classification (1) ----------------------------------------
         elif name == "classify_cefr":
-            result = _handle_classify_cefr(**arguments)
+            result = await asyncio.to_thread(_handle_classify_cefr, **arguments)
         elif name == "cefr_batch":
-            result = _handle_cefr_batch(**arguments)
+            result = await asyncio.to_thread(_handle_cefr_batch, **arguments)
 
         # -- Output (6) ---------------------------------------------------
         elif name == "list_output_templates":
             result = _handle_list_output_templates(**arguments)
         elif name == "generate_digest":
-            result = _handle_generate_digest(**arguments)
+            result = await asyncio.to_thread(_handle_generate_digest, **arguments)
         elif name == "generate_report":
-            result = _handle_generate_report(**arguments)
+            result = await asyncio.to_thread(_handle_generate_report, **arguments)
         elif name == "generate_cross_domain_report":
-            result = _handle_generate_cross_domain_report(**arguments)
+            result = await asyncio.to_thread(_handle_generate_cross_domain_report, **arguments)
         elif name == "generate_tutorial":
-            result = _handle_generate_tutorial(**arguments)
+            result = await asyncio.to_thread(_handle_generate_tutorial, **arguments)
         elif name == "generate_presentation":
-            result = _handle_generate_presentation(**arguments)
+            result = await asyncio.to_thread(_handle_generate_presentation, **arguments)
         elif name == "localize_content":
-            result = _handle_localize_content(**arguments)
+            result = await asyncio.to_thread(_handle_localize_content, **arguments)
 
         # -- Export / Import (2) -----------------------------------------------
         elif name == "export_kb":
@@ -11011,7 +11143,7 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
 
         # -- Custom Extraction (2) ----------------------------------------
         elif name == "extract_fields":
-            result = _handle_extract_fields(**arguments)
+            result = await asyncio.to_thread(_handle_extract_fields, **arguments)
         elif name == "get_extraction":
             result = _handle_get_extraction(**arguments)
 
@@ -11037,7 +11169,7 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
 
         # -- Q&A (1) -------------------------------------------------------
         elif name == "query_collected":
-            result = _handle_query_collected(**arguments)
+            result = await asyncio.to_thread(_handle_query_collected, **arguments)
 
         # -- Source Health / Feedback (2) ----------------------------------
         elif name == "get_source_health":
@@ -11209,11 +11341,11 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
 
         # -- Recommendation (1) --------------------------------------------
         elif name == "recommend_content":
-            result = _handle_recommend_content(**arguments)
+            result = await asyncio.to_thread(_handle_recommend_content, **arguments)
 
         # -- Simplification (1) --------------------------------------------
         elif name == "simplify_content":
-            result = _handle_simplify_content(**arguments)
+            result = await asyncio.to_thread(_handle_simplify_content, **arguments)
 
         # -- Validation (2) ------------------------------------------------
         elif name == "list_validation_scenarios":

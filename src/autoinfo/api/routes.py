@@ -260,6 +260,23 @@ async def get_entry(entry_id: str) -> dict[str, Any]:
 @router.post("/entries", response_model=dict[str, Any], status_code=201)
 async def create_entry(body: EntryCreate) -> dict[str, Any]:
     """Create a new KB entry from the provided fields."""
+    if body.tier != "01-Raw":
+        return JSONResponse(  # pyright: ignore[reportReturnType]
+            status_code=400,
+            content={
+                "success": False,
+                "error": {
+                    "code": ErrorCode.VALIDATION_ERROR,
+                    "message": (
+                        f"Invalid tier '{body.tier}': only '01-Raw' is accepted "
+                        "for direct entry creation. 02-Draft and 03-Wiki are "
+                        "reached via create_kb_draft / promote_kb_draft only."
+                    ),
+                    "actionable": True,
+                },
+            },
+        )
+
     # Validate that the domain exists (skip validation for "default")
     if body.domain and body.domain != "default":
         known = _known_domains()

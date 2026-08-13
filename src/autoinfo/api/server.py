@@ -417,7 +417,6 @@ async def serve_media(file_path: str) -> FileResponse:
     Returns 404 when the path escapes the allowed roots or the file
     does not exist.
     """
-    resolved = (Path(file_path)).resolve()
     cwd = Path.cwd().resolve()
     resolved_abs = (cwd / file_path).resolve()
 

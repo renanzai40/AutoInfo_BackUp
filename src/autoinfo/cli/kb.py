@@ -15,8 +15,6 @@ import json
 
 import typer
 
-from autoinfo.kb import KBStore, PromotionRejected
-
 app = typer.Typer(help="Knowledge base operations")
 
 
@@ -31,6 +29,8 @@ def search(
     ),
 ) -> None:
     """Search the knowledge base using FTS5 full-text search."""
+    from autoinfo.kb import KBStore
+
     store = KBStore()
     result = store.search_knowledge_base(
         query=query, domain=domain, limit=limit, offset=offset
@@ -51,6 +51,8 @@ def list_entries(
     ),
 ) -> None:
     """List KB entries in a given tier."""
+    from autoinfo.kb import KBStore
+
     store = KBStore()
     entries = store.list_kb_tier(
         domain=domain, tier=tier, limit=limit, offset=offset
@@ -68,6 +70,8 @@ def reindex(
     ),
 ) -> None:
     """Rebuild the FTS5 search index from knowledge/ files."""
+    from autoinfo.kb import KBStore
+
     store = KBStore()
     result = store.reindex_knowledge_base(domain=domain or None)
     typer.echo(json.dumps(result, indent=2, ensure_ascii=False))
@@ -88,6 +92,8 @@ def create_draft(
     ),
 ) -> None:
     """Create a Draft entry from one or more Raw entries."""
+    from autoinfo.kb import KBStore
+
     store = KBStore()
     try:
         entry = store.create_kb_draft(
@@ -111,6 +117,8 @@ def reject_draft(
     ),
 ) -> None:
     """Reject a Draft, moving it back to 01-Raw or archiving."""
+    from autoinfo.kb import KBStore
+
     store = KBStore()
     try:
         result = store.reject_kb_draft(
@@ -134,6 +142,8 @@ def list_tiers(
 ) -> None:
     """List available KB tiers with entry counts for a domain."""
     json_output = json_output or bool((ctx.obj or {}).get("json"))
+    from autoinfo.kb import KBStore
+
     store = KBStore()
     tiers = ["01-Raw", "02-Draft", "03-Wiki"]
     tier_info = []
@@ -181,6 +191,8 @@ def wiki_links(
         typer.echo("Use --rebuild to scan and update wiki links.")
         raise typer.Exit(0)
 
+    from autoinfo.kb import KBStore
+
     store = KBStore()
     result = store.rebuild_wiki_links()
     typer.echo(json.dumps(result, indent=2, ensure_ascii=False))
@@ -205,6 +217,8 @@ def decay(
     decay grade (🟢🟡🔴), and re-collection suggestions.
     """
     json_output = json_output or bool((ctx.obj or {}).get("json"))
+    from autoinfo.kb import KBStore
+
     store = KBStore()
     result = store.get_domain_decay(domain=domain, ttl_days=ttl_days)
 
@@ -245,6 +259,8 @@ def promote(
     thresholds, G4 factual consistency); rejected drafts stay in 02-Draft
     with a _failed/ marker written.
     """
+    from autoinfo.kb import KBStore, PromotionRejected
+
     store = KBStore()
     try:
         result = store.promote_kb_draft(draft_id=entry_id)
@@ -278,6 +294,8 @@ def promote_pending(
             config = load_config(cfg_path)
     except Exception:
         config = None
+
+    from autoinfo.kb import KBStore
 
     store = KBStore()
     result = store.promote_pending_drafts(domain=domain, config=config, caller="sweep")
@@ -313,6 +331,8 @@ def history(
 ) -> None:
     """Show version history for a KB entry."""
     json_output = json_output or bool((ctx.obj or {}).get("json"))
+    from autoinfo.kb import KBStore
+
     store = KBStore()
     versions = store.get_entry_history(entry_id=entry_id)
     if not versions:

@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import json
 import os
+from pathlib import Path
 from typing import Any, cast
 
 import typer
@@ -89,6 +90,36 @@ def digest(
         "--user-id",
         help="End-user ID for content-preference filtering (default: all tiers)",
     ),
+    custom_instructions: str = typer.Option(
+        "",
+        "--custom-instructions",
+        help="Optional custom instructions to tailor the output content",
+    ),
+    target_audience: str = typer.Option(
+        "",
+        "--target-audience",
+        help="Optional target audience description to tailor output tone and depth (e.g. \"healthcare professionals\", \"general public\")",
+    ),
+    include_stale: bool = typer.Option(
+        False,
+        "--include-stale",
+        help="Include stale entries (below the domain freshness threshold) in the digest",
+    ),
+    recipients: list[str] | None = typer.Option(
+        None,
+        "--recipients",
+        help="Email recipient addresses for direct digest delivery (repeatable, e.g. --recipients a@x.com --recipients b@y.com)",
+    ),
+    max_items: int = typer.Option(
+        0,
+        "--max-items",
+        help="Maximum number of KB entries to include (default: 0 = built-in limit of 200)",
+    ),
+    persist: bool = typer.Option(
+        False,
+        "--persist",
+        help="Write the generated digest to outputs/<domain>/ and print its path",
+    ),
 ) -> None:
     """Generate a digest of KB entries for a domain over a given period.
 
@@ -104,11 +135,50 @@ def digest(
             "domain": domain,
             "period": period,
             "format": format,
+            "custom_instructions": custom_instructions,
+            "target_audience": target_audience,
+            "include_stale": include_stale,
+            "recipients": recipients,
             "user_id": user_id,
+            "max_items": max_items,
         }
         if product_template is not None:
             kwargs["product_template"] = product_template
         result = generate_digest(**kwargs)
+        if persist:
+            import base64
+            from datetime import datetime
+
+            _stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+            _ext = {
+                "json": ".json",
+                "agent": ".json",
+                "markdown": ".md",
+                "html": ".html",
+                "audio": ".mp3",
+                "epub": ".epub",
+                "audiobook": ".zip",
+            }.get(format, ".txt")
+            _dir = Path("outputs") / domain
+            _dir.mkdir(parents=True, exist_ok=True)
+            _path = _dir / f"digest-{format}-{_stamp}{_ext}"
+            if format in ("json", "agent"):
+                try:
+                    _content = json.loads(result)
+                except (ValueError, TypeError):
+                    _content = result
+                if isinstance(_content, (dict, list)):
+                    _path.write_text(
+                        json.dumps(_content, ensure_ascii=False, indent=2),
+                        encoding="utf-8",
+                    )
+                else:
+                    _path.write_text(str(_content), encoding="utf-8")
+            elif format in ("audio", "epub", "audiobook"):
+                _path.write_bytes(base64.b64decode(result))
+            else:
+                _path.write_text(str(result), encoding="utf-8")
+            typer.echo(f"Persisted to {_path}")
         typer.echo(result)
     except ValueError as exc:
         typer.echo(f"Error: {exc}", err=True)

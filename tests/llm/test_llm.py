@@ -376,6 +376,22 @@ class TestExtractWithRetry:
         extractor: LLMExtractor,
     ) -> None:
         """When no fallback is configured, error message says so."""
+        from autoinfo.config import Config, LLMConfig
+
+        # Explicit no-fallback config: the real .autoinfo/config.yaml now
+        # carries the mimo-v2.5 fallback chain (todo 2), so the shared
+        # extractor fixture would exercise the fallback path instead of the
+        # "no fallback" message this test guards.
+        cfg = Config(
+            llm=LLMConfig(
+                provider="openai",
+                model="deepseek-v4-flash",
+                api_key="",
+                base_url="https://opencode.ai/zen/go/v1",
+                fallback=[],
+            )
+        )
+        extractor = LLMExtractor(config=cfg)
         mock_lm = MagicMock()
         mock_lm.completion.side_effect = Exception("API error")
 

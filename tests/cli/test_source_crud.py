@@ -20,6 +20,7 @@ from typer.testing import CliRunner
 
 from autoinfo.config import load_config
 from autoinfo.mcp import server as mcp_server
+from autoinfo.mcp.errors import ErrorCode
 from autoinfo.mcp.server import (
     _handle_add_source,
     _handle_list_sources,
@@ -282,21 +283,24 @@ class TestMCPRemoveSource:
 class TestMCPTestSource:
     def test_rejects_invalid_url(self) -> None:
         result = _handle_test_source(url="invalid")
-        assert result["reachable"] is False
-        assert result.get("error_code") == "ValidationError"
+        assert result["success"] is False
+        assert result["error"]["code"] == ErrorCode.VALIDATION_ERROR.value
+        assert result["error"]["actionable"] is True
 
     def test_rejects_invalid_type(self) -> None:
         result = _handle_test_source(url="https://example.com", type="bad")
-        assert result["reachable"] is False
-        assert result.get("error_code") == "ValidationError"
+        assert result["success"] is False
+        assert result["error"]["code"] == ErrorCode.VALIDATION_ERROR.value
+        assert result["error"]["actionable"] is True
 
     def test_timeout_returns_structured_error(self) -> None:
         from httpx import TimeoutException
 
         with patch("httpx.get", side_effect=TimeoutException("timed out")):
             result = _handle_test_source(url="https://slow.example.com")
-            assert result["reachable"] is False
-            assert result["error_code"] == "Timeout"
+            assert result["success"] is False
+            assert result["error"]["code"] == ErrorCode.TIMEOUT.value
+            assert result["error"]["actionable"] is True
 
     def test_successful_response(self) -> None:
         mock_resp = MagicMock()

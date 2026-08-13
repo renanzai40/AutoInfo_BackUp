@@ -1,0 +1,33 @@
+# Video output format (V1, 2026-08-13) — report format="video" via the
+# HyperFrames pipeline (HTML+GSAP -> MP4, ported from AutoMedia).
+#
+# LLM-required (same BYOK obligation as output-digest-report): the narration
+# TTS uses the configured engine (OpenAI TTS default, edge-tts optional).
+# Env-gated: HyperFrames rendering needs `bun` + `hyperframes` npm CLI, and
+# ffmpeg/ffprobe for audio probing — when missing the step reports
+# unconfigured (never silently skipped), matching the MCP env-gate pattern.
+#
+# The video pipeline mirrors the E8 matrix report×video implemented cell:
+# TTS narration -> HyperFrames project scaffold -> bun render -> MP4.
+name: output-video
+description: "V1 — report format='video' via HyperFrames (HTML+GSAP -> MP4)"
+category: output
+requires_env: ["AUTOINFO_LLM_API_KEY"]
+requires_domain: ["medical-research"]
+collect_artifacts:
+  - "outputs/**/*.mp4"
+  - "outputs/**/*.json"
+steps:
+  - name: "generate_report video format (HyperFrames MP4)"
+    tool: generate_report
+    arguments:
+      domain: medical-research
+      period: weekly
+      format: video
+      persist: true
+    expect:
+      success: true
+      response_contains:
+        - '"format": "mp4"'
+        - '"output_type": "video"'
+        - '"status": "ok"'

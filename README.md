@@ -21,7 +21,7 @@ LLM-based structured extraction, summarization, and a queryable knowledge base.
 - **REST API** — Full CRUD over HTTP (FastAPI, port 8741), no auth (localhost security)
 - **Web UI Dashboard** — Bootstrap 5, collection stats, KB search, source health overview
 - **CEFR classification** — LLM-based EN/ZH/JA reading level scoring for language learning
-- **Output formats** — Markdown, JSON, PDF, **HTML**, **EPUB/MOBI** (ebooklib EPUB3 + calibre MOBI via `format="epub"/"mobi"`), **Audiobook** (chaptered MP3 via `format="audiobook"`, ID3v2.3 CHAP/CTOC + ZIP bundle) (digest/report via Jinja2 + LLM, presentation via Reveal.js CDN)
+- **Output formats** — Markdown, JSON, PDF, **HTML**, **EPUB/MOBI** (ebooklib EPUB3 + calibre MOBI via `format="epub"/"mobi"`), **Audiobook** (chaptered MP3 via `format="audiobook"`, ID3v2.3 CHAP/CTOC + ZIP bundle), **Video** (HTML+GSAP→MP4 via HyperFrames: TTS narration + themed scene compositions, 36+8 themes, 6 layouts with mandatory adjacent-scene diversity) (digest/report via Jinja2 + LLM, presentation via Reveal.js CDN)
 - **Translation QA pipeline** — 5 lite quality gates, back-translation verification, multi-round refinement, terminology guardrails, composite quality scoring
 - **Email sending** — SMTP-based digest delivery (manual and cron-scheduled)
 - **Webhook push** — Per-item webhook notification on collected content
@@ -69,7 +69,7 @@ LLM-based structured extraction, summarization, and a queryable knowledge base.
 - **Channel health monitoring** — `get_channel_health` MCP tool checks all 13 delivery channels (smtp, webhook, rest_api, file_export, discord, telegram, wechat_work, wechat_oa, dingtalk, feishu, rss, social_publish, push) with latency and error status
 - **Cron health monitoring** — `autoinfo cron health` CLI with heartbeat tracking and missed-schedule detection
 - **SQLite backup** — `make backup` target plus `scripts/backup-db.sh` and `scripts/restore-db.sh` for automated KB and user-store backups (keeps last 7)
-- **17 new collectors** — DBLP, NYT, OpenAlex, Reddit, Spotify, YouTube, Bilibili, Apple Podcasts, Semantic Scholar, USPTO, plus paid AP API and Reuters MCP handlers (v1.6), plus SSRN, GDELT, Yahoo Finance, Quandl, HuggingFace/Kaggle, Unpaywall/CORE (v1.8.4), plus HackerNews (Unreleased 2026-08-04), plus AKShare, SEC EDGAR, edX sitemap (2026-08-05). 30 total collector handlers across all source types.
+- **22 new collectors** — DBLP, NYT, OpenAlex, Reddit, Spotify, YouTube, Bilibili, Apple Podcasts, Semantic Scholar, USPTO, plus paid AP API and Reuters MCP handlers (v1.6), plus SSRN, GDELT, Yahoo Finance, Quandl, HuggingFace/Kaggle, Unpaywall/CORE (v1.8.4), plus HackerNews (Unreleased 2026-08-04), plus AKShare, SEC EDGAR, edX sitemap (2026-08-05). 30 total collector handlers across all source types.
 - **Collector fulltext depth** — `fetch_depth: fulltext` threaded through collection dispatch: Unpaywall (OA fulltext via trafilatura), RSS (entry.link fulltext), YouTube (transcript download), GDELT (article fulltext) — 8000-char cap, graceful fallback on failure; scoped re-collection proved ~4x deeper content on the medical-research deliverable domain
 - **Bundle export** — `export_kb(format="bundle")` creates a ZIP archive containing JSON data, Markdown summary, YAML metadata, and a weasyprint-rendered PDF report (with graceful fallback)
 - **Cross-domain reports & digests** — `generate_report()` and `generate_digest()` accept a `domains` parameter for multi-domain synthesis. New MCP tool `generate_cross_domain_report` for cross-domain analysis.
@@ -84,13 +84,14 @@ LLM-based structured extraction, summarization, and a queryable knowledge base.
 - **RAW product variants (E11)** — RAW product carries `variants: ["api_feed", "webhook", "bulk_export"]` field distinguishing the three RAW delivery modes
 - **Podcast RSS publishing (C11)** — RSS 2.0 delivery channel with `<enclosure>` + `itunes:*` namespace for podcast feed generation; audio output auto-persists MP3 to disk
 - **Validated source types** — `VALID_SOURCE_TYPES` frozenset (29 types) as single source of truth for source type validation across MCP and CLI
-- **Agent-native validation** — `list_validation_scenarios` / `run_validation_scenario` MCP tools execute validation scenarios through the MCP surface (plus CLI subprocess and REST HTTP steps): each step makes a real call and asserts on the `{success, data}` envelope; env-gated steps report `unconfigured` (never silently skipped), and `llm_assert` runs a real model call for semantic checks. 67 scenarios (61 functional + 6 regression). Per-step `timeout_seconds` guards runaway steps; failed steps can declare `recovery_steps` (run after the primary failure); scenarios support partial-pass via `min_passing` (int) / `pass_ratio` (float); `requires_http` gates steps that need a live REST server (reports `unconfigured` when offline). Results carry a per-step execution trace (step_index/duration/arguments/trace_id + llm_meta model/tokens/duration); `run_validation_scenario` output includes a root-cause report with `## Blockers` and `## Per-step trace` sections.
+- **Agent-native validation** — `list_validation_scenarios` / `run_validation_scenario` MCP tools execute validation scenarios through the MCP surface (plus CLI subprocess and REST HTTP steps): each step makes a real call and asserts on the `{success, data}` envelope; env-gated steps report `unconfigured` (never silently skipped), and `llm_assert` runs a real model call for semantic checks. 68 scenarios (62 functional + 6 regression). Per-step `timeout_seconds` guards runaway steps; failed steps can declare `recovery_steps` (run after the primary failure); scenarios support partial-pass via `min_passing` (int) / `pass_ratio` (float); `requires_http` gates steps that need a live REST server (reports `unconfigured` when offline). Results carry a per-step execution trace (step_index/duration/arguments/trace_id + llm_meta model/tokens/duration); `run_validation_scenario` output includes a root-cause report with `## Blockers` and `## Per-step trace` sections.
 - **Validation regression flywheel** — `scenarios/regression/` subdirectory (6 regression scenarios, REGRESSION marker) auto-loads via recursive glob; `coverage_audit.py` prints a "Regression scenarios: N (issues: ...)" metric; `.github/ISSUE_TEMPLATE/bug_report.md` carries a mandatory 回归场景 (regression scenario) field so every bug ships with a scenario.
 - **Validation delivery packaging** — `scripts/validation_delivery.py` builds 01-RAW / 02-PROCESSED / 03-KB / 04-MATRIX / 06-REJECTED plus `validation-report.md` and `manifest.json` with per-file authenticity, D1-D3 delivery gates, and UX metrics (UX_OK/completion_rate ≥ 0.8). Output scenarios persist `collect_artifacts` for post-run inspection.
-- **End-user coverage matrix (E8)** — `scripts/coverage_matrix.py` generates the end-user feature coverage matrix from `docs/dev/specs/end-user-matrix.yaml`; surfaced as the 04-MATRIX section in validation delivery plus Oracle R8 unconfigured-vs-gap analysis. Scenario library exercises 8/8 products, 7/7 formats, and 27/27 source platforms (issue #156 closed).
+- **End-user coverage matrix (E8)** — `scripts/coverage_matrix.py` generates the end-user feature coverage matrix from `docs/dev/specs/end-user-matrix.yaml` (v3: 8 products × 8 formats × 13 domains, 29 source platforms, 14 channels, 15 capabilities); surfaced as the 04-MATRIX section in validation delivery plus Oracle R8 unconfigured-vs-gap analysis. Scenario library currently exercises 8/8 products, 8/8 formats, 28/29 source platforms (email_imap not yet covered).
 - **End-user journey validation** — `enduser-journey.yaml` scenario drives the full B1 lifecycle with UX metrics (UX_OK/completion_rate ≥ 0.8) measured in validation packaging; the error-boundary scenario asserts the `actionable` field of the error envelope.
-- **LLM timeout + parallel processing** — `LLMConfig.timeout` (default 120.0) threads through every LLM call; processing uses a `ThreadPoolExecutor` sized by `AUTOINFO_PROCESS_WORKERS`; MCP handlers offload blocking work via `asyncio.to_thread`.
-- **LLM fallback chain on all paths** — shared `llm.call_with_fallback` helper; the configured `llm.fallback` list now protects every LLM call path (extraction, validation judge, quality gates, translation QA, output generation, keyword suggest, Q&A, CEFR), not just extraction.
+- **LLM concurrency governance** — per-provider shared rate limiting (`AUTOINFO_LLM_MAX_CONCURRENCY`, default 4, clamped ≥1) via a `threading.Semaphore` per `(provider, base_url)` in `llm.call_with_fallback`, enforced across every fan-out path (process workers, post-extraction gates, cefr_batch, output grouping, MCP `to_thread` handlers, fallback chain); jittered exponential backoff on HTTP 429/5xx (3 attempts, base 1.0s ×2, cap 8s, jitter ±25%; non-retryable 4xx never retried); process worker cap raised 8→16 (probe-gated: 0 rate limits at workers 1/4/8/16 with bounded p95); post-extraction gates G3/G4/G5/CEFR run concurrently per item (`AUTOINFO_SUBTASK_CAP`, default 4); CEFR classification moved outside the storage lock; `cefr_batch` parallelized (`AUTOINFO_CEFR_BATCH_WORKERS`, default 8); `_group_by_theme` batch loop parallelized (max 4 workers, order preserved); 14 sync MCP LLM handlers offloaded via `asyncio.to_thread`; per-task model routing with release-pinned `JUDGMENT_MODEL = "deepseek-v4-flash"` for G4/G5/llm_judge judgment calls. (2026-08-13)
+- **LLM timeout + parallel processing** — `LLMConfig.timeout` (default 120.0) threads through every LLM call; processing uses a `ThreadPoolExecutor` sized by `AUTOINFO_PROCESS_WORKERS` (default 5, env-clamped cap 16); MCP handlers offload blocking work via `asyncio.to_thread`.
+- **LLM fallback chain on all paths** — shared `llm.call_with_fallback` helper; the configured `llm.fallback` list now protects every LLM call path (extraction, validation judge, quality gates, translation QA, output generation, keyword suggest, Q&A, CEFR), not just extraction. The actual fallback is `mimo-v2.5` on the same gateway (inherits the primary API key).
 - **Dead-source detection** — Semantic Scholar HTTP 429 surfaces as `SourceFailure` (fail-fast, no partial results); arXiv rss/bio → rss/q-bio source config fix.
 - **CLI module entry** — `python -m autoinfo.cli` runs the same Typer app as the `autoinfo` console script; `collect` prints live per-source progress lines.
 
@@ -108,9 +109,10 @@ LLM-based structured extraction, summarization, and a queryable knowledge base.
 | KB import | ✅ 4 formats (PDF, Markdown, HTML, JSON) → 01-Raw via `import_kb` MCP tool |
 | Search | ✅ Hybrid (FTS5 keyword + sqlite-vec vector), faceted (7 filters + `filter_custom_fields` on custom_fields JSON) |
 | Q&A | ✅ FTS5 + LLM synthesis with source citations |
-| Output generation | ✅ Digest (Markdown/HTML/JSON/PDF/EPUB/Audiobook), report (Markdown/JSON/HTML/Audio/Agent/EPUB/Audiobook), tutorial (Markdown), presentation (Markdown), export (Markdown/JSON/SQLite/PDF/RSS/CSV/GraphML/Agent/Bundle/Sitemap/EPUB/MOBI) (Jinja2 + LLM, Reveal.js CDN, ebooklib EPUB3 + calibre MOBI); 8 product templates incl. premium-briefing/enterprise-briefing + per-product LLM synthesis |
+| Output generation | ✅ Digest (Markdown/HTML/JSON/Agent/Audio/EPUB/Audiobook), report (Markdown/JSON/HTML/Audio/Agent/Video/EPUB/Audiobook), tutorial (Markdown), presentation (Markdown), export (Markdown/JSON/SQLite/PDF/RSS/CSV/GraphML/Agent/Bundle/Sitemap/EPUB/MOBI) (Jinja2 + LLM, Reveal.js CDN, ebooklib EPUB3 + calibre MOBI); 8 product templates incl. premium-briefing/enterprise-briefing + per-product LLM synthesis |
 | Agent-native JSON output | ✅ `format="agent"` returns JSON-LD (`@type: KnowledgeDigest`) for LLM re-consumption |
 | Audio output | ✅ TTS-rendered digest/report as MP3 (OpenAI TTS) via `format='audio'`; `format='audiobook'` = chaptered MP3 + ZIP (ID3v2.3 CHAP/CTOC via mutagen) |
+| Video output | ✅ HyperFrames HTML+GSAP→MP4 (`report format="video"`): TTS narration + themed scene compositions, 36+8 themes, 6 layouts with adjacent-scene diversity; MCP `generate_report`/`generate_cross_domain_report` expose `video` |
 | Translation | ✅ LLM-based source→target |
 | Knowledge graph | ✅ Entity extraction + relation discovery |
 | REST API | ✅ FastAPI CRUD (port 8741, /api/v1/entries, /health, /dashboard) |
@@ -140,18 +142,18 @@ LLM-based structured extraction, summarization, and a queryable knowledge base.
 | Versioned re-collection | ✅ Version tracking with structured diff between versions. |
 | Stale content handling | ✅ Search demotion, digest exclusion, never deleted. |
 | Domain decay metrics | ✅ Staleness ratio, avg TTL, decay grade (Green/Yellow/Red). |
-| Cross-collection dedup & merge | ✅ URL dedup, cross-source similarity, LLM-assisted merge. |
+| Cross-collection dedup & merge | 🟡 URL dedup + cross-source similarity (find_similar_items); no LLM-assisted merge (merge_items in quality.py has only simple/title_first strategies) |
 | Enhanced diagnostics | ✅ `doctor --verbose` with health score, error rates, latency p95/p99. |
 | Prometheus metrics | ✅ `http://localhost:8741/metrics` endpoint (configurable). |
-| Multi-user foundation | ✅ user_id fields on entries (no auth/teams yet) |
+| Multi-user foundation | 🟡 Advisory user_id fields only (MultiUserConfig enabled=False); no auth/teams/RBAC |
 | Export | ✅ Markdown, JSON, SQLite, PDF, CSV, GraphML |
 | Schema versioning | ✅ DB schema version markers in SQLite |
 | Subscription tiers | ✅ Free/Premium/Enterprise tiers with per-tier channels, domains, products, platform limits |
 | Access control | ✅ `check_access()` fast path — free always allowed, premium/enterprise require active paid subscription (G15) |
-| Consumption tracking | ✅ `ConsumptionEvent` auto-record on digest/report delivery (view/open/click), SQLite-backed store |
-| Automated notifications | ✅ Trial-ending reminders (3-day window) + content-ready notifications to end users |
-| Channel health monitoring | ✅ `get_channel_health` MCP tool — health + latency for all 13 delivery channels |
-| Cron health monitoring | ✅ `autoinfo cron health` CLI — heartbeat tracking + missed-schedule detection |
+| Consumption tracking | 🟡 `ConsumptionEvent` auto-record on delivery (SQLite store) exists; no consumption feedback loop |
+| Automated notifications | 🟡 Trial-ending reminders + content-ready notifications; no unified notification bus (F63) |
+| Channel health monitoring | 🟡 `get_channel_health` MCP tool exists (health + latency); no auto-suspend of unhealthy channels |
+| Cron health monitoring | 🟡 Heartbeat tracking + missed-schedule detection (cli/cron.py); no backfill/execution history |
 | SQLite backup | ✅ `make backup` + `scripts/backup-db.sh` / `scripts/restore-db.sh` (keeps last 7 backups) |
 | Job state persistence | ✅ SQLite-backed collection/processing job state survives restarts |
 | Agent callback persistence | ✅ SQLite-backed agent callback registration survives restarts |
@@ -170,17 +172,17 @@ LLM-based structured extraction, summarization, and a queryable knowledge base.
 | Cost allocation MCP | ✅ cost_allocation MCP tool |
 | Demo domains | ✅ medical-research, ai-commercial, financial-intelligence, tech-ai-developer, language-learning, online-video, financial-news, online-education, legal-compliance, general-news, gaming, b2b, retail |
 | Delivery schedules | ✅ add_delivery_schedule, list_delivery_schedules, remove_delivery_schedule MCP tools, cron-integrated |
-| Validation scenarios | ✅ 67 scenarios (61 functional + 6 regression in `scenarios/regression/`, REGRESSION marker, recursive-glob auto-load) |
+| Validation scenarios | ✅ 68 scenarios (62 functional + 6 regression in `scenarios/regression/`, REGRESSION marker, recursive-glob auto-load) |
 | Validation execution | ✅ Per-step `timeout_seconds`; per-step `recovery_steps` + partial-pass (`min_passing`/`pass_ratio`); per-step trace (step_index/duration/arguments/trace_id + llm_meta); root-cause report (`## Blockers` / `## Per-step trace` / `## Regression failures`) |
 | Regression flywheel | ✅ `scenarios/regression/` (6 scenarios) + `coverage_audit.py` "Regression scenarios: N" metric + `.github/ISSUE_TEMPLATE/bug_report.md` mandatory 回归场景 field |
 | Validation delivery | ✅ `scripts/validation_delivery.py` builds 01-RAW/02-PROCESSED/03-KB/04-MATRIX/06-REJECTED + validation-report.md + manifest.json (per-file authenticity + D1-D3 gates + UX metrics UX_OK/completion_rate ≥ 0.8) |
 | End-user coverage matrix (E8) | ✅ `scripts/coverage_matrix.py` + `docs/dev/specs/end-user-matrix.yaml`; surfaced as 04-MATRIX + coverage-gaps.json |
 | End-user journey validation | ✅ `enduser-journey.yaml` scenario + UX metrics; error-boundary asserts `actionable` field |
-| LLM timeout + parallel processing | ✅ `LLMConfig.timeout` (default 120.0) threaded through LLM calls; `AUTOINFO_PROCESS_WORKERS` ThreadPoolExecutor; MCP `asyncio.to_thread` offload |
-| LLM fallback chain | ✅ Shared `llm.call_with_fallback` — every LLM call site (extraction + 17 standalone) walks `[primary] + config.llm.fallback`; first successful model wins |
+| LLM timeout + parallel processing | ✅ `LLMConfig.timeout` (default 120.0) threaded through LLM calls; `AUTOINFO_PROCESS_WORKERS` ThreadPoolExecutor (default 5, env-clamped cap 16, probe-gated); post-extraction gates G3/G4/G5/CEFR concurrent per item (`AUTOINFO_SUBTASK_CAP` default 4); CEFR outside `_STORAGE_LOCK`; MCP `asyncio.to_thread` offload (14 sync LLM handlers) |
+| LLM fallback chain | ✅ Shared `llm.call_with_fallback` — every LLM call site (extraction + 17 standalone) walks `[primary] + config.llm.fallback` (actual: `mimo-v2.5` same-gateway, inherits primary key); first successful model wins; per-provider shared rate limiting (`AUTOINFO_LLM_MAX_CONCURRENCY`, default 4) + jittered 429/5xx backoff on every chain entry and all fan-out paths |
 | Dead-source detection | ✅ Semantic Scholar 429 → `SourceFailure` (fail-fast); arXiv rss/bio → rss/q-bio fix |
 | CLI module entry | ✅ `python -m autoinfo.cli` runs the same Typer app; `collect` live per-source progress printer |
-| Test suite | ✅ ~3575 tests collected (3574 passed / 21 skipped / 0 errors at final gate; includes validation wave E1-E9 scenarios + regression suite + #141-#164 regression guards + kb-curation wave + hermetic config-seam fixes) |
+| Test suite | ✅ ~3728 tests collected (incl. validation wave E1-E9 scenarios + regression suite + #141-#164 regression guards + kb-curation wave + hermetic config-seam fixes + llm-concurrency wave; order-dependency fixes landed 2026-08-12) |
 
 ## Quick Start
 
@@ -213,7 +215,7 @@ AutoInfo is agent-first: every capability is an MCP tool. Connect your agent
 
 1. **Health** — `health_check()` → `{status, version, tools_count}`
 2. **Discover** — `list_domains()` → `get_domain_schema("<domain>")` → `list_available_models()`
-3. **Validate** — `list_validation_scenarios()` (67 scenarios: 61 functional + 6 regression) → `run_validation_scenario(scenario="system-health")`
+3. **Validate** — `list_validation_scenarios()` (68 scenarios: 62 functional + 6 regression) → `run_validation_scenario(scenario="system-health")`
 
 Validation is the fastest way to prove the system works: each scenario makes
 real MCP / CLI / REST calls and asserts on the `{success, data}` envelope.
@@ -221,7 +223,7 @@ Env-gated steps report `unconfigured` (never silently skipped); `llm_assert`
 steps run a real model call. Every step carries a per-step execution trace
 (step_index/duration/arguments/trace_id + llm_meta), and failing runs surface
 a root-cause report (`## Blockers` / `## Per-step trace` / `## Regression
-failures`). No LLM key yet? The 14 LLM-required tools return
+failures`). No LLM key yet? The 17 LLM-required tools return
 `LLM_NOT_CONFIGURED` — set `AUTOINFO_LLM_API_KEY` or call `configure_llm()`.
 
 Non-MCP testers can smoke-test over REST instead:
@@ -384,11 +386,11 @@ autoinfo output digest|report|tutorial|presentation|export|translate|list-templa
 autoinfo cron run|list-schedules|add-schedule|remove-schedule|install|uninstall|health  # health = heartbeat + missed-schedule detection
 autoinfo cefr classify|batch        # CEFR text classification
 autoinfo email send-digest --user-id <id>|config  # SMTP email sending (--user-id for content_preference filtering)
-autoinfo keywords add|remove|list|suggest  # Keyword management
+autoinfo keywords list|approve|reject|suggest  # Keyword management
 autoinfo knowledge graph            # Knowledge graph export
 autoinfo clean                       # Clean temporary artifacts
 autoinfo cost dashboard|allocation  # Cost tracking & allocation
-autoinfo billing summary|usage|invoice  # Billing & usage overview
+autoinfo billing summary  # Billing & usage overview
 autoinfo enduser create|get|update|delete|list  # End-user profile management
 autoinfo portal preferences|history # End-user self-service portal
 autoinfo trace <trace_id>           # Per-item pipeline trace
@@ -413,7 +415,7 @@ autoinfo agent-callback add|list|remove  # Agent push callbacks (MCP parity)
 | **KB Versioning** | get_entry_history, restore_entry_version |
 | **KB Monitor** | get_collection_stats, get_collection_diff |
 | **KB Graph** | query_knowledge_graph, knowledge_graph_export |
-| **Output** | list_output_templates, generate_digest (md/html/json/agent, `product=` premium-briefing/magazine-digest/...), generate_report (md/json/pdf/html/audio/agent, `product=` premium-briefing/enterprise-briefing/...), generate_cross_domain_report, generate_tutorial (md/agent), generate_presentation (md/agent), localize_content, export_kb (md/json/sqlite/pdf/csv/graphml/agent/bundle) |
+| **Output** | list_output_templates, generate_digest (md/html/json/agent, `product=` premium-briefing/magazine-digest/...), generate_report (md/json/html/audio/agent/video/epub/audiobook, `product=` premium-briefing/enterprise-briefing/...), generate_cross_domain_report, generate_tutorial (md/agent), generate_presentation (md/agent), localize_content, export_kb (md/json/sqlite/pdf/csv/graphml/agent/bundle) |
 | **Export/Import** | export_kb, import_kb |
 | **CEFR** | classify_cefr (EN/ZH/JA), cefr_batch |
 | **Keywords** | approve_keyword, reject_keyword, suggest_keywords |
@@ -444,13 +446,13 @@ autoinfo agent-callback add|list|remove  # Agent push callbacks (MCP parity)
 |--------|---------|----------|--------|
 | **Medical Research** | PubMed (REST API), Semantic Scholar, arXiv, CrossRef, DBLP, OpenAlex, USPTO | 🔴 P0 | ✅ Implemented (7 curated sources) |
 | **AI Commercial Intelligence** | TechCrunch RSS, ProductHunt RSS, Crunchbase, 36kr | 🟡 P1 | ✅ Implemented (4 curated sources) |
-| **Financial/Business Intelligence** | Alpha Vantage, FRED, SEC EDGAR, Twelve Data, World Bank Data | 🟡 P1 | ✅ Implemented (5 curated sources) |
+| **Financial/Business Intelligence** | Alpha Vantage, FRED, Finnhub, SEC EDGAR, Twelve Data, World Bank Data, Quandl/Nasdaq Data Link | 🟡 P1 | ✅ Implemented (7 curated sources) |
 | **Tech/AI/Developer** | GitHub Trending, HackerNews API, Substack RSS (tech), Stack Exchange, ProductHunt, Reddit, Spotify AI Podcasts, Bilibili | 🟡 P1 | ✅ Implemented (8 curated sources) |
 | **Language Learning** | Project Gutenberg, news-in-levels, commonlit | 🟢 P2 | ✅ Implemented (3 curated sources) |
-| **Online Video / OTT** | YouTube, Bilibili, Apple Podcasts, Spotify | 🟡 P1 | ✅ Implemented (4 curated sources) |
-| **Financial News** | NYT, Alpha Vantage, FRED, SEC EDGAR, Twelve Data, World Bank Data | 🟡 P1 | ✅ Implemented (6 curated sources) |
-| **Online Education** | OpenAlex, Semantic Scholar, arXiv, DBLP, Stack Exchange, Project Gutenberg | 🟢 P2 | ✅ Implemented (6 curated sources) |
-| **Legal Compliance** | USPTO, Semantic Scholar, webhook, email (IMAP) | 🟢 P2 | ✅ Implemented (4 curated sources) |
+| **Online Video / OTT** | YouTube (mkbhd), Variety, Hollywood Reporter, Netflix Tech Blog, Apple Music, Pitchfork, Billboard | 🟡 P1 | ✅ Implemented (7 curated sources) |
+| **Financial News** | Reuters Business, CNBC, FT Alphaville, Yahoo Finance, Seeking Alpha, BusinessWire Tech, PRNewswire FinServ, NVIDIA Newsroom, Microsoft Newsroom | 🟡 P1 | ✅ Implemented (9 curated sources) |
+| **Online Education** | Coursera Blog, EdSurge, Class Central, Khan Academy, Open Culture, 得到 (dedao), Coursera, ncpssd, 万方 (Wanfang) | 🟢 P2 | ✅ Implemented (9 curated sources) |
+| **Legal Compliance** | SCOTUSblog, IAPP Privacy, Law.com, Oyez, GDPR.eu | 🟢 P2 | ✅ Implemented (5 curated sources) |
 | **General News** | GDELT, Guardian Open Platform, Google News RSS, NYT, AP API, Mastodon, Bluesky, 知乎日报, Medium RSS, magazine feeds (The Atlantic/Wired/Time) | 🟢 P2 | ✅ Implemented (15 curated sources) |
 | **Gaming** | IGN RSS, Polygon, GamesIndustry.biz, 机核网 gcores, 游研社 (via Google News) | 🟢 P2 | ✅ Implemented (5 curated sources) |
 | **B2B / Enterprise** | ProductHunt, TechCrunch, Crunchbase News, a16z, HackerNews | 🟢 P2 | ✅ Implemented (5 curated sources) |
@@ -466,7 +468,7 @@ make lint        # ruff check + mypy
 
 ## Known Limitations
 
-AutoInfo has evolved through v1.3-v1.8.4 with major feature additions at each release. See [CHANGELOG.md](CHANGELOG.md) for the full version history. Notable v1.8.2-v1.8.4 additions: bundle export, delivery schedules, podcast RSS publishing (C11), HackerNews collector, MCP-native validation toolset (44→57→59 scenarios in 2026-08-05→07, incl. the 5-scenario regression flywheel; the kb-curation wave grew it to 65 on 2026-08-08; the output-quality-mega wave grew it to 67 on 2026-08-11 with premium-briefing/enterprise-briefing templates + collector fulltext depth), B23 ebook/audiobook output, version unification at 1.8.1 (see `src/autoinfo/_version.py`). The following items remain explicitly deferred:
+AutoInfo has evolved through v1.3-v1.8.4 with major feature additions at each release. See [CHANGELOG.md](CHANGELOG.md) for the full version history. Notable v1.8.2-v1.8.4 additions: bundle export, delivery schedules, podcast RSS publishing (C11), HackerNews collector, MCP-native validation toolset (44→57→59 scenarios in 2026-08-05→07, incl. the 6-scenario regression flywheel; the kb-curation wave grew it to 65 on 2026-08-08; the output-quality-mega wave grew it to 67 on 2026-08-11 and the output-video scenario brought it to 68 (62 functional + 6 regression) on 2026-08-13 with premium-briefing/enterprise-briefing templates + collector fulltext depth), B23 ebook/audiobook output, version unification at 1.8.1 (see `src/autoinfo/_version.py`); CHANGELOG documents v1.9/v1.10 as Unreleased. The following items remain explicitly deferred:
 
 | Feature | Status | Notes |
 |---------|--------|-------|

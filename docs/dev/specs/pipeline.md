@@ -18,21 +18,25 @@ Every collected source item is represented as an `Item`:
 ```python
 @dataclass
 class Item:
-    """A single collected item before KB storage."""
-    source_url: str
+    """A single collected item from any source."""
+    id: str
+    source_name: str
     source_type: str                  # one of VALID_SOURCE_TYPES (29 types, single source of truth in src/autoinfo/config.py)
-    source_platform: str              # e.g. "pubmed", "arxiv", "hn"
+    source_url: str
     title: str
     content: str                      # main body text
-    content_hash: str                 # SHA256(content) — dedup key
-    author: str | None = None
-    published: datetime | None = None
-    collected_at: datetime = field(default_factory=datetime.now)
-    raw_metadata: dict = field(default_factory=dict)  # source-specific (DOI, PMID, URL)
-    topics: list[str] = field(default_factory=list)   # matched topic names
-    relevance_score: float = 0.0      # populated by G3
+    content_type: str = "text"
+    source_platform: str = ""         # e.g. "pubmed", "arxiv", "hn"
+    collected_at: str = ""            # ISO-8601 timestamp (string, not datetime)
+    language: str = ""
+    domain: str = ""
+    topic_tags: list[str] = field(default_factory=list)   # matched topic names
     quality_tier: int = 1             # 1-4, propagated from source config at collect time (G1 input)
-    quality_flags: list[str] = field(default_factory=list)
+    raw_data: dict[str, Any] = field(default_factory=dict)  # source-specific (DOI, PMID, URL)
+    version: int = 1
+    previous_version: int = 0
+    supersedes: str = ""
+    trace_id: str = ""                # UUID assigned at collection, carried through delivery
 ```
 
 ### 1.2 Design Rules
@@ -163,12 +167,12 @@ All tiers are stored as flat Markdown files with YAML frontmatter in `knowledge/
 
 ```markdown
 ---
-id: "raw_abc123"
+entry_id: "raw_abc123"
 source_url: "https://pubmed.ncbi.nlm.nih.gov/12345"
 source_type: "pubmed"
 source_platform: "pubmed"
 collected_at: "2026-07-26T10:00:00"
-topics: ["IVF breakthroughs"]
+tags: ["IVF breakthroughs"]
 relevance_score: 85
 trace_id: "trc_abc123"
 ---
@@ -197,9 +201,9 @@ git commit -m "[{tier}] {domain}: {article title}"
 
 This provides full history, diff between versions, and recovery. No explicit "versioning" system needed — git handles it.
 
-### 2.5 SHA Tracking
+### 2.5 Version Tracking
 
-Each KB entry's YAML frontmatter includes `content_sha: <sha256(content + metadata)>`. When re-processing produces a different SHA, the old entry is preserved (git retains history) and the new entry gets a new path (new slug with `-v2` suffix).
+Re-collection creates a new `Item` with an incremented `version` (and `previous_version` linking the prior version); KB entries carry `version` / `previous_version` / `supersedes` in their frontmatter. When re-processing produces a new version, the old entry is preserved (git retains history) and the new entry gets a new path (new slug with `-v2` suffix). There is no content-hash field in the model — versioning is tracked via the explicit version fields and git history.
 
 ### 2.6 Product Analysis Metadata
 
@@ -257,13 +261,15 @@ Each extraction run produces:
 ```python
 @dataclass
 class ExtractionResult:
-    tl_dr: str                         # One-sentence summary
-    key_points: list[str]             # 3-5 bullet points
-    entities: dict[str, list[str]]    # Extracted entities by type
-    custom_fields: dict               # Domain-specific fields
-    quality_score: float = 0.0        # 0-100, from G4/G5
-    facts: list[str] = field(default_factory=list)    # verifiable claims (for G4)
-    translation: str | None = None    # Translated text (if language != source)
+    """Structured extraction output from LLM processing."""
+    item_id: str
+    title: str = ""
+    tl_dr: str = ""                    # One-sentence summary
+    key_points: list[str] = field(default_factory=list)  # 3-5 bullet points
+    entities: list[dict[str, Any]] = field(default_factory=list)  # Extracted entities — list of dicts (not dict-of-lists)
+    relevance_score: float = 0.0       # populated by G3
+    custom_fields: dict[str, Any] = field(default_factory=dict)   # Domain-specific fields
+    usage: dict[str, Any] = field(default_factory=dict)  # LLM token usage metadata
 ```
 
 ### 3.3 LLM Configuration
@@ -360,6 +366,24 @@ When the primary model fails (timeout, rate limit, server error), AutoInfo itera
 
 ---
 
+### 3.5 LLM Concurrency, Rate Limiting & Retry (2026-08-13 llm-concurrency-remediation wave)
+
+Every LLM call route through `llm.call_with_fallback` (llm.py) and inherits the same concurrency controls; gate semantics (G0-G5 thresholds/actions/retry-block) are **unchanged** — limiter and backoff wrap the calls, they do not alter gate outcomes.
+
+**Per-provider shared rate limiting** — `_PROVIDER_SEMAPHORES` (llm.py) holds one `threading.Semaphore` per `(provider, base_url)`; `AUTOINFO_LLM_MAX_CONCURRENCY` env override (default 4, clamped ≥1) bounds in-flight requests per provider. Enforced across **every** fan-out path: process workers, post-extraction gates, cefr_batch, output grouping, MCP `asyncio.to_thread` handlers, and the fallback chain itself (each chain entry walks under the same limiter). There is no single global process-wide lock.
+
+**429/5xx jittered backoff** — HTTP 429 and 5xx are retried inside `call_with_fallback` with jittered exponential backoff: at most 3 total attempts (2 retries), base 1.0s, factor 2, cap 8s, jitter ±25%. Non-retryable 4xx (400/403/404) surface immediately, never retried; after the final attempt the last error surfaces.
+
+**Per-task model routing** — `_resolve_task_llm_config` (config.py) resolves the model per task and feeds `call_with_fallback(task=)` → `_build_config_with_model` (process.py, which disables task routing for explicit model overrides). Extraction/classification tasks use the task-config model, else the base model. Judgment calls (G4 factual, G5 translation, llm_judge) resolve to the release-pinned `JUDGMENT_MODEL = "deepseek-v4-flash"` constant in config.py — a release-level decision, so judgment never drifts with runtime task config.
+
+**Processing parallelism** — `AUTOINFO_PROCESS_WORKERS` (default 5, env-clamped 1..16; cap raised 8→16 probe-gated: 0 rate limits at workers 1/4/8/16 × 12 with bounded p95, see `scripts/test_llm_concurrency.py`) bounds the per-item extraction thread pool. Post-extraction gates G3/G4/G5/CEFR run concurrently per item under `AUTOINFO_SUBTASK_CAP` (default 4); canonical gate order, G3 retry loop, G4 hard-gate 3× retry and the G0-G5 report order are preserved. The CEFR classification LLM call runs **outside** `_STORAGE_LOCK` (only its storage writes take the lock).
+
+**MCP & output parallelism** — `AUTOINFO_CEFR_BATCH_WORKERS` (default 8, never more than the text count) bounds `cefr_batch` fan-out with order preserved and per-item errors; 14 sync LLM handlers (suggest_keywords, classify_cefr, cefr_batch, extract_fields, generate_digest, generate_report, generate_cross_domain_report, generate_tutorial, generate_presentation, localize_content, query_collected, recommend_content, simplify_content, promote_kb_draft) are offloaded via `asyncio.to_thread`; `_group_by_theme` batch loop is parallelized (max 4 workers, batch size `_GROUPING_BATCH_SIZE`=8 unchanged, results collected by index so order is preserved, exec-summary calls remain serial).
+
+**Probe** — `scripts/test_llm_concurrency.py` accepts `--workers N` / `--total N` and reports `p95` (95th percentile of per-call durations) and `rate_limit_count`; no-args keeps the serial baseline + (1,3,5) sequence.
+
+---
+
 ## 4. Custom Extraction & Q&A (§12.5, 12.8)
 
 ### 4.1 Custom Extraction
@@ -414,7 +438,7 @@ Output structure:
 | HTML | trafilatura | Body extraction, boilerplate removal |
 | JSON | Structured parse | Must match Item schema fields |
 
-All imports create 01-Raw entries identical to collected items (same `source_url` — uses a synthetic URL `import://{filename}`, same `source_type` — `import`, same `content_sha` dedup).
+All imports create 01-Raw entries identical to collected items (same `source_url` — uses a synthetic URL `import://{filename}`, same `source_type` — `import`, subject to the same URL-based dedup rules).
 
 ---
 

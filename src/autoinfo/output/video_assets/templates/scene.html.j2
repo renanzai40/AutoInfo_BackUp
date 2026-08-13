@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1920, height=1080" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    /* Theme variables — injected from theme_palettes.json */
+    :root {
+      --bg: {{ theme.bg }};
+      --bg-soft: {{ theme.bg_soft }};
+      --surface: {{ theme.surface }};
+      --surface-2: {{ theme.surface_2 }};
+      --border: {{ theme.border }};
+      --text-1: {{ theme.text_1 }};
+      --text-2: {{ theme.text_2 }};
+      --text-3: {{ theme.text_3 }};
+      --accent: {{ theme.accent }};
+      --accent-2: {{ theme.accent_2 }};
+      --good: {{ theme.good }};
+      --warn: {{ theme.warn }};
+      --bad: {{ theme.bad }};
+      --grad: {{ theme.grad }};
+      --radius: {{ theme.radius }};
+      --radius-lg: {{ theme.radius_lg }};
+      --shadow: {{ theme.shadow }};
+      --font-sans: system-ui, sans-serif;
+      --font-display: {{ theme.font_display }};
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; }
+    body { background: var(--bg); color: var(--text-1); font-family: var(--font-sans); }
+    .clip { position: absolute; }
+    /* Safety: font >= 20px, foreground top >= 300px */
+    .scene-title { font-size: 56px; font-weight: 700; }
+    .scene-body { font-size: 30px; line-height: 1.5; }
+    .kicker { font-size: 26px; letter-spacing: 0.05em; }
+  </style>
+</head>
+<body>
+  <!-- Scene {{ loop.index }} — layout: {{ layout.name }} -->
+  <div id="scene" data-composition-id="scene-{{ loop.index }}"
+       data-start="0" data-duration="{{ duration }}"
+       data-width="1920" data-height="1080">
+    {{ layout.html | safe }}
+  </div>
+
+  <script>
+    window.__timelines = window.__timelines || {};
+    const tl = gsap.timeline({ paused: true });
+    {{ layout.animations | safe }}
+    window.__timelines["scene-{{ loop.index }}"] = tl;
+  </script>
+</body>
+</html>
