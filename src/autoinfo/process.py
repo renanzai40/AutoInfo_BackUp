@@ -88,7 +88,10 @@ _DEFAULT_PROCESS_WORKERS = 5
 _PROCESS_WORKER_CAP = 16
 
 # Serializes SQLite / markdown KB writes (store_entry, store_entities, CEFR
-# frontmatter updates) so concurrent workers never contend on the same file.
+# frontmatter + index updates) so concurrent workers never contend on the
+# same file.  The CEFR *classification* itself is an LLM call and runs
+# OUTSIDE this lock — only its storage writes take the lock (see
+# _classify_entry_cefr).
 _STORAGE_LOCK = threading.Lock()
 
 
@@ -417,12 +420,16 @@ def _classify_entry_cefr(
         if cefr_level != "unknown":
             from autoinfo.kb import update_frontmatter_field
 
-            update_frontmatter_field(
-                file_path=entry.file_path,
-                key="cefr",
-                value=cefr_level,
-            )
-            _update_index_cefr(entry.entry_id, cefr_level)
+            # Storage writes (markdown frontmatter + SQLite index) stay
+            # serialized under _STORAGE_LOCK; the LLM classification call
+            # above deliberately ran WITHOUT the lock — see _process_item.
+            with _STORAGE_LOCK:
+                update_frontmatter_field(
+                    file_path=entry.file_path,
+                    key="cefr",
+                    value=cefr_level,
+                )
+                _update_index_cefr(entry.entry_id, cefr_level)
             logger.debug(
                 "CEFR classification for %s: %s (confidence=%.2f)",
                 entry.entry_id,
@@ -1166,10 +1173,14 @@ def run_processing(
                         exc,
                     )
 
-            # Step c2: CEFR classification (non-blocking — only when enabled)
+            # Step c2: CEFR classification (non-blocking — only when enabled).
+            # The classification itself is an LLM call and must NOT hold
+            # _STORAGE_LOCK: it can take seconds, and a worker stuck on the
+            # LLM would stall every other worker's KB writes.  Only the
+            # helper's storage writes (frontmatter + SQLite cefr column) take
+            # the lock, internally (see _classify_entry_cefr).
             if config is not None and config.cefr.enabled:
-                with _STORAGE_LOCK:
-                    _classify_entry_cefr(entry, item, config)
+                _classify_entry_cefr(entry, item, config)
 
             # Step d: Knowledge graph — store entities & discover relations
             if extraction and extraction.entities:
