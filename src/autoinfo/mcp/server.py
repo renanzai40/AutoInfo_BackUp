@@ -3025,7 +3025,7 @@ def _handle_generate_report(
                     "period": period,
                     **parsed,
                 },
-                persist, domain, "report", "video", result,
+                persist, domain, _persist_product, "video", result,
             )
         if format in ("epub", "audiobook"):
             return _maybe_persist_output(
