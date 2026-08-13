@@ -3,7 +3,7 @@ name: doc-manager-skill
 description: AutoInfo project documentation inventory, change-impact analysis, and doc-update workflow.
   Load this skill whenever code changes may affect project documentation.
 author: AutoInfo
-version: 2.1.0
+version: 2.2.0
 ---
 
 # AutoInfo Documentation Manager Skill
@@ -34,11 +34,13 @@ The authoritative documentation inventory — every file under `docs/**`
   python3 scripts/doc_inventory.py          # regenerate docs/dev/doc-inventory.md
   python3 scripts/doc_inventory.py --check  # cross-doc consistency check (exit 0 = clean)
   ```
-- `--check` compares README.md vs AGENTS.md on the five drift-prone facts
+- `--check` compares README.md vs AGENTS.md on the seven drift-prone facts
   (MCP tool count, CLI command groups, delivery channels, validation
-  scenarios, demo domains), fails on stray `tests/test_bug_*` files, and
-  fails if the inventory lacks its AUTO-GENERATED header (stale detection).
-  Run it after every doc change; it must exit 0.
+  scenarios, demo domains, LLM-required tools, test count) **and verifies the
+  skill's own numbers in §3 Step 3 agree with README** (self-enforcement —
+  the skill can no longer drift silently), fails on stray `tests/test_bug_*`
+  files, and fails if the inventory lacks its AUTO-GENERATED header (stale
+  detection). Run it after every doc change; it must exit 0.
 - Scope: the generated inventory covers `docs/**`. Root-level docs
   (`README.md`, `AGENTS.md`, `CHANGELOG.md`, `pyproject.toml`, `Makefile`)
   and `.opencode/` skills are outside it but covered by the dependency map (§2).
@@ -54,26 +56,44 @@ When you modify code, the listed docs **must** be reviewed and updated:
 
 | Code change | Docs to update | What to update |
 |-------------|----------------|----------------|
-| MCP server — new tool / param / ErrorCode | `AGENTS.md`, `README.md`, `docs/dev/specs/mcp-tools.md`, `docs/skills/autoinfo-skill/SKILL.md`, `CHANGELOG.md` | Tool Discovery + MCP tables, tool count, spec inventory, scenarios per `docs/dev/validation-scenario-contract.md` |
+| MCP server — new tool / param / ErrorCode | `AGENTS.md`, `README.md`, `docs/dev/specs/mcp-tools.md`, `docs/skills/autoinfo-skill/SKILL.md`, `docs/skills/autoinfo-skill/onboarding-walkthrough.md`, `docs/dev/mcp-usage-examples.md`, `docs/schemas/*.json` (JSON-LD schemas — M4T35 round-trip validates against them), `CHANGELOG.md` | Tool Discovery + MCP tables, tool count, spec inventory, worked examples, JSON-LD schema pinning, scenarios per `docs/dev/validation-scenario-contract.md` |
 | CLI — group / flag / parity change | `README.md`, `AGENTS.md`, `docs/dev/cli-mcp-rest-parity.md`, `CHANGELOG.md` | CLI command table (28 groups), flag examples, parity matrix |
-| New collector / source type | `README.md`, `CHANGELOG.md` | Feature list, Status table (handler count), demo domains (+ `docs/dev/specs/pipeline.md` if collection config changes) |
+| New collector / source type | `README.md`, `CHANGELOG.md`, `docs/dev/required-api-keys.md`, `docs/known-limitations/blocked-sources.md` | Feature list, Status table (handler count), demo domains, env-var catalog, blocked-source policy (+ `docs/dev/specs/pipeline.md` if collection config changes) |
 | Quality gates (G0-G5 / D1-D3) | `docs/dev/specs/quality-gates.md`, `AGENTS.md`, `README.md`, `CHANGELOG.md` | Gate catalog, hard/soft table, retry philosophy |
 | KB pipeline / KB schema | `AGENTS.md` (Architecture Rules), `docs/dev/specs/pipeline.md`, `README.md`, `docs/archive/kb-pipeline-reference.md` (archived — only if referenced) | 4-tier rules (01-Raw sole entry, 03-Wiki append-only), schema |
-| LLM extraction / config | `AGENTS.md` (LLM Configuration), `docs/dev/specs/pipeline.md`, `README.md` | Provider/model/fallback docs, extraction spec |
+| LLM extraction / config | `AGENTS.md` (LLM Configuration), `docs/dev/specs/pipeline.md`, `docs/dev/required-api-keys.md`, `README.md` | Provider/model/fallback docs, extraction spec, env-var catalog |
 | Output formats / delivery channels | `README.md`, `AGENTS.md`, `docs/dev/specs/delivery.md`, `CHANGELOG.md` | Format lists, channel matrix (13), output spec |
-| End-user lifecycle / billing | `docs/dev/specs/delivery.md`, `docs/dev/specs/user-lifecycle-definition.md`, `AGENTS.md`, `README.md`, `CHANGELOG.md` | User types (B1/B2/B3), subscription tiers, check_access |
-| Validation engine / scenarios | `docs/dev/validation-scenario-contract.md`, `AGENTS.md`, `README.md`, `CHANGELOG.md`, `src/autoinfo/mcp/scenarios/` | Scenario counts (68 = 62 + 6 regression), schema fields |
-| Feature addition / scope change | `docs/dev/cross-dimensional-catalog.md` (keystone — mandatory), all P0 docs, `CHANGELOG.md` | Cell statuses (🟢/🟡/🔴/🟠), gap-to-spec mapping |
+| End-user lifecycle / billing | `docs/dev/specs/delivery.md`, `docs/dev/specs/user-lifecycle-definition.md`, `docs/dev/enduser-capabilities-guide.md`, `AGENTS.md`, `README.md`, `CHANGELOG.md` | User types (B1/B2/B3), subscription tiers, check_access, B1 capabilities guide |
+| Validation engine / scenarios | `docs/dev/validation-scenario-contract.md`, `docs/autoinfo-validation-master-plan/`, `docs/dev/validation-reports/` (acceptance + evidence), `AGENTS.md`, `README.md`, `CHANGELOG.md`, `src/autoinfo/mcp/scenarios/` | Scenario counts (68 = 62 + 6 regression), schema fields, per-run acceptance evidence |
+| Alert rules / agent callbacks | `docs/dev/agent-alerting.md`, `AGENTS.md`, `README.md`, `CHANGELOG.md` | Alert rule config, YAML persistence, dispatch |
+| Feature addition / scope change | `docs/dev/cross-dimensional-catalog.md` (keystone — mandatory), `docs/dev/new-domain-guide.md`, all P0 docs, `CHANGELOG.md` | Cell statuses (🟢/🟡/🔴/🟠), gap-to-spec mapping, domain onboarding |
+| Dev skill (`validation-runner-skill`, `deep-modules-skill`, …) | The skill's own `SKILL.md`, `AGENTS.md` if it documents the workflow | Version bump, workflow accuracy, scenario/module references staying current |
+| ADR / glossary / keystone vocabulary | `docs/adr/`, `docs/glossary.md`, the ADR-linked rule doc (e.g. `AGENTS.md` Architecture Rules) | New ADR + status (Proposed/Accepted/Superseded), glossary terms, rule-doc link (§9) |
 | Version bump / release | `pyproject.toml`, `CHANGELOG.md`, `README.md`, `AGENTS.md`, `docs/dev/founder-expectations.md`, `docs/dev/specs/expectations.md` | Version refs, status tables, release notes |
 
 **Keystone docs** to re-check on any change: `docs/dev/cross-dimensional-catalog.md`
 (product matrix), `docs/dev/enduser-coverage-matrix.md` (99-dimension E8),
 `docs/dev/acceptance-framework.md` (acceptance charter), `docs/dev/director-user-guide.md`
-(human interface).
+(human interface), `docs/glossary.md` (shared vocabulary — never redefine its terms).
 
 ---
 
 ## 3. Doc Update Workflow
+
+### Step 0 — Architecture-change pre-flight (ADR gate)
+
+Before identifying affected docs, decide **whether this change needs an ADR**:
+
+- **Write one** (per §9, template `docs/adr/TEMPLATE.md`) when the change: alters
+  an architecture rule (KB/collection pipeline, quality gates, delivery),
+  introduces a non-obvious trade-off, chooses between ≥2 viable alternatives,
+  or has wide blast radius (MCP surface, REST envelope, storage schema, LLM
+  call paths). The ADR comes **first** — it is the decision, the doc edits
+  follow.
+- **Add glossary terms** to `docs/glossary.md` when the change introduces or
+  redefines a term used across ≥2 docs.
+- **No ADR needed** for: typos, comment-only edits, small reversible choices
+  (a code comment suffices), dependency bumps with no behavior delta.
 
 ### Step 1 — Identify affected docs
 1. Consult the dependency map (§2) for your change; read the generated
@@ -103,13 +123,15 @@ skills): source types 29, collector handlers 30, output templates 8,
 LLM-required tools 17, REST port 8741, test count ~3640.
 
 ### Step 4 — Verify
-1. `python3 scripts/doc_inventory.py --check` — must exit 0 (facts match,
-   no stray `test_bug_*`, inventory header intact).
+1. `python3 scripts/doc_inventory.py --check` — must exit 0 (README↔AGENTS↔skill
+   facts match, no stray `test_bug_*`, inventory header intact).
 2. Regenerate `docs/dev/doc-inventory.md` — line counts change whenever you
    edit docs.
 3. No broken relative links (`docs/...`, `src/...` resolve).
 4. README renders (GitHub/PyPI); AGENTS.md stays parseable for agents;
    CHANGELOG entries match actual changes.
+5. If you changed a term used across ≥2 docs: confirm `docs/glossary.md` owns
+   the definition (§6) instead of redefining it in the edited doc.
 
 ---
 
