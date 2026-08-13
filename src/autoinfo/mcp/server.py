@@ -2700,6 +2700,7 @@ _PERSIST_EXT_BY_FORMAT: dict[str, str] = {
     "markdown": ".md",
     "html": ".html",
     "audio": ".mp3",
+    "video": ".mp4",
     "epub": ".epub",
     "audiobook": ".zip",
 }
@@ -2745,7 +2746,7 @@ def _persist_output(
             )
         else:
             _path.write_text(str(content), encoding="utf-8")
-    elif format in ("audio", "epub", "audiobook"):
+    elif format in ("audio", "video", "epub", "audiobook"):
         _path.write_bytes(base64.b64decode(content))
     else:
         _path.write_text(str(content), encoding="utf-8")
@@ -2867,6 +2868,18 @@ def _handle_generate_digest(
                     "content": result,
                 },
                 persist, domain, "digest", "audio", result,
+            )
+        if format == "video":
+            # _render_video_scaffold returns a JSON status blob with video_path.
+            import json as _json2
+
+            try:
+                parsed = _json2.loads(result)
+            except (ValueError, TypeError):
+                parsed = {"status": "ok", "video_path": result}
+            return _maybe_persist_output(
+                {"success": True, "format": "video", **parsed},
+                persist, domain, "digest", "video", result,
             )
         if format in ("epub", "audiobook"):
             return _maybe_persist_output(
@@ -2991,6 +3004,23 @@ def _handle_generate_report(
                     "content": result,
                 },
                 persist, domain, "report", "audio", result,
+            )
+        if format == "video":
+            import json as _json3
+
+            try:
+                parsed = _json3.loads(result)
+            except (ValueError, TypeError):
+                parsed = {"status": "ok", "video_path": result}
+            return _maybe_persist_output(
+                {
+                    "success": True,
+                    "domain": domain,
+                    "format": "video",
+                    "period": period,
+                    **parsed,
+                },
+                persist, domain, "report", "video", result,
             )
         if format in ("epub", "audiobook"):
             return _maybe_persist_output(
@@ -3122,6 +3152,24 @@ def _handle_generate_cross_domain_report(
                     "content": result,
                 },
                 persist, domains[0], "report", "audio", result,
+            )
+        if format == "video":
+            import json as _json4
+
+            try:
+                parsed = _json4.loads(result)
+            except (ValueError, TypeError):
+                parsed = {"status": "ok", "video_path": result}
+            return _maybe_persist_output(
+                {
+                    "success": True,
+                    "domain": domains[0],
+                    "domains": domains,
+                    "format": "video",
+                    "period": period,
+                    **parsed,
+                },
+                persist, domains[0], "report", "video", result,
             )
         if format in ("epub", "audiobook"):
             return _maybe_persist_output(
@@ -8388,7 +8436,7 @@ async def list_tools() -> list[Tool]:
                         "default": "markdown",
                         "enum": [
                             "markdown", "html", "json", "agent", "audio",
-                            "epub", "audiobook",
+                            "video", "epub", "audiobook",
                         ],
                     },
                     "custom_instructions": {
@@ -8466,7 +8514,7 @@ async def list_tools() -> list[Tool]:
                         "default": "markdown",
                         "enum": [
                             "markdown", "json", "html", "agent", "audio",
-                            "epub", "audiobook",
+                            "video", "epub", "audiobook",
                         ],
                     },
                     "period": {
@@ -8540,7 +8588,7 @@ async def list_tools() -> list[Tool]:
                             "audiobook"
                         ),
                         "default": "markdown",
-                        "enum": ["markdown", "json", "html", "agent", "audio", "epub", "audiobook"],
+                        "enum": ["markdown", "json", "html", "agent", "audio", "video", "epub", "audiobook"],
                     },
                     "period": {
                         "type": "string",

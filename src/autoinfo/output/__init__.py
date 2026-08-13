@@ -2969,6 +2969,19 @@ def generate_digest(
                 limit=query_limit,
             )
 
+    # --- Archive/deprecated exclusion ----------------------------------------
+    digest_active: list[dict[str, Any]] = []
+    for entry in entries:
+        cf = entry.get("custom_fields") or "{}"
+        try:
+            cf_dict = json.loads(cf) if isinstance(cf, str) else dict(cf)
+        except (json.JSONDecodeError, TypeError):
+            cf_dict = {}
+        if cf_dict.get("status") in ("archived", "deprecated"):
+            continue
+        digest_active.append(entry)
+    entries = digest_active
+
     # --- Parse tags for each entry (they come as JSON strings from SQLite) ----
     for entry in entries:
         tags_raw = entry.get("tags", "")
@@ -3122,8 +3135,6 @@ def generate_digest(
         else:
             ebook_result = render_audiobook(ebook_chapters)
         rendered = ebook_result["data_b64"]
-    elif format == "video":
-        rendered = _render_video_scaffold(context, digest_title_domain, sections=None)
     else:
         rendered = _render_markdown(context)
 
@@ -6976,13 +6987,13 @@ def _render_video_scaffold(
     if isinstance(resolution, list):
         resolution = tuple(resolution)
     vcfg = VideoConfig(
-        fps=context.get("fps", 1),
+        fps=context.get("fps", 30),
         resolution=resolution,
-        transition=context.get("transition", "fade"),
-        bg_color=context.get("bg_color", "#1a1a2e"),
-        font_color=context.get("font_color", "#ffffff"),
-        font_size=context.get("font_size", 48),
+        theme=context.get("theme", "terminal-green"),
+        quality=context.get("quality", "draft"),
         tts_speed=context.get("tts_speed", 1.0),
+        scene_mode=context.get("scene_mode", "auto"),
+        theme_mood=context.get("theme_mood", ""),
     )
 
     output_path = os.path.join(output_dir, f"report_{timestamp}.mp4")

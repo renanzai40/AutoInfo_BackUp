@@ -1,0 +1,12 @@
+{
+  "meta": {
+    "title": "{{ title }}",
+    "description": "AutoInfo generated video report",
+    "fps": 30,
+    "targetDuration": {{ target_duration }}
+  },
+  "scenes": [
+    {% for scene in scenes %}{"id": "scene-{{ loop.index }}", "name": "{{ scene.name }}", "start": {{ scene.start }}, "duration": {{ scene.duration }}}{% if not loop.last %},
+    {% endif %}{% endfor %}
+  ]
+}

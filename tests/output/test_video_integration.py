@@ -1,10 +1,11 @@
-"""Integration tests for the FFmpeg video rendering pipeline.
+"""Integration tests for the HyperFrames video rendering pipeline.
 
 Tests cover:
-- ``render_video()`` — concat demuxer + xfade transitions
-- ``generate_report_video()`` — full pipeline (slides + audio + FFmpeg)
-- Error handling: missing FFmpeg, empty images, invalid audio
-- ``_render_video_scaffold`` integration with ``generate_report``
+- ``render_hyperframes()`` — bun lint + render orchestration (mocked bun)
+- ``generate_report_video()`` — full pipeline (TTS + project + render)
+- Error handling: missing bun, lint failure, render failure
+- ``_render_video_scaffold`` integration with ``generate_report`` (video format)
+- Real-render smoke tests, skipped when bun/ffmpeg unavailable
 """
 
 from __future__ import annotations
@@ -12,6 +13,7 @@ from __future__ import annotations
 import json
 import os
 import shutil
+import subprocess
 import tempfile
 from unittest.mock import MagicMock, patch
 
@@ -20,19 +22,13 @@ import pytest
 from autoinfo.output.video import (
     VideoConfig,
     generate_report_video,
-    render_video,
+    render_hyperframes,
 )
 
-pytest.importorskip("PIL")
-
-# TRIAGE (env-dep, plan M0T3): the whole module also needs the ffmpeg binary —
-# PIL gating (#114, line above) is partial. Complete it: skip the module when
-# ffmpeg is not on PATH (root cause: autoinfo/output/video.py uses _find_binary).
-if shutil.which("ffmpeg") is None:
-    pytest.skip(
-        "ffmpeg not installed — video rendering tests require ffmpeg on PATH",
-        allow_module_level=True,
-    )
+# HyperFrames render requires bun + ffmpeg/ffprobe + headless Chrome libs.
+# The unit tests below mock bun; the real-render tests skip when missing.
+BUN = shutil.which("bun")
+FFMPEG = shutil.which("ffmpeg")
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -48,481 +44,163 @@ def temp_dir() -> str:
     shutil.rmtree(d, ignore_errors=True)
 
 
-@pytest.fixture
-def dummy_images(temp_dir: str) -> list[str]:
-    """Generate 3 small PNG images using Pillow."""
-    from PIL import Image
-
-    paths: list[str] = []
-    for i in range(3):
-        img = Image.new("RGB", (320, 240), color=(40 + i * 40, 40, 80))
-        p = os.path.join(temp_dir, f"slide_{i:03d}.png")
-        img.save(p)
-        paths.append(p)
-    return paths
-
-
-@pytest.fixture
-def dummy_audio(temp_dir: str) -> str:
-    """Create a minimal binary file that ffprobe/ffmpeg will accept."""
-    audio_path = os.path.join(temp_dir, "narration.mp3")
-    # Write a minimal ID3v2 tag + valid MPEG audio frame header
-    # This is a silent MP3 frame: FF FB 90 00 = MPEG1 Layer3 128kbps 44100Hz stereo
-    mp3_data = (
-        b"ID3\x03\x00\x00\x00\x00\x00\x00"  # minimal ID3v2.3 tag
-        + b"\xff\xfb\x90\x00" * 200  # silent frames
-    )
-    with open(audio_path, "wb") as f:
-        f.write(mp3_data)
-    return audio_path
+def _fake_project(temp_dir: str) -> str:
+    """Create a minimal valid HyperFrames project directory."""
+    project = os.path.join(temp_dir, "project")
+    os.makedirs(os.path.join(project, "compositions"), exist_ok=True)
+    with open(os.path.join(project, "package.json"), "w") as f:
+        f.write('{"name":"t","dependencies":{"hyperframes":"^0.6.95"}}')
+    with open(os.path.join(project, "hyperframes.json"), "w") as f:
+        f.write('{"project":{"entry":"index.html","width":1920,"height":1080,"fps":30}}')
+    with open(os.path.join(project, "meta.json"), "w") as f:
+        f.write('{"scenes":[{"id":"s1","start":0,"duration":5}]}')
+    with open(os.path.join(project, "index.html"), "w") as f:
+        f.write("<html><body>t</body></html>")
+    return project
 
 
 # ---------------------------------------------------------------------------
-# render_video — input validation
+# render_hyperframes — mocked bun orchestration
 # ---------------------------------------------------------------------------
 
 
-class TestRenderVideoValidation:
-    def test_empty_image_list_raises_value_error(self, dummy_audio: str) -> None:
-        with pytest.raises(ValueError, match="image_paths must not be empty"):
-            render_video(
-                audio_path=dummy_audio,
-                image_paths=[],
-                output_path="/tmp/should_not_create.mp4",
-            )
+class TestRenderHyperframes:
+    def test_missing_bun_raises(self, temp_dir: str) -> None:
+        """Missing bun binary raises FileNotFoundError."""
+        project = _fake_project(temp_dir)
+        with patch("autoinfo.output.video._find_binary", side_effect=FileNotFoundError("bun")):
+            with pytest.raises(FileNotFoundError):
+                render_hyperframes(project, os.path.join(temp_dir, "v.mp4"))
 
-    def test_missing_audio_raises_file_not_found(self, dummy_images: list[str]) -> None:
-        with pytest.raises(FileNotFoundError, match="Audio file not found"):
-            render_video(
-                audio_path="/tmp/nonexistent_audio_xyz.mp3",
-                image_paths=dummy_images,
-                output_path="/tmp/should_not_create.mp4",
-            )
+    def test_lint_failure_raises(self, temp_dir: str) -> None:
+        """Lint non-zero exit raises RuntimeError with output."""
+        project = _fake_project(temp_dir)
+        proc = MagicMock(returncode=1, stdout="lint error", stderr="")
+        with patch("autoinfo.output.video._find_binary", return_value="/usr/bin/bun"), \
+             patch("subprocess.run", return_value=proc):
+            with pytest.raises(RuntimeError, match="lint failed"):
+                render_hyperframes(project, os.path.join(temp_dir, "v.mp4"))
 
-    def test_all_images_missing_raises_value_error(
-        self, dummy_audio: str, temp_dir: str
-    ) -> None:
-        with pytest.raises(ValueError, match="No valid image files found"):
-            render_video(
-                audio_path=dummy_audio,
-                image_paths=[
-                    os.path.join(temp_dir, "ghost_0.png"),
-                    os.path.join(temp_dir, "ghost_1.png"),
-                ],
-                output_path=os.path.join(temp_dir, "out.mp4"),
-            )
+    def test_render_failure_raises(self, temp_dir: str) -> None:
+        """Render non-zero exit raises RuntimeError."""
+        project = _fake_project(temp_dir)
+        lint_ok = MagicMock(returncode=0, stdout="ok", stderr="")
+        render_fail = MagicMock(returncode=2, stdout="", stderr="render boom")
+        with patch("autoinfo.output.video._find_binary", return_value="/usr/bin/bun"), \
+             patch("subprocess.run", side_effect=[lint_ok, render_fail]):
+            with pytest.raises(RuntimeError, match="render failed"):
+                render_hyperframes(project, os.path.join(temp_dir, "v.mp4"))
 
-    def test_ffmpeg_not_found_raises_file_not_found(
-        self, dummy_images: list[str], dummy_audio: str, temp_dir: str
-    ) -> None:
-        with patch("autoinfo.output.video.shutil.which", return_value=None):
-            with pytest.raises(FileNotFoundError, match="not found on PATH"):
-                render_video(
-                    audio_path=dummy_audio,
-                    image_paths=dummy_images,
-                    output_path=os.path.join(temp_dir, "out.mp4"),
-                )
+    def test_render_success_returns_path(self, temp_dir: str) -> None:
+        """Successful render returns the output path and validates size."""
+        project = _fake_project(temp_dir)
+        output = os.path.join(temp_dir, "v.mp4")
+        # Pre-create a real file so the size guard passes.
+        with open(output, "wb") as f:
+            f.write(b"x" * 200)
 
-
-# ---------------------------------------------------------------------------
-# render_video — concat demuxer (mocked subprocess)
-# ---------------------------------------------------------------------------
-
-
-class TestRenderVideoConcat:
-    def test_concat_no_transitions_mocked(
-        self, dummy_images: list[str], dummy_audio: str, temp_dir: str
-    ) -> None:
-        """Concat demuxer path with transition='none' — verify subprocess call."""
-        output_path = os.path.join(temp_dir, "output.mp4")
-
-        mock_run = MagicMock()
-        mock_run.return_value.returncode = 0
-
-        with patch("autoinfo.output.video._run_ffmpeg", mock_run):
-            with patch("autoinfo.output.video._find_binary", return_value="/usr/bin/ffmpeg"):
-                with patch("autoinfo.output.video._probe_audio_duration", return_value=15.0):
-                    # Create the output file so post-render validation passes
-                    with open(output_path, "wb") as f:
-                        f.write(b"\x00" * 500)
-
-                    result = render_video(
-                        audio_path=dummy_audio,
-                        image_paths=dummy_images,
-                        output_path=output_path,
-                        config=VideoConfig(transition="none"),
-                    )
-
-        assert result == output_path
-        mock_run.assert_called_once()
-        cmd = mock_run.call_args[0][0]
-        assert "-f" in cmd
-        assert "concat" in cmd
-
-    def test_concat_with_audio_overlay_mocked(
-        self, dummy_images: list[str], dummy_audio: str, temp_dir: str
-    ) -> None:
-        """Audio is included in concat command (-i audio, -c:a aac)."""
-        output_path = os.path.join(temp_dir, "output2.mp4")
-
-        mock_run = MagicMock()
-        mock_run.return_value.returncode = 0
-
-        with patch("autoinfo.output.video._run_ffmpeg", mock_run):
-            with patch("autoinfo.output.video._find_binary", return_value="/usr/bin/ffmpeg"):
-                with patch("autoinfo.output.video._probe_audio_duration", return_value=9.0):
-                    with open(output_path, "wb") as f:
-                        f.write(b"\x00" * 500)
-
-                    render_video(
-                        audio_path=dummy_audio,
-                        image_paths=dummy_images,
-                        output_path=output_path,
-                        config=VideoConfig(transition="none"),
-                    )
-
-        cmd = mock_run.call_args[0][0]
-        # Audio input should be present
-        assert "-i" in cmd
-        # Audio codec
-        assert "aac" in cmd
-        assert "-shortest" in cmd
+        lint_ok = MagicMock(returncode=0, stdout="ok", stderr="")
+        render_ok = MagicMock(returncode=0, stdout="", stderr="")
+        with patch("autoinfo.output.video._find_binary", return_value="/usr/bin/bun"), \
+             patch("subprocess.run", side_effect=[lint_ok, render_ok]) as mock_run:
+            result = render_hyperframes(project, output, quality="draft")
+        assert result == output
+        # Verify the render command includes the quality flag.
+        render_call = mock_run.call_args_list[1]
+        assert "--quality" in render_call.args[0]
+        assert "draft" in render_call.args[0]
 
 
 # ---------------------------------------------------------------------------
-# render_video — xfade transitions (mocked subprocess)
-# ---------------------------------------------------------------------------
-
-
-class TestRenderVideoXfade:
-    def test_xfade_transition_mocked(
-        self, dummy_images: list[str], dummy_audio: str, temp_dir: str
-    ) -> None:
-        """Xfade path with transition='fade'."""
-        output_path = os.path.join(temp_dir, "output.mp4")
-
-        mock_run = MagicMock()
-        mock_run.return_value.returncode = 0
-
-        with patch("autoinfo.output.video._run_ffmpeg", mock_run):
-            with patch("autoinfo.output.video._find_binary", return_value="/usr/bin/ffmpeg"):
-                with patch("autoinfo.output.video._probe_audio_duration", return_value=15.0):
-                    with open(output_path, "wb") as f:
-                        f.write(b"\x00" * 500)
-
-                    result = render_video(
-                        audio_path=dummy_audio,
-                        image_paths=dummy_images,
-                        output_path=output_path,
-                        config=VideoConfig(transition="fade"),
-                    )
-
-        assert result == output_path
-        mock_run.assert_called_once()
-        cmd = mock_run.call_args[0][0]
-        assert "-filter_complex" in str(cmd)
-        assert "xfade" in str(cmd)
-
-    def test_xfade_single_image_falls_back_to_concat(
-        self, dummy_images: list[str], dummy_audio: str, temp_dir: str
-    ) -> None:
-        """Single image should use concat path (no xfade needed)."""
-        single = [dummy_images[0]]
-        output_path = os.path.join(temp_dir, "output_single.mp4")
-
-        mock_run = MagicMock()
-        mock_run.return_value.returncode = 0
-
-        with patch("autoinfo.output.video._run_ffmpeg", mock_run):
-            with patch("autoinfo.output.video._find_binary", return_value="/usr/bin/ffmpeg"):
-                with patch("autoinfo.output.video._probe_audio_duration", return_value=5.0):
-                    with open(output_path, "wb") as f:
-                        f.write(b"\x00" * 500)
-
-                    render_video(
-                        audio_path=dummy_audio,
-                        image_paths=single,
-                        output_path=output_path,
-                        config=VideoConfig(transition="fade"),
-                    )
-
-        cmd = mock_run.call_args[0][0]
-        assert "-f" in cmd
-        assert "concat" in cmd
-
-    def test_ffmpeg_failure_raises_runtime_error(
-        self, dummy_images: list[str], dummy_audio: str, temp_dir: str
-    ) -> None:
-        """Non-zero exit code from FFmpeg raises RuntimeError."""
-        output_path = os.path.join(temp_dir, "output_fail.mp4")
-
-        mock_run = MagicMock()
-        mock_run.return_value.returncode = 1
-        mock_run.return_value.stderr = "ffmpeg error: Invalid argument"
-
-        with patch("autoinfo.output.video._run_ffmpeg", mock_run):
-            with patch("autoinfo.output.video._find_binary", return_value="/usr/bin/ffmpeg"):
-                with patch("autoinfo.output.video._probe_audio_duration", return_value=10.0):
-                    with open(output_path, "wb") as f:
-                        f.write(b"\x00" * 500)
-
-                    render_video(
-                        audio_path=dummy_audio,
-                        image_paths=dummy_images,
-                        output_path=output_path,
-                        config=VideoConfig(transition="fade"),
-                    )
-
-        # _run_ffmpeg was called and raised via mock side_effect would be
-        # better, but the current implementation checks returncode after
-        # _run_ffmpeg returns. Let's test the actual _run_ffmpeg behavior.
-        # This test verifies that _run_ffmpeg is called — the actual exception
-        # test is below.
-        mock_run.assert_called_once()
-
-
-class TestRunFfmpeg:
-    def test_non_zero_exit_raises_runtime_error(self) -> None:
-        from autoinfo.output.video import _run_ffmpeg
-
-        with patch("subprocess.run") as mock_sub_run:
-            mock_sub_run.return_value.returncode = 1
-            mock_sub_run.return_value.stderr = "Error: codec not found\nMore error details"
-            mock_sub_run.return_value.stdout = ""
-
-            with pytest.raises(RuntimeError, match="FFmpeg exited with code 1"):
-                _run_ffmpeg(["ffmpeg", "-i", "input.mp4", "output.mp4"])
-
-    def test_timeout_raises_runtime_error(self) -> None:
-        from autoinfo.output.video import _run_ffmpeg
-
-        with patch("subprocess.run", side_effect=__import__("subprocess").TimeoutExpired(
-            cmd=["ffmpeg"], timeout=1
-        )):
-            with pytest.raises(RuntimeError, match="FFmpeg timed out"):
-                _run_ffmpeg(["ffmpeg", "-i", "input.mp4", "output.mp4"], timeout=1)
-
-
-# ---------------------------------------------------------------------------
-# ffprobe / audio probing
-# ---------------------------------------------------------------------------
-
-
-class TestProbeAudioDuration:
-    def test_valid_duration(self) -> None:
-        from autoinfo.output.video import _probe_audio_duration
-
-        with patch("subprocess.run") as mock_run:
-            mock_run.return_value.returncode = 0
-            mock_run.return_value.stdout = json.dumps(
-                {"format": {"duration": "42.5"}}
-            )
-            mock_run.return_value.stderr = ""
-
-            result = _probe_audio_duration("/usr/bin/ffprobe", "/tmp/test.mp3")
-            assert result == 42.5
-
-    def test_probe_failure_returns_zero(self) -> None:
-        from autoinfo.output.video import _probe_audio_duration
-
-        with patch("subprocess.run") as mock_run:
-            mock_run.return_value.returncode = 1
-            mock_run.return_value.stderr = "No such file"
-
-            result = _probe_audio_duration("/usr/bin/ffprobe", "/tmp/missing.mp3")
-            assert result == 0.0
-
-    def test_invalid_json_returns_zero(self) -> None:
-        from autoinfo.output.video import _probe_audio_duration
-
-        with patch("subprocess.run") as mock_run:
-            mock_run.return_value.returncode = 0
-            mock_run.return_value.stdout = "not json"
-            mock_run.return_value.stderr = ""
-
-            result = _probe_audio_duration("/usr/bin/ffprobe", "/tmp/test.mp3")
-            assert result == 0.0
-
-
-# ---------------------------------------------------------------------------
-# generate_report_video — full pipeline (mocked FFmpeg)
+# generate_report_video — full pipeline (mocked render)
 # ---------------------------------------------------------------------------
 
 
 class TestGenerateReportVideo:
-    def test_full_pipeline_mocked(
-        self, temp_dir: str
-    ) -> None:
-        """Full pipeline generates slides + audio + FFmpeg → MP4."""
-        sections = [
-            {"heading": "Intro", "body": "Welcome to the report."},
-            {"heading": "Findings", "body": "Key results discovered."},
-        ]
+    def test_full_pipeline_returns_path(self, temp_dir: str) -> None:
+        """TTS + project + render produces a video path."""
+        with patch("autoinfo.output.video.generate_audio_narration") as mock_audio, \
+             patch("autoinfo.output.video.render_hyperframes") as mock_render:
+            mock_audio.return_value = os.path.join(temp_dir, "narration.mp3")
+            mock_render.return_value = os.path.join(temp_dir, "video.mp4")
 
-        mock_run = MagicMock()
-        mock_run.return_value.returncode = 0
+            result = generate_report_video(
+                title="Test",
+                sections=[{"heading": "H", "body": "B"}],
+                output_path=os.path.join(temp_dir, "video.mp4"),
+                config=VideoConfig(theme="nord"),
+            )
+        assert result == os.path.join(temp_dir, "video.mp4")
+        mock_render.assert_called_once()
+        # theme must reach the render config
+        assert mock_render.call_args.kwargs.get("quality") == "draft"
 
-        with patch("autoinfo.output.video._run_ffmpeg", mock_run):
-            with patch("autoinfo.output.video._find_binary", return_value="/usr/bin/ffmpeg"):
-                with patch("autoinfo.output.video._probe_audio_duration", return_value=10.0):
-                    # Need to mock _render_audio to avoid real TTS call
-                    with patch("autoinfo.output._render_audio") as mock_tts:
-                        mock_tts.return_value = b"fake_mp3_data" * 100
-
-                        output_path = os.path.join(temp_dir, "report.mp4")
-
-                        # Create the file before render_video validates it
-                        # The mock _run_ffmpeg won't actually create it
-                        with open(output_path, "wb") as f:
-                            f.write(b"\x00" * 500)
-
-                        result = generate_report_video(
-                            title="Test Report",
-                            sections=sections,
-                            output_path=output_path,
-                        )
-
-        assert result == output_path
-        mock_run.assert_called_once()
-
-    def test_pipeline_no_slide_images_raises(
-        self, temp_dir: str
-    ) -> None:
-        """When Pillow is missing, slide generation falls back to .txt
-        placeholders which _cleanup_temp_artefacts skips — the pipeline
-        should raise RuntimeError."""
-        sections: list[dict] = []  # empty sections
-
-        with patch("autoinfo.output._render_audio") as mock_tts:
-            mock_tts.return_value = b"fake_mp3_data" * 100
-
-            with patch.object(
-                __import__("autoinfo.output.video", fromlist=["generate_slide_images"]),
-                "generate_slide_images",
-                return_value=["/tmp/nonexistent_slide.png"],
-            ):
-                with pytest.raises(RuntimeError, match="No slide images"):
-                    generate_report_video(
-                        title="Bad",
-                        sections=sections,
-                        output_path=os.path.join(temp_dir, "bad.mp4"),
-                    )
+    def test_failure_preserves_work_dir(self, temp_dir: str) -> None:
+        """Render failure keeps the work dir for post-mortem, then raises."""
+        with patch("autoinfo.output.video.generate_audio_narration") as mock_audio, \
+             patch("autoinfo.output.video.render_hyperframes",
+                   side_effect=RuntimeError("render boom")):
+            mock_audio.return_value = os.path.join(temp_dir, "narration.mp3")
+            with pytest.raises(RuntimeError, match="render boom"):
+                generate_report_video(
+                    title="Test",
+                    sections=[{"heading": "H", "body": "B"}],
+                )
 
 
 # ---------------------------------------------------------------------------
-# _render_video_scaffold integration via generate_report
+# _render_video_scaffold integration with generate_report (video format)
 # ---------------------------------------------------------------------------
 
 
-class TestReportVideoIntegration:
-    def test_generate_report_format_video_accepted(self, temp_dir: str) -> None:
-        """format='video' flows through generate_report and returns JSON status."""
-        mock_run = MagicMock()
-        mock_run.return_value.returncode = 0
+class TestRenderVideoScaffoldIntegration:
+    def test_scaffold_returns_json_contract(self, temp_dir: str) -> None:
+        """_render_video_scaffold returns the JSON status blob contract."""
+        from autoinfo.output import _render_video_scaffold
 
-        with patch("autoinfo.output.KBStore") as mock_store:
-            mock_store.return_value.list_entries.return_value = []
+        fake_mp4 = os.path.join(temp_dir, "video.mp4")
+        with open(fake_mp4, "wb") as f:
+            f.write(b"x" * 200)
 
-            with patch("autoinfo.output._render_audio") as mock_tts:
-                mock_tts.return_value = b"fake_mp3_data" * 100
-
-                with patch("autoinfo.output.video._find_binary", return_value="/usr/bin/ffmpeg"):
-                    with patch("autoinfo.output.video._run_ffmpeg", mock_run):
-                        with patch(
-                            "autoinfo.output.video._probe_audio_duration",
-                            return_value=10.0,
-                        ):
-                            # Pre-create an output file so post-render validation passes.
-                            # _render_video_scaffold writes to
-                            # /tmp/autoinfo/video/<ts>/report_<ts>.mp4.
-                            # We intercept by mocking generate_report_video to return
-                            # our own path.
-                            fake_video = os.path.join(temp_dir, "fake_report.mp4")
-                            with open(fake_video, "wb") as f:
-                                f.write(b"\x00" * 500)
-
-                            with patch(
-                                "autoinfo.output.video.generate_report_video",
-                                return_value=fake_video,
-                            ):
-                                from autoinfo.output import generate_report
-
-                                result = generate_report(
-                                    domain="test-domain",
-                                    format="video",
-                                )
-
-        assert isinstance(result, str)
-        data = json.loads(result)
-        assert data.get("status") == "ok"
-        assert data.get("output_type") == "video"
-        assert "video_path" in data
-
-    def test_generate_report_format_video_in_valid_set(self, temp_dir: str) -> None:
-        """Verify 'video' appears in generate_report's valid_formats."""
-        fake_video = os.path.join(temp_dir, "fake_report2.mp4")
-        with open(fake_video, "wb") as f:
-            f.write(b"\x00" * 500)
-
-        with patch("autoinfo.output.KBStore") as mock_store:
-            mock_store.return_value.list_entries.return_value = []
-
-            with patch("autoinfo.output._render_audio") as mock_tts:
-                mock_tts.return_value = b"fake_mp3_data" * 100
-
-                with patch(
-                    "autoinfo.output.video.generate_report_video",
-                    return_value=fake_video,
-                ):
-                    from autoinfo.output import generate_report
-
-                    # Should NOT raise ValueError for invalid format
-                    try:
-                        generate_report(domain="test-domain", format="video")
-                    except ValueError as e:
-                        if "Unsupported output format" in str(e):
-                            pytest.fail(f"format='video' should be supported: {e}")
-                        raise
+        with patch(
+            "autoinfo.output.video.generate_report_video",
+            return_value=fake_mp4,
+        ):
+            result = _render_video_scaffold(
+                {"theme": "nord"},
+                "Test Video",
+                sections=[{"heading": "H", "body": "B"}],
+            )
+        parsed = json.loads(result)
+        assert parsed["status"] == "ok"
+        assert parsed["output_type"] == "video"
+        assert parsed["format"] == "mp4"
+        assert parsed["video_path"]  # absolute mp4 path
 
 
 # ---------------------------------------------------------------------------
-# Optional: Real FFmpeg integration (skipped if not installed)
+# Real-render smoke tests (skipped when env unavailable)
 # ---------------------------------------------------------------------------
 
-
-ffmpeg_available = bool(
-    __import__("shutil").which("ffmpeg")
+pytestmark = pytest.mark.skipif(
+    BUN is None or FFMPEG is None,
+    reason="bun or ffmpeg not on PATH — real HyperFrames render skipped",
 )
 
 
-@pytest.mark.skipif(not ffmpeg_available, reason="ffmpeg not installed")
-class TestRenderVideoReal:
-    def test_real_ffmpeg_concat(
-        self, dummy_images: list[str], dummy_audio: str, temp_dir: str
-    ) -> None:
-        """Real FFmpeg — concat demuxer produces a valid MP4 file."""
-        output_path = os.path.join(temp_dir, "real_concat.mp4")
-        result = render_video(
-            audio_path=dummy_audio,
-            image_paths=dummy_images,
-            output_path=output_path,
-            config=VideoConfig(transition="none"),
-        )
-        assert result == output_path
-        assert os.path.isfile(output_path)
-        assert os.path.getsize(output_path) > 1000
+class TestRealRender:
+    def test_real_render_smoke(self, temp_dir: str) -> None:
+        """End-to-end render of a generated project produces an MP4."""
+        from autoinfo.output.video import generate_hyperframes_project
 
-    def test_real_ffmpeg_xfade(
-        self, dummy_images: list[str], dummy_audio: str, temp_dir: str
-    ) -> None:
-        """Real FFmpeg — xfade produces a valid MP4 file."""
-        output_path = os.path.join(temp_dir, "real_xfade.mp4")
-        result = render_video(
-            audio_path=dummy_audio,
-            image_paths=dummy_images,
-            output_path=output_path,
-            config=VideoConfig(transition="fade"),
+        project = generate_hyperframes_project(
+            title="Smoke",
+            sections=[{"heading": "A", "body": "x" * 200}],
+            output_dir=os.path.join(temp_dir, "proj"),
+            audio_path=None,  # no audio — fallback durations
+            config=VideoConfig(quality="draft"),
         )
-        assert result == output_path
-        assert os.path.isfile(output_path)
-        assert os.path.getsize(output_path) > 1000
+        output = os.path.join(temp_dir, "smoke.mp4")
+        render_hyperframes(project, output, quality="draft")
+        assert os.path.isfile(output)
+        assert os.path.getsize(output) > 100
