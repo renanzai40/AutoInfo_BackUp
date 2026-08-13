@@ -16,6 +16,16 @@ All notable changes to the AutoInfo project will be documented in this file.
 - **magazine-digest routing fixed** — `gen_domain_products.py` now routes magazine-digest via `generate_digest`.
 - **Guard-first product-type resolution** — `_resolve_report_product_type` mirrors `_resolve_digest_product_type`; digest render-context normalization via `_normalize_digest_product_context`.
 
+### Added (2026-08-13 video + reasoning wave)
+- **HyperFrames video pipeline (report `format="video"`)** — replaces the PIL+FFmpeg slideshow scaffold: TTS narration → HyperFrames project scaffold → `bun x hyperframes render` (HTML+GSAP→MP4). Ported 36-theme + 8-brand theme library (`src/autoinfo/output/video_assets/themes/`), 6 visual layouts with mandatory adjacent-scene diversity (Gate VQ: 5 scenes ≥ 4 layouts), AutoMedia scene-frame-boundary math (char-ratio split + 0.01s float safety margin). Templates: `video_assets/templates/{package.json,hyperframes.json,meta.json.j2,index.html.j2,scene.html.j2}`. Rendered MP4s verified for all 13 demo domains. (`64daae5`)
+- **MCP video exposure** — `generate_report` / `generate_digest` / `generate_cross_domain_report` format enums + persist gain `video` (`.mp4`); per-handler video branch parses the scaffold JSON into structured responses. (`64daae5`)
+- **LLM reasoning-model thinking control** — `reasoning_model=True` now disables chain-of-thought by default via `additional_body={"thinking":{"type":"disabled"}}` (DeepSeek R1/V4 style reasoning consumes the shared `max_tokens` budget *before* content, truncating JSON output at `finish_reason=length`). Judgment gates re-enable thinking with raised budgets: G4 factual (500→2000), G5 translation (500→1500), llm_judge (1000→2000), translation-QA judge (1000→2000), validation-scenario judge (500→1500). (`c33c6d0`, `02a06a8`)
+- **End-user matrix v3** — `end-user-matrix.yaml`: formats +`video`, source_platforms 27→29 (hackernews/email_imap, reuters→reuters_mcp), required_sources 13 domains/89 sources, required_kb_tiers 13 domains, new channels (14) + capabilities (15) dimensions. (`5db457b`)
+
+### Fixed (2026-08-13)
+- **Coverage-matrix evidence scan** — `scan_evidence` double-path bug (`--evidence outputs` produced zero cells), manifest/zip scanning bounded to validation-deliveries/ + outputs/ (project-root rglob was slow), video cells now recognized. Evidence: produced 0→26 (video 13/13 domains), source_gaps 89→38. (`5db457b`)
+- **RSS fetch timeout guard** — `feedparser.parse` has no timeout and hung the whole collect run (language-learning stalled 124s); fetch over httpx with 30s timeout, keep `file://` + URL-encoded local-path support. (`5db457b`)
+
 ### Fixed
 - **Report-synthesis robustness** — bounded retry loop + dedicated product-sections prompt so synthesis failures no longer block product output.
 

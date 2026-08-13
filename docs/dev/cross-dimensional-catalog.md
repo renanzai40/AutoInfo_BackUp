@@ -105,7 +105,7 @@ Each cell: 🟢 = Fully delivered / complete, 🟡 = Partially delivered / gaps 
 
 | Lifecycle → | B1.1 Discover | B1.2 Subscribe | B1.3 Onboard | B1.4 Consume | B1.5 Modify Config | B1.6 Churn |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
-| **A4 Products** | 🔴 No product catalog / storefront | 🔴 No trial product preview | 🟢 8 templates (5 free + 2 premium + 1 enterprise) with free/premium/enterprise tiers, `check_access` gates delivery (B24 column premium + D11 magazine-digest added 2026-08-05; premium-briefing/enterprise-briefing now render differentiated layouts with per-product LLM synthesis fields implications/risks/action_required/key_metrics, 2026-08-11) | 🟡 Products deliver but lifecycle is not tracked | 🔴 No renewal product regeneration | 🔴 No product archive on churn |
+| **A4 Products** | 🔴 No product catalog / storefront | 🔴 No trial product preview | 🟢 8 templates (5 free + 2 premium + 1 enterprise) with free/premium/enterprise tiers, `check_access` gates delivery (B24 column premium + D11 magazine-digest added 2026-08-05; premium-briefing/enterprise-briefing now render differentiated layouts with per-product LLM synthesis fields implications/risks/action_required/key_metrics, 2026-08-11; report `format="video"` via HyperFrames HTML+GSAP→MP4 with 36+8 themes, 2026-08-13) | 🟡 Products deliver but lifecycle is not tracked | 🔴 No renewal product regeneration | 🔴 No product archive on churn |
 
 | Lifecycle → | B2.1 Discover | B2.2 Connect | B2.3 Configure | B2.4 Operate | B2.5 Monitor | B2.6 Report |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|

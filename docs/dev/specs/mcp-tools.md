@@ -20,7 +20,7 @@
 | **KB Versioning** | `get_entry_history`, `restore_entry_version` |
 | **KB Monitor** | `get_collection_stats`, `get_collection_diff` |
 | **KB Graph** | `query_knowledge_graph`, `knowledge_graph_export` |
-| **Output** | `list_output_templates`, `generate_digest` (with `product` param — selects a differentiated product template, e.g. `magazine-digest`), `generate_report` (Markdown/JSON/PDF/HTML; `product` param for `premium-briefing` / `enterprise-briefing`), `generate_cross_domain_report`, `generate_tutorial`, `generate_presentation`, `localize_content` |
+| **Output** | `list_output_templates`, `generate_digest` (with `product` param — selects a differentiated product template, e.g. `magazine-digest`), `generate_report` (Markdown/JSON/HTML/Audio/Agent/Video/EPUB/Audiobook; `product` param for `premium-briefing` / `enterprise-briefing`; `video` renders via HyperFrames HTML+GSAP→MP4), `generate_cross_domain_report`, `generate_tutorial`, `generate_presentation`, `localize_content` |
 | **Export/Import** | `export_kb`, `import_kb` |
 | **CEFR** | `classify_cefr` (EN/ZH/JA LLM-based classification), `cefr_batch` (batch classification) |
 | **Keywords** | `approve_keyword`, `reject_keyword`, `suggest_keywords` |

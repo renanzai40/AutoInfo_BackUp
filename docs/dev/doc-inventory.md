@@ -13,16 +13,16 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 
 | Metric | Value |
 |--------|-------|
-| Total files | 50 |
-| Total lines | 25131 |
-| Active files | 41 |
+| Total files | 51 |
+| Total lines | 25189 |
+| Active files | 42 |
 | Archived files | 9 |
 | Category — archive | 9 files / 4932 lines |
 | Category — known-limitations | 1 files / 255 lines |
 | Category — skills | 3 files / 785 lines |
 | Category — specs | 12 files / 8746 lines |
 | Category — validation-reports | 9 files / 2620 lines |
-| Category — docs/dev | 16 files / 7793 lines |
+| Category — docs/dev | 17 files / 7851 lines |
 
 ## Inventory
 
@@ -37,6 +37,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `archive/launch-validation-report.md` | 273 | archive | archived | — |
 | `archive/migration-v1.9.md` | 58 | archive | archived | — |
 | `archive/reports/global-content-paid-research-report-trae.md` | 973 | archive | archived | — |
+| `autoinfo-validation-master-plan/LOOP-LOG.md` | 57 | docs/dev | active | — |
 | `autoinfo-validation-master-plan/part-02-cli-depth-results-q10-q18.md` | 170 | docs/dev | active | — |
 | `autoinfo-validation-master-plan/part-12-final-verdict.md` | 381 | docs/dev | active | — |
 | `autoinfo-validation-master-plan/scenarios/enduser-deliverable.yaml` | 234 | docs/dev | active | — |
@@ -46,7 +47,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/cross-dimensional-catalog.md` | 982 | docs/dev | active | — |
 | `dev/director-user-guide.md` | 756 | docs/dev | active | — |
 | `dev/enduser-capabilities-guide.md` | 372 | docs/dev | active | — |
-| `dev/enduser-coverage-matrix.md` | 482 | docs/dev | active | — |
+| `dev/enduser-coverage-matrix.md` | 483 | docs/dev | active | — |
 | `dev/founder-expectations.md` | 471 | docs/dev | active | — |
 | `dev/mcp-usage-examples.md` | 324 | docs/dev | active | — |
 | `dev/new-domain-guide.md` | 935 | docs/dev | active | — |
