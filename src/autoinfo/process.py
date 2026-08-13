@@ -12,6 +12,7 @@ Typical usage::
 
 from __future__ import annotations
 
+import concurrent.futures
 import json
 import logging
 import os
@@ -22,7 +23,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from autoinfo.config import Config, DomainConfig, QualityGateConfig, get_config_path, load_config
 from autoinfo.kb import _FTS5_STOPWORDS, KBStore, PromotionRejected
@@ -31,6 +32,7 @@ from autoinfo.llm import LLMExtractor
 from autoinfo.models import Item
 from autoinfo.quality import (
     G0SchemaIntegrity,
+    G3RelevanceScoring,
     G4FactualConsistency,
     G5TranslationAccuracy,
     QualityResult,
@@ -102,6 +104,23 @@ def _resolve_process_workers() -> int:
     except (TypeError, ValueError):
         raw = _DEFAULT_PROCESS_WORKERS
     return max(1, min(raw, _PROCESS_WORKER_CAP))
+
+
+# Post-extraction gates (G3/G4/G5/CEFR) run concurrently per item with a
+# sub-task cap (default 4): total in-flight work stays bounded at
+# process_workers × sub_task_cap, and every gate's LLM call additionally
+# serializes through the shared per-provider semaphore inside
+# llm.call_with_fallback.  Override with AUTOINFO_SUBTASK_CAP.
+_DEFAULT_SUBTASK_CAP = 4
+
+
+def _resolve_subtask_cap() -> int:
+    """Resolve the per-item gate sub-task cap from ``AUTOINFO_SUBTASK_CAP``."""
+    try:
+        raw = int(os.environ.get("AUTOINFO_SUBTASK_CAP", _DEFAULT_SUBTASK_CAP))
+    except (TypeError, ValueError):
+        raw = _DEFAULT_SUBTASK_CAP
+    return max(1, raw)
 
 
 def _progress_enabled() -> bool:
@@ -372,20 +391,59 @@ def _classify_entry_cefr(
 ) -> None:
     """Run CEFR classification on *item* and store result in entry frontmatter.
 
-    Called after ``store_entry()``.  Failures are logged but do **not**
+    Called twice per item in the processing pipeline:
+
+    1. Concurrent phase (``entry=None``, before the storage write): the LLM
+       classification runs here — alongside the G3/G4/G5 gates — and the
+       result is stashed on the item (``item._cefr_classification``) for the
+       post-storage call.  Nothing is written.
+    2. Post-storage (``entry`` set): the stashed classification is written
+       to the entry's frontmatter and the SQLite index under
+       ``_STORAGE_LOCK`` — the LLM call is NOT repeated.
+
+    When the helper is invoked standalone without a stash it falls back to
+    the full classify-and-write path.  Failures are logged but do **not**
     propagate — classification must never block entry creation.
 
     Steps
     -----
-    1. Determine language from the item (detected language or config default).
+    1. Determine language (the pipeline-stashed detection, else the item's
+       language, else ``"en"``).
     2. If the language is not in ``config.cefr.languages``, skip.
     3. Call ``classify_text()``.
     4. If a level was returned (not "unknown"), write it to the frontmatter
-       of the entry's Markdown file as ``cefr: <level>``.
+       of the entry's Markdown file as ``cefr: <level>`` (or stash it for
+       the post-storage write when ``entry`` is ``None``).
     """
     try:
+        # Write-only fast path: the LLM classification already ran in the
+        # concurrent gate phase — only the storage writes remain.
+        precomputed = getattr(item, "_cefr_classification", None)
+        if precomputed is not None:
+            cefr_level = precomputed.get("cefr_level", "unknown")
+            if cefr_level != "unknown":
+                from autoinfo.kb import update_frontmatter_field  # noqa: PLC0415
+
+                # Storage writes (markdown frontmatter + SQLite index) stay
+                # serialized under _STORAGE_LOCK; the LLM classification call
+                # above deliberately ran WITHOUT the lock — see _process_item.
+                with _STORAGE_LOCK:
+                    update_frontmatter_field(
+                        file_path=entry.file_path,
+                        key="cefr",
+                        value=cefr_level,
+                    )
+                    _update_index_cefr(entry.entry_id, cefr_level)
+                logger.debug(
+                    "CEFR classification for %s: %s (confidence=%.2f)",
+                    entry.entry_id,
+                    cefr_level,
+                    precomputed.get("confidence", 0.0),
+                )
+            return
+
         # Determine language: use detected language, or fall back to "en"
-        lang = item.language or "en"
+        lang = getattr(item, "_detected_language", None) or item.language or "en"
         # Normalize: langdetect returns "zh-cn" etc. — take the base
         lang = lang.split("-")[0] if lang else "en"
 
@@ -408,7 +466,7 @@ def _classify_entry_cefr(
 
         # Classify the text (title + content, truncated)
         text_for_classification = f"{item.title}\n\n{item.content}"[:3000]
-        from autoinfo.cefr import classify_text
+        from autoinfo.cefr import classify_text  # noqa: PLC0415
 
         result = classify_text(
             text=text_for_classification,
@@ -417,25 +475,32 @@ def _classify_entry_cefr(
         )
 
         cefr_level = result.get("cefr_level", "unknown")
-        if cefr_level != "unknown":
-            from autoinfo.kb import update_frontmatter_field
+        if cefr_level == "unknown":
+            return
+        if entry is None:
+            # Concurrent phase — defer the storage writes to the post-storage
+            # call (which needs the persisted entry).
+            item._cefr_classification = {
+                "cefr_level": cefr_level,
+                "confidence": result.get("confidence", 0.0),
+            }
+            return
 
-            # Storage writes (markdown frontmatter + SQLite index) stay
-            # serialized under _STORAGE_LOCK; the LLM classification call
-            # above deliberately ran WITHOUT the lock — see _process_item.
-            with _STORAGE_LOCK:
-                update_frontmatter_field(
-                    file_path=entry.file_path,
-                    key="cefr",
-                    value=cefr_level,
-                )
-                _update_index_cefr(entry.entry_id, cefr_level)
-            logger.debug(
-                "CEFR classification for %s: %s (confidence=%.2f)",
-                entry.entry_id,
-                cefr_level,
-                result.get("confidence", 0.0),
+        from autoinfo.kb import update_frontmatter_field  # noqa: PLC0415
+
+        with _STORAGE_LOCK:
+            update_frontmatter_field(
+                file_path=entry.file_path,
+                key="cefr",
+                value=cefr_level,
             )
+            _update_index_cefr(entry.entry_id, cefr_level)
+        logger.debug(
+            "CEFR classification for %s: %s (confidence=%.2f)",
+            entry.entry_id,
+            cefr_level,
+            result.get("confidence", 0.0),
+        )
     except Exception as exc:
         logger.debug(
             "CEFR classification skipped for item %s: %s",
@@ -555,10 +620,12 @@ def run_processing(
        index and only process up to *batch_size* items.
     3. For each item:
         a. LLM extraction  (call :meth:`LLMExtractor.extract`)
-        b. Quality gates   (call :func:`run_quality_gates`; optionally G4
-                           factual consistency when *check_factual* is set,
-                           and optionally G5 translation accuracy when
-                           *check_translation* is set)
+        b. Quality gates   (call :func:`run_quality_gates`; G3, and
+                           optionally G4 factual consistency when
+                           *check_factual* is set, and optionally G5
+                           translation accuracy when *check_translation*
+                           is set, plus CEFR classification run
+                           concurrently post-extraction — see Step b1)
         c. KB storage      (call :meth:`KBStore.store_entry`)
        d. Per-item log    (model, duration, scores, flags, …)
     4. When *batch_size* > 0, persist the updated progress index.
@@ -840,10 +907,26 @@ def run_processing(
                     item.id,
                 )
 
-            # Step b: Quality gates (G1, G2, G3)
+            # Step a1: language detection — moved ahead of the post-extraction
+            # gates because the CEFR classification task (run concurrently
+            # below) needs the detected language.  Detection is pure and
+            # deterministic; item.language is still only ASSIGNED at its
+            # original position (after the gates) so gate inputs that read it
+            # (G5's source_lang) are bit-identical to the serial flow.
+            text_for_lang = f"{item.title} {item.content}"
+            detected_lang = detect_language(text_for_lang)
+            item._detected_language = detected_lang
+
+            # Step b: quality gates.  G1/G1-ToS/G2 are deterministic (no LLM)
+            # and run inline via run_quality_gates with the G3 config stripped
+            # — the serial G3 result is discarded because G3 (LLM relevance)
+            # runs concurrently with G4/G5/CEFR below.
             item_source_config: dict[str, Any] = {}
             if item.source_name in source_tiers:
                 item_source_config = {"quality_tier": source_tiers[item.source_name]}
+            det_gate_config = dict(gate_config) if gate_config else None
+            if det_gate_config is not None:
+                det_gate_config.pop("G3-RelevanceScoring", None)
             quality_results = run_quality_gates(
                 item,
                 context={
@@ -851,74 +934,97 @@ def run_processing(
                     "existing_entries": existing_entries,
                     "topic_keywords": topic_keywords,
                 },
-                gate_config=gate_config if gate_config else None,
+                gate_config=det_gate_config if det_gate_config else None,
                 llm_timeout=llm_timeout,
             )
+            quality_results.pop("G3-RelevanceScoring", None)
 
-            # Step b2: Optional G4 factual consistency gate
+            # Step b1: post-extraction concurrent gates — G3, G4 (when
+            # enabled), G5 (when enabled) and the CEFR LLM classification
+            # depend only on the extraction output and run CONCURRENTLY with
+            # a per-item sub-task cap (default 4) so total in-flight stays
+            # bounded at process workers × sub-task cap; each gate's LLM call
+            # additionally serializes through the shared per-provider
+            # semaphore in llm.call_with_fallback.  The pool is created via
+            # the module-qualified class (NOT the imported
+            # ``ThreadPoolExecutor`` name) so tests that patch the outer
+            # pool's class are unaffected.
+            sub_tasks: list[tuple[str, Callable[[], Any]]] = []
+
+            def _run_g3() -> QualityResult:
+                g3_config = (
+                    gate_config.get("G3-RelevanceScoring") if gate_config else None
+                )
+                threshold = 30
+                if g3_config is not None and g3_config.threshold is not None:
+                    threshold = int(g3_config.threshold)
+                g3 = G3RelevanceScoring(timeout=llm_timeout)
+                return g3.check(item, topic_keywords, threshold, g3_config)
+
+            sub_tasks.append(("G3-RelevanceScoring", _run_g3))
+
             if check_factual and extraction.tl_dr:
-                try:
-                    g4_provider = (
-                        proc_config.llm.provider
-                        if proc_config and proc_config.llm.provider
-                        else "openrouter"
-                    )
-                    g4_model_name = (
-                        proc_config.llm.model
-                        if proc_config and proc_config.llm.model
-                        else "deepseek/deepseek-chat"
-                    )
-                    g4_model = f"{g4_provider}/{g4_model_name}"
-                    g4_gate_config = gate_config.get("G4-SummaryFactual") if gate_config else None
-                    g4 = G4FactualConsistency(model=g4_model, json_mode=proc_config.llm.json_mode if proc_config else False, timeout=llm_timeout)  # noqa: E501
-                    g4_result = g4.check(item, extraction, gate_config=g4_gate_config)
-                    quality_results["G4-SummaryFactual"] = g4_result
-
-                    # G4 hard gate: block action → skip storage
-                    # (G4 already writes its own diagnostics to _failed/ internally)
-                    if g4_result.details.get("action") == "block":
-                        item_log["status"] = "g4_blocked"
-                        logger.warning(
-                            "G4 blocked item %s — skipping storage",
-                            item.id,
+                def _run_g4() -> QualityResult:
+                    try:
+                        g4_provider = (
+                            proc_config.llm.provider
+                            if proc_config and proc_config.llm.provider
+                            else "openrouter"
                         )
-                        stats["logged"] = False
-                        return item_log, stats
-                except Exception as exc:
-                    logger.warning(
-                        "G4 factual check failed for item %s: %s", item.id, exc
-                    )
-                    g4_result = QualityResult(
-                        gate_name="G4-SummaryFactual",
-                        passed=False,
-                        flagged=True,
-                        details={
-                            "contradiction": None,
-                            "explanation": str(exc),
-                        },
-                    )
-                    quality_results["G4-SummaryFactual"] = g4_result
+                        g4_model_name = (
+                            proc_config.llm.model
+                            if proc_config and proc_config.llm.model
+                            else "deepseek/deepseek-chat"
+                        )
+                        g4_model = f"{g4_provider}/{g4_model_name}"
+                        g4_gate_config = (
+                            gate_config.get("G4-SummaryFactual") if gate_config else None
+                        )
+                        g4 = G4FactualConsistency(
+                            model=g4_model,
+                            json_mode=proc_config.llm.json_mode if proc_config else False,
+                            timeout=llm_timeout,
+                        )
+                        return g4.check(item, extraction, gate_config=g4_gate_config)
+                    except Exception as exc:
+                        logger.warning(
+                            "G4 factual check failed for item %s: %s", item.id, exc
+                        )
+                        return QualityResult(
+                            gate_name="G4-SummaryFactual",
+                            passed=False,
+                            flagged=True,
+                            details={
+                                "contradiction": None,
+                                "explanation": str(exc),
+                            },
+                        )
 
-            # Step b3: Optional G5 translation accuracy gate
-            # Augmentation approach: deterministic gates 1-4 as fast pre-check,
-            # LLM judge (gate 5) as composite final gate only if pre-checks pass.
-            # Falls back to single-LLM-check path if 5-gate pipeline fails.
+                sub_tasks.append(("G4-SummaryFactual", _run_g4))
+
             if check_translation:
-                translation = (extraction.custom_fields or {}).get("translation", "")
-
-                if not translation:
-                    # No translation to check — trivially pass (backward compat)
-                    g5_result = QualityResult(
-                        gate_name="G5-TranslationAccuracy",
-                        passed=True,
-                        flagged=False,
-                        details={
-                            "faithful": True,
-                            "explanation": "No translation to check",
-                            "issues": [],
-                        },
+                # Augmentation approach: deterministic gates 1-4 as fast
+                # pre-check, LLM judge (gate 5) as composite final gate only
+                # if pre-checks pass.  Falls back to single-LLM-check path if
+                # the 5-gate pipeline fails.
+                def _run_g5() -> QualityResult:
+                    translation = (extraction.custom_fields or {}).get(
+                        "translation", ""
                     )
-                else:
+
+                    if not translation:
+                        # No translation to check — trivially pass (backward compat)
+                        return QualityResult(
+                            gate_name="G5-TranslationAccuracy",
+                            passed=True,
+                            flagged=False,
+                            details={
+                                "faithful": True,
+                                "explanation": "No translation to check",
+                                "issues": [],
+                            },
+                        )
+
                     # Resolve model string (also used by fallback path)
                     g5_model = (
                         f"{proc_config.llm.provider}/{proc_config.llm.model}"
@@ -955,14 +1061,13 @@ def run_processing(
                         pre_check_failed = any(
                             not g["passed"] for g in pre_checks
                         )
-
                         if pre_check_failed:
                             # Pre-checks failed → skip LLM judge, composite failure
                             failed_gates = [
                                 k for g, k in zip(
                                     pre_checks,
                                     ["inline_tags", "terminology",
-                                     "length_ratio", "source_copy"],
+                                    "length_ratio", "source_copy"],
                                 ) if not g["passed"]
                             ]
                             logger.info(
@@ -970,7 +1075,7 @@ def run_processing(
                                 "item %s: %s — skipping LLM judge",
                                 item.id, ", ".join(failed_gates),
                             )
-                            g5_result = QualityResult(
+                            return QualityResult(
                                 gate_name="G5-TranslationAccuracy",
                                 passed=False,
                                 flagged=True,
@@ -997,55 +1102,49 @@ def run_processing(
                             from autoinfo.translation_qa import (
                                 calculate_quality_score,  # noqa: PLC0415
                             )
-
-                            g5_scores = llm_judge(
-                                source_text, target_text,
-                                source_lang, target_lang,
-                                model=g5_model,
-                                json_mode=proc_config.llm.json_mode if proc_config else False,
-                                timeout=llm_timeout,
-                            )
-
-                            composite = calculate_quality_score(
-                                faithfulness=float(
-                                    g5_scores.get("faithfulness", 0)
-                                ),
-                                terminology=float(
-                                    g5_scores.get("terminology", 0)
-                                ),
-                                style=float(g5_scores.get("style", 0)),
-                                readability=float(
-                                    g5_scores.get("readability", 0)
-                                ),
-                            )
-
-                            composite_score = float(
-                                composite.get("composite", 0.0)  # type: ignore[arg-type]  # pyright: ignore[reportArgumentType]
-                            )
-
-                            # Threshold: faithful when composite >= 50
-                            faithful = composite_score >= 50.0
-
-                            g5_result = QualityResult(
-                                gate_name="G5-TranslationAccuracy",
-                                passed=faithful,
-                                flagged=not faithful,
-                                score=composite_score / 100.0,
-                                details={
-                                    "faithful": faithful,
-                                    "explanation": "5-gate pipeline evaluation",
-                                    "issues": g5_scores.get("issues", []),
-                                    "gates": {
-                                        "inline_tags": g1_pre,
-                                        "terminology": g2_pre,
-                                        "length_ratio": g3_pre,
-                                        "source_copy": g4_pre,
-                                        "llm_judge": g5_scores,
-                                    },
-                                    "composite_score": composite_score,
+                        g5_scores = llm_judge(
+                            source_text, target_text,
+                            source_lang, target_lang,
+                            model=g5_model,
+                            json_mode=proc_config.llm.json_mode if proc_config else False,
+                            timeout=llm_timeout,
+                        )
+                        composite = calculate_quality_score(
+                            faithfulness=float(
+                                g5_scores.get("faithfulness", 0)
+                            ),
+                            terminology=float(
+                                g5_scores.get("terminology", 0)
+                            ),
+                            style=float(g5_scores.get("style", 0)),
+                            readability=float(
+                                g5_scores.get("readability", 0)
+                            ),
+                        )
+                        composite_score = float(
+                            composite.get("composite", 0.0)  # type: ignore[arg-type]  # pyright: ignore[reportArgumentType]
+                        )
+                        # Threshold: faithful when composite >= 50
+                        faithful = composite_score >= 50.0
+                        return QualityResult(
+                            gate_name="G5-TranslationAccuracy",
+                            passed=faithful,
+                            flagged=not faithful,
+                            score=composite_score / 100.0,
+                            details={
+                                "faithful": faithful,
+                                "explanation": "5-gate pipeline evaluation",
+                                "issues": g5_scores.get("issues", []),
+                                "gates": {
+                                    "inline_tags": g1_pre,
+                                    "terminology": g2_pre,
+                                    "length_ratio": g3_pre,
+                                    "source_copy": g4_pre,
+                                    "llm_judge": g5_scores,
                                 },
-                            )
-
+                                "composite_score": composite_score,
+                            },
+                        )
                     except Exception as five_gate_exc:
                         logger.warning(
                             "G5 5-gate pipeline failed for item %s: %s — "
@@ -1055,13 +1154,13 @@ def run_processing(
                         # Fallback: single-LLM-check path (existing behavior)
                         try:
                             g5 = G5TranslationAccuracy(model=g5_model, timeout=llm_timeout)
-                            g5_result = g5.check(item, extraction)
+                            return g5.check(item, extraction)
                         except Exception as single_exc:
                             logger.warning(
                                 "G5 fallback also failed for item %s: %s",
                                 item.id, single_exc,
                             )
-                            g5_result = QualityResult(
+                            return QualityResult(
                                 gate_name="G5-TranslationAccuracy",
                                 passed=False,
                                 flagged=True,
@@ -1071,7 +1170,55 @@ def run_processing(
                                     "issues": [],
                                 },
                             )
-
+                sub_tasks.append(("G5-TranslationAccuracy", _run_g5))
+            if config is not None and config.cefr.enabled:
+                def _run_cefr() -> None:
+                    # The LLM classification runs concurrently; the storage
+                    # write happens post-storage, under _STORAGE_LOCK, inside
+                    # _classify_entry_cefr (see its contract).
+                    try:
+                        _classify_entry_cefr(None, item, config)
+                    except Exception as exc:
+                        # Preserve the serial-flow contract: a CEFR failure
+                        # is recorded as an item error but never aborts
+                        # storage.
+                        logger.warning(
+                            "CEFR classification failed for item %s: %s",
+                            item.id, exc,
+                        )
+                        item_log["status"] = "error"
+                        stats["errors"].append(
+                            {"item_id": item.id, "error": str(exc)}
+                        )
+                sub_tasks.append(("cefr", _run_cefr))
+            # Step b2: run the concurrent gates and emit their results in
+            # canonical G0→G5 order regardless of completion order.
+            gate_outcomes: dict[str, Any] = {}
+            with concurrent.futures.ThreadPoolExecutor(
+                max_workers=min(_resolve_subtask_cap(), len(sub_tasks)),
+                thread_name_prefix="gate",
+            ) as pool:
+                futures = {pool.submit(fn): name for name, fn in sub_tasks}
+                for fut in as_completed(futures):
+                    gate_outcomes[futures[fut]] = fut.result()
+            quality_results["G3-RelevanceScoring"] = gate_outcomes[
+                "G3-RelevanceScoring"
+            ]
+            g4_result = gate_outcomes.get("G4-SummaryFactual")
+            if g4_result is not None:
+                quality_results["G4-SummaryFactual"] = g4_result
+                # G4 hard gate: block action → skip storage
+                # (G4 already writes its own diagnostics to _failed/ internally)
+                if g4_result.details.get("action") == "block":
+                    item_log["status"] = "g4_blocked"
+                    logger.warning(
+                        "G4 blocked item %s — skipping storage",
+                        item.id,
+                    )
+                    stats["logged"] = False
+                    return item_log, stats
+            g5_result = gate_outcomes.get("G5-TranslationAccuracy")
+            if g5_result is not None:
                 quality_results["G5-TranslationAccuracy"] = g5_result
 
             g1 = quality_results.get("G1-SourceAuthority")
@@ -1108,9 +1255,9 @@ def run_processing(
                     "composite_score"
                 )
 
-            # Step c0: Language detection (non-blocking)
-            text_for_lang = f"{item.title} {item.content}"
-            detected_lang = detect_language(text_for_lang)
+            # Step c0: Language detection — assign the language detected ahead
+            # of the concurrent gates (Step a1).  Gates run before this
+            # assignment, exactly as in the serial flow.
             item.language = detected_lang
             item_log["language"] = detected_lang
 
@@ -1173,14 +1320,15 @@ def run_processing(
                         exc,
                     )
 
-            # Step c2: CEFR classification (non-blocking — only when enabled).
-            # The classification itself is an LLM call and must NOT hold
-            # _STORAGE_LOCK: it can take seconds, and a worker stuck on the
-            # LLM would stall every other worker's KB writes.  Only the
-            # helper's storage writes (frontmatter + SQLite cefr column) take
-            # the lock, internally (see _classify_entry_cefr).
+            # Step c2: CEFR persistence — the LLM classification already ran
+            # concurrently with the gates (Step b1); only the storage writes
+            # (frontmatter + SQLite index) remain and they stay under
+            # _STORAGE_LOCK, internally (see _classify_entry_cefr).  When the
+            # concurrent classification found nothing to persist there is no
+            # stash and nothing is written.
             if config is not None and config.cefr.enabled:
-                _classify_entry_cefr(entry, item, config)
+                if getattr(item, "_cefr_classification", None) is not None:
+                    _classify_entry_cefr(entry, item, config)
 
             # Step d: Knowledge graph — store entities & discover relations
             if extraction and extraction.entities:
