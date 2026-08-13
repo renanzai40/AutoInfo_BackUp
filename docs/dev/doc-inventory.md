@@ -2,7 +2,7 @@
 
 # Documentation Inventory
 
-AUTO-GENERATED inventory of Markdown/YAML files under `docs/`, produced by `scripts/doc_inventory.py`. **Do not edit by hand.** Regenerate:
+AUTO-GENERATED inventory of Markdown/YAML/JSON files under `docs/`, produced by `scripts/doc_inventory.py`. **Do not edit by hand.** Regenerate:
 
 ```bash
 python3 scripts/doc_inventory.py          # regenerate this file
@@ -13,21 +13,30 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 
 | Metric | Value |
 |--------|-------|
-| Total files | 51 |
-| Total lines | 25189 |
-| Active files | 42 |
+| Total files | 62 |
+| Total lines | 25958 |
+| Active files | 53 |
 | Archived files | 9 |
 | Category — archive | 9 files / 4932 lines |
 | Category — known-limitations | 1 files / 255 lines |
+| Category — schemas | 4 files / 397 lines |
 | Category — skills | 3 files / 785 lines |
 | Category — specs | 12 files / 8746 lines |
-| Category — validation-reports | 9 files / 2620 lines |
-| Category — docs/dev | 17 files / 7851 lines |
+| Category — validation-reports | 8 files / 2620 lines |
+| Category — docs/dev | 24 files / 8162 lines |
+| Category — docs/root | 1 files / 61 lines |
 
 ## Inventory
 
 | Relative path | Lines | Category | Status | Doc-type |
 |---------------|------:|----------|--------|----------|
+| `adr/0001-kb-pipeline-raw-sole-entry.md` | 41 | docs/dev | active | adr |
+| `adr/0002-draft-to-wiki-agent-promotion.md` | 46 | docs/dev | active | adr |
+| `adr/0003-llm-fallback-chain.md` | 44 | docs/dev | active | adr |
+| `adr/0004-reasoning-model-json-mode-thinking.md` | 48 | docs/dev | active | adr |
+| `adr/0005-unified-success-error-envelope.md` | 49 | docs/dev | active | adr |
+| `adr/README.md` | 51 | docs/dev | active | adr-index |
+| `adr/TEMPLATE.md` | 32 | docs/dev | active | adr |
 | `archive/agent-tester-validation.md` | 663 | archive | archived | — |
 | `archive/end-user-sla.md` | 126 | archive | archived | — |
 | `archive/epics-issue-97-coverage-verdict.md` | 109 | archive | archived | — |
@@ -71,11 +80,15 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/validation-reports/evidence-2026-08-12/AC5-verdict.md` | 34 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-column.md` | 796 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-digest-weekly.md` | 144 | validation-reports | active | — |
-| `dev/validation-reports/evidence-2026-08-12/ac5-presentation.md` | 0 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-report-standard.md` | 813 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-tutorial-student.md` | 501 | validation-reports | active | — |
 | `dev/validation-scenario-contract.md` | 768 | docs/dev | active | — |
+| `glossary.md` | 61 | docs/root | active | glossary |
 | `known-limitations/blocked-sources.md` | 255 | known-limitations | active | — |
+| `schemas/knowledge-base-export-v1.json` | 72 | schemas | active | — |
+| `schemas/knowledge-digest-v1.json` | 154 | schemas | active | — |
+| `schemas/knowledge-presentation-v1.json` | 72 | schemas | active | — |
+| `schemas/knowledge-tutorial-v1.json` | 99 | schemas | active | — |
 | `skills/autoinfo-skill/SKILL.md` | 295 | skills | active | — |
 | `skills/autoinfo-skill/onboarding-walkthrough.md` | 121 | skills | active | — |
 | `skills/translator-qa-skill/SKILL.md` | 369 | skills | active | — |

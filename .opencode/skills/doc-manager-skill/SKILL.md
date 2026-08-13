@@ -3,7 +3,7 @@ name: doc-manager-skill
 description: AutoInfo project documentation inventory, change-impact analysis, and doc-update workflow.
   Load this skill whenever code changes may affect project documentation.
 author: AutoInfo
-version: 2.0.1
+version: 2.1.0
 ---
 
 # AutoInfo Documentation Manager Skill
@@ -62,7 +62,7 @@ When you modify code, the listed docs **must** be reviewed and updated:
 | LLM extraction / config | `AGENTS.md` (LLM Configuration), `docs/dev/specs/pipeline.md`, `README.md` | Provider/model/fallback docs, extraction spec |
 | Output formats / delivery channels | `README.md`, `AGENTS.md`, `docs/dev/specs/delivery.md`, `CHANGELOG.md` | Format lists, channel matrix (13), output spec |
 | End-user lifecycle / billing | `docs/dev/specs/delivery.md`, `docs/dev/specs/user-lifecycle-definition.md`, `AGENTS.md`, `README.md`, `CHANGELOG.md` | User types (B1/B2/B3), subscription tiers, check_access |
-| Validation engine / scenarios | `docs/dev/validation-scenario-contract.md`, `AGENTS.md`, `README.md`, `CHANGELOG.md`, `src/autoinfo/mcp/scenarios/` | Scenario counts (65 = 60 + 5 regression), schema fields |
+| Validation engine / scenarios | `docs/dev/validation-scenario-contract.md`, `AGENTS.md`, `README.md`, `CHANGELOG.md`, `src/autoinfo/mcp/scenarios/` | Scenario counts (68 = 62 + 6 regression), schema fields |
 | Feature addition / scope change | `docs/dev/cross-dimensional-catalog.md` (keystone — mandatory), all P0 docs, `CHANGELOG.md` | Cell statuses (🟢/🟡/🔴/🟠), gap-to-spec mapping |
 | Version bump / release | `pyproject.toml`, `CHANGELOG.md`, `README.md`, `AGENTS.md`, `docs/dev/founder-expectations.md`, `docs/dev/specs/expectations.md` | Version refs, status tables, release notes |
 
@@ -96,11 +96,11 @@ When you modify code, the listed docs **must** be reviewed and updated:
 
 ### Step 3 — Update quantitative references
 Drift-prone facts checked by `doc_inventory.py --check`: MCP tools 145 / 35
-categories · CLI groups 28 · delivery channels 13 · validation scenarios 65
-(60 functional + 5 regression) · demo domains 13.
+categories · CLI groups 28 · delivery channels 13 · validation scenarios 68
+(62 functional + 6 regression) · demo domains 13.
 Also keep consistent wherever they appear (README, AGENTS, CHANGELOG, specs,
 skills): source types 29, collector handlers 30, output templates 8,
-LLM-required tools 14, REST port 8741, test count ~3390.
+LLM-required tools 17, REST port 8741, test count ~3640.
 
 ### Step 4 — Verify
 1. `python3 scripts/doc_inventory.py --check` — must exit 0 (facts match,
@@ -140,21 +140,13 @@ self-approve such changes. Acceptance evidence is recorded per run in
 
 ## 6. Project Glossary (must-use terms)
 
-| Term | Definition | Used In |
-|------|-----------|---------|
-| KB pipeline (4-tier) | 01-Raw → 02-Draft → 03-Wiki (00-Inbox deprecated) | AGENTS.md, specs/pipeline.md |
-| 01-Raw | Sole entry point for all collected content | All KB-related docs |
-| 03-Wiki | Append-only; human promotion only | All KB-related docs |
-| G1-G5 | Quality gates: Source authority, Dedup, Relevance, Factual, Translation | AGENTS.md, README.md, specs/quality-gates.md |
-| P0/P1/P2 | Priority levels used in status tables | README.md, AGENTS.md |
-| B1 / B2 / B3 | End User (customer) / Direct User (agent) / Director User (human commander) | specs/user-lifecycle-definition.md, director-user-guide.md |
-| Keystone document | Single source of truth for product definition; all other docs derive from it | cross-dimensional-catalog.md, enduser-coverage-matrix.md, acceptance-framework.md |
-| MCP | Model Context Protocol (stdio transport) | All docs |
-| Agent-native | All capabilities as MCP tools; agent operates, human directs | AGENTS.md |
-| BYOK | Bring Your Own Keys (LLM provider) | README.md, AGENTS.md |
-| LiteLLM | LLM provider abstraction layer | AGENTS.md, llm.py |
-| FTS5 / sqlite-vec | SQLite full-text search / vector embedding extensions | README.md, AGENTS.md |
-| Domain-agnostic | Demo domains are configurations, not hardcoded features | AGENTS.md, founder-expectations.md |
+The authoritative glossary is **`docs/glossary.md`** — the project's
+Ubiquitous Language (DDD). **Never redefine a term ad-hoc** in a doc, spec,
+or skill; add new terms to the glossary when they are used across ≥2 docs and
+their meaning is non-obvious. Terms that must stay consistent everywhere:
+KB pipeline (4-tier), 01-Raw, 03-Wiki, G0-G5 / D1-D3, B1 / B2 / B3, Keystone
+document, ADR, MCP, Agent-native, BYOK, LiteLLM, FTS5 / sqlite-vec,
+Domain-agnostic, fallback chain, reasoning model.
 
 ---
 
@@ -169,6 +161,8 @@ Load (`load_skills=["doc-manager-skill"]`) when:
 - The user asks "what docs exist?", "what needs updating?", or "review the documentation"
 - Fixing a bug that changes user- or agent-visible behavior
 - Updating MCP tool counts, CLI counts, test counts, or demo domain sources
+- **Writing an ADR** (`docs/adr/`) or adding a term to `docs/glossary.md`
+  (both change the doc inventory — regenerate it)
 
 Do **NOT** load for: trivial typo fixes in code comments, internal refactoring
 with no behavioral change, test-only changes (unless test counts change),
@@ -189,3 +183,25 @@ dependency version bumps with no behavior delta.
   in `docs/dev/doc-inventory.md` reflect the docs' current state.
 - **A doc change touching the acceptance framework is not self-approvable** —
   AC7 requires B3 approval (§5).
+- **ADR numbers are never reused** — if a decision changes, write a new ADR and
+  mark the old one `Superseded by NNNN`; never rewrite an accepted ADR in place.
+
+---
+
+## 9. Architecture Decision Records (ADR)
+
+`docs/adr/` answers the *why* questions that code + commit history cannot:
+"why did we do it this way?" and "what alternatives were rejected?" Write an
+ADR (per `docs/adr/TEMPLATE.md`) for any decision that changes an architecture
+rule, chooses between viable alternatives, or has a wide blast radius (MCP
+surface, REST envelope, storage schema, LLM call paths). Workflow:
+
+1. Copy `docs/adr/TEMPLATE.md` → `docs/adr/NNNN-kebab-slug.md` (next free number).
+2. Fill Context / Decision / Alternatives considered (each with why it lost) /
+   Consequences; set Status (`Proposed` / `Accepted` / `Superseded by NNNN`).
+3. Link the ADR from the doc that encodes the rule (`AGENTS.md` Architecture
+   Rules, specs) where helpful.
+4. Regenerate the inventory: `python3 scripts/doc_inventory.py` + `--check`.
+
+New ADRs change the inventory (file count + lines) — the check stays green as
+long as README/AGENTS facts are untouched.
