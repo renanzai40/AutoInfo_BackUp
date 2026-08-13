@@ -46,6 +46,7 @@ from __future__ import annotations
 
 import asyncio
 import base64
+import concurrent.futures
 import json
 import logging
 import os
@@ -6516,17 +6517,37 @@ def _handle_cefr_batch(
 
     results: list[dict[str, Any]] = []
     errors = 0
-    for t in texts:
-        try:
-            result = classify_text(text=t, lang=lang, model_config=model_config)
-            results.append({
-                "text": t,
-                "cefr_level": result["cefr_level"],
-                "confidence": result["confidence"],
-            })
-        except Exception as exc:
-            results.append({"text": t, "error": str(exc)})
-            errors += 1
+
+    # Bounded fan-out: at most 8 concurrent classifications (env override
+    # AUTOINFO_CEFR_BATCH_WORKERS), never more than the number of texts.
+    # Each per-text task runs through classify_text -> call_with_fallback,
+    # which acquires the shared per-provider semaphore (llm.py) so the
+    # fan-out stays rate-limited.  Futures are keyed by original index and
+    # collected in insertion order, preserving the sequential response order.
+    max_workers = min(len(texts), 8)
+    raw_workers = os.environ.get("AUTOINFO_CEFR_BATCH_WORKERS", "")
+    if raw_workers.isdigit():
+        max_workers = min(len(texts), max(1, int(raw_workers)))
+
+    with concurrent.futures.ThreadPoolExecutor(
+        max_workers=max_workers,
+        thread_name_prefix="cefr-batch",
+    ) as pool:
+        futures = {
+            i: pool.submit(classify_text, text=t, lang=lang, model_config=model_config)
+            for i, t in enumerate(texts)
+        }
+        for i, future in futures.items():
+            try:
+                result = future.result()
+                results.append({
+                    "text": texts[i],
+                    "cefr_level": result["cefr_level"],
+                    "confidence": result["confidence"],
+                })
+            except Exception as exc:
+                results.append({"text": texts[i], "error": str(exc)})
+                errors += 1
 
     return {
         "results": results,
