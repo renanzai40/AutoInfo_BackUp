@@ -222,16 +222,16 @@ class TestArchiveProject:
 
             result = _handle_archive_project(reason="cleanup", confirm=True)
 
-        assert "error_code" in result
-        assert result["error_code"] == "NotPublished"
-        assert "actionable" in result
-        assert result["actionable"] is True
+        assert result["success"] is False
+        assert result["error"]["code"] == "NotPublished"
+        assert result["error"]["actionable"] is True
 
     def test_refuses_without_confirm(self) -> None:
         """archive_project must refuse when confirm=False."""
         result = _handle_archive_project(reason="cleanup", confirm=False)
-        assert result["error_code"] == "ConfirmationRequired"
-        assert result["actionable"] is True
+        assert result["success"] is False
+        assert result["error"]["code"] == "ConfirmationRequired"
+        assert result["error"]["actionable"] is True
 
     def test_says_human_only_when_published(self) -> None:
         """With wiki entries present, archive is still human-only."""
@@ -242,7 +242,7 @@ class TestArchiveProject:
 
             result = _handle_archive_project(reason="cleanup", confirm=True)
 
-        assert "error_code" not in result
+        assert "error" not in result
         assert result["status"] == "refused_by_design"
         assert result["actionable"] is False
 
@@ -254,8 +254,8 @@ class TestArchiveProject:
 
             result = _handle_archive_project(confirm=True)
 
-        assert result["error_code"] == "NotPublished"
-        assert "reason provided" not in result["message"].lower()
+        assert result["error"]["code"] == "NotPublished"
+        assert "reason provided" not in result["error"]["message"].lower()
 
 
 # ======================================================================
@@ -496,8 +496,8 @@ class TestConfirmParam:
 
     def test_archive_project_refuses_without_confirm(self) -> None:
         result = mcp_server._handle_archive_project(reason="test", confirm=False)
-        assert result["error_code"] == "ConfirmationRequired"
-        assert result["actionable"] is True
+        assert result["error"]["code"] == "ConfirmationRequired"
+        assert result["error"]["actionable"] is True
 
 
 # ======================================================================

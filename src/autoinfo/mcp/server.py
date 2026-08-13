@@ -4651,21 +4651,27 @@ def _handle_get_gate_config(domain: str, gate: str) -> dict[str, Any]:
 
     from dataclasses import asdict as _asdict
 
+    # Normalise the queried gate name to its canonical long form — config
+    # keys are stored as e.g. "G3-RelevanceScoring" (short "G3" accepted).
+    from autoinfo.config import _GATE_CONFIG_KEY_MAP as _gate_map
+
+    gate_key = _gate_map.get(gate, gate)
+
     # Check quality gates first, then delivery gates, then global defaults
     gate_config: dict[str, Any] | None = None
     gate_type: str = ""
 
-    if gate in domain_cfg.quality_gates:
-        gate_config = _asdict(domain_cfg.quality_gates[gate])
+    if gate_key in domain_cfg.quality_gates:
+        gate_config = _asdict(domain_cfg.quality_gates[gate_key])
         gate_type = "quality"
-    elif gate in domain_cfg.delivery_gates:
-        gate_config = _asdict(domain_cfg.delivery_gates[gate])
+    elif gate_key in domain_cfg.delivery_gates:
+        gate_config = _asdict(domain_cfg.delivery_gates[gate_key])
         gate_type = "delivery"
-    elif gate in config.quality_gates:
-        gate_config = _asdict(config.quality_gates[gate])
+    elif gate_key in config.quality_gates:
+        gate_config = _asdict(config.quality_gates[gate_key])
         gate_type = "quality"
-    elif gate in config.delivery_gates:
-        gate_config = _asdict(config.delivery_gates[gate])
+    elif gate_key in config.delivery_gates:
+        gate_config = _asdict(config.delivery_gates[gate_key])
         gate_type = "delivery"
 
     if gate_config is None:
