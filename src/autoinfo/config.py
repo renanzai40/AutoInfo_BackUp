@@ -107,6 +107,22 @@ HARD_GATE_ACTIONS: frozenset[str] = frozenset({"block", "retry"})
 SOFT_GATE_ACTIONS: frozenset[str] = frozenset({"retry", "flag", "skip", "archive"})
 
 # ---------------------------------------------------------------------------
+# Per-task LLM routing (release-pinned, static — never a runtime classifier)
+# ---------------------------------------------------------------------------
+
+# Release-pinned judgment model for the G4 (factual consistency), G5
+# (translation accuracy) and llm_judge (translation QA gate 5) call sites.
+# The value is chosen per release; changing it is a release-level decision,
+# never a runtime one — judgment calls must NOT drift with task config.
+JUDGMENT_MODEL = "deepseek-v4-flash"
+
+# Task names whose model ALWAYS resolves to :data:`JUDGMENT_MODEL`, regardless
+# of any ``llm.tasks[<name>].model`` runtime drift.
+JUDGMENT_TASKS: frozenset[str] = frozenset(
+    {"g4_factual", "g5_translation", "llm_judge"}
+)
+
+# ---------------------------------------------------------------------------
 # Dataclasses
 # ---------------------------------------------------------------------------
 
@@ -1212,11 +1228,29 @@ def _resolve_task_llm_config(config: Config, task_name: str = "") -> LLMConfig:
     1. Task-specific overrides from ``llm.tasks[task_name]``
     2. Base ``llm`` configuration
 
+    Judgment task names (see :data:`JUDGMENT_TASKS`) are exempt from task
+    overrides: their model ALWAYS resolves to the release-pinned
+    :data:`JUDGMENT_MODEL`, so a drifted ``llm.tasks`` entry can never
+    change what model judges content.
+
     Returns a new ``LLMConfig`` with task-level fields merged on top of
     the base config.  Falls back to the base ``LLMConfig`` when
     *task_name* is empty or unknown.
     """
     base = config.llm
+    if task_name in JUDGMENT_TASKS:
+        return LLMConfig(
+            provider=base.provider,
+            model=JUDGMENT_MODEL,
+            api_key=base.api_key,
+            base_url=base.base_url,
+            json_mode=base.json_mode,
+            reasoning_model=base.reasoning_model,
+            timeout=base.timeout,
+            max_tokens=base.max_tokens,
+            fallback=base.fallback,
+            tasks=base.tasks,
+        )
     if not task_name or task_name not in base.tasks:
         return base
 

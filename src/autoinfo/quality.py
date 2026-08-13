@@ -25,7 +25,7 @@ from typing import Any, Literal
 
 import yaml
 
-from autoinfo.config import QualityGateConfig
+from autoinfo.config import JUDGMENT_MODEL, QualityGateConfig
 from autoinfo.llm import call_with_fallback, parse_json_response
 from autoinfo.models import ExtractionResult, Item, KBEntry
 
@@ -1140,7 +1140,7 @@ class G4FactualConsistency:
 
     def __init__(
         self,
-        model: str = "openrouter/deepseek/deepseek-chat",
+        model: str = JUDGMENT_MODEL,
         collections_path: str | Path = "collections",
         json_mode: bool = False,
         timeout: float | None = None,
@@ -1443,7 +1443,7 @@ class G5TranslationAccuracy:
 
     def __init__(
         self,
-        model: str = "openrouter/deepseek/deepseek-chat",
+        model: str = JUDGMENT_MODEL,
         json_mode: bool = False,
         timeout: float | None = None,
     ) -> None:
@@ -2748,7 +2748,7 @@ def llm_judge(
 ) -> dict[str, Any]:
     """Gate 5: LLM-based quality eval (faithfulness, terminology, style, readability 0-100)."""
     if model is None:
-        model = _resolve_llm_model()
+        model = JUDGMENT_MODEL
     if timeout is None:
         timeout = _resolve_llm_timeout()
 

@@ -25,7 +25,14 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable
 
-from autoinfo.config import Config, DomainConfig, QualityGateConfig, get_config_path, load_config
+from autoinfo.config import (
+    JUDGMENT_MODEL,
+    Config,
+    DomainConfig,
+    QualityGateConfig,
+    get_config_path,
+    load_config,
+)
 from autoinfo.kb import _FTS5_STOPWORDS, KBStore, PromotionRejected
 from autoinfo.keywords import KeywordsFile, KeywordState
 from autoinfo.llm import LLMExtractor
@@ -523,6 +530,10 @@ def _build_config_with_model(
     When *model* contains a ``/`` it is treated as ``provider/model``;
     otherwise only the model name is replaced and the provider is kept
     from the original config (or left empty).
+
+    An explicit *model* is a deliberate runtime override: per-task routing
+    (``llm.tasks``) is disabled for the returned config so the override
+    can never be re-clobbered by the extraction task resolution.
     """
     if model is None:
         return config
@@ -543,6 +554,8 @@ def _build_config_with_model(
         cfg.llm.model = model_name
     else:
         cfg.llm.model = model
+
+    cfg.llm.tasks = {}
 
     return cfg
 
@@ -968,22 +981,11 @@ def run_processing(
             if check_factual and extraction.tl_dr:
                 def _run_g4() -> QualityResult:
                     try:
-                        g4_provider = (
-                            proc_config.llm.provider
-                            if proc_config and proc_config.llm.provider
-                            else "openrouter"
-                        )
-                        g4_model_name = (
-                            proc_config.llm.model
-                            if proc_config and proc_config.llm.model
-                            else "deepseek/deepseek-chat"
-                        )
-                        g4_model = f"{g4_provider}/{g4_model_name}"
                         g4_gate_config = (
                             gate_config.get("G4-SummaryFactual") if gate_config else None
                         )
                         g4 = G4FactualConsistency(
-                            model=g4_model,
+                            model=JUDGMENT_MODEL,
                             json_mode=proc_config.llm.json_mode if proc_config else False,
                             timeout=llm_timeout,
                         )
@@ -1027,12 +1029,9 @@ def run_processing(
                             },
                         )
 
-                    # Resolve model string (also used by fallback path)
-                    g5_model = (
-                        f"{proc_config.llm.provider}/{proc_config.llm.model}"
-                        if proc_config and proc_config.llm.provider and proc_config.llm.model
-                        else "openrouter/deepseek/deepseek-chat"
-                    )
+                    # Judgment model is release-pinned (JUDGMENT_MODEL) —
+                    # never derived from runtime task-config drift.
+                    g5_model = JUDGMENT_MODEL
                     try:
                         source_text = item.content or ""
                         target_text = translation

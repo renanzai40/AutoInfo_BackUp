@@ -26,7 +26,12 @@ import threading
 import time
 from typing import Any, Optional
 
-from autoinfo.config import Config, get_config_path, load_config
+from autoinfo.config import (
+    Config,
+    _resolve_task_llm_config,
+    get_config_path,
+    load_config,
+)
 from autoinfo.models import ExtractionResult, Item
 
 logger = logging.getLogger(__name__)
@@ -195,6 +200,12 @@ class LLMExtractor:
                 config = load_config(config_path)
             else:
                 config = Config()
+
+        # Per-task model routing: extraction/classification resolves through
+        # the "extraction" task config (deepseek-v4-flash this release).  The
+        # base config is returned as-is when no task config exists, so
+        # historical defaults are preserved exactly.
+        config = Config(llm=_resolve_task_llm_config(config, "extraction"))
 
         self._config = config
         self._json_mode = config.llm.json_mode
@@ -611,6 +622,7 @@ def call_with_fallback(
     timeout: float | None = None,
     config: Config | None = None,
     disable_thinking: bool = True,
+    task: str | None = None,
 ) -> Any:
     """Call LiteLLM through the configured primary + fallback model chain.
 
@@ -639,6 +651,16 @@ def call_with_fallback(
     resolved via :func:`autoinfo.config._resolve_task_llm_config` therefore
     reaches the request payload (issue #178).
 
+    *task* routes the call through
+    :func:`autoinfo.config._resolve_task_llm_config` before any value is
+    read from the config: the resolved config's ``model`` and
+    ``max_tokens`` become the effective defaults.  An explicit *model* /
+    *max_tokens* parameter always wins over the resolved task values.
+    Judgment task names (G4/G5/llm_judge) resolve their model to the
+    release-pinned :data:`autoinfo.config.JUDGMENT_MODEL` — a drifted
+    ``llm.tasks`` entry can never re-route a judgment call.  ``None``
+    (default) keeps the historical behavior with no task resolution.
+
     Every actual provider call is guarded by a per-provider shared
     semaphore (keyed ``(provider, base_url)``, default width 4, override
     ``AUTOINFO_LLM_MAX_CONCURRENCY``) and retried on HTTP 429 / 5xx with
@@ -656,6 +678,9 @@ def call_with_fallback(
             config = load_config(config_path) if config_path is not None else Config()
         except Exception:
             config = Config()
+
+    if task:
+        config = Config(llm=_resolve_task_llm_config(config, task))
 
     if reasoning_model is None:
         reasoning_model = config.llm.reasoning_model
