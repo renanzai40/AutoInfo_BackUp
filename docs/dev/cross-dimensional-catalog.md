@@ -245,12 +245,13 @@ Concepts that have never been designed — no spec, no code, no MCP tools.
 - **Existing Cross-Ref:** None (new)
 - **Evidence:** `email_sender.py` sends plain text/HTML messages. No template engine integration. No `list_email_templates` MCP tool.
 
-#### CD-010: Product Catalog / Storefront
-- **Description:** No product discovery for end users. No storefront, no product listing page, no pricing page. End users have no way to browse available products.
+#### CD-010: [RESOLVED] Product Catalog / Storefront
+- **Description:** Product discovery for agents IS available via the `list_products`/`get_product` MCP tools (Product category). The destructive-operation guard fix landed 2026-08-12: actor defaults to non-privileged `"agent"`, destructive tools (`demote_kb_wiki`, `force_promote`, `soft_delete_entry`, `remove_domain`, `remove_source`, `remove_topic`, `remove_schedule`) require an explicit actor, and `clean_cache(everything=True)` requires `confirm=true` (CONFIRMATION_REQUIRED) before deleting `knowledge/` + `autoinfo.db`. No end-user-facing storefront/pricing page yet (B1 discovery is agent-intro-led), but the agent-facing catalog gap is closed.
 - **Affected Stages:** A4 (Products), A6 (Consumption)
-- **Affected Users:** B1 (End User — cannot discover products), B3 (Director — no product marketing channel)
+- **Affected Users:** B1 (End User — discovery via agent intro), B3 (Director — no product marketing channel)
 - **Existing Cross-Ref:** G7 (Consumer-facing gap: "no Substack-style discovery")
-- **Evidence:** `list_products` MCP tool exists but returns products for agent use, not for end-user browsing. No public product catalog.
+- **Evidence:** `get_product` (server.py:4784) and `list_products` (server.py:4852) registered + dispatched (server.py:11105, 11107). Guard fix: `actor: str = "agent"` defaults at 8 destructive handlers (server.py:1052/1536/1753/2559/2582/2604/3548/6682); dispatch fallback `arguments.get("actor") or "agent"` (server.py:10846); `clean_cache(everything=True)` without `confirm` returns CONFIRMATION_REQUIRED (server.py:6702-6707). Landed 2026-08-12 (eval B4/B5).
+- **Status:** 🟢 Resolved — guard fix implemented 2026-08-12. Remaining: end-user-facing storefront/pricing page (P3).
 
 #### CD-011: [RESOLVED] Consumption Tracking (Read Receipts / Engagement)
 - **Description:** `consumption.py` IS implemented with `ConsumptionEvent` dataclass (delivered/opened/clicked) and `ConsumptionStore` (SQLite-backed). Auto-record on delivery from `src/autoinfo/output/__init__.py:2433` and `:2881`. No dedicated MCP tool for querying consumption events yet (accessed via `ConsumptionStore.list_events()` programmatically). No engagement metrics dashboard.
@@ -302,12 +303,13 @@ Concepts that have never been designed — no spec, no code, no MCP tools.
 
 Gaps where the spec exists but code has not been written (or spec partially written, code partially done).
 
-#### CD-017: Product Lifecycle MCP Tools
-- **Description:** `delivery.md` specs 5 product lifecycle MCP tools (`get_product_lifecycle`, `list_user_products`, `regenerate_product`, `archive_product`, `get_engagement_metrics`). None are implemented. No `ProductState` enum, no lifecycle state machine.
+#### CD-017: [PARTIALLY RESOLVED] Product Lifecycle MCP Tools
+- **Description:** `delivery.md` specs 5 product lifecycle MCP tools (`get_product_lifecycle`, `list_user_products`, `regenerate_product`, `archive_product`, `get_engagement_metrics`). `get_product`/`list_products` (Product category) ARE registered and dispatched, but the 5 lifecycle tools remain unimplemented. No `ProductState` enum, no lifecycle state machine.
 - **Affected Stages:** A4 (Products), A5 (Delivery)
 - **Affected Users:** B2 (Direct Agent — no lifecycle tooling), B3 (Director — no product management)
 - **Existing Cross-Ref:** AUD-06
-- **Evidence:** `ProductType` at `src/autoinfo/models.py:94`, `ProductTemplate` at `src/autoinfo/output/__init__.py:1645` but no `ProductInstance`, no `ProductState`, no lifecycle MCP handlers.
+- **Evidence:** `get_product`/`list_products` registered (server.py:9561/9580) + dispatched (server.py:11105/11107). `ProductType` at `src/autoinfo/models.py:94`, `ProductTemplate` at `src/autoinfo/output/__init__.py:1645` but no `ProductInstance`, no `ProductState`, no lifecycle MCP handlers (grep: no `get_product_lifecycle`/`list_user_products`/`regenerate_product`/`archive_product`/`get_engagement_metrics` in src/).
+- **Status:** 🟡 Partially resolved — product read tools registered; 5 lifecycle tools still missing (2026-08-12).
 
 #### CD-018: [RESOLVED] Consumption Tracking MCP Tools
 - **Description:** `delivery.md` specs consumption tracking (read receipts, open rates, engagement signals). `consumption.py` IS implemented with `ConsumptionEvent` (delivered/opened/clicked) and `ConsumptionStore` (SQLite-backed). Events auto-record on delivery from `src/autoinfo/output/__init__.py:2433` and `:2881`. No dedicated MCP tool for querying consumption events yet (accessed programmatically via `ConsumptionStore.list_events()`). No engagement metrics dashboard.
@@ -338,13 +340,14 @@ Gaps where the spec exists but code has not been written (or spec partially writ
 - **Existing Cross-Ref:** None (new)
 - **Evidence:** `UserProfile` at `src/autoinfo/models.py:318` has `user_id` (UUID) with no identity anchor field. No multi-platform identity resolution. User store logic at `src/autoinfo/user_store.py`.
 
-#### CD-022: Product Lifecycle MCP Tools (Spec'd Not Implemented)
+#### CD-022: [PARTIALLY RESOLVED] Product Lifecycle MCP Tools (Spec'd Not Implemented)
 - **Description:** `delivery.md` specs 4 product lifecycle MCP tools that remain unimplemented: `regenerate_product`, `archive_product`, `get_product_lifecycle`, `get_engagement_metrics`. No `ProductState` enum, no lifecycle state machine for product instances.
-- **Note:** All 10 End User MCP tools are fully registered (`send_to_enduser`, `get_enduser_history`, `get_enduser_products`, `query_delivery_log`, `get_delivery_log`, `activate_trial`, `check_trial_expiry`, `update_preferences`, `get_preferences`, `get_subscription_status`). `compare_versions` (KB Versioning) IS also registered. This gap is limited to the missing product lifecycle tools only.
+- **Note:** All 10 End User MCP tools are fully registered (`send_to_enduser`, `get_enduser_history`, `get_enduser_products`, `query_delivery_log`, `get_delivery_log`, `activate_trial`, `check_trial_expiry`, `update_preferences`, `get_preferences`, `get_subscription_status`). `compare_versions` (KB Versioning) IS also registered. `get_product`/`list_products` (Product category) ARE registered too. This gap is limited to the missing product lifecycle tools only.
 - **Affected Stages:** A4 (Products), A5 (Delivery)
 - **Affected Users:** B2 (Direct Agent — no lifecycle tooling), B3 (Director — no product management)
 - **Existing Cross-Ref:** AUD-06
-- **Evidence:** `ProductType` at `src/autoinfo/models.py:94`, `ProductTemplate` at `src/autoinfo/output/__init__.py:1645` but no `ProductInstance`, no `ProductState`, no lifecycle MCP handlers. 10 end-user MCP tools confirmed registered.
+- **Evidence:** `ProductType` at `src/autoinfo/models.py:94`, `ProductTemplate` at `src/autoinfo/output/__init__.py:1645` but no `ProductInstance`, no `ProductState`, no lifecycle MCP handlers. 10 end-user MCP tools confirmed registered; `get_product`/`list_products` confirmed registered (server.py:9561/9580).
+- **Status:** 🟡 Partially resolved — product read tools registered; lifecycle tools still missing (2026-08-12).
 
 #### CD-023: [RESOLVED] `get_schedule_status` IS Registered
 - **Description:** `get_schedule_status` IS fully registered as an MCP tool (confirmed: `Tool(name="get_schedule_status")` in server.py). The cron reliability gap is about monitoring / missed-schedule detection, not tool availability. Merged into CD-004.
@@ -457,12 +460,12 @@ Gaps where the implementation exists but spec documents still describe the old/p
 - **Existing Cross-Ref:** G1, G11
 - **Evidence:** `generate_report(format="audio")` and `generate_digest(format="agent")` both operational. Source doc archived. No further action needed.
 
-#### CD-036: target_audience MCP Parameter Behavior
-- **Description:** MCP spec says `list_output_templates` has `target_audience` filter, but in practice it may not filter correctly or the parameter behavior differs from spec.
+#### CD-036: `list_output_templates` Filter Behavior — By Tier, Not target_audience
+- **Description:** The `list_output_templates` MCP tool has NO `target_audience` filter parameter. The actual filter is by **user tier**: when `user_id` is provided, templates are filtered so only those whose `access_level` (free/premium/enterprise) is accessible to that user are returned (`check_access(user_id, t["access_level"])`). The catalog previously described a `target_audience` filter — that parameter does not exist on this tool (`target_audience` is a `generate_report`/`generate_digest` content parameter, not a template-list filter). Description corrected 2026-08-12 to match actual behavior.
 - **Affected Stages:** A4 (Products)
 - **Affected Users:** B2 (Direct Agent — parameter behavior mismatch)
 - **Existing Cross-Ref:** G13
-- **Evidence:** Needs verification against actual MCP behavior.
+- **Evidence:** `_handle_list_output_templates(domain="", user_id=None)` at `server.py:2641` filters via `check_access(user_id, t["access_level"])` (tier); MCP schema at `server.py:8310` declares only `domain` + `user_id` params, no `target_audience`. `list_output_templates()` at `src/autoinfo/output/__init__.py:2341` returns `access_level` per template.
 
 ---
 
@@ -483,11 +486,12 @@ Gaps that are not about missing features but about how the system is architected
 - **Existing Cross-Ref:** None (new)
 - **Evidence:** No `Notification` model, no notification registry, no notification preferences in `UserProfile` or `Subscription`.
 
-#### CD-039: No Delivery Schema Enforcement
-- **Description:** Delivery channels receive products but there is no schema enforcement — a product expected to have certain fields can be sent without them. No per-channel format validation. If a channel requires specific formatting, it's implemented per-adapter with no shared contract.
+#### CD-039: [PARTIALLY RESOLVED] No Delivery Schema Enforcement
+- **Description:** Delivery channels receive products but there is no schema enforcement at delivery time. Every channel adapter DOES implement a `validate_config(self, config) -> bool` method (13/13 adapters, incl. smtp/webhook/rest_api/discord/telegram/wechat_work/wechat_oa/dingtalk/feishu/rss/social_publish/push), plus a config-level `validate_config(config) -> list[str]` in `config.py:855` — but the channel-level `validate_config` methods are **never called** (zero call sites in src/). Only the config-level validator is invoked, from `doctor.py:74`. So per-channel format validation exists as a contract but is never enforced in the delivery path.
 - **Affected Stages:** A4 (Products), A5 (Delivery)
 - **Affected Users:** B2 (Direct Agent — inconsistent product structure), B1 (End User — varying quality across channels)
-- **Evidence:** `ProductTemplate` has fields but no delivery schema validation. Channel adapters handle formatting independently.
+- **Evidence:** `validate_config` defined at `delivery/__init__.py:216/288/368/485/619`, `wechat_work.py:151`, `wechat_oa.py:204`, `telegram.py:177`, `social.py:390`, `rss.py:228/563`, `push.py:219`, `feishu.py:179`, `discord.py:166`, `dingtalk.py:178`; config-level at `config.py:855` called by `doctor.py:74`. `grep -rn '\.validate_config(' src/autoinfo/` → no call sites (definitions only). `ProductTemplate` has fields but no delivery-time schema validation.
+- **Status:** 🟡 Partially resolved — validation contract exists (all adapters) but never invoked in the delivery path (2026-08-12).
 
 #### CD-040: [PARTIALLY RESOLVED] No End-User Consumption Loop
 - **Description:** Core consumption tracking IS implemented (`ConsumptionEvent` + `ConsumptionStore`), but the consumption data is not yet used for feedback loops. Events are auto-recorded on delivery (delivered/opened/clicked) in `output.py`. No preference learning, no content adaptation based on engagement, no personalized ranking.
@@ -515,12 +519,12 @@ Gaps that are not about missing features but about how the system is architected
 
 | Type | Count | Open | Resolved | IDs |
 |------|-------|------|----------|-----|
-| 🔴 Type 1: Never Designed | 16 | 12 | 4 | CD-001 to CD-016 |
+| 🔴 Type 1: Never Designed | 16 | 11 | 5 | CD-001 to CD-016 |
 | 🟡 Type 2: Spec'd Not Impl | 7 | 5 | 2 | CD-017 to CD-023 |
 | 🟡 Type 3: Partially Impl | 8 | 6 | 2 (1 merged) | CD-024 to CD-031 |
-| 🟢 Type 4: Spec Outdated | 5 | 1 | 4 | CD-032 to CD-036 |
+| 🟢 Type 4: Spec Outdated | 5 | 0 | 5 | CD-032 to CD-036 |
 | 🟠 Type 5: Architecture | 6 | 5 | 1 (partial) | CD-037 to CD-042 |
-| **Total** | **42** | **29** | **13** | |
+| **Total** | **42** | **27** | **15** | |
 
 **Newly resolved gaps (this audit):**
 | Gap | Old Status | New Status | Reason |
@@ -539,6 +543,11 @@ Gaps that are not about missing features but about how the system is architected
 | CD-035 | 🟢 Spec Outdated | ✅ Resolved | Source doc archived, no further action |
 | CD-034 | 🟢 Spec Outdated | ✅ Resolved | AGENTS.md structure-tree `output.py` comment updated to list all formats (Audio/Agent/presentation) — matches status table (2026-08-04) |
 | CD-040 | 🟠 Architecture | 🟡 Partially Resolved | Consumption data collection exists, feedback loop missing |
+| CD-010 | 🔴 Never Designed | 🟢 Resolved | Destructive-operation guard fix 2026-08-12: actor defaults non-privileged "agent", destructive tools require explicit actor, `clean_cache(everything=True)` requires confirm=true (CONFIRMATION_REQUIRED); product discovery via `list_products`/`get_product` MCP |
+| CD-036 | 🟢 Spec Outdated | ✅ Resolved | Description corrected 2026-08-12 — `list_output_templates` filters by tier (`access_level` via `user_id`), no `target_audience` filter exists |
+| CD-017 | 🟡 Spec'd Not Impl | 🟡 Partially Resolved | `get_product`/`list_products` registered; 5 lifecycle tools still missing (2026-08-12) |
+| CD-022 | 🟡 Spec'd Not Impl | 🟡 Partially Resolved | `get_product`/`list_products` registered; lifecycle tools still missing (2026-08-12) |
+| CD-039 | 🟠 Architecture | 🟡 Partially Resolved | Channel `validate_config` exists (13/13 adapters) but never called; config-level validator used by doctor only (2026-08-12) |
 
 ---
 
@@ -559,7 +568,7 @@ Each gap maps to one or more documents that need updating. This enables targeted
 | CD-007 | `specs/delivery.md` | Add section |
 | CD-008 | `specs/delivery.md` | Add section |
 | CD-009 | `specs/operations.md` | Add section |
-| CD-010 | `specs/delivery.md` | Add section |
+| CD-010 | *(resolved — product discovery via `list_products`/`get_product` MCP + destructive-op guard fix, 2026-08-12)* | — |
 | CD-011 | `specs/delivery.md`, `specs/data-models.md` | Add sections |
 | CD-012 | `specs/operations.md` | Add section |
 | CD-013 | `specs/ops-runbook.md` (new) | Add section |
@@ -585,7 +594,7 @@ Each gap maps to one or more documents that need updating. This enables targeted
 | CD-033 | — *(resolved — agent JSON working, docs updated)* | — |
 | CD-034 | `AGENTS.md` | Fix format claims |
 | CD-035 | *(resolved — source doc archived)* | — |
-| CD-036 | `specs/mcp-tools.md` | Verify behavior |
+| CD-036 | *(resolved — `list_output_templates` filters by tier, not target_audience; description corrected 2026-08-12)* | — |
 | CD-037 | `specs/operations.md` (new section: Feature Flags) | Add section |
 | CD-038 | `specs/operations.md` (new section: Notifications) | Add section |
 | CD-039 | `specs/delivery.md` (new section: Schema Enforcement) | Add section |
@@ -645,17 +654,17 @@ Priorities are assigned based on:
 | CD-006 | Notification framework unification | Notifications exist but scattered (notifications.py, alerts.py, cron.py); no central template system | 3-5 days |
 | CD-008 | Product preview | No QA before delivery; demo can send directly | 2-3 days |
 | CD-009 | Email templates | Lifecycle emails are plain text; adequate for demo | 2-3 days |
-| CD-010 | Product catalog | End users can't discover products; demo via agent intro | 5-10 days |
+| CD-010 | *(resolved 2026-08-12 — product discovery via `list_products`/`get_product` MCP + destructive-op guard fix)* | Product catalog now agent-discoverable via MCP; end-user storefront still P3 | — |
 | CD-012 | Retention & churn analysis | No business analytics | 5-10 days |
 | CD-013 | Live ops dashboard | No real-time monitoring | 3-5 days |
 | CD-015 | Scaling strategy | No path beyond single-node SQLite | 5-10 days |
-| CD-017 | Product lifecycle MCP tools | Agent cannot manage product lifecycle; not needed for demo | 3-5 days |
+| CD-017 | Product lifecycle MCP tools | `get_product`/`list_products` registered (partial); 5 lifecycle tools still missing | 3-5 days |
 | CD-019 | Quiet hours | Spec not implemented | 2-3 days |
 | CD-021 | Identity anchor | No cross-platform identity | 3-5 days |
 | CD-027 | merge_items partial | Basic concatenation, no LLM conflict resolution | 2-3 days |
 | CD-029 | *(resolved + redefined — `promote_kb_draft` MCP tool, 2026-08-06; agent-operated promotion, 2026-08-08)* | Agent promotion Draft→Wiki via MCP, KB-tier guard | — |
 | CD-037 | Feature flags | No gradual rollout capability | 3-5 days |
-| CD-039 | Delivery schema enforcement | No format validation | 3-5 days |
+| CD-039 | Delivery schema enforcement | Channel `validate_config` exists (13/13) but never called (partial, 2026-08-12); enforcement gap remains | 3-5 days |
 | CD-041 | Business metrics | No revenue/engagement visibility | 5-10 days |
 
 ### P3 ⚪ — Future (V2+)
@@ -669,7 +678,7 @@ Priorities are assigned based on:
 | CD-025 | Payment provider abstraction | Stripe reference impl exists; need `PaymentProvider` ABC for WeChat Pay / Alipay / Stripe pluggability | 5-10 days |
 | CD-028 | Deprecated status agent tooling | Minor workflow improvement | 1 day |
 | CD-030 | Logging implementation gap | Gradual improvement across modules | 3-5 days |
-| CD-036 | target_audience parameter | Edge case behavior | 1 day |
+| CD-036 | *(resolved 2026-08-12 — description corrected: `list_output_templates` filters by tier, not target_audience)* | Spec/doc behavior now matches code | — |
 | CD-042 | Multi-tenant DB isolation | Depends on CD-001 | 5-10 days |
 
 ### Spec Doc Overhaul Priority
@@ -970,4 +979,4 @@ Maps existing gap IDs from other (now archived) documents to CD-NNN. Kept for hi
 
 ---
 
-*End of Cross-Dimensional Catalog. 42 gaps cataloged across 5 types (12 resolved/merged after codebase reality check), with full priority matrix and implementation roadmap + feasibility verdicts (absorbed from enduser-coverage-matrix, `docs/dev/enduser-coverage-matrix.md`). Last updated 2026-08-11 (V1 completion audit + stale-item fix + validation toolset + H-section fold-in + M0-M7 consolidated sweep: 3 new source types, 4 new demo domains, B24 column + D11 magazine-digest products + output-quality-mega: premium-briefing/enterprise-briefing differentiated rendering, per-product LLM synthesis fields, product selection on MCP/CLI, `filter_custom_fields` over `product_analysis` KB metadata, `fetch_depth` fulltext, scenarios 65→67). This is the keystone product definition document — start here, then navigate to the relevant spec in `docs/dev/specs/`.*
+*End of Cross-Dimensional Catalog. 42 gaps cataloged across 5 types (15 resolved/merged after codebase reality check), with full priority matrix and implementation roadmap + feasibility verdicts (absorbed from enduser-coverage-matrix, `docs/dev/enduser-coverage-matrix.md`). Last updated 2026-08-12 (status corrections: CD-010 resolved via destructive-op guard fix + product MCP tools; CD-036 description corrected to tier-based filter; CD-017/CD-022/CD-039 annotated partially resolved). This is the keystone product definition document — start here, then navigate to the relevant spec in `docs/dev/specs/`.*

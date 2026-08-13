@@ -520,7 +520,12 @@ class TestOutputCommandUserID:
             domain="medical-research",
             period="weekly",
             format="markdown",
+            custom_instructions="",
+            target_audience="",
+            include_stale=False,
+            recipients=None,
             user_id="user-123",
+            max_items=0,
         )
 
     @patch("autoinfo.output.generate_digest", return_value="# digest")
@@ -536,7 +541,12 @@ class TestOutputCommandUserID:
             domain="medical-research",
             period="weekly",
             format="markdown",
+            custom_instructions="",
+            target_audience="",
+            include_stale=False,
+            recipients=None,
             user_id="",
+            max_items=0,
         )
 
     @patch("autoinfo.output.generate_report", return_value="# report")

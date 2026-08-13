@@ -10,7 +10,6 @@ channel, and time range.  Aggregated stats via :func:`get_delivery_stats`.
 
 from __future__ import annotations
 
-import json
 import sqlite3
 import uuid
 from datetime import datetime, timezone

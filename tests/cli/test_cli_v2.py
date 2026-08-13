@@ -57,13 +57,22 @@ class TestSourcesCommand:
         assert "test" in result.stdout
 
     def test_sources_add_help_shows_options(self, cli_runner: Any, app: Any) -> None:
-        """``autoinfo sources add --help`` shows --name, --url, --type, --domain."""
+        """``autoinfo sources add --help`` shows all MCP add_source params."""
         result = cli_runner.invoke(app, ["sources", "add", "--help"])
         assert result.exit_code == 0
         assert "--name" in result.stdout
         assert "--url" in result.stdout
         assert "--type" in result.stdout
         assert "--domain" in result.stdout
+        assert "--settings" in result.stdout
+        assert "--requires-key" in result.stdout
+        assert "--no-requires-key" in result.stdout
+        assert "--imap-server" in result.stdout
+        assert "--imap-port" in result.stdout
+        assert "--imap-username" in result.stdout
+        assert "--imap-password" in result.stdout
+        assert "--imap-mailbox" in result.stdout
+        assert "--webhook-secret" in result.stdout
 
     def test_sources_list_help_shows_options(self, cli_runner: Any, app: Any) -> None:
         """``autoinfo sources list --help`` shows --domain."""
@@ -242,12 +251,18 @@ class TestOutputCommand:
         assert "export" in result.stdout
 
     def test_output_digest_help_shows_options(self, cli_runner: Any, app: Any) -> None:
-        """``autoinfo output digest --help`` shows --domain, --period, --format."""
+        """``autoinfo output digest --help`` shows all MCP generate_digest params."""
         result = cli_runner.invoke(app, ["output", "digest", "--help"])
         assert result.exit_code == 0
         assert "--domain" in result.stdout
         assert "--period" in result.stdout
         assert "--format" in result.stdout
+        assert "--custom-instructions" in result.stdout
+        assert "--target-audience" in result.stdout
+        assert "--include-stale" in result.stdout
+        assert "--recipients" in result.stdout
+        assert "--max-items" in result.stdout
+        assert "--persist" in result.stdout
 
     def test_output_report_help_shows_options(self, cli_runner: Any, app: Any) -> None:
         """``autoinfo output report --help`` shows --domain, --format."""

@@ -254,9 +254,9 @@ class TestDeliveryGateConfig:
 class TestGlobalGatesParsing:
     def test_quality_gates_loaded(self, gates_dict: dict[str, Any]) -> None:
         config = _dict_to_config(gates_dict)
-        assert "G0" in config.quality_gates
-        assert "G4" in config.quality_gates
-        assert "G3" in config.quality_gates
+        assert "G0-SchemaIntegrity" in config.quality_gates
+        assert "G4-SummaryFactual" in config.quality_gates
+        assert "G3-RelevanceScoring" in config.quality_gates
 
     def test_delivery_gates_loaded(self, gates_dict: dict[str, Any]) -> None:
         config = _dict_to_config(gates_dict)
@@ -265,7 +265,7 @@ class TestGlobalGatesParsing:
 
     def test_g0_values(self, gates_dict: dict[str, Any]) -> None:
         config = _dict_to_config(gates_dict)
-        g0 = config.quality_gates["G0"]
+        g0 = config.quality_gates["G0-SchemaIntegrity"]
         assert g0.category == "hard"
         assert g0.retries == 1
         assert g0.retry_models == []
@@ -274,7 +274,7 @@ class TestGlobalGatesParsing:
 
     def test_g4_values(self, gates_dict: dict[str, Any]) -> None:
         config = _dict_to_config(gates_dict)
-        g4 = config.quality_gates["G4"]
+        g4 = config.quality_gates["G4-SummaryFactual"]
         assert g4.category == "hard"
         assert g4.retries == 3
         assert g4.retry_models == ["deepseek/deepseek-chat", "anthropic/claude-sonnet-4"]
@@ -283,7 +283,7 @@ class TestGlobalGatesParsing:
 
     def test_g3_values(self, gates_dict: dict[str, Any]) -> None:
         config = _dict_to_config(gates_dict)
-        g3 = config.quality_gates["G3"]
+        g3 = config.quality_gates["G3-RelevanceScoring"]
         assert g3.category == "soft"
         assert g3.retries == 2
         assert g3.retry_models == ["deepseek/deepseek-chat"]
@@ -317,8 +317,8 @@ class TestDomainGatesOverrides:
     def test_domain_quality_gates_loaded(self, domain_gates_dict: dict[str, Any]) -> None:
         config = _dict_to_config(domain_gates_dict)
         domain = config.domains[0]
-        assert "G0" in domain.quality_gates
-        assert domain.quality_gates["G0"].action == "retry"
+        assert "G0-SchemaIntegrity" in domain.quality_gates
+        assert domain.quality_gates["G0-SchemaIntegrity"].action == "retry"
 
     def test_domain_delivery_gates_loaded(self, domain_gates_dict: dict[str, Any]) -> None:
         config = _dict_to_config(domain_gates_dict)
@@ -330,8 +330,8 @@ class TestDomainGatesOverrides:
     def test_domain_gates_override_globals(self, domain_gates_dict: dict[str, Any]) -> None:
         config = _dict_to_config(domain_gates_dict)
         # Global G0 is action=block, domain override is action=retry
-        assert config.quality_gates["G0"].action == "block"
-        assert config.domains[0].quality_gates["G0"].action == "retry"
+        assert config.quality_gates["G0-SchemaIntegrity"].action == "block"
+        assert config.domains[0].quality_gates["G0-SchemaIntegrity"].action == "retry"
         # Domain D1 disabled, global D1 enabled
         assert config.delivery_gates["D1"].enabled is True
         assert config.domains[0].delivery_gates["D1"].enabled is False
@@ -353,11 +353,11 @@ class TestSerialization:
         config = _dict_to_config(gates_dict)
         raw = config_to_dict(config)
         assert "quality_gates" in raw
-        assert "G0" in raw["quality_gates"]
-        assert "G4" in raw["quality_gates"]
-        assert raw["quality_gates"]["G0"]["category"] == "hard"
-        assert raw["quality_gates"]["G0"]["retries"] == 1
-        assert raw["quality_gates"]["G0"]["action"] == "block"
+        assert "G0-SchemaIntegrity" in raw["quality_gates"]
+        assert "G4-SummaryFactual" in raw["quality_gates"]
+        assert raw["quality_gates"]["G0-SchemaIntegrity"]["category"] == "hard"
+        assert raw["quality_gates"]["G0-SchemaIntegrity"]["retries"] == 1
+        assert raw["quality_gates"]["G0-SchemaIntegrity"]["action"] == "block"
 
     def test_delivery_gates_serialized(self, gates_dict: dict[str, Any]) -> None:
         config = _dict_to_config(gates_dict)
@@ -371,8 +371,8 @@ class TestSerialization:
         raw = config_to_dict(config)
         domain_raw = raw["domains"][0]
         assert "quality_gates" in domain_raw
-        assert "G0" in domain_raw["quality_gates"]
-        assert domain_raw["quality_gates"]["G0"]["action"] == "retry"
+        assert "G0-SchemaIntegrity" in domain_raw["quality_gates"]
+        assert domain_raw["quality_gates"]["G0-SchemaIntegrity"]["action"] == "retry"
 
     def test_empty_gates_omitted(self, minimal_dict: dict[str, Any]) -> None:
         """Empty quality_gates/delivery_gates should be omitted from output."""
@@ -386,12 +386,12 @@ class TestSerialization:
         config = _dict_to_config(gates_dict)
         raw = config_to_dict(config)
         config2 = _dict_to_config(raw)
-        assert config2.quality_gates["G4"].retries == 3
-        assert config2.quality_gates["G4"].retry_models == [
+        assert config2.quality_gates["G4-SummaryFactual"].retries == 3
+        assert config2.quality_gates["G4-SummaryFactual"].retry_models == [
             "deepseek/deepseek-chat",
             "anthropic/claude-sonnet-4",
         ]
-        assert config2.quality_gates["G3"].threshold == 30
+        assert config2.quality_gates["G3-RelevanceScoring"].threshold == 30
         assert config2.delivery_gates["D2"].action_on_failure == "fallback"
 
 

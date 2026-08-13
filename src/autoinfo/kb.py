@@ -1675,7 +1675,9 @@ class SQLiteIndex:
 
             Returns (conditions_list, param_values) that can be merged
             into any SELECT on the ``entries`` table (aliased by
-            *prefix*).
+            *prefix*).  Always excludes entries whose ``custom_fields``
+            status is ``archived`` or ``deprecated`` — they are stored
+            but not discoverable via search.
             """
             conds: list[str] = []
             params: list[Any] = []
@@ -1743,6 +1745,12 @@ class SQLiteIndex:
                             f"AS TEXT) = ?"
                         )
                         params.extend([json_path, expected])
+
+            conds.append(
+                f"(json_type({prefix}.custom_fields, '$.status') IS NULL "
+                f"OR CAST(json_extract({prefix}.custom_fields, '$.status') "
+                f"AS TEXT) NOT IN ('archived', 'deprecated'))"
+            )
 
             return conds, params
 
@@ -1984,15 +1992,22 @@ class SQLiteIndex:
                        FROM entry_embeddings emb
                        JOIN entries e ON e.entry_id = emb.entry_id
                        WHERE e.domain = ?
+                         AND (json_type(e.custom_fields, '$.status') IS NULL
+                              OR CAST(json_extract(e.custom_fields, '$.status')
+                                      AS TEXT) NOT IN ('archived', 'deprecated'))
                        ORDER BY distance
                        LIMIT ?""",
                     (blob, domain, limit + offset),
                 ).fetchall()
             else:
                 vec_rows = conn.execute(
-                    """SELECT entry_id,
-                              vec_distance_cosine(embedding, ?) AS distance
-                       FROM entry_embeddings
+                    """SELECT emb.entry_id,
+                              vec_distance_cosine(emb.embedding, ?) AS distance
+                       FROM entry_embeddings emb
+                       JOIN entries e ON e.entry_id = emb.entry_id
+                       WHERE json_type(e.custom_fields, '$.status') IS NULL
+                          OR CAST(json_extract(e.custom_fields, '$.status')
+                                  AS TEXT) NOT IN ('archived', 'deprecated')
                        ORDER BY distance
                        LIMIT ?""",
                     (blob, limit + offset),
@@ -2585,6 +2600,10 @@ class KBStore:
         quality_results:
             Quality gate results keyed by gate name.  Used to populate
             ``relevance_score`` (from G3) and ``dedup_status`` (from G2).
+            A soft gate with ``details["archive"] = True`` (G3 relevance
+            below threshold with action "archive") marks the entry
+            ``status="archived"`` — stored, but excluded from search
+            results and digest generation.
         tier:
             KB pipeline tier (default "01-Raw").  Set to "02-Draft" for
             agent-created Draft entries.
@@ -2642,6 +2661,13 @@ class KBStore:
                 raw_score = g1.details.get("source_score")
                 if raw_score is not None:
                     source_score = float(raw_score)
+
+        entry_status: str = "active"
+        if quality_results:
+            for _gr in quality_results.values():
+                if _gr.details.get("archive") is True:
+                    entry_status = "archived"
+                    break
 
         # --- resolve user_id ---------------------------------------------------
         resolved_user_id: str = ""
@@ -2709,6 +2735,7 @@ class KBStore:
             previous_version=getattr(item, "previous_version", 0),
             supersedes=getattr(item, "supersedes", ""),
             trace_id=getattr(item, "trace_id", ""),
+            status=entry_status,
         )
 
         # --- write Markdown file ----------------------------------------------

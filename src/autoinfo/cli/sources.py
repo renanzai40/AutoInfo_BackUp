@@ -13,11 +13,13 @@ Usage::
 
 import json
 from pathlib import Path
+from typing import Any
 
 import httpx
 import typer
 
 from autoinfo.config import (
+    SOURCE_KEY_ENV_VARS,
     Config,
     DomainConfig,
     SourceConfig,
@@ -126,6 +128,34 @@ def add(
     url: str = typer.Option(..., "--url", help="Source URL"),
     type: str = typer.Option(..., "--type", help="Source type (rss, api, web)"),
     domain: str = typer.Option(..., "--domain", help="Domain to add source to"),
+    settings: str = typer.Option(
+        "",
+        "--settings",
+        help="Optional JSON object string with key-value configuration (stored in SourceConfig.settings)",
+    ),
+    requires_key: bool | None = typer.Option(
+        None,
+        "--requires-key/--no-requires-key",
+        help="Whether this source requires an API key/credential (default: derived from source type)",
+    ),
+    imap_server: str | None = typer.Option(
+        None, "--imap-server", help="Email type only: IMAP server hostname (e.g. imap.gmail.com)"
+    ),
+    imap_port: int | None = typer.Option(
+        None, "--imap-port", help="Email type only: IMAP port (default 993)"
+    ),
+    imap_username: str | None = typer.Option(
+        None, "--imap-username", help="Email type only: IMAP username"
+    ),
+    imap_password: str | None = typer.Option(
+        None, "--imap-password", help="Email type only: IMAP password"
+    ),
+    imap_mailbox: str | None = typer.Option(
+        None, "--imap-mailbox", help="Email type only: IMAP mailbox name (default INBOX)"
+    ),
+    webhook_secret: str | None = typer.Option(
+        None, "--webhook-secret", help="Webhook type only: HMAC shared secret for payload verification"
+    ),
 ) -> None:
     """Add a new source to a domain (idempotent by url + type + domain)."""
     # --- Validate arguments ---
@@ -155,11 +185,49 @@ def add(
             )
             return
 
+    merged_settings: dict[str, Any] = {}
+    if settings:
+        try:
+            parsed_settings = json.loads(settings)
+        except json.JSONDecodeError as exc:
+            typer.echo(f"Error: --settings must be valid JSON: {exc}", err=True)
+            raise typer.Exit(1)
+        if not isinstance(parsed_settings, dict):
+            typer.echo("Error: --settings must be a JSON object", err=True)
+            raise typer.Exit(1)
+        merged_settings = parsed_settings
+
+    if type == "email":
+        if imap_server:
+            merged_settings["host"] = imap_server
+        if imap_port is not None:
+            merged_settings["port"] = imap_port
+        if imap_username:
+            merged_settings["username"] = imap_username
+        if imap_password:
+            merged_settings["password"] = imap_password
+        if imap_mailbox:
+            merged_settings["mailbox"] = imap_mailbox
+    elif type == "webhook":
+        if webhook_secret:
+            merged_settings["secret"] = webhook_secret
+
+    if requires_key is None:
+        requires_key = type in SOURCE_KEY_ENV_VARS
+
     # --- Add source ---
     quality_tier = 1 if type in ("api", "rss") else 2
     _TIER_TOS_MAP = {1: "open", 2: "licensed", 3: "restricted", 4: "sensitive"}
     tos_classification = _TIER_TOS_MAP.get(quality_tier, "open")
-    new_source = SourceConfig(name=name, type=type, url=url, quality_tier=quality_tier, tos_classification=tos_classification)
+    new_source = SourceConfig(
+        name=name,
+        type=type,
+        url=url,
+        quality_tier=quality_tier,
+        tos_classification=tos_classification,
+        requires_key=requires_key,
+        settings=merged_settings,
+    )
     domain_cfg.sources.append(new_source)
     save_config(config, cfg_path)
     typer.echo(f"Source '{name}' added to domain '{domain}'.")

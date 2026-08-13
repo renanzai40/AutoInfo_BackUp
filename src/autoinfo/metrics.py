@@ -8,12 +8,10 @@ Provides:
 
 from __future__ import annotations
 
-import os
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from autoinfo.config import get_config_path, load_config
+from autoinfo.config import get_config_path
 
 # ---------------------------------------------------------------------------
 # Metric names

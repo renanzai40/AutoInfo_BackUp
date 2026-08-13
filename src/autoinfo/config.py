@@ -504,6 +504,34 @@ def _resolve_env_vars_recursively(obj: Any) -> Any:
 # Loading
 # ---------------------------------------------------------------------------
 
+# Short quality-gate keys (used by the default config and older YAML files)
+# mapped to the canonical long keys the pipeline looks up (e.g. process.py,
+# quality.py).  ``G1-TosCompliance`` is already the long form and passes
+# through unchanged.
+_GATE_CONFIG_KEY_MAP: dict[str, str] = {
+    "G0": "G0-SchemaIntegrity",
+    "G1": "G1-SourceAuthority",
+    "G1-TosCompliance": "G1-TosCompliance",
+    "G2": "G2-Dedup",
+    "G3": "G3-RelevanceScoring",
+    "G4": "G4-SummaryFactual",
+    "G5": "G5-TranslationAccuracy",
+}
+
+
+def _normalize_gate_config_keys(raw: dict[str, Any]) -> dict[str, Any]:
+    """Map short quality-gate keys to their canonical long form.
+
+    Accepts a dict whose keys are either short (``"G0"``) or long
+    (``"G0-SchemaIntegrity"``) gate identifiers.  Short keys are rewritten to
+    the long form the pipeline looks up; long keys pass through unchanged.
+    When both forms appear for the same gate, the long key wins.
+    """
+    normalized: dict[str, Any] = {}
+    for key, value in raw.items():
+        normalized[_GATE_CONFIG_KEY_MAP.get(str(key), str(key))] = value
+    return normalized
+
 
 def load_config(path: Path | str) -> Config:
     """Parse *path* as YAML and return a :class:`Config` instance.
@@ -604,7 +632,9 @@ def _dict_to_config(raw: dict[str, Any]) -> Config:
             for t in topics_raw
         ]
         # --- Parse per-domain quality_gates ---
-        domain_qg_raw: dict[str, Any] = d.get("quality_gates", {}) or {}
+        domain_qg_raw: dict[str, Any] = _normalize_gate_config_keys(
+            d.get("quality_gates", {}) or {}
+        )
         domain_quality_gates: dict[str, QualityGateConfig] = {}
         for gate_name, gc_raw in domain_qg_raw.items():
             gc = gc_raw or {}
@@ -648,7 +678,9 @@ def _dict_to_config(raw: dict[str, Any]) -> Config:
         )
 
     # --- Parse v1.5 sections: quality_gates & delivery_gates ---
-    quality_gates_raw: dict[str, Any] = raw.get("quality_gates", {}) or {}
+    quality_gates_raw: dict[str, Any] = _normalize_gate_config_keys(
+        raw.get("quality_gates", {}) or {}
+    )
     quality_gates: dict[str, QualityGateConfig] = {}
     for gate_name, gc_raw in quality_gates_raw.items():
         gc = gc_raw or {}
