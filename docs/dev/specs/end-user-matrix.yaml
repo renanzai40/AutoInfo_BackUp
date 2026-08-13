@@ -1,13 +1,15 @@
 # End-User Coverage Matrix (E8, issue #131 — full-capability revision)
 #
-# Sparse matrix spec: 13 demo domains x 8 products x 7 formats, PLUS
-# source-platform coverage (27 collector types) and KB-tier coverage
-# (01-Raw / 02-Draft / 03-Wiki).
+# AUTHORITATIVE 5-dimension matrix spec (v3): report demand surface -> code truth.
+# Dimensions: A sources (29 types / 89 required sources), B products (8) x formats (8),
+# C channels (14), D domains (13), E capabilities (15). Derived from
+# docs/dev/research/综合报告-资讯付费与AI触达研究.md; calibrated against VALID_SOURCE_TYPES,
+# PRODUCT_TEMPLATES, _CHANNEL_REGISTRY and the MCP tool registry.
 #
 # This revision fixes the spec drift found in the 2026-08-07 audit: the
 # old spec declared only 13 required cells across 2 domains while the
 # codebase implements 13 domains x 8 products x 7 formats x 27 sources.
-# The required set now reflects the FULL implemented capability surface.
+# The required set now reflects the FULL report demand surface, calibrated to code truth.
 #
 # Statuses (rendered by scripts/coverage_matrix.py):
 #   有produced             evidence found
@@ -16,7 +18,7 @@
 #   未配置unconfigured     required cell whose product is LLM-gated while
 #                          the LLM key is unavailable (NOT a gap)
 #
-version: 2
+version: 3
 
 products:
   - digest
@@ -34,6 +36,7 @@ formats:
   - json
   - agent
   - audio
+  - video
   - epub
   - audiobook
 
@@ -61,6 +64,7 @@ source_platforms:
   - web
   - webhook
   - email
+  - email_imap
   - pdf
   - apple_podcasts
   - akshare
@@ -69,13 +73,14 @@ source_platforms:
   - core
   - dblp
   - gdelt
+  - hackernews
   - huggingface
   - kaggle
   - nyt
   - openalex
   - quandl
   - reddit
-  - reuters
+  - reuters_mcp
   - sec_edgar
   - ssrn
   - spotify
@@ -84,17 +89,56 @@ source_platforms:
   - youtube
   - edx_sitemap
 
+
+# Distribution channels (C dimension) — aligned with _CHANNEL_REGISTRY
+# (src/autoinfo/delivery/__init__.py:657-671, 13 adapters) + WeChat ecosystem
+# (C14 supplementary, report §10.2 China touchpoints). Rendered by coverage_matrix.py.
+channels:
+  - social_video
+  - search_ai_overview
+  - tv_broadcast
+  - ai_chatbot
+  - owned_website_app
+  - push_notification
+  - email_newsletter
+  - mobile_app
+  - podcast_directory
+  - rss_feed
+  - browser_navigation
+  - affiliate
+  - mcp_a2a_agent
+  - wechat_ecosystem
+
+# Agent capabilities (E dimension) — aligned with MCP tools (src/autoinfo/mcp/server.py)
+# and the report §6.5 usage scenarios / §8.3 business models.
+capabilities:
+  - mcp_exposure
+  - paid_user_management
+  - usage_metering
+  - multi_channel_delivery
+  - rag_output
+  - personalized_recommendation
+  - scheduled_tasks
+  - webhook_integration
+  - source_credibility
+  - content_compliance
+  - api_data_licensing
+  - single_article_payment
+  - raas_performance_pricing
+  - content_simplification
+  - a2a_protocol
+
 # KB tiers — the data pipeline depth an end-user can inspect.
 kb_tiers:
   - 01-Raw
   - 02-Draft
   - 03-Wiki
 
-# Required cells — FULL end-user capability surface (8 products x 7 formats).
+# Required cells — FULL end-user capability surface (8 products x 8 formats).
 # Each cell carries a capability annotation so the matrix can distinguish
 # 'real gap' (implemented but no evidence) from 'capability boundary'
 # (not implemented by design — annotated, not silently dropped).
-# Required cells — FULL end-user capability surface (8 products x 7 formats).
+# Required cells — FULL end-user capability surface (8 products x 8 formats).
 # Each cell carries a capability annotation so the matrix can distinguish
 # 'real gap' (implemented but no evidence) from 'capability boundary'
 # (not implemented by design — annotated, not silently dropped).
@@ -156,6 +200,14 @@ required_cells:
   - {domain: medical-research, product: enterprise-briefing, format: audio, capability: not-implemented}
   - {domain: medical-research, product: enterprise-briefing, format: epub, capability: not-implemented}
   - {domain: medical-research, product: enterprise-briefing, format: audiobook, capability: not-implemented}
+  - {domain: medical-research, product: digest, format: video, capability: not-implemented}
+  - {domain: medical-research, product: report, format: video, capability: implemented}
+  - {domain: medical-research, product: tutorial, format: video, capability: not-implemented}
+  - {domain: medical-research, product: presentation, format: video, capability: not-implemented}
+  - {domain: medical-research, product: premium-briefing, format: video, capability: not-implemented}
+  - {domain: medical-research, product: column, format: video, capability: not-implemented}
+  - {domain: medical-research, product: magazine-digest, format: video, capability: not-implemented}
+  - {domain: medical-research, product: enterprise-briefing, format: video, capability: not-implemented}
   - {domain: ai-commercial, product: digest, format: markdown, capability: implemented}
   - {domain: ai-commercial, product: digest, format: html, capability: implemented}
   - {domain: ai-commercial, product: digest, format: json, capability: implemented}
@@ -212,6 +264,14 @@ required_cells:
   - {domain: ai-commercial, product: enterprise-briefing, format: audio, capability: not-implemented}
   - {domain: ai-commercial, product: enterprise-briefing, format: epub, capability: not-implemented}
   - {domain: ai-commercial, product: enterprise-briefing, format: audiobook, capability: not-implemented}
+  - {domain: ai-commercial, product: digest, format: video, capability: not-implemented}
+  - {domain: ai-commercial, product: report, format: video, capability: implemented}
+  - {domain: ai-commercial, product: tutorial, format: video, capability: not-implemented}
+  - {domain: ai-commercial, product: presentation, format: video, capability: not-implemented}
+  - {domain: ai-commercial, product: premium-briefing, format: video, capability: not-implemented}
+  - {domain: ai-commercial, product: column, format: video, capability: not-implemented}
+  - {domain: ai-commercial, product: magazine-digest, format: video, capability: not-implemented}
+  - {domain: ai-commercial, product: enterprise-briefing, format: video, capability: not-implemented}
   - {domain: financial-intelligence, product: digest, format: markdown, capability: implemented}
   - {domain: financial-intelligence, product: digest, format: html, capability: implemented}
   - {domain: financial-intelligence, product: digest, format: json, capability: implemented}
@@ -268,6 +328,14 @@ required_cells:
   - {domain: financial-intelligence, product: enterprise-briefing, format: audio, capability: not-implemented}
   - {domain: financial-intelligence, product: enterprise-briefing, format: epub, capability: not-implemented}
   - {domain: financial-intelligence, product: enterprise-briefing, format: audiobook, capability: not-implemented}
+  - {domain: financial-intelligence, product: digest, format: video, capability: not-implemented}
+  - {domain: financial-intelligence, product: report, format: video, capability: implemented}
+  - {domain: financial-intelligence, product: tutorial, format: video, capability: not-implemented}
+  - {domain: financial-intelligence, product: presentation, format: video, capability: not-implemented}
+  - {domain: financial-intelligence, product: premium-briefing, format: video, capability: not-implemented}
+  - {domain: financial-intelligence, product: column, format: video, capability: not-implemented}
+  - {domain: financial-intelligence, product: magazine-digest, format: video, capability: not-implemented}
+  - {domain: financial-intelligence, product: enterprise-briefing, format: video, capability: not-implemented}
   - {domain: tech-ai-developer, product: digest, format: markdown, capability: implemented}
   - {domain: tech-ai-developer, product: digest, format: html, capability: implemented}
   - {domain: tech-ai-developer, product: digest, format: json, capability: implemented}
@@ -324,6 +392,14 @@ required_cells:
   - {domain: tech-ai-developer, product: enterprise-briefing, format: audio, capability: not-implemented}
   - {domain: tech-ai-developer, product: enterprise-briefing, format: epub, capability: not-implemented}
   - {domain: tech-ai-developer, product: enterprise-briefing, format: audiobook, capability: not-implemented}
+  - {domain: tech-ai-developer, product: digest, format: video, capability: not-implemented}
+  - {domain: tech-ai-developer, product: report, format: video, capability: implemented}
+  - {domain: tech-ai-developer, product: tutorial, format: video, capability: not-implemented}
+  - {domain: tech-ai-developer, product: presentation, format: video, capability: not-implemented}
+  - {domain: tech-ai-developer, product: premium-briefing, format: video, capability: not-implemented}
+  - {domain: tech-ai-developer, product: column, format: video, capability: not-implemented}
+  - {domain: tech-ai-developer, product: magazine-digest, format: video, capability: not-implemented}
+  - {domain: tech-ai-developer, product: enterprise-briefing, format: video, capability: not-implemented}
   - {domain: language-learning, product: digest, format: markdown, capability: implemented}
   - {domain: language-learning, product: digest, format: html, capability: implemented}
   - {domain: language-learning, product: digest, format: json, capability: implemented}
@@ -380,6 +456,14 @@ required_cells:
   - {domain: language-learning, product: enterprise-briefing, format: audio, capability: not-implemented}
   - {domain: language-learning, product: enterprise-briefing, format: epub, capability: not-implemented}
   - {domain: language-learning, product: enterprise-briefing, format: audiobook, capability: not-implemented}
+  - {domain: language-learning, product: digest, format: video, capability: not-implemented}
+  - {domain: language-learning, product: report, format: video, capability: implemented}
+  - {domain: language-learning, product: tutorial, format: video, capability: not-implemented}
+  - {domain: language-learning, product: presentation, format: video, capability: not-implemented}
+  - {domain: language-learning, product: premium-briefing, format: video, capability: not-implemented}
+  - {domain: language-learning, product: column, format: video, capability: not-implemented}
+  - {domain: language-learning, product: magazine-digest, format: video, capability: not-implemented}
+  - {domain: language-learning, product: enterprise-briefing, format: video, capability: not-implemented}
   - {domain: online-video, product: digest, format: markdown, capability: implemented}
   - {domain: online-video, product: digest, format: html, capability: implemented}
   - {domain: online-video, product: digest, format: json, capability: implemented}
@@ -436,6 +520,14 @@ required_cells:
   - {domain: online-video, product: enterprise-briefing, format: audio, capability: not-implemented}
   - {domain: online-video, product: enterprise-briefing, format: epub, capability: not-implemented}
   - {domain: online-video, product: enterprise-briefing, format: audiobook, capability: not-implemented}
+  - {domain: online-video, product: digest, format: video, capability: not-implemented}
+  - {domain: online-video, product: report, format: video, capability: implemented}
+  - {domain: online-video, product: tutorial, format: video, capability: not-implemented}
+  - {domain: online-video, product: presentation, format: video, capability: not-implemented}
+  - {domain: online-video, product: premium-briefing, format: video, capability: not-implemented}
+  - {domain: online-video, product: column, format: video, capability: not-implemented}
+  - {domain: online-video, product: magazine-digest, format: video, capability: not-implemented}
+  - {domain: online-video, product: enterprise-briefing, format: video, capability: not-implemented}
   - {domain: financial-news, product: digest, format: markdown, capability: implemented}
   - {domain: financial-news, product: digest, format: html, capability: implemented}
   - {domain: financial-news, product: digest, format: json, capability: implemented}
@@ -492,6 +584,14 @@ required_cells:
   - {domain: financial-news, product: enterprise-briefing, format: audio, capability: not-implemented}
   - {domain: financial-news, product: enterprise-briefing, format: epub, capability: not-implemented}
   - {domain: financial-news, product: enterprise-briefing, format: audiobook, capability: not-implemented}
+  - {domain: financial-news, product: digest, format: video, capability: not-implemented}
+  - {domain: financial-news, product: report, format: video, capability: implemented}
+  - {domain: financial-news, product: tutorial, format: video, capability: not-implemented}
+  - {domain: financial-news, product: presentation, format: video, capability: not-implemented}
+  - {domain: financial-news, product: premium-briefing, format: video, capability: not-implemented}
+  - {domain: financial-news, product: column, format: video, capability: not-implemented}
+  - {domain: financial-news, product: magazine-digest, format: video, capability: not-implemented}
+  - {domain: financial-news, product: enterprise-briefing, format: video, capability: not-implemented}
   - {domain: online-education, product: digest, format: markdown, capability: implemented}
   - {domain: online-education, product: digest, format: html, capability: implemented}
   - {domain: online-education, product: digest, format: json, capability: implemented}
@@ -548,6 +648,14 @@ required_cells:
   - {domain: online-education, product: enterprise-briefing, format: audio, capability: not-implemented}
   - {domain: online-education, product: enterprise-briefing, format: epub, capability: not-implemented}
   - {domain: online-education, product: enterprise-briefing, format: audiobook, capability: not-implemented}
+  - {domain: online-education, product: digest, format: video, capability: not-implemented}
+  - {domain: online-education, product: report, format: video, capability: implemented}
+  - {domain: online-education, product: tutorial, format: video, capability: not-implemented}
+  - {domain: online-education, product: presentation, format: video, capability: not-implemented}
+  - {domain: online-education, product: premium-briefing, format: video, capability: not-implemented}
+  - {domain: online-education, product: column, format: video, capability: not-implemented}
+  - {domain: online-education, product: magazine-digest, format: video, capability: not-implemented}
+  - {domain: online-education, product: enterprise-briefing, format: video, capability: not-implemented}
   - {domain: legal-compliance, product: digest, format: markdown, capability: implemented}
   - {domain: legal-compliance, product: digest, format: html, capability: implemented}
   - {domain: legal-compliance, product: digest, format: json, capability: implemented}
@@ -604,6 +712,14 @@ required_cells:
   - {domain: legal-compliance, product: enterprise-briefing, format: audio, capability: not-implemented}
   - {domain: legal-compliance, product: enterprise-briefing, format: epub, capability: not-implemented}
   - {domain: legal-compliance, product: enterprise-briefing, format: audiobook, capability: not-implemented}
+  - {domain: legal-compliance, product: digest, format: video, capability: not-implemented}
+  - {domain: legal-compliance, product: report, format: video, capability: implemented}
+  - {domain: legal-compliance, product: tutorial, format: video, capability: not-implemented}
+  - {domain: legal-compliance, product: presentation, format: video, capability: not-implemented}
+  - {domain: legal-compliance, product: premium-briefing, format: video, capability: not-implemented}
+  - {domain: legal-compliance, product: column, format: video, capability: not-implemented}
+  - {domain: legal-compliance, product: magazine-digest, format: video, capability: not-implemented}
+  - {domain: legal-compliance, product: enterprise-briefing, format: video, capability: not-implemented}
   - {domain: general-news, product: digest, format: markdown, capability: implemented}
   - {domain: general-news, product: digest, format: html, capability: implemented}
   - {domain: general-news, product: digest, format: json, capability: implemented}
@@ -660,6 +776,14 @@ required_cells:
   - {domain: general-news, product: enterprise-briefing, format: audio, capability: not-implemented}
   - {domain: general-news, product: enterprise-briefing, format: epub, capability: not-implemented}
   - {domain: general-news, product: enterprise-briefing, format: audiobook, capability: not-implemented}
+  - {domain: general-news, product: digest, format: video, capability: not-implemented}
+  - {domain: general-news, product: report, format: video, capability: implemented}
+  - {domain: general-news, product: tutorial, format: video, capability: not-implemented}
+  - {domain: general-news, product: presentation, format: video, capability: not-implemented}
+  - {domain: general-news, product: premium-briefing, format: video, capability: not-implemented}
+  - {domain: general-news, product: column, format: video, capability: not-implemented}
+  - {domain: general-news, product: magazine-digest, format: video, capability: not-implemented}
+  - {domain: general-news, product: enterprise-briefing, format: video, capability: not-implemented}
   - {domain: gaming, product: digest, format: markdown, capability: implemented}
   - {domain: gaming, product: digest, format: html, capability: implemented}
   - {domain: gaming, product: digest, format: json, capability: implemented}
@@ -716,6 +840,14 @@ required_cells:
   - {domain: gaming, product: enterprise-briefing, format: audio, capability: not-implemented}
   - {domain: gaming, product: enterprise-briefing, format: epub, capability: not-implemented}
   - {domain: gaming, product: enterprise-briefing, format: audiobook, capability: not-implemented}
+  - {domain: gaming, product: digest, format: video, capability: not-implemented}
+  - {domain: gaming, product: report, format: video, capability: implemented}
+  - {domain: gaming, product: tutorial, format: video, capability: not-implemented}
+  - {domain: gaming, product: presentation, format: video, capability: not-implemented}
+  - {domain: gaming, product: premium-briefing, format: video, capability: not-implemented}
+  - {domain: gaming, product: column, format: video, capability: not-implemented}
+  - {domain: gaming, product: magazine-digest, format: video, capability: not-implemented}
+  - {domain: gaming, product: enterprise-briefing, format: video, capability: not-implemented}
   - {domain: b2b, product: digest, format: markdown, capability: implemented}
   - {domain: b2b, product: digest, format: html, capability: implemented}
   - {domain: b2b, product: digest, format: json, capability: implemented}
@@ -772,6 +904,14 @@ required_cells:
   - {domain: b2b, product: enterprise-briefing, format: audio, capability: not-implemented}
   - {domain: b2b, product: enterprise-briefing, format: epub, capability: not-implemented}
   - {domain: b2b, product: enterprise-briefing, format: audiobook, capability: not-implemented}
+  - {domain: b2b, product: digest, format: video, capability: not-implemented}
+  - {domain: b2b, product: report, format: video, capability: implemented}
+  - {domain: b2b, product: tutorial, format: video, capability: not-implemented}
+  - {domain: b2b, product: presentation, format: video, capability: not-implemented}
+  - {domain: b2b, product: premium-briefing, format: video, capability: not-implemented}
+  - {domain: b2b, product: column, format: video, capability: not-implemented}
+  - {domain: b2b, product: magazine-digest, format: video, capability: not-implemented}
+  - {domain: b2b, product: enterprise-briefing, format: video, capability: not-implemented}
   - {domain: retail, product: digest, format: markdown, capability: implemented}
   - {domain: retail, product: digest, format: html, capability: implemented}
   - {domain: retail, product: digest, format: json, capability: implemented}
@@ -828,6 +968,14 @@ required_cells:
   - {domain: retail, product: enterprise-briefing, format: audio, capability: not-implemented}
   - {domain: retail, product: enterprise-briefing, format: epub, capability: not-implemented}
   - {domain: retail, product: enterprise-briefing, format: audiobook, capability: not-implemented}
+  - {domain: retail, product: digest, format: video, capability: not-implemented}
+  - {domain: retail, product: report, format: video, capability: implemented}
+  - {domain: retail, product: tutorial, format: video, capability: not-implemented}
+  - {domain: retail, product: presentation, format: video, capability: not-implemented}
+  - {domain: retail, product: premium-briefing, format: video, capability: not-implemented}
+  - {domain: retail, product: column, format: video, capability: not-implemented}
+  - {domain: retail, product: magazine-digest, format: video, capability: not-implemented}
+  - {domain: retail, product: enterprise-briefing, format: video, capability: not-implemented}
 # Products whose generation requires an LLM key. When the LLM is unavailable,
 # an empty required cell for one of these is 未配置unconfigured — never 空gap.
 llm_gated_products:
@@ -838,17 +986,10 @@ llm_gated_products:
   - tutorial
   - presentation
 
-# Required source coverage: the 2 configured demo domains must collect from
-# every configured source in that domain (medical-research: 7, tech-ai-dev: 8).
-#
-# Config-layer status (issue #195): the config layer is COMPLETE — every
-# required source below has a matching `name:` entry in the domain's
-# `src/autoinfo/data/domains/<domain>/sources.yaml`, pinned by
-# tests/test_coverage_matrix.py (test_required_sources_all_configured_in_demo_domains).
-# Any SOURCE_COVERAGE gap the matrix reports is therefore a DATA-EVIDENCE gap:
-# the platform is configured but no live collection run has produced raw data
-# for it yet. Closing a gap = run `collect` for that domain, then re-render the
-# matrix — no config change required.
+# Required source coverage: all 13 configured demo domains, every configured
+# source in that domain's `src/autoinfo/data/domains/<domain>/sources.yaml`
+# (89 sources across 13 domains). Closing a gap = run `collect` for that domain,
+# then re-render the matrix — no config change required.
 required_sources:
   - {domain: medical-research, source: pubmed}
   - {domain: medical-research, source: semantic-scholar}
@@ -857,25 +998,129 @@ required_sources:
   - {domain: medical-research, source: dblp}
   - {domain: medical-research, source: openalex}
   - {domain: medical-research, source: uspto}
+  - {domain: ai-commercial, source: techcrunch}
+  - {domain: ai-commercial, source: producthunt}
+  - {domain: ai-commercial, source: Crunchbase}
+  - {domain: ai-commercial, source: 36kr}
+  - {domain: financial-intelligence, source: Alpha Vantage}
+  - {domain: financial-intelligence, source: FRED}
+  - {domain: financial-intelligence, source: Finnhub}
+  - {domain: financial-intelligence, source: SEC EDGAR}
+  - {domain: financial-intelligence, source: Twelve Data}
+  - {domain: financial-intelligence, source: World Bank Data}
+  - {domain: financial-intelligence, source: Quandl/Nasdaq Data Link}
   - {domain: tech-ai-developer, source: GitHub Trending}
   - {domain: tech-ai-developer, source: HackerNews API}
   - {domain: tech-ai-developer, source: Substack RSS (tech) — Pragmatic Engineer}
   - {domain: tech-ai-developer, source: Stack Exchange}
   - {domain: tech-ai-developer, source: ProductHunt}
   - {domain: tech-ai-developer, source: Reddit}
+  - {domain: tech-ai-developer, source: Spotify AI Podcasts}
+  - {domain: tech-ai-developer, source: Bilibili (B站)}
+  - {domain: language-learning, source: project-gutenberg}
+  - {domain: language-learning, source: news-in-levels}
+  - {domain: language-learning, source: commonlit}
+  - {domain: online-video, source: youtube-mkbhd}
+  - {domain: online-video, source: variety}
+  - {domain: online-video, source: hollywood-reporter}
+  - {domain: online-video, source: netflix-tech-blog}
+  - {domain: online-video, source: apple-music}
+  - {domain: online-video, source: pitchfork}
+  - {domain: online-video, source: billboard}
+  - {domain: financial-news, source: reuters-business}
+  - {domain: financial-news, source: cnbc}
+  - {domain: financial-news, source: ft-alphaville}
+  - {domain: financial-news, source: yahoo-finance}
+  - {domain: financial-news, source: seeking-alpha}
+  - {domain: financial-news, source: businesswire-technology}
+  - {domain: financial-news, source: prnewswire-financial-services}
+  - {domain: financial-news, source: nvidia-newsroom}
+  - {domain: financial-news, source: microsoft-newsroom}
+  - {domain: online-education, source: coursera-blog}
+  - {domain: online-education, source: edsurge}
+  - {domain: online-education, source: class-central}
+  - {domain: online-education, source: khan-academy}
+  - {domain: online-education, source: open-culture}
+  - {domain: online-education, source: dedao}
+  - {domain: online-education, source: coursera}
+  - {domain: online-education, source: ncpssd}
+  - {domain: online-education, source: wanfang}
+  - {domain: legal-compliance, source: scotusblog}
+  - {domain: legal-compliance, source: iapp-privacy}
+  - {domain: legal-compliance, source: law-com}
+  - {domain: legal-compliance, source: oyez}
+  - {domain: legal-compliance, source: gdpr-eu}
+  - {domain: general-news, source: gdelt}
+  - {domain: general-news, source: guardian-open-platform}
+  - {domain: general-news, source: google-news-rss}
+  - {domain: general-news, source: nyt}
+  - {domain: general-news, source: ap-api}
+  - {domain: general-news, source: zhihu-daily}
+  - {domain: general-news, source: mastodon}
+  - {domain: general-news, source: bluesky}
+  - {domain: general-news, source: wechat2rss}
+  - {domain: general-news, source: medium-user}
+  - {domain: general-news, source: medium-publication}
+  - {domain: general-news, source: medium-tag}
+  - {domain: general-news, source: the-atlantic}
+  - {domain: general-news, source: wired}
+  - {domain: general-news, source: time-magazine}
+  - {domain: gaming, source: ign-rss}
+  - {domain: gaming, source: polygon-rss}
+  - {domain: gaming, source: gamesindustry-biz}
+  - {domain: gaming, source: gcores-rss}
+  - {domain: gaming, source: yystv-via-google-news}
+  - {domain: b2b, source: producthunt}
+  - {domain: b2b, source: techcrunch}
+  - {domain: b2b, source: crunchbase-news}
+  - {domain: b2b, source: a16z}
+  - {domain: b2b, source: hackernews}
+  - {domain: retail, source: retail-dive}
+  - {domain: retail, source: modern-retail}
+  - {domain: retail, source: ebrun-via-google-news}
+  - {domain: retail, source: shopify-news}
+  - {domain: retail, source: digiday}
 
 # Required KB-tier coverage: the data pipeline must reach each tier for
-# the configured demo domains.
-#
-# Data-evidence status (issue #195): both demo domains have configs (see
-# required_sources above). A KB_TIER_COVERAGE gap means the pipeline has not
-# yet produced entries for that tier in this checkout — e.g. 02-Draft needs a
-# processing run (01-Raw -> 02-Draft) for the domain. Closing a gap = run
-# `process` for that domain, then re-render the matrix.
+# every configured demo domain (01-Raw / 02-Draft / 03-Wiki).
+# Closing a gap = run `process` for that domain, then re-render the matrix.
 required_kb_tiers:
   - {domain: medical-research, tier: 01-Raw}
   - {domain: medical-research, tier: 02-Draft}
   - {domain: medical-research, tier: 03-Wiki}
+  - {domain: ai-commercial, tier: 01-Raw}
+  - {domain: ai-commercial, tier: 02-Draft}
+  - {domain: ai-commercial, tier: 03-Wiki}
+  - {domain: financial-intelligence, tier: 01-Raw}
+  - {domain: financial-intelligence, tier: 02-Draft}
+  - {domain: financial-intelligence, tier: 03-Wiki}
   - {domain: tech-ai-developer, tier: 01-Raw}
   - {domain: tech-ai-developer, tier: 02-Draft}
   - {domain: tech-ai-developer, tier: 03-Wiki}
+  - {domain: language-learning, tier: 01-Raw}
+  - {domain: language-learning, tier: 02-Draft}
+  - {domain: language-learning, tier: 03-Wiki}
+  - {domain: online-video, tier: 01-Raw}
+  - {domain: online-video, tier: 02-Draft}
+  - {domain: online-video, tier: 03-Wiki}
+  - {domain: financial-news, tier: 01-Raw}
+  - {domain: financial-news, tier: 02-Draft}
+  - {domain: financial-news, tier: 03-Wiki}
+  - {domain: online-education, tier: 01-Raw}
+  - {domain: online-education, tier: 02-Draft}
+  - {domain: online-education, tier: 03-Wiki}
+  - {domain: legal-compliance, tier: 01-Raw}
+  - {domain: legal-compliance, tier: 02-Draft}
+  - {domain: legal-compliance, tier: 03-Wiki}
+  - {domain: general-news, tier: 01-Raw}
+  - {domain: general-news, tier: 02-Draft}
+  - {domain: general-news, tier: 03-Wiki}
+  - {domain: gaming, tier: 01-Raw}
+  - {domain: gaming, tier: 02-Draft}
+  - {domain: gaming, tier: 03-Wiki}
+  - {domain: b2b, tier: 01-Raw}
+  - {domain: b2b, tier: 02-Draft}
+  - {domain: b2b, tier: 03-Wiki}
+  - {domain: retail, tier: 01-Raw}
+  - {domain: retail, tier: 02-Draft}
+  - {domain: retail, tier: 03-Wiki}

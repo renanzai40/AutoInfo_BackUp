@@ -318,8 +318,9 @@ every scenario in `scenarios/regression/` must carry `regression: true` and a
   (FRED/Finnhub, env-gated)
 - **2026-08-07 additions (#156)**: output-premium-products (premium-briefing /
   magazine-digest / enterprise-briefing via `product_template`, LLM-gated),
-  sources-coverage (academic + all 27 source platforms; completes products 8/8,
-  formats 7/7, sources 27/27 in the E8 matrix)
+  sources-coverage (academic + all 29 source platforms in the v3 spec; scenario
+  library exercises 8/8 products, 7/8 formats — video pending, 28/29 sources —
+  email_imap pending)
 - **2026-08-08 additions (KB-curation wave)**: kb-promote-admission (admission
   gate + provenance guard end to end), promotion-provenance (source_platform
   admission requirement), promotion-triggers (auto-promote eligibility paths),
