@@ -15,7 +15,7 @@
 | **Source** | `add_source` (idempotent), `add_sources` (batch), `remove_source`, `test_source` (with extract_fields + tier warnings), `list_sources`, `get_source_health`, `get_feeds` |
 | **Topic** | `add_topic`, `remove_topic`, `list_topics`, `list_keywords`, `approve_keyword`, `reject_keyword`, `suggest_keywords`, `topic_group_add`, `topic_group_remove` |
 | **Collection** | `collect_sources` (with dry_run, domain-less), `get_collection_progress`, `get_collection_status`, `process_collection` (with batch, check_factual, check_translation), `get_processing_progress`, `batch_run`, `clean_cache` |
-| **KB** | `search_knowledge_base` (hybrid: FTS5+vector, paginated; `filter_custom_fields` faceted filter — dict of dot-paths into `custom_fields`, `""` = presence, non-empty = exact match, path-injection validated), `get_kb_entry`, `list_summaries`, `get_summary`, `create_kb_entry` (direct Raw-tier with source metadata), `create_kb_draft` (from Raw only), `reject_kb_draft`, `list_kb_tier`, `reindex_kb`, `flag_for_knowledge_base` |
+| **KB** | `search_knowledge_base` (hybrid: FTS5+vector, paginated; `filter_custom_fields` faceted filter — dict of dot-paths into `custom_fields`, `""` = presence, non-empty = exact match, path-injection validated), `get_kb_entry`, `list_summaries`, `get_summary`, `create_kb_entry` (direct Raw-tier with source metadata), `create_kb_draft` (from Raw only), `reject_kb_draft`, `promote_kb_draft` (agent promotion Draft→Wiki), `demote_kb_wiki` (director-only), `force_promote` (director-only), `promote_pending`, `list_kb_tier`, `reindex_kb`, `flag_for_knowledge_base` |
 | **KB Relations** | `link_items`, `get_item_relations` |
 | **KB Versioning** | `get_entry_history`, `restore_entry_version` |
 | **KB Monitor** | `get_collection_stats`, `get_collection_diff` |
@@ -35,7 +35,7 @@
 | **Quality Gate Config** | `get_gate_config`, `set_gate_config` |
 | **Product** | `list_products`, `get_product` |
 | **Alert Rules** | `add_alert_rule`, `get_alert_rules`, `remove_alert_rule` |
-| **End User** | `send_to_enduser`, `get_enduser_history`, `get_enduser_products`, `query_delivery_log`, `get_delivery_log`, `activate_trial`, `check_trial_expiry`, `update_preferences`, `get_preferences`, `get_subscription_status` |
+| **End User** | `send_to_enduser`, `get_enduser_history`, `get_enduser_products`, `query_delivery_log`, `get_delivery_log`, `activate_trial`, `check_trial_expiry`, `update_preferences`, `get_preferences`, `get_subscription_status`, `enduser_create`, `enduser_get`, `enduser_update`, `enduser_delete`, `enduser_list` |
 | **Cost** | `get_billing_summary`, `get_budget_thresholds`, `set_budget_thresholds`, `create_checkout_session`, `get_enduser_usage`, `get_enduser_invoice`, `cost_dashboard`, `cost_allocation` |
 | **Data Privacy** | `soft_delete_entry` (with purge flag), `restore_entry`, `export_user_data`, `delete_user_data` |
 | **Knowledge Lifecycle** | `compare_versions`, `find_similar_items`, `merge_items`, `get_domain_decay`, `mark_stale`, `calculate_freshness_score`, `recommend_content`, `simplify_content` |
@@ -43,7 +43,7 @@
 | **Audit** | `query_audit_log` (immutable audit log query) |
 | **Agent Callbacks** | `set_agent_callback`, `list_agent_callbacks`, `remove_agent_callback` |
 | **Delivery Schedule** | `add_delivery_schedule`, `list_delivery_schedules`, `remove_delivery_schedule` |
-| **Validation** | `list_validation_scenarios` (list available Agent-native scenarios; 67 built-in across all MCP categories, CLI, and REST API surfaces — 61 functional + 6 regression), `run_validation_scenario` (execute a scenario in-process: each step makes a real MCP/CLI/HTTP call and asserts on the `{success, data}` envelope; `llm_assert` steps run a real model call; env-gated steps report `unconfigured` when BYOK keys are missing — parameters: scenario (required), steps (optional, 1-based indices)). Scenarios in `src/autoinfo/mcp/scenarios/`; authoring contract in `docs/dev/validation-scenario-contract.md`. |
+| **Validation** | `list_validation_scenarios` (list available Agent-native scenarios; 68 built-in across all MCP categories, CLI, and REST API surfaces — 62 functional + 6 regression), `run_validation_scenario` (execute a scenario in-process: each step makes a real MCP/CLI/HTTP call and asserts on the `{success, data}` envelope; `llm_assert` steps run a real model call; env-gated steps report `unconfigured` when BYOK keys are missing — parameters: scenario (required), steps (optional, 1-based indices)). Scenarios in `src/autoinfo/mcp/scenarios/`; authoring contract in `docs/dev/validation-scenario-contract.md`. |
 
 All tools accept `domain` parameter where applicable. Pagination (`limit`/`offset`/`total_count`) on all list/search tools.
 

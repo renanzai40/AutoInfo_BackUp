@@ -101,7 +101,7 @@ The dimension set was proposed by the director (2026-08-08), evaluated against t
 | *(supplement)* Commercial viability | ➕ Added | **AC6**: the money path (subscription lifecycle, payment, gating, metering) must be real, since B1 is a *paying* customer. |
 | *(supplement)* Process & governance | ➕ Added | **AC7**: who accepts, when, verdict semantics, run reports, change control. |
 | *(supplement, 2026-08-08 round 2)* Documentation health | ➕ Added | **AC8**: the docs system must stay lean, current, and single-sourced for an agent-facing tool — grounded in industry best practice (AGENTS.md as index, generated inventory, one-off docs archived, single source of truth). |
-| *(supplement, 2026-08-08 round 2)* Test & validation suite health | ➕ Added | **AC9**: the pytest suite (organized by subject, mirroring `src/`) and the agent-facing validation layer (65 real-surface scenarios, agent as tester) must both stay healthy and feed acceptance evidence. |
+| *(supplement, 2026-08-08 round 2)* Test & validation suite health | ➕ Added | **AC9**: the pytest suite (organized by subject, mirroring `src/`) and the agent-facing validation layer (68 real-surface scenarios, agent as tester) must both stay healthy and feed acceptance evidence. |
 | *(2026-08-08 director correction)* KB orientation | ➕ Amended | **AC1 criterion 3**: Draft→Wiki promotion is an **agent operation** — AutoInfo's KB is a database for raw/processed production (max automation, agent as user); a human promote gate would cripple production. Human-exclusive class narrowed to destructive ops (permanent purge, domain/source removal). |
 | *(2026-08-08 director correction)* Commercial scope | ➕ Amended | **AC6 phase split**: the **payment chain is V2**. V1 validation covers the collection + production pipeline only; V2 criteria (lifecycle billing, checkout, webhooks, entitlement, invoicing) become binding at V2 launch. |
 
@@ -373,8 +373,8 @@ AutoInfo is an agent-facing tool: the primary consumer of its documentation is a
 
 Two layers, judged separately:
 
-- **(a) Test layer** — the pytest suite (~3575 tests) that verifies the code itself. Industry best practice: organized by subject, mirroring the `src/` package structure; named by subject, not issue number; pyramid-shaped (many fast unit tests, few integration, very few end-to-end).
-- **(b) Validation layer** — the agent-facing scenario suite (67 scenarios, 61 functional + 6 regression) executed through the MCP surface by an agent (agent as tester / validator). This layer is the executable specification at the top of the pyramid: real-surface calls, `unconfigured` never passes, per-step trace + root-cause report, regression flywheel. **Judged compliant with best practice as of 2026-08-08**; it is retained as positive acceptance evidence.
+- **(a) Test layer** — the pytest suite (~3640 tests) that verifies the code itself. Industry best practice: organized by subject, mirroring the `src/` package structure; named by subject, not issue number; pyramid-shaped (many fast unit tests, few integration, very few end-to-end).
+- **(b) Validation layer** — the agent-facing scenario suite (68 scenarios, 62 functional + 6 regression) executed through the MCP surface by an agent (agent as tester / validator). This layer is the executable specification at the top of the pyramid: real-surface calls, `unconfigured` never passes, per-step trace + root-cause report, regression flywheel. **Judged compliant with best practice as of 2026-08-08**; it is retained as positive acceptance evidence.
 
 ### Binary acceptance criteria
 
@@ -446,7 +446,7 @@ Re-runnable per version, run from the project root. This catalog **replaces** th
 
 | # | Check | Command / surface | Produces | Dimension |
 |---|-------|-------------------|----------|-----------|
-| A1 | Scenario coverage audit | `python3 scripts/coverage_audit.py` | covered/missing tool list, 142/142 target | AC3-agent, AC1 |
+| A1 | Scenario coverage audit | `python3 scripts/coverage_audit.py` | covered/missing tool list, 145/145 target | AC3-agent, AC1 |
 | A2 | Scenario inventory + run | MCP `list_validation_scenarios` / `run_validation_scenario` | per-scenario status (passed/failed/unconfigured), per-step trace, root-cause report | AC1, AC3, AC7 |
 | A3 | System phase + health | MCP `diagnose_system`, `get_tool_count` | health_score + phase; live tool count | AC1 |
 | A4 | No-simulated-layer scan | grep over `src/` (excl. `tests/`) for `mock`/`fixture`/`placeholder`/`example.com`/`sk_test` | SUSPECT-table hits with dispositions | AC5, AC7 |

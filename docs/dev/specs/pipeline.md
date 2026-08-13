@@ -18,21 +18,25 @@ Every collected source item is represented as an `Item`:
 ```python
 @dataclass
 class Item:
-    """A single collected item before KB storage."""
-    source_url: str
+    """A single collected item from any source."""
+    id: str
+    source_name: str
     source_type: str                  # one of VALID_SOURCE_TYPES (29 types, single source of truth in src/autoinfo/config.py)
-    source_platform: str              # e.g. "pubmed", "arxiv", "hn"
+    source_url: str
     title: str
     content: str                      # main body text
-    content_hash: str                 # SHA256(content) — dedup key
-    author: str | None = None
-    published: datetime | None = None
-    collected_at: datetime = field(default_factory=datetime.now)
-    raw_metadata: dict = field(default_factory=dict)  # source-specific (DOI, PMID, URL)
-    topics: list[str] = field(default_factory=list)   # matched topic names
-    relevance_score: float = 0.0      # populated by G3
+    content_type: str = "text"
+    source_platform: str = ""         # e.g. "pubmed", "arxiv", "hn"
+    collected_at: str = ""            # ISO-8601 timestamp (string, not datetime)
+    language: str = ""
+    domain: str = ""
+    topic_tags: list[str] = field(default_factory=list)   # matched topic names
     quality_tier: int = 1             # 1-4, propagated from source config at collect time (G1 input)
-    quality_flags: list[str] = field(default_factory=list)
+    raw_data: dict[str, Any] = field(default_factory=dict)  # source-specific (DOI, PMID, URL)
+    version: int = 1
+    previous_version: int = 0
+    supersedes: str = ""
+    trace_id: str = ""                # UUID assigned at collection, carried through delivery
 ```
 
 ### 1.2 Design Rules
@@ -163,12 +167,12 @@ All tiers are stored as flat Markdown files with YAML frontmatter in `knowledge/
 
 ```markdown
 ---
-id: "raw_abc123"
+entry_id: "raw_abc123"
 source_url: "https://pubmed.ncbi.nlm.nih.gov/12345"
 source_type: "pubmed"
 source_platform: "pubmed"
 collected_at: "2026-07-26T10:00:00"
-topics: ["IVF breakthroughs"]
+tags: ["IVF breakthroughs"]
 relevance_score: 85
 trace_id: "trc_abc123"
 ---
@@ -197,9 +201,9 @@ git commit -m "[{tier}] {domain}: {article title}"
 
 This provides full history, diff between versions, and recovery. No explicit "versioning" system needed — git handles it.
 
-### 2.5 SHA Tracking
+### 2.5 Version Tracking
 
-Each KB entry's YAML frontmatter includes `content_sha: <sha256(content + metadata)>`. When re-processing produces a different SHA, the old entry is preserved (git retains history) and the new entry gets a new path (new slug with `-v2` suffix).
+Re-collection creates a new `Item` with an incremented `version` (and `previous_version` linking the prior version); KB entries carry `version` / `previous_version` / `supersedes` in their frontmatter. When re-processing produces a new version, the old entry is preserved (git retains history) and the new entry gets a new path (new slug with `-v2` suffix). There is no content-hash field in the model — versioning is tracked via the explicit version fields and git history.
 
 ### 2.6 Product Analysis Metadata
 
@@ -257,13 +261,15 @@ Each extraction run produces:
 ```python
 @dataclass
 class ExtractionResult:
-    tl_dr: str                         # One-sentence summary
-    key_points: list[str]             # 3-5 bullet points
-    entities: dict[str, list[str]]    # Extracted entities by type
-    custom_fields: dict               # Domain-specific fields
-    quality_score: float = 0.0        # 0-100, from G4/G5
-    facts: list[str] = field(default_factory=list)    # verifiable claims (for G4)
-    translation: str | None = None    # Translated text (if language != source)
+    """Structured extraction output from LLM processing."""
+    item_id: str
+    title: str = ""
+    tl_dr: str = ""                    # One-sentence summary
+    key_points: list[str] = field(default_factory=list)  # 3-5 bullet points
+    entities: list[dict[str, Any]] = field(default_factory=list)  # Extracted entities — list of dicts (not dict-of-lists)
+    relevance_score: float = 0.0       # populated by G3
+    custom_fields: dict[str, Any] = field(default_factory=dict)   # Domain-specific fields
+    usage: dict[str, Any] = field(default_factory=dict)  # LLM token usage metadata
 ```
 
 ### 3.3 LLM Configuration
@@ -414,7 +420,7 @@ Output structure:
 | HTML | trafilatura | Body extraction, boilerplate removal |
 | JSON | Structured parse | Must match Item schema fields |
 
-All imports create 01-Raw entries identical to collected items (same `source_url` — uses a synthetic URL `import://{filename}`, same `source_type` — `import`, same `content_sha` dedup).
+All imports create 01-Raw entries identical to collected items (same `source_url` — uses a synthetic URL `import://{filename}`, same `source_type` — `import`, subject to the same URL-based dedup rules).
 
 ---
 

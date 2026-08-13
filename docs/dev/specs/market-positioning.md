@@ -359,10 +359,10 @@ The research report identifies a critical structural gap:
 
 | Format | Market Data | AutoInfo Support | Commercial Potential |
 |--------|-----------|-----------------|---------------------|
-| **Audio digest** | Avg price ¥30-80, repurchase rate 41% | ❌ Not yet supported (text-only) | 🔴 High — 14% user preference, 42% payment intent for news podcasts |
+| **Audio digest** | Avg price ¥30-80, repurchase rate 41% | ✅ Supported — TTS audio digest via `format='audio'` + audiobook (`format='audiobook'`) shipped | 🔴 High — 14% user preference, 42% payment intent for news podcasts |
 | **Short video summary** | 75.7% of paid learning sessions (2022); 72% user penetration (2024) | ❌ Not yet supported (text-only) | 🟡 Medium — requires TTS + video generation pipeline |
 | **Newsletter (email)** | Substack 8.4M paid (+68%); 52 newsletters earning $500K+/yr | ✅ SMTP sending supported; Agent-generated digest | ✅ High — core delivery channel |
-| **RSS Feed as product** | RSS adoption +34% YoY (2026); 400M+ podcasts distributed via RSS | 🟡 Not yet exportable (consumes RSS, doesn't produce) | ✅ High — standard format for both human and agent consumption |
+| **RSS Feed as product** | RSS adoption +34% YoY (2026); 400M+ podcasts distributed via RSS | ✅ Supported — RSS 2.0 delivery channel (C11 podcast RSS) + `export_kb(format='rss')` shipped | ✅ High — standard format for both human and agent consumption |
 | **Structured data API** | Bloomberg $2,665/user/mo; Alpha Vantage $49.99/mo; Wind ¥680/mo | ✅ REST API + webhook + bulk export | ✅ Core RAW product delivery |
 | **Agent-native output** | ChatGPT 10B MAU; Perplexity 100M+ MAU (2026 Q2) | ✅ MCP tools for KB search + digest generation | ✅ Highest growth channel — agent-mediated delivery is the 2026 inflection point |
 

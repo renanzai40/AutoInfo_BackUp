@@ -70,7 +70,7 @@ Expectations are grouped by journey phase.
 | **Init process — agent** | Agent does not run `init`. Agent expects `.autoinfo/` to already exist with valid config. If missing, MCP tools return appropriate error. |
 | **Re-running init** | Idempotent: creates any missing files but never overwrites existing config. To reset fully, delete `.autoinfo/` and re-run init. |
 | **What init creates** | Full project skeleton: `.autoinfo/config.yaml` (domains with embedded `sources` + `topics` — config.yaml is the single source of truth; no standalone `sources.yaml`/`domains.yaml`/`topics.yaml`) + directory structure (`collections/`, `outputs/`, `knowledge/`). `knowledge/` contains the 4 pipeline tiers: `00-Inbox/` (scaffolded but deprecated — no code writes to it), `01-Raw/`, `02-Draft/`, `03-Wiki/`. If demo domains selected, ships demo source lists. |
-| **Demo domains shipped** | Nine pre-configured domain templates: `medical-research`, `ai-commercial`, `financial-intelligence`, `tech-ai-developer`, `language-learning`, `online-video`, `financial-news`, `online-education`, `legal-compliance`. Each includes curated default sources, suggested topics, and output templates. User can activate any subset. |
+| **Demo domains shipped** | Thirteen pre-configured domain templates: `medical-research`, `ai-commercial`, `financial-intelligence`, `tech-ai-developer`, `language-learning`, `online-video`, `financial-news`, `online-education`, `legal-compliance`, `general-news`, `gaming`, `b2b`, `retail`. Each includes curated default sources, suggested topics, and output templates. User can activate any subset. |
 
 #### F04 — LLM Configuration (BYOK) ✅
 
@@ -122,7 +122,7 @@ Expectations are grouped by journey phase.
 
 #### F07 — Demo Domain Source Libraries ✅
 
-*The system ships with curated source lists for nine demo domains, proving value out of the box.*
+*The system ships with curated source lists for thirteen demo domains, proving value out of the box.*
 
 | UX Detail | Specification |
 |-----------|---------------|

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Generate the end-user coverage matrix report (E8, issue #131).
 
-Reads ``docs/dev/specs/end-user-matrix.yaml`` (sparse spec: 13 demo domains
-x 8 products x 7 formats) plus real evidence — ``outputs/**`` persisted
+Reads ``docs/dev/specs/end-user-matrix.yaml`` (spec: 13 demo domains
+x 8 products x 8 formats) plus real evidence — ``outputs/**`` persisted
 artifacts (``outputs/<domain>/<product>-<format>-<stamp>.<ext>``, written by
 the MCP ``persist`` path) and the ``manifest.json`` from
 ``scripts/validation_delivery.py`` (bare or inside its ``*.zip`` archive) —

@@ -21,15 +21,15 @@ consumes each entity. "spec only" marks models not yet implemented in code.
 
 | Entity | MCP Tool | Key Fields |
 |--------|----------|------------|
-| `Item` | `collect_sources`, `process_collection`, `get_collection_status` | `source_url`, `source_type`, `content_hash`, `topics`, `relevance_score` |
-| `ExtractionResult` | `extract_fields`, `get_extraction`, `process_collection` | `tl_dr`, `key_points`, `entities`, `custom_fields`, `quality_score` |
-| KB Entry (YAML frontmatter) | `search_knowledge_base`, `get_kb_entry`, `create_kb_draft`, `flag_for_knowledge_base`, `list_kb_tier` | `id`, `source_url`, `tier`, `status`, `trace_id`, `version` |
-| `DeliveryResult` | `send_to_enduser`, `send_email_digest` | `success`, `channel`, `recipient`, `delivered_at` |
-| `DeliveryLog` | `query_delivery_log`, `get_delivery_log`, `get_enduser_history` | `id`, `subscription_id`, `channel`, `success`, `trace_id` |
-| `RetryConfig` | `send_to_enduser` (retry chain) | `max_retries`, `backoff_base`, `retryable_statuses` |
-| `UserProfile` | `send_to_enduser`, `get_enduser_history`, `update_preferences`, `get_preferences` | `id`, `name`, `email`, `status`, `identity_anchor` |
+| `Item` | `collect_sources`, `process_collection`, `get_collection_status` | `source_url`, `source_type`, `topic_tags`, `raw_data`, `trace_id` |
+| `ExtractionResult` | `extract_fields`, `get_extraction`, `process_collection` | `tl_dr`, `key_points`, `entities` (list[dict]), `custom_fields`, `relevance_score` |
+| KB Entry (YAML frontmatter) | `search_knowledge_base`, `get_kb_entry`, `create_kb_draft`, `flag_for_knowledge_base`, `list_kb_tier` | `entry_id`, `source_url`, `tier`, `status`, `tags`, `trace_id`, `version` |
+| `DeliveryResult` | `send_to_enduser`, `send_email_digest` | `product_id`, `channel`, `status`, `timestamp`, `recipient_count`, `error` |
+| `DeliveryLog` | `query_delivery_log`, `get_delivery_log`, `get_enduser_history` | `log_id`, `subscription_id`, `channel`, `message_type`, `status`, `sla_tier` |
+| Delivery retry policy | `send_to_enduser`, `deliver_with_retry` | SLA-tier retries (`_SLA_RETRIES`: critical=5, standard=3, bulk=1); backoff `_RETRY_BACKOFF` = `[1.0, 5.0, 30.0]` (last value repeats) |
+| `UserProfile` | `send_to_enduser`, `get_enduser_history`, `update_preferences`, `get_preferences` | `user_id`, `name`, `email`, `status`, `tier`, `preferences` |
 | `DeliveryPreferences` | `update_preferences`, `get_preferences` | `channels`, `quiet_hours`, `max_daily_digests`, `preferred_format` |
-| `Subscription` | `get_subscription_status`, `activate_trial`, `check_trial_expiry` | `id`, `user_id`, `domain`, `topics`, `status`, `access_level` |
+| `Subscription` | `get_subscription_status`, `activate_trial`, `check_trial_expiry` | `subscription_id`, `user_id`, `plan`, `tier`, `channels`, `domains`, `products` |
 | `ProductState` / `ProductInstance` | `list_products`, `get_product` | `id`, `template_id`, `state`, `version` |
 | `ConsumptionEvent` | `get_enduser_usage` | `id`, `product_id`, `event_type`, `channel` |
 | `EngagementMetrics` | `get_enduser_usage` (spec only) | `product_id`, `open_count`, `read_count`, `completion_rate` |
@@ -68,35 +68,40 @@ consumes each entity. "spec only" marks models not yet implemented in code.
 ```python
 @dataclass
 class Item:
-    """A single collected item before KB storage."""
-    source_url: str
+    """A single collected item from any source."""
+    id: str
+    source_name: str
     source_type: str                  # one of VALID_SOURCE_TYPES (29 types, single source of truth in src/autoinfo/config.py)
-    source_platform: str              # e.g. "pubmed", "arxiv", "hn"
+    source_url: str
     title: str
     content: str                      # main body text
-    content_hash: str                 # SHA256(content) — dedup key
-    author: str | None = None
-    published: datetime | None = None
-    collected_at: datetime = field(default_factory=datetime.now)
-    raw_metadata: dict = field(default_factory=dict)  # source-specific (DOI, PMID, URL)
-    topics: list[str] = field(default_factory=list)   # matched topic names
-    relevance_score: float = 0.0      # populated by G3
+    content_type: str = "text"
+    source_platform: str = ""         # e.g. "pubmed", "arxiv", "hn"
+    collected_at: str = ""            # ISO-8601 timestamp (string, not datetime)
+    language: str = ""
+    domain: str = ""
+    topic_tags: list[str] = field(default_factory=list)   # matched topic names
     quality_tier: int = 1             # 1-4, propagated from source config at collect time (G1 input)
-    quality_flags: list[str] = field(default_factory=list)
+    raw_data: dict[str, Any] = field(default_factory=dict)  # source-specific (DOI, PMID, URL)
+    version: int = 1
+    previous_version: int = 0
+    supersedes: str = ""
+    trace_id: str = ""                # UUID assigned at collection, carried through delivery
 ```
 
 <!-- schema: ExtractionResult -->
 ```python
 @dataclass
 class ExtractionResult:
-    """Structured output from LLM extraction."""
-    tl_dr: str                         # One-sentence summary
-    key_points: list[str]             # 3-5 bullet points
-    entities: dict[str, list[str]]    # Extracted entities by type
-    custom_fields: dict               # Domain-specific fields
-    quality_score: float = 0.0        # 0-100, from G4/G5
-    facts: list[str] = field(default_factory=list)    # verifiable claims (for G4)
-    translation: str | None = None    # Translated text (if language != source)
+    """Structured extraction output from LLM processing."""
+    item_id: str
+    title: str = ""
+    tl_dr: str = ""                    # One-sentence summary
+    key_points: list[str] = field(default_factory=list)  # 3-5 bullet points
+    entities: list[dict[str, Any]] = field(default_factory=list)  # Extracted entities — list of dicts (not dict-of-lists)
+    relevance_score: float = 0.0       # populated by G3
+    custom_fields: dict[str, Any] = field(default_factory=dict)   # Domain-specific fields
+    usage: dict[str, Any] = field(default_factory=dict)  # LLM token usage metadata
 ```
 
 ---
@@ -108,20 +113,19 @@ Stored as Markdown with YAML frontmatter:
 
 ```yaml
 ---
-id: "raw_abc123"
+entry_id: "raw_abc123"
 source_url: "https://..."
 source_type: "pubmed"
 source_platform: "pubmed"
 collected_at: "2026-07-26T10:00:00"
-topics: ["IVF breakthroughs"]
-content_sha: "abc123def456"
+tags: ["IVF breakthroughs"]
 trace_id: "trc_abc123"
 version: 1
 relevance_score: 85
 quality_tier: 1          # 1-4, propagated from source config (G1 input)
 source_score: 90.0       # 0-100 deterministic credibility score from quality_tier via SOURCE_TIER_SCORE_MAP (E9)
-status: "active"       # "active" | "deleted" | "stale"
-tier: "01-raw"         # "01-raw" | "02-draft" | "03-wiki"
+status: "active"       # "active" | "deprecated" | "archived"  ("deleted" is a DB column, not a status; `stale` is set via mark_stale flag)
+tier: "01-Raw"         # "01-Raw" | "02-Draft" | "03-Wiki"
 custom_fields:        # optional — domain extraction fields plus reserved product analysis key
   key_findings: ["..."]
   product_analysis:   # written during differentiated product generation (premium-briefing / enterprise-briefing / magazine-digest)
@@ -140,39 +144,36 @@ custom_fields:        # optional — domain extraction fields plus reserved prod
 ## 3. Delivery Models
 
 <!-- schema: DeliveryResult -->
-<!-- schema: RetryConfig -->
 <!-- schema: DeliveryLog -->
 ```python
 @dataclass
 class DeliveryResult:
-    success: bool
+    """Result of delivering a product through a specific channel."""
+    product_id: str
     channel: str
-    recipient: str
-    delivered_at: datetime
-    attempt_count: int = 1
+    status: Literal["success", "failed", "partial"]
+    timestamp: str = ""                # ISO-8601 timestamp (string)
+    recipient_count: int = 0
     error: str | None = None
-    receipt_id: str | None = None
-
-@dataclass
-class RetryConfig:
-    max_retries: int = 3
-    backoff_base: float = 5.0
-    backoff_max: float = 300.0
-    retryable_statuses: list[int] = field(default_factory=lambda: [408, 429, 500, 502, 503, 504])
 
 @dataclass
 class DeliveryLog:
-    id: str                          # "dlog_{uuid8}"
-    subscription_id: str             # FK to Subscription
-    product_id: str | None           # FK to Product (if applicable)
+    """A single delivery attempt record (append-only log)."""
+    log_id: str                        # "dlog_{uuid8}"
+    subscription_id: str               # FK to Subscription
     channel: str
-    recipient: str
-    success: bool
-    attempt_count: int
-    delivered_at: datetime
-    error: str | None = None
-    trace_id: str = ""
+    message_type: str                  # e.g. "digest" | "report" | "alert"
+    status: str                        # "success" | "failed" | "retrying" | "pending" ...
+    attempt_count: int = 0
+    last_attempt: str = ""             # ISO-8601 timestamp (string)
+    error_message: str = ""
+    sla_tier: str = "standard"         # "critical" | "standard" | "bulk"
 ```
+
+> **Retry policy**: retries are **SLA-tier-based**, not per-channel — there is no per-channel retry-config dataclass.
+> `src/autoinfo/delivery/__init__.py` defines `_SLA_RETRIES = {"critical": 5, "standard": 3, "bulk": 1}`
+> (retries beyond the initial attempt) and `_RETRY_BACKOFF = [1.0, 5.0, 30.0]` (seconds between retries;
+> the last value repeats for attempts beyond the list). Unknown tiers fall back to `standard`.
 
 ---
 
@@ -194,23 +195,38 @@ class UserStatus(Enum):
     ACTIVE = "active"
     SUSPENDED = "suspended"
     CANCELLED = "cancelled"
+# Note: spec-only enum — models.py stores UserProfile.status as a plain str
+# ("trial" | "active" | "suspended" | "cancelled"); no enum exists in code.
 
 class SubscriptionStatus(Enum):
     ACTIVE = "active"
     PAUSED = "paused"
     CANCELLED = "cancelled"
+# Note: spec-only enum — models.py stores Subscription.status as a plain str.
 
 @dataclass
 class UserProfile:
-    id: str                          # "usr_{uuid8}"
+    """End-user profile with lifecycle status (trial→active→suspended→cancelled)."""
+    user_id: str                       # "usr_{uuid8}" — identity is implicit via user_id (no identity_anchor field in code)
     name: str
-    email: str
-    delivery_preferences: DeliveryPreferences
-    status: UserStatus
-    created_at: datetime
-    updated_at: datetime
-    identity_anchor: str             # "native" | "oauth_provider:{provider}:{sub}"
+    email: str = ""
+    status: str = "trial"              # "trial" | "active" | "suspended" | "cancelled"
+    tier: str = "free"                 # "free" | "premium" | "enterprise"
+    delivery_preferences: dict[str, Any] = field(default_factory=dict)  # freeform dict — no typed DeliveryPreferences class
+    created_at: str = ""               # ISO-8601 (string)
+    updated_at: str = ""
+    trial_ends_at: str = ""
+    trial_started_at: str = ""
+    trial_days: int = 14
+    grace_period_days: int = 7
+    last_login_at: str = ""
+    preferences: dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
+    # Stripe billing fields
+    stripe_customer_id: str = ""
+    stripe_subscription_id: str = ""
 
+# ── Spec-only target models (no dataclass in src/autoinfo/models.py) ──
 @dataclass
 class DeliveryPreferences:
     channels: dict[str, list[ChannelConfig]]
@@ -233,25 +249,30 @@ class QuietHours:
 
 @dataclass
 class Subscription:
-    """Delivery-oriented subscription model. See cross-ref: CD-020, CD-024.
-    
-    ⚠ Spec/code gap: Current code model (src/autoinfo/models.py) is billing-focused
-    (plan, price_monthly, currency, features, stripe_*_id), missing domain/topics/products/
-    channels/schedule. This spec model represents the target delivery-oriented design.
-    Fields annotated with implementation status below.
+    """Subscription tied to a user profile with plan, status, and billing info.
+    CD-024 fields: tier, channels, domains, products, platform_limit, domain_limit,
+    raw_access, processed_access.
     """
-    id: str                          # "sub_{uuid8}"                         ✅ implemented
-    user_id: str                     # FK to UserProfile                     ✅ implemented
-    domain: str                      # Target domain                          📋 spec only; not in code model
-    topics: list[str]                # Subscribed topic names                 📋 spec only; not in code model
-    products: list[str]              # Subscribed product IDs                 📋 spec only; not in code model
-    channels: list[ChannelConfig]    # Delivery channels with per-channel cfg 📋 spec'd; code uses list[str] untyped
-    schedule: str                    # Cron expression for periodic delivery   📋 spec only; not linked to scheduler in code
-    status: SubscriptionStatus       # Lifecycle state                        ✅ implemented (SubscriptionStatus enum)
-    access_level: str = "free"       # Subscription tier → product gating     📋 spec only; code ProductTemplate hardcoded to "free"
-    created_at: datetime             # Subscription start                      ✅ implemented
-    updated_at: datetime             # Last update                             ✅ implemented
-    last_delivered_at: datetime | None = None  # Last delivery timestamp       📋 spec only; not in code model
+    subscription_id: str             # "sub_{uuid8}"
+    user_id: str                     # FK to UserProfile
+    plan: str = "free"               # "free" | "premium" | "enterprise"
+    status: str = "active"           # "active" | "paused" | "cancelled"
+    start_date: str = ""             # ISO-8601 (string)
+    end_date: str = ""
+    auto_renew: bool = True
+    price_monthly: float = 0.0
+    currency: str = "USD"
+    features: dict[str, Any] = field(default_factory=dict)
+    created_at: str = ""             # ISO-8601 (string)
+    updated_at: str = ""
+    tier: str = "free"               # CD-024: product-gating tier
+    channels: list[str] = field(default_factory=list)   # CD-024: 13 canonical channel types
+    domains: list[str] = field(default_factory=list)    # CD-024: subscribed domains
+    products: list[str] = field(default_factory=list)   # CD-024: subscribed products
+    platform_limit: int = 1          # CD-024: max platforms
+    domain_limit: int = 1            # CD-024: max domains
+    raw_access: bool = False         # CD-024: RAW product access
+    processed_access: bool = True    # CD-024: PROCESSED product access
 ```
 
 ---

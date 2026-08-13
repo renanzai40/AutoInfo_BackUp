@@ -14,15 +14,15 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | Metric | Value |
 |--------|-------|
 | Total files | 50 |
-| Total lines | 25059 |
+| Total lines | 25131 |
 | Active files | 41 |
 | Archived files | 9 |
 | Category — archive | 9 files / 4932 lines |
 | Category — known-limitations | 1 files / 255 lines |
 | Category — skills | 3 files / 785 lines |
-| Category — specs | 12 files / 8684 lines |
+| Category — specs | 12 files / 8746 lines |
 | Category — validation-reports | 9 files / 2620 lines |
-| Category — docs/dev | 16 files / 7783 lines |
+| Category — docs/dev | 16 files / 7793 lines |
 
 ## Inventory
 
@@ -46,23 +46,23 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/cross-dimensional-catalog.md` | 982 | docs/dev | active | — |
 | `dev/director-user-guide.md` | 756 | docs/dev | active | — |
 | `dev/enduser-capabilities-guide.md` | 372 | docs/dev | active | — |
-| `dev/enduser-coverage-matrix.md` | 480 | docs/dev | active | — |
+| `dev/enduser-coverage-matrix.md` | 482 | docs/dev | active | — |
 | `dev/founder-expectations.md` | 471 | docs/dev | active | — |
 | `dev/mcp-usage-examples.md` | 324 | docs/dev | active | — |
 | `dev/new-domain-guide.md` | 935 | docs/dev | active | — |
 | `dev/required-api-keys.md` | 127 | docs/dev | active | — |
 | `dev/research/综合报告-资讯付费与AI触达研究.md` | 702 | docs/dev | active | — |
-| `dev/specs/data-models.md` | 745 | specs | active | — |
-| `dev/specs/delivery.md` | 1244 | specs | active | — |
-| `dev/specs/end-user-matrix.yaml` | 1126 | specs | active | — |
+| `dev/specs/data-models.md` | 766 | specs | active | — |
+| `dev/specs/delivery.md` | 1266 | specs | active | — |
+| `dev/specs/end-user-matrix.yaml` | 1122 | specs | active | — |
 | `dev/specs/expectations.md` | 1188 | specs | active | — |
 | `dev/specs/market-positioning.md` | 404 | specs | active | market-positioning |
 | `dev/specs/mcp-tools.md` | 85 | specs | active | — |
 | `dev/specs/multi-tenancy-auth.md` | 770 | specs | active | — |
-| `dev/specs/operations.md` | 933 | specs | active | — |
-| `dev/specs/ops-runbook.md` | 1022 | specs | active | — |
-| `dev/specs/pipeline.md` | 543 | specs | active | — |
-| `dev/specs/quality-gates.md` | 183 | specs | active | — |
+| `dev/specs/operations.md` | 930 | specs | active | — |
+| `dev/specs/ops-runbook.md` | 1040 | specs | active | — |
+| `dev/specs/pipeline.md` | 549 | specs | active | — |
+| `dev/specs/quality-gates.md` | 185 | specs | active | — |
 | `dev/specs/user-lifecycle-definition.md` | 441 | specs | active | — |
 | `dev/validation-reports/README.md` | 53 | validation-reports | active | — |
 | `dev/validation-reports/acceptance-2026-08-08.md` | 166 | validation-reports | active | — |
@@ -73,7 +73,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/validation-reports/evidence-2026-08-12/ac5-presentation.md` | 0 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-report-standard.md` | 813 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-tutorial-student.md` | 501 | validation-reports | active | — |
-| `dev/validation-scenario-contract.md` | 760 | docs/dev | active | — |
+| `dev/validation-scenario-contract.md` | 768 | docs/dev | active | — |
 | `known-limitations/blocked-sources.md` | 255 | known-limitations | active | — |
 | `skills/autoinfo-skill/SKILL.md` | 295 | skills | active | — |
 | `skills/autoinfo-skill/onboarding-walkthrough.md` | 121 | skills | active | — |

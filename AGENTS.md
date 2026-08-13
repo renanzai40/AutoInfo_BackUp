@@ -204,7 +204,7 @@ Hard/soft split with retry-first, block-last philosophy. G0 (Schema Integrity) a
 | **KB Versioning** | `get_entry_history`, `restore_entry_version` |
 | **KB Monitor** | `get_collection_stats`, `get_collection_diff` |
 | **KB Graph** | `query_knowledge_graph`, `knowledge_graph_export` |
-| **Output** | `list_output_templates`, `generate_digest` (format=md/html/json/agent, `product=` premium-briefing/magazine-digest/...), `generate_report` (format=md/json/pdf/html/audio/agent, `product=` premium-briefing/enterprise-briefing/...), `generate_cross_domain_report`, `generate_tutorial` (format=md/agent), `generate_presentation` (format=md/agent), `localize_content` |
+| **Output** | `list_output_templates`, `generate_digest` (format=md/html/json/agent, `product=` premium-briefing/magazine-digest/...), `generate_report` (format=md/json/html/audio/agent/video/epub/audiobook, `product=` premium-briefing/enterprise-briefing/...), `generate_cross_domain_report`, `generate_tutorial` (format=md/agent), `generate_presentation` (format=md/agent), `localize_content` |
 | **Delivery Schedule** | `add_delivery_schedule`, `list_delivery_schedules`, `remove_delivery_schedule` |
 | **Export/Import** | `export_kb` (format=md/json/sqlite/pdf/csv/graphml/agent/bundle), `import_kb` |
 | **CEFR** | `classify_cefr`, `cefr_batch` |
@@ -350,7 +350,7 @@ Never hand-edit runtime artifacts to fix behavior — fix the source.
 | KB import | ✅ 4 formats (PDF, Markdown, HTML, JSON) → 01-Raw via `import_kb` MCP tool |
 | Search | ✅ Hybrid (FTS5 keyword + sqlite-vec vector), faceted (7 filters + `filter_custom_fields` on custom_fields JSON) |
 | Q&A | ✅ FTS5 + LLM synthesis with source citations |
-| Output generation | ✅ Digest (Markdown/HTML/JSON/PDF/EPUB/Audiobook), report (Markdown/JSON/HTML/Audio/Agent/EPUB/Audiobook), tutorial (Markdown), presentation (Markdown), export (Markdown/JSON/SQLite/PDF/RSS/CSV/GraphML/Agent/Bundle/Sitemap/EPUB/MOBI) (Jinja2 + LLM, Reveal.js CDN, ebooklib EPUB3 + calibre MOBI); 8 product templates incl. premium-briefing/enterprise-briefing + per-product LLM synthesis |
+| Output generation | ✅ Digest (Markdown/HTML/JSON/Agent/Audio/EPUB/Audiobook), report (Markdown/JSON/HTML/Audio/Agent/Video/EPUB/Audiobook), tutorial (Markdown), presentation (Markdown), export (Markdown/JSON/SQLite/PDF/RSS/CSV/GraphML/Agent/Bundle/Sitemap/EPUB/MOBI) (Jinja2 + LLM, Reveal.js CDN, ebooklib EPUB3 + calibre MOBI); 8 product templates incl. premium-briefing/enterprise-briefing + per-product LLM synthesis |
 | Agent-native JSON output | ✅ `format="agent"` returns JSON-LD (`@type: KnowledgeDigest`) for LLM re-consumption |
 | JSON-LD schemas | ✅ `docs/schemas/{knowledge-digest,knowledge-tutorial,knowledge-presentation,knowledge-base-export}-v1.json` (JSON Schema draft-07) pin `@context`/`@type` via `const`; validated by M4T35 round-trip tests |
 | Audio output | ✅ TTS-rendered digest/report as MP3 (OpenAI TTS); `format="audiobook"` = chaptered MP3 + ZIP (ID3v2.3 CHAP/CTOC via mutagen) |
@@ -424,13 +424,13 @@ Never hand-edit runtime artifacts to fix behavior — fix the source.
 | LLM fallback chain | ✅ Shared `llm.call_with_fallback` — every LLM call site (extraction + 17 standalone) walks `[primary] + config.llm.fallback`; first successful model wins, aggregate error surfaces last failure |
 | Dead-source detection | ✅ Semantic Scholar 429 → `SourceFailure` (fail-fast); arXiv rss/bio → rss/q-bio fix |
 | CLI module entry | ✅ `python -m autoinfo.cli` runs the same Typer app; `collect` live per-source progress printer |
-| Test suite | ✅ ~3605 tests collected (incl. order-dependency fixes landed 2026-08-12; includes validation wave E1-E9 scenarios + regression suite + #141-#164 regression guards + kb-curation wave + hermetic config-seam fixes) |
-| Delivery schedules | ✅ add_delivery_schedule, list_delivery_schedules, remove_delivery_schedules MCP tools, cron-integrated |
+| Test suite | ✅ ~3640 tests collected (incl. order-dependency fixes landed 2026-08-12; includes validation wave E1-E9 scenarios + regression suite + #141-#164 regression guards + kb-curation wave + hermetic config-seam fixes) |
+| Delivery schedules | ✅ add_delivery_schedule, list_delivery_schedules, remove_delivery_schedule MCP tools, cron-integrated |
 | Standardized error envelope | ✅ All MCP + REST API errors return `{success: false, error: {code, message, actionable}}`; 28 ErrorCode values; `error_dict()` deprecated |
 | REST success envelope | ✅ REST API success responses return `{success: true, data: ...}` (breaking change v1.9; migration: `docs/archive/migration-v1.9.md`); dashboard JS unwraps transparently |
 | LLM guard | ✅ Centralized `LLM_NOT_CONFIGURED` at `call_tool` dispatch (17 LLM-required tools) — no more raw auth errors |
 | Actionable guidance | ✅ `init_project` returns `next_steps`; `diagnose_system` returns `health_score` (0-100) + `phase`; DOMAIN_NOT_FOUND includes "Use add_domain()" |
-| CLI help text | ✅ 9 CLI command groups have custom help descriptions |
+| CLI help text | ✅ 16 of 28 CLI command groups have custom help descriptions |
 | CLI/MCP parity groups | ✅ 6 parity groups added M6 (topic-group, import-kb, query-collected, alert-rules, agent-callback + keywords suggest) — 28 CLI groups mirroring MCP tool params; parity matrix: `docs/dev/cli-mcp-rest-parity.md` |
 | Required API keys doc | ✅ `docs/dev/required-api-keys.md` catalogs all env vars; linked from error messages |
 | Content simplification (E14) | ✅ `simplify_content` MCP tool — CEFR-parameterized text simplification (A1-C1) with LLM rewrite + verification |

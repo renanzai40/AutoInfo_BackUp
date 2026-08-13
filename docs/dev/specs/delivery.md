@@ -208,43 +208,38 @@ class DeliveryChannel(ABC):
 
 ### 2.4 Retry & SLA
 
+Retries are **SLA-tier-based**, not per-channel. `src/autoinfo/delivery/__init__.py` defines:
+
 ```python
-# Per-channel retry config
-CHANNEL_RETRY_CONFIG: dict[str, RetryConfig] = {
-    "smtp":          RetryConfig(max_retries=3, backoff_base=5.0, backoff_max=300.0),
-    "telegram":      RetryConfig(max_retries=2, backoff_base=2.0, backoff_max=30.0),
-    "wechat_oa":     RetryConfig(max_retries=2, backoff_base=2.0, backoff_max=30.0),
-    "wechat_work":   RetryConfig(max_retries=2, backoff_base=2.0, backoff_max=30.0),
-    "dingtalk":      RetryConfig(max_retries=2, backoff_base=1.0, backoff_max=10.0),
-    "feishu":        RetryConfig(max_retries=2, backoff_base=1.0, backoff_max=10.0),
-    "discord":       RetryConfig(max_retries=2, backoff_base=1.0, backoff_max=10.0),
-    "webhook":       RetryConfig(max_retries=3, backoff_base=2.0, backoff_max=60.0),
-    "rest_api":      RetryConfig(max_retries=3, backoff_base=2.0, backoff_max=60.0),
-    "file_export":   RetryConfig(max_retries=1, backoff_base=1.0, backoff_max=5.0),
-    "rss":           RetryConfig(max_retries=2, backoff_base=2.0, backoff_max=30.0),
-    "social_publish": RetryConfig(max_retries=2, backoff_base=2.0, backoff_max=30.0),
+# Max retries per SLA tier (does not include the initial attempt)
+_SLA_RETRIES: dict[str, int] = {
+    "critical": 5,
+    "standard": 3,
+    "bulk": 1,
 }
 
-@dataclass
-class RetryConfig:
-    max_retries: int = 3
-    backoff_base: float = 5.0       # seconds — exponential backoff multiplier
-    backoff_max: float = 300.0      # seconds — cap per retry interval
-    retryable_statuses: list[int] = field(default_factory=lambda: [408, 429, 500, 502, 503, 504])
+# Exponential backoff in seconds between retries (indexed by attempt-1;
+# the last value repeats for attempts beyond the list)
+_RETRY_BACKOFF: list[float] = [1.0, 5.0, 30.0]
 ```
+
+- `_max_retries(sla_tier)` returns the retry count for the tier, falling back to `standard` (3) for unknown tiers.
+- `_backoff_for_attempt(attempt)` returns the backoff in seconds before the *attempt*-th retry (1-based); entries beyond `_RETRY_BACKOFF` reuse the last value (30 s).
+- `deliver_with_retry(channel, product, payload, recipients, subscription_id="", sla_tier="standard")` wraps `DeliveryChannel.send` with the tier-dependent retry count, backoff schedule, per-attempt `DeliveryLog` persistence, and per-attempt error capture.
+- There is no retry-config dataclass and no per-channel retry table; the 13 channels share the SLA-tier policy.
 
 ### 2.5 Delivery Result
 
 ```python
 @dataclass
 class DeliveryResult:
-    success: bool
+    """Result of delivering a product through a specific channel."""
+    product_id: str
     channel: str
-    recipient: str
-    delivered_at: datetime
-    attempt_count: int = 1
+    status: Literal["success", "failed", "partial"]
+    timestamp: str = ""                # ISO-8601 timestamp (string)
+    recipient_count: int = 0
     error: str | None = None
-    receipt_id: str | None = None  # External channel message ID
 ```
 
 ---
@@ -281,9 +276,8 @@ Product → D1 → D2 → D3 → Agent Push (HTTP POST to agent callback URL)
 
 | Failure | Recovery |
 |---------|----------|
-| Transient HTTP error (408, 429, 5xx) | Retry with exponential backoff per `RetryConfig` |
-| Network timeout | Retry up to `max_retries`; after exhaustion → log failure |
-| Authentication failure | No retry (credential issue) → log with diagnostic |
+| Transient HTTP error (408, 429, 5xx) | Retry with backoff per the SLA-tier policy (`_SLA_RETRIES` / `_RETRY_BACKOFF`, §2.4) |
+| Network timeout | Retry up to `_max_retries(sla_tier)`; after exhaustion → log failure |
 | Rate limiting (429 with Retry-After) | Respect Retry-After header, then retry |
 | Channel misconfiguration (invalid webhook URL, deleted bot) | No retry → log with config diagnostic |
 
@@ -303,16 +297,16 @@ Every delivery attempt (success or failure) is recorded in `DeliveryLog`:
 ```python
 @dataclass
 class DeliveryLog:
-    id: str                          # "dlog_{uuid8}"
-    subscription_id: str             # FK to Subscription
-    product_id: str | None           # FK to Product (if applicable)
+    """A single delivery attempt record (append-only log)."""
+    log_id: str                        # "dlog_{uuid8}"
+    subscription_id: str               # FK to Subscription
     channel: str
-    recipient: str
-    success: bool
-    attempt_count: int
-    delivered_at: datetime
-    error: str | None = None
-    trace_id: str = ""               # Links to collection trace
+    message_type: str                  # e.g. "digest" | "report" | "alert"
+    status: str                        # "success" | "failed" | "retrying" | "pending" ...
+    attempt_count: int = 0
+    last_attempt: str = ""             # ISO-8601 timestamp (string)
+    error_message: str = ""
+    sla_tier: str = "standard"         # "critical" | "standard" | "bulk"
 ```
 
 ---
@@ -326,15 +320,27 @@ class DeliveryLog:
 ```python
 @dataclass
 class UserProfile:
-    id: str                          # "usr_{uuid8}"
+    """End-user profile with lifecycle status (trial→active→suspended→cancelled)."""
+    user_id: str                       # "usr_{uuid8}" — identity is implicit via user_id (no identity_anchor field in code)
     name: str
-    email: str
-    delivery_preferences: DeliveryPreferences
-    status: UserStatus               # trial | active | suspended | cancelled
-    created_at: datetime
-    updated_at: datetime
-    identity_anchor: str             # "native" | "oauth_provider:{provider}:{sub}"
+    email: str = ""
+    status: str = "trial"              # "trial" | "active" | "suspended" | "cancelled"
+    tier: str = "free"                 # "free" | "premium" | "enterprise"
+    delivery_preferences: dict[str, Any] = field(default_factory=dict)  # freeform dict — no typed DeliveryPreferences class
+    created_at: str = ""               # ISO-8601 (string)
+    updated_at: str = ""
+    trial_ends_at: str = ""
+    trial_started_at: str = ""
+    trial_days: int = 14
+    grace_period_days: int = 7
+    last_login_at: str = ""
+    preferences: dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
+    # Stripe billing fields
+    stripe_customer_id: str = ""
+    stripe_subscription_id: str = ""
 
+# ── Spec-only target models (no dataclass in src/autoinfo/models.py) ──
 @dataclass
 class DeliveryPreferences:
     channels: dict[str, list[ChannelConfig]]  # channel_type → [config per subscription? maybe per user?]
@@ -357,44 +363,59 @@ class QuietHours:
 
 @dataclass
 class Subscription:
-    id: str                          # "sub_{uuid8}"
+    """Subscription tied to a user profile with plan, status, and billing info.
+    CD-024 fields: tier, channels, domains, products, platform_limit, domain_limit,
+    raw_access, processed_access.
+    """
+    subscription_id: str             # "sub_{uuid8}"
     user_id: str                     # FK to UserProfile
-    domain: str
-    topics: list[str]
-    products: list[str]              # ["digest", "report", "tutorial", "presentation"]
-    channels: list[str]              # Channel types for delivery ("smtp", "telegram", ...) — one of the 13 canonical channels
-    schedule: str                    # Cron expression ("0 8 * * 1" = weekly Monday 8AM)
-    status: SubscriptionStatus       # active | paused | cancelled
-    created_at: datetime
-    updated_at: datetime
-    last_delivered_at: datetime | None = None
+    plan: str = "free"               # "free" | "premium" | "enterprise"
+    status: str = "active"           # "active" | "paused" | "cancelled"
+    start_date: str = ""             # ISO-8601 (string)
+    end_date: str = ""
+    auto_renew: bool = True
+    price_monthly: float = 0.0
+    currency: str = "USD"
+    features: dict[str, Any] = field(default_factory=dict)
+    created_at: str = ""             # ISO-8601 (string)
+    updated_at: str = ""
+    tier: str = "free"               # CD-024: product-gating tier
+    channels: list[str] = field(default_factory=list)   # CD-024: 13 canonical channel types
+    domains: list[str] = field(default_factory=list)    # CD-024: subscribed domains
+    products: list[str] = field(default_factory=list)   # CD-024: subscribed products
+    platform_limit: int = 1          # CD-024: max platforms
+    domain_limit: int = 1            # CD-024: max domains
+    raw_access: bool = False         # CD-024: RAW product access
+    processed_access: bool = True    # CD-024: PROCESSED product access
 
 class UserStatus(Enum):
     TRIAL = "trial"
     ACTIVE = "active"
     SUSPENDED = "suspended"
     CANCELLED = "cancelled"
+# Note: spec-only enum — models.py stores UserProfile.status as a plain str; no enum exists in code.
 
 class SubscriptionStatus(Enum):
     ACTIVE = "active"
     PAUSED = "paused"
     CANCELLED = "cancelled"
+# Note: spec-only enum — models.py stores Subscription.status as a plain str.
 ```
 
 > **UserProfile ↔ B1 identity**: `UserProfile` maps to B1 identity. The NL→Config pipeline (B1 NL utterance → Agent parses intent → structured config mutation) creates and updates this profile. See `docs/dev/specs/user-lifecycle-definition.md` §2.1 and §11.3 of this file for the NL→Config pipeline.
 
 #### 4.1.1 Code Reality vs Spec Discrepancies
 
-> **Updated 2026-07-27**: The spec dataclasses above describe the *intended* data model. The actual implementation in `src/autoinfo/models.py` differs in the following ways. These discrepancies should be resolved by implementing the spec model (not by downgrading the spec).
+> **Updated 2026-08-13**: The §4.1 dataclasses above now mirror the actual implementation in `src/autoinfo/models.py`. The table below tracks the remaining target-vs-code gaps.
 
 | Spec Construct | Code Reality | Gap ID | Resolution |
 |---------------|-------------|--------|------------|
 | `DeliveryPreferences` dataclass with typed `channels: dict[str, list[ChannelConfig]]`, `quiet_hours`, `max_daily_digests`, `preferred_format` | `delivery_preferences: dict[str, Any]` — freeform dict with no type enforcement | [CD-019](cross-dimensional-catalog.md#cd-019-quiet-hours-configuration) | Implement typed `DeliveryPreferences`; currently operator must know the expected dict shape |
 | `ChannelConfig` typed class with `channel_type`, `recipient`, `enabled` | **No `ChannelConfig` class exists** — channel config is embedded in the freeform dict or handled ad-hoc | [CD-020](cross-dimensional-catalog.md#cd-020-subscription--channel-linking) | Implement `ChannelConfig`; link to `DeliveryChannel` registry for validation |
 | `QuietHours` dataclass with `start`, `end`, `timezone`, `only_urgent` | **Not implemented** — zero code for quiet hours enforcement | [CD-019](cross-dimensional-catalog.md#cd-019-quiet-hours-configuration) | Implement `QuietHours` and enforcement in `deliver_with_retry()` |
-| `Subscription` with `domain`, `topics`, `products`, `channels`, `schedule` — single unified model tied to a domain | `Subscription` has `plan`, `status`, `price_monthly`, `auto_renew`, `features` — billing-only model, no domain/product/channel linking | [CD-024](cross-dimensional-catalog.md#cd-024-subscription-model-disconnected-layers) | Unify `Subscription` with domain-scoped fields; implement tier→product→channel linking |
+| `Subscription` with `domain`, `topics`, `schedule` linking (target) | **Partially resolved** — `Subscription` (`models.py`) now carries the CD-024 fields `tier`, `channels`, `domains`, `products`, `platform_limit`, `domain_limit`, `raw_access`, `processed_access`, and `check_access()` gates tier→product. Remaining gap: self-service upgrade UX (plus `schedule`/`topics` subscription linking) | [CD-024](cross-dimensional-catalog.md#cd-024-subscription-model-disconnected-layers) | Fields exist; remaining gap: self-service upgrade UX |
 | `UserProfile.identity_anchor` for cross-platform identity resolution | `UserProfile` has `stripe_customer_id`, `stripe_subscription_id`, `tier` — identity is implicit via `user_id` UUID | [CD-021](cross-dimensional-catalog.md#cd-021-identity-anchor) | Add `identity_anchor` field to `UserProfile` |
-| `UserProfile.tier` controls data retention | `Subscription.plan` controls billing tier | `UserProfile.tier` + `Subscription.plan` are **3 disconnected layers** — no code links tier ↔ plan ↔ product access | [CD-024](cross-dimensional-catalog.md#cd-024-subscription-model-disconnected-layers) | Unify as single source of truth: `Subscription.plan` determines `UserProfile.tier` and unlocked `ProductTemplate.access_level` |
+| `UserProfile.tier` controls data retention | **Partially resolved** — `Subscription.tier` with `channels`/`domains`/`products`/`platform_limit`/`domain_limit`/`raw_access`/`processed_access` now drives product access via `check_access()`; `UserProfile` carries its own `tier` + lifecycle `status` (trial→active→suspended→cancelled). Remaining gap: self-service upgrade UX (no end-user-facing free→paid transition flow) | [CD-024](cross-dimensional-catalog.md#cd-024-subscription-model-disconnected-layers) | Core gating resolved; remaining gap: self-service upgrade UX |
 
 **Implication**: The MCP tool `update_preferences` currently writes into a `dict[str, Any]` with no schema validation. Any key can be set; invalid keys are silently stored. Channel configurations are not validated against the `DeliveryChannel` registry. Operators and agents must manually ensure the dict structure matches expected shape.
 
@@ -429,22 +450,23 @@ class SubscriptionStatus(Enum):
 
 | Tool | Description |
 |------|-------------|
-| `create_end_user(name, email, channels, products, trial_days=14)` | Create user with default trial subscription |
-| `get_end_user(user_id)` | Get user profile + subscription summary |
-| `update_end_user(user_id, **fields)` | Update delivery preferences, status, etc. |
-| `list_end_users(domain, status, page, limit)` | Paginated user list with filters |
-| `get_subscription(subscription_id)` | Get subscription details |
-| `update_subscription(subscription_id, **fields)` | Pause, resume, change topics/products/channels |
-| `deactivate_end_user(user_id, reason)` | Suspend or cancel user; trigger notification |
-| `get_delivery_log(user_id, limit)` | Recent delivery history for a user |
-| `send_test_delivery(user_id, channel)` | Send test product through a specific channel |
+| `send_to_enduser(end_user_id, product_type, product_id, channel)` | Dispatch a product to an end user through a delivery channel. Looks up the user profile, resolves the channel, and dispatches via the `DeliveryChannel` framework (channel falls back to user preferences, then smtp) |
+| `get_enduser_history(end_user_id, limit)` | Delivery history for an end-user — looks up subscriptions and queries the delivery log for delivery attempts (mirrors the portal CLI history command) |
+| `get_enduser_products(end_user_id)` | Products (subscriptions) for an end-user — returns plan, status, dates, and auto-renew flag (mirrors the portal CLI subscription lookup) |
+| `query_delivery_log(subscription_id, status, from_date, to_date, limit)` | Query the delivery log with optional filters (subscription_id, status, date range) |
+| `get_delivery_log(status, domain, limit, offset)` | Query delivery history with optional filters (status, domain) and pagination |
+| `activate_trial(end_user_id, days=14)` | Activate or reset trial period for an end-user. Sets `trial_started_at` to now with configurable duration (default 14 days); sets user status to `trial` if not active |
+| `check_trial_expiry(end_user_id)` | Check trial status for an end-user. Returns `days_remaining`, `status` (expired/active/no_trial), `trial_started_at`, and `trial_days` |
+| `update_preferences(end_user_id, preferences)` | Merge preferences into stored preferences for an end-user (format, delivery_channel, timezone, max_items) — deep-merges with existing preferences |
+| `get_preferences(end_user_id)` | Return stored preferences for an end-user (dict with user_id and preferences object) |
+| `get_subscription_status(end_user_id)` | Return subscription status for an end-user |
 
 ### 4.5 Implementation Notes (v1)
 
 | Concern | Decision |
 |---------|----------|
 | **Persistence** | SQLite via `sqlite3` module. User table, Subscription table, DeliveryLog table. Linked to KB via trace_id / user_id. |
-| **Trial management** | Operator-managed. MCP tool `create_end_user` sets `trial_end = created_at + trial_days`. No automatic expiry in v1 (operator checks manually or via `list_end_users(status="trial")`). |
+| **Trial management** | Operator-managed. MCP tool `activate_trial` sets `trial_started_at` + `trial_days`. No automatic expiry in v1 (operator checks manually via `check_trial_expiry`). |
 | **Quiet hours enforcement** | `deliver_with_retry()` checks `DeliveryPreferences.quiet_hours` before sending. If inside quiet window and `only_urgent=False`, queue for next window. |
 | **Channel config per user** | Each channel type can appear once per user with different recipient (e.g., two email addresses = two email ChannelConfig entries). |
 | **Subscription→Channel linking** | `Subscription.channels` lists channel types. The actual recipient config comes from `UserProfile.delivery_preferences.channels[channel_type]`. This allows operator to change user's email address without updating every subscription. |
@@ -636,7 +658,7 @@ While v1 does not implement explicit consumption tracking for all channels, the 
 | **Subscription pause/cancel** | Subscription state machine | ✅ High (explicit user action) |
 | **Missing quiet hours override** | `only_urgent=False` + no manual check | 🔮 Low (inferred disengagement) |
 
-**v1 Retention Strategy**: When `list_end_users(status="trial")` returns users approaching trial end, operator manually assesses engagement using available signals above. No automated churn prediction (deferred to v2+ LTV modelling).
+**v1 Retention Strategy**: When `check_trial_expiry(end_user_id)` flags a user approaching trial end (low `days_remaining`), operator manually assesses engagement using available signals above. No automated churn prediction (deferred to v2+ LTV modelling).
 
 ### 5.6 Product Lifecycle MCP Tools
 

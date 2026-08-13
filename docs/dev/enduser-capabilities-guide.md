@@ -8,7 +8,7 @@ AutoInfo is a domain-agnostic information tracking & knowledge base platform: yo
 
 AutoInfo splits into two halves:
 
-**Raw data gathering.** AutoInfo pulls items from over 30 collector handlers across 29 source types. Anything collected lands in the 3-tier knowledge base (01-Raw first) with full source provenance.
+**Raw data gathering.** AutoInfo pulls items from over 30 collector handlers across 29 source types. Anything collected lands in the 4-tier knowledge base (01-Raw sole entry; 00-Inbox deprecated) with full source provenance.
 
 **Processed data generation.** Once raw content sits in the knowledge base, AutoInfo runs LLM extraction (TL;DR, key points, entities, relevance), then generates finished products: digests, reports, tutorials, presentations, exports, translations, and CEFR-classified or simplified content.
 
@@ -129,10 +129,10 @@ Supported import formats: `markdown` (YAML+Markdown frontmatter), `json`, `csv`,
 
 ## 3. The Knowledge Base
 
-Everything collected flows through a 3-tier pipeline:
+Everything collected flows through a 4-tier pipeline (00-Inbox deprecated → 01-Raw → 02-Draft → 03-Wiki):
 
 ```
-01-Raw → 02-Draft → 03-Wiki
+00-Inbox (deprecated) → 01-Raw → 02-Draft → 03-Wiki
 ```
 
 - **01-Raw** is the sole entry point for collected content. Every item keeps complete source provenance (`source_url`, `source_type`, `source_platform`).
@@ -187,7 +187,7 @@ This runs FTS5 retrieval plus LLM synthesis with source citations.
 | Product | What you get | Formats |
 |---------|--------------|---------|
 | Digest | Periodic roundup of the latest collected content | markdown, html, json, agent (MCP also: epub, audiobook) |
-| Report | Structured analysis, typed by `report_type` | markdown, json, agent (MCP also: html, audio, epub, audiobook) |
+| Report | Structured analysis, typed by `report_type` | markdown, json, agent (MCP also: html, audio, video, epub, audiobook) |
 | Tutorial | Step-by-step teaching content | markdown (MCP: md, agent) |
 | Presentation | Slide-ready outline | markdown (MCP: md, agent) |
 | Export | The knowledge base or a domain, portable | json, markdown, sqlite, pdf, bundle, agent (MCP also: rss, csv, graphml, sitemap, epub, mobi) |

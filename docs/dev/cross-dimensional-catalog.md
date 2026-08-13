@@ -14,7 +14,7 @@
 >
 > **Cell status:** 🔴 = Never Designed (gap), 🟡 = Spec'd Not Impl / Partially Impl, 🟢 = Spec Outdated, 🟠 = Architecture Gap
 >
-> **Last updated:** 2026-08-11 (output-quality-mega: premium-briefing/enterprise-briefing differentiated rendering + per-product LLM synthesis fields + product selection on MCP/CLI + `filter_custom_fields` faceted search over `product_analysis` KB metadata + `fetch_depth` fulltext; scenarios 65→67 — see "2026-08-11 更新" section)
+> **Last updated:** 2026-08-12 (output-quality-mega: premium-briefing/enterprise-briefing differentiated rendering + per-product LLM synthesis fields + product selection on MCP/CLI + `filter_custom_fields` faceted search over `product_analysis` KB metadata + `fetch_depth` fulltext; scenarios 65→67→68 — see "2026-08-11 更新" section)
 
 ---
 
@@ -51,9 +51,9 @@
 
 | User Type | Lifecycle Stages |
 |-----------|-----------------|
-| **B1 End User** (paying customer) | B1.1 Discover → B1.2 Trial → B1.3 Subscribe → B1.4 Consume → B1.5 Renew → B1.6 Churn |
-| **B2 Direct User** (agent/MCP operator) | B2.1 Discover → B2.2 Connect → B2.3 Configure → B2.4 Operate → B2.5 Monitor → B2.6 Update |
-| **B3 Director User** (human commander) | B3.1 Define → B3.2 Configure → B3.3 Monitor → B3.4 Iterate → B3.5 Scale |
+| **B1 End User** (paying customer) | B1.1 Discover → B1.2 Subscribe → B1.3 Onboard → B1.4 Consume → B1.5 Modify Config → B1.6 Churn → B1.7 Reactivate |
+| **B2 Direct User** (agent/MCP operator) | B2.1 Discover → B2.2 Connect → B2.3 Configure → B2.4 Operate → B2.5 Monitor → B2.6 Report |
+| **B3 Director User** (human commander) | B3.1 Configure → B3.2 Monitor → B3.3 Intervene |
 
 ### The Matrix: Value Delivery Score
 
@@ -61,99 +61,99 @@ Each cell: 🟢 = Fully delivered / complete, 🟡 = Partially delivered / gaps 
 
 #### A1 Collection
 
-| Lifecycle → | B1.1 Discover | B1.2 Trial | B1.3 Subscribe | B1.4 Consume | B1.5 Renew | B1.6 Churn |
+| Lifecycle → | B1.1 Discover | B1.2 Subscribe | B1.3 Onboard | B1.4 Consume | B1.5 Modify Config | B1.6 Churn |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
 | **A1 Collection** | ⚪ | 🟢 Trial user gets same collection | ⚪ | 🟢 Content is flowing | ⚪ | ⚪ |
 
-| Lifecycle → | B2.1 Discover | B2.2 Connect | B2.3 Configure | B2.4 Operate | B2.5 Monitor | B2.6 Update |
+| Lifecycle → | B2.1 Discover | B2.2 Connect | B2.3 Configure | B2.4 Operate | B2.5 Monitor | B2.6 Report |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
 | **A1 Collection** | 🟢 `list_available_platforms` | 🟢 MCP tools auto-discovered | 🟢 `add_source`, `add_topic`, `add_schedule` | 🟢 `collect_sources` (with `fetch_depth` threaded through dispatch + fulltext for unpaywall/RSS/YouTube/GDELT, 2026-08-11), `process_collection`, `batch_run` | 🟢 Cron health with heartbeat, missed-detection, alerts | 🟢 Source config is mutable |
 
-| Lifecycle → | B3.1 Define | B3.2 Configure | B3.3 Monitor | B3.4 Iterate | B3.5 Scale |
+| Lifecycle → | B3.1 Configure | B3.2 Monitor | B3.3 Intervene | B3.4 Iterate | B3.5 Scale |
 |-------------|:---:|:---:|:---:|:---:|:---:|
 | **A1 Collection** | 🟢 `add_domain`, `add_source` | 🟢 `activate_domain`, source health | 🟡 No collection pipeline dashboard | 🟢 Sources are editable | 🟡 Domain-less collect + batch_run orchestration; no rate limiting |
 
 #### A2 Extraction
 
-| Lifecycle → | B1.1 Discover | B1.2 Trial | B1.3 Subscribe | B1.4 Consume | B1.5 Renew | B1.6 Churn |
+| Lifecycle → | B1.1 Discover | B1.2 Subscribe | B1.3 Onboard | B1.4 Consume | B1.5 Modify Config | B1.6 Churn |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
 | **A2 Extraction** | ⚪ | 🟢 Trial user gets processed content | ⚪ | 🟢 LLM extraction works | ⚪ | ⚪ |
 
-| Lifecycle → | B2.1 Discover | B2.2 Connect | B2.3 Configure | B2.4 Operate | B2.5 Monitor | B2.6 Update |
+| Lifecycle → | B2.1 Discover | B2.2 Connect | B2.3 Configure | B2.4 Operate | B2.5 Monitor | B2.6 Report |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
 | **A2 Extraction** | 🟢 `get_domain_schema`, `list_available_models` | 🟢 MCP tools | 🟢 Per-task LLM config, custom extraction fields | 🟢 `process_collection`, quality gates G0-G5 | 🟢 Async job_id polling with progress tracking | 🟢 Config via MCP tools |
 
-| Lifecycle → | B3.1 Define | B3.2 Configure | B3.3 Monitor | B3.4 Iterate | B3.5 Scale |
+| Lifecycle → | B3.1 Configure | B3.2 Monitor | B3.3 Intervene | B3.4 Iterate | B3.5 Scale |
 |-------------|:---:|:---:|:---:|:---:|:---:|
 | **A2 Extraction** | 🟢 Custom extraction field schema | 🟢 Per-domain LLM config | 🟡 No extraction quality dashboard | 🟢 Gates are configurable | 🟢 Batch processing via batch_size + batch_run MCP tool |
 
 #### A3 Knowledge Base
 
-| Lifecycle → | B1.1 Discover | B1.2 Trial | B1.3 Subscribe | B1.4 Consume | B1.5 Renew | B1.6 Churn |
+| Lifecycle → | B1.1 Discover | B1.2 Subscribe | B1.3 Onboard | B1.4 Consume | B1.5 Modify Config | B1.6 Churn |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
 | **A3 Knowledge Base** | ⚪ | 🟡 KB is usable but no tenant isolation | ⚪ | 🟢 Search, Q&A, graph | ⚪ | 🟢 GDPR export and deletion MCP tools exist |
 
-| Lifecycle → | B2.1 Discover | B2.2 Connect | B2.3 Configure | B2.4 Operate | B2.5 Monitor | B2.6 Update |
+| Lifecycle → | B2.1 Discover | B2.2 Connect | B2.3 Configure | B2.4 Operate | B2.5 Monitor | B2.6 Report |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
 | **A3 Knowledge Base** | 🟢 KB tools listed | 🟢 Full KB tool set | 🟢 `reindex_kb`, `list_kb_tier` | 🟢 `create_kb_draft`, `search_knowledge_base` (with `filter_custom_fields` faceted filter over `custom_fields["product_analysis"]` metadata, 2026-08-11), `query_knowledge_graph` | 🟢 `compare_versions` registered, `merge_items` partially | 🟢 KB is mutable (soft-delete, restore) |
 
-| Lifecycle → | B3.1 Define | B3.2 Configure | B3.3 Monitor | B3.4 Iterate | B3.5 Scale |
+| Lifecycle → | B3.1 Configure | B3.2 Monitor | B3.3 Intervene | B3.4 Iterate | B3.5 Scale |
 |-------------|:---:|:---:|:---:|:---:|:---:|
 | **A3 Knowledge Base** | 🟢 Wiki is append-only per spec | 🟢 Promote/reject Draft CLI | 🟡 No KB quality dashboard | 🟢 Items can be flagged, deprecated | 🔴 No multi-tenant KB isolation |
 
 #### A4 Products
 
-| Lifecycle → | B1.1 Discover | B1.2 Trial | B1.3 Subscribe | B1.4 Consume | B1.5 Renew | B1.6 Churn |
+| Lifecycle → | B1.1 Discover | B1.2 Subscribe | B1.3 Onboard | B1.4 Consume | B1.5 Modify Config | B1.6 Churn |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
 | **A4 Products** | 🔴 No product catalog / storefront | 🔴 No trial product preview | 🟢 8 templates (5 free + 2 premium + 1 enterprise) with free/premium/enterprise tiers, `check_access` gates delivery (B24 column premium + D11 magazine-digest added 2026-08-05; premium-briefing/enterprise-briefing now render differentiated layouts with per-product LLM synthesis fields implications/risks/action_required/key_metrics, 2026-08-11) | 🟡 Products deliver but lifecycle is not tracked | 🔴 No renewal product regeneration | 🔴 No product archive on churn |
 
-| Lifecycle → | B2.1 Discover | B2.2 Connect | B2.3 Configure | B2.4 Operate | B2.5 Monitor | B2.6 Update |
+| Lifecycle → | B2.1 Discover | B2.2 Connect | B2.3 Configure | B2.4 Operate | B2.5 Monitor | B2.6 Report |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
 | **A4 Products** | 🟢 `list_products`, `get_product` MCP exists | 🟢 MCP tools | 🟢 Product templates exist (RAW, PROCESSED); product selection via `generate_report`/`generate_digest` `product` params (MCP) + `--product` (CLI), 2026-08-11 | 🟡 Products are generated with per-product routing (premium-briefing/enterprise-briefing/magazine-digest render through own template families, 2026-08-11) but lifecycle state machine is 0% implemented | 🔴 No product engagement metrics | 🟡 Template config is mutable via code |
 
-| Lifecycle → | B3.1 Define | B3.2 Configure | B3.3 Monitor | B3.4 Iterate | B3.5 Scale |
+| Lifecycle → | B3.1 Configure | B3.2 Monitor | B3.3 Intervene | B3.4 Iterate | B3.5 Scale |
 |-------------|:---:|:---:|:---:|:---:|:---:|
 | **A4 Products** | 🟢 Product types defined (RAW/PROCESSED) | 🟢 Free/premium/enterprise product templates with `check_access` gating | 🔴 No product delivery dashboard | 🔴 No A/B testing, no template iteration | 🔴 No product catalog scaling strategy |
 
 #### A5 Delivery
 
-| Lifecycle → | B1.1 Discover | B1.2 Trial | B1.3 Subscribe | B1.4 Consume | B1.5 Renew | B1.6 Churn |
+| Lifecycle → | B1.1 Discover | B1.2 Subscribe | B1.3 Onboard | B1.4 Consume | B1.5 Modify Config | B1.6 Churn |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
 | **A5 Delivery** | ⚪ | 🟢 Trial delivery works (same channels) | 🟡 Subscription→channel linking is disconnected | 🟡 Delivery works but no read tracking | 🟡 Renewal delivery continues | 🔴 No cancellation delivery receipt |
 
-| Lifecycle → | B2.1 Discover | B2.2 Connect | B2.3 Configure | B2.4 Operate | B2.5 Monitor | B2.6 Update |
+| Lifecycle → | B2.1 Discover | B2.2 Connect | B2.3 Configure | B2.4 Operate | B2.5 Monitor | B2.6 Report |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
 | **A5 Delivery** | 🟢 Delivery tools listed | 🟢 MCP tools | 🟢 `send_to_enduser`, channel config | 🟡 Delivery works, `query_delivery_log` exists | 🟢 `get_channel_health` MCP with 13 channels | 🟢 Config is mutable |
 
-| Lifecycle → | B3.1 Define | B3.2 Configure | B3.3 Monitor | B3.4 Iterate | B3.5 Scale |
+| Lifecycle → | B3.1 Configure | B3.2 Monitor | B3.3 Intervene | B3.4 Iterate | B3.5 Scale |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
 | **A5 Delivery** | 🟢 13 delivery channels | 🟢 Channel config via webhook/schedule | 🟡 No unified delivery dashboard | 🟢 Adapters are modular | 🟡 DeliveryLog with SLA tracking, `get_channel_health` checks all 13 channels, no auto-failover |
 
 #### A6 Consumption
 
-| Lifecycle → | B1.1 Discover | B1.2 Trial | B1.3 Subscribe | B1.4 Consume | B1.5 Renew | B1.6 Churn |
+| Lifecycle → | B1.1 Discover | B1.2 Subscribe | B1.3 Onboard | B1.4 Consume | B1.5 Modify Config | B1.6 Churn |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
 | **A6 Consumption** | ⚪ | ⚪ | ⚪ | 🟢 `ConsumptionEvent` + `ConsumptionStore` with auto-record on delivery (delivered/opened/clicked) | 🟡 Events auto-recorded, no renewal-specific analytics | 🔴 No churn analysis |
 
-| Lifecycle → | B2.1 Discover | B2.2 Connect | B2.3 Configure | B2.4 Operate | B2.5 Monitor | B2.6 Update |
+| Lifecycle → | B2.1 Discover | B2.2 Connect | B2.3 Configure | B2.4 Operate | B2.5 Monitor | B2.6 Report |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
 | **A6 Consumption** | ⚪ | ⚪ | ⚪ | 🟡 `ConsumptionStore` exists but no dedicated MCP tool for querying | 🔴 No engagement metrics dashboard | ⚪ |
 
-| Lifecycle → | B3.1 Define | B3.2 Configure | B3.3 Monitor | B3.4 Iterate | B3.5 Scale |
+| Lifecycle → | B3.1 Configure | B3.2 Monitor | B3.3 Intervene | B3.4 Iterate | B3.5 Scale |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
 | **A6 Consumption** | 🔴 No consumption KPIs defined | ⚪ | 🔴 No consumption dashboard | 🔴 No data-driven iteration loop | 🔴 No consumption-based scaling signals |
 
 #### A7 Operations
 
-| Lifecycle → | B1.1 Discover | B1.2 Trial | B1.3 Subscribe | B1.4 Consume | B1.5 Renew | B1.6 Churn |
+| Lifecycle → | B1.1 Discover | B1.2 Subscribe | B1.3 Onboard | B1.4 Consume | B1.5 Modify Config | B1.6 Churn |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
 | **A7 Operations** | ⚪ | ⚪ | 🟢 Billing/cost operations | ⚪ | ⚪ | 🟢 Soft-delete, retention, GDPR export |
 
-| Lifecycle → | B2.1 Discover | B2.2 Connect | B2.3 Configure | B2.4 Operate | B2.5 Monitor | B2.6 Update |
+| Lifecycle → | B2.1 Discover | B2.2 Connect | B2.3 Configure | B2.4 Operate | B2.5 Monitor | B2.6 Report |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
 | **A7 Operations** | 🟢 Diagnostics tools listed | 🟢 `diagnose_system` | 🟢 `set_budget_thresholds`, `set_gate_config` | 🟢 Cost metering, audit log, trace | 🟢 Prometheus metrics at `/metrics`, `get_prometheus_metrics` MCP, cron health heartbeat | 🟢 System is configurable at runtime |
 
-| Lifecycle → | B3.1 Define | B3.2 Configure | B3.3 Monitor | B3.4 Iterate | B3.5 Scale |
+| Lifecycle → | B3.1 Configure | B3.2 Monitor | B3.3 Intervene | B3.4 Iterate | B3.5 Scale |
 |-------------|:---:|:---:|:---:|:---:|:---:|:---:|
 | **A7 Operations** | 🟡 RPO/RTO loosely defined in ops-runbook (1h snapshots, RTO estimate); no formal targets | 🟢 Config via MCP/CLI | 🟡 No live operations dashboard | 🟢 Backup/restore scripts exist (`backup-db.sh`, `restore-db.sh`, `make backup`) | 🔴 No horizontal scaling strategy, SQLite is single-node |
 
@@ -793,8 +793,8 @@ This section documents V1 feature completions (v1.8.1–v1.8.4, landed 2026-08-0
 
 **No matrix cell flips.** The 119-cell matrix (A1-A7 × 17 lifecycle stages); 42 is the CD gap count) evaluates pipeline-stage completeness against user-lifecycle stages. The features above are enhancements within already-evaluated stages, not new stages or lifecycle transitions. Two cells arguably gained strength without changing status:
 
-- **A4 Products (B2.4 Operate, B2.6 Update):** RAW product `variants` field (E11) makes the RAW/PROCESSED product model more expressive. The cells remain 🟡 (product lifecycle state machine still 0% implemented — CD-017/CD-022 open).
-- **A5 Delivery (B3.1 Define, B3.5 Scale):** Podcast RSS channel (C11) adds a 13th delivery channel with audio persistence. The cells remain 🟢 (delivery channels were already 🟢; podcast RSS is an additive channel, not a structural change).
+- **A4 Products (B2.4 Operate, B2.6 Report):** RAW product `variants` field (E11) makes the RAW/PROCESSED product model more expressive. The cells remain 🟡 (product lifecycle state machine still 0% implemented — CD-017/CD-022 open).
+- **A5 Delivery (B3.1 Configure, B3.5 Scale):** Podcast RSS channel (C11) adds a 13th delivery channel with audio persistence. The cells remain 🟢 (delivery channels were already 🟢; podcast RSS is an additive channel, not a structural change).
 
 ### Open CD gaps unaffected
 
@@ -804,9 +804,9 @@ All open CD gaps (CD-001..CD-042 minus the 12 already resolved/merged) remain op
 
 ## 2026-08-03 更新 — Agent-native validation toolset
 
-Landed after the 2026-08-02 audit: `list_validation_scenarios` / `run_validation_scenario` MCP tools (src/autoinfo/mcp/server.py:9586,9594) backed by a standalone executor (src/autoinfo/mcp/validation.py). 67 scenario YAMLs (61 functional + 6 regression; 65→67 on 2026-08-11 with output-agent-interaction + regression-product-routing) in src/autoinfo/mcp/scenarios/ cover 145/145 MCP tools (145 MCP tools), all 28 CLI groups, and 8 REST endpoints (verified via scripts/coverage_audit.py — MISSING: 0). Scenarios execute through the MCP surface plus real CLI subprocess and REST HTTP steps; `llm_assert` steps run real model calls; env-gated steps report `unconfigured` (Director User BYOK obligation). Scenario authoring contract: docs/dev/validation-scenario-contract.md.
+Landed after the 2026-08-02 audit: `list_validation_scenarios` / `run_validation_scenario` MCP tools (src/autoinfo/mcp/server.py:9586,9594) backed by a standalone executor (src/autoinfo/mcp/validation.py). 68 scenario YAMLs (62 functional + 6 regression; 65→67→68 on 2026-08-11→13 with output-agent-interaction + regression-product-routing) in src/autoinfo/mcp/scenarios/ cover 145/145 MCP tools (145 MCP tools), all 28 CLI groups, and 8 REST endpoints (verified via scripts/coverage_audit.py — MISSING: 0). Scenarios execute through the MCP surface plus real CLI subprocess and REST HTTP steps; `llm_assert` steps run real model calls; env-gated steps report `unconfigured` (Director User BYOK obligation). Scenario authoring contract: docs/dev/validation-scenario-contract.md.
 
-**Cell-impact**: no matrix cell flips — validation is a B2/B3 operational capability strengthening A7 Operations (B2.5 Monitor) and the B2 lifecycle (validation of collection/extraction/delivery), not a new pipeline stage or user lifecycle transition. Tool count is now 141 (was 139 at the 08-02 audit).
+**Cell-impact**: no matrix cell flips — validation is a B2/B3 operational capability strengthening A7 Operations (B2.5 Monitor) and the B2 lifecycle (validation of collection/extraction/delivery), not a new pipeline stage or user lifecycle transition. Tool count is now 145 (was 139 at the 08-02 audit).
 
 ---
 
@@ -829,8 +829,8 @@ Landed 2026-08-05 (M0-M7 merged plan waves). These add collectors, demo domains,
 
 ### Cell-impact statement
 
-- **A4 Products (B1.3 Subscribe, B2.3 Configure, B3.2 Configure):** `PRODUCT_TEMPLATES` grew 6→8 rows (column premium + magazine-digest free). The B1.3 cell text "6 templates with free/premium/enterprise tiers" updated to **8 templates**. Cells remain 🟡/🟢 as before — the product lifecycle state machine (CD-017/CD-022) is still 0% implemented.
-- **A1 Collection (B2.3 Configure, B3.2 Configure):** +3 handler types (akshare/sec_edgar/edx_sitemap, VALID_SOURCE_TYPES 26→29) and +4 demo domains (9→13). Cells remain 🟢 (source config already fully delivered).
+- **A4 Products (B1.3 Onboard, B2.3 Configure, B3.2 Monitor):** `PRODUCT_TEMPLATES` grew 6→8 rows (column premium + magazine-digest free). The B1.3 cell text "6 templates with free/premium/enterprise tiers" updated to **8 templates**. Cells remain 🟡/🟢 as before — the product lifecycle state machine (CD-017/CD-022) is still 0% implemented.
+- **A1 Collection (B2.3 Configure, B3.2 Monitor):** +3 handler types (akshare/sec_edgar/edx_sitemap, VALID_SOURCE_TYPES 26→29) and +4 demo domains (9→13). Cells remain 🟢 (source config already fully delivered).
 - **B2 lifecycle (B2.3 Configure):** CLI parity groups (topic-group, import-kb, query-collected, alert-rules, agent-callback) extend CLI/MCP parity — 23→28 CLI groups. Cells remain 🟢.
 
 ### Open CD gaps unaffected
@@ -854,11 +854,11 @@ Landed 2026-08-11 (output-quality-mega plan). Product-template routing, per-prod
 | **Product-analysis KB metadata** | `kb.py` `update_entry_metadata`; output `_persist_product_analysis_to_kb` | Product-derived analysis persisted to KB entry `custom_fields["product_analysis"]` (implications/risks/action_required/key_metrics) via the existing custom_fields metadata dict — no schema/rule change. |
 | **Faceted filter over custom fields** | `kb.py` `search_fts5`/`search_knowledge_base` `filter_custom_fields`; MCP `search_knowledge_base` | New faceted filter key (dot-path into `custom_fields`, e.g. `product_analysis.action_required`); empty value matches "exists and non-empty", other values match equality. No new MCP tool, no new store. |
 | **Content depth: fetch_depth + fulltext** | `collect.py` dispatch; `collectors/{unpaywall,rss,youtube,gdelt}.py` | `fetch_depth` threaded through source dispatch; unpaywall/RSS/YouTube/GDELT fulltext retrieval (deeper content). |
-| **2 new validation scenarios** | `scenarios/output-agent-interaction.yaml`; `scenarios/regression/regression-product-routing.yaml` | Scenarios 65→67 (61 functional + 6 regression): (a) end-to-end agent interaction — generate premium-briefing → filter KB by `action_required` → `query_collected` with citations; (b) product-template routing regression guard (differentiated sections must render). |
+| **2 new validation scenarios** | `scenarios/output-agent-interaction.yaml`; `scenarios/regression/regression-product-routing.yaml` | Scenarios 65→67→68 (62 functional + 6 regression): (a) end-to-end agent interaction — generate premium-briefing → filter KB by `action_required` → `query_collected` with citations; (b) product-template routing regression guard (differentiated sections must render). |
 
 ### Cell-impact statement
 
-- **A4 Products (B1.3 Subscribe, B2.3 Configure, B2.4 Operate):** premium-briefing/enterprise-briefing now render differentiated layouts with per-product LLM synthesis fields; product selection exposed via MCP `product` params and CLI `--product`; magazine-digest routed through the digest path. The B1.3/B2.3 cells stay 🟢 (tiered templates were already delivered); B2.4 stays 🟡 — generation is now per-product routed, but the product lifecycle state machine (CD-017/CD-022) remains 0% implemented.
+- **A4 Products (B1.3 Onboard, B2.3 Configure, B2.4 Operate):** premium-briefing/enterprise-briefing now render differentiated layouts with per-product LLM synthesis fields; product selection exposed via MCP `product` params and CLI `--product`; magazine-digest routed through the digest path. The B1.3/B2.3 cells stay 🟢 (tiered templates were already delivered); B2.4 stays 🟡 — generation is now per-product routed, but the product lifecycle state machine (CD-017/CD-022) remains 0% implemented.
 - **A3 Knowledge Base (B2.4 Operate):** `filter_custom_fields` makes product-analysis metadata (`custom_fields["product_analysis"]`) queryable/filterable — agent-format output is now queryable end-to-end (generate → filter → query). Cell stays 🟢.
 - **A1 Collection (B2.4 Operate):** `fetch_depth` + fulltext retrieval (unpaywall/RSS/YouTube/GDELT) deepen collected content. Cell stays 🟢.
 
@@ -923,7 +923,7 @@ All open CD gaps (CD-001..CD-042 minus resolved/merged) remain open. The format-
 | A7 | 机构金融数据 | ✅ 部分落地（2026-08-05）：`akshare` 专有 handler（`[akshare]` extra，A 股/港股 EOD+公告）+ cninfo 巨潮公告 + Wind Alice 个人版文档化（`sources-gap-closure` 场景覆盖类型注册）；tick/终端级仍无解 | Wind 账号注册（手机号实名）；tick/终端级无解 |
 | A20 | 微博 / 抖音 | ⚠️ 文档化路径（2026-08-05）：Bluesky/Mastodon 源已落地（general-news 域 http_api `json_path`），微博 RSSHub cookie 路由、抖音 hotsearch 为文档化待办 | 需预算决策 / 反爬维护 |
 | A28 | TikTok | Research API 学术审核 / Display API 资质 | 流程门槛 |
-| E15 | A2A 原生协议 | 代码实现（MCP 141 工具已覆盖 Agent 对接） | 生态未成熟 |
+| E15 | A2A 原生协议 | 代码实现（MCP 145 工具已覆盖 Agent 对接） | 生态未成熟 |
 | B23 | 电子书/音频书 | ✅ 已完成（2026-08-04）：`src/autoinfo/output/ebook.py` — EPUB3（ebooklib，xhtml+CJK `set_language`）+ MOBI（calibre `--mobi-file-type=both` KF8 承载中文）+ audiobook（`_render_audio` 分章 TTS→章节 MP3/ZIP/CHAP-CTOC） | 已从 V2 移出（用户指定要做，H6 第 1 批完成） |
 | A19-知乎 | 知乎采集 | ⚠️ 部分落地（2026-08-05）：知乎日报 JSON API（免鉴权）+ 得到 RSSHub `/dedao/*` + wewe-rss/wechat2rss（general-news 域源配置）；热榜/答案仍需 cookie 路由 | 热榜级维护成本高（日报级零维护） |
 | C10 | 移动 App | PWA + 微信小程序替代 App Store 分发 | 中-高成本 |

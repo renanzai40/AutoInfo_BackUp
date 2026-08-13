@@ -58,6 +58,7 @@ Raw Item ─→ [G0][G1][G2][G3] ─→ 01-Raw KB ─→ LLM Extract ─→ 02-D
 |------|----------|---------------|----------------|------------------------------|----------|
 | **G0: Schema integrity** | 🔴 Hard | Entry structure, mandatory fields (`source_url`, `source_type`, `source_platform`), frontmatter validity | Retry once (re-parse) | Block item; log full parse diagnostics | 🔴 P0 |
 | **G1: Source authority** | 🟡 Soft | Source quality tier check. Items from Tier 3+ flagged. User's minimum tier enforced. Computes a deterministic `source_score` (0-100) from `quality_tier` via `SOURCE_TIER_SCORE_MAP` (tier1=90, tier2=70, tier3=50, tier4=30) — see `src/autoinfo/quality.py`. The `quality_tier` is propagated from source config at collect time (`source_config.quality_tier` takes precedence over `item.quality_tier`). The score map is overridable via `QualityGateConfig.source_score_map`. The resulting `source_score` is persisted on the `KBEntry` and surfaced in search results (E9). | No retry (tier is static) | Hide from default view; store with warning flag | 🔴 P0 |
+| **G1-ToS: Terms-of-Service Compliance (F46)** | 🟡 Soft | ToS compliance check against the source's quality tier → ToS map (`_TIER_TOS_MAP` in `src/autoinfo/quality.py`, gate `G1TosCompliance`, `gate_name` `G1-TosCompliance`): Open/Licensed/Restricted/Sensitive tiers map to their ToS obligations (attribution, output controls); violations are flagged, never block. | No retry (static tier→ToS map) | Flag item with ToS violation detail; store with warning flag | 🟡 P1 |
 | **G2: Dedup** | 🟡 Soft | URL exact match + fuzzy title match (within configurable window, default 30 days). | No retry (deterministic) | Skip duplicate; log "already collected [date]" | 🔴 P0 |
 | **G3: Relevance scoring** | 🟡 Soft | LLM-based relevance score against user's topics and keywords. Score 0-100. | Retry 2x with different model | Below threshold → archived (stored but not shown) | 🔴 P0 |
 | **G4: Summary factual consistency** | 🔴 Hard | LLM verifies: does the generated summary contradict the source text? | Retry 3x with escalating context (different model each retry) | Block item; flag for human review with full diff | 🟡 P1 |
@@ -160,7 +161,7 @@ quality_gates:
 
 ## 8. ErrorCode & Error Response System
 
-The MCP server uses a unified error response system (`src/autoinfo/mcp/errors.py`) that provides consistent error classification across all 145 MCP tools. The `ErrorCode` enum (28 values) covers all known failure modes and includes seven codes added since v1.8:
+The MCP server uses a unified error response system (`src/autoinfo/mcp/errors.py`) that provides consistent error classification across all 145 MCP tools. The `ErrorCode` enum (28 values) covers all known failure modes and includes eight codes added since v1.8 (incl. `DIRECTOR_ONLY`):
 
 | Code | Value | Purpose |
 |------|-------|---------|
@@ -171,8 +172,9 @@ The MCP server uses a unified error response system (`src/autoinfo/mcp/errors.py
 | `NO_CACHED_ITEMS` | `"NoCachedItems"` | No cached collection items to process (v1.8.1) |
 | `EMPTY_RESULT` | `"EmptyResult"` | Operation produced an empty result (v1.8.1) |
 | `CONFIG_NOT_FOUND` | `"ConfigNotFound"` | Project configuration not found (v1.8.1) |
+| `DIRECTOR_ONLY` | `"DIRECTOR_ONLY"` | Director-only tool dispatched to a non-director actor — e.g. `force_promote` / `demote_kb_wiki` / `soft_delete_entry` purge (actor whitelist `AUTOINFO_DIRECTOR_ACTORS`, default `director`) |
 
-These seven codes extend the existing 20 error codes (`NotFound`, `DomainNotFound`, `ValidationError`, `InvalidSourceId`, `SourceNotFound`, `Timeout`, `TopicNotFound`, `KeywordNotFound`, `EmailNotEnabled`, `EmailSendFailed`, `InvalidCronExpression`, `ScheduleAlreadyExists`, `ScheduleNotFound`, `NotPublished`, `CollectionFailed`, `ProcessingFailed`, `InvalidSection`, `UnknownTool`, `ConfirmationRequired`, `InternalError`). The three v1.8 codes (`AuthRequired`, `RateLimited`, `SessionExpired`) remain reserved for future use; the four v1.8.1 codes (`LLMNotConfigured`, `NoCachedItems`, `EmptyResult`, `ConfigNotFound`) are actively thrown — `LLM_NOT_CONFIGURED` is dispatched centrally by `call_tool` for all 14 LLM-required tools.
+These eight codes extend the existing 20 error codes (`NotFound`, `DomainNotFound`, `ValidationError`, `InvalidSourceId`, `SourceNotFound`, `Timeout`, `TopicNotFound`, `KeywordNotFound`, `EmailNotEnabled`, `EmailSendFailed`, `InvalidCronExpression`, `ScheduleAlreadyExists`, `ScheduleNotFound`, `NotPublished`, `CollectionFailed`, `ProcessingFailed`, `InvalidSection`, `UnknownTool`, `ConfirmationRequired`, `InternalError`). The three v1.8 codes (`AuthRequired`, `RateLimited`, `SessionExpired`) remain reserved for future use; the four v1.8.1 codes (`LLMNotConfigured`, `NoCachedItems`, `EmptyResult`, `ConfigNotFound`) are actively thrown — `LLM_NOT_CONFIGURED` is dispatched centrally by `call_tool` for all 17 LLM-required tools.
 
 **Dual-format responses**: Error responses are backward-compatible via two formats:
 
