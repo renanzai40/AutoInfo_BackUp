@@ -376,7 +376,7 @@ class TestProcessParallelism:
         monkeypatch.setenv("AUTOINFO_PROCESS_WORKERS", "3")
         assert _resolve_process_workers() == 3
         monkeypatch.setenv("AUTOINFO_PROCESS_WORKERS", "999")
-        assert _resolve_process_workers() == 8  # clamped
+        assert _resolve_process_workers() == 16  # clamped
         monkeypatch.setenv("AUTOINFO_PROCESS_WORKERS", "0")
         assert _resolve_process_workers() == 1  # clamped
         monkeypatch.delenv("AUTOINFO_PROCESS_WORKERS")

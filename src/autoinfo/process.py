@@ -81,9 +81,11 @@ def _is_valid_discovery_keyword(candidate: str, min_length: int = 2) -> bool:
 
 # Parallel processing (issue #136): LLM extraction dominates per-item latency,
 # so items are processed concurrently in a bounded thread pool.  Default 5
-# workers; override with AUTOINFO_PROCESS_WORKERS (clamped to 1..8).
+# workers; override with AUTOINFO_PROCESS_WORKERS (clamped to 1..16; cap raised
+# 8 -> 16, probe-gated: workers 1/4/8/16 x 12 -> 0 rate limits, see
+# .omo/evidence/task-3-llm-concurrency-remediation.txt).
 _DEFAULT_PROCESS_WORKERS = 5
-_PROCESS_WORKER_CAP = 8
+_PROCESS_WORKER_CAP = 16
 
 # Serializes SQLite / markdown KB writes (store_entry, store_entities, CEFR
 # frontmatter updates) so concurrent workers never contend on the same file.
