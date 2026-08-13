@@ -1243,11 +1243,12 @@ class G4FactualConsistency:
                         {"role": "user", "content": user_content},
                     ],
                     json_mode=self._json_mode,
-                    max_tokens=500,
+                    max_tokens=2000,
                     temperature=0.0,
                     timeout=self._timeout,
                     api_key=llm_api_key,
                     base_url=llm_base_url,
+                    disable_thinking=False,
                 )
 
                 raw_content: str = response.choices[0].message.content
@@ -1505,11 +1506,12 @@ class G5TranslationAccuracy:
                     },
                 ],
                 json_mode=self._json_mode,
-                max_tokens=500,
+                max_tokens=1500,
                 temperature=0.0,
                 timeout=self._timeout,
                 api_key=llm_api_key,
                 base_url=llm_base_url,
+                disable_thinking=False,
             )
 
             content: str = response.choices[0].message.content  # type: ignore[union-attr]
@@ -2766,11 +2768,12 @@ def llm_judge(
             model=model,
             messages=[{"role": "user", "content": prompt}],
             json_mode=json_mode,
-            max_tokens=1000,
+            max_tokens=2000,
             temperature=0.0,
             timeout=timeout,
             api_key=llm_api_key,
             base_url=llm_base_url,
+            disable_thinking=False,
         )
         parsed = parse_json_response(resp.choices[0].message.content)
     except Exception as e:

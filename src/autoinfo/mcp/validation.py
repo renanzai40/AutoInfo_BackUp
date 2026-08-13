@@ -454,10 +454,11 @@ def _llm_judge(assertion: str, tool_output: Any) -> dict[str, Any]:
     response = call_with_fallback(
         messages=[{"role": "user", "content": prompt}],
         model=llm_cfg["model"],
-        max_tokens=500,
+        max_tokens=1500,
         temperature=0.0,
         base_url=llm_cfg["api_base"],
         api_key=llm_cfg["api_key"] or None,
+        disable_thinking=False,
     )
     duration = time.monotonic() - start
     content = response.choices[0].message.content  # type: ignore[union-attr]
