@@ -21,22 +21,23 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | Category — known-limitations | 1 files / 255 lines |
 | Category — schemas | 4 files / 397 lines |
 | Category — skills | 3 files / 785 lines |
+| Category — adr | 7 files / 311 lines |
 | Category — specs | 12 files / 8746 lines |
 | Category — validation-reports | 8 files / 2620 lines |
-| Category — docs/dev | 24 files / 8162 lines |
+| Category — docs/dev | 17 files / 7851 lines |
 | Category — docs/root | 1 files / 61 lines |
 
 ## Inventory
 
 | Relative path | Lines | Category | Status | Doc-type |
 |---------------|------:|----------|--------|----------|
-| `adr/0001-kb-pipeline-raw-sole-entry.md` | 41 | docs/dev | active | adr |
-| `adr/0002-draft-to-wiki-agent-promotion.md` | 46 | docs/dev | active | adr |
-| `adr/0003-llm-fallback-chain.md` | 44 | docs/dev | active | adr |
-| `adr/0004-reasoning-model-json-mode-thinking.md` | 48 | docs/dev | active | adr |
-| `adr/0005-unified-success-error-envelope.md` | 49 | docs/dev | active | adr |
-| `adr/README.md` | 51 | docs/dev | active | adr-index |
-| `adr/TEMPLATE.md` | 32 | docs/dev | active | adr |
+| `adr/0001-kb-pipeline-raw-sole-entry.md` | 41 | adr | active | adr |
+| `adr/0002-draft-to-wiki-agent-promotion.md` | 46 | adr | active | adr |
+| `adr/0003-llm-fallback-chain.md` | 44 | adr | active | adr |
+| `adr/0004-reasoning-model-json-mode-thinking.md` | 48 | adr | active | adr |
+| `adr/0005-unified-success-error-envelope.md` | 49 | adr | active | adr |
+| `adr/README.md` | 51 | adr | active | adr-index |
+| `adr/TEMPLATE.md` | 32 | adr | active | adr |
 | `archive/agent-tester-validation.md` | 663 | archive | archived | — |
 | `archive/end-user-sla.md` | 126 | archive | archived | — |
 | `archive/epics-issue-97-coverage-verdict.md` | 109 | archive | archived | — |

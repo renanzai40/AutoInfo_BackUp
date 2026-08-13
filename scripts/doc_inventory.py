@@ -6,18 +6,23 @@ Run from the project root:
     python3 scripts/doc_inventory.py --check  # cross-doc consistency check, exit 0 = clean
 
 Pure Python 3.11 stdlib only (pathlib, re, argparse) — no yaml/pyyaml or any
-third-party dependency. Scans ``docs/**/*.md`` and ``docs/**/*.yaml`` and emits
+third-party dependency. Scans ``docs/**/*.md``, ``docs/**/*.yaml`` and
+``docs/**/*.json`` (JSON-LD schemas in docs/schemas/) and emits
 a Markdown report to ``docs/dev/doc-inventory.md`` (the ONLY file this script
 writes). The report carries an AUTO-GENERATED header so hand edits are
 detectable; never hand-maintain the inventory — regenerate it.
 
 ``--check`` (no writes) verifies:
-  1. Cross-doc consistency of the five drift-prone facts extracted from
+  1. Cross-doc consistency of the seven drift-prone facts extracted from
      README.md and AGENTS.md via regex (MCP tool count, CLI command groups,
-     delivery channels, validation scenarios, demo domains) — README value,
-     AGENTS.md value, match/mismatch are all reported.
-  2. No stray ``tests/test_bug_*`` files exist in the tests/ root.
-  3. ``docs/dev/doc-inventory.md`` exists and carries its AUTO-GENERATED
+     delivery channels, validation scenarios, demo domains, LLM-required
+     tools, test count) — README value, AGENTS.md value, match/mismatch are
+     all reported.
+  2. The same facts extracted from the doc-manager skill
+     (``.opencode/skills/doc-manager-skill/SKILL.md``) agree with README.md —
+     the skill's own numbers can no longer silently drift.
+  3. No stray ``tests/test_bug_*`` files exist in the tests/ root.
+  4. ``docs/dev/doc-inventory.md`` exists and carries its AUTO-GENERATED
      header (stale-inventory detection).
 
 Exits non-zero on any failure. Idempotent: regenerating twice produces the
@@ -38,6 +43,8 @@ OUT = DOCS / "dev" / "doc-inventory.md"
 TESTS = ROOT / "tests"
 README = ROOT / "README.md"
 AGENTS = ROOT / "AGENTS.md"
+#: The doc-manager skill whose own drift-prone numbers must agree with README.
+SKILL = ROOT / ".opencode" / "skills" / "doc-manager-skill" / "SKILL.md"
 
 #: Exact first line of the generated report; ``--check`` requires it.
 HEADER = (
@@ -50,6 +57,8 @@ HEADER = (
 CATEGORY_SEGMENTS = (
     "specs",
     "skills",
+    "schemas",
+    "adr",
     "known-limitations",
     "validation-reports",
     "reports",
@@ -60,7 +69,9 @@ CATEGORY_ORDER = (
     "epics",
     "known-limitations",
     "reports",
+    "schemas",
     "skills",
+    "adr",
     "specs",
     "validation-reports",
     "docs/dev",
@@ -93,9 +104,9 @@ def status_of(rel: Path) -> str:
 
 
 def scan_docs() -> list[dict[str, Any]]:
-    """Return one row per docs/**/*.md or *.yaml file (sorted, stable)."""
+    """Return one row per docs/**/*.md, *.yaml or *.json file (sorted, stable)."""
     paths: set[Path] = set()
-    for suffix in ("*.md", "*.yaml"):
+    for suffix in ("*.md", "*.yaml", "*.json"):
         paths.update(DOCS.rglob(suffix))
     rows: list[dict[str, Any]] = []
     for path in sorted(paths, key=lambda p: p.relative_to(DOCS).as_posix()):
@@ -129,8 +140,9 @@ def render_report(rows: list[dict[str, Any]]) -> str:
 
     lines: list[str] = [HEADER, "", "# Documentation Inventory", ""]
     lines.append(
-        "AUTO-GENERATED inventory of Markdown/YAML files under `docs/`, produced by "
-        "`scripts/doc_inventory.py`. **Do not edit by hand.** Regenerate:"
+        "AUTO-GENERATED inventory of Markdown/YAML/JSON files under `docs/`, "
+        "produced by `scripts/doc_inventory.py`. **Do not edit by hand.** "
+        "Regenerate:"
     )
     lines.append("")
     lines.append("```bash")
@@ -166,16 +178,30 @@ def render_report(rows: list[dict[str, Any]]) -> str:
 
 
 # ---------------------------------------------------------------------------
-# --check: cross-doc consistency facts (README.md vs AGENTS.md)
+# --check: cross-doc consistency facts (README.md vs AGENTS.md vs SKILL.md)
 # ---------------------------------------------------------------------------
 
-#: (fact name, regex) — first match wins; pattern must hit BOTH docs.
+#: (fact name, regex) — first match wins; pattern must hit BOTH README and AGENTS.
 FACTS: list[tuple[str, str]] = [
     ("MCP tool count", r"(\d+)\s+tools\s+across"),
     ("CLI command groups", r"(\d+)\s+command groups?"),
     ("Delivery channels", r"(\d+)\s+(?:delivery\s+)?channels?"),
     ("Validation scenarios", r"(\d+)\s+scenarios?"),
     ("Demo domains", r"(\d+)\s+demo domains?"),
+    ("LLM-required tools", r"(\d+)\s+LLM-required tools"),
+    ("Test count", r"~(\d+)\s+tests?"),
+]
+
+#: (fact name, regex) tuned to the doc-manager skill's own phrasing (§3 Step 3);
+#: checked against the README value so the skill's numbers cannot drift silently.
+SKILL_FACTS: list[tuple[str, str]] = [
+    ("MCP tool count", r"MCP tools?\s+(\d+)"),
+    ("CLI command groups", r"CLI groups\s+(\d+)"),
+    ("Delivery channels", r"delivery channels\s+(\d+)"),
+    ("Validation scenarios", r"validation scenarios\s+(\d+)"),
+    ("Demo domains", r"demo domains\s+(\d+)"),
+    ("LLM-required tools", r"LLM-required tools\s+(\d+)"),
+    ("Test count", r"test count\s+~?(\d+)"),
 ]
 
 
@@ -190,6 +216,7 @@ def run_check() -> list[str]:
     readme_text = read_text(README)
     agents_text = read_text(AGENTS)
 
+    readme_values: dict[str, str | None] = {}
     for fact, pattern in FACTS:
         rv = extract_number(readme_text, pattern)
         av = extract_number(agents_text, pattern)
@@ -198,8 +225,24 @@ def run_check() -> list[str]:
         av_disp = av if av is not None else "not found"
         print(f"  {fact}: README.md={rv_disp}, AGENTS.md={av_disp} "
               f"-> {'match' if match else 'MISMATCH'}")
+        readme_values[fact] = rv
         if not match:
             failures.append(f"fact '{fact}': README.md={rv_disp} vs AGENTS.md={av_disp}")
+
+    skill_text = read_text(SKILL) if SKILL.exists() else ""
+    for fact, pattern in SKILL_FACTS:
+        rv = readme_values.get(fact)
+        sv = extract_number(skill_text, pattern) if skill_text else None
+        match = rv is not None and sv == rv
+        rv_disp = rv if rv is not None else "not found"
+        sv_disp = sv if sv is not None else "not found"
+        print(f"  SKILL.md {fact}: README.md={rv_disp}, SKILL.md={sv_disp} "
+              f"-> {'match' if match else 'MISMATCH'}")
+        if not match:
+            failures.append(
+                f"doc-manager-skill '{fact}': SKILL.md={sv_disp} vs README.md={rv_disp} — "
+                f"update .opencode/skills/doc-manager-skill/SKILL.md (§3 Step 3)"
+            )
 
     stray = sorted(TESTS.glob("test_bug_*")) if TESTS.is_dir() else []
     if stray:

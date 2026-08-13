@@ -3,7 +3,7 @@ name: doc-manager-skill
 description: AutoInfo project documentation inventory, change-impact analysis, and doc-update workflow.
   Load this skill whenever code changes may affect project documentation.
 author: AutoInfo
-version: 2.2.0
+version: 2.2.1
 ---
 
 # AutoInfo Documentation Manager Skill
@@ -59,17 +59,18 @@ When you modify code, the listed docs **must** be reviewed and updated:
 | MCP server — new tool / param / ErrorCode | `AGENTS.md`, `README.md`, `docs/dev/specs/mcp-tools.md`, `docs/skills/autoinfo-skill/SKILL.md`, `docs/skills/autoinfo-skill/onboarding-walkthrough.md`, `docs/dev/mcp-usage-examples.md`, `docs/schemas/*.json` (JSON-LD schemas — M4T35 round-trip validates against them), `CHANGELOG.md` | Tool Discovery + MCP tables, tool count, spec inventory, worked examples, JSON-LD schema pinning, scenarios per `docs/dev/validation-scenario-contract.md` |
 | CLI — group / flag / parity change | `README.md`, `AGENTS.md`, `docs/dev/cli-mcp-rest-parity.md`, `CHANGELOG.md` | CLI command table (28 groups), flag examples, parity matrix |
 | New collector / source type | `README.md`, `CHANGELOG.md`, `docs/dev/required-api-keys.md`, `docs/known-limitations/blocked-sources.md` | Feature list, Status table (handler count), demo domains, env-var catalog, blocked-source policy (+ `docs/dev/specs/pipeline.md` if collection config changes) |
-| Quality gates (G0-G5 / D1-D3) | `docs/dev/specs/quality-gates.md`, `AGENTS.md`, `README.md`, `CHANGELOG.md` | Gate catalog, hard/soft table, retry philosophy |
-| KB pipeline / KB schema | `AGENTS.md` (Architecture Rules), `docs/dev/specs/pipeline.md`, `README.md`, `docs/archive/kb-pipeline-reference.md` (archived — only if referenced) | 4-tier rules (01-Raw sole entry, 03-Wiki append-only), schema |
+| Quality gates (G0-G5 / D1-D3) | `docs/dev/specs/quality-gates.md`, `docs/skills/translator-qa-skill/SKILL.md` (translation QA pipeline — G5 gate), `AGENTS.md`, `README.md`, `CHANGELOG.md` | Gate catalog, hard/soft table, retry philosophy |
+| KB pipeline / KB schema | `AGENTS.md` (Architecture Rules), `docs/dev/specs/pipeline.md`, `docs/dev/specs/data-models.md` (consolidated data-model schemas), `README.md`, `docs/archive/kb-pipeline-reference.md` (archived — only if referenced) | 4-tier rules (01-Raw sole entry, 03-Wiki append-only), schema |
 | LLM extraction / config | `AGENTS.md` (LLM Configuration), `docs/dev/specs/pipeline.md`, `docs/dev/required-api-keys.md`, `README.md` | Provider/model/fallback docs, extraction spec, env-var catalog |
 | Output formats / delivery channels | `README.md`, `AGENTS.md`, `docs/dev/specs/delivery.md`, `CHANGELOG.md` | Format lists, channel matrix (13), output spec |
-| End-user lifecycle / billing | `docs/dev/specs/delivery.md`, `docs/dev/specs/user-lifecycle-definition.md`, `docs/dev/enduser-capabilities-guide.md`, `AGENTS.md`, `README.md`, `CHANGELOG.md` | User types (B1/B2/B3), subscription tiers, check_access, B1 capabilities guide |
-| Validation engine / scenarios | `docs/dev/validation-scenario-contract.md`, `docs/autoinfo-validation-master-plan/`, `docs/dev/validation-reports/` (acceptance + evidence), `AGENTS.md`, `README.md`, `CHANGELOG.md`, `src/autoinfo/mcp/scenarios/` | Scenario counts (68 = 62 + 6 regression), schema fields, per-run acceptance evidence |
+| End-user lifecycle / billing | `docs/dev/specs/delivery.md`, `docs/dev/specs/user-lifecycle-definition.md`, `docs/dev/specs/operations.md` (cost, privacy, lifecycle), `docs/dev/enduser-capabilities-guide.md`, `AGENTS.md`, `README.md`, `CHANGELOG.md` | User types (B1/B2/B3), subscription tiers, check_access, B1 capabilities guide |
+| Validation engine / scenarios | `docs/dev/validation-scenario-contract.md`, `docs/dev/specs/end-user-matrix.yaml` (E8 matrix source, consumed by `scripts/coverage_matrix.py`), `docs/autoinfo-validation-master-plan/`, `docs/dev/validation-reports/` (acceptance + evidence, produced by `scripts/validation_delivery.py` / `scripts/validation_report.py`), `AGENTS.md`, `README.md`, `CHANGELOG.md`, `src/autoinfo/mcp/scenarios/` | Scenario counts (68 = 62 + 6 regression), schema fields, per-run acceptance evidence |
 | Alert rules / agent callbacks | `docs/dev/agent-alerting.md`, `AGENTS.md`, `README.md`, `CHANGELOG.md` | Alert rule config, YAML persistence, dispatch |
-| Feature addition / scope change | `docs/dev/cross-dimensional-catalog.md` (keystone — mandatory), `docs/dev/new-domain-guide.md`, all P0 docs, `CHANGELOG.md` | Cell statuses (🟢/🟡/🔴/🟠), gap-to-spec mapping, domain onboarding |
+| Research / market intelligence | `docs/dev/research/*` (active research reports, e.g. 综合报告-资讯付费与AI触达研究) | Update only when a research deliverable is added/revised; not code-coupled |
+| Feature addition / scope change | `docs/dev/cross-dimensional-catalog.md` (keystone — mandatory), `docs/dev/new-domain-guide.md`, `docs/dev/specs/multi-tenancy-auth.md`, `docs/dev/specs/ops-runbook.md`, all P0 docs, `CHANGELOG.md` | Cell statuses (🟢/🟡/🔴/🟠), gap-to-spec mapping, domain onboarding, auth/ops implications |
 | Dev skill (`validation-runner-skill`, `deep-modules-skill`, …) | The skill's own `SKILL.md`, `AGENTS.md` if it documents the workflow | Version bump, workflow accuracy, scenario/module references staying current |
 | ADR / glossary / keystone vocabulary | `docs/adr/`, `docs/glossary.md`, the ADR-linked rule doc (e.g. `AGENTS.md` Architecture Rules) | New ADR + status (Proposed/Accepted/Superseded), glossary terms, rule-doc link (§9) |
-| Version bump / release | `pyproject.toml`, `CHANGELOG.md`, `README.md`, `AGENTS.md`, `docs/dev/founder-expectations.md`, `docs/dev/specs/expectations.md` | Version refs, status tables, release notes |
+| Version bump / release | `pyproject.toml`, `CHANGELOG.md`, `README.md`, `AGENTS.md`, `docs/dev/founder-expectations.md`, `docs/dev/specs/expectations.md`, `docs/dev/specs/market-positioning.md` (pricing/personas/priority) | Version refs, status tables, release notes |
 
 **Keystone docs** to re-check on any change: `docs/dev/cross-dimensional-catalog.md`
 (product matrix), `docs/dev/enduser-coverage-matrix.md` (99-dimension E8),
@@ -199,8 +200,10 @@ dependency version bumps with no behavior delta.
 - **Never edit `docs/archive/`** during normal changes — only when archiving
   a new doc, fixing an archival path reference, or on explicit user request.
 - **Update a count in EVERY location it appears** — one stale "142 tools" in
-  any doc fails the "no stale numbers" verify rule (the `--check` facts cover
-  only the top five; the rest are your responsibility).
+  any doc fails the "no stale numbers" verify rule (the `--check` covers the
+  seven drift-prone facts plus the skill's own seven; the remaining numbers —
+  source types, collector handlers, output templates, REST port — are your
+  responsibility).
 - **Regenerate the inventory after editing docs, not before** — line counts
   in `docs/dev/doc-inventory.md` reflect the docs' current state.
 - **A doc change touching the acceptance framework is not self-approvable** —
