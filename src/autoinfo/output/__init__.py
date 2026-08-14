@@ -37,7 +37,7 @@ from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta, timezone
 from email.utils import format_datetime
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Callable, Literal
+from typing import TYPE_CHECKING, Any, Callable, Literal, cast
 
 import yaml
 
@@ -1583,7 +1583,7 @@ def _build_bundle_metadata(
         "formats_included": included_formats,
         "generator": "AutoInfo",
     }
-    return yaml.dump(metadata, default_flow_style=False, allow_unicode=True)
+    return str(yaml.dump(metadata, default_flow_style=False, allow_unicode=True))
 
 
 def _build_bundle_pdf(
@@ -1696,10 +1696,13 @@ def _build_bundle_pdf(
 
     # Render to PDF bytes
     try:
-        return _run_pdf_with_timeout(
-            lambda: weasyprint.HTML(string=full_html).write_pdf(),
-            timeout=pdf_timeout,
-            desc="Bundle PDF rendering",
+        return cast(
+            bytes,
+            _run_pdf_with_timeout(
+                lambda: weasyprint.HTML(string=full_html).write_pdf(),
+                timeout=pdf_timeout,
+                desc="Bundle PDF rendering",
+            ),
         )
     except Exception as exc:
         logger.error("Bundle PDF generation failed: %s", exc)
@@ -2301,7 +2304,7 @@ def _resolve_digest_product_type(template: ProductTemplate, variant: str) -> str
     """
     for row in PRODUCT_TEMPLATES:
         if row["template"] is template:
-            name = row["name"]
+            name = str(row["name"])
             if (_TEMPLATES_DIR / f"{name}.{variant}.j2").is_file():
                 return name
             return "digest"
@@ -2475,7 +2478,7 @@ def _call_llm_for_digest(
         config_path = get_config_path()
         if config_path is not None:
             try:
-                config = load_config(config_path)
+                config = load_config(config_path) or Config()
             except Exception:
                 config = Config()
         else:
@@ -2537,7 +2540,7 @@ def _parse_json_response(content: str | None) -> dict[str, Any]:
 
     # Strategy 1 — direct
     try:
-        return json.loads(content)
+        return cast(dict[str, Any], json.loads(content))
     except json.JSONDecodeError:
         pass
 
@@ -2545,7 +2548,7 @@ def _parse_json_response(content: str | None) -> dict[str, Any]:
     match = re.search(r"```(?:json)?\s*([\s\S]*?)```", content)
     if match:
         try:
-            return json.loads(match.group(1))
+            return cast(dict[str, Any], json.loads(match.group(1)))
         except json.JSONDecodeError:
             pass
 
@@ -2553,7 +2556,7 @@ def _parse_json_response(content: str | None) -> dict[str, Any]:
     match = re.search(r"\{[\s\S]*\}", content)
     if match:
         try:
-            return json.loads(match.group(0))
+            return cast(dict[str, Any], json.loads(match.group(0)))
         except json.JSONDecodeError:
             pass
 
@@ -5253,25 +5256,27 @@ def _render_report_template(report_data: ReportData, source_tier_badge: bool = T
     template_source = TEMPLATE_PATH.read_text(encoding="utf-8")
     template = Template(template_source)
 
-    return template.render(
-        title=report_data.title,
-        generated_at=report_data.generated_at,
-        domain=report_data.domain,
-        collection_id=report_data.collection_id,
-        executive_summary=report_data.executive_summary,
-        key_findings=report_data.key_findings,
-        recommendations=report_data.recommendations,
-        source_tier_badge=source_tier_badge,
-        sections=[
-            {
-                "title": s.title,
-                "content": s.content,
-                "entries": s.items,
-            }
-            for s in report_data.sections
-        ],
-        references=report_data.references,
-        appendices=report_data.appendices,
+    return str(
+        template.render(
+            title=report_data.title,
+            generated_at=report_data.generated_at,
+            domain=report_data.domain,
+            collection_id=report_data.collection_id,
+            executive_summary=report_data.executive_summary,
+            key_findings=report_data.key_findings,
+            recommendations=report_data.recommendations,
+            source_tier_badge=source_tier_badge,
+            sections=[
+                {
+                    "title": s.title,
+                    "content": s.content,
+                    "entries": s.items,
+                }
+                for s in report_data.sections
+            ],
+            references=report_data.references,
+            appendices=report_data.appendices,
+        )
     )
 
 
@@ -5321,9 +5326,11 @@ def _render_report_html(report_data: ReportData, period: str = "weekly") -> str:
         import markdown as md_lib  # noqa: PLC0415
 
         def _md_to_html(md_text: str) -> str:
-            return md_lib.markdown(md_text or "", extensions=["fenced_code", "tables"])
+            return str(
+                md_lib.markdown(md_text or "", extensions=["fenced_code", "tables"])
+            )
     except (ImportError, ModuleNotFoundError):
-        def _md_to_html(md_text: str) -> str:  # type: ignore[no-redef]
+        def _md_to_html(md_text: str) -> str:
             return html.escape(md_text or "").replace("\n", "<br>\n")
 
     html_sections: list[dict[str, Any]] = []
@@ -7170,7 +7177,7 @@ def _get_tts_engine_from_config() -> str:
             cfg = load_config(config_path)
             engine = getattr(cfg, "tts", None)
             if engine is not None and engine.engine:
-                return engine.engine
+                return str(engine.engine)
     except Exception:
         pass
     return "local"
@@ -7366,7 +7373,7 @@ def _render_audio_edge_tts(
         "Generated audio (local/edge-tts): %d chars text → %d bytes MP3 (voice=%s)",
         len(text), len(mp3_bytes), voice,
     )
-    return mp3_bytes
+    return cast(bytes, mp3_bytes)
 
 
 def _render_markdown(context: dict[str, Any]) -> str:
@@ -7422,7 +7429,7 @@ def _render_html(markdown_text: str) -> str:
     try:
         import markdown as md_lib  # noqa: PLC0415
 
-        return md_lib.markdown(markdown_text, extensions=["fenced_code", "tables"])
+        return str(md_lib.markdown(markdown_text, extensions=["fenced_code", "tables"]))
     except (ImportError, ModuleNotFoundError):
         logger.warning("markdown library not available \u2014 returning raw markdown")
         return markdown_text
@@ -7831,7 +7838,7 @@ def simplify_text(
             api_key=api_key or None,
             base_url=base_url or None,
         )
-        simplified: str = (response.choices[0].message.content or "").strip()  # type: ignore[union-attr]
+        simplified: str = (response.choices[0].message.content or "").strip()
     except Exception as exc:
         logger.warning("LLM simplification failed: %s", exc)
         return {
