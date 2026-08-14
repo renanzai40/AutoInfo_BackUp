@@ -20,6 +20,7 @@ import importlib.util
 import subprocess
 import sys
 from pathlib import Path
+from typing import Any
 
 import pytest
 import yaml
@@ -39,7 +40,7 @@ AUDIT_SCRIPT = ROOT / "scripts" / "coverage_audit.py"
 
 
 @pytest.fixture(scope="module")
-def coverage_audit():
+def coverage_audit() -> Any:
     spec = importlib.util.spec_from_file_location("coverage_audit", AUDIT_SCRIPT)
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
@@ -52,7 +53,7 @@ def coverage_audit():
 # ---------------------------------------------------------------------------
 
 
-def test_kb_promote_yaml_exists_and_parses():
+def test_kb_promote_yaml_exists_and_parses() -> None:
     assert KB_PROMOTE_YAML.is_file(), "kb-promote.yaml must exist"
     data = yaml.safe_load(KB_PROMOTE_YAML.read_text(encoding="utf-8"))
     assert isinstance(data, dict)
@@ -71,7 +72,7 @@ def test_kb_promote_yaml_exists_and_parses():
     ]
 
 
-def test_kb_promote_steps_and_cleanup():
+def test_kb_promote_steps_and_cleanup() -> None:
     """kb-promote.yaml is a two-section admission matrix: [pass] eligible
     draft -> 03-Wiki with promotion_source=agent; [reject] draft whose source
     lacks source_url -> refused with no 03-Wiki row.  The cleanup routes every
@@ -108,7 +109,7 @@ def test_kb_promote_steps_and_cleanup():
     assert "CLEANED" in cleanup[0]["expect"]["stdout_has"]
 
 
-def test_kb_promote_passes_load_scenarios_validation():
+def test_kb_promote_passes_load_scenarios_validation() -> None:
     """kb-promote.yaml must be accepted by the real scenario loader."""
     sys.path.insert(0, str(ROOT / "src"))
     try:
@@ -117,6 +118,35 @@ def test_kb_promote_passes_load_scenarios_validation():
         sys.path.remove(str(ROOT / "src"))
     names = {s["name"] for s in load_scenarios()}
     assert "kb-promote" in names
+
+
+def test_director_tool_steps_carry_explicit_director_actor() -> None:
+    """Success steps for force_promote / demote_kb_wiki must pass actor.
+
+    Regression guard for #236: the director whitelist
+    (``AUTOINFO_DIRECTOR_ACTORS``, default ``director``) refuses omitted
+    actors at MCP dispatch (the default is ``agent``). Scenarios written
+    before the guard existed omitted the actor and broke once it landed
+    (director-backdoor, promotion-triggers, search-tier-boost). Success-
+    expecting director steps must declare ``actor: director`` explicitly.
+    """
+    sys.path.insert(0, str(ROOT / "src"))
+    try:
+        from autoinfo.mcp.validation import load_scenarios
+    finally:
+        sys.path.remove(str(ROOT / "src"))
+    violations = []
+    for sc in load_scenarios():
+        for i, step in enumerate(sc["steps"]):
+            if step.get("tool") not in ("force_promote", "demote_kb_wiki"):
+                continue
+            expect_success = step.get("expect", {}).get("success", True)
+            if expect_success and step.get("arguments", {}).get("actor") != "director":
+                violations.append(f"{sc['name']}[{i}] {step['name']}")
+    assert not violations, (
+        "director-only tool success steps must pass actor: director "
+        f"(#236 regression guard): {violations}"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -147,7 +177,7 @@ def _write_scenario(dirpath: Path, name: str, tools: list[str]) -> Path:
     return p
 
 
-def test_covered_is_declared_intersection_with_phantom(coverage_audit, tmp_path):
+def test_covered_is_declared_intersection_with_phantom(coverage_audit: Any, tmp_path: Path) -> None:
     """A phantom scenario tool must NOT count as covering a declared tool."""
     _write_scenario(tmp_path, "good", ["alpha_tool", "beta_tool"])
     # error-boundary style: references a tool that server.py never declares
@@ -166,7 +196,7 @@ def test_covered_is_declared_intersection_with_phantom(coverage_audit, tmp_path)
     assert cov["phantom"] == ["definitely_not_a_real_tool"]
 
 
-def test_missing_is_declared_minus_covered(coverage_audit, tmp_path):
+def test_missing_is_declared_minus_covered(coverage_audit: Any, tmp_path: Path) -> None:
     """missing = declared - (declared ∩ scenario_used) = declared - scenario_used."""
     _write_scenario(tmp_path, "partial", ["alpha_tool"])
     cov = coverage_audit.compute_coverage(SERVER_SNIPPET, tmp_path)
@@ -175,7 +205,7 @@ def test_missing_is_declared_minus_covered(coverage_audit, tmp_path):
     assert set(cov["missing"]) == set(cov["declared"]) - set(cov["covered"])
 
 
-def test_full_coverage_when_all_declared_used(coverage_audit, tmp_path):
+def test_full_coverage_when_all_declared_used(coverage_audit: Any, tmp_path: Path) -> None:
     _write_scenario(
         tmp_path,
         "full",
@@ -187,7 +217,7 @@ def test_full_coverage_when_all_declared_used(coverage_audit, tmp_path):
     assert cov["phantom"] == ["definitely_not_a_real_tool"]
 
 
-def test_non_mcp_steps_do_not_count(coverage_audit, tmp_path):
+def test_non_mcp_steps_do_not_count(coverage_audit: Any, tmp_path: Path) -> None:
     """kind: cli steps reference no tool and must not enter scenario_used."""
     p = tmp_path / "mixed.yaml"
     p.write_text(
@@ -213,7 +243,7 @@ def test_non_mcp_steps_do_not_count(coverage_audit, tmp_path):
     assert cov["covered"] == ["alpha_tool"]
 
 
-def test_live_audit_prints_full_coverage():
+def test_live_audit_prints_full_coverage() -> None:
     """End-to-end: the real script against the real repo must report 145/145
     with an empty MISSING list (145 tools = 142 baseline + T5's director
     backdoor tools demote_kb_wiki/force_promote + T6's promote_pending sweep;
@@ -237,7 +267,7 @@ def test_live_audit_prints_full_coverage():
     )
 
 
-def test_live_audit_prints_regression_scenarios():
+def test_live_audit_prints_regression_scenarios() -> None:
     """The real coverage_audit.py must print 'Regression scenarios: N (issues: ...)'."""
     result = subprocess.run(
         [sys.executable, str(AUDIT_SCRIPT)],
@@ -258,7 +288,7 @@ def test_live_audit_prints_regression_scenarios():
     assert "#135" in line
 
 
-def test_compute_coverage_includes_regression_subdir(coverage_audit, tmp_path):
+def test_compute_coverage_includes_regression_subdir(coverage_audit: Any, tmp_path: Path) -> None:
     """compute_coverage with rglob scans regression/ subdirectory for tool coverage."""
     tmp_path.mkdir(parents=True, exist_ok=True)
     _write_scenario(tmp_path, "top-level", ["alpha_tool"])

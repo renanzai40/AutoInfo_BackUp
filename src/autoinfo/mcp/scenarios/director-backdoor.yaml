@@ -1,7 +1,9 @@
 # Director backdoor (plan todo T9c / T5) — demote / force-promote / wiki
 # delete are director-only.  Every non-whitelisted actor call is refused at
-# dispatch with a DIRECTOR_ONLY error envelope; the default actor ("director",
-# the first member of AUTOINFO_DIRECTOR_ACTORS) succeeds.
+# dispatch with a DIRECTOR_ONLY error envelope; the director path requires
+# an explicit actor whitelisted in AUTOINFO_DIRECTOR_ACTORS (default
+# "director").  The MCP tools declare ``actor`` as a required parameter —
+# an omitted actor is refused (dispatch defaults to "agent").
 #
 # Also pins the T5 wiki guard: soft_delete_entry on a 03-Wiki entry with a
 # non-director actor is refused (03-Wiki is append-only).
@@ -53,10 +55,11 @@ steps:
       error_code: "DIRECTOR_ONLY"
       error_actionable: true
 
-  - name: "force_promote succeeds for default director actor"
+  - name: "force_promote succeeds for director actor"
     tool: force_promote
     arguments:
       draft_id: medical-research-draft-t9-backdoor-draft
+      actor: director
     expect:
       success: true
       data_has: ["status", "draft_id", "new_path"]
@@ -81,10 +84,11 @@ steps:
       error_code: "DIRECTOR_ONLY"
       error_actionable: true
 
-  - name: "demote_kb_wiki succeeds for default director actor"
+  - name: "demote_kb_wiki succeeds for director actor"
     tool: demote_kb_wiki
     arguments:
       entry_id: medical-research-draft-t9-backdoor-draft
+      actor: director
     expect:
       success: true
       data_has: ["status", "entry_id", "new_path"]

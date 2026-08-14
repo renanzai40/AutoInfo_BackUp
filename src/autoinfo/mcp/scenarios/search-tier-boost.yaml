@@ -77,6 +77,7 @@ steps:
     tool: force_promote
     arguments:
       draft_id: medical-research-draft-t9z-token-wiki-draft
+      actor: director
     expect:
       success: true
       data_has: ["status", "draft_id", "new_path"]
