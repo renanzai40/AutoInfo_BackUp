@@ -47,7 +47,7 @@ jobs:
         with:
           # Full history so the merge-base diff below can see the PR's files.
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
       - name: Install system dependencies
