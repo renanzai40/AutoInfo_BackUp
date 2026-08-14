@@ -43,7 +43,7 @@ jobs:
       # help-substring assertions identically to local runs.
       TERM: dumb
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           # Full history so the merge-base diff below can see the PR's files.
           fetch-depth: 0

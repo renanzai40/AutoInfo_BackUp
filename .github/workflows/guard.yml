@@ -10,7 +10,7 @@ jobs:
     name: Doc drift guard
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # M7T55: grep-assert drift-guard. Scans docs/ + README.md + AGENTS.md for
       # banned strings that must never reappear (counts/claims drifted from code
       # and were cleaned by M7T54). Exits non-zero on any hit — the guard turns
