@@ -95,7 +95,7 @@ jobs:
             --base-data .coverage.base \
             --base-sha "$BASE_SHA"
       - name: Upload coverage artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-data
           path: |
