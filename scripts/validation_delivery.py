@@ -65,33 +65,98 @@ def _requires_llm_key(scenario_path: Path) -> bool:
     )
 
 
+# Issue #234: scenario scheduling groups by side-effect signature.
+#
+# - READONLY_* : no writes anywhere (pure MCP/CLI/DB reads + assertions).
+#   Safe to run concurrently.
+# - OUTPUT_GEN_* : writes isolated files under outputs/<domain>/<product>-*
+#   via _persist_output (product names correct since #229), no DB writes
+#   except the edge-path _persist_product_analysis_to_kb (SQLite-locked).
+#   Safe to run concurrently under the shared LLM rate limiter (#da5362a).
+# - Everything else (kb-*/promote/collect/delete/cli + output-premium-products)
+#   mutates shared KB/DB/collections state and stays serial.
+_READONLY_SCENARIOS = frozenset({
+    "collect-failure-recovery", "collectors-e2e", "delivery-channels",
+    "discovery", "error-boundary", "kb-lifecycle", "llm-failure-recovery",
+    "llm-gated", "meta-validation", "observability", "output-discovery",
+    "output-simplify-recommend", "projects-config", "rest-api",
+    "system-health",
+})
+_OUTPUT_GEN_SCENARIOS = frozenset({
+    "output-column", "output-digest-report", "output-ebook",
+    "output-tutorial-presentation", "output-video", "enduser-journey",
+})
+_PARALLEL_SCENARIOS = _READONLY_SCENARIOS | _OUTPUT_GEN_SCENARIOS
+_PARALLEL_MAX_WORKERS = 4
+
+
+async def _run_one_scenario(
+    scenarios_dir: Path,
+    name: str,
+    skip_llm: bool,
+    results: list[dict[str, Any]],
+    artifacts: list[dict[str, Any]],
+) -> None:
+    """Run one scenario and append its result/artifacts to the collectors.
+
+    Safe to call concurrently (readonly/output-gen groups): appends to lists
+    under the asyncio event loop are atomic per coroutine step, and callers
+    sort results/artifacts afterwards for determinism.
+    """
+    from autoinfo.mcp.server import _handle_run_validation_scenario
+
+    if skip_llm and _requires_llm_key(scenarios_dir / f"{name}.yaml"):
+        results.append({"name": name, "status": "skipped", "summary": {}})
+        return
+    try:
+        res = await _handle_run_validation_scenario(scenario=name)
+    except Exception as e:  # noqa: BLE001
+        results.append({"name": name, "status": "error", "detail": str(e)[:200]})
+        return
+    data = res.get("data", res)
+    results.append({
+        "name": name,
+        "status": data.get("status"),
+        "summary": data.get("summary", {}),
+    })
+    for a in data.get("artifacts", []):
+        artifacts.append(a)
+
+
 async def _run_all_scenarios(
     scenarios_dir: Path, skip_llm: bool = False
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    """Run every scenario via the real engine; return (results, artifacts)."""
-    from autoinfo.mcp.server import _handle_run_validation_scenario
+    """Run every scenario via the real engine; return (results, artifacts).
 
-    results = []
-    artifacts = []
-    for sc in sorted(scenarios_dir.glob("*.yaml")):
-        name = sc.stem
-        if skip_llm and _requires_llm_key(sc):
-            results.append({"name": name, "status": "skipped", "summary": {}})
-            continue
-        try:
-            res = await _handle_run_validation_scenario(scenario=name)
-        except Exception as e:  # noqa: BLE001
-            results.append({"name": name, "status": "error", "detail": str(e)[:200]})
-            continue
-        data = res.get("data", res)
-        results.append({
-            "name": name,
-            "status": data.get("status"),
-            "summary": data.get("summary", {}),
-        })
-        for a in data.get("artifacts", []):
-            artifacts.append(a)
-    return results, artifacts
+    Issue #234: readonly + output-generation scenarios run concurrently under
+    a bounded semaphore (shared LLM rate limiting protects LLM fan-out);
+    stateful scenarios (kb/promote/collect/delete/cli) stay serial. Results
+    are kept in memory and sorted by scenario name so the persisted
+    ``scenarios.json`` is deterministic regardless of scheduling order.
+    """
+    results: list[dict[str, Any]] = []
+    artifacts: list[dict[str, Any]] = []
+
+    names = sorted(sc.stem for sc in scenarios_dir.glob("*.yaml"))
+    parallel_names = [n for n in names if n in _PARALLEL_SCENARIOS]
+    serial_names = [n for n in names if n not in _PARALLEL_SCENARIOS]
+
+    sem = asyncio.Semaphore(_PARALLEL_MAX_WORKERS)
+
+    async def run_parallel(name: str) -> None:
+        async with sem:
+            await _run_one_scenario(scenarios_dir, name, skip_llm, results, artifacts)
+
+    if parallel_names:
+        await asyncio.gather(*(run_parallel(n) for n in parallel_names))
+    for name in serial_names:
+        await _run_one_scenario(scenarios_dir, name, skip_llm, results, artifacts)
+
+    # Deterministic output: results keyed by name, artifacts sorted by path.
+    by_name = {r["name"]: r for r in results}
+    ordered = [by_name[n] for n in names if n in by_name]
+    artifacts.sort(key=lambda a: str(a.get("path", a)))
+    return ordered, artifacts
 
 
 def _tier_subpath(src: Path) -> Path:
@@ -390,11 +455,11 @@ def _sections_from_headings(
     cur_heading: str | None = None
     cur_lines: list[str] = []
     for line in text.splitlines():
-        m = re.match(r"^#{1,6}\s+(.+?)\s*$", line.strip())
-        if m:
+        hm = re.match(r"^#{1,6}\s+(.+?)\s*$", line.strip())
+        if hm:
             if cur_heading:
                 blocks.append((cur_heading, cur_lines))
-            cur_heading = m.group(1).lower().replace("*", "").replace("`", "").strip()
+            cur_heading = hm.group(1).lower().replace("*", "").replace("`", "").strip()
             cur_lines = []
         elif cur_heading:
             cur_lines.append(line.strip())
@@ -954,7 +1019,7 @@ def _package(artifacts: list[dict[str, Any]], results: list[dict[str, Any]], out
     # so run it concurrently across artifacts with a fixed-size pool, then
     # reassemble the results in the original artifact order so the manifest,
     # rejected list and per-artifact side effects stay deterministic.
-    _GATE_MAX_WORKERS = 6
+    gate_max_workers = 6
     pending: list[tuple[int, Path, Path, str]] = []
     # #206: the same source file may be declared by several scenarios'
     # collect_artifacts, so dedupe by source path.  Without this, the
@@ -980,7 +1045,7 @@ def _package(artifacts: list[dict[str, Any]], results: list[dict[str, Any]], out
         pending.append((idx, src, dest, bucket))
 
     gate_evals: dict[int, dict[str, Any]] = {}
-    with ThreadPoolExecutor(max_workers=_GATE_MAX_WORKERS) as executor:
+    with ThreadPoolExecutor(max_workers=gate_max_workers) as executor:
         futures = {
             executor.submit(run_delivery_gates, src, bucket): idx
             for idx, src, _dest, bucket in pending
@@ -992,7 +1057,10 @@ def _package(artifacts: list[dict[str, Any]], results: list[dict[str, Any]], out
             except Exception as exc:  # noqa: BLE001 — one bad file must never break delivery
                 gate_eval = {
                     "gates": {
-                        "D1": {"passed": False, "details": {"error": f"gate evaluation error: {exc}"}},
+                        "D1": {
+                            "passed": False,
+                            "details": {"error": f"gate evaluation error: {exc}"},
+                        },
                         "D2": {"passed": True, "details": {}},
                         "D3": {"passed": True, "details": {}},
                         "authenticity": {"authenticity": "fail", "reason": f"check error: {exc}"},
