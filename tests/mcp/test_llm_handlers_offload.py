@@ -8,10 +8,13 @@ asyncio event loop stays responsive while the (potentially slow) LLM call is
 in flight — mirroring the existing pattern used for ``collect_sources`` /
 ``process_collection`` / ``batch_run`` (issue #136).
 
-Excluded on purpose (17 members - 3 = 14):
+Excluded on purpose (16 members - 2 = 14):
   * ``process_collection``  — already offloaded via to_thread
   * ``batch_run``           — already offloaded via to_thread
-  * ``run_validation_scenario`` — async handler, awaited directly (no wrap)
+  * ``run_validation_scenario`` — async handler, awaited directly; not in
+    ``_LLM_REQUIRED_TOOLS`` (the scenario engine reports per-step
+    ``unconfigured`` itself, so the dispatch-level LLM guard would block
+    scenarios that need no LLM at all)
 """
 
 from __future__ import annotations
@@ -46,22 +49,22 @@ OFFLOADED_HANDLERS: list[tuple[str, str]] = [
 
 
 def _assert_exact_14() -> None:
-    """Guard the member set: exactly these 14 must be offloaded (17 - 3)."""
+    """Guard the member set: exactly these 14 must be offloaded (16 - 2)."""
     assert len(OFFLOADED_HANDLERS) == 14, "exactly 14 sync LLM handlers"
     assert len({name for name, _ in OFFLOADED_HANDLERS}) == 14, "no duplicates"
 
 
 def test_exactly_14_sync_llm_handlers_listed() -> None:
-    """The test matrix itself must stay at exactly 14 handlers (17 - 3)."""
+    """The test matrix itself must stay at exactly 14 handlers (16 - 2)."""
     _assert_exact_14()
     all_llm_required = mcp_server._LLM_REQUIRED_TOOLS
     names = {name for name, _ in OFFLOADED_HANDLERS}
     assert names <= all_llm_required
-    # the three excluded members are the already-offloaded/async ones
+    # the two remaining excluded members are the already-offloaded ones
+    # (run_validation_scenario is async and not LLM-required — see module doc)
     assert all_llm_required - names == {
         "process_collection",
         "batch_run",
-        "run_validation_scenario",
     }
 
 

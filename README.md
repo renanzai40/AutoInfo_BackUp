@@ -223,7 +223,7 @@ Env-gated steps report `unconfigured` (never silently skipped); `llm_assert`
 steps run a real model call. Every step carries a per-step execution trace
 (step_index/duration/arguments/trace_id + llm_meta), and failing runs surface
 a root-cause report (`## Blockers` / `## Per-step trace` / `## Regression
-failures`). No LLM key yet? The 17 LLM-required tools return
+failures`). No LLM key yet? The 16 LLM-required tools return
 `LLM_NOT_CONFIGURED` — set `AUTOINFO_LLM_API_KEY` or call `configure_llm()`.
 
 Non-MCP testers can smoke-test over REST instead:

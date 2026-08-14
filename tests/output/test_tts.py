@@ -318,14 +318,14 @@ class TestTTSConfig:
 
         config = Config()
         assert isinstance(config.tts, TTSConfig)
-        assert config.tts.engine == "openai"
+        assert config.tts.engine == "local"
         assert config.tts.local_voice == "en-US-JennyNeural"
 
     def test_config_tts_defaults(self) -> None:
         from autoinfo.config import TTSConfig
 
         tts = TTSConfig()
-        assert tts.engine == "openai"
+        assert tts.engine == "local"
         assert tts.local_voice == "en-US-JennyNeural"
 
     def test_config_tts_custom_engine(self) -> None:
@@ -340,7 +340,7 @@ class TestTTSConfig:
             "autoinfo.output.get_config_path", return_value=None
         ):
             result = _get_tts_engine_from_config()
-        assert result == "openai"
+        assert result == "local"
 
     def test_get_tts_engine_from_config_reads_tts_section(
         self, tmp_path: Path

@@ -55,7 +55,7 @@ import uuid
 from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable, Literal, TypeVar
+from typing import Any, Callable, Literal, TypeVar, cast
 
 import httpx
 from mcp.server import Server
@@ -2092,7 +2092,7 @@ def _handle_suggest_keywords(
             api_key=api_key or None,
             timeout=timeout,
         )
-        content: str = response.choices[0].message.content or ""  # type: ignore[union-attr]
+        content: str = response.choices[0].message.content or ""
 
         try:
             parsed = json.loads(content)
@@ -2754,6 +2754,19 @@ def _persist_output(
     return str(OUTPUTS_DIR / domain / _path.name)
 
 
+def _output_text(result: str | Any) -> str:
+    """Unwrap a generate_* result to its plain text.
+
+    ``generate_digest``/``generate_report`` return ``str | DeliveryOutput``;
+    the MCP handlers never pass *delivery_gate_configs*, so a
+    ``DeliveryOutput`` can only appear if the contract changes.  Normalise to
+    ``str`` so callers can safely ``json.loads`` / persist the text.
+    """
+    from autoinfo.output import DeliveryOutput
+
+    return result.output if isinstance(result, DeliveryOutput) else result
+
+
 def _maybe_persist_output(
     envelope: dict[str, Any],
     persist: bool,
@@ -2854,7 +2867,7 @@ def _handle_generate_digest(
             # Parse JSON string back to dict for structured MCP response
             import json as _json
 
-            _parsed = _json.loads(result)
+            _parsed = _json.loads(_output_text(result))
             return _maybe_persist_output(
                 {"success": True, "format": format, "content": _parsed},
                 persist, domain, "digest", format, _parsed,
@@ -2875,7 +2888,7 @@ def _handle_generate_digest(
             import json as _json2
 
             try:
-                parsed = _json2.loads(result)
+                parsed = _json2.loads(_output_text(result))
             except (ValueError, TypeError):
                 parsed = {"status": "ok", "video_path": result}
             return _maybe_persist_output(
@@ -2982,7 +2995,7 @@ def _handle_generate_report(
         if format in ("json", "agent"):
             import json as _json
 
-            parsed = _json.loads(result)
+            parsed = _json.loads(_output_text(result))
             return _maybe_persist_output(
                 {
                     "success": True,
@@ -3010,7 +3023,7 @@ def _handle_generate_report(
             import json as _json3
 
             try:
-                parsed = _json3.loads(result)
+                parsed = _json3.loads(_output_text(result))
             except (ValueError, TypeError):
                 parsed = {"status": "ok", "video_path": result}
             return _maybe_persist_output(
@@ -3128,7 +3141,7 @@ def _handle_generate_cross_domain_report(
         if format in ("json", "agent"):
             import json as _json
 
-            parsed = _json.loads(result)
+            parsed = _json.loads(_output_text(result))
             return _maybe_persist_output(
                 {
                     "success": True,
@@ -3158,7 +3171,7 @@ def _handle_generate_cross_domain_report(
             import json as _json4
 
             try:
-                parsed = _json4.loads(result)
+                parsed = _json4.loads(_output_text(result))
             except (ValueError, TypeError):
                 parsed = {"status": "ok", "video_path": result}
             return _maybe_persist_output(
@@ -3239,8 +3252,8 @@ def _handle_generate_tutorial(
         if format == "agent":
             import json as _json
             return _maybe_persist_output(
-                {"success": True, "format": format, "domain": domain, "topic": topic, "content": _json.loads(result)},
-                persist, domain, "tutorial", format, _json.loads(result),
+                {"success": True, "format": format, "domain": domain, "topic": topic, "content": _json.loads(_output_text(result))},
+                persist, domain, "tutorial", format, _json.loads(_output_text(result)),
             )
         return _maybe_persist_output(
             {"success": True, "format": format, "domain": domain, "topic": topic, "content": result},
@@ -3285,8 +3298,8 @@ def _handle_generate_presentation(
         if format == "agent":
             import json as _json
             return _maybe_persist_output(
-                {"success": True, "domain": domain, "topic": topic, "slides": slides, "format": format, "content": _json.loads(result)},
-                persist, domain, "presentation", format, _json.loads(result),
+                {"success": True, "domain": domain, "topic": topic, "slides": slides, "format": format, "content": _json.loads(_output_text(result))},
+                persist, domain, "presentation", format, _json.loads(_output_text(result)),
             )
         return _maybe_persist_output(
             {"success": True, "domain": domain, "topic": topic, "slides": slides, "format": format, "content": result},
@@ -4653,9 +4666,9 @@ def _handle_get_gate_config(domain: str, gate: str) -> dict[str, Any]:
 
     # Normalise the queried gate name to its canonical long form — config
     # keys are stored as e.g. "G3-RelevanceScoring" (short "G3" accepted).
-    from autoinfo.config import _GATE_CONFIG_KEY_MAP as _gate_map
+    from autoinfo.config import _GATE_CONFIG_KEY_MAP
 
-    gate_key = _gate_map.get(gate, gate)
+    gate_key = _GATE_CONFIG_KEY_MAP.get(gate, gate)
 
     # Check quality gates first, then delivery gates, then global defaults
     gate_config: dict[str, Any] | None = None
@@ -5278,7 +5291,7 @@ def _handle_get_config(section: str = "") -> dict[str, Any]:
     return {"config": config_dict}
 
 
-def _handle_trace_item(name: str, arguments: dict) -> dict[str, Any]:
+def _handle_trace_item(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
     """Trace the full pipeline history for a trace_id.
 
     Searches pipeline logs (``logs/pipeline-*.log``) and KB frontmatter
@@ -5364,12 +5377,12 @@ def _handle_trace_item(name: str, arguments: dict) -> dict[str, Any]:
     }
 
 
-def _handle_get_metrics(name: str, arguments: dict) -> dict[str, Any]:
+def _handle_get_metrics(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
     from autoinfo.metrics import get_metrics as _get_metrics
     return _get_metrics()
 
 
-def _handle_get_prometheus_metrics(name: str, arguments: dict) -> dict[str, Any]:
+def _handle_get_prometheus_metrics(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
     """Return raw Prometheus exposition-format metrics in a dict wrapper."""
     from autoinfo.metrics import format_prometheus
     from autoinfo.metrics import get_metrics as _get_metrics
@@ -5378,7 +5391,7 @@ def _handle_get_prometheus_metrics(name: str, arguments: dict) -> dict[str, Any]
     return {"format": "prometheus", "metrics_text": format_prometheus(data)}
 
 
-def _handle_soft_delete_entry(name: str, arguments: dict) -> dict[str, Any]:
+def _handle_soft_delete_entry(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
     from autoinfo.kb import KBStore
     store = KBStore()
     actor = arguments.get("actor") or "agent"
@@ -5395,24 +5408,24 @@ def _handle_soft_delete_entry(name: str, arguments: dict) -> dict[str, Any]:
         )
 
 
-def _handle_mark_stale(name: str, arguments: dict) -> dict[str, Any]:
+def _handle_mark_stale(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
     from autoinfo.kb import mark_stale
     return mark_stale(arguments["entry_id"])
 
 
-def _handle_restore_entry(name: str, arguments: dict) -> dict[str, Any]:
+def _handle_restore_entry(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
     from autoinfo.kb import KBStore
     store = KBStore()
     return store.restore_entry(arguments["entry_id"])
 
 
-def _handle_export_user_data(name: str, arguments: dict) -> dict[str, Any]:
+def _handle_export_user_data(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
     from autoinfo.user_store import get_profile
     profile = get_profile(arguments["user_id"])
     return {"user_id": arguments["user_id"], "profile": profile}
 
 
-def _handle_delete_user_data(name: str, arguments: dict) -> dict[str, Any]:
+def _handle_delete_user_data(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
     from autoinfo.kb import KBStore
     store = KBStore()
     purge = arguments.get("purge", False)
@@ -5431,7 +5444,7 @@ def _handle_delete_user_data(name: str, arguments: dict) -> dict[str, Any]:
     return store.delete_user_data(arguments["user_id"])
 
 
-def _handle_query_delivery_log(name: str, arguments: dict) -> dict[str, Any] | list[dict[str, Any]]:
+def _handle_query_delivery_log(name: str, arguments: dict[str, Any]) -> dict[str, Any] | list[dict[str, Any]]:
     import dataclasses
 
     from autoinfo.delivery_log import query_delivery_log
@@ -5577,7 +5590,7 @@ def _handle_get_enduser_history(end_user_id: str, limit: int = 20) -> dict[str, 
     for sid in sub_ids:
         raw = _query_log(subscription_id=sid, limit=limit)
         for entry in raw:
-            all_entries.append(entry.to_dict())
+            all_entries.append(asdict(entry))
 
     all_entries.sort(key=lambda e: e.get("last_attempt", ""), reverse=True)
     page = all_entries[:limit]
@@ -6150,7 +6163,7 @@ def _handle_set_agent_callback(
         }
 
 
-def _handle_list_agent_callbacks() -> list[dict[str, Any]]:
+def _handle_list_agent_callbacks() -> dict[str, Any] | list[dict[str, Any]]:
     """List all registered agent callbacks."""
     from autoinfo.agent_callback import list_agent_callbacks
 
@@ -6242,7 +6255,7 @@ async def _handle_run_validation_scenario(
 
     async def _validation_dispatch(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
         texts = await call_tool(name, arguments)
-        return json.loads(texts[0].text)
+        return cast(dict[str, Any], json.loads(texts[0].text))
 
     try:
         result = await run_scenario(
@@ -6987,7 +7000,7 @@ def _error_response(exc: Exception) -> list[TextContent]:
         code = ErrorCode.INTERNAL_ERROR
         # httpx.ConnectError → Timeout (httpx is optional)
         try:
-            import httpx  # type: ignore[import-untyped]
+            import httpx
 
             if isinstance(exc, httpx.ConnectError):
                 code = ErrorCode.TIMEOUT
@@ -6997,7 +7010,7 @@ def _error_response(exc: Exception) -> list[TextContent]:
     # Lazy litellm check — AuthenticationError → LLM_NOT_CONFIGURED
     if code == ErrorCode.INTERNAL_ERROR:
         try:
-            import litellm.exceptions  # type: ignore[import-untyped]
+            import litellm.exceptions
 
             if isinstance(exc, litellm.exceptions.AuthenticationError):
                 code = ErrorCode.LLM_NOT_CONFIGURED
@@ -7026,7 +7039,7 @@ def _error_response(exc: Exception) -> list[TextContent]:
 app = Server("autoinfo")
 
 
-@app.list_tools()
+@app.list_tools()  # type: ignore[untyped-decorator,no-untyped-call]
 async def list_tools() -> list[Tool]:
     """Declare the available MCP tools with their input schemas."""
     return [
@@ -10757,7 +10770,7 @@ async def list_tools() -> list[Tool]:
         ),
     ]
 
-# -- LLM-required tools (17) ------------------------------------------------
+# -- LLM-required tools (16) ------------------------------------------------
 # Tools in this set require LLM configuration to function.  When the LLM
 # is not configured (no api_key), call_tool will block them with a clear
 # error response before dispatching to the handler.
@@ -10778,7 +10791,6 @@ _LLM_REQUIRED_TOOLS: frozenset[str] = frozenset({
     "simplify_content",
     "promote_kb_draft",
     "batch_run",
-    "run_validation_scenario",
 })
 
 
@@ -10918,10 +10930,11 @@ def _audit_tool_call(tool_name: str, code: str, resource: str = "") -> None:
         )
 
 
-@app.call_tool()
+@app.call_tool()  # type: ignore[untyped-decorator]
 async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
     """Dispatch tool calls to the appropriate implementation."""
     _dispatch_audit: dict[str, str] = {"code": "success"}
+    result: dict[str, Any] | list[dict[str, Any]]
     try:
         # -- health_check is exempted — keep flat for the entry-point tool
         if name == "health_check":

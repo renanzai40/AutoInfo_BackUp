@@ -1076,7 +1076,7 @@ class TestMultiUser:
             mock_instance.get_entry.return_value = None
             mock_kb.return_value = mock_instance
             result = _handle_get_kb_entry(entry_id="test-entry", user_id="alice")
-        assert "error_code" in result
+        assert result["error"]["code"] == "NotFound"
 
 
 # ======================================================================
@@ -1373,8 +1373,8 @@ class TestMCPGenerateReport:
 
     def test_handle_generate_report_with_product_passes_registry_template(self):
         """product='premium-briefing' forwards the registry template to generate_report."""
-        from autoinfo.output import PRODUCT_TEMPLATES
         from autoinfo.mcp.server import _handle_generate_report
+        from autoinfo.output import PRODUCT_TEMPLATES
 
         _row = next(
             r for r in PRODUCT_TEMPLATES if r["name"] == "premium-briefing"
@@ -1395,8 +1395,8 @@ class TestMCPGenerateReport:
 
     def test_handle_generate_report_unknown_product_returns_error_envelope(self):
         """Unknown product returns the canonical error envelope with valid names."""
-        from autoinfo.output import PRODUCT_TEMPLATES
         from autoinfo.mcp.server import _handle_generate_report
+        from autoinfo.output import PRODUCT_TEMPLATES
 
         result = _handle_generate_report(
             domain="medical-research",
@@ -1414,8 +1414,8 @@ class TestMCPGenerateReport:
 
     def test_handle_generate_report_column_still_wires_product_template(self):
         """Existing report_type='column' behavior unchanged when product absent."""
-        from autoinfo.output import PRODUCT_TEMPLATES
         from autoinfo.mcp.server import _handle_generate_report
+        from autoinfo.output import PRODUCT_TEMPLATES
 
         _row = next(r for r in PRODUCT_TEMPLATES if r["name"] == "column")
         fake_entry = {"id": "x", "title": "t", "content": "c"}

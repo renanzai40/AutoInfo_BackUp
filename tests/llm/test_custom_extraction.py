@@ -23,10 +23,9 @@ import pytest
 import yaml
 
 from autoinfo.kb import KBStore
-from autoinfo.llm import LLMExtractor, DEFAULT_FIELDS
+from autoinfo.llm import DEFAULT_FIELDS, LLMExtractor
 from autoinfo.models import ExtractionResult, Item
 from autoinfo.process import run_processing
-
 
 # ===================================================================
 # Fixtures
@@ -439,7 +438,6 @@ class TestMcpExtractFields:
     ) -> None:
         """extract_fields MCP tool returns custom fields for a stored entry."""
         from autoinfo.mcp.server import _handle_extract_fields
-        from autoinfo.kb import KBEntry
 
         # Create a mock entry for the KB lookup
         mock_entry = {
@@ -473,8 +471,8 @@ class TestMcpExtractFields:
 
     def test_extract_fields_nonexistent_entry(self) -> None:
         """extract_fields MCP returns NotFound for unknown entry."""
-        from autoinfo.mcp.server import _handle_extract_fields
         from autoinfo.kb import KBStore
+        from autoinfo.mcp.server import _handle_extract_fields
 
         mock_kb = MagicMock(spec=KBStore)
         mock_kb.get_entry.return_value = None
@@ -484,7 +482,7 @@ class TestMcpExtractFields:
                 content_id="nonexistent-id",
                 schema=["methodology"],
             )
-        assert result.get("error_code") == "NotFound"
+        assert result["error"]["code"] == "NotFound"
 
 
 # ===================================================================
@@ -503,7 +501,6 @@ class TestMcpGetExtraction:
     ) -> None:
         """get_extraction returns extracted_fields from frontmatter."""
         from autoinfo.mcp.server import _handle_get_extraction
-        from autoinfo.kb import KBEntry
 
         # Create a real KB entry file so get_extraction can read its frontmatter
         kb_base = tmp_path / "knowledge"
@@ -544,7 +541,6 @@ class TestMcpGetExtraction:
     ) -> None:
         """get_extraction returns empty extracted_fields when none stored."""
         from autoinfo.mcp.server import _handle_get_extraction
-        from autoinfo.kb import KBEntry
 
         kb_base = tmp_path / "knowledge"
         store = KBStore(base_path=kb_base)
@@ -571,8 +567,8 @@ class TestMcpGetExtraction:
 
     def test_get_extraction_nonexistent_entry(self) -> None:
         """get_extraction MCP returns NotFound for unknown entry."""
-        from autoinfo.mcp.server import _handle_get_extraction
         from autoinfo.kb import KBStore
+        from autoinfo.mcp.server import _handle_get_extraction
 
         mock_kb = MagicMock(spec=KBStore)
         mock_kb.get_entry.return_value = None

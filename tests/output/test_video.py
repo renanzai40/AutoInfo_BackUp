@@ -251,11 +251,14 @@ class TestGenerateHyperframesProject:
         import subprocess
 
         audio = os.path.join(str(tmp_path), "narr.mp3")
-        subprocess.run(
-            ["ffmpeg", "-y", "-f", "lavfi", "-i", "sine=frequency=220:duration=3",
-             "-c:a", "libmp3lame", audio],
-            capture_output=True,
-        )
+        try:
+            subprocess.run(
+                ["ffmpeg", "-y", "-f", "lavfi", "-i", "sine=frequency=220:duration=3",
+                 "-c:a", "libmp3lame", audio],
+                capture_output=True,
+            )
+        except FileNotFoundError:
+            pytest.skip("ffmpeg unavailable — cannot create audio fixture")
         if not os.path.isfile(audio):
             pytest.skip("ffmpeg unavailable — cannot create audio fixture")
         project = generate_hyperframes_project(

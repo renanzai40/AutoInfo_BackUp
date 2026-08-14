@@ -43,7 +43,7 @@ Returns structured health with composite score. On degraded status, inspect
 2. If LLM is missing, LLM-required tools return LLM_NOT_CONFIGURED (not a raw auth error) — see docs/dev/required-api-keys.md
 ```
 
-Any of the 17 LLM-required tools (e.g. `process_collection`, `generate_digest`,
+Any of the 16 LLM-required tools (e.g. `process_collection`, `generate_digest`,
 `suggest_keywords`) return `ErrorCode.LLM_NOT_CONFIGURED` at dispatch when no
 key is configured.
 

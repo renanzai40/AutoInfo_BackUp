@@ -270,7 +270,7 @@ The table indexes every pattern; the five most-used are inlined below.
 
 **Check system health**: `diagnose_system()` → returns `health_score` (0-100) + `phase` (`uninitialized` / `llm_unconfigured` / `no_sources` / `ready_to_collect` / `operational`). On degraded status, inspect `phase`.
 
-**Configure the LLM (BYOK)**: `configure_llm(api_key, provider, model)` stores an env var reference (`${AUTOINFO_LLM_API_KEY}`), never the raw key. If missing, the 17 LLM-required tools return `LLM_NOT_CONFIGURED` at dispatch. Full variable catalog: `docs/dev/required-api-keys.md`.
+**Configure the LLM (BYOK)**: `configure_llm(api_key, provider, model)` stores an env var reference (`${AUTOINFO_LLM_API_KEY}`), never the raw key. If missing, the 16 LLM-required tools return `LLM_NOT_CONFIGURED` at dispatch. Full variable catalog: `docs/dev/required-api-keys.md`.
 
 **Search KB**: `search_knowledge_base(domain, query, mode="hybrid")` (FTS5 + vector), `mode="vector"` (semantic only), or `mode="faceted"` with `filters={...}`; `filter_custom_fields={...}` facets on custom_fields JSON (e.g. `{"product_analysis.action_required": ""}`). Omit `domain` to search across all domains.
 
@@ -435,7 +435,7 @@ Never hand-edit runtime artifacts to fix behavior — fix the source.
 | Delivery schedules | ✅ add_delivery_schedule, list_delivery_schedules, remove_delivery_schedule MCP tools, cron-integrated |
 | Standardized error envelope | ✅ All MCP + REST API errors return `{success: false, error: {code, message, actionable}}`; 28 ErrorCode values; `error_dict()` deprecated |
 | REST success envelope | ✅ REST API success responses return `{success: true, data: ...}` (breaking change v1.9; migration: `docs/archive/migration-v1.9.md`); dashboard JS unwraps transparently |
-| LLM guard | ✅ Centralized `LLM_NOT_CONFIGURED` at `call_tool` dispatch (17 LLM-required tools) — no more raw auth errors |
+| LLM guard | ✅ Centralized `LLM_NOT_CONFIGURED` at `call_tool` dispatch (16 LLM-required tools) — no more raw auth errors |
 | Actionable guidance | ✅ `init_project` returns `next_steps`; `diagnose_system` returns `health_score` (0-100) + `phase`; DOMAIN_NOT_FOUND includes "Use add_domain()" |
 | CLI help text | ✅ 16 of 28 CLI command groups have custom help descriptions |
 | CLI/MCP parity groups | ✅ 6 parity groups added M6 (topic-group, import-kb, query-collected, alert-rules, agent-callback + keywords suggest) — 28 CLI groups mirroring MCP tool params; parity matrix: `docs/dev/cli-mcp-rest-parity.md` |

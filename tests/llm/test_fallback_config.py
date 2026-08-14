@@ -16,10 +16,20 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
+
 from autoinfo.config import load_config
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CONFIG_PATH = REPO_ROOT / ".autoinfo" / "config.yaml"
+
+# The tests assert against the repository's real (gitignored) config — the
+# single authorized direct config edit. Absent on CI (fresh checkout has no
+# .autoinfo/), so skip cleanly instead of failing FileNotFoundError.
+pytestmark = pytest.mark.skipif(
+    not CONFIG_PATH.is_file(),
+    reason=".autoinfo/config.yaml absent (gitignored) — deployment-config test",
+)
 
 OPENGATE_BASE_URL = "https://opencode.ai/zen/go/v1"
 FALLBACK_MODEL = "mimo-v2.5"

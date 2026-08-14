@@ -29,6 +29,7 @@ from __future__ import annotations
 import threading
 import time
 from contextlib import ExitStack
+from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
@@ -158,6 +159,10 @@ def _run_with_patches(
     """Run ``run_processing`` with the standard mock seam for KB + LLM."""
     patches = [
         patch("autoinfo.process.load_cached_items", return_value=items),
+        # Force the config seam regardless of a local .autoinfo/config.yaml —
+        # run_processing only calls load_config when get_config_path() finds a
+        # file, so on CI (no gitignored config) the patch below is a no-op.
+        patch("autoinfo.process.get_config_path", return_value=Path("/nonexistent/config.yaml")),
         patch("autoinfo.process.load_config", return_value=config),
         patch("autoinfo.process.KBStore", return_value=store),
         patch.object(
