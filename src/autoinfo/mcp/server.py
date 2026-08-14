@@ -6850,7 +6850,7 @@ def _handle_clean_cache(
     dict
         ``{items_removed, dry_run, targets}``.
     """
-    if everything and not confirm:
+    if everything and not confirm and not dry_run:
         return error_response(
             code=ErrorCode.CONFIRMATION_REQUIRED,
             message="clean_cache(everything=True) requires confirm=true — this deletes the entire knowledge/ directory and database",
