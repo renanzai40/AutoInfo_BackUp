@@ -27,6 +27,7 @@ import base64
 import json
 from pathlib import Path
 from types import SimpleNamespace
+from typing import Generator
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -40,20 +41,22 @@ from autoinfo.mcp.server import (
     _handle_generate_tutorial,
 )
 
+KBFixture = Generator[None, None, None]
+
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
 
 
 @pytest.fixture
-def outputs_dir(tmp_path, monkeypatch):
+def outputs_dir(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     """Redirect the module-level outputs root to tmp_path."""
     monkeypatch.setattr(mcp_server, "OUTPUTS_DIR", tmp_path)
     return tmp_path
 
 
 @pytest.fixture
-def kb_store_with_entries():
+def kb_store_with_entries() -> KBFixture:
     """Stub KBStore so the digest/report handlers reach generate_*.
 
     Same seam as tests/test_digest.py::TestMcpHandler — the handlers
@@ -88,7 +91,7 @@ def _unique_output_file(outputs_root: Path, domain: str, pattern: str) -> Path:
 class TestDigestPersist:
     @patch("autoinfo.mcp.server.logger")
     def test_digest_json_persist_writes_file(
-        self, mock_logger: MagicMock, outputs_dir, kb_store_with_entries
+        self, mock_logger: MagicMock, outputs_dir: Path, kb_store_with_entries: KBFixture
     ) -> None:
         """persist=True on generate_digest (json) writes a parseable JSON file."""
         payload = {"digest_type": "digest", "domain": "test", "entry_count": 0}
@@ -111,7 +114,7 @@ class TestDigestPersist:
 
     @patch("autoinfo.mcp.server.logger")
     def test_digest_markdown_persist_writes_md(
-        self, mock_logger: MagicMock, outputs_dir, kb_store_with_entries
+        self, mock_logger: MagicMock, outputs_dir: Path, kb_store_with_entries: KBFixture
     ) -> None:
         """persist=True with format=markdown writes a .md file with the text."""
         content = "# Weekly Digest\n\nSome **content** here"
@@ -132,7 +135,7 @@ class TestDigestPersist:
 
     @patch("autoinfo.mcp.server.logger")
     def test_digest_audio_persist_writes_mp3(
-        self, mock_logger: MagicMock, outputs_dir, kb_store_with_entries
+        self, mock_logger: MagicMock, outputs_dir: Path, kb_store_with_entries: KBFixture
     ) -> None:
         """persist=True with format=audio base64-decodes content into an .mp3."""
         audio_bytes = b"\x00\x01\x02\x03\xff\xfeID3FAKEMP3"
@@ -152,7 +155,7 @@ class TestDigestPersist:
 
     @patch("autoinfo.mcp.server.logger")
     def test_digest_persist_false_and_omitted_write_nothing(
-        self, mock_logger: MagicMock, outputs_dir, kb_store_with_entries
+        self, mock_logger: MagicMock, outputs_dir: Path, kb_store_with_entries: KBFixture
     ) -> None:
         """persist=False (and omitted) keeps the exact envelope, writes nothing."""
         content = "# Weekly Digest\n\ncontent"
@@ -183,7 +186,7 @@ class TestDigestPersist:
 class TestAllHandlersPersist:
     @patch("autoinfo.mcp.server.logger")
     def test_report_persist_writes_md(
-        self, mock_logger: MagicMock, outputs_dir, kb_store_with_entries
+        self, mock_logger: MagicMock, outputs_dir: Path, kb_store_with_entries: KBFixture
     ) -> None:
         content = "# Report\n\nbody"
         with patch("autoinfo.output.generate_report", return_value=content):
@@ -196,7 +199,7 @@ class TestAllHandlersPersist:
         file = _unique_output_file(outputs_dir, "medical-research", "report-markdown-*.md")
         assert file.read_text(encoding="utf-8") == content
 
-    def test_cross_domain_report_persist_writes_md(self, outputs_dir) -> None:
+    def test_cross_domain_report_persist_writes_md(self, outputs_dir: Path) -> None:
         config = SimpleNamespace(
             domains=[
                 SimpleNamespace(name="medical-research"),
@@ -221,7 +224,7 @@ class TestAllHandlersPersist:
         )
         assert file.read_text(encoding="utf-8") == content
 
-    def test_tutorial_persist_writes_md(self, outputs_dir) -> None:
+    def test_tutorial_persist_writes_md(self, outputs_dir: Path) -> None:
         content = "# Tutorial\n\nContent here"
         with patch("autoinfo.output.generate_tutorial", return_value=content):
             result = _handle_generate_tutorial(
@@ -235,7 +238,7 @@ class TestAllHandlersPersist:
         )
         assert file.read_text(encoding="utf-8") == content
 
-    def test_presentation_persist_writes_md(self, outputs_dir) -> None:
+    def test_presentation_persist_writes_md(self, outputs_dir: Path) -> None:
         content = "# Slide 1\n\nContent"
         with patch("autoinfo.output.generate_presentation", return_value=content):
             result = _handle_generate_presentation(
@@ -253,7 +256,7 @@ class TestAllHandlersPersist:
         assert file.read_text(encoding="utf-8") == content
 
     def test_persist_false_leaves_outputs_dir_empty_for_all_handlers(
-        self, outputs_dir, kb_store_with_entries
+        self, outputs_dir: Path, kb_store_with_entries: KBFixture
     ) -> None:
         """All five handlers with persist=False/omitted write nothing."""
         with (
@@ -282,7 +285,7 @@ class TestAllHandlersPersist:
 class TestReportColumnPersistNaming:
     @patch("autoinfo.mcp.server.logger")
     def test_column_report_persist_writes_column_markdown(
-        self, mock_logger: MagicMock, outputs_dir, kb_store_with_entries
+        self, mock_logger: MagicMock, outputs_dir: Path, kb_store_with_entries: KBFixture
     ) -> None:
         """report_type='column' + format=markdown persists as column-markdown-*."""
         content = "# Column\n\nbody"
@@ -303,7 +306,7 @@ class TestReportColumnPersistNaming:
 
     @patch("autoinfo.mcp.server.logger")
     def test_column_video_persist_writes_column_video(
-        self, mock_logger: MagicMock, outputs_dir, kb_store_with_entries
+        self, mock_logger: MagicMock, outputs_dir: Path, kb_store_with_entries: KBFixture
     ) -> None:
         """report_type='column' + format=video persists as column-video-* (#229 follow-up)."""
         video_b64 = base64.b64encode(b"fake-video-bytes").decode()
@@ -324,7 +327,7 @@ class TestReportColumnPersistNaming:
 
     @patch("autoinfo.mcp.server.logger")
     def test_standard_video_persist_still_writes_report_video(
-        self, mock_logger: MagicMock, outputs_dir, kb_store_with_entries
+        self, mock_logger: MagicMock, outputs_dir: Path, kb_store_with_entries: KBFixture
     ) -> None:
         """Default report_type keeps the report-* product name for video (no regression)."""
         video_b64 = base64.b64encode(b"fake-video-bytes").decode()
@@ -341,3 +344,35 @@ class TestReportColumnPersistNaming:
             outputs_dir, "medical-research", "report-video-*.mp4"
         )
         assert file.read_bytes() == base64.b64decode(video_b64)
+
+    @patch("autoinfo.mcp.server.logger")
+    def test_video_persist_copies_real_mp4_from_blob(
+        self,
+        mock_logger: MagicMock,
+        outputs_dir: Path,
+        kb_store_with_entries: KBFixture,
+        tmp_path: Path,
+    ) -> None:
+        """#254: _render_video_scaffold returns a JSON blob — persist copies the MP4.
+
+        A real MP4 next to the blob's video_path must be copied byte-for-byte,
+        not b64decoded (the blob is metadata, not base64 video).
+        """
+        mp4 = tmp_path / "report_20260814.mp4"
+        mp4.write_bytes(b"real-mp4-bytes")
+        blob = json.dumps(
+            {"status": "ok", "video_path": str(mp4), "format": "mp4"}
+        )
+        with patch("autoinfo.output.generate_report", return_value=blob):
+            result = _handle_generate_report(
+                domain="medical-research",
+                format="video",
+                persist=True,
+            )
+
+        assert result["success"] is True
+        assert "persisted_path" in result
+        file = _unique_output_file(
+            outputs_dir, "medical-research", "report-video-*.mp4"
+        )
+        assert file.read_bytes() == b"real-mp4-bytes"

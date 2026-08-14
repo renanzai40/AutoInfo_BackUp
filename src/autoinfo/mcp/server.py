@@ -2747,8 +2747,32 @@ def _persist_output(
             )
         else:
             _path.write_text(str(content), encoding="utf-8")
-    elif format in ("audio", "video", "epub", "audiobook"):
+    elif format in ("audio", "epub", "audiobook"):
         _path.write_bytes(base64.b64decode(content))
+    elif format == "video":
+        # Two accepted shapes: (1) _render_video_scaffold's JSON blob
+        # {"video_path": ...} — copy the referenced MP4 (#254);
+        # (2) base64-encoded MP4 bytes (audio-compatible test contract).
+        blob: Any = None
+        if isinstance(content, str):
+            try:
+                blob = json.loads(content)
+            except (ValueError, TypeError):
+                blob = None
+        video_path = (
+            blob.get("video_path") if isinstance(blob, dict) else None
+        )
+        if isinstance(video_path, str) and os.path.isfile(video_path):
+            import shutil
+
+            shutil.copy2(video_path, _path)
+        elif isinstance(blob, dict):
+            _path.write_text(
+                json.dumps(blob, ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
+        else:
+            _path.write_bytes(base64.b64decode(content))
     else:
         _path.write_text(str(content), encoding="utf-8")
     return str(OUTPUTS_DIR / domain / _path.name)
@@ -3030,6 +3054,12 @@ def _handle_generate_report(
                 parsed = _json3.loads(_output_text(result))
             except (ValueError, TypeError):
                 parsed = {"status": "ok", "video_path": result}
+            content = result
+            if isinstance(result, str) and os.path.isfile(result):
+                # generate_video returns an MP4 file path; persist expects
+                # the same base64 payload shape as audio (#254).
+                content = base64.b64encode(Path(result).read_bytes()).decode("ascii")
+                parsed.setdefault("encoding", "base64")
             return _maybe_persist_output(
                 {
                     "success": True,
@@ -3038,7 +3068,7 @@ def _handle_generate_report(
                     "period": period,
                     **parsed,
                 },
-                persist, domain, _persist_product, "video", result,
+                persist, domain, _persist_product, "video", content,
             )
         if format in ("epub", "audiobook"):
             return _maybe_persist_output(
