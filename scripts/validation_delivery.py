@@ -87,7 +87,13 @@ _OUTPUT_GEN_SCENARIOS = frozenset({
     "output-tutorial-presentation", "output-video", "enduser-journey",
 })
 _PARALLEL_SCENARIOS = _READONLY_SCENARIOS | _OUTPUT_GEN_SCENARIOS
-_PARALLEL_MAX_WORKERS = 4
+_READONLY_MAX_WORKERS = 4
+# Output-gen scenarios are LLM-heavy; full parallel fan-out under sustained
+# load raised DeepSeek empty-content probability (#178 class) enough to fail
+# steps that a solo run retries successfully (2026-08-14: 6 output-gen at
+# semaphore 4 → 5/6 failed, solo reruns passed). Cap at 2 to keep wall-time
+# gains (~50%) while keeping LLM concurrency low.
+_OUTPUT_GEN_MAX_WORKERS = 2
 
 
 async def _run_one_scenario(
@@ -141,9 +147,11 @@ async def _run_all_scenarios(
     parallel_names = [n for n in names if n in _PARALLEL_SCENARIOS]
     serial_names = [n for n in names if n not in _PARALLEL_SCENARIOS]
 
-    sem = asyncio.Semaphore(_PARALLEL_MAX_WORKERS)
+    sem_readonly = asyncio.Semaphore(_READONLY_MAX_WORKERS)
+    sem_output = asyncio.Semaphore(_OUTPUT_GEN_MAX_WORKERS)
 
     async def run_parallel(name: str) -> None:
+        sem = sem_output if name in _OUTPUT_GEN_SCENARIOS else sem_readonly
         async with sem:
             await _run_one_scenario(scenarios_dir, name, skip_llm, results, artifacts)
 
