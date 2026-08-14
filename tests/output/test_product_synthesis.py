@@ -22,9 +22,10 @@ Default standard/report synthesis stays unchanged (no product fields).
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 from unittest.mock import MagicMock, patch
 
+from autoinfo.llm import LLMExtractor
 from autoinfo.models import ExtractionResult
 from autoinfo.output import (
     PRODUCT_TEMPLATES,
@@ -212,7 +213,7 @@ def _registry_template(name: str) -> ProductTemplate:
     """Return the ProductTemplate instance of a PRODUCT_TEMPLATES row."""
     for row in PRODUCT_TEMPLATES:
         if row["name"] == name:
-            return row["template"]
+            return cast(ProductTemplate, row["template"])
     raise AssertionError(f"{name} ProductTemplate row missing from PRODUCT_TEMPLATES")
 
 
@@ -238,7 +239,7 @@ def _make_grouping_result() -> ExtractionResult:
     )
 
 
-def _get_llm_extractor_class():
+def _get_llm_extractor_class() -> type[LLMExtractor]:
     """Return the ``LLMExtractor`` class from ``autoinfo.llm``."""
     from autoinfo.llm import LLMExtractor
 
@@ -679,7 +680,7 @@ class TestExecutiveSummaryPromptSizeRetry:
 
         def _fake(prompt: str) -> str:
             captured.append(prompt)
-            return side_effect(prompt, len(captured))
+            return cast(str, side_effect(prompt, len(captured)))
 
         def _noop_sleep(seconds: float) -> None:
             sleeps.append(seconds)
