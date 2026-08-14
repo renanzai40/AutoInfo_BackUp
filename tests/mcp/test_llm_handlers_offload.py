@@ -74,10 +74,12 @@ async def test_sync_llm_handler_offloaded_via_to_thread(
     tool_name: str, handler_name: str
 ) -> None:
     """Dispatch of each sync LLM handler goes through asyncio.to_thread exactly once."""
-    calls: list[tuple[object, tuple, dict]] = []
+    calls: list[tuple[object, tuple[object, ...], dict[str, object]]] = []
     stub_result = {"success": True, "data": {"offloaded": True}}
 
-    async def tracking_to_thread(func: object, *args: object, **kwargs: object):
+    async def tracking_to_thread(
+        func: object, *args: object, **kwargs: object
+    ) -> dict[str, object]:
         calls.append((func, args, kwargs))
         return stub_result
 

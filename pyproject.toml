@@ -135,6 +135,10 @@ select = ["E", "F", "I", "N", "W"]
 # catches NEW errors without blocking legacy file touches.
 [tool.ruff.lint.per-file-ignores]
 "src/autoinfo/mcp/server.py" = ["E501", "F841", "N806"]
+# video.py: added 2026-08-13 (64daae5) with 39 pre-existing E501 long lines;
+# never lint-cleaned. Suppressing here so the changed-files gate catches NEW
+# errors without blocking legacy file touches (same rationale as server.py).
+"src/autoinfo/output/video.py" = ["E501"]
 
 [tool.mypy]
 python_version = "3.11"

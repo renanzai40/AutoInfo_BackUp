@@ -31,6 +31,7 @@ import time
 from contextlib import ExitStack
 from pathlib import Path
 from types import SimpleNamespace
+from typing import Any, Callable
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -41,6 +42,7 @@ from autoinfo.llm import LLMExtractor
 from autoinfo.models import ExtractionResult, Item, KBEntry
 from autoinfo.process import (
     _DEFAULT_SUBTASK_CAP,
+    ProcessResult,
     _resolve_subtask_cap,
     run_processing,
 )
@@ -97,7 +99,7 @@ def _g4_pass() -> QualityResult:
     )
 
 
-def _quality_all_pass():
+def _quality_all_pass() -> dict[str, QualityResult]:
     """Canonical deterministic-gate dict (G0..G3) — mirrors run_quality_gates."""
     return {
         "G0-SchemaIntegrity": QualityResult(
@@ -152,10 +154,10 @@ def _run_with_patches(
     items: list[Item],
     store: MagicMock,
     config: Config,
-    *extra_patches,
+    *extra_patches: Any,
     translation: str = "",
-    **proc_kwargs,
-):
+    **proc_kwargs: Any,
+) -> ProcessResult:
     """Run ``run_processing`` with the standard mock seam for KB + LLM."""
     patches = [
         patch("autoinfo.process.load_cached_items", return_value=items),
@@ -198,10 +200,12 @@ class _Inflight:
             self.inflight -= 1
 
 
-def _barrier_gate(barrier: threading.Barrier, counter: _Inflight, result):
+def _barrier_gate(
+    barrier: threading.Barrier, counter: _Inflight, result: Any
+) -> Callable[..., Any]:
     """Gate mock body: count in-flight, wait on the barrier, return result."""
 
-    def _gate(*args, **kwargs):  # noqa: ARG001
+    def _gate(*args: Any, **kwargs: Any) -> Any:  # noqa: ARG001
         counter.enter()
         try:
             barrier.wait(timeout=15)
@@ -212,10 +216,12 @@ def _barrier_gate(barrier: threading.Barrier, counter: _Inflight, result):
     return _gate
 
 
-def _sleepy_gate(counter: _Inflight, result, delay: float = 0.05):
+def _sleepy_gate(
+    counter: _Inflight, result: Any, delay: float = 0.05
+) -> Callable[..., Any]:
     """Gate mock body: count in-flight, sleep, return result."""
 
-    def _gate(*args, **kwargs):  # noqa: ARG001
+    def _gate(*args: Any, **kwargs: Any) -> Any:  # noqa: ARG001
         counter.enter()
         try:
             time.sleep(delay)
@@ -385,9 +391,13 @@ class TestReportOrder:
         last, yet the dict passed to ``store_entry`` must list gates in
         canonical G0→G5 order.
         """
-        captured: dict = {}
+        captured: dict[str, Any] = {}
 
-        def _capture_store(item, extraction, quality_results):  # noqa: ARG001
+        def _capture_store(
+            item: Item,
+            extraction: ExtractionResult,
+            quality_results: dict[str, QualityResult],
+        ) -> KBEntry:  # noqa: ARG001
             captured["quality_results"] = quality_results
             return _entry("par-b1-entry")
 
@@ -458,7 +468,7 @@ class TestG4RetrySemantics:
         """
         calls = {"n": 0}
 
-        def flaky_llm(*args, **kwargs):  # noqa: ARG001
+        def flaky_llm(*args: Any, **kwargs: Any) -> Any:  # noqa: ARG001
             calls["n"] += 1
             if calls["n"] < 3:
                 raise RuntimeError("provider boom")
@@ -497,7 +507,7 @@ class TestG4RetrySemantics:
         assert g4.details.get("retry_count") == 2
 
     def test_g4_always_fail_blocks_item(
-        self, monkeypatch: pytest.MonkeyPatch, caplog
+        self, monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
     ) -> None:
         """3 failed attempts → hard-gate block path preserved.
 
@@ -505,7 +515,7 @@ class TestG4RetrySemantics:
         the item is blocked (no storage), and G4 writes its own ``_failed/``
         diagnostics (3 attempts recorded).
         """
-        def always_fail(*args, **kwargs):  # noqa: ARG001
+        def always_fail(*args: Any, **kwargs: Any) -> Any:  # noqa: ARG001
             raise RuntimeError("provider boom")
 
         item = _item("par-d1-item", "First test article about IVF")

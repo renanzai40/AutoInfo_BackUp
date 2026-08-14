@@ -17,6 +17,8 @@ import sys
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
+
 # scripts/ is not a package — load it via sys.path like the script itself does.
 _SCRIPTS_DIR = Path(__file__).resolve().parent.parent.parent / "scripts"
 sys.path.insert(0, str(_SCRIPTS_DIR))
@@ -50,7 +52,7 @@ def test_run_concurrency_returns_p95_and_rate_limit_count() -> None:
     assert row["p95"] == 1.0
 
 
-def test_main_parses_workers_and_total_and_prints_row(capsys) -> None:
+def test_main_parses_workers_and_total_and_prints_row(capsys: pytest.CaptureFixture[str]) -> None:
     """``main(["--workers", "3", "--total", "6"])`` emits a single row dict
     containing p95 + rate_limit_count."""
     with (
@@ -67,7 +69,9 @@ def test_main_parses_workers_and_total_and_prints_row(capsys) -> None:
     assert "'rate_limit_count'" in out
 
 
-def test_main_no_args_keeps_serial_baseline_and_135_sequence(capsys) -> None:
+def test_main_no_args_keeps_serial_baseline_and_135_sequence(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
     """No-args fallback: serial baseline (1, total=6) then (3, total=10), (5, total=10)."""
     # 6 + 10 + 10 = 26 calls
     side = [_ok_call("m", i) for i in range(26)]
@@ -87,7 +91,7 @@ def test_main_no_args_keeps_serial_baseline_and_135_sequence(capsys) -> None:
     assert "'total': 10" in out
 
 
-def test_main_skips_without_key(capsys) -> None:
+def test_main_skips_without_key(capsys: pytest.CaptureFixture[str]) -> None:
     """No API key available -> SKIPPED + reason, no LLM calls, exit 0."""
     with (
         patch.object(probe, "_resolve_api_key", return_value=""),
