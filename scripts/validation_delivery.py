@@ -455,11 +455,11 @@ def _sections_from_headings(
     cur_heading: str | None = None
     cur_lines: list[str] = []
     for line in text.splitlines():
-        m = re.match(r"^#{1,6}\s+(.+?)\s*$", line.strip())
-        if m:
+        hm = re.match(r"^#{1,6}\s+(.+?)\s*$", line.strip())
+        if hm:
             if cur_heading:
                 blocks.append((cur_heading, cur_lines))
-            cur_heading = m.group(1).lower().replace("*", "").replace("`", "").strip()
+            cur_heading = hm.group(1).lower().replace("*", "").replace("`", "").strip()
             cur_lines = []
         elif cur_heading:
             cur_lines.append(line.strip())
@@ -1019,7 +1019,7 @@ def _package(artifacts: list[dict[str, Any]], results: list[dict[str, Any]], out
     # so run it concurrently across artifacts with a fixed-size pool, then
     # reassemble the results in the original artifact order so the manifest,
     # rejected list and per-artifact side effects stay deterministic.
-    _GATE_MAX_WORKERS = 6
+    gate_max_workers = 6
     pending: list[tuple[int, Path, Path, str]] = []
     # #206: the same source file may be declared by several scenarios'
     # collect_artifacts, so dedupe by source path.  Without this, the
@@ -1045,7 +1045,7 @@ def _package(artifacts: list[dict[str, Any]], results: list[dict[str, Any]], out
         pending.append((idx, src, dest, bucket))
 
     gate_evals: dict[int, dict[str, Any]] = {}
-    with ThreadPoolExecutor(max_workers=_GATE_MAX_WORKERS) as executor:
+    with ThreadPoolExecutor(max_workers=gate_max_workers) as executor:
         futures = {
             executor.submit(run_delivery_gates, src, bucket): idx
             for idx, src, _dest, bucket in pending
@@ -1057,7 +1057,10 @@ def _package(artifacts: list[dict[str, Any]], results: list[dict[str, Any]], out
             except Exception as exc:  # noqa: BLE001 — one bad file must never break delivery
                 gate_eval = {
                     "gates": {
-                        "D1": {"passed": False, "details": {"error": f"gate evaluation error: {exc}"}},
+                        "D1": {
+                            "passed": False,
+                            "details": {"error": f"gate evaluation error: {exc}"},
+                        },
                         "D2": {"passed": True, "details": {}},
                         "D3": {"passed": True, "details": {}},
                         "authenticity": {"authenticity": "fail", "reason": f"check error: {exc}"},
