@@ -18,6 +18,10 @@ collections/
 knowledge/
 outputs/
 
+# Validation / delivery artifacts (reproducible, not for git)
+validation-deliveries/
+deliverables/
+
 # IDE
 .idea/
 *.swp
