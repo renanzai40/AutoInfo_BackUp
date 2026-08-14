@@ -47,7 +47,7 @@ RETRY_MARKERS: tuple[str, ...] = (
 
 
 def _call_sites(src: str) -> list[dict[str, Any]]:
-    """Collect error_response / error_dict / _error_dict call nodes."""
+    """Collect error_response / error_dict / _error_from_exc call nodes."""
     tree = ast.parse(src)
     sites: list[dict[str, Any]] = []
     for node in ast.walk(tree):
@@ -59,16 +59,25 @@ def _call_sites(src: str) -> list[dict[str, Any]]:
             name = fn.id
         elif isinstance(fn, ast.Attribute):
             name = fn.attr
-        if name not in ("error_response", "error_dict", "_error_dict"):
+        if name not in ("error_response", "error_dict", "_error_dict",
+                        "_error_from_exc"):
             continue
         msg = ""
         if name == "_error_dict":
-            # _error_dict(exc) — message is str(exc) at runtime
+            # _error_dict(exc) — message is str(exc) at runtime (deprecated;
+            # any remaining call site is a raw-exception violation).
             arg = node.args[0] if node.args else None
             arg_name = ""
             if isinstance(arg, ast.Name):
                 arg_name = arg.id
             msg = f"<str({arg_name or 'exc'})>"
+        elif name == "_error_from_exc":
+            # _error_from_exc(exc, context) — the context argument carries
+            # the agent-facing operation context; the unified message
+            # template (helper body) appends the fix hint.
+            ctx = node.args[1] if len(node.args) >= 2 else None
+            if isinstance(ctx, ast.Constant) and isinstance(ctx.value, str):
+                msg = ctx.value
         else:
             for kw in node.keywords:
                 if kw.arg == "message" and isinstance(kw.value, ast.Constant):
@@ -79,6 +88,22 @@ def _call_sites(src: str) -> list[dict[str, Any]]:
             "message": msg,
         })
     return sites
+
+
+def _helper_template_ok(src: str) -> bool:
+    """Check the ``_error_from_exc`` helper's message template carries a fix
+    hint (the template-level guarantee that replaces per-site hints)."""
+    tree = ast.parse(src)
+    for node in ast.walk(tree):
+        if (isinstance(node, ast.FunctionDef)
+                and node.name == "_error_from_exc"):
+            texts = [
+                n.value for n in ast.walk(node)
+                if isinstance(n, ast.Constant) and isinstance(n.value, str)
+            ]
+            joined = " ".join(texts).lower()
+            return any(m in joined for m in HINT_MARKERS)
+    return False
 
 
 def audit_errors(src: str) -> dict[str, Any]:
@@ -109,6 +134,13 @@ def audit_errors(src: str) -> dict[str, Any]:
         and s["message"]
         and not any(m in s["message"].lower() for m in HINT_MARKERS)
     ]
+    # _error_from_exc sites must pass a non-empty operation context; the
+    # fix-hint part is guaranteed by the helper template (checked below).
+    from_exc_missing_context = [
+        s for s in sites
+        if s["call"] == "_error_from_exc" and not s["message"]
+    ]
+    helper_template_ok = _helper_template_ok(src)
     # RATE_LIMITED sites should carry a retry/backoff hint; find them by the
     # code argument referencing RATE_LIMITED.
     rate_sites: list[dict[str, Any]] = []
@@ -154,6 +186,11 @@ def audit_errors(src: str) -> dict[str, Any]:
         "no_fix_hint_sites": len(no_hint),
         "rate_limited_sites": len(rate_sites),
         "rate_limited_no_retry": len(rate_limited_no_retry),
+        "from_exc_sites": sum(
+            1 for s in sites if s["call"] == "_error_from_exc"
+        ),
+        "from_exc_missing_context": len(from_exc_missing_context),
+        "helper_template_ok": helper_template_ok,
     }
     return {
         "total_sites": len(sites),
@@ -163,6 +200,9 @@ def audit_errors(src: str) -> dict[str, Any]:
             "no_fix_hint": [
                 {"line": s["line"], "call": s["call"], "message": s["message"]}
                 for s in no_hint
+            ],
+            "from_exc_missing_context": [
+                s["line"] for s in from_exc_missing_context
             ],
             "rate_limited_no_retry": [
                 {"line": s["line"], "message": s["message"]}
@@ -183,6 +223,9 @@ def main() -> int:
     print(f"Raw-exception sites (_error_dict, str(exc) as message): "
           f"{s['raw_exception_sites']}")
     print(f"Messages without fix hint: {s['no_fix_hint_sites']}")
+    print(f"_error_from_exc sites: {s['from_exc_sites']} "
+          f"(missing context: {s['from_exc_missing_context']}, "
+          f"helper template ok: {s['helper_template_ok']})")
     print(f"RATE_LIMITED sites: {s['rate_limited_sites']} "
           f"(no retry hint: {s['rate_limited_no_retry']})")
 
