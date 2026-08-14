@@ -9,6 +9,10 @@ description: "B23 — digest/report EPUB and audiobook output formats"
 category: output
 requires_env: ["AUTOINFO_LLM_API_KEY"]
 requires_domain: ["medical-research"]
+# generate_report industry-type epub/audiobook (LLM synthesis + per-chapter
+# TTS render) exceeds the 180s default per-step timeout; raise the cap like
+# output-premium-products (900s) and output-video (1200s) (#255).
+timeout: 900
 collect_artifacts:
   - "outputs/**/*.md"
   - "outputs/**/*.json"
