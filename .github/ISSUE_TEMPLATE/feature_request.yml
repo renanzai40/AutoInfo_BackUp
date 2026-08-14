@@ -1,0 +1,53 @@
+name: Feature request
+about: Suggest a new feature or improvement
+title: "[Feature] "
+labels: ["feature"]
+assignees: ""
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature description
+      description: What the feature is and what it should do.
+      placeholder: "A clear description of the feature."
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation / use case
+      description: Who needs this and why. What problem does it solve?
+      placeholder: "e.g. Operators want to ... because ..."
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: What the feature should look like when done, including any interface (CLI, MCP tool, REST) changes.
+    validations:
+      required: false
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Workarounds or other approaches you considered and why they are insufficient.
+    validations:
+      required: false
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance criteria
+      description: What "done" looks like — the checks a reviewer can verify.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: false
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: Keep the change small and reviewable. Note any parts that could be split into follow-up PRs.
+    validations:
+      required: false

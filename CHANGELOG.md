@@ -55,6 +55,13 @@ All notable changes to the AutoInfo project will be documented in this file.
 - **Coverage-matrix fixes** — config-layer completeness pinned (#195, `b816698`), regenerate_paygrade artifact naming recognized (#191, `542d5eb`), `_failed/` and coverage-matrix artifacts excluded from delivery packages (#192, `9b67d5b`).
 - **keyword-management scenario seeds preset keywords** (#194, `3acb313`).
 
+### Infrastructure (2026-08-14 OSS-governance wave)
+- **LICENSE added** — MIT license text (matches the `license = "MIT"` declaration in `pyproject.toml`); repo URLs in `pyproject.toml` corrected from `your-org/autoinfo` placeholders to `1StepMore/AutoInfo`.
+- **Community governance files** — `CONTRIBUTING.md` (setup → first contribution → coding/testing standards → Conventional Commits for PR titles under squash-merge → AI contribution policy → 7-day issue SLA; highlights the 回归场景 regression-scenario practice as the project's OSS differentiator), `GOVERNANCE.md` (Minimum Viable Governance: roles, label taxonomy, per-priority response SLA, documented no-aggressive-stale-bot decision, review policy, branch protection + DCO runbook, release management), `CODE_OF_CONDUCT.md` (Contributor Covenant v2.1 with agent-first preamble), `SECURITY.md` (private vulnerability reporting, 48-72h acknowledgment, BYOK-key/webhook/REST-8741 security-relevant areas), `AUTHORS.md` (git-derived contributor list), `CODEOWNERS` (default + `mcp/`/`output/`/`docs/`/`.github/` owners).
+- **Issue & PR templates** — `.github/PULL_REQUEST_TEMPLATE.md` (Kubernetes-style: What/Why, `Fixes #N`, special review notes, mandatory `release-note` block with "NONE" valid, mandatory 回归场景 field for bug fixes, checklist), `.github/ISSUE_TEMPLATE/feature_request.yml` + `config.yml` (blank issues disabled, Discussions contact link), `dependabot.yml` (weekly pip + github-actions updates).
+- **CI & release automation** — `pr-title-check.yml` (Conventional Commits gate on PR titles, the commit under squash-merge), `coverage.yml` (changed-files coverage gate on the fast subset, 60% baseline threshold), `release-please.yml` + `release-please-config.json` + `.release-please-manifest.json` (semver releases from Conventional Commits), `.pre-commit-config.yaml` (ruff + hygiene hooks; `pre-commit install`).
+- **`.opencode/skills/maintainer-workflow-skill`** — triage → review → merge decision tree SOP for agent-maintainers, grounded in the governance docs above.
+
 ## v1.9 (Unreleased, 2026-08-05) — M0-M7 consolidated wave summary
 
 ### Breaking

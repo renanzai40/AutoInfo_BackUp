@@ -1,0 +1,49 @@
+# PR title gate (gap C1).
+#
+# AutoInfo squash-merges, so the PR title becomes the commit message on main
+# — and from there it feeds release-please's changelog (release-please.yml).
+# A title that is not a valid Conventional Commit either lands in the wrong
+# changelog section or no section at all. Gate it at the PR level instead of
+# fixing up history after the merge.
+#
+# Plain bash + grep: a regex check does not justify a third-party action.
+
+name: PR title check
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  conventional-title:
+    name: Conventional Commits title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR title
+        env:
+          # Passed via env, not shell interpolation, so titles containing
+          # $, backticks, or quotes are inert.
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          set -u
+
+          # Conventional Commits: type(scope)!?: subject.
+          # Scope is optional, "!" (breaking change) is allowed before the
+          # colon, and the subject must be non-empty.
+          REGEX='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?!?: .+'
+
+          # Bot/automation titles that are expected on main but are not
+          # Conventional Commits. Never block these: dependabot bumps
+          # ("dependabot[bot]: bump ..."), merge commits ("Merge ..."), and
+          # release-please's own release PRs ("Release v1.9.0").
+          case "$TITLE" in
+            dependabot\[*|Merge*|Release*) echo "Exempt title (bot/merge/release): $TITLE"; exit 0 ;;
+          esac
+
+          if [[ "$TITLE" =~ $REGEX ]]; then
+            echo "PR title OK: $TITLE"
+          else
+            echo "::error::PR title is not a Conventional Commit (https://www.conventionalcommits.org): '$TITLE'"
+            echo "::error::Expected 'type(scope): subject', e.g. 'feat(collect): add GDELT fulltext depth'"
+            exit 1
+          fi

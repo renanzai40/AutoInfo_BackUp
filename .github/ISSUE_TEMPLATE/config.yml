@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: GitHub Discussions
+    url: https://github.com/1StepMore/AutoInfo/discussions
+    about: General questions, ideas, and community discussion
+  - name: Documentation
+    url: https://github.com/1StepMore/AutoInfo/blob/main/README.md
+    about: Read the README for project overview, quick start, and usage

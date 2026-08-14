@@ -1,0 +1,24 @@
+# CODEOWNERS — AutoInfo
+#
+# How this file works:
+# - Patterns are matched against file paths; the LAST matching pattern wins.
+# - Owners listed here are automatically requested as reviewers for PRs that
+#   touch matching files.
+# - Owners must have write (or higher) access to the repository.
+# - To make ownership enforceable, enable the "Require review from Code Owners"
+#   branch protection rule on the default branch.
+
+# Default owner for everything not matched below.
+* @1StepMore
+
+# MCP server surface (tool definitions, dispatch, scenarios).
+/src/autoinfo/mcp/ @1StepMore
+
+# Output generation (digests, reports, tutorials, presentations, exports).
+/src/autoinfo/output/ @1StepMore
+
+# Documentation.
+/docs/ @1StepMore
+
+# CI/CD and community files.
+/.github/ @1StepMore

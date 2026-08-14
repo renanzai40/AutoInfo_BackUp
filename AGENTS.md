@@ -463,3 +463,20 @@ Never hand-edit runtime artifacts to fix behavior — fix the source.
 - `docs/dev/validation-scenario-contract.md` — Scenario authoring **and agent-tester execution** how-to (real MCP/CLI/REST calls, real artifacts); authoring + execution merged into one doc 2026-08-08 (former runbook archived at `docs/archive/agent-tester-validation.md`); graded against `acceptance-framework.md` (AC1-AC9)
 - `docs/adr/` — Architecture Decision Records: the *why* behind architecture rules (01-Raw sole entry, agent promotion without human gate, LLM fallback chain, reasoning-model JSON control, unified envelope). Template: `docs/adr/TEMPLATE.md`.
 - `docs/glossary.md` — Project glossary (Ubiquitous Language): the authoritative definitions of KB pipeline, gates, user types, and agent/tooling terms.
+
+## Community
+
+- `CONTRIBUTING.md` — Human-facing contribution guide (translates the agent rules above into human steps): setup, coding/testing standards, Conventional Commits for PR titles (squash-merge), AI contribution policy, 7-day issue response SLA, and the 回归场景 regression-scenario requirement.
+- `GOVERNANCE.md` — Lightweight governance: roles, label taxonomy, per-priority response SLA, stale-bot decision, review policy, branch protection + DCO, release management (release-please).
+- `CODE_OF_CONDUCT.md` — Contributor Covenant v2.1; governs all interactions including AI-assisted contributions and agent accounts.
+- `SECURITY.md` — Vulnerability reporting (private advisories, 48-72h acknowledgment) and security-relevant areas (BYOK keys, webhooks, REST port 8741).
+- `AUTHORS.md` — Contributor attribution.
+- `.github/PULL_REQUEST_TEMPLATE.md` — PR body: What/Why, `Fixes #N`, mandatory `release-note` block, mandatory 回归场景 for bug fixes.
+- `.github/ISSUE_TEMPLATE/` — `bug_report.md` (mandatory 回归场景 field) + `feature_request.yml` + `config.yml`.
+- `.github/CODEOWNERS` — Path-level review ownership (default + `mcp/`/`output/`/`docs/`/`.github/`).
+- `.github/workflows/pr-title-check.yml` — Conventional Commits gate on PR titles (the squashed commit under squash-merge).
+- `.github/workflows/coverage.yml` — Changed-files coverage gate on the fast test subset (60% baseline).
+- `.github/workflows/release-please.yml` + `release-please-config.json` + `.release-please-manifest.json` — Semver releases from Conventional Commits (version pinned 1.8.1).
+- `.github/dependabot.yml` — Weekly dependency updates (pip + github-actions).
+- `.pre-commit-config.yaml` — Local fast-feedback lint layer (`pre-commit install`).
+- `.opencode/skills/maintainer-workflow-skill/` — Triage → review → merge decision tree for agent-maintainers.

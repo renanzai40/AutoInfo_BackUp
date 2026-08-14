@@ -106,8 +106,8 @@ akshare = [
 all = ["autoinfo[dev,web,pdf,tts,video,ebook,akshare]"]
 
 [project.urls]
-Homepage = "https://github.com/your-org/autoinfo"
-Documentation = "https://github.com/your-org/autoinfo#readme"
+Homepage = "https://github.com/1StepMore/AutoInfo"
+Documentation = "https://github.com/1StepMore/AutoInfo#readme"
 
 [project.scripts]
 autoinfo = "autoinfo.cli:app"

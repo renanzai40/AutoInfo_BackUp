@@ -1,0 +1,34 @@
+# Local fast-feedback lint layer (gaps C3 + C4).
+#
+# Install once with: pre-commit install
+# (pre-commit >= 3.7 is in the dev extra; `pre-commit install` writes the
+# hook scripts into .git/hooks — solving the empty-hooks problem for new
+# clones, since the hook samples are not copied by git clone).
+#
+# This is the LOCAL fast-feedback layer only: CI runs ruff and mypy directly
+# in ci.yml (changed-files ruff + mypy gates) so the pre-commit hooks here
+# are a convenience, not the enforcement point. Keep the two in sync —
+# anything added below should also be covered by the CI gates.
+
+repos:
+  # Ruff revs track ruff's own releases; pinned to a stable tag matching the
+  # ruff>=0.5 floor in pyproject.toml.
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.10
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-json
+      - id: check-added-large-files
+      - id: detect-private-key
+      - id: debug-statements
+      - id: check-merge-conflict
