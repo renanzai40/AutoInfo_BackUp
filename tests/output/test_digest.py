@@ -12,19 +12,20 @@ Covers:
 from __future__ import annotations
 
 import json
+from collections.abc import Iterator
 from datetime import date, timedelta
-from pathlib import Path
+from typing import Any, cast
 from unittest.mock import MagicMock, patch
 
 import pytest
-import yaml
 
 from autoinfo.output import (
+    DeliveryOutput,
+    _call_llm_for_digest,
     _compute_date_range,
     _parse_json_response,
     generate_digest,
 )
-
 
 # ---------------------------------------------------------------------------
 # Sample entry data
@@ -73,7 +74,10 @@ _SAMPLE_LLM_SYNTHESIS = {
     "key_findings": [
         {
             "topic": "Time-lapse imaging",
-            "detail": "Significant improvement in live birth rates (48.2% vs 39.5%) in a large RCT.",
+            "detail": (
+                "Significant improvement in live birth rates (48.2% vs 39.5%)"
+                " in a large RCT."
+            ),
         },
         {
             "topic": "AI embryo selection",
@@ -146,7 +150,7 @@ class TestParseJsonResponse:
 
     def test_none_content_returns_empty(self) -> None:
         """None content (LLM json_object mismatch) must not crash (issues #96/#99)."""
-        result = _parse_json_response(None)  # type: ignore[arg-type]
+        result = _parse_json_response(None)
         assert result == {}
 
 
@@ -156,8 +160,11 @@ class TestParseJsonResponse:
 
 
 def _mock_list_entries(
-    domain=None, date_from=None, limit=20, offset=0
-) -> list[dict]:
+    domain: str | None = None,
+    date_from: str | None = None,
+    limit: int = 20,
+    offset: int = 0,
+) -> list[dict[str, Any]]:
     """Return sample entries, or empty for 'empty-domain'."""
     if domain == "empty-domain":
         return []
@@ -169,8 +176,50 @@ def _mock_list_entries(
 # ---------------------------------------------------------------------------
 
 
+class TestCallLlmForDigestRetry:
+    """Issue #217: empty synthesis retries before giving up."""
+
+    def _make_response(self, content: str) -> MagicMock:
+        resp = MagicMock()
+        resp.choices = [MagicMock()]
+        resp.choices[0].message.content = content
+        return resp
+
+    def test_retries_once_on_empty_content(self) -> None:
+        """A first empty response triggers one retry that returns synthesis."""
+        empty = self._make_response("not json")
+        good = self._make_response(json.dumps({"executive_summary": "ok"}))
+        with (
+            patch(
+                "autoinfo.output.call_with_fallback",
+                side_effect=[empty, good],
+            ),
+            patch("autoinfo.output.load_config", return_value=None),
+        ):
+            result = _call_llm_for_digest("prompt")
+        assert result.get("executive_summary") == "ok"
+
+    def test_two_empty_responses_return_empty(self) -> None:
+        """Two consecutive empty responses give up and return {} — the
+        caller then fills the sections deterministically (fallback)."""
+        empty = self._make_response("not json")
+        with (
+            patch(
+                "autoinfo.output.call_with_fallback",
+                side_effect=[empty, empty],
+            ),
+            patch("autoinfo.output.load_config", return_value=None),
+        ):
+            result = _call_llm_for_digest("prompt")
+        assert result == {}
+
+
 class TestGenerateDigest:
-    @patch("autoinfo.output.KBStore")  # TRIAGE #32-34: patch target must be the name used inside generate_digest (hoisted at src/autoinfo/output/__init__.py:49)
+    @patch(
+        # TRIAGE #32-34: patch target must be the name used inside
+        # generate_digest (hoisted at src/autoinfo/output/__init__.py:49)
+        "autoinfo.output.KBStore",
+    )
     @patch("autoinfo.output._call_llm_for_digest")
     def test_markdown_output_includes_entries_and_synthesis(
         self, mock_llm: MagicMock, mock_kb: MagicMock
@@ -204,7 +253,7 @@ class TestGenerateDigest:
         result = generate_digest(
             domain="medical-research", period="weekly", format="json"
         )
-        parsed = json.loads(result)
+        parsed = json.loads(cast(str, result))
 
         assert parsed["digest_type"] == "digest"
         assert parsed["domain"] == "medical-research"
@@ -245,8 +294,8 @@ class TestGenerateDigest:
         mock_kb.return_value = mock_store
 
         result = generate_digest(domain="empty-domain", period="weekly")
-        assert "No entries found" in result
-        assert "empty-domain" in result
+        assert "No entries found" in cast(str, result)
+        assert "empty-domain" in cast(str, result)
 
     @patch("autoinfo.output.KBStore")
     @patch("autoinfo.output._call_llm_for_digest")
@@ -262,7 +311,7 @@ class TestGenerateDigest:
         result = generate_digest(
             domain="empty-domain", period="weekly", format="json"
         )
-        parsed = json.loads(result)
+        parsed = json.loads(cast(str, result))
         assert parsed["entry_count"] == 0
         assert parsed["entries"] == []
 
@@ -270,7 +319,9 @@ class TestGenerateDigest:
     def test_llm_failure_still_renders_entries(
         self, mock_kb: MagicMock
     ) -> None:
-        """When LLM fails, digest still renders entries without synthesis."""
+        """When LLM fails, digest still renders entries — and, per issue
+        #217, a deterministic entry-derived synthesis fills the D1-required
+        sections instead of leaving them empty."""
         mock_store = MagicMock()
         mock_store.list_entries.side_effect = _mock_list_entries
         mock_kb.return_value = mock_store
@@ -279,9 +330,64 @@ class TestGenerateDigest:
             result = generate_digest(
                 domain="medical-research", period="weekly"
             )
-            assert "Entries" in result
-            assert "IVF outcomes with time-lapse" in result
-            assert "Executive Summary" not in result
+            assert "Entries" in cast(str, result)
+            assert "IVF outcomes with time-lapse" in cast(str, result)
+            # Issue #217: synthesis is now entry-derived, never empty —
+            # D1 (product completeness) must not block the product.
+            assert "Executive Summary" in cast(str, result)
+            assert "IVF" in cast(str, result)
+
+    @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._call_llm_for_digest")
+    def test_empty_llm_synthesis_falls_back_to_entry_sections(
+        self, mock_llm: MagicMock, mock_kb: MagicMock
+    ) -> None:
+        """Issue #217: when the LLM returns empty synthesis, the digest still
+        carries non-empty D1-required sections derived from real entries —
+        D1 must not block the product for empty key_findings/summary/
+        recommendations."""
+        mock_llm.return_value = {}  # DeepSeek intermittent empty output
+        mock_store = MagicMock()
+        mock_store.list_entries.side_effect = _mock_list_entries
+        mock_kb.return_value = mock_store
+
+        result = generate_digest(
+            domain="medical-research", period="weekly", format="json"
+        )
+        parsed = json.loads(cast(str, result))
+        synth = parsed["llm_synthesis"]
+        assert synth["executive_summary"].strip()
+        assert synth["key_findings"]
+        assert synth["recommendations"]
+        # Fallback is derived from the real entries, never fabricated.
+        assert "IVF" in synth["executive_summary"] or "AI" in synth["executive_summary"]
+
+    @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._call_llm_for_digest")
+    def test_empty_synthesis_passes_d1_gate(
+        self, mock_llm: MagicMock, mock_kb: MagicMock
+    ) -> None:
+        """Issue #217: D1 (product completeness) must pass when the LLM
+        synthesis was empty and the deterministic entry-derived fallback
+        filled the required sections."""
+        mock_llm.return_value = {}
+        mock_store = MagicMock()
+        mock_store.list_entries.side_effect = _mock_list_entries
+        mock_kb.return_value = mock_store
+
+        result = generate_digest(
+            domain="medical-research",
+            period="weekly",
+            format="json",
+            delivery_gate_configs={
+                "D1-ProductCompleteness": {"action": "block"},
+            },
+        )
+        assert isinstance(result, DeliveryOutput)
+        assert not result.delivery_blocked
+        d1 = result.gate_results.get("D1-ProductCompleteness")
+        assert d1 is not None
+        assert d1.passed is True
 
     def test_invalid_period_raises_value_error(self) -> None:
         """Invalid period raises ValueError."""
@@ -305,10 +411,10 @@ class TestGenerateDigest:
         mock_kb.return_value = mock_store
 
         daily = generate_digest(domain="medical-research", period="daily")
-        assert "Daily Digest" in daily
+        assert "Daily Digest" in cast(str, daily)
 
         monthly = generate_digest(domain="medical-research", period="monthly")
-        assert "Monthly Digest" in monthly
+        assert "Monthly Digest" in cast(str, monthly)
 
 
 # ---------------------------------------------------------------------------
@@ -320,7 +426,7 @@ class TestMcpHandler:
     """Tests the _handle_generate_digest MCP handler directly."""
 
     @pytest.fixture
-    def kb_store_with_entries(self):
+    def kb_store_with_entries(self) -> Iterator[None]:
         """Stub KBStore entries so the handler reaches generate_digest.
 
         TRIAGE #38-41 — ``_handle_generate_digest`` has an intentional no-entry
@@ -340,7 +446,7 @@ class TestMcpHandler:
 
     @patch("autoinfo.mcp.server.logger")
     def test_handler_returns_success_with_content(
-        self, mock_logger: MagicMock, kb_store_with_entries
+        self, mock_logger: MagicMock, kb_store_with_entries: Iterator[None]
     ) -> None:
         """Handler returns success dict with rendered content."""
         from autoinfo.mcp.server import _handle_generate_digest
@@ -359,7 +465,7 @@ class TestMcpHandler:
 
     @patch("autoinfo.mcp.server.logger")
     def test_handler_json_format_parses_content(
-        self, mock_logger: MagicMock, kb_store_with_entries
+        self, mock_logger: MagicMock, kb_store_with_entries: Iterator[None]
     ) -> None:
         """Handler parses JSON string into dict for JSON format response."""
         from autoinfo.mcp.server import _handle_generate_digest
@@ -382,7 +488,7 @@ class TestMcpHandler:
 
     @patch("autoinfo.mcp.server.logger")
     def test_handler_propagates_validation_error(
-        self, mock_logger: MagicMock, kb_store_with_entries
+        self, mock_logger: MagicMock, kb_store_with_entries: Iterator[None]
     ) -> None:
         """Handler returns error dict for ValueError from generate_digest."""
         from autoinfo.mcp.server import _handle_generate_digest
@@ -398,7 +504,7 @@ class TestMcpHandler:
 
     @patch("autoinfo.mcp.server.logger")
     def test_handler_returns_error_for_exception(
-        self, mock_logger: MagicMock, kb_store_with_entries
+        self, mock_logger: MagicMock, kb_store_with_entries: Iterator[None]
     ) -> None:
         """Handler returns error dict for generic exceptions."""
         from autoinfo.mcp.server import _handle_generate_digest
@@ -413,11 +519,11 @@ class TestMcpHandler:
 
     @patch("autoinfo.mcp.server.logger")
     def test_handler_digest_with_product_passes_registry_template(
-        self, mock_logger: MagicMock, kb_store_with_entries
+        self, mock_logger: MagicMock, kb_store_with_entries: Iterator[None]
     ) -> None:
         """Handler forwards the PRODUCT_TEMPLATES row for product to generate_digest."""
-        from autoinfo.output import PRODUCT_TEMPLATES
         from autoinfo.mcp.server import _handle_generate_digest
+        from autoinfo.output import PRODUCT_TEMPLATES
 
         _row = next(
             r for r in PRODUCT_TEMPLATES if r["name"] == "magazine-digest"
@@ -439,11 +545,11 @@ class TestMcpHandler:
 
     @patch("autoinfo.mcp.server.logger")
     def test_handler_digest_unknown_product_returns_error_envelope(
-        self, mock_logger: MagicMock, kb_store_with_entries
+        self, mock_logger: MagicMock, kb_store_with_entries: Iterator[None]
     ) -> None:
         """Unknown product returns the canonical error envelope with valid names."""
-        from autoinfo.output import PRODUCT_TEMPLATES
         from autoinfo.mcp.server import _handle_generate_digest
+        from autoinfo.output import PRODUCT_TEMPLATES
 
         result = _handle_generate_digest(
             domain="medical-research", product="no-such-product"
@@ -459,7 +565,7 @@ class TestMcpHandler:
 
     @patch("autoinfo.mcp.server.logger")
     def test_handler_digest_without_product_unchanged(
-        self, mock_logger: MagicMock, kb_store_with_entries
+        self, mock_logger: MagicMock, kb_store_with_entries: Iterator[None]
     ) -> None:
         """No product param -> generate_digest receives product_template=None."""
         from autoinfo.mcp.server import _handle_generate_digest

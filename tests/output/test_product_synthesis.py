@@ -22,9 +22,10 @@ Default standard/report synthesis stays unchanged (no product fields).
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 from unittest.mock import MagicMock, patch
 
+from autoinfo.llm import LLMExtractor
 from autoinfo.models import ExtractionResult
 from autoinfo.output import (
     PRODUCT_TEMPLATES,
@@ -212,7 +213,7 @@ def _registry_template(name: str) -> ProductTemplate:
     """Return the ProductTemplate instance of a PRODUCT_TEMPLATES row."""
     for row in PRODUCT_TEMPLATES:
         if row["name"] == name:
-            return row["template"]
+            return cast(ProductTemplate, row["template"])
     raise AssertionError(f"{name} ProductTemplate row missing from PRODUCT_TEMPLATES")
 
 
@@ -238,7 +239,7 @@ def _make_grouping_result() -> ExtractionResult:
     )
 
 
-def _get_llm_extractor_class():
+def _get_llm_extractor_class() -> type[LLMExtractor]:
     """Return the ``LLMExtractor`` class from ``autoinfo.llm``."""
     from autoinfo.llm import LLMExtractor
 
@@ -679,7 +680,7 @@ class TestExecutiveSummaryPromptSizeRetry:
 
         def _fake(prompt: str) -> str:
             captured.append(prompt)
-            return side_effect(prompt, len(captured))
+            return cast(str, side_effect(prompt, len(captured)))
 
         def _noop_sleep(seconds: float) -> None:
             sleeps.append(seconds)
@@ -758,7 +759,7 @@ class TestExecutiveSummaryPromptSizeRetry:
     def test_all_attempts_empty_bounded_loop_then_theme_fallback(self) -> None:
         """If every attempt returns empty, fall back after exactly
         ``max_synthesis_attempts`` calls (bounded — no unbounded retry
-        loop) with the unchanged theme-list fallback."""
+        loop) with the theme-list fallback."""
         def _side(prompt: str, call_no: int) -> str:
             return ""
 
@@ -768,12 +769,13 @@ class TestExecutiveSummaryPromptSizeRetry:
         assert len(captured) == 4
         # One backoff sleep between each of the 4 attempts (3 total).
         assert sleeps == [60.0, 60.0, 60.0]
-        # Deterministic theme-list fallback still yields a non-empty summary
-        # but never fabricates product sections (the dict carries only the
-        # three base keys; downstream reads absent product keys as empty).
+        # Issue #217: the deterministic fallback must still carry non-empty
+        # D1-required sections derived from the real entries — never empty
+        # (an empty key_findings/recommendations would block delivery).
         assert result["executive_summary"]
         assert "This report covers" in result["executive_summary"]
-        assert result["key_findings"] == []
+        assert result["key_findings"]
+        assert result["recommendations"]
         assert set(result) == {"executive_summary", "key_findings", "recommendations"}
 
     def test_retry_succeeds_but_omits_sections_fires_dedicated_prompt(

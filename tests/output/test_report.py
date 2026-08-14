@@ -15,11 +15,12 @@ Covers:
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 from unittest.mock import MagicMock, patch
 
 import pytest
 
+from autoinfo.llm import LLMExtractor
 from autoinfo.models import ExtractionResult
 
 # ===================================================================
@@ -178,7 +179,7 @@ class TestGenerateReport:
                 _call_report("test-domain", format="pdf")
 
     def test_happy_path_renders_complete_report(
-        self, sample_entries: list[dict]
+        self, sample_entries: list[dict[str, Any]]
     ) -> None:
         """Full flow: entries → LLM grouping → template → rendered markdown."""
         mock_extract = MagicMock(
@@ -237,7 +238,7 @@ class TestGenerateReport:
         assert "medical-research" in report
 
     def test_llm_grouping_failure_falls_back_to_single_group(
-        self, sample_entries: list[dict]
+        self, sample_entries: list[dict[str, Any]]
     ) -> None:
         """When LLM grouping fails, entries fall back to source-type groups."""
         mock_extract = MagicMock(
@@ -277,7 +278,7 @@ class TestGenerateReport:
         assert "Synaptic pruning" in report
 
     def test_llm_grouping_exception_falls_back(
-        self, sample_entries: list[dict]
+        self, sample_entries: list[dict[str, Any]]
     ) -> None:
         """When LLM grouping raises, entries fall back to source-type groups."""
         mock_extract = MagicMock(
@@ -309,7 +310,7 @@ class TestGenerateReport:
         assert "Improved IVF outcomes" in report
 
     def test_executive_summary_failure_falls_back(
-        self, sample_entries: list[dict]
+        self, sample_entries: list[dict[str, Any]]
     ) -> None:
         """When LLM executive summary fails, a bullet-list fallback is used."""
         mock_extract = MagicMock(
@@ -341,7 +342,7 @@ class TestGenerateReport:
         assert "Neuroplasticity & Brain Development" in report
 
     def test_executive_summary_exception_falls_back(
-        self, sample_entries: list[dict]
+        self, sample_entries: list[dict[str, Any]]
     ) -> None:
         """When LLM executive summary raises, a bullet-list fallback is used."""
         mock_extract = MagicMock(
@@ -369,9 +370,40 @@ class TestGenerateReport:
 
         assert "This report covers" in report
 
-    def test_ungrouped_entries_go_to_additional_topics(
-        self, sample_entries: list[dict]
+    def test_fallback_sections_non_empty_after_llm_empty_synthesis(
+        self, sample_entries: list[dict[str, Any]]
     ) -> None:
+        """Issue #217: when every LLM synthesis path comes back empty, the
+        report's deterministic fallback must still carry non-empty
+        key_findings / recommendations derived from the real entries, so
+        D1 (product completeness) does not block the report."""
+        mock_extract = MagicMock(
+            side_effect=[
+                _make_grouping_result(),
+                _make_empty_extraction(),
+            ]
+        )
+
+        with (
+            patch("autoinfo.output.KBStore") as mock_kb_cls,
+            patch.object(
+                _get_llm_extractor_class(), "extract", mock_extract
+            ),
+            patch(
+                "autoinfo.output._call_llm_for_report_synthesis",
+                return_value="",
+            ),
+        ):
+            mock_store = MagicMock()
+            mock_store.list_entries.return_value = sample_entries
+            mock_kb_cls.return_value = mock_store
+
+            report = _call_report("medical-research")
+
+        # Fallback sections are entry-derived, never empty (D1 passes).
+        assert "This report covers" in report
+        assert "## Key Findings" in report
+        assert "IVF" in report or "time-lapse" in report
         """Entries not matched by LLM grouping appear in 'Additional Topics'."""
         mock_extract = MagicMock(
             side_effect=[
@@ -402,7 +434,7 @@ class TestGenerateReport:
         assert "Synaptic pruning" in report
 
     def test_render_with_collection_id(
-        self, sample_entries: list[dict]
+        self, sample_entries: list[dict[str, Any]]
     ) -> None:
         """``collection_id`` appears in the rendered report metadata."""
         mock_extract = MagicMock(
@@ -442,7 +474,7 @@ class TestReportTypes:
     """``generate_report(report_type=...)`` — specialized report types."""
 
     def test_standard_type_is_unchanged(
-        self, sample_entries: list[dict]
+        self, sample_entries: list[dict[str, Any]]
     ) -> None:
         """``report_type="standard"`` produces same output as omitting the parameter."""
         mock_extract = MagicMock(
@@ -480,7 +512,7 @@ class TestReportTypes:
         assert "## Sections" in report_explicit
 
     def test_industry_type_produces_report(
-        self, sample_entries: list[dict]
+        self, sample_entries: list[dict[str, Any]]
     ) -> None:
         """``report_type="industry"`` produces a valid structured report."""
         mock_extract = MagicMock(
@@ -511,7 +543,7 @@ class TestReportTypes:
         assert "## Sections" in report
 
     def test_competitive_type_produces_report(
-        self, sample_entries: list[dict]
+        self, sample_entries: list[dict[str, Any]]
     ) -> None:
         """``report_type="competitive"`` produces a valid structured report."""
         mock_extract = MagicMock(
@@ -542,7 +574,7 @@ class TestReportTypes:
         assert "## Sections" in report
 
     def test_trend_type_produces_report(
-        self, sample_entries: list[dict]
+        self, sample_entries: list[dict[str, Any]]
     ) -> None:
         """``report_type="trend"`` produces a valid structured report."""
         mock_extract = MagicMock(
@@ -573,7 +605,7 @@ class TestReportTypes:
         assert "## Sections" in report
 
     def test_daily_briefing_type_produces_report(
-        self, sample_entries: list[dict]
+        self, sample_entries: list[dict[str, Any]]
     ) -> None:
         """``report_type="daily-briefing"`` produces a valid structured report."""
         mock_extract = MagicMock(
@@ -623,7 +655,7 @@ class TestReportTypes:
             generate_report(domain="test", period="yearly")
 
     def test_type_prompt_injected_into_executive_summary(
-        self, sample_entries: list[dict]
+        self, sample_entries: list[dict[str, Any]]
     ) -> None:
         """Type-specific prompt text reaches the executive summary LLM call."""
         mock_extract = MagicMock(
@@ -657,7 +689,7 @@ class TestReportTypes:
         assert "Key Developments" in instructions
 
     def test_standard_type_passes_empty_instructions(
-        self, sample_entries: list[dict]
+        self, sample_entries: list[dict[str, Any]]
     ) -> None:
         (
             """``report_type="standard"`` passes empty/unchanged custom_instructions"""
@@ -766,16 +798,19 @@ def _call_report(
     """Call ``generate_report`` from ``autoinfo.output``."""
     from autoinfo.output import generate_report
 
-    return generate_report(
-        domain=domain,
-        collection_id=collection_id,
-        format=format,
-        report_type=report_type,
-        custom_instructions=custom_instructions,
+    return cast(
+        str,
+        generate_report(
+            domain=domain,
+            collection_id=collection_id,
+            format=format,
+            report_type=report_type,
+            custom_instructions=custom_instructions,
+        ),
     )
 
 
-def _get_llm_extractor_class():
+def _get_llm_extractor_class() -> type[LLMExtractor]:
     """Return the ``LLMExtractor`` class from ``autoinfo.llm``."""
     from autoinfo.llm import LLMExtractor
 
