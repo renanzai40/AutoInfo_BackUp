@@ -13,18 +13,18 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 
 | Metric | Value |
 |--------|-------|
-| Total files | 66 |
-| Total lines | 26402 |
-| Active files | 57 |
-| Archived files | 9 |
-| Category — archive | 9 files / 4932 lines |
+| Total files | 68 |
+| Total lines | 28313 |
+| Active files | 54 |
+| Archived files | 14 |
+| Category — archive | 14 files / 7283 lines |
 | Category — known-limitations | 1 files / 255 lines |
 | Category — schemas | 4 files / 397 lines |
 | Category — skills | 3 files / 785 lines |
 | Category — adr | 8 files / 384 lines |
 | Category — specs | 12 files / 8766 lines |
-| Category — validation-reports | 8 files / 2620 lines |
-| Category — docs/dev | 20 files / 8202 lines |
+| Category — validation-reports | 8 files / 2624 lines |
+| Category — docs/dev | 17 files / 7758 lines |
 | Category — docs/root | 1 files / 61 lines |
 
 ## Inventory
@@ -39,7 +39,12 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `adr/0006-dev-process-workflow-charter.md` | 72 | adr | active | adr |
 | `adr/README.md` | 52 | adr | active | adr-index |
 | `adr/TEMPLATE.md` | 32 | adr | active | adr |
+| `archive/agent-tester-validation-guide.md` | 1498 | archive | archived | — |
 | `archive/agent-tester-validation.md` | 663 | archive | archived | — |
+| `archive/autoinfo-validation-master-plan/LOOP-LOG.md` | 60 | archive | archived | — |
+| `archive/autoinfo-validation-master-plan/part-02-cli-depth-results-q10-q18.md` | 172 | archive | archived | — |
+| `archive/autoinfo-validation-master-plan/part-12-final-verdict.md` | 383 | archive | archived | — |
+| `archive/autoinfo-validation-master-plan/scenarios/enduser-deliverable.yaml` | 238 | archive | archived | — |
 | `archive/end-user-sla.md` | 126 | archive | archived | — |
 | `archive/epics-issue-97-coverage-verdict.md` | 109 | archive | archived | — |
 | `archive/founder-expectations-pre-split.md` | 2112 | archive | archived | — |
@@ -48,12 +53,9 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `archive/launch-validation-report.md` | 273 | archive | archived | — |
 | `archive/migration-v1.9.md` | 58 | archive | archived | — |
 | `archive/reports/global-content-paid-research-report-trae.md` | 973 | archive | archived | — |
-| `autoinfo-validation-master-plan/LOOP-LOG.md` | 57 | docs/dev | active | — |
-| `autoinfo-validation-master-plan/part-02-cli-depth-results-q10-q18.md` | 170 | docs/dev | active | — |
-| `autoinfo-validation-master-plan/part-12-final-verdict.md` | 381 | docs/dev | active | — |
-| `autoinfo-validation-master-plan/scenarios/enduser-deliverable.yaml` | 234 | docs/dev | active | — |
 | `dev/acceptance-framework.md` | 494 | docs/dev | active | — |
 | `dev/agent-alerting.md` | 129 | docs/dev | active | — |
+| `dev/best-practice-review.md` | 388 | docs/dev | active | best-practice-review |
 | `dev/cli-mcp-rest-parity.md` | 466 | docs/dev | active | — |
 | `dev/cross-dimensional-catalog.md` | 982 | docs/dev | active | — |
 | `dev/director-user-guide.md` | 756 | docs/dev | active | — |
@@ -77,7 +79,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/specs/pipeline.md` | 567 | specs | active | — |
 | `dev/specs/quality-gates.md` | 187 | specs | active | — |
 | `dev/specs/user-lifecycle-definition.md` | 441 | specs | active | — |
-| `dev/validation-reports/README.md` | 53 | validation-reports | active | — |
+| `dev/validation-reports/README.md` | 57 | validation-reports | active | — |
 | `dev/validation-reports/acceptance-2026-08-08.md` | 166 | validation-reports | active | — |
 | `dev/validation-reports/acceptance-2026-08-12.md` | 113 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/AC5-verdict.md` | 34 | validation-reports | active | — |
@@ -85,7 +87,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/validation-reports/evidence-2026-08-12/ac5-digest-weekly.md` | 144 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-report-standard.md` | 813 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-tutorial-student.md` | 501 | validation-reports | active | — |
-| `dev/validation-scenario-contract.md` | 768 | docs/dev | active | — |
+| `dev/validation-scenario-contract.md` | 778 | docs/dev | active | — |
 | `dev/workflow-charter.md` | 67 | docs/dev | active | workflow-charter |
 | `dev/七阶段AI开发流程-用CodingAgent交付成品的方法论.md` | 234 | docs/dev | active | methodology |
 | `glossary.md` | 61 | docs/root | active | glossary |

@@ -386,7 +386,7 @@ Two layers, judged separately:
 
 ### Known improvement backlog (not yet criteria)
 
-Recorded from external best-practice research (2026-08-08), for future hardening of the validation layer: (1) run each behavioral scenario N times and gate on pass rate (5/5 hard, 4/5 soft) rather than a single run; (2) add a cheap deterministic conformance layer (no LLM) that runs on every push, keeping LLM-gated scenarios on schedule; (3) gate on score delta vs the last green run, not absolute thresholds; (4) add negative cases (assert a tool is *not* called) to catch over-triggering.
+Recorded from external best-practice research (2026-08-08), for future hardening of the validation layer: (1) run each behavioral scenario N times and gate on pass rate (5/5 hard, 4/5 soft) rather than a single run; (2) add a cheap deterministic conformance layer (no LLM) that runs on every push, keeping LLM-gated scenarios on schedule; (3) gate on score delta vs the last green run, not absolute thresholds; (4) add negative cases (assert a tool is *not* called) to catch over-triggering. **Verifiable sources for the best-practice claims:** `docs/dev/best-practice-review.md` §9 (evidence & source index, compiled 2026-08-14) — the independent best-practice review dimension with per-claim evidence strength (🔬 empirical / 📐 convention / ⚖️ contested).
 
 ### Evidence requirements
 
