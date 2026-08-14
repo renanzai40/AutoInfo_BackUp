@@ -7,6 +7,8 @@ validate_config, get_channel factory, list_channels, ProductTemplate.
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -277,7 +279,7 @@ class TestProductTemplate:
         assert "# Digest Title" in result
         assert len(result) > 0
 
-    def test_domain_override(self, tmp_path: pytest.TempPathFactory) -> None:
+    def test_domain_override(self, tmp_path: Path) -> None:
         """Domain-specific template overrides the base template."""
         domain = "test-domain"
         domain_dir = (
@@ -289,14 +291,14 @@ class TestProductTemplate:
         )
 
         pt = ProductTemplate(domain=domain)
-        pt._domain_dir = domain_dir.parent.parent / domain  # type: ignore[attr-defined]
+        pt._domain_dir = domain_dir.parent.parent / domain
 
         data: dict[str, object] = {"title": "Hello"}
         result = pt.render("digest", "custom", data)
         assert "CUSTOM OVERRIDE: Hello" in result
 
     def test_unknown_variant_falls_back_to_default(
-        self, tmp_path: pytest.TempPathFactory
+        self, tmp_path: Path
     ) -> None:
         """Unknown variant falls back to the default template for the type."""
         domain = "test-domain"
@@ -309,7 +311,7 @@ class TestProductTemplate:
         )
 
         pt = ProductTemplate(domain=domain)
-        pt._domain_dir = domain_dir.parent.parent / domain  # type: ignore[attr-defined]
+        pt._domain_dir = domain_dir.parent.parent / domain
 
         data: dict[str, object] = {"title": "Works"}
         result = pt.render("digest", "nonexistent_variant", data)
@@ -419,19 +421,11 @@ class TestDigestDeliveryGates:
         """D1 blocks delivery when digest has incomplete/empty sections."""
 
         class _MockStore:
+            # No entries: the deterministic synthesis fallback (issue #217)
+            # only fires when entries exist, so the D1-required sections stay
+            # empty and D1 still blocks an incomplete digest.
             def list_entries(self, **kwargs: object) -> list[dict[str, object]]:
-                return [
-                    {
-                        "title": "Entry 1",
-                        "summary": "Test",
-                        "tags": "[]",
-                        "source_platform": "web",
-                        "source_type": "article",
-                        "collected_at": "2026-07-24",
-                        "relevance_score": 85,
-                        "source_url": "http://example.com",
-                    }
-                ]
+                return []
 
         monkeypatch.setattr("autoinfo.output.KBStore", lambda: _MockStore())
         # Return empty LLM synthesis — all D1 sections will be empty/missing
@@ -549,7 +543,7 @@ class TestDigestDeliveryGates:
             lambda prompt=None, config=None: {},
         )
 
-        configs = {
+        configs: dict[str, dict[str, Any]] = {
             "D1": {"enabled": True},
             "D3": {"enabled": True, "action_on_failure": "flag"},
         }
@@ -575,7 +569,7 @@ class TestDigestDeliveryGates:
             # (output/__init__.py:2808: kb_store.list_entries(domain, limit=5000)),
             # so the mock signature must accept positional domain/limit too.
             def list_entries(
-                self, domain=None, limit=20, **kwargs: object
+                self, domain: str | None = None, limit: int = 20, **kwargs: object
             ) -> list[dict[str, object]]:
                 return [
                     {
@@ -618,7 +612,7 @@ class TestDigestDeliveryGates:
             # TRIAGE #35 — same positional list_entries signature as the
             # other report-path mock (generate_report, output/__init__.py:2808).
             def list_entries(
-                self, domain=None, limit=20, **kwargs: object
+                self, domain: str | None = None, limit: int = 20, **kwargs: object
             ) -> list[dict[str, object]]:
                 return [
                     {
