@@ -4,6 +4,9 @@ All notable changes to the AutoInfo project will be documented in this file.
 
 ## v1.10 (Unreleased, 2026-08-11) — output-quality-mega wave
 
+### Infrastructure (2026-08-15)
+- **Baseline-aware coverage gate** — `.github/workflows/coverage.yml` no longer fails a changed module against a fixed 60% floor (server.py sits at 53% on the fast subset, so any PR touching it failed even for a one-line, fully-tested change). New `scripts/coverage_gate.py` compares each changed module against its merge-base coverage (no-regression, 2pp tolerance); NEW modules still must reach 60%. The base measurement runs the same fast subset in a git worktree at the merge-base SHA (job runtime ~9m → ~18m for src-touching PRs). Unit tests: `tests/scripts/test_coverage_gate.py` (22 tests).
+
 ### Added
 - **2 new product template files (product count stays 8)** — `premium-briefing.md.j2` (market-report-anchored: numbered takeaways with So-what/Risk/Actions) and `enterprise-briefing.md.j2` (one-page exec summary + Key Metrics table + Action Required + Risk matrix) in `src/autoinfo/data/templates/`, giving the already-registered premium-briefing/enterprise-briefing products dedicated templates.
 - **Per-product LLM synthesis fields** — implications/risks/action_required/key_metrics synthesized per product template and carried into agent-format JSON-LD output; JSON-LD schema extended (`docs/schemas/knowledge-digest-v1.json` optional fields).

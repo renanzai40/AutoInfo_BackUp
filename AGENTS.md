@@ -431,7 +431,7 @@ Never hand-edit runtime artifacts to fix behavior — fix the source.
 | LLM fallback chain | ✅ Shared `llm.call_with_fallback` — every LLM call site (extraction + 17 standalone) walks `[primary] + config.llm.fallback` (actual config: `mimo-v2.5` same-gateway, inherits primary key); first successful model wins, aggregate error surfaces last failure; per-provider shared rate limiting + jittered 429/5xx backoff enforced on every chain entry and all fan-out paths |
 | Dead-source detection | ✅ Semantic Scholar 429 → `SourceFailure` (fail-fast); arXiv rss/bio → rss/q-bio fix |
 | CLI module entry | ✅ `python -m autoinfo.cli` runs the same Typer app; `collect` live per-source progress printer |
-| Test suite | ✅ ~3728 tests collected (incl. order-dependency fixes landed 2026-08-12; includes validation wave E1-E9 scenarios + regression suite + #141-#164 regression guards + kb-curation wave + hermetic config-seam fixes + llm-concurrency wave) |
+| Test suite | ✅ ~3799 tests collected (incl. order-dependency fixes landed 2026-08-12; includes validation wave E1-E9 scenarios + regression suite + #141-#164 regression guards + kb-curation wave + hermetic config-seam fixes + llm-concurrency wave + baseline-aware coverage-gate unit tests) |
 | Delivery schedules | ✅ add_delivery_schedule, list_delivery_schedules, remove_delivery_schedule MCP tools, cron-integrated |
 | Standardized error envelope | ✅ All MCP + REST API errors return `{success: false, error: {code, message, actionable}}`; 28 ErrorCode values; `error_dict()` deprecated |
 | REST success envelope | ✅ REST API success responses return `{success: true, data: ...}` (breaking change v1.9; migration: `docs/archive/migration-v1.9.md`); dashboard JS unwraps transparently |
@@ -475,7 +475,7 @@ Never hand-edit runtime artifacts to fix behavior — fix the source.
 - `.github/ISSUE_TEMPLATE/` — `bug_report.md` (mandatory 回归场景 field) + `feature_request.yml` + `config.yml`.
 - `.github/CODEOWNERS` — Path-level review ownership (default + `mcp/`/`output/`/`docs/`/`.github/`).
 - `.github/workflows/pr-title-check.yml` — Conventional Commits gate on PR titles (the squashed commit under squash-merge).
-- `.github/workflows/coverage.yml` — Changed-files coverage gate on the fast test subset (60% baseline).
+- `.github/workflows/coverage.yml` — Changed-files coverage gate on the fast test subset, **baseline-aware** (`scripts/coverage_gate.py`): each changed module must keep ≥ its merge-base coverage (2pp tolerance); NEW modules must reach 60%.
 - `.github/workflows/release-please.yml` + `release-please-config.json` + `.release-please-manifest.json` — Semver releases from Conventional Commits (version pinned 1.8.1).
 - `.github/dependabot.yml` — Weekly dependency updates (pip + github-actions).
 - `.pre-commit-config.yaml` — Local fast-feedback lint layer (`pre-commit install`).

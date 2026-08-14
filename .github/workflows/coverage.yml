@@ -6,21 +6,27 @@
 # PR actually touched (same merge-base diff logic as ci.yml's changed-files
 # ruff/mypy steps).
 #
-# Design decisions (why scoped, why this threshold):
+# Design decisions (why scoped, why baseline-aware):
 #   - A repo-wide fail-under gate would be dragged down by untouched legacy
 #     modules (e.g. server.py's 211 pre-existing lint rows — see ci.yml) and
 #     would block unrelated PRs. Scoping the gate to changed modules ties the
 #     requirement to the code the PR introduces.
-#   - The threshold (60%) is an initial baseline, deliberately below the 80%
-#     target: the suite currently carries 12 M1-deferred envelope failures
-#     (tests/TRIAGE.md) and coverage is thin on some modules. Raise it as
-#     coverage improves. The gate is REQUIRED (not continue-on-error) so a
-#     new module without tests turns CI red immediately.
+#   - A fixed fail-under=60 on the WHOLE changed module still penalises
+#     legacy modules: server.py sits at 53% on the fast subset, so any PR
+#     touching it (even a one-line, fully-tested change) failed. The gate is
+#     therefore baseline-aware (scripts/coverage_gate.py): each changed
+#     module must keep at least its merge-base coverage (minus a 2pp
+#     tolerance for run-to-run noise); NEW modules still must reach 60%.
+#     This turns the gate into a true no-regression check.
+#   - The base measurement runs the same fast subset in a git worktree at
+#     the merge-base SHA — this roughly doubles this job's runtime (~9m →
+#     ~18m) but keeps the baseline exact (no stale committed numbers).
 #   - Only src/autoinfo changes count. Test-only PRs (tests/ changes, no
 #     src/) cannot fail the gate — the job reports the skip explicitly.
 #   - real_api tests are excluded exactly like ci.yml's fast subset.
 #   - Fallback if the scoped include matches nothing (coverage stores
-#     absolute paths on some runners): retry with a wildcard prefix.
+#     absolute paths on some runners): the gate script retries with a
+#     wildcard prefix.
 
 name: Coverage (changed files)
 
@@ -55,47 +61,47 @@ jobs:
         run: |
           # Same merge-base pattern as ci.yml's ruff/mypy changed-files steps.
           BASE="$(git merge-base "${{ github.event.pull_request.base.sha }}" HEAD)"
+          echo "BASE_SHA=$BASE" >> "$GITHUB_ENV"
           mapfile -t FILES < <(git diff --name-only "$BASE" HEAD -- '*.py')
           : > changed-files.txt
           for f in "${FILES[@]}"; do echo "$f" >> changed-files.txt; done
           echo "changed Python files: ${#FILES[@]}"
-      - name: Run fast subset with coverage
+      - name: Run fast subset with coverage (PR head)
         run: |
           set -o pipefail
           pytest -m "not real_api" --cov=src/autoinfo --cov-report=term-missing -q 2>&1 | tee coverage-pytest.log
-      - name: Gate coverage on changed modules
+          mv .coverage .coverage.pr
+      - name: Measure base coverage (merge-base worktree)
         run: |
           set -uo pipefail
-
-          THRESHOLD=60  # initial baseline; raise toward 80 as coverage improves
-
-          # Only src/autoinfo modules gate the PR: tests/ changes assert
-          # behavior rather than shipping production code, so they cannot
-          # lower coverage.
-          mapfile -t SRC_FILES < <(grep '^src/autoinfo/.*\.py$' changed-files.txt || true)
-          if [ "${#SRC_FILES[@]}" -eq 0 ]; then
-            echo "No changed src/autoinfo modules - coverage gate skipped."
+          # Only worth the second ~9m run when there IS a gated module.
+          if ! grep -q '^src/autoinfo/.*\.py$' changed-files.txt; then
+            echo "No changed src/autoinfo modules - base measurement skipped."
             exit 0
           fi
-
-          # coverage report --include takes comma-separated fnmatch patterns
-          # matched against the stored data file. Git-relative paths match
-          # pytest-cov's report output; the */ fallback below covers runners
-          # where coverage stores absolute paths.
-          INCLUDE_REL="$(IFS=,; printf '%s' "${SRC_FILES[*]}")"
-          INCLUDE_ABS="$(printf '*/%s,' "${SRC_FILES[@]}")"
-          echo "Coverage gate on: ${SRC_FILES[*]} (fail-under: $THRESHOLD)"
-
-          if ! coverage report --include="$INCLUDE_REL" --fail-under="$THRESHOLD" --skip-empty; then
-            echo "Retrying with absolute-path patterns (coverage stored paths absolutely)."
-            coverage report --include="${INCLUDE_ABS%,}" --fail-under="$THRESHOLD" --skip-empty
-          fi
+          git worktree add --detach "$RUNNER_TEMP/autoinfo-base" "$BASE_SHA"
+          cd "$RUNNER_TEMP/autoinfo-base"
+          # Re-install editable from the base worktree so `import autoinfo`
+          # resolves to the base code (the earlier install points at HEAD).
+          pip install -e ".[dev,ebook]" >/dev/null
+          pytest -m "not real_api" --cov=src/autoinfo --cov-report=term-missing -q 2>&1 | tee "$GITHUB_WORKSPACE/coverage-base-pytest.log"
+          cp .coverage "$GITHUB_WORKSPACE/.coverage.base"
+          echo "Base coverage measured at $BASE_SHA"
+      - name: Gate coverage on changed modules (baseline-aware)
+        run: |
+          python3 scripts/coverage_gate.py \
+            --changed changed-files.txt \
+            --pr-data .coverage.pr \
+            --base-data .coverage.base \
+            --base-sha "$BASE_SHA"
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
         with:
           name: coverage-data
           path: |
             coverage-pytest.log
-            .coverage
+            coverage-base-pytest.log
+            .coverage.pr
+            .coverage.base
           retention-days: 7
           if-no-files-found: ignore
