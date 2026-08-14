@@ -9,9 +9,11 @@ boundary-health evidence stays deterministic:
    name is uniquely distinguishable by name alone.
 3. **Distinct stems for distinct products** — the ``generate_*`` output
    family (digest/report/tutorial/presentation) each carries a distinct
-   noun stem, so they are *not* a same-stem family; their boundary risk is
-   purely descriptive and surfaces in the Jaccard-overlap findings.
-4. Family and per-tool row shapes are stable.
+   noun stem, so they are *not* a same-stem family.
+4. **Zero high-description-overlap family** — descriptions were
+   disambiguated with unique vocabulary; ``high_desc_overlap == 0`` is the
+   regression floor.
+5. Family and per-tool row shapes are stable.
 """
 from __future__ import annotations
 
@@ -75,11 +77,12 @@ def test_generate_family_has_distinct_stems(result: dict[str, Any]) -> None:
     }
 
 
-def test_high_overlap_pairs_include_generate_family(result: dict[str, Any]) -> None:
-    pairs = result["violations"]["high_desc_overlap"]
-    pair_names = {(p["a"], p["b"]) for p in pairs}
-    assert ("generate_digest", "generate_report") in pair_names
-    assert ("generate_presentation", "generate_tutorial") in pair_names
+def test_zero_high_description_overlap_pairs(result: dict[str, Any]) -> None:
+    # D-工-7 fixed: the generate_* family (digest/report/tutorial/
+    # presentation) and list_sources/list_topics etc. once formed high
+    # Jaccard-overlap pairs (>= 0.5); descriptions were disambiguated with
+    # unique vocabulary. Zero pairs is the regression floor.
+    assert result["violations"]["high_desc_overlap"] == []
 
 
 def test_overlap_sorted_descending(result: dict[str, Any]) -> None:

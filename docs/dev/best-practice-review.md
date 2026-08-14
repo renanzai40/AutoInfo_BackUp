@@ -139,7 +139,7 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 | 业界主张 | 来源 | AutoInfo 对照 | 结论 |
 |---------|------|--------------|------|
 | 工具是"确定性系统↔非确定性 agent"的契约,不是 API 包装;按 agent 感知方式设计(search_contacts 优于 list_contacts) | Anthropic "Writing effective tools"(2025-09) | 145 工具;是否有"原样包装 API"的工具未审计 | 🟡 部分 |
-| 描述像给新员工写文档:动词化命名;参数 ≤8(AWS)/≤5(Grizzly);有限值用 enum + default;描述含"何时用"与示例;40+ 词描述与选择准确率正相关 | AWS;RaftLabs;Grizzly Peak;Anthropic | ✅ **已审计 2026-08-14**(`scripts/tool_desc_audit.py`,145 工具全量):99.3% 动词风格命名(唯一违规 `email_config`);参数均值 2.68、>8 仅 4 个(`add_source`/`generate_digest`/`generate_report`/`search_knowledge_base`);⚠️ **40 个工具描述 <10 词**(短描述无"何时用"信号)与 **103 个工具零 enum 参数**(有限值未声明 enum)——这两项是高 ROI 改进点 | 🟡 部分(命名/参数已达标,描述与 enum 待提升) |
+| 描述像给新员工写文档:动词化命名;参数 ≤8(AWS)/≤5(Grizzly);有限值用 enum + default;描述含"何时用"与示例;40+ 词描述与选择准确率正相关 | AWS;RaftLabs;Grizzly Peak;Anthropic | ✅ **已审计 2026-08-14**(`scripts/tool_desc_audit.py`,145 工具全量):99.3% 动词风格命名(唯一违规 `email_config`);参数均值 2.68、>8 仅 4 个(`add_source`/`generate_digest`/`generate_report`/`search_knowledge_base`);⚠️ **36 个工具描述 <10 词**(短描述无"何时用"信号;2026-08-14 消歧后 40→36)与 **103 个工具零 enum 参数**(有限值未声明 enum)——这两项是高 ROI 改进点 | 🟡 部分(命名/参数已达标,描述与 enum 待提升) |
 | 可操作错误信息:错误码 + 人类/LLM 可读消息 + 建议修复;不返回裸 HTTP 状态码 | Anthropic;AWS | envelope 已实现;28 ErrorCode message 是否都含"具体修复"需核对 | 🟡 部分 |
 | 返回高信号字段:UUID 换语义可读标识;response_format concise/detailed(1/3 token) | Anthropic | `summary_id`/条目 ID 对模型语义友好度未验证;concise 模式无 | 🟡 部分 |
 | 工具合并与拆分:单一清晰目的;合并频繁链式调用;相似工具 <10 个就会让 agent 迷惑 | Anthropic;OpenAI | 35 类别 145 工具;相似度审计(list_summaries/get_summary/search_knowledge_base 边界)未做 | 🟡 部分 |
@@ -242,12 +242,12 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 | ID | 差距 | 来源证据 | 工作量级 | ROI | 状态 |
 |----|------|---------|---------|-----|------|
 | D-工-1 | **145 工具描述/参数审计**(命名动词化、参数 ≤8、enum/default、description 含示例与"何时用") | AWS/RaftLabs/Anthropic — 共识度最高项;Anthropic 实测描述改进降 40% 任务时间 | 中(可脚本化半自动) | 极高 | ✅ **审计已落地** → `scripts/tool_desc_audit.py`(2026-08-14,145 工具,回归测试 7 例);剩余短描述/enum 差距转 backlog |
-| D-工-2 | **LLM-judge 校准证据**(golden set 50-100 例、kappa、多试次) | Airbnb EDD;arXiv 2025-2026 偏见研究 | 中 | 高(直接提升 G4/G5 可信度) | ✅ **机制已落地** → `scripts/llm_judge_calibration.py`(2026-08-14,8 例 seed golden set + Cohen's kappa + 多试次,回归测试 9 例);扩充至 50-100 例为后续 backlog |
+| D-工-2 | **LLM-judge 校准证据**(golden set 50-100 例、kappa、多试次) | Airbnb EDD;arXiv 2025-2026 偏见研究 | 中 | 高(直接提升 G4/G5 可信度) | ✅ **已校准(真实运行)** → `scripts/llm_judge_calibration.py`(2026-08-14:8 例 seed golden set × 3 试次,accuracy 1.0 / kappa 1.0 / spread 0.0,证据 `validation-runs/coverage/llm-judge-calibration-2026-08-14.json`,回归测试 9 例);扩充至 50-100 例为后续 backlog |
 | D-工-3 | **AI 代码专项审查清单**(命名一致、幻觉包名、同义反复测试) | CodeRabbit;USENIX 2025 | 低(文档 + PR 模板) | 高 | ⏳ 待落地 |
-| D-工-4 | 错误信息一致性审计(28 ErrorCode 的 message 是否全含修复指引;429 Retry-After;堆栈泄漏) | OWASP;MCP spec | 低-中 | 高 | ✅ **审计已落地** → `scripts/error_message_audit.py`(2026-08-14,109 调用点,0 缺修复指引,65 裸异常 `str(exc)`,回归测试 7 例);裸异常处置转 backlog |
+| D-工-4 | 错误信息一致性审计(28 ErrorCode 的 message 是否全含修复指引;429 Retry-After;堆栈泄漏) | OWASP;MCP spec | 低-中 | 高 | ✅ **已修复** → `scripts/error_message_audit.py`(2026-08-14:109 调用点,0 缺修复指引,**0 裸异常**——65 处 `_error_dict(exc)` 全部替换为 `_error_from_exc(exc, context)` 统一模板(context + 异常 + retry 指引),回归测试 9 例) |
 | D-工-5 | 场景路径断言审计(grade outcome 别 grade path)+ 隔离环境防作弊 | Anthropic | 低-中 | 中 | ✅ **审计已落地** → `scripts/scenario_outcome_audit.py`(2026-08-14,68 场景/326 步,96.3% outcome 断言,0 未门控 llm_assert/http,回归测试 9 例) |
 | D-工-6 | 幂等键显式语义 + 合作式取消 | MCP Tasks;Async workflows | 中 | 中 | ⏳ 待落地 |
-| D-工-7 | 工具相似度审计(35 类别 145 工具边界) | Anthropic;OpenAI | 中 | 中 | ✅ **审计已落地** → `scripts/tool_similarity_audit.py`(2026-08-14,145 工具,0 名称边界碰撞,8 高描述重叠对,回归测试 7 例);generate_* 描述消歧转 backlog |
+| D-工-7 | 工具相似度审计(35 类别 145 工具边界) | Anthropic;OpenAI | 中 | 中 | ✅ **已修复** → `scripts/tool_similarity_audit.py`(2026-08-14:145 工具,0 名称边界碰撞,**0 高描述重叠对**——10 个工具描述用独有词汇消歧,回归测试 7 例) |
 | D-工-8 | capability/regression 双套件 + 饱和轮换机制文档化 | Anthropic | 低 | 中 | ⏳ 待落地 |
 | D-工-9 | PR 模板强制"为什么+影响面+局限" | Kudrjavets 2022(446% 评审延迟解释) | 低 | 中 | ⏳ 待落地 |
 
@@ -274,15 +274,15 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 
 ### ❌ 做得不好(事实缺口 — 应立即处理)
 
-1. **LLM-judge 无校准证据** — G4/G5 依赖未校准的 LLM judge,而业界实证显示未校准 judge 会产生虚假信心(D3-2)。
-2. **40 个工具描述 <10 词、103 个工具零 enum 参数** — 审计已证实(2026-08-14,`scripts/tool_desc_audit.py`);命名(99.3% 动词风格)与参数数(均值 2.68)已达标,但短描述与缺失 enum 是 D-工-1 剩余的高 ROI 差距(D2-1)。
+1. **LLM-judge 校准证据已落地** — 2026-08-14 真实运行(8 例 seed golden set × 3 试次,accuracy 1.0 / kappa 1.0 / spread 0.0,证据 JSON 入库,回归测试 9 例);仍待扩至 50-100 例且覆盖更多 task 类型(D3-2)。
+2. **36 个工具描述 <10 词、103 个工具零 enum 参数** — 审计已证实(2026-08-14,`scripts/tool_desc_audit.py`;描述消歧后 40→36);命名(99.3% 动词风格)与参数数(均值 2.68)已达标,但短描述与缺失 enum 是 D-工-1 剩余的高 ROI 差距(D2-1)。
 3. **AI 代码专项审查缺失** — 项目是 agent 密集开发,却无针对 AI 生成代码的审查清单(D1-4)。
 
 ### 🔧 需重构(有明确业界模式可对齐;审计证据均已落地,重构本身转 backlog)
 
-1. 工具命名空间化 + 描述消歧(35 类别 → 前缀分组 + 合并重叠)—— 边界审计已证实 0 名称碰撞、8 高描述重叠对(`scripts/tool_similarity_audit.py`,D2-1)。
+1. 工具命名空间化 + 描述消歧(35 类别 → 前缀分组 + 合并重叠)—— 边界审计已证实 0 名称碰撞;**8 高描述重叠对已消歧为 0**(2026-08-14,10 个工具描述独有词汇化,`scripts/tool_similarity_audit.py`,D2-1)。
 2. 场景从"路径断言"转向"outcome 断言"—— 已 96.3% 达标,残余 12 步无 success 键(`scripts/scenario_outcome_audit.py`,D3-1)。
-3. 错误处理审计(裸 except、log-and-throw、429 Retry-After)—— 109 调用点 0 缺修复指引,但 65 处 `_error_dict(exc)` 裸异常泄漏(`scripts/error_message_audit.py`,D1-3)。
+3. 错误处理审计(裸 except、log-and-throw、429 Retry-After)—— 109 调用点 0 缺修复指引;**65 处 `_error_dict(exc)` 裸异常泄漏已全部替换为 `_error_from_exc(exc, context)` 统一模板(0 裸异常,2026-08-14,`scripts/error_message_audit.py`,D1-3)**。
 
 ### 📈 需提升(渐进改进,非缺陷)
 
@@ -311,7 +311,7 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 | 触发 | 每 feature wave 结束(与 AC1-AC9 验收报告同步);或重大架构变更后 |
 | 动作 | ① 刷新 §9 来源(新增 2026-2027 共识);② 重跑可脚本化审计(D-工-1/4/5/7);③ 更新对照表结论;④ 生成"差异报告"(本次 vs 上次) |
 | 输出 | 本文档的修订 + 差距清单增删(§5) |
-| 自动化候选 | ✅ 工具描述审计 → `scripts/tool_desc_audit.py`(2026-08-14,145 工具,回归 7 例);✅ 错误信息审计 → `scripts/error_message_audit.py`(2026-08-14,109 调用点,回归 7 例);✅ 场景 outcome 审计 → `scripts/scenario_outcome_audit.py`(2026-08-14,68 场景/326 步,回归 9 例);✅ 工具相似度审计 → `scripts/tool_similarity_audit.py`(2026-08-14,145 工具,回归 7 例);✅ LLM-judge 校准 → `scripts/llm_judge_calibration.py`(2026-08-14,seed golden set + kappa,回归 9 例)。全部输出 `validation-runs/coverage/*-<date>.json` |
+| 自动化候选 | ✅ 工具描述审计 → `scripts/tool_desc_audit.py`(2026-08-14,145 工具,回归 7 例);✅ 错误信息审计 → `scripts/error_message_audit.py`(2026-08-14,109 调用点,回归 9 例);✅ 场景 outcome 审计 → `scripts/scenario_outcome_audit.py`(2026-08-14,68 场景/326 步,回归 9 例);✅ 工具相似度审计 → `scripts/tool_similarity_audit.py`(2026-08-14,145 工具,回归 7 例);✅ LLM-judge 校准 → `scripts/llm_judge_calibration.py`(2026-08-14,seed golden set + kappa,回归 9 例)。全部输出 `validation-runs/coverage/*-<date>.json` |
 | 与验收框架关系 | 本维度**不**设 FAIL/PASS 判据;差距项转为工程 backlog 由 wave 处理,最终状态仍由 AC1-AC9 判定 |
 
 ---

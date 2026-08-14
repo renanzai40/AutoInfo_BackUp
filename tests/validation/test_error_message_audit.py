@@ -4,14 +4,15 @@ Locks the behavior of ``scripts/error_message_audit.py`` so the D-工-4
 evidence the best-practice review depends on stays deterministic:
 
 1. All error envelope call sites in ``server.py`` are parsed (109 sites:
-   error_response / error_dict / _error_dict).
+   error_response / error_dict / _error_from_exc).
 2. **Actionability** — every explicit-message site (``error_response`` /
    ``error_dict``) carries a fix hint; the strong claim that
    ``no_fix_hint_sites == 0`` is the regression floor.
-3. **Raw-exception leakage** — ``_error_dict(exc)`` builds
-   ``message_str = str(exc)``; the audit flags every such site as a
-   raw-exception site. The floor (>= 50 of 109) documents that the
-   majority of error responses expose the raw exception string verbatim.
+3. **No raw-exception leakage** — the legacy ``_error_dict(exc)`` (message
+   == ``str(exc)``) is gone; the ``_error_from_exc(exc, context)`` helper
+   replaces it with a context + template-hint message. The floor
+   ``raw_exception_sites == 0`` and ``from_exc_missing_context == 0`` lock
+   the fix in place; ``helper_template_ok`` pins the template-level hint.
 4. **429 Retry-After** — RATE_LIMITED call sites should carry a retry /
    backoff hint; the audit reports them (0 today — rate limiting is not
    surfaced through the MCP error envelope).
@@ -52,7 +53,8 @@ def test_call_site_kind_breakdown(result):
     from collections import Counter
 
     kinds = Counter(s["call"] for s in result["sites"])
-    assert kinds["_error_dict"] == 65
+    assert kinds["_error_dict"] == 0
+    assert kinds["_error_from_exc"] == 65
     assert kinds["error_response"] == 43
     assert kinds["error_dict"] == 1
 
@@ -62,18 +64,31 @@ def test_every_explicit_message_has_fix_hint(result):
     assert result["summary"]["no_fix_hint_sites"] == 0
 
 
-def test_raw_exception_sites_are_majority(result):
-    # _error_dict(exc) → message == str(exc): raw exception string leaked
-    # into the agent-facing envelope. Floor >= 50 documents the pattern.
-    assert result["summary"]["raw_exception_sites"] >= 50
+def test_no_raw_exception_sites(result):
+    # D-工-4 fixed: _error_dict(exc) → raw str(exc) is gone. Any future
+    # reintroduction (or a new _error_dict call site) fails this floor.
+    assert result["summary"]["raw_exception_sites"] == 0
+    assert result["violations"]["raw_exception"] == []
 
 
 def test_raw_exception_lines_match_error_dict_sites(result):
     raw = result["violations"]["raw_exception"]
-    # every raw-exception line is a _error_dict call site
     by_line = {s["line"]: s["call"] for s in result["sites"]}
     for line in raw:
         assert by_line[line] == "_error_dict", line
+
+
+def test_from_exc_sites_carry_context(result):
+    # every _error_from_exc call site must pass a non-empty operation
+    # context; a missing context would surface a bare exception again.
+    assert result["summary"]["from_exc_missing_context"] == 0
+    assert result["violations"]["from_exc_missing_context"] == []
+
+
+def test_from_exc_helper_template_has_fix_hint(result):
+    # the fix hint for _error_from_exc sites lives in the helper template
+    # (checked statically), not per call site.
+    assert result["summary"]["helper_template_ok"] is True
 
 
 def test_rate_limited_reporting_shape(result):

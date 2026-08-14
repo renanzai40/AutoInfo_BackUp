@@ -993,7 +993,7 @@ def _handle_activate_domain(name: str) -> dict[str, Any]:
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(config, name)
     if domain_cfg is None:
@@ -1024,7 +1024,7 @@ def _handle_deactivate_domain(name: str) -> dict[str, Any]:
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(config, name)
     if domain_cfg is None:
@@ -1064,7 +1064,7 @@ def _handle_remove_domain(name: str, confirm: bool = True, actor: str = "agent")
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(config, name)
     if domain_cfg is None:
@@ -1084,7 +1084,7 @@ def _handle_get_domain_config(name: str) -> dict[str, Any]:
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(config, name)
     if domain_cfg is None:
@@ -1150,7 +1150,7 @@ def _handle_set_domain_webhooks(
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(config, domain)
     if domain_cfg is None:
@@ -1175,7 +1175,7 @@ def _handle_get_domain_webhooks(domain: str) -> dict[str, Any]:
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(config, domain)
     if domain_cfg is None:
@@ -1196,7 +1196,7 @@ def _handle_add_domain(name: str, description: str = "") -> dict[str, Any]:
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(config, name)
     if domain_cfg is not None:
@@ -1231,7 +1231,7 @@ def _handle_get_domain_schema(domain: str) -> dict[str, Any]:
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(config, domain)
     if domain_cfg is None:
@@ -1307,7 +1307,7 @@ def _handle_get_effective_llm_config(task: str | None = None) -> dict[str, Any]:
     try:
         return get_effective_llm_config(task=task)
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to resolve the effective LLM configuration")
 
 
 # ---------------------------------------------------------------------------
@@ -1417,7 +1417,7 @@ def _handle_add_source(
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(config, domain)
     if domain_cfg is None:
@@ -1548,7 +1548,7 @@ def _handle_remove_source(source_id: str, confirm: bool = True, actor: str = "ag
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     parts = source_id.split(":", 1)
     if len(parts) != 2:
@@ -1686,7 +1686,7 @@ def _handle_list_sources(domain: str) -> dict[str, Any]:
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(config, domain)
     if domain_cfg is None:
@@ -1725,7 +1725,7 @@ def _handle_add_topic(
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(config, domain)
     if domain_cfg is None:
@@ -1771,7 +1771,7 @@ def _handle_remove_topic(domain: str, topic_id: str, confirm: bool = True, actor
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(config, domain)
     if domain_cfg is None:
@@ -1804,7 +1804,7 @@ def _handle_list_topics(domain: str) -> dict[str, Any]:
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(config, domain)
     if domain_cfg is None:
@@ -1837,7 +1837,7 @@ def _handle_list_keywords(
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(config, domain)
     if domain_cfg is None:
@@ -1911,7 +1911,7 @@ def _handle_topic_group_add(
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(config, domain)
     if domain_cfg is None:
@@ -1955,7 +1955,7 @@ def _handle_topic_group_remove(domain: str, group_name: str) -> dict[str, Any]:
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(config, domain)
     if domain_cfg is None:
@@ -2152,7 +2152,7 @@ def _handle_suggest_keywords(
         }
     except Exception as exc:
         logger.exception("Keyword suggestion failed")
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Keyword suggestion failed")
 
 
 # ---------------------------------------------------------------------------
@@ -2583,7 +2583,7 @@ def _handle_promote_kb_draft(
         }
     except Exception as exc:
         logger.exception("promote_kb_draft failed for '%s'", entry_id)
-        return _error_dict(exc)
+        return _error_from_exc(exc, "promote_kb_draft failed")
 
 
 def _handle_demote_kb_wiki(entry_id: str, actor: str = "agent") -> dict[str, Any]:
@@ -2654,7 +2654,7 @@ def _handle_promote_pending(domain: str, actor: str = "agent") -> dict[str, Any]
         )
     except Exception as exc:
         logger.exception("promote_pending failed for domain '%s'", domain)
-        return _error_dict(exc)
+        return _error_from_exc(exc, "promote_pending failed")
 
 
 def _handle_reindex_kb(domain: str) -> dict[str, Any]:
@@ -2920,7 +2920,7 @@ def _handle_generate_digest(
         }
     except Exception as exc:
         logger.exception("Digest generation failed for domain '%s'", domain)
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Digest generation failed")
 
 
 def _handle_generate_report(
@@ -3073,7 +3073,7 @@ def _handle_generate_report(
         }
     except Exception as exc:
         logger.exception("Report generation failed for domain '%s'", domain)
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Report generation failed")
 
 
 def _handle_generate_cross_domain_report(
@@ -3122,7 +3122,7 @@ def _handle_generate_cross_domain_report(
             "actionable": True,
         }
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Cross-domain report generation failed")
     valid_names = {d.name for d in config.domains}
     invalid = [d for d in domains if d not in valid_names]
     if invalid:
@@ -3227,7 +3227,7 @@ def _handle_generate_cross_domain_report(
             "Cross-domain report generation failed for domains %s",
             domains,
         )
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Cross-domain report generation failed")
 
 
 def _handle_generate_tutorial(
@@ -3271,7 +3271,7 @@ def _handle_generate_tutorial(
         }
     except Exception as exc:
         logger.exception("Tutorial generation failed for domain '%s'", domain)
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Tutorial generation failed")
 
 
 def _handle_generate_presentation(
@@ -3317,7 +3317,7 @@ def _handle_generate_presentation(
         )
     except Exception as exc:
         logger.exception("Presentation generation failed for domain '%s'", domain)
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Presentation generation failed")
 
 
 def _handle_send_email_digest(
@@ -3352,7 +3352,7 @@ def _handle_send_email_digest(
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     if not config.email.enabled:
         return error_response(
@@ -3377,7 +3377,7 @@ def _handle_send_email_digest(
         )
     except Exception as exc:
         logger.exception("Email digest send failed for domain '%s'", domain)
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Email digest send failed")
 
 
 def _handle_localize_content(**kwargs: Any) -> dict[str, Any]:
@@ -3402,7 +3402,7 @@ def _handle_localize_content(**kwargs: Any) -> dict[str, Any]:
         }
     except Exception as exc:
         logger.exception("Localization failed")
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Localization failed")
 
 
 # ---------------------------------------------------------------------------
@@ -3478,7 +3478,7 @@ def _handle_export_kb(
         }
     except Exception as exc:
         logger.exception("Export KB failed for domain '%s'", domain)
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Export KB failed")
 
 
 def _handle_import_kb(
@@ -3521,7 +3521,7 @@ def _handle_import_kb(
         }
     except Exception as exc:
         logger.exception("Import KB failed for domain '%s'", domain)
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Import KB failed")
 
 
 # ---------------------------------------------------------------------------
@@ -3547,7 +3547,7 @@ def _handle_list_schedules() -> dict[str, Any]:
             })
         return {"schedules": items, "count": len(items)}
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to list schedules")
 
 
 def _handle_add_schedule(
@@ -3577,7 +3577,7 @@ def _handle_add_schedule(
             try:
                 config = _load_config()
             except Exception as exc:
-                return _error_dict(exc)
+                return _error_from_exc(exc, "Failed to load the project configuration")
             if not config.email.enabled:
                 return {
                     "error_code": ErrorCode.EMAIL_NOT_ENABLED.value,
@@ -3637,7 +3637,7 @@ def _handle_add_schedule(
             },
         }
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to add schedule")
 
 
 def _handle_remove_schedule(name: str, confirm: bool = False, actor: str = "agent") -> dict[str, Any]:
@@ -3672,7 +3672,7 @@ def _handle_remove_schedule(name: str, confirm: bool = False, actor: str = "agen
             },
         }
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to remove schedule")
 
 
 def _handle_run_schedules(
@@ -3697,7 +3697,7 @@ def _handle_run_schedules(
             "total_checked": len(results),
         }
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to run schedules")
 
 
 def _handle_get_schedule_status(
@@ -3713,7 +3713,7 @@ def _handle_get_schedule_status(
             "count": len(schedules),
         }
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to get schedule status")
 
 
 # ---------------------------------------------------------------------------
@@ -3832,7 +3832,7 @@ def _handle_add_delivery_schedule(
             },
         }
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to add delivery schedule")
 
 
 def _handle_list_delivery_schedules() -> dict[str, Any]:
@@ -3850,7 +3850,7 @@ def _handle_list_delivery_schedules() -> dict[str, Any]:
             items.append(d)
         return {"schedules": items, "count": len(items)}
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to list delivery schedules")
 
 
 def _handle_remove_delivery_schedule(
@@ -3883,7 +3883,7 @@ def _handle_remove_delivery_schedule(
             "schedule_id": schedule_id,
         }
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to remove delivery schedule")
 
 
 # ---------------------------------------------------------------------------
@@ -4656,7 +4656,7 @@ def _handle_get_gate_config(domain: str, gate: str) -> dict[str, Any]:
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(config, domain)
     if domain_cfg is None:
@@ -4722,7 +4722,7 @@ def _handle_set_gate_config(
     try:
         cfg = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(cfg, domain)
     if domain_cfg is None:
@@ -4801,7 +4801,7 @@ def _handle_get_budget_thresholds() -> dict[str, Any]:
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     thresholds = config.cost_alerts.budget_thresholds
     if not thresholds:
@@ -4852,7 +4852,7 @@ def _handle_set_budget_thresholds(
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     if not thresholds:
         return {
@@ -4892,7 +4892,7 @@ def _handle_get_product(domain: str, product_type: str) -> dict[str, Any]:
     try:
         cfg = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(cfg, domain)
     if domain_cfg is None:
@@ -4959,7 +4959,7 @@ def _handle_list_products(domain: str) -> dict[str, Any]:
     try:
         cfg = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     domain_cfg = _find_domain(cfg, domain)
     if domain_cfg is None:
@@ -5130,7 +5130,7 @@ def _handle_send_to_enduser(
         }
     except Exception as exc:
         logger.exception("send_to_enduser dispatch failed")
-        return _error_dict(exc)
+        return _error_from_exc(exc, "send_to_enduser dispatch failed")
 
     return {
         "delivery_id": delivery_id,
@@ -5247,7 +5247,7 @@ def _handle_get_config(section: str = "") -> dict[str, Any]:
     try:
         config = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     config_dict: dict[str, Any] = {}
 
@@ -5482,7 +5482,7 @@ def _handle_list_active_deliveries() -> dict[str, Any]:
         }
     except Exception as exc:
         logger.exception("list_active_deliveries failed")
-        return _error_dict(exc)
+        return _error_from_exc(exc, "list_active_deliveries failed")
 
 
 def _handle_get_delivery_log(
@@ -5515,7 +5515,7 @@ def _handle_get_delivery_log(
         }
     except Exception as exc:
         logger.exception("get_delivery_log failed")
-        return _error_dict(exc)
+        return _error_from_exc(exc, "get_delivery_log failed")
 
 
 def _handle_get_channel_health(
@@ -5689,7 +5689,7 @@ def _handle_merge_items(
         return result
     except Exception as exc:
         logger.exception("merge_items failed")
-        return _error_dict(exc)
+        return _error_from_exc(exc, "merge_items failed")
 
 
 def _handle_find_similar_items(
@@ -5723,7 +5723,7 @@ def _handle_find_similar_items(
         return {"entries": result}
     except Exception as exc:
         logger.exception("find_similar_items failed")
-        return _error_dict(exc)
+        return _error_from_exc(exc, "find_similar_items failed")
 
 
 def _handle_calculate_freshness_score(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
@@ -6034,7 +6034,7 @@ def _handle_enduser_create(
         )
     except Exception as exc:
         logger.exception("enduser_create failed for '%s'", user_id)
-        return _error_dict(exc)
+        return _error_from_exc(exc, "enduser_create failed")
 
     return success_response(_asdict(profile))
 
@@ -6049,7 +6049,7 @@ def _handle_enduser_get(user_id: str) -> dict[str, Any]:
         profile = get_profile(user_id)
     except Exception as exc:
         logger.exception("enduser_get failed for '%s'", user_id)
-        return _error_dict(exc)
+        return _error_from_exc(exc, "enduser_get failed")
 
     if profile is None:
         return {
@@ -6085,7 +6085,7 @@ def _handle_enduser_update(
         )
     except Exception as exc:
         logger.exception("enduser_update failed for '%s'", user_id)
-        return _error_dict(exc)
+        return _error_from_exc(exc, "enduser_update failed")
 
     if profile is None:
         return {
@@ -6105,7 +6105,7 @@ def _handle_enduser_delete(user_id: str) -> dict[str, Any]:
         ok = delete_profile(user_id)
     except Exception as exc:
         logger.exception("enduser_delete failed for '%s'", user_id)
-        return _error_dict(exc)
+        return _error_from_exc(exc, "enduser_delete failed")
 
     if not ok:
         return error_response(
@@ -6127,7 +6127,7 @@ def _handle_enduser_list() -> dict[str, Any]:
         profiles = list_profiles()
     except Exception as exc:
         logger.exception("enduser_list failed")
-        return _error_dict(exc)
+        return _error_from_exc(exc, "enduser_list failed")
 
     items = [_asdict(p) for p in profiles]
     return success_response({"items": items, "count": len(items)})
@@ -6426,7 +6426,7 @@ def _handle_create_kb_entry(
         }
     except Exception as exc:
         logger.exception("create_kb_entry failed")
-        return _error_dict(exc)
+        return _error_from_exc(exc, "create_kb_entry failed")
 
 
 # ---------------------------------------------------------------------------
@@ -6485,7 +6485,7 @@ def _handle_query_audit_log(
         }
     except Exception as exc:
         logger.exception("Audit log query failed")
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Audit log query failed")
 
 
 # ---------------------------------------------------------------------------
@@ -6623,7 +6623,7 @@ def _handle_email_config(
     try:
         cfg = _load_config()
     except Exception as exc:
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Failed to load the project configuration")
 
     email_cfg = cfg.email
 
@@ -6759,7 +6759,7 @@ def _handle_knowledge_graph_export(
         data = store.export_knowledge_graph(domain=domain)
     except Exception as exc:
         logger.exception("Knowledge graph export failed for domain '%s'", domain)
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Knowledge graph export failed")
 
     out_path = (Path(output) if output
                 else Path(f"knowledge_graph_export.{format}"))
@@ -6778,7 +6778,7 @@ def _handle_knowledge_graph_export(
             _write_csv(data, stem)
     except OSError as exc:
         logger.exception("Error writing knowledge graph export file")
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Error writing knowledge graph export file")
 
     return {
         "domain": domain,
@@ -6919,7 +6919,7 @@ def _handle_cost_dashboard(
         return meter.get_cost_dashboard(period=period)
     except Exception as exc:
         logger.exception("Cost dashboard failed")
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Cost dashboard failed")
 
 
 # ---------------------------------------------------------------------------
@@ -6957,11 +6957,16 @@ def _handle_cost_allocation(
         )
     except Exception as exc:
         logger.exception("Cost allocation failed")
-        return _error_dict(exc)
+        return _error_from_exc(exc, "Cost allocation failed")
 
 
-def _error_dict(exc: Exception) -> dict[str, Any]:
-    """Build a dual-format error dict (flat + envelope) for backward compat.
+def _error_from_exc(exc: Exception, context: str) -> dict[str, Any]:
+    """Build an actionable error dict from an unexpected exception.
+
+    Replaces the old ``_error_dict(exc)`` which leaked the raw exception
+    string as the agent-facing message (D-工-4: no raw-exception leakage).
+    The message now carries a human-readable operation context plus the
+    exception detail and a concrete next step.
 
     Returns both the legacy flat fields (``error_code``, ``message``,
     ``actionable``) and the new envelope fields (``success``, ``error``).
@@ -6969,7 +6974,10 @@ def _error_dict(exc: Exception) -> dict[str, Any]:
     standard call_tool wrapping unchanged (idempotent).
     """
     code_str = ErrorCode.INTERNAL_ERROR.value
-    message_str = str(exc)
+    message_str = (
+        f"{context}: {exc}. Check the request parameters and retry, "
+        "or consult the docs for supported inputs."
+    )
     return {
         "error_code": code_str,
         "message": message_str,
@@ -7391,7 +7399,11 @@ async def list_tools() -> list[Tool]:
         ),
         Tool(
             name="list_sources",
-            description="List all sources for a given domain",
+            description=(
+                "List all configured collection sources for a domain, with "
+                "each source's id, type, and platform. Use to inspect what "
+                "feeds a domain before adding or removing sources."
+            ),
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -7457,7 +7469,11 @@ async def list_tools() -> list[Tool]:
         ),
         Tool(
             name="list_topics",
-            description="List all topics for a given domain",
+            description=(
+                "List all tracked topics and their keywords for a domain. "
+                "Topics group collected items by area; use to review "
+                "coverage before collecting."
+            ),
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -8453,10 +8469,12 @@ async def list_tools() -> list[Tool]:
         Tool(
             name="generate_digest",
             description=(
-                "Generate a digest of KB entries for a domain over a given "
-                "period (daily, weekly, monthly).  Returns markdown by "
-                "default; also supports html, json, agent (JSON-LD), and audio (base64-encoded MP3).  "
-                "Accepts optional custom_instructions to tailor output."
+                "Compile a periodic digest summarizing recent KB entries for "
+                "a domain over a chosen period (daily, weekly, monthly). "
+                "Default markdown; also html, json, agent (JSON-LD), and "
+                "audio MP3. Optional recipients emails the digest directly; "
+                "max_items, include_stale, and target_audience tailor "
+                "content; product supports magazine-digest."
             ),
             inputSchema={
                 "type": "object",
@@ -8536,11 +8554,12 @@ async def list_tools() -> list[Tool]:
         Tool(
             name="generate_report",
             description=(
-                "Generate a structured report for a domain over a given "
-                "period (daily, weekly, monthly).  Returns markdown by default; "
-                "also supports json, html, agent (JSON-LD), audio, epub, "
-                "and audiobook.  "
-                "Accepts optional custom_instructions to tailor output."
+                "Produce a deep structured report analyzing collected items "
+                "for a domain over a period (daily, weekly, monthly). "
+                "Default markdown; also json, html, agent (JSON-LD), audio, "
+                "epub, audiobook, video. report_type switches industry, "
+                "competitive, trend, daily-briefing, or column templates; "
+                "product supports premium-briefing and enterprise-briefing."
             ),
             inputSchema={
                 "type": "object",
@@ -8668,9 +8687,10 @@ async def list_tools() -> list[Tool]:
         Tool(
             name="generate_tutorial",
             description=(
-                "Generate a structured tutorial for a domain. "
-                "Returns markdown by default; also supports agent (JSON-LD). "
-                "Accepts optional custom_instructions to tailor output."
+                "Create a step-by-step tutorial teaching a topic for a "
+                "domain, with learning goals and hands-on steps. "
+                "Default markdown; also agent (JSON-LD). topic filters the "
+                "content; custom_instructions shape the teaching style."
             ),
             inputSchema={
                 "type": "object",
@@ -8711,9 +8731,10 @@ async def list_tools() -> list[Tool]:
         Tool(
             name="generate_presentation",
             description=(
-                "Generate a slide-based presentation for a topic within a domain. "
-                "Returns markdown by default; also supports html, mkslides, agent (JSON-LD). "
-                "Accepts optional custom_instructions to tailor output."
+                "Build a slide deck for a topic within a domain (slides 3-30). "
+                "Outputs markdown (Reveal.js flavored), standalone html, "
+                "mkslides build, or agent (JSON-LD). Pass custom_instructions "
+                "for visual narrative and pacing."
             ),
             inputSchema={
                 "type": "object",
@@ -9040,7 +9061,11 @@ async def list_tools() -> list[Tool]:
         # -- Schedule Management (4) ----------------------------------------
         Tool(
             name="list_schedules",
-            description="List all configured collection schedules",
+            description=(
+                "List all scheduled collection jobs that fetch sources on a "
+                "cron cadence, showing job id and enabled state. Use to "
+                "review or remove collection automation."
+            ),
             inputSchema={"type": "object", "properties": {}},
         ),
         Tool(
@@ -9200,7 +9225,11 @@ async def list_tools() -> list[Tool]:
         ),
         Tool(
             name="list_delivery_schedules",
-            description="List all configured delivery schedules",
+            description=(
+                "List all delivery schedules that generate and push outputs "
+                "(digests, reports) to end-user channels on a cron cadence. "
+                "Shows output type, channel, and next run time per schedule."
+            ),
             inputSchema={"type": "object", "properties": {}},
         ),
         Tool(
@@ -9680,7 +9709,12 @@ async def list_tools() -> list[Tool]:
         # -- Product (2) ----------------------------------------------------
         Tool(
             name="get_product",
-            description="Return product configuration for a domain and product type (RAW or PROCESSED). Products are derived from domain config",
+            description=(
+                "Return configuration of a single product (RAW or PROCESSED) "
+                "for a domain by product type — channels, formats, and "
+                "platform limits derived from domain config. Inspect a "
+                "specific product before generating or delivering."
+            ),
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -9699,7 +9733,11 @@ async def list_tools() -> list[Tool]:
         ),
         Tool(
             name="list_products",
-            description="List all configured products (RAW and PROCESSED) for a domain, derived from its configuration",
+            description=(
+                "Enumerate all products (RAW and PROCESSED) configured for a "
+                "domain with their product id, channels, and formats. Use "
+                "for an overview before choosing one to generate."
+            ),
             inputSchema={
                 "type": "object",
                 "properties": {

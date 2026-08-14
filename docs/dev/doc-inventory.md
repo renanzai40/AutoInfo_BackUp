@@ -14,10 +14,10 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | Metric | Value |
 |--------|-------|
 | Total files | 68 |
-| Total lines | 28313 |
+| Total lines | 28314 |
 | Active files | 54 |
 | Archived files | 14 |
-| Category — archive | 14 files / 7283 lines |
+| Category — archive | 14 files / 7284 lines |
 | Category — known-limitations | 1 files / 255 lines |
 | Category — schemas | 4 files / 397 lines |
 | Category — skills | 3 files / 785 lines |
@@ -41,7 +41,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `adr/TEMPLATE.md` | 32 | adr | active | adr |
 | `archive/agent-tester-validation-guide.md` | 1498 | archive | archived | — |
 | `archive/agent-tester-validation.md` | 663 | archive | archived | — |
-| `archive/autoinfo-validation-master-plan/LOOP-LOG.md` | 60 | archive | archived | — |
+| `archive/autoinfo-validation-master-plan/LOOP-LOG.md` | 61 | archive | archived | — |
 | `archive/autoinfo-validation-master-plan/part-02-cli-depth-results-q10-q18.md` | 172 | archive | archived | — |
 | `archive/autoinfo-validation-master-plan/part-12-final-verdict.md` | 383 | archive | archived | — |
 | `archive/autoinfo-validation-master-plan/scenarios/enduser-deliverable.yaml` | 238 | archive | archived | — |
