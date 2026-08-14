@@ -11,6 +11,11 @@
 # TTS narration -> HyperFrames project scaffold -> bun render -> MP4.
 name: output-video
 description: "V1 — report format='video' via HyperFrames (HTML+GSAP -> MP4)"
+# Issue #237: HyperFrames rendering (headless Chrome + GSAP -> MP4) on this
+# box exceeds the 600s default per-step timeout; render_hyperframes also
+# defaults to 1200s now. Raise the cap so a slow-but-healthy render is not
+# killed (WSL ffmpeg environments are slower than native).
+timeout: 1200
 category: output
 requires_env: ["AUTOINFO_LLM_API_KEY"]
 requires_domain: ["medical-research"]
