@@ -9,7 +9,7 @@ separately in ``test_video_integration.py``.
 from __future__ import annotations
 
 import os
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -132,7 +132,7 @@ class TestGenerateAudioNarration:
     """Unit tests for TTS audio narration generation (unchanged contract)."""
 
     @patch("autoinfo.output._render_audio")
-    def test_happy_path(self, mock_render: object) -> None:
+    def test_happy_path(self, mock_render: MagicMock) -> None:
         """TTS narration generates an MP3 file from section content."""
         mock_render.return_value = b"fake_mp3_data" * 100  # > 100 bytes
 
@@ -151,7 +151,7 @@ class TestGenerateAudioNarration:
         mock_render.assert_called_once()
 
     @patch("autoinfo.output._render_audio")
-    def test_multiple_sections(self, mock_render: object) -> None:
+    def test_multiple_sections(self, mock_render: MagicMock) -> None:
         """Narration text includes all section headings and bodies."""
         mock_render.return_value = b"fake_mp3_data" * 100
 
@@ -179,7 +179,7 @@ class TestGenerateAudioNarration:
         assert "No heading section" in call_text
 
     @patch("autoinfo.output._render_audio")
-    def test_too_small_audio_raises(self, mock_render: object) -> None:
+    def test_too_small_audio_raises(self, mock_render: MagicMock) -> None:
         """Audio file smaller than 100 bytes raises RuntimeError."""
         mock_render.return_value = b"tiny"  # < 100 bytes
 
@@ -194,7 +194,7 @@ class TestGenerateAudioNarration:
             )
 
     @patch("autoinfo.output._render_audio")
-    def test_voice_passed_through(self, mock_render: object) -> None:
+    def test_voice_passed_through(self, mock_render: MagicMock) -> None:
         """Voice parameter is forwarded to _render_audio."""
         mock_render.return_value = b"fake_mp3_data" * 100
 

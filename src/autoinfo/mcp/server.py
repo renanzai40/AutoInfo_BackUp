@@ -2991,6 +2991,10 @@ def _handle_generate_report(
         }
 
     try:
+        # Persist under the spec product name so matrix evidence resolves
+        # (column was persisted as report-markdown-* and never counted for
+        # the column:markdown cell — issue #229).
+        _persist_product = "column" if report_type == "column" else "report"
         result = _generate_report(domain=domain, format=format, period=period, custom_instructions=custom_instructions, target_audience=target_audience, user_id=user_id, report_type=report_type, product_template=product_template)
         if format in ("json", "agent"):
             import json as _json
@@ -3004,7 +3008,7 @@ def _handle_generate_report(
                     "period": period,
                     "content": parsed,
                 },
-                persist, domain, "report", format, parsed,
+                persist, domain, _persist_product, format, parsed,
             )
         if format == "audio":
             return _maybe_persist_output(
@@ -3017,7 +3021,7 @@ def _handle_generate_report(
                     "encoding": "base64",
                     "content": result,
                 },
-                persist, domain, "report", "audio", result,
+                persist, domain, _persist_product, "audio", result,
             )
         if format == "video":
             import json as _json3
@@ -3034,7 +3038,7 @@ def _handle_generate_report(
                     "period": period,
                     **parsed,
                 },
-                persist, domain, "report", "video", result,
+                persist, domain, _persist_product, "video", result,
             )
         if format in ("epub", "audiobook"):
             return _maybe_persist_output(
@@ -3049,7 +3053,7 @@ def _handle_generate_report(
                     "encoding": "base64",
                     "content": result,
                 },
-                persist, domain, "report", format, result,
+                persist, domain, _persist_product, format, result,
             )
         return _maybe_persist_output(
             {
@@ -3059,7 +3063,7 @@ def _handle_generate_report(
                 "period": period,
                 "content": result,
             },
-            persist, domain, "report", format, result,
+            persist, domain, _persist_product, format, result,
         )
     except ValueError as exc:
         return {

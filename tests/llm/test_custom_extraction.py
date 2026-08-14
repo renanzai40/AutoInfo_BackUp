@@ -247,6 +247,7 @@ class TestKBFrontmatterCustomFields:
 
         store = KBStore(base_path=kb_base)
         entry = store.store_entry(sample_item, extraction)
+        assert entry is not None
 
         # Read the markdown file and parse frontmatter
         file_path = Path(entry.file_path)
@@ -276,6 +277,7 @@ class TestKBFrontmatterCustomFields:
 
         store = KBStore(base_path=kb_base)
         entry = store.store_entry(sample_item, extraction)
+        assert entry is not None
 
         file_path = Path(entry.file_path)
         raw = file_path.read_text(encoding="utf-8")
@@ -300,6 +302,7 @@ class TestKBFrontmatterCustomFields:
 
         store = KBStore(base_path=kb_base)
         entry = store.store_entry(sample_item, extraction)
+        assert entry is not None
 
         file_path = Path(entry.file_path)
         raw = file_path.read_text(encoding="utf-8")
@@ -345,7 +348,7 @@ class TestProcessingWithExtractFields:
 
         # Mock load_cached_items to return the sample item, and use
         # a mock KBStore so we can inspect what was stored
-        from autoinfo.kb import KBEntry
+        from autoinfo.models import KBEntry
 
         mock_store = MagicMock(spec=KBStore)
         mock_store.list_entries.return_value = []
@@ -509,6 +512,7 @@ class TestMcpGetExtraction:
         with patch.object(LLMExtractor, "_get_litellm", return_value=mock_litellm_with_custom):
             extraction = extractor.extract(sample_item, schema=["methodology"])
         entry = store.store_entry(sample_item, extraction)
+        assert entry is not None
 
         # Mock the KBStore lookup to return metadata pointing to the real file
         meta = store.index.get_entry(entry.entry_id)
@@ -548,6 +552,7 @@ class TestMcpGetExtraction:
         with patch.object(LLMExtractor, "_get_litellm", return_value=mock_litellm_default_only):
             extraction = extractor.extract(sample_item)
         entry = store.store_entry(sample_item, extraction)
+        assert entry is not None
 
         meta = store.index.get_entry(entry.entry_id)
         mock_kb = MagicMock(spec=KBStore)

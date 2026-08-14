@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sys
+from collections.abc import AsyncIterator
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -163,7 +164,7 @@ class TestRenderAudioEdgeTTS:
     def test_local_returns_mp3_bytes(self) -> None:
         fake_comm = _register_fake_edge_tts()
         try:
-            async def mock_stream():
+            async def mock_stream() -> AsyncIterator[dict[str, str | bytes]]:
                 yield {"type": "audio", "data": b"chunk1"}
                 yield {"type": "audio", "data": b"chunk2"}
 
@@ -181,7 +182,7 @@ class TestRenderAudioEdgeTTS:
     def test_local_custom_voice(self) -> None:
         fake_comm = _register_fake_edge_tts()
         try:
-            async def mock_stream():
+            async def mock_stream() -> AsyncIterator[dict[str, str | bytes]]:
                 yield {"type": "audio", "data": b"voice-data"}
 
             instance = MagicMock()
@@ -200,7 +201,7 @@ class TestRenderAudioEdgeTTS:
     def test_local_empty_audio_raises(self) -> None:
         fake_comm = _register_fake_edge_tts()
         try:
-            async def mock_stream():
+            async def mock_stream() -> AsyncIterator[dict[str, str | bytes]]:
                 yield {"type": "WordBoundary", "data": b""}
 
             instance = MagicMock()
@@ -250,7 +251,7 @@ class TestFallback:
 
         fake_comm = _register_fake_edge_tts()
         try:
-            async def mock_stream():
+            async def mock_stream() -> AsyncIterator[dict[str, str | bytes]]:
                 raise RuntimeError("TTS service unavailable")
                 yield  # unreachable; makes this an async generator (edge-tts stream() yields)
 
@@ -368,7 +369,7 @@ class TestRenderAudioEdgeTTSDirect:
     def test_edge_tts_helper_returns_bytes(self) -> None:
         fake_comm = _register_fake_edge_tts()
         try:
-            async def mock_stream():
+            async def mock_stream() -> AsyncIterator[dict[str, str | bytes]]:
                 yield {"type": "audio", "data": b"edge-data"}
 
             instance = MagicMock()
@@ -385,7 +386,7 @@ class TestRenderAudioEdgeTTSDirect:
     def test_edge_tts_helper_respects_voice(self) -> None:
         fake_comm = _register_fake_edge_tts()
         try:
-            async def mock_stream():
+            async def mock_stream() -> AsyncIterator[dict[str, str | bytes]]:
                 yield {"type": "audio", "data": b"x"}
 
             instance = MagicMock()
@@ -409,7 +410,7 @@ class TestRenderAudioEdgeTTSDirect:
 
         fake_comm = _register_fake_edge_tts()
         try:
-            async def mock_stream():
+            async def mock_stream() -> AsyncIterator[dict[str, str | bytes]]:
                 await asyncio.sleep(99)
                 yield {"type": "audio", "data": b"x"}
 
@@ -434,7 +435,7 @@ class TestRenderAudioWithEngineLocal:
     def test_render_audio_engine_local_works(self) -> None:
         fake_comm = _register_fake_edge_tts()
         try:
-            async def mock_stream():
+            async def mock_stream() -> AsyncIterator[dict[str, str | bytes]]:
                 yield {"type": "audio", "data": b"local-mp3"}
 
             instance = MagicMock()
@@ -454,7 +455,7 @@ class TestRenderAudioWithEngineLocal:
     def test_render_audio_engine_local_strips_markdown(self) -> None:
         fake_comm = _register_fake_edge_tts()
         try:
-            async def mock_stream():
+            async def mock_stream() -> AsyncIterator[dict[str, str | bytes]]:
                 yield {"type": "audio", "data": b"stripped"}
 
             instance = MagicMock()

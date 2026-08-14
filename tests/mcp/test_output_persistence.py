@@ -267,3 +267,77 @@ class TestAllHandlersPersist:
             _handle_generate_tutorial(domain="d1", format="markdown")
             _handle_generate_presentation(domain="d1", topic="t", format="markdown")
         assert list(outputs_dir.iterdir()) == []
+
+
+# ---------------------------------------------------------------------------
+# Test 6 — report_type='column' persists under the column product name (#229)
+# ---------------------------------------------------------------------------
+# regression: _handle_generate_report always persisted with product='report',
+# so report_type='column' artifacts were saved as report-markdown-* and the
+# coverage_matrix filename parser never counted them for the column:markdown
+# cell. column products must persist as column-<format>-*. The video branch
+# (added after #229) must follow the same mapping.
+
+
+class TestReportColumnPersistNaming:
+    @patch("autoinfo.mcp.server.logger")
+    def test_column_report_persist_writes_column_markdown(
+        self, mock_logger: MagicMock, outputs_dir, kb_store_with_entries
+    ) -> None:
+        """report_type='column' + format=markdown persists as column-markdown-*."""
+        content = "# Column\n\nbody"
+        with patch("autoinfo.output.generate_report", return_value=content):
+            result = _handle_generate_report(
+                domain="medical-research",
+                format="markdown",
+                report_type="column",
+                persist=True,
+            )
+
+        assert result["success"] is True
+        assert "persisted_path" in result
+        file = _unique_output_file(
+            outputs_dir, "medical-research", "column-markdown-*.md"
+        )
+        assert file.read_text(encoding="utf-8") == content
+
+    @patch("autoinfo.mcp.server.logger")
+    def test_column_video_persist_writes_column_video(
+        self, mock_logger: MagicMock, outputs_dir, kb_store_with_entries
+    ) -> None:
+        """report_type='column' + format=video persists as column-video-* (#229 follow-up)."""
+        video_b64 = base64.b64encode(b"fake-video-bytes").decode()
+        with patch("autoinfo.output.generate_report", return_value=video_b64):
+            result = _handle_generate_report(
+                domain="medical-research",
+                format="video",
+                report_type="column",
+                persist=True,
+            )
+
+        assert result["success"] is True
+        assert "persisted_path" in result
+        file = _unique_output_file(
+            outputs_dir, "medical-research", "column-video-*.mp4"
+        )
+        assert file.read_bytes() == base64.b64decode(video_b64)
+
+    @patch("autoinfo.mcp.server.logger")
+    def test_standard_video_persist_still_writes_report_video(
+        self, mock_logger: MagicMock, outputs_dir, kb_store_with_entries
+    ) -> None:
+        """Default report_type keeps the report-* product name for video (no regression)."""
+        video_b64 = base64.b64encode(b"fake-video-bytes").decode()
+        with patch("autoinfo.output.generate_report", return_value=video_b64):
+            result = _handle_generate_report(
+                domain="medical-research",
+                format="video",
+                persist=True,
+            )
+
+        assert result["success"] is True
+        assert "persisted_path" in result
+        file = _unique_output_file(
+            outputs_dir, "medical-research", "report-video-*.mp4"
+        )
+        assert file.read_bytes() == base64.b64decode(video_b64)

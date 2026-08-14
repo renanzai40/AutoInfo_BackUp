@@ -14,7 +14,6 @@ hyperframes.json / index.html / compositions/*.html / assets/audio/).
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 import json
 import logging
 import os
@@ -22,6 +21,8 @@ import shutil
 import subprocess
 import tempfile
 import time
+from dataclasses import dataclass
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -51,9 +52,9 @@ class VideoConfig:
 # ---------------------------------------------------------------------------
 
 
-def _load_themes() -> dict:
+def _load_themes() -> dict[str, Any]:
     """Load the merged theme library (36 palettes + 8 brand themes)."""
-    themes: dict = {}
+    themes: dict[str, Any] = {}
     for filename in ("theme_palettes.json", "od_themes.json"):
         path = os.path.join(_ASSETS_DIR, "themes", filename)
         if not os.path.isfile(path):
@@ -64,7 +65,7 @@ def _load_themes() -> dict:
     return themes
 
 
-def _flatten_theme(raw: dict) -> dict:
+def _flatten_theme(raw: dict[str, Any]) -> dict[str, Any]:
     """Flatten a theme entry's ``variables`` dict into dotted keys.
 
     Themes in the ported library are heterogeneous — not every palette
@@ -90,7 +91,7 @@ def _flatten_theme(raw: dict) -> dict:
     return flat
 
 
-def select_theme(config: VideoConfig | None = None) -> dict:
+def select_theme(config: VideoConfig | None = None) -> dict[str, Any]:
     """Select a flattened theme dict from the ported library.
 
     Picks ``config.theme`` if it exists; otherwise filters by
@@ -125,7 +126,7 @@ def select_theme(config: VideoConfig | None = None) -> dict:
 
 # Visual layout patterns (AutoMedia visual-layouts.md, 6 types).  Each scene
 # picks a layout; adjacent scenes must differ (5-scene video uses >= 4 layouts).
-LAYOUTS: dict[str, dict] = {
+LAYOUTS: dict[str, dict[str, Any]] = {
     "centered-hero": {
         "label": "Centered Hero",
         "html": """
@@ -288,7 +289,7 @@ def _pick_layouts(n_scenes: int) -> list[str]:
 
 def generate_audio_narration(
     title: str,
-    sections: list[dict],
+    sections: list[dict[str, str]],
     output_dir: str,
     voice: str = "default",
 ) -> str:
@@ -363,9 +364,9 @@ def _probe_audio_duration(audio_path: str) -> float:
 
 
 def _split_narration_into_scenes(
-    sections: list[dict],
+    sections: list[dict[str, str]],
     total_duration: float,
-) -> list[dict]:
+) -> list[dict[str, Any]]:
     """Assign per-scene start/duration from TTS length by character ratio.
 
     Mirrors AutoMedia's scene-frame-boundary math, including the float
@@ -376,7 +377,7 @@ def _split_narration_into_scenes(
         return []
     char_lens = [max(len(s.get("heading", "")) + len(s.get("body", "")), 1) for s in sections]
     total_chars = sum(char_lens)
-    scenes: list[dict] = []
+    scenes: list[dict[str, Any]] = []
     cumsum = 0.0
     for i, (section, clen) in enumerate(zip(sections, char_lens)):
         start = cumsum / total_chars * total_duration
@@ -395,7 +396,7 @@ def _split_narration_into_scenes(
     return scenes
 
 
-def _render_jinja(template_name: str, **ctx) -> str:
+def _render_jinja(template_name: str, **ctx: Any) -> str:
     """Render a template from the ported assets dir."""
     from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
@@ -410,9 +411,9 @@ def _render_jinja(template_name: str, **ctx) -> str:
 def _write_scene_composition(
     compositions_dir: str,
     index: int,
-    scene: dict,
+    scene: dict[str, Any],
     layout_name: str,
-    theme: dict,
+    theme: dict[str, Any],
 ) -> None:
     """Write one scene composition HTML (layout + GSAP timeline)."""
     layout = LAYOUTS[layout_name]
@@ -441,7 +442,7 @@ def _write_scene_composition(
 
 def generate_hyperframes_project(
     title: str,
-    sections: list[dict],
+    sections: list[dict[str, str]],
     output_dir: str,
     audio_path: str | None = None,
     config: VideoConfig | None = None,
@@ -467,6 +468,7 @@ def generate_hyperframes_project(
     if has_audio:
         audio_dir = os.path.join(output_dir, "assets", "audio")
         os.makedirs(audio_dir, exist_ok=True)
+        assert audio_path is not None, "audio_path required when narration audio exists"
         shutil.copy(audio_path, os.path.join(audio_dir, "narration.mp3"))
         total_duration = _probe_audio_duration(audio_path)
     else:
@@ -605,7 +607,7 @@ def render_hyperframes(
 
 def generate_report_video(
     title: str,
-    sections: list[dict],
+    sections: list[dict[str, str]],
     output_path: str | None = None,
     config: VideoConfig | None = None,
     voice: str = "default",

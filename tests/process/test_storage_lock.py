@@ -27,6 +27,7 @@ import threading
 import time
 from contextlib import ExitStack
 from pathlib import Path
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -35,7 +36,8 @@ from autoinfo.config import CEFRConfig, Config
 from autoinfo.kb import KBStore
 from autoinfo.llm import LLMExtractor
 from autoinfo.models import ExtractionResult, Item, KBEntry
-from autoinfo.process import _STORAGE_LOCK, run_processing
+from autoinfo.process import _STORAGE_LOCK, ProcessResult, run_processing
+from autoinfo.quality import QualityResult
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -72,9 +74,7 @@ def _extraction(item: Item) -> ExtractionResult:
     )
 
 
-def _quality_all_pass():
-    from autoinfo.quality import QualityResult
-
+def _quality_all_pass() -> dict[str, QualityResult]:
     return {
         "G1-SourceAuthority": QualityResult(gate_name="G1", passed=True, details={}),
         "G2-Dedup": QualityResult(
@@ -108,8 +108,8 @@ def _run_with_patches(
     items: list[Item],
     store: MagicMock,
     config: Config,
-    *extra_patches,
-):
+    *extra_patches: Any,
+) -> ProcessResult:
     """Run ``run_processing`` with the standard mock seam for KB + LLM."""
     patches = [
         patch("autoinfo.process.load_cached_items", return_value=items),
@@ -149,7 +149,7 @@ class TestCefrCallOutsideLock:
         """
         lock_states: list[bool] = []
 
-        def fake_cefr(entry, item, config):  # noqa: ARG001
+        def fake_cefr(entry: Any, item: Item, config: Config) -> None:  # noqa: ARG001
             lock_states.append(_STORAGE_LOCK.locked())
             return None
 
@@ -184,11 +184,13 @@ class TestCefrCallOutsideLock:
         llm_lock_states: list[bool] = []
         write_lock_states: list[bool] = []
 
-        def fake_classify(text, lang, model_config):  # noqa: ARG001
+        def fake_classify(  # noqa: ARG001
+            text: str, lang: str, model_config: dict[str, Any] | None
+        ) -> dict[str, Any]:
             llm_lock_states.append(_STORAGE_LOCK.locked())
             return {"cefr_level": "B1", "confidence": 0.9}
 
-        def fake_frontmatter(file_path, key, value):  # noqa: ARG001
+        def fake_frontmatter(file_path: str, key: str, value: Any) -> None:  # noqa: ARG001
             write_lock_states.append(_STORAGE_LOCK.locked())
 
         item = _item("cefr-a2-item", "First test article about IVF")
@@ -239,11 +241,15 @@ class TestStorageWritesSerialized:
         inflight = 0
         max_inflight = 0
 
-        def _gates(*args, **kwargs):  # noqa: ARG001
+        def _gates(*args: Any, **kwargs: Any) -> dict[str, QualityResult]:  # noqa: ARG001
             gate_barrier.wait(timeout=15)
             return _quality_all_pass()
 
-        def _store_entry(item, extraction, quality_results):  # noqa: ARG001
+        def _store_entry(
+            item: Item,
+            extraction: ExtractionResult | None,
+            quality_results: dict[str, QualityResult] | None,
+        ) -> KBEntry | None:  # noqa: ARG001
             nonlocal inflight, max_inflight
             with counter_lock:
                 inflight += 1
@@ -286,7 +292,7 @@ class TestCefrFailurePath:
         recorded per the ``_process_item`` contract (item status ``error`` +
         entry in ``ProcessResult.errors``).  Completes fast — no deadlock:
         the CEFR failure releases the lock so storage proceeds."""
-        def _boom_cefr(entry, item, config):  # noqa: ARG001
+        def _boom_cefr(entry: Any, item: Item, config: Config) -> None:  # noqa: ARG001
             raise RuntimeError("cefr boom")
 
         item = _item("cefr-c1-item", "First test article about IVF")
@@ -311,7 +317,9 @@ class TestCefrFailurePath:
         """A failure of the actual LLM call inside ``_classify_entry_cefr`` is
         swallowed by the helper (classification must never block entry
         creation): the KB write still happened and no error propagates."""
-        def _boom_classify(text, lang, model_config):  # noqa: ARG001
+        def _boom_classify(  # noqa: ARG001
+            text: str, lang: str, model_config: dict[str, Any] | None
+        ) -> dict[str, Any]:
             raise RuntimeError("cefr llm boom")
 
         item = _item("cefr-c2-item", "First test article about IVF")
