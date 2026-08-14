@@ -266,10 +266,13 @@ follows the model used by major projects such as pandas and scikit-learn.
 
 ## Review process
 
-- **CI is the gatekeeper.** ruff, mypy, and pytest are required checks; a PR
-  that fails them does not merge. Run `make lint` and `make test` locally
-  before pushing.
-- Every PR needs at least one approving review from a maintainer.
+- **CI is the gatekeeper.** ruff, mypy, pytest, the Conventional-Commits title
+  check, the coverage gate, and DCO are required checks; a PR that fails them
+  does not merge. Run `make lint` and `make test` locally before pushing.
+- AutoInfo is currently a solo-maintained project, so the author can merge
+  their own PR once all checks pass (GitHub blocks self-approval, so requiring
+  human approvals would deadlock the repo). Reviews and comments from
+  contributors are still very welcome; see `GOVERNANCE.md`.
 - Open a **draft PR** early to get feedback while you iterate, and mark it
   ready when checks pass.
 - When a reviewer comments, respond to each thread: agree and fix, or explain

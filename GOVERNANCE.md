@@ -116,12 +116,18 @@ quiet issues is lower than the cost of alienating reporters.
 ## Pull request review policy
 
 CI is the gatekeeper. Every pull request must pass the required status checks
-in `.github/workflows/ci.yml`: `lint` (ruff), `mypy-changed-files`, and
-`test` (pytest). Reviewers focus on substance, not on style trivia that CI
-already covers.
+in the `main-protection` ruleset (`.github/workflows/ci.yml`: `lint` (ruff),
+`mypy-changed-files`, `test` (pytest); plus `Conventional Commits title`,
+`Fast subset coverage on changed modules`, and `DCO`). Reviewers focus on
+substance, not on style trivia that CI already covers.
 
-- **One required reviewer** is the sweet spot for a team of this size. More
-  reviewers slow the loop without adding safety; zero reviewers ships bugs.
+- **Solo-maintainer mode**: AutoInfo currently runs with a single maintainer,
+  so `required_approving_review_count` is `0` and the author can merge their
+  own PR once CI is green. GitHub structurally blocks self-approval (an author
+  cannot approve their own PR under either branch protection or rulesets), so
+  a non-zero approval requirement would deadlock every merge. The CI gate is
+  the review. When a second trusted maintainer joins, bump the approval count
+  to `1` — no other change is needed.
 - **Draft pull requests are assumed not ready.** Do not review a draft unless
   explicitly asked; a draft means the author wants feedback later.
 - **Small pull requests are strongly preferred.** A request that takes more
@@ -138,16 +144,26 @@ already covers.
 
 ## Merge strategy and branch protection
 
-- **Default to squash-and-merge.** Every merged pull request becomes one
-  clean commit on `main`, keeping history linear and blame useful. Other
-  merge strategies are disabled, matching GitHub's own recommendation for
-  default-branch hygiene.
-- **Branch protection on `main`** requires:
-  - A pull request before merging (no direct pushes)
-  - At least 1 approval
-  - Passing status checks: `lint`, `mypy-changed-files`, `test`
-  - Dismissing stale approvals when new commits are pushed
-  - Branches up to date before merging
+`main` is protected by the `main-protection` **ruleset** (repository-level,
+active, no bypass actors — even the repo owner cannot bypass):
+
+- **A pull request before merging** — no direct pushes to `main`.
+- **Approval count `0` (solo-maintainer mode)** — the author merges their own
+  PR once all gates pass; see the review policy above.
+- **Required status checks, strict** — `Lint`, `Mypy (changed files)`, `Test
+  suite (fast subset)`, `Conventional Commits title`, `Fast subset coverage on
+  changed modules`, `DCO`; branches must be up to date with `main` before
+  merging.
+- **Required review-thread resolution** — all conversations on the PR must be
+  resolved before merge.
+- **Squash-merge only** — every merged PR becomes one clean commit on `main`,
+  keeping history linear and blame useful (matches GitHub's own recommendation
+  for default-branch hygiene).
+- **Force pushes and deletions blocked.**
+- `CODEOWNERS` remains in place for auto-requesting reviews (the "Require
+  review from Code Owners" enforcement is dormant while approval count is `0`;
+  it activates automatically once a second maintainer exists and the count is
+  raised).
 
 ## Developer Certificate of Origin (DCO)
 

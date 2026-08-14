@@ -87,7 +87,11 @@ M1T11-12.
 
 Review posture:
 
-- One required reviewer is enough for a small team. More opinions do not scale.
+- **Solo-maintainer mode: no required human approval.** The `main-protection`
+  ruleset runs `required_approving_review_count: 0` (GitHub structurally blocks
+  self-approval, so a non-zero count would deadlock every merge). The CI gate
+  is the review: ruff, mypy, pytest subset, title check, coverage gate, DCO.
+  If a second trusted maintainer joins, raise the count to 1 — no other change.
 - Draft PRs are not ready for review; say so and wait for "ready for review".
 - Label every comment `blocking` or `nit` explicitly. This keeps feedback
   unambiguous across cultures and language barriers.
@@ -99,21 +103,22 @@ Review posture:
 
 ## Merge decision
 
-Only merge when ALL of these hold:
+Only merge when ALL of these hold (the ruleset enforces 1-3):
 
-1. CI green (ruff, mypy, fast pytest subset).
-2. At least one approving review.
-3. PR title conforms (the title IS the commit).
+1. CI green (ruff, mypy, fast pytest subset, coverage gate, DCO).
+2. PR title conforms (the title IS the commit).
+3. PR is a pull request into `main` (no direct pushes) and up to date
+   (strict status checks).
 4. Release-note block filled.
-5. No unresolved blocking comments.
+5. No unresolved blocking comments (review threads must be resolved).
 
 - **Squash-merge is the default.** Individual commits need not be perfect; the
   squashed message is the history. Squash keeps `main` linear and makes
   release-please's changelog grouping work.
-- **Dismiss stale approvals on new commits** (branch protection). A change of
-  code invalidates the old approval; the author must re-request review.
-- **Never merge a PR with unresolved blocking comments**, even if CI is green
-  and an approval exists.
+- **The author merges their own PR once CI is green** (solo-maintainer mode).
+  No `--admin` needed: the ruleset has no bypass actors and approval count is
+  zero, so a clean PR merges normally.
+- **Never merge a PR with unresolved blocking comments**, even if CI is green.
 
 ## Agent-specific maintainer constraints
 
@@ -155,7 +160,7 @@ pain appears. Each symptom gets a specific, minimal cure:
 |---------|------|
 | Duplicate issue flood | Stricter issue templates + `meta/duplicate` labeling discipline |
 | Wrong reviewers on security-sensitive files | `CODEOWNERS` entries for those paths |
-| Merges keep breaking `main` | Dismiss stale approvals + require branches up-to-date |
+| Merges keep breaking `main` | Strict status checks + up-to-date requirement (already enforced by the ruleset) |
 | Abandoned PR pile | Conservative stale bot: mark stale at 360 days, close at 30 days, exempt `kind/bug` and `meta/good-first-issue` |
 | Recurring wontfix requests | Update the docs, do not re-litigate the issue |
 
