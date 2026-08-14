@@ -1,6 +1,11 @@
 # Quality gate configuration — read, mutate, verify, restore.
 # get_gate_config: test error path (gate not configured) and success path (after set).
 # set_gate_config: create a test gate, then restore to original (no gate).
+# NOTE (2026-08-14, #242): short names like "G0" are normalised to their
+# canonical long form (G0-SchemaIntegrity) via _GATE_CONFIG_KEY_MAP, so a
+# GateNotFound probe must use a gate name outside the map (Z99-NotConfigured),
+# and the set/get/cleanup round-trip uses a scratch gate (G0-TestScratch) to
+# avoid touching real G0-SchemaIntegrity configuration.
 name: quality-gate-config
 description: "Quality gate config: read, set, verify, restore"
 category: quality
@@ -11,16 +16,16 @@ steps:
     tool: get_gate_config
     arguments:
       domain: medical-research
-      gate: G0
+      gate: Z99-NotConfigured
     expect:
       success: false
       error_code: "GateNotFound"
 
-  - name: "set_gate_config creates G0 test gate"
+  - name: "set_gate_config creates G0-TestScratch test gate"
     tool: set_gate_config
     arguments:
       domain: medical-research
-      gate: G0
+      gate: G0-TestScratch
       config:
         category: soft
         action: flag
@@ -30,19 +35,19 @@ steps:
       success: true
       data_has: ["domain", "gate", "updated", "config"]
 
-  - name: "get_gate_config verifies G0 is now configured"
+  - name: "get_gate_config verifies G0-TestScratch is now configured"
     tool: get_gate_config
     arguments:
       domain: medical-research
-      gate: G0
+      gate: G0-TestScratch
     expect:
       success: true
       data_has: ["domain", "gate", "gate_type", "config"]
 
-  - name: "cleanup: remove test G0 gate from domain quality_gates"
+  - name: "cleanup: remove test G0-TestScratch gate from domain quality_gates"
     kind: cli
     tool: _cli_cleanup
-    command: "python3 -c \"from autoinfo.config import load_config, get_config_path, save_config; cp=get_config_path(); cfg=load_config(cp); [d.quality_gates.pop('G0', None) for d in cfg.domains if d.name=='medical-research']; save_config(cfg, cp); print('GATE_REMOVED')\""
+    command: "python3 -c \"from autoinfo.config import load_config, get_config_path, save_config; cp=get_config_path(); cfg=load_config(cp); [d.quality_gates.pop('G0-TestScratch', None) for d in cfg.domains if d.name=='medical-research']; save_config(cfg, cp); print('GATE_REMOVED')\""
     expect:
       exit_code: 0
       stdout_has: ["GATE_REMOVED"]
