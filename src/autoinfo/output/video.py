@@ -540,7 +540,7 @@ def render_hyperframes(
     project_dir: str,
     output_path: str,
     quality: str = "draft",
-    timeout: float = 600,
+    timeout: float = 1200,
 ) -> str:
     """Render a HyperFrames project to MP4 via ``bun x hyperframes render``.
 
