@@ -29,7 +29,7 @@ jobs:
     name: Open or update release PR
     runs-on: ubuntu-latest
     steps:
-      - uses: GoogleCloudPlatform/release-please-action@v4
+      - uses: GoogleCloudPlatform/release-please-action@v5
         with:
           # release-please-config.json and .release-please-manifest.json are
           # picked up automatically from the repo root.
