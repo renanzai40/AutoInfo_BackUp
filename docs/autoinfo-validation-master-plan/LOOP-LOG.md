@@ -49,6 +49,7 @@
 10. **html 模板必须输出 D1 三键章节**：report.html.j2 只有 Executive Summary，缺 Key Findings/Recommendations → D1 永远拒 report-html（模板 + 传参一起改，改完必须重新生成旧产物）
 11. **适配层 product_type 粒度**：_build_product_output 曾把 product_type 全标 "PROCESSED" → quality.py D1 无法按产品分支——改为透传 _detect_product_type 结果（presentation/report/column/...），RAW 保持
 12. **presentation 完整性语义 = slide 内容**：D1 三键不适用 deck——product_type==presentation 时 body 内容 ≥200 chars 即 pass（无需改模板视觉）
+13. **persist 文件名决定 matrix evidence**：generate_report 曾把 column（report_type）产物固定存为 report-markdown-* → 文件名解析永远到不了 column:markdown cell（#229）——persist product 名必须与 spec product 对齐
 
 ### 复盘（为什么 9 次）
 
