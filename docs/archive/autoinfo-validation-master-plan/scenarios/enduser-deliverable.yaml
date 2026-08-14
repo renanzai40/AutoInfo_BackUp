@@ -1,4 +1,8 @@
 # =============================================================================
+# ARCHIVED 2026-08-14 (superseded): data stopped at 2026-07-31 (141 tools/47
+# scenarios), conflicts with current 145 tools/68 scenarios. Replaced by
+# docs/dev/validation-scenario-contract.md + docs/dev/best-practice-review.md.
+# =============================================================================
 # Scenario: enduser-deliverable
 # Description: Full end-user validation with real API/LLM calls producing
 #   a deliverable ZIP with raw data + processed reports

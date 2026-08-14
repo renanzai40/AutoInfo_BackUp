@@ -590,9 +590,9 @@ Before you promote a Draft to Wiki, you should review its quality. The agent can
 >
 > **You**: "Looks good. Promote to Wiki."
 >
-> **Agent**: "Promotion requires CLI: `autoinfo kb promote <entry-id>`. Here is the command to run..."
+> **Agent**: (calls `promote_kb_draft()` — promotion is an agent operation, no human gate) "Promoted to 03-Wiki. I'll flag it in my next report."
 
-The agent cannot run `autoinfo kb promote` but it can tell you the exact command. Or you can tell the agent "promote it" and the agent can use the MCP equivalent if one exists (check for `promote_kb_entry` tool availability). If not, the agent gives you the CLI command.
+Promotion Draft→Wiki is an **agent operation** (`promote_kb_draft`, no human gate — the KB is a production database, by director decision 2026-08-08). You are not in the promote loop; your role is to review quality before promotion and monitor the agent's promotion reports after. You can always instruct the agent to force-promote or to reject a Draft instead.
 
 ### Iteration Loop
 
@@ -696,7 +696,7 @@ The agent should adapt to your feedback immediately.
 | **Search KB** | "Search for [query]" | Runs hybrid search, returns ranked results | "Search for embryo biomarkers" |
 | **Generate output** | "Generate a [digest/report/tutorial] for [domain]" | Creates output with optional custom instructions | "Generate a weekly digest for medical" |
 | **Create Draft** | "Create Draft from items [ids]" | Creates Draft from Raw, awaits your promotion | "Create Draft from items 1 and 2" |
-| **Promote to Wiki** | "Promote entry [id] to Wiki" | Cannot do it -- tells you CLI command or uses MCP if available | Manual or via agent-assisted CLI |
+| **Promote to Wiki** | "Promote entry [id] to Wiki" | Calls `promote_kb_draft()` — agent operation, no human gate | "Promote #3 to Wiki" |
 | **Reject Draft** | "Reject Draft [id] because [reason]" | Calls `reject_kb_draft()` | "Reject #3, needs more sources" |
 | **Add a source** | "Add [type] source [url] to [domain]" | Calls `add_source()` with parameters | "Add PubMed as a source for medical" |
 | **Remove a source** | "Remove [source] from [domain]" | Confirms, then calls `remove_source()` | "Remove TechCrunch from ai-commercial" |
@@ -719,7 +719,7 @@ These are operations the agent cannot perform. If needed, the agent will tell yo
 
 | Operation | CLI Command | When Needed |
 |-----------|-------------|-------------|
-| Promote Draft to Wiki | `autoinfo kb promote <entry-id>` | After reviewing a Draft |
+| Promote Draft to Wiki | `autoinfo kb promote <entry-id>` | Optional manual path — normally the agent promotes via `promote_kb_draft()` (no human gate). The CLI command exists for direct CLI users. |
 | Permanent deletion | `autoinfo kb delete --purge <entry-id>` | For irreversible removal |
 | GDPR data export | `autoinfo enduser export <user-id>` | Compliance requests |
 | Init project | `autoinfo init --demo <domain>` | First-time setup |

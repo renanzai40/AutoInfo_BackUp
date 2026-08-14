@@ -1,5 +1,7 @@
 # LOOP-LOG — AutoInfo validation 循环记录
 
+> **📦 ARCHIVED 2026-08-14(superseded)** — 本目录数据停在 2026-07-31(141 工具/47 场景),与现行 145 工具/68 场景冲突。已被 `docs/dev/validation-scenario-contract.md`(场景编写 + agent-tester 执行)与 `docs/dev/best-practice-review.md`(业界最佳实践复盘维度)取代。
+
 > 机制说明（2026-08-12 首次落实）：
 > - 每次迭代循环（打包/验证/修复）的**关键事件、根因、修复、验证结果**必须记录在此
 > - 每次迭代**开始前**必须复查本文的「坑清单」——已知坑逐条核对，避免重踩

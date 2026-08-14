@@ -1,5 +1,7 @@
 # Part 2 CLI Depth Scenarios — Q10–Q18 Results
 
+> **📦 ARCHIVED 2026-08-14(superseded)** — 本目录数据停在 2026-07-31(141 工具/47 场景),与现行 145 工具/68 场景冲突。已被 `docs/dev/validation-scenario-contract.md`(场景编写 + agent-tester 执行)与 `docs/dev/best-practice-review.md`(业界最佳实践复盘维度)取代。
+
 **Date:** 2026-07-31  
 **Model:** deepseek-v4-flash  
 **Environment:** WSL, AutoInfo project at `/mnt/d/Hermes-Workspace/01-Projects/AutoInfo`

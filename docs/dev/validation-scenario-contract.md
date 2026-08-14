@@ -750,6 +750,16 @@ presentation, premium-briefing, column, magazine-digest, enterprise-briefing.
   `knowledge-tutorial-v1.json`, `knowledge-presentation-v1.json`,
   `knowledge-base-export-v1.json` (const-pinned `@context` / `@type`).
 
+## Citation Traps (verified against source 2026-08-14)
+
+> Merged from the archived general guide `docs/archive/agent-tester-validation-guide.md` §8.3. Every item looks correct and is wrong; do not cite any of them.
+
+1. `src/autoinfo/mcp/scenarios/regression/regression-collect-int-id.yaml` does not exist. The FILE is `collect-int-id.yaml` inside `regression/`; only the scenario's `name:` field is `regression-collect-int-id`. The same file-vs-name split holds for all 6 regression files.
+2. `validation-runs/latest.json` does not exist. The actual pointer is `latest.txt` (refreshed at validation.py line 88).
+3. There is no `REGRESSION:` keyword field. The YAML marker is the boolean `regression: true` plus `regression_issue: "#NN"` (see `collect-int-id.yaml` lines 17-18).
+4. This document's path is `docs/dev/validation-scenario-contract.md`, not `docs/dev/specs/validation-scenario-contract.md`. The evidence contract is not under `specs/`.
+5. `scripts/validation_diff.py` needs at least 2 persisted runs, and `validation-runs/` is runtime-gitignored. Cite it as a trend tool over an existing local history, not as always-runnable on a fresh clone.
+
 ## Related Documents
 
 - `AGENTS.md` (root): operating model, 145-tool catalog, architecture rules

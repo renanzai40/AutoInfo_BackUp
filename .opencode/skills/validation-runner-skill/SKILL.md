@@ -20,7 +20,8 @@ the loadable procedure — read the contract doc when authoring scenarios.
 - **Feature wave done** → run the affected scenario group before declaring done.
 - **Authoring a new scenario** → follow Part 1 contract, drop YAML into
   `src/autoinfo/mcp/scenarios/` (regression ones into `scenarios/regression/`
-  with `REGRESSION` marker; recursive glob auto-loads them).
+  with `category: regression` + `regression: true` keys; recursive glob
+  auto-loads them).
 - **Acceptance run** → produce `docs/dev/validation-reports/acceptance-*.md`.
 
 ## Scenario library (68 = 62 functional + 6 regression)
@@ -42,7 +43,7 @@ data-privacy, data-lifecycle-e2e, llm-gated, llm-failure-recovery,
 observability, quality-gate-config, curated-priority-consumption,
 sources-coverage, sources-a6-keyed, sources-gap-closure, … (62 total — run `list_validation_scenarios()` for the live list).
 
-Regression (`src/autoinfo/mcp/scenarios/regression/`, REGRESSION marker):
+Regression (`src/autoinfo/mcp/scenarios/regression/`, `regression: true` key):
 collect-int-id (#104), llm-key-resolution (#119), period-enum (#126),
 report-structure (#121), source-301 (#135), regression-product-routing.
 
@@ -64,7 +65,7 @@ report-structure (#121), source-301 (#135), regression-product-routing.
 ## Bug → regression flywheel (mandatory)
 
 Every bug fix ends with a new regression scenario named after the issue
-(`regression-<issue>-<slug>`), REGRESSION-marked, in `scenarios/regression/`.
+(`regression-<issue>-<slug>`), marked `regression: true`, in `scenarios/regression/`.
 It stays green forever (recursive-glob auto-load). `scripts/coverage_audit.py`
 prints the "Regression scenarios: N" metric — keep it climbing. This is the
 process-improvement loop of the 七阶段 methodology's Review stage.

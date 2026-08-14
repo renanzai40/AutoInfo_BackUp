@@ -1,5 +1,7 @@
 # Part 12: Final Verdict
 
+> **📦 ARCHIVED 2026-08-14(superseded)** — 本目录数据停在 2026-07-31(141 工具/47 场景),与现行 145 工具/68 场景冲突。已被 `docs/dev/validation-scenario-contract.md`(场景编写 + agent-tester 执行)与 `docs/dev/best-practice-review.md`(业界最佳实践复盘维度)取代。
+
 **This file aggregates all 96 questions from Parts 1-15 into a single PASS/FAIL summary.**
 
 **Validation Date:** 2026-07-31

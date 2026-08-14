@@ -592,7 +592,7 @@ def main() -> None:
         # Default: relative to repo root (parent of scripts/)
         script_dir = Path(__file__).resolve().parent
         repo_root = script_dir.parent
-        scenario_dir = repo_root / "docs" / "autoinfo-validation-master-plan" / "scenarios"
+        scenario_dir = repo_root / "docs" / "archive" / "autoinfo-validation-master-plan" / "scenarios"
 
     if not scenario_dir.is_dir():
         print(f"{_red('ERROR')}: Scenario directory not found: {scenario_dir}")

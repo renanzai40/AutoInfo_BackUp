@@ -145,10 +145,10 @@ Browse and manage the tiers:
 autoinfo kb list-tiers --domain medical-research
 autoinfo kb create-draft --raw-id <raw-entry-id> --title "<title>"   # compile Raw entries into a Draft
 autoinfo kb reject-draft <draft-id>                                  # reject a Draft back out
-autoinfo kb promote --entry-id <draft-id>   # HUMAN-ONLY: promote Draft to Wiki
+autoinfo kb promote --entry-id <draft-id>   # promote Draft to Wiki (also available to agents via promote_kb_draft)
 ```
 
-The promote step is intentionally the one thing an agent cannot do. It is the human checkpoint.
+Promotion Draft→Wiki is an **agent operation** (`promote_kb_draft`, no human gate — the KB is a database for raw/processed production). Human-director review happens before promotion (quality review of Drafts), not as a gate inside the promote step.
 
 **Search.**
 
@@ -343,13 +343,13 @@ autoinfo output report --domain medical-research --type daily-briefing --audienc
 
 Runs the same collected content through the daily-briefing report type, tuned for clinicians.
 
-**10. Human promotion (the checkpoint).**
+**10. Promotion (agent operation).**
+
+The final step is agent-driven: promoting a Draft to the append-only Wiki tier via `promote_kb_draft` (KB-tier guard, no human gate). The CLI equivalent exists for direct CLI users:
 
 ```bash
 autoinfo kb promote --entry-id <id>
 ```
-
-The final step is agent-driven: promoting a Draft to the append-only Wiki tier via `promote_kb_draft` (KB-tier guard, no human gate).
 
 ---
 

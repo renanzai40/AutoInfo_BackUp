@@ -49,5 +49,9 @@ The 2026-08-08 first-run findings matrix is maintained in
 `docs/dev/validation-reports/acceptance-2026-08-08.md`. The KB-curation
 gap-closure wave (2026-08-08) closed B-03, B-04, B-05, B-06, B-07, B-08,
 the query_collected CWD trap, and the FRED_API_KEY documentation gap — see
-the "B-class Closure Status" section there. Still open: B-01 `remove_domain`
-confirm guard, B-02 CLI portal disposition, R-01 explicit gate config.
+the "B-class Closure Status" section there. Per the second run
+(`docs/dev/validation-reports/acceptance-2026-08-12.md`), all 7 first-run
+FAIL blockers (B-01..B-07) and R-01 are now closed or adjudicated, and the
+overall verdict is PASS (sign-off candidate); remaining items are B3 final
+adjudication, AC5 sample human reading, and the non-blocking presentation
+observation (OBS-1).
