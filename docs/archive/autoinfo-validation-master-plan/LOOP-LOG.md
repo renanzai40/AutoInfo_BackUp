@@ -52,6 +52,7 @@
 11. **适配层 product_type 粒度**：_build_product_output 曾把 product_type 全标 "PROCESSED" → quality.py D1 无法按产品分支——改为透传 _detect_product_type 结果（presentation/report/column/...），RAW 保持
 12. **presentation 完整性语义 = slide 内容**：D1 三键不适用 deck——product_type==presentation 时 body 内容 ≥200 chars 即 pass（无需改模板视觉）
 13. **persist 文件名决定 matrix evidence**：generate_report 曾把 column（report_type）产物固定存为 report-markdown-* → 文件名解析永远到不了 column:markdown cell（#229）——persist product 名必须与 spec product 对齐
+14. **全量 validation 结果受 DeepSeek LLM 时段波动污染**（2026-08-14，PR #235 全量验证）：log 中 `Failed to parse LLM response as JSON` 63+ 次时，output-* 场景批量 failed——但隔离复跑证明与并发/代码无关（output-column 单独 passed 靠重试救回，output-digest-report 单独也 failed）→ 全量跑前先做 1-2 次短 LLM 探测（llm-gated 单场景 <60s passed 即稳定）；波动时段的重跑结果不可作为回归判定依据
 
 ### 复盘（为什么 9 次）
 
