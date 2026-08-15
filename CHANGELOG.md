@@ -2,6 +2,20 @@
 
 All notable changes to the AutoInfo project will be documented in this file.
 
+## [1.9.1](https://github.com/1StepMore/AutoInfo/compare/v1.9.0...v1.9.1) (2026-08-15)
+
+
+### Bug Fixes
+
+* **ci:** release-please — drop release-type/package-name inputs so config-file branch runs ([#270](https://github.com/1StepMore/AutoInfo/issues/270)) ([338212e](https://github.com/1StepMore/AutoInfo/commit/338212ed1e5295bbc5434d136a355a0b22fe2428))
+* **ci:** release-please — include-component-in-tag: false + drop redundant top-level keys ([#267](https://github.com/1StepMore/AutoInfo/issues/267)) ([72540b8](https://github.com/1StepMore/AutoInfo/commit/72540b8d95f59d3eba11ccadb1dc28a11ddd1b3f))
+* **ci:** sync runtime version to 1.9.0 + teach release-please to update _version.py ([#264](https://github.com/1StepMore/AutoInfo/issues/264)) ([1b03cd0](https://github.com/1StepMore/AutoInfo/commit/1b03cd03d82018348efd870cc9cece1886d279e7))
+
+
+### Documentation
+
+* **adr:** record release-please version-truth governance (ADR-0007) ([#266](https://github.com/1StepMore/AutoInfo/issues/266)) ([5e092ce](https://github.com/1StepMore/AutoInfo/commit/5e092ce8d5ccad24713b11f843b2a3d2bbfd59e6))
+
 ## 1.9.0 (2026-08-15)
 
 
