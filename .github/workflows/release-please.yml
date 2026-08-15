@@ -10,6 +10,12 @@
 # file src/autoinfo/_version.py is discovered automatically (no extra-files
 # needed).
 #
+# Manual dispatch (workflow_dispatch) is an escape hatch: a stale or
+# misleading tag can make release-please discover the wrong "latest version"
+# (e.g. a pre-V1 baseline tag v0.9.0 computed the next release as 0.10.0
+# instead of 1.9.0 — fixed 2026-08-15 by deleting that tag). Passing the
+# optional `release-as` input pins the target version for a single run.
+#
 # Input contract: squash-merge + Conventional Commits (pr-title-check.yml).
 # Nothing here is ever edited by hand.
 
@@ -18,6 +24,13 @@ name: Release
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      release-as:
+        description: "Pin the target version for this run (e.g. 1.9.0). Leave empty for automatic versioning."
+        required: false
+        default: ""
+        type: string
 
 permissions:
   # release-please opens the release PR and pushes the version bump + tag.
@@ -36,3 +49,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: python
           package-name: autoinfo
+          release-as: ${{ inputs.release-as || '' }}
