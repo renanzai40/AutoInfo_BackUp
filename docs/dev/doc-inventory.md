@@ -13,9 +13,9 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 
 | Metric | Value |
 |--------|-------|
-| Total files | 71 |
-| Total lines | 28490 |
-| Active files | 57 |
+| Total files | 72 |
+| Total lines | 28533 |
+| Active files | 58 |
 | Archived files | 14 |
 | Category — archive | 14 files / 7284 lines |
 | Category — known-limitations | 1 files / 255 lines |
@@ -24,7 +24,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | Category — adr | 9 files / 423 lines |
 | Category — specs | 12 files / 8766 lines |
 | Category — validation-reports | 8 files / 2624 lines |
-| Category — docs/dev | 19 files / 7895 lines |
+| Category — docs/dev | 20 files / 7938 lines |
 | Category — docs/root | 1 files / 61 lines |
 
 ## Inventory
@@ -55,6 +55,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `archive/migration-v1.9.md` | 58 | archive | archived | — |
 | `archive/reports/global-content-paid-research-report-trae.md` | 973 | archive | archived | — |
 | `dev/acceptance-framework.md` | 494 | docs/dev | active | — |
+| `dev/acceptance-run-20260816.md` | 43 | docs/dev | active | — |
 | `dev/agent-alerting.md` | 129 | docs/dev | active | — |
 | `dev/best-practice-review.md` | 388 | docs/dev | active | best-practice-review |
 | `dev/cli-mcp-rest-parity.md` | 466 | docs/dev | active | — |
