@@ -5,16 +5,26 @@
 # commit), it opens a release PR that bumps src/autoinfo/_version.py and
 # updates CHANGELOG.md; merging that PR cuts the GitHub release and tags the
 # commit. The manifest (.release-please-manifest.json) pins the current
-# version at 1.8.1; the config (release-please-config.json) maps conventional
-# commit types to changelog sections. For release-type "python" the version
-# file src/autoinfo/_version.py is discovered automatically (no extra-files
-# needed).
+# version; the config (release-please-config.json) maps conventional commit
+# types to changelog sections and declares the extra version files
+# (src/autoinfo/_version.py via `extra-files` + `# x-release-please-version`
+# annotation — release-type python only auto-discovers files named exactly
+# version.py, so _version.py needs the explicit extra-files entry).
+#
+# IMPORTANT — do NOT add `release-type`/`package-name` action inputs here:
+# when those inputs are set, the action builds an inline config and IGNORES
+# release-please-config.json entirely (extra-files silently dropped; known
+# release-please-action issue #975 / #1088). All release configuration lives
+# in release-please-config.json; the action must take the config-file branch.
 #
 # Manual dispatch (workflow_dispatch) is an escape hatch: a stale or
 # misleading tag can make release-please discover the wrong "latest version"
 # (e.g. a pre-V1 baseline tag v0.9.0 computed the next release as 0.10.0
-# instead of 1.9.0 — fixed 2026-08-15 by deleting that tag). Passing the
-# optional `release-as` input pins the target version for a single run.
+# instead of 1.9.0 — fixed 2026-08-15 by deleting that tag). NOTE: the
+# `release-as` input below only takes effect when a release-type input is
+# set, which is exactly what we must NOT do here — so for manual version
+# pinning, push a commit containing `Release-As: x.y.z` (release-please's
+# documented override) or edit the manifest directly.
 #
 # Input contract: squash-merge + Conventional Commits (pr-title-check.yml).
 # Nothing here is ever edited by hand.
@@ -25,12 +35,6 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-    inputs:
-      release-as:
-        description: "Pin the target version for this run (e.g. 1.9.0). Leave empty for automatic versioning."
-        required: false
-        default: ""
-        type: string
 
 permissions:
   # release-please opens the release PR and pushes the version bump + tag.
@@ -45,8 +49,7 @@ jobs:
       - uses: GoogleCloudPlatform/release-please-action@v5
         with:
           # release-please-config.json and .release-please-manifest.json are
-          # picked up automatically from the repo root.
+          # picked up automatically from the repo root. NO release-type /
+          # package-name inputs — they would bypass the config file and drop
+          # extra-files (see header note).
           token: ${{ secrets.GITHUB_TOKEN }}
-          release-type: python
-          package-name: autoinfo
-          release-as: ${{ inputs.release-as || '' }}
