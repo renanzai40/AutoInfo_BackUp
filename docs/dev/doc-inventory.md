@@ -13,18 +13,18 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 
 | Metric | Value |
 |--------|-------|
-| Total files | 68 |
-| Total lines | 28314 |
-| Active files | 54 |
+| Total files | 71 |
+| Total lines | 28490 |
+| Active files | 57 |
 | Archived files | 14 |
 | Category — archive | 14 files / 7284 lines |
 | Category — known-limitations | 1 files / 255 lines |
 | Category — schemas | 4 files / 397 lines |
 | Category — skills | 3 files / 785 lines |
-| Category — adr | 8 files / 384 lines |
+| Category — adr | 9 files / 423 lines |
 | Category — specs | 12 files / 8766 lines |
 | Category — validation-reports | 8 files / 2624 lines |
-| Category — docs/dev | 17 files / 7758 lines |
+| Category — docs/dev | 19 files / 7895 lines |
 | Category — docs/root | 1 files / 61 lines |
 
 ## Inventory
@@ -37,6 +37,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `adr/0004-reasoning-model-json-mode-thinking.md` | 48 | adr | active | adr |
 | `adr/0005-unified-success-error-envelope.md` | 49 | adr | active | adr |
 | `adr/0006-dev-process-workflow-charter.md` | 72 | adr | active | adr |
+| `adr/0007-release-please-version-truth.md` | 39 | adr | active | adr |
 | `adr/README.md` | 52 | adr | active | adr-index |
 | `adr/TEMPLATE.md` | 32 | adr | active | adr |
 | `archive/agent-tester-validation-guide.md` | 1498 | archive | archived | — |
@@ -79,6 +80,8 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/specs/pipeline.md` | 567 | specs | active | — |
 | `dev/specs/quality-gates.md` | 187 | specs | active | — |
 | `dev/specs/user-lifecycle-definition.md` | 441 | specs | active | — |
+| `dev/validation-governance.md` | 75 | docs/dev | active | — |
+| `dev/validation-loop-log.md` | 62 | docs/dev | active | — |
 | `dev/validation-reports/README.md` | 57 | validation-reports | active | — |
 | `dev/validation-reports/acceptance-2026-08-08.md` | 166 | validation-reports | active | — |
 | `dev/validation-reports/acceptance-2026-08-12.md` | 113 | validation-reports | active | — |
