@@ -213,7 +213,23 @@ def _run_g4_check(
     A ``retries=0`` gate config keeps the legacy single-call path, so the
     checker never writes ``_failed/`` diagnostics — this wrapper is
     read-only (``_failed/`` routing is T2's concern).
+
+    When *config* is ``None`` the on-disk project config is loaded (same
+    fallback as :func:`autoinfo.llm.call_with_fallback`) so the G4 model
+    resolves to the configured provider/model — the hardcoded
+    ``openrouter/deepseek/deepseek-chat`` default (an unsupported model)
+    previously blocked every promotion when callers omitted ``config``
+    (#283).
     """
+    if config is None:
+        from autoinfo.config import get_config_path, load_config
+
+        config_path = get_config_path()
+        try:
+            config = load_config(config_path) if config_path is not None else None
+        except Exception:
+            config = None
+
     provider = config.llm.provider if config and config.llm.provider else "openrouter"
     model_name = config.llm.model if config and config.llm.model else "deepseek/deepseek-chat"
     json_mode = bool(config.llm.json_mode) if config else False
