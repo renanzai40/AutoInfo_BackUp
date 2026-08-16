@@ -1,3 +1,4 @@
+# mypy: ignore-errors
 """End-user coverage matrix tests (E8, issue #131).
 
 Exercises the real ``scripts/coverage_matrix.py`` (same importlib pattern as
@@ -344,6 +345,76 @@ def test_scan_evidence_outputs_and_manifests(tmp_path):
 
 def test_scan_evidence_missing_dir_returns_empty(tmp_path):
     assert cm.scan_evidence(tmp_path / "does-not-exist") == set()
+
+
+# ---------------------------------------------------------------------------
+# scan_source_evidence — regression coverage for collection-evidence
+# semantics (real items vs run-records / failed dumps)
+# ---------------------------------------------------------------------------
+
+
+def _touch(src: Path) -> Path:
+    src.parent.mkdir(parents=True, exist_ok=True)
+    src.touch()
+    return src
+
+
+def _write_runs_for(path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps([{"status": "ok", "items_found": 3, "items_new": 3}]),
+        encoding="utf-8",
+    )
+
+
+def test_scan_source_evidence_runs_json_is_not_evidence(
+    tmp_path: Path,
+) -> None:
+    def _write_runs(path: Path, status: str = "error", items_found: int = 0) -> None:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            json.dumps(
+                [{"status": status, "items_found": items_found, "items_new": 0}]
+            ),
+            encoding="utf-8",
+        )
+
+    coll = tmp_path / "collections"
+    _write_runs(coll / "medical-research" / "pubmed" / "_runs.json")
+    _write_runs(
+        coll / "general-news" / "wired" / "_runs.json", status="ok", items_found=3
+    )
+
+    assert cm.scan_source_evidence(tmp_path) == set()
+
+
+def test_scan_source_evidence_nested_date_items_count(tmp_path: Path) -> None:
+    coll = tmp_path / "collections"
+    _touch(coll / "medical-research" / "pubmed" / "2026-08-08" / "42566234.json")
+    _touch(coll / "medical-research" / "pubmed" / "2026-08-11" / "42559456.json")
+    _touch(coll / "gaming" / "ign-rss" / "2026-08-13" / "abc123.json")
+    _write_runs_for(coll / "gaming" / "ign-rss" / "_runs.json")
+
+    assert cm.scan_source_evidence(tmp_path) == {
+        ("medical-research", "pubmed"),
+        ("gaming", "ign-rss"),
+    }
+
+
+def test_scan_source_evidence_failed_dir_not_a_source(tmp_path: Path) -> None:
+    coll = tmp_path / "collections"
+    _touch(coll / "medical-research" / "_failed" / "test-item-g4-retry.json")
+
+    assert cm.scan_source_evidence(tmp_path) == set()
+
+
+def test_scan_source_evidence_flat_items_still_count(tmp_path: Path) -> None:
+    coll = tmp_path / "collections"
+    _touch(coll / "b2b" / "producthunt" / "item1.json")
+    _touch(coll / "b2b" / "producthunt" / "item2.json")
+    _write_runs_for(coll / "b2b" / "producthunt" / "_runs.json")
+
+    assert cm.scan_source_evidence(tmp_path) == {("b2b", "producthunt")}
 
 
 # ---------------------------------------------------------------------------

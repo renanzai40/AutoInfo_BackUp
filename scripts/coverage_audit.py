@@ -98,6 +98,17 @@ def main() -> None:
     except Exception:
         print("Regression scenarios: (unable to load)")
 
+    try:
+        import sys as _sys
+        _sys.path.insert(0, str(ROOT / "scripts"))
+        import scenario_domain_coverage as _sdc
+        _covered = len(_sdc.demo_domains()) - len(_sdc.missing_domains())
+        print(
+            f"Scenario domain coverage: {_covered}/{len(_sdc.demo_domains())} demo domains"
+        )
+    except Exception:
+        print("Scenario domain coverage: (unable to load)")
+
     stamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
     out_dir = ROOT / "validation-runs" / "coverage"
     out_dir.mkdir(parents=True, exist_ok=True)

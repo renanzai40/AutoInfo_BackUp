@@ -1,3 +1,4 @@
+# mypy: ignore-errors
 """Integration tests for AutoInfo v1.2 features — 17 feature categories.
 
 Covers:
@@ -29,6 +30,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 import yaml
+from fastapi.testclient import TestClient
 
 from autoinfo.models import Item
 
@@ -296,7 +298,11 @@ class TestRestAPI:
             "/api/v1/entries",
             json={
                 "title": "Test Entry",
-                "content": "Test content body",
+                "content": (
+                    "This is the full body text of the test entry, long "
+                    "enough to satisfy the fifty-character minimum content "
+                    "guard that every KB write boundary enforces."
+                ),
                 "domain": "medical-research",
                 "tags": ["IVF"],
             },
@@ -308,6 +314,39 @@ class TestRestAPI:
         assert entry["title"] == "Test Entry"
         assert entry["domain"] == "medical-research"
         assert "entry_id" in entry
+
+    def test_create_entry_short_content_returns_400(self, client: TestClient):
+        """POST /entries with content shorter than 50 chars returns 400
+        with the VALIDATION_ERROR envelope (issue #279)."""
+        response = client.post(
+            "/api/v1/entries",
+            json={
+                "title": "Short Body Entry",
+                "content": "x" * 10,
+                "domain": "medical-research",
+            },
+        )
+        assert response.status_code == 400
+        data = response.json()
+        assert data["success"] is False
+        assert data["error"]["code"] == "ValidationError"
+        assert "at least 50 characters" in data["error"]["message"]
+        assert data["error"]["actionable"] is True
+
+    def test_create_entry_long_content_returns_201(self, client: TestClient):
+        """POST /entries with a >=50-char body still returns 201."""
+        response = client.post(
+            "/api/v1/entries",
+            json={
+                "title": "Long Body Entry",
+                "content": "x" * 50,
+                "domain": "medical-research",
+            },
+        )
+        assert response.status_code == 201
+        data = response.json()
+        assert data["success"] is True
+        assert data["data"]["title"] == "Long Body Entry"
 
     def test_create_entry_empty_title_returns_422(self, client):
         """POST /entries with empty title returns 422 validation error."""
@@ -321,7 +360,15 @@ class TestRestAPI:
         """GET /entries/{id} returns the created entry in success envelope."""
         created = client.post(
             "/api/v1/entries",
-            json={"title": "Get Test", "domain": "medical-research"},
+            json={
+                "title": "Get Test",
+                "content": (
+                    "This is the full body text of the test entry, long "
+                    "enough to satisfy the fifty-character minimum content "
+                    "guard that every KB write boundary enforces."
+                ),
+                "domain": "medical-research",
+            },
         ).json()
         entry_id = created["data"]["entry_id"]
         response = client.get(f"/api/v1/entries/{entry_id}")
@@ -342,7 +389,15 @@ class TestRestAPI:
         """DELETE /entries/{id} returns 204 and removes the entry."""
         created = client.post(
             "/api/v1/entries",
-            json={"title": "Delete Me", "domain": "medical-research"},
+            json={
+                "title": "Delete Me",
+                "content": (
+                    "This is the full body text of the test entry, long "
+                    "enough to satisfy the fifty-character minimum content "
+                    "guard that every KB write boundary enforces."
+                ),
+                "domain": "medical-research",
+            },
         ).json()
         entry_id = created["data"]["entry_id"]
         response = client.delete(f"/api/v1/entries/{entry_id}")
@@ -358,8 +413,27 @@ class TestRestAPI:
 
     def test_list_entries(self, client):
         """GET /entries returns a list in success envelope."""
-        client.post("/api/v1/entries", json={"title": "Entry A", "domain": "medical-research"})
-        client.post("/api/v1/entries", json={"title": "Entry B", "domain": "medical-research"})
+        long_content = (
+            "This is the full body text of the test entry, long enough to "
+            "satisfy the fifty-character minimum content guard that every "
+            "KB write boundary enforces."
+        )
+        client.post(
+            "/api/v1/entries",
+            json={
+                "title": "Entry A",
+                "content": long_content,
+                "domain": "medical-research",
+            },
+        )
+        client.post(
+            "/api/v1/entries",
+            json={
+                "title": "Entry B",
+                "content": long_content,
+                "domain": "medical-research",
+            },
+        )
         response = client.get("/api/v1/entries")
         assert response.status_code == 200
         data = response.json()
@@ -372,7 +446,11 @@ class TestRestAPI:
             "/api/v1/entries",
             json={
                 "title": "IVF breakthrough therapy",
-                "content": "New IVF treatment shows promise",
+                "content": (
+                    "New IVF treatment shows promise in early trials, with "
+                    "researchers reporting significantly improved outcomes "
+                    "across multiple patient cohorts."
+                ),
                 "domain": "medical-research",
                 "tags": ["IVF"],
             },

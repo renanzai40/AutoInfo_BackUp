@@ -24,7 +24,7 @@ _No executive summary available for this period._
 ## Key Takeaways
 
 {% for f in key_findings %}
-### {{ loop.index }}. {{ f }}
+### {{ loop.index }}. {{ f.text if f is mapping else f }}{% if f is mapping and f.source_url %} (Source: {{ f.source_url }}){% endif %}
 
 {% if implications and implications|length > loop.index0 %}
 > **So what**: {{ implications[loop.index0] }}

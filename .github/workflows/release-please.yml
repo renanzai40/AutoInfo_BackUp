@@ -17,6 +17,16 @@
 # release-please-action issue #975 / #1088). All release configuration lives
 # in release-please-config.json; the action must take the config-file branch.
 #
+# BOT-PR APPROVAL (#275) — GitHub's 2026-06-11 security change requires
+# manual approval before workflows run on PRs authored by github-actions[bot].
+# Release-please creates the release PR as the bot, so all 6 required status
+# checks concluded `action_required` with zero jobs and the release PR stayed
+# blocked. Fix: release-please-action must authenticate as a human. A human
+# with repo admin must run `gh secret set RELEASE_PLEASE_PAT` with a
+# fine-grained PAT (Contents: read/write, Pull requests: read/write) for the
+# fix to take effect; until then the `github.token` fallback below preserves
+# the current (blocked) behavior rather than failing the workflow.
+#
 # Manual dispatch (workflow_dispatch) is an escape hatch: a stale or
 # misleading tag can make release-please discover the wrong "latest version"
 # (e.g. a pre-V1 baseline tag v0.9.0 computed the next release as 0.10.0
@@ -52,4 +62,6 @@ jobs:
           # picked up automatically from the repo root. NO release-type /
           # package-name inputs — they would bypass the config file and drop
           # extra-files (see header note).
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # Human PAT when configured (unblocks bot-authored PRs, see header);
+          # github.token fallback keeps prior behavior until then.
+          token: ${{ secrets.RELEASE_PLEASE_PAT || github.token }}

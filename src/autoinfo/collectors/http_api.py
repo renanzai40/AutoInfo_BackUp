@@ -198,7 +198,13 @@ class HttpApiHandler(BaseHandler):
                 headers = self._build_request_headers()
 
                 self._wait_for_rate_limit()
-                response = httpx.get(url, params=params, headers=headers, timeout=timeout)
+                kwargs: dict[str, Any] = {"headers": headers, "timeout": timeout}
+                # Passing an empty params dict to httpx.get strips the URL's
+                # own query string (Stack Exchange 400 regression) — feed-style
+                # URLs carry their query params inline and need none from here.
+                if params:
+                    kwargs["params"] = params
+                response = httpx.get(url, **kwargs)
                 response.raise_for_status()
                 data = response.json()
 
@@ -240,7 +246,12 @@ class HttpApiHandler(BaseHandler):
         params: dict[str, Any] = dict(self._settings.get("params", {}))
 
         # -- Query ----------------------------------------------------------
-        query_param = self._settings.get("query_param", "q")
+        # Only inject the topic when the source explicitly configures a
+        # query_param name.  Feed-style sources (fixed-URL JSON feeds with
+        # json_path + field_mapping, no query_param) never receive a query —
+        # inventing a default name (e.g. "q") appends ?q= to an endpoint
+        # that answers 404 on unexpected params (apple-music regression).
+        query_param = self._settings.get("query_param", "")
         if query and query_param:
             params[query_param] = query
 

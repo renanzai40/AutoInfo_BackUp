@@ -1,3 +1,4 @@
+# mypy: ignore-errors
 """Issue #135 — dead-source detection: no silent "0 found".
 
 Verifies:
@@ -244,3 +245,113 @@ class TestPipelineFailureMarker:
         assert "retired by USPTO" in per_source["errors"][0]["reason"]
         # A dead source must never be reported as a successful 0-found run
         assert per_source["status"] != "success"
+
+
+# ---------------------------------------------------------------------------
+# Feed-style API sources must collect without a topic (AC4 collection gaps)
+# ---------------------------------------------------------------------------
+
+
+class TestFeedStyleApiDispatch:
+    """The #182 no-query guard applies to query-driven sources only.
+
+    Feed-style API sources (no ``query_param`` configured — fixed-URL JSON
+    feeds like apple-music / mastodon / zhihu-daily / coursera / World Bank)
+    are the API equivalent of an RSS feed: they fetch their configured URL
+    as-is with an empty query.  The guard introduced by #182 (skip API
+    sources with empty query) must NOT short-circuit them, or they can never
+    be collected.
+    """
+
+    def test_feed_style_api_source_fetches_without_query(self) -> None:
+        cfg = SourceConfig(
+            name="apple-music",
+            type="api",
+            url="https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json",  # noqa: E501
+            settings={
+                "json_path": "$.feed.results",
+                "field_mapping": {
+                    "id": "id",
+                    "title": "artistName + name",
+                    "source_url": "url",
+                    "content": "content",
+                },
+            },
+        )
+        handler = _build_handler(cfg)
+        assert isinstance(handler, HttpApiHandler)
+        resp = httpx.Response(
+            200,
+            json={
+                "feed": {
+                    "results": [
+                        {
+                            "id": "1",
+                            "artistName": "A",
+                            "name": "Song",
+                            "url": "https://music.apple.com/song/1",
+                            "content": "lyrics",
+                        }
+                    ]
+                }
+            },
+            request=httpx.Request("GET", cfg.url),
+        )
+        with patch("httpx.get", return_value=resp):
+            items = _fetch_items(handler, cfg, topic="", limit=5)
+
+        assert len(items) == 1
+        assert items[0].source_name == "apple-music"
+
+    def test_query_driven_api_source_still_skipped_without_query(self) -> None:
+        cfg = SourceConfig(
+            name="GitHub Trending",
+            type="api",
+            url="https://api.github.com/search/repositories",
+            settings={
+                "query_param": "q",
+                "json_path": "items",
+                "field_mapping": {
+                    "id": "id",
+                    "title": "full_name",
+                    "content": "description",
+                    "source_url": "html_url",
+                },
+            },
+        )
+        handler = _build_handler(cfg)
+        assert isinstance(handler, HttpApiHandler)
+        with patch("httpx.get") as mock_get:
+            items = _fetch_items(handler, cfg, topic="", limit=5)
+
+        assert items == []
+        mock_get.assert_not_called()
+
+    def test_query_driven_api_source_fetches_with_topic(self) -> None:
+        cfg = SourceConfig(
+            name="GitHub Trending",
+            type="api",
+            url="https://api.github.com/search/repositories",
+            settings={
+                "query_param": "q",
+                "json_path": "items",
+                "field_mapping": {
+                    "id": "id",
+                    "title": "full_name",
+                    "content": "description",
+                    "source_url": "html_url",
+                },
+            },
+        )
+        handler = _build_handler(cfg)
+        resp = httpx.Response(
+            200,
+            json={"items": [{"id": 1, "full_name": "octo/repo", "description": "d"}]},
+            request=httpx.Request("GET", cfg.url),
+        )
+        with patch("httpx.get", return_value=resp) as mock_get:
+            items = _fetch_items(handler, cfg, topic="AI", limit=5)
+
+        assert len(items) == 1
+        call_kwargs = mock_get.call_args.kwargs
+        assert call_kwargs["params"]["q"] == "AI"

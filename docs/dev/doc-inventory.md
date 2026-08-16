@@ -13,9 +13,9 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 
 | Metric | Value |
 |--------|-------|
-| Total files | 72 |
-| Total lines | 28533 |
-| Active files | 58 |
+| Total files | 74 |
+| Total lines | 28731 |
+| Active files | 60 |
 | Archived files | 14 |
 | Category — archive | 14 files / 7284 lines |
 | Category — known-limitations | 1 files / 255 lines |
@@ -24,7 +24,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | Category — adr | 9 files / 423 lines |
 | Category — specs | 12 files / 8766 lines |
 | Category — validation-reports | 8 files / 2624 lines |
-| Category — docs/dev | 20 files / 7938 lines |
+| Category — docs/dev | 22 files / 8136 lines |
 | Category — docs/root | 1 files / 61 lines |
 
 ## Inventory
@@ -54,6 +54,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `archive/launch-validation-report.md` | 273 | archive | archived | — |
 | `archive/migration-v1.9.md` | 58 | archive | archived | — |
 | `archive/reports/global-content-paid-research-report-trae.md` | 973 | archive | archived | — |
+| `dev/ac4-gap-key-acquisition.md` | 81 | docs/dev | active | — |
 | `dev/acceptance-framework.md` | 494 | docs/dev | active | — |
 | `dev/acceptance-run-20260816.md` | 43 | docs/dev | active | — |
 | `dev/agent-alerting.md` | 129 | docs/dev | active | — |
@@ -67,6 +68,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/mcp-usage-examples.md` | 324 | docs/dev | active | — |
 | `dev/new-domain-guide.md` | 935 | docs/dev | active | — |
 | `dev/plans/README.md` | 50 | docs/dev | active | plan-index |
+| `dev/remaining-source-gap-verdicts.md` | 116 | docs/dev | active | verdicts |
 | `dev/required-api-keys.md` | 127 | docs/dev | active | — |
 | `dev/research/综合报告-资讯付费与AI触达研究.md` | 702 | docs/dev | active | — |
 | `dev/specs/data-models.md` | 766 | specs | active | — |
@@ -91,7 +93,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/validation-reports/evidence-2026-08-12/ac5-digest-weekly.md` | 144 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-report-standard.md` | 813 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-tutorial-student.md` | 501 | validation-reports | active | — |
-| `dev/validation-scenario-contract.md` | 778 | docs/dev | active | — |
+| `dev/validation-scenario-contract.md` | 779 | docs/dev | active | — |
 | `dev/workflow-charter.md` | 67 | docs/dev | active | workflow-charter |
 | `dev/七阶段AI开发流程-用CodingAgent交付成品的方法论.md` | 234 | docs/dev | active | methodology |
 | `glossary.md` | 61 | docs/root | active | glossary |

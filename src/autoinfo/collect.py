@@ -822,7 +822,7 @@ def _fetch_items(
         if settings.get("since_date"):
             email_config["since_date"] = settings["since_date"]
         items = handler.collect(email_config)
-        return items[:limit]
+        return items[:limit]  # type: ignore[no-any-return]
 
     # -- PubMed handler path -----------------------------------------------
     if hasattr(handler, "search") and hasattr(handler, "fetch"):
@@ -848,7 +848,12 @@ def _fetch_items(
             )
             return []
         query = topic or source_config.settings.get("query", "") or ""
-        if not query.strip():
+        query_param = source_config.settings.get("query_param", "")
+        # #182 guard: skip query-driven sources (they configure query_param)
+        # when no topic is available — fetching unrelated content pollutes
+        # the KB.  Feed-style sources (no query_param — fixed-URL JSON feeds)
+        # are the API equivalent of an RSS feed and must fetch as-is.
+        if query_param and not query.strip():
             plog.warning(
                 "API source has no query (no --topic and no source query); "
                 "skipping to avoid fetching unrelated content",
@@ -857,7 +862,7 @@ def _fetch_items(
             )
             return []
         items = handler.fetch(url, query=query, limit=limit)
-        return items[:limit]
+        return items[:limit]  # type: ignore[no-any-return]
 
     # -- QuandlHandler path -------------------------------------------------
     if getattr(handler, "_handler_type", "") == "QuandlHandler":
@@ -879,7 +884,7 @@ def _fetch_items(
             )
             return []
         items = handler.fetch(url, query=query, limit=limit)
-        return items[:limit]
+        return items[:limit]  # type: ignore[no-any-return]
 
     # -- NYT handler path ------------------------------------------------
     if hasattr(handler, "fetch") and getattr(handler, "source_type", "") == "nyt":
@@ -1012,7 +1017,7 @@ def _fetch_items(
             return []
         items = handler.fetch(url)
         # Apply limit
-        return items[:limit]
+        return items[:limit]  # type: ignore[no-any-return]
 
     raise TypeError(f"Handler for '{source_config.name}' has no usable fetch method")
 

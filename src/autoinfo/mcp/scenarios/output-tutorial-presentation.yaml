@@ -1,11 +1,23 @@
 # Output generation — tutorial, presentation, and localize_content.
 # All three are LLM-required.  Without AUTOINFO_LLM_API_KEY the
 # scenario reports unconfigured (BYOK obligation).
+#
+# Issue #280: domain-matrix parameterization — matrix_domains runs this
+# scenario once per member demo domain, substituting {{domain}} into the
+# mcp step arguments (generate_tutorial / generate_presentation).  The
+# localize_content step is domain-less and unchanged.  requires_domain is
+# omitted by design — the runner unions requires_domain + matrix_domains
+# for the availability gate, and the domain-coverage scanner treats
+# matrix scenarios as domain-agnostic declarations.
 name: output-tutorial-presentation
 description: "Tutorial, presentation, and content localization"
 category: output
 requires_env: ["AUTOINFO_LLM_API_KEY"]
-requires_domain: ["medical-research"]
+matrix_domains:
+  - language-learning
+  - online-video
+  - financial-news
+  - online-education
 collect_artifacts:
   - "outputs/**/*.md"
   - "outputs/**/*.json"
@@ -15,7 +27,7 @@ steps:
   - name: "generate_tutorial markdown format"
     tool: generate_tutorial
     arguments:
-      domain: medical-research
+      domain: "{{domain}}"
       format: markdown
       persist: true
     expect:
@@ -24,7 +36,7 @@ steps:
   - name: "generate_presentation markdown 5 slides"
     tool: generate_presentation
     arguments:
-      domain: medical-research
+      domain: "{{domain}}"
       format: markdown
       slides: 5
       persist: true

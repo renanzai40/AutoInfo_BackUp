@@ -1,3 +1,4 @@
+# mypy: ignore-errors
 """Tests for Stripe integration (billing module).
 
 All stripe library calls are mocked via ``unittest.mock.patch`` — no
@@ -19,19 +20,18 @@ from unittest.mock import MagicMock, patch
 import pytest
 from fastapi.testclient import TestClient
 
+# Module reference for checking mutable global state
+import autoinfo.billing as _billing_mod
 from autoinfo.api.server import app
 from autoinfo.billing import (
     _user_stripe_map,
     create_checkout_session,
+    get_subscription_status,
     get_user_stripe_id,
     handle_webhook,
     set_user_stripe_id,
 )
 from autoinfo.consumption import ConsumptionStore
-
-# Module reference for checking mutable global state
-import autoinfo.billing as _billing_mod
-
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -739,7 +739,7 @@ class TestCheckAccessTierFastPath:
         return type(
             "_FakeProfile",
             (),
-            {"tier": tier, "status": status, "stripe_customer_id": "", "stripe_subscription_id": ""},
+            {"tier": tier, "status": status, "stripe_customer_id": "", "stripe_subscription_id": ""},  # noqa: E501
         )()
 
     @patch("autoinfo.billing._load_user_profile")
@@ -1049,7 +1049,7 @@ class TestStripeLifecycle:
     Run these with::
 
         make stripe-mock
-        python3 -m pytest tests/test_stripe.py::TestStripeLifecycle -v
+        .venv/bin/python -m pytest tests/cost/test_stripe.py::TestStripeLifecycle -v
     """
 
     # ------------------------------------------------------------------
@@ -1060,6 +1060,7 @@ class TestStripeLifecycle:
     def _setup_stripe_config(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Configure Stripe for stripe-mock and clear global state."""
         import os
+
         import stripe as _stripe
 
         self._api_base = os.environ.get(
@@ -1145,7 +1146,7 @@ class TestStripeLifecycle:
         import stripe as _stripe
 
         end_user_id = "user_lifecycle_full"
-        TEST_SUB = "sub_mock_lifecycle"
+        TEST_SUB = "sub_mock_lifecycle"  # noqa: N806
 
         # ── 1. Create checkout session via stripe-mock ──────────────────
         result = create_checkout_session(
@@ -1483,8 +1484,8 @@ class TestStripeMockGuard:
         stripe.api_key and api_base should be correctly configured
         without any stripe-mock warning."""
         import logging
-        import autoinfo.billing as billing_mod
 
+        import autoinfo.billing as billing_mod
         from autoinfo.billing import _configure_stripe
 
         mock_stripe = MagicMock()

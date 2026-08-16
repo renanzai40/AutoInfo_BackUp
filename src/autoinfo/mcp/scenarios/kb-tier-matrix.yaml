@@ -1,0 +1,229 @@
+# KB-tier write matrix across all 13 demo domains (issue #278 keystone-gap
+# umbrella: KB-tier write coverage).  Reproduces the 13 x 3 KB-tier fill —
+# every demo domain writing into each of the three KB tiers 01-Raw /
+# 02-Draft / 03-Wiki — through REAL pipeline calls, one full execution per
+# member domain via the T4a domain-matrix framework (issue #280:
+# ``matrix_domains`` + ``{{domain}}`` substitution).
+#
+# Tier write semantics (AGENTS.md KB pipeline rules) — honest mapping:
+#
+# * 01-Raw is the SOLE entry point for collected content and is written ONLY
+#   by the collection pipeline (collect_sources + process_collection, G0-G5).
+#   This matrix does NOT re-run live collection (network-flaky, covered
+#   deterministically by the collection scenarios: collection.yaml,
+#   collect-failure-recovery.yaml, processing.yaml).  Instead the seed step
+#   below provisions the minimal 01-Raw prerequisite via KBStore.store_entry
+#   with genuine G1/G3 QualityResult scores — the exact call path
+#   process_collection uses — so the admission-gated promote step has real
+#   gate scores to evaluate (same seeding technique as kb-promote.yaml).
+#   Note: create_kb_entry (the MCP manual-ingestion helper, also 01-Raw)
+#   stores NO quality results, so a draft built from it could never pass the
+#   G1/G3 admission gate; the gate-score seed is therefore required, not
+#   decorative.
+# * 02-Draft is the agent-writable tier: the sanctioned write is
+#   create_kb_draft(raw_ids=[...], title=...).  Its real signature requires
+#   existing 01-Raw entries (no domain/content params), so the draft step
+#   references the deterministic raw entry seeded above via {{domain}}.
+# * 03-Wiki is append-only; the ONLY sanctioned write is promote_kb_draft
+#   (agent promotion, no human gate) of a 02-Draft entry.
+#
+# Determinism: every entry id is derived from domain/topic/title slugging
+# ({{domain}}-general-kb-tier-matrix-{{domain}}-raw and
+# {{domain}}-draft-kb-tier-matrix-{{domain}}-draft), so the promote step
+# references the draft id statically (the framework has no step-result
+# chaining) and repeated runs re-store/re-promote the same ids — idempotent
+# enough to be a deterministic GREEN evidence source.  All 13 domains are
+# declared in requires_domain (the domain-coverage scanner reads
+# requires_domain + step arguments.domain, not matrix_domains) so the
+# 13/13 coverage contract is preserved.
+#
+# Cleanup is director-routed (T5): the promoted 03-Wiki entries are
+# append-only for non-director actors, so every delete runs through
+# store.delete_entry(eid, actor="director").
+name: kb-tier-matrix
+description: "KB-tier write matrix: 13 demo domains x {01-Raw seed, create_kb_draft -> 02-Draft, promote_kb_draft -> 03-Wiki} via real pipeline calls"
+category: kb
+requires_env: []
+requires_domain:
+  - medical-research
+  - ai-commercial
+  - financial-intelligence
+  - tech-ai-developer
+  - language-learning
+  - online-video
+  - financial-news
+  - online-education
+  - legal-compliance
+  - general-news
+  - gaming
+  - b2b
+  - retail
+# T4a domain axis (issue #280): one full execution per demo domain,
+# {{domain}} substituted into every mcp step argument.
+matrix_domains:
+  - medical-research
+  - ai-commercial
+  - financial-intelligence
+  - tech-ai-developer
+  - language-learning
+  - online-video
+  - financial-news
+  - online-education
+  - legal-compliance
+  - general-news
+  - gaming
+  - b2b
+  - retail
+timeout: 120
+collect_artifacts:
+  - "knowledge/*/01-Raw/**/*kb-tier-matrix*"
+  - "knowledge/*/02-Draft/**/*kb-tier-matrix*"
+  - "knowledge/*/03-Wiki/**/*kb-tier-matrix*"
+steps:
+  # ---- 01-Raw ---------------------------------------------------------------
+  # Seeds the 01-Raw prerequisite for ALL 13 demo domains through the real
+  # KBStore.store_entry + QualityResult call path that process_collection
+  # uses (G1 source_score=72, G3 relevance=85 — above the 30/30 admission
+  # thresholds), with mandatory provenance (source_url/source_type/
+  # source_platform).  This step runs once per matrix sub-run (the framework
+  # re-executes every step per domain) and is idempotent: re-storing the
+  # same deterministic entry ids just upserts index + file.  Full collection
+  # pipeline coverage lives in the collection scenarios — this is NOT the
+  # collection representation, only the minimal scored raw the Draft step
+  # requires.
+  - name: "seed 01-Raw gate-scored entries for all 13 demo domains"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.kb import KBStore
+      from autoinfo.models import Item
+      from autoinfo.quality import QualityResult
+      domains = ["medical-research", "ai-commercial", "financial-intelligence",
+                 "tech-ai-developer", "language-learning", "online-video",
+                 "financial-news", "online-education", "legal-compliance",
+                 "general-news", "gaming", "b2b", "retail"]
+      store = KBStore()
+      for d in domains:
+          item = Item(
+              id="kbtm-" + d, source_name="web", source_type="web",
+              source_url="https://kb-tier-matrix.autoinfo.dev/" + d + "/raw",
+              source_platform="web",
+              title="KB Tier Matrix " + d + " Raw",
+              content=("KB tier matrix raw source content for the " + d +
+                       " demo domain. Reproduces the 01-Raw to 02-Draft to "
+                       "03-Wiki write path for every demo domain."),
+              domain=d, topic_tags=["general"],
+              collected_at="2026-08-16T00:00:00+00:00",
+              content_type="text", quality_tier=1,
+          )
+          g1 = QualityResult(gate_name="G1-SourceAuthority", passed=True,
+                             score=0.0, details={"source_score": 72.0})
+          g3 = QualityResult(gate_name="G3-RelevanceScoring", passed=True,
+                             score=85.0, details={})
+          entry = store.store_entry(item=item, tier="01-Raw",
+                                    quality_results={"G1-SourceAuthority": g1,
+                                                     "G3-RelevanceScoring": g3})
+          assert entry is not None and entry.tier == "01-Raw", d
+          print("SEED_RAW " + entry.entry_id + " " + entry.tier)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has:
+        - "SEED_RAW medical-research-general-kb-tier-matrix-medical-research-raw 01-Raw"
+        - "SEED_RAW ai-commercial-general-kb-tier-matrix-ai-commercial-raw 01-Raw"
+        - "SEED_RAW financial-intelligence-general-kb-tier-matrix-financial-intelligence-raw 01-Raw"
+        - "SEED_RAW tech-ai-developer-general-kb-tier-matrix-tech-ai-developer-raw 01-Raw"
+        - "SEED_RAW language-learning-general-kb-tier-matrix-language-learning-raw 01-Raw"
+        - "SEED_RAW online-video-general-kb-tier-matrix-online-video-raw 01-Raw"
+        - "SEED_RAW financial-news-general-kb-tier-matrix-financial-news-raw 01-Raw"
+        - "SEED_RAW online-education-general-kb-tier-matrix-online-education-raw 01-Raw"
+        - "SEED_RAW legal-compliance-general-kb-tier-matrix-legal-compliance-raw 01-Raw"
+        - "SEED_RAW general-news-general-kb-tier-matrix-general-news-raw 01-Raw"
+        - "SEED_RAW gaming-general-kb-tier-matrix-gaming-raw 01-Raw"
+        - "SEED_RAW b2b-general-kb-tier-matrix-b2b-raw 01-Raw"
+        - "SEED_RAW retail-general-kb-tier-matrix-retail-raw 01-Raw"
+
+  # ---- 02-Draft (agent-writable tier) ---------------------------------------
+  # create_kb_draft compiles the seeded 01-Raw entry into a 02-Draft file.
+  # The draft entry id is deterministic from domain + title slugging
+  # ({{domain}}-draft-kb-tier-matrix-{{domain}}-draft) — referenced statically
+  # by the promote step below.
+  - name: "create_kb_draft for {{domain}} writes 02-Draft"
+    tool: create_kb_draft
+    kind: mcp
+    arguments:
+      raw_ids:
+        - "{{domain}}-general-kb-tier-matrix-{{domain}}-raw"
+      title: "KB Tier Matrix {{domain}} Draft"
+      summary: "Draft compiled by the kb-tier-matrix validation scenario."
+      tags:
+        - "validation"
+        - "kb-tier-matrix"
+    expect:
+      success: true
+      data_has: ["entry_id", "tier"]
+
+  # ---- 03-Wiki (append-only; promote is the ONLY sanctioned write) ---------
+  # promote_kb_draft runs the admission gate (provenance, G0, G1/G3 >= 30,
+  # CurationGate G4) against the gate-scored draft and moves it to 03-Wiki
+  # with promotion_source=agent — no human gate.
+  - name: "promote_kb_draft for {{domain}} writes 03-Wiki"
+    tool: promote_kb_draft
+    kind: mcp
+    arguments:
+      entry_id: "{{domain}}-draft-kb-tier-matrix-{{domain}}-draft"
+    expect:
+      success: true
+      data_has: ["status", "draft_id", "new_path"]
+
+# Always-run best-effort cleanup (engine executes these after the main steps,
+# on pass or fail; results never affect the scenario status).  Only entries
+# whose source_url matches the scenario marker prefix are purged, so real
+# user data is never touched.  Every delete runs through the DIRECTOR path
+# (T5): the promoted 03-Wiki entries are append-only for non-director actors
+# (DirectorOnlyError otherwise).
+cleanup_steps:
+  - name: "director purge of matrix raw/draft/wiki entries + _failed markers"
+    kind: cli
+    command: |-
+      python3 -c '
+      from pathlib import Path
+      from autoinfo.kb import KBStore
+      domains = ["medical-research", "ai-commercial", "financial-intelligence",
+                 "tech-ai-developer", "language-learning", "online-video",
+                 "financial-news", "online-education", "legal-compliance",
+                 "general-news", "gaming", "b2b", "retail"]
+      store = KBStore()
+      removed = []
+      for d in domains:
+          raw_id = d + "-general-kb-tier-matrix-" + d + "-raw"
+          wiki_id = d + "-draft-kb-tier-matrix-" + d + "-draft"
+          marker = "https://kb-tier-matrix.autoinfo.dev/" + d + "/raw"
+          for eid in (wiki_id, raw_id):
+              meta = store.index.get_entry(eid)
+              if meta is None:
+                  continue
+              if str(meta.get("source_url", "")) != marker:
+                  print("REFUSE " + eid)
+                  continue
+              res = store.delete_entry(eid, actor="director")  # T5: director path
+              removed.append(eid + ":" + str(res))
+          for p in list(Path("knowledge/_failed/" + d).glob("*kb-tier-matrix-*")):
+              p.unlink(missing_ok=True)
+              removed.append(str(p))
+          for p in list(Path("knowledge/" + d + "/01-Raw/general").glob("*kb-tier-matrix-*")):
+              p.unlink(missing_ok=True)
+              removed.append(str(p))
+          for p in list(Path("knowledge/" + d + "/02-Draft").rglob("*kb-tier-matrix-*")):
+              p.unlink(missing_ok=True)
+              removed.append(str(p))
+          for p in list(Path("knowledge/" + d + "/03-Wiki").rglob("*kb-tier-matrix-*")):
+              p.unlink(missing_ok=True)
+              removed.append(str(p))
+      print("CLEANED " + str(removed))
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["CLEANED"]

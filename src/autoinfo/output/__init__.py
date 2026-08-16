@@ -2448,6 +2448,7 @@ def _build_digest_llm_prompt(
         lines.append(f"  Title: {title}")
         lines.append(f"  Summary: {summary[:500] if summary else chr(8212)}")
         lines.append(f"  Tags: {tags_str}")
+        lines.append(f"  Source URL: {entry.get('source_url') or chr(8212)}")
         lines.append("")
 
     lines.append("Now generate a JSON digest with the following fields:")
@@ -2460,6 +2461,10 @@ def _build_digest_llm_prompt(
         for desc in product_descs:
             lines.append(f"  - {desc}")
     lines.append("")
+    lines.append(
+        "When a key finding, recommendation, or trend is backed by a "
+        "specific entry, cite its source inline as (Source: URL)."
+    )
     lines.append("Return all fields in a single JSON object.")
 
     return "\n".join(lines)
@@ -2595,9 +2600,12 @@ def _deterministic_synthesis_fallback(
     Returns
     -------
     dict
-        ``{"executive_summary": str, "key_findings": list[str],
+        ``{"executive_summary": str, "key_findings": list[str | dict],
         "recommendations": list[str]}`` with all sections non-empty when
-        entries exist.
+        entries exist.  Findings for entries that carry a ``source_url``
+        are ``{"text": str, "source_url": str}`` objects (issue #279) so
+        rendered output can cite per-finding provenance; entries without
+        a URL keep the legacy ``"title: summary"`` string form.
     """
     titled = [e for e in entries if (e.get("title") or "").strip()]
     if not titled:
@@ -2612,13 +2620,14 @@ def _deterministic_synthesis_fallback(
         f"{summary_prefix} {len(titled)} knowledge base "
         f"entr{'y' if len(titled) == 1 else 'ies'}: {title_line}."
     )
-    key_findings = [
-        (
+    key_findings: list[Any] = []
+    for e in titled[:8]:
+        text = (
             f"{str(e['title']).strip()}: "
             f"{str(e.get('summary') or e['title']).strip()}"
         )
-        for e in titled[:8]
-    ]
+        src = str(e.get("source_url") or "").strip()
+        key_findings.append({"text": text, "source_url": src} if src else text)
     recommendations = [
         f"Review the {len(titled)} knowledge base entr"
         f"{'y' if len(titled) == 1 else 'ies'} listed above for follow-up."
@@ -2749,9 +2758,11 @@ def _normalize_digest_product_context(
     - ``executive_summary`` ← ``llm_synthesis["executive_summary"]``
       (``""`` when absent)
     - ``key_findings`` ← ``llm_synthesis["key_findings"]`` converted to
-      ``list[str]``: each ``{topic, detail}`` dict becomes ``"Topic: detail"``
-      when both parts are non-empty; otherwise the present part alone;
-      fully empty items are dropped (spec §2.3 rule 2)
+      ``list[dict]`` of ``{"text", "source_url"}`` (LLM ``{topic, detail}``
+      dicts become ``"topic: detail"`` text; partial items kept, empty
+      items dropped; ``source_url`` kept when the LLM provides it and
+      back-filled from the entry list on an unambiguous title match —
+      issue #279)
     - ``recommendations`` ← ``llm_synthesis["recommendations"]``
     - ``references`` ← derived from ``entries`` with the report-path item
       shape ``{title, source_url, source_type, source_platform, domain}``
@@ -2767,30 +2778,61 @@ def _normalize_digest_product_context(
     """
     synthesis_raw = context.get("llm_synthesis")
     synthesis = synthesis_raw if isinstance(synthesis_raw, dict) else {}
+    raw_entries = context.get("entries")
+    entries_list = raw_entries if isinstance(raw_entries, list) else []
 
     # --- Flattened top-level keys ------------------------------------------
     flat: dict[str, Any] = dict(context)
     flat["executive_summary"] = str(synthesis.get("executive_summary") or "")
 
     raw_findings = synthesis.get("key_findings", [])
-    findings: list[str] = []
+    findings: list[dict[str, Any]] = []
     if isinstance(raw_findings, list):
         for item in raw_findings:
             if isinstance(item, str):
                 text = item.strip()
                 if text:
-                    findings.append(text)
+                    findings.append({"text": text})
                 continue
             if not isinstance(item, dict):
                 continue
             topic = str(item.get("topic") or "").strip()
             detail = str(item.get("detail") or "").strip()
             if topic and detail:
-                findings.append(f"{topic}: {detail}")
+                text = f"{topic}: {detail}"
             elif topic:
-                findings.append(topic)
+                text = topic
             elif detail:
-                findings.append(detail)
+                text = detail
+            elif item.get("text"):
+                text = str(item["text"]).strip()
+            else:
+                continue
+            finding: dict[str, Any] = {"text": text}
+            src = str(item.get("source_url") or "").strip()
+            if src:
+                finding["source_url"] = src
+            findings.append(finding)
+    # Issue #279: back-fill source_url from entries on an unambiguous
+    # title match only (wrong attribution is worse than none).
+    for finding in findings:
+        if finding.get("source_url"):
+            continue
+        text = str(finding.get("text") or "").strip().lower()
+        if not text:
+            continue
+        tokens = [t for t in re.split(r"[^a-z0-9]+", text.split(":")[0]) if t]
+        if len(tokens) < 2:
+            continue
+        matches = [
+            e.get("source_url")
+            for e in entries_list
+            if isinstance(e, dict)
+            and (e.get("source_url") or "").strip()
+            and all(t in str(e.get("title") or "").lower() for t in tokens)
+        ]
+        if len(matches) == 1:
+            finding["source_url"] = str(matches[0]).strip()
     flat["key_findings"] = findings
 
     raw_recommendations = synthesis.get("recommendations", [])
@@ -2799,8 +2841,6 @@ def _normalize_digest_product_context(
     )
 
     # --- References derived from entries (report-path item shape) ----------
-    raw_entries = context.get("entries")
-    entries_list = raw_entries if isinstance(raw_entries, list) else []
     flat["references"] = [
         {
             "title": e.get("title", ""),
@@ -3362,7 +3402,7 @@ class ReportData:
     domain: str
     collection_id: str = ""
     executive_summary: str = ""
-    key_findings: list[str] = field(default_factory=list)
+    key_findings: list[dict[str, Any]] = field(default_factory=list)
     recommendations: list[str] = field(default_factory=list)
     implications: list[str] = field(default_factory=list)
     risks: list[dict[str, Any]] = field(default_factory=list)
@@ -3676,8 +3716,10 @@ def generate_report(
     # callers / direct mocks) — treated as summary only.
     if isinstance(summary_result, dict):
         executive_summary = summary_result.get("executive_summary", "") or ""
+        # Issue #279: normalize findings to {text, source_url} objects.
         key_findings = [
-            str(f) for f in (summary_result.get("key_findings") or [])
+            f if isinstance(f, dict) else {"text": str(f)}
+            for f in (summary_result.get("key_findings") or [])
         ]
         recommendations = [
             str(r) for r in (summary_result.get("recommendations") or [])
@@ -3743,10 +3785,17 @@ def generate_report(
             )
         if not key_findings:
             key_findings = [
-                (
-                    f"{e.get('title', 'Untitled entry')} — "
-                    f"{str(e.get('summary') or '(no summary)')[:160]}"
-                )
+                {
+                    "text": (
+                        f"{e.get('title', 'Untitled entry')} \u2014 "
+                        f"{str(e.get('summary') or '(no summary)')[:160]}"
+                    ),
+                    **(
+                        {"source_url": str(e.get("source_url") or "").strip()}
+                        if (e.get("source_url") or "").strip()
+                        else {}
+                    ),
+                }
                 for e in ranked[:5]
                 if e.get("title")
             ]
@@ -4665,6 +4714,10 @@ def _build_report_entries_detail(
                 f"- [{g['theme']}] {e.get('title', '')}: "
                 f"{(e.get('summary') or '')[: max_entry_summary_chars]}"
             )
+            # Issue #279: thread source_url into the synthesis context.
+            src = str(e.get("source_url") or "").strip()
+            if src:
+                line = f"{line} (Source: {src})"
             if detail_char_budget is not None:
                 if len("\n".join(detail_lines + [line])) > detail_char_budget:
                     truncated = True
@@ -4705,7 +4758,9 @@ def _build_report_synthesis_prompt(
         cross_domain_prefix +
         "Write a report synthesis analyzing the following knowledge base "
         "entries (grouped by theme). Use the actual content: cite specific "
-        "findings, studies, and data points from the entries. Do NOT describe "
+        "findings, studies, and data points from the entries. When a key "
+        "finding, recommendation, or trend is backed by a specific entry, "
+        "cite its source inline as (Source: URL). Do NOT describe "
         "the report structure or the writing instructions — write the analysis "
         "itself.\n\n"
         f"Themes and entries:\n{entries_detail}\n\n"
@@ -4771,9 +4826,12 @@ def _build_product_sections_prompt(
     summary = (parsed.get("executive_summary") or "").strip()
     if len(summary) > max_summary_chars:
         summary = summary[:max_summary_chars].rstrip() + "..."
-    findings = "\n".join(
-        f"- {(str(f) or '').strip()[:max_finding_chars].rstrip()}"
+    finding_texts = [
+        ((f.get("text") if isinstance(f, dict) else f) or "").strip()
         for f in (parsed.get("key_findings") or [])[:max_findings]
+    ]
+    findings = "\n".join(
+        f"- {t[:max_finding_chars].rstrip()}" for t in finding_texts
     )
     return (
         "You are a report synthesis assistant. Below are the executive summary "
@@ -7456,14 +7514,23 @@ def _render_digest_html(context: dict[str, Any]) -> str:
 
     synthesis = context.get("llm_synthesis") or {}
 
-    # Map LLM key_findings ({topic, detail}) -> {title, text}
-    key_findings = [
-        {
-            "title": f.get("topic", ""),
-            "text": f.get("detail", ""),
-        }
-        for f in (synthesis.get("key_findings") or [])
-    ]
+    # Map LLM key_findings ({topic, detail}) -> {title, text}; also
+    # accepts {text, source_url} objects and plain strings (issue #279
+    # fallback shape), threading source_url through for inline citation.
+    key_findings: list[dict[str, Any]] = []
+    for f in (synthesis.get("key_findings") or []):
+        if isinstance(f, dict):
+            topic = str(f.get("topic") or "").strip()
+            detail = str(f.get("detail") or "").strip()
+            text = str(f.get("text") or "").strip()
+            item = {"title": topic, "text": detail or text or topic}
+            item["source_url"] = str(f.get("source_url") or "").strip()
+        elif isinstance(f, str):
+            item = {"title": "", "text": f.strip(), "source_url": ""}
+        else:
+            continue
+        if item["text"]:
+            key_findings.append(item)
 
     # Map KB entries to the template's entry contract
     html_entries = [

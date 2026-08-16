@@ -1,10 +1,17 @@
 # Meta-validation — verify the validation toolset itself works.
 # list_validation_scenarios must list scenarios; run_validation_scenario must
 # execute one (system-health) and report a real passed status.
+# Issue #280: this scenario declares ``matrix_domains`` so the schema key is
+# exercised on every live run — load_scenarios must accept it,
+# list_validation_scenarios must report it, and run_scenario must expand the
+# run once per member domain (both sub-runs must pass for the meta check to
+# pass).  The steps' arguments carry no {{domain}} placeholder, so the
+# substitution is a no-op and the self-check stays deterministic.
 name: meta-validation
 description: "Validation toolset self-check: list and run scenarios"
 category: system
 requires_env: []
+matrix_domains: ["ai-commercial", "b2b"]
 steps:
   - name: "list_validation_scenarios returns the scenario library"
     tool: list_validation_scenarios

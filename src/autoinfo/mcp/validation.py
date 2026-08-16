@@ -11,6 +11,7 @@ to avoid circular dependencies.  Dispatch is injected as a callable.
 from __future__ import annotations
 
 import asyncio
+import copy
 import datetime
 import json
 import os
@@ -107,7 +108,7 @@ def load_scenario_results(run_dir: Path) -> dict[str, Any] | None:
     if not payload_path.exists():
         return None
     try:
-        return json.loads(payload_path.read_text(encoding="utf-8"))
+        return json.loads(payload_path.read_text(encoding="utf-8"))  # type: ignore[no-any-return]
     except (json.JSONDecodeError, OSError):
         return None
 
@@ -399,7 +400,7 @@ def _resolve_llm_model() -> str:
 
     Same pattern as ``quality._resolve_llm_model``.
     """
-    return _resolve_llm_config()["model"]
+    return _resolve_llm_config()["model"]  # type: ignore[no-any-return]
 
 
 def _parse_llm_verdict(content: str | None) -> dict[str, Any]:
@@ -461,7 +462,7 @@ def _llm_judge(assertion: str, tool_output: Any) -> dict[str, Any]:
         disable_thinking=False,
     )
     duration = time.monotonic() - start
-    content = response.choices[0].message.content  # type: ignore[union-attr]
+    content = response.choices[0].message.content
     parsed = _parse_llm_verdict(content)
     usage = getattr(response, "usage", None)
     tokens: dict[str, Any] | None = None
@@ -848,6 +849,26 @@ def load_scenarios(scenarios_dir: Path | None = None) -> list[dict[str, Any]]:
         data.setdefault("requires_domain", [])
         data.setdefault("requires_http", [])
 
+        # Issue #280: domain-matrix parameterization.  When present,
+        # matrix_domains must be a non-empty list of non-empty strings
+        # (demo-domain-ish identifiers); when absent it defaults to [] so
+        # scenarios without the key keep single-execution behaviour.
+        # Scenarios without the key are NEVER rejected.
+        matrix_domains = data.get("matrix_domains")
+        if matrix_domains is not None:
+            if (
+                not isinstance(matrix_domains, list)
+                or not matrix_domains
+                or not all(isinstance(d, str) and d for d in matrix_domains)
+            ):
+                raise ValueError(
+                    f"Scenario file {yaml_path.name}: 'matrix_domains' must be "
+                    f"a non-empty list of non-empty strings, got "
+                    f"{matrix_domains!r}"
+                )
+        else:
+            data["matrix_domains"] = []
+
         # Issue #138: partial-pass policy validation.  Both keys are optional;
         # when absent the scenario keeps ALL-or-nothing semantics.
         min_passing = data.get("min_passing")
@@ -878,8 +899,8 @@ def list_scenarios(scenarios_dir: Path | None = None) -> dict[str, Any]:
     Returns
     -------
     dict
-        ``{"scenarios": [{name, description, category, step_count, requires_env},
-        ...], "count": N}``
+        ``{"scenarios": [{name, description, category, step_count,
+        requires_env, requires_http, matrix_domains}, ...], "count": N}``
     """
     scs = load_scenarios(scenarios_dir)
     return {
@@ -891,6 +912,7 @@ def list_scenarios(scenarios_dir: Path | None = None) -> dict[str, Any]:
                 "step_count": len(sc["steps"]),
                 "requires_env": sc.get("requires_env", []),
                 "requires_http": sc.get("requires_http", []),
+                "matrix_domains": sc.get("matrix_domains", []),
             }
             for sc in scs
         ],
@@ -1272,6 +1294,43 @@ def is_excluded_artifact(relpath: str) -> bool:
     return "_failed" in segments or "coverage-matrix" in segments
 
 
+def _substitute_domain(value: Any, domain: str) -> Any:
+    """Deep-substitute the ``{{domain}}`` placeholder with *domain*.
+
+    Walks nested dicts and lists, replacing the exact ``{{domain}}`` token
+    inside every string value (``str.replace`` semantics — sibling text
+    around the token is preserved untouched).  Non-string leaves are
+    returned unchanged.
+    """
+    if isinstance(value, str):
+        return value.replace("{{domain}}", domain)
+    if isinstance(value, dict):
+        return {k: _substitute_domain(v, domain) for k, v in value.items()}
+    if isinstance(value, list):
+        return [_substitute_domain(v, domain) for v in value]
+    return value
+
+
+def _scenario_for_domain(scenario: dict[str, Any], domain: str) -> dict[str, Any]:
+    """Deep-copy *scenario* with ``{{domain}}`` substituted in mcp step args.
+
+    Substitution applies to ``kind: mcp`` steps only — ``kind: cli`` and
+    ``kind: http`` steps ignore it (their ``command`` / ``url`` fields are
+    never rewritten).  Covers the main ``steps`` plus ``cleanup_steps`` and
+    per-step ``recovery_steps``.  ``expect`` blocks are left untouched:
+    assertions assert on behaviour, not on the substituted value.
+    """
+    scenario_d = copy.deepcopy(scenario)
+    steps = [*scenario_d.get("steps", []), *scenario_d.get("cleanup_steps", [])]
+    for step in steps:
+        if step.get("kind", "mcp") == "mcp" and "arguments" in step:
+            step["arguments"] = _substitute_domain(step["arguments"], domain)
+        for rdef in step.get("recovery_steps", []) or []:
+            if rdef.get("kind", "mcp") == "mcp" and "arguments" in rdef:
+                rdef["arguments"] = _substitute_domain(rdef["arguments"], domain)
+    return scenario_d
+
+
 async def run_scenario(
     name: str,
     dispatch: Callable[[str, dict[str, Any]], Awaitable[dict[str, Any]]],
@@ -1312,6 +1371,17 @@ async def run_scenario(
         the scenario declares ``cleanup_steps``, they run after the main
         steps regardless of outcome (best-effort) and are reported under
         ``cleanup`` — they never influence ``status``.
+
+        Issue #280 — domain-matrix scenarios (``matrix_domains`` non-empty)
+        additionally return a ``matrix`` key ``{"domains": [...],
+        "per_domain": {domain: sub-run envelope}}``; the top-level ``steps``
+        are the concatenation of every sub-run's steps, each labelled with
+        its ``domain``, and ``summary`` aggregates across sub-runs.  Status
+        is ALL-or-nothing across sub-runs: any ``failed`` sub-run fails the
+        scenario, otherwise any ``unconfigured`` sub-run makes it
+        unconfigured.  Scenarios without the key are executed exactly once
+        with no substitution and no ``matrix`` key — byte-identical to the
+        pre-matrix harness.
 
         Every step result carries the per-step execution trace fields
         ``step_index`` (1-based), ``duration`` (wall-clock seconds as a
@@ -1370,7 +1440,16 @@ async def run_scenario(
     # If the project config does not have one of the required domains, the
     # scenario reports unconfigured with the missing domain names instead of
     # failing every step with DomainNotFound.
+    #
+    # Issue #280: for matrix scenarios the effective required-domain set is
+    # the union of the declared requires_domain and the matrix members — a
+    # member domain that is not configured would fail every sub-run step with
+    # DOMAIN_NOT_FOUND, so it gates as unconfigured up front, exactly like
+    # requires_domain.
     requires_domain: list[str] = scenario.get("requires_domain", [])
+    matrix_domains: list[str] = scenario.get("matrix_domains", [])
+    if matrix_domains:
+        requires_domain = list(dict.fromkeys(requires_domain + matrix_domains))
     if requires_domain:
         configured_domains = _configured_domain_names()
         missing_domains = [
@@ -1402,6 +1481,104 @@ async def run_scenario(
             ),
         )
 
+    # Issue #280: domain-matrix parameterization.  When the scenario declares
+    # matrix_domains, run one execution per member domain (deep-substituting
+    # {{domain}} in mcp step arguments) and aggregate ALL-or-nothing.  Without
+    # the key this is exactly one execution with zero substitution — the
+    # pre-matrix behaviour.
+    if not matrix_domains:
+        return await _execute_scenario(scenario, dispatch, steps, timeout, trace_id)
+
+    per_domain: dict[str, dict[str, Any]] = {}
+    matrix_steps: list[dict[str, Any]] = []
+    combined_counts = {"passed": 0, "failed": 0, "unconfigured": 0, "recovered": 0}
+    artifacts: list[dict[str, Any]] | None = None
+    warnings: list[str] = []
+    cleanup: dict[str, Any] | None = None
+    for domain in matrix_domains:
+        sub = await _execute_scenario(
+            _scenario_for_domain(scenario, domain),
+            dispatch,
+            steps,
+            timeout,
+            trace_id,
+        )
+        per_domain[domain] = sub
+        for sr in sub["steps"]:
+            labeled = dict(sr)
+            labeled["domain"] = domain
+            matrix_steps.append(labeled)
+        for key in combined_counts:
+            combined_counts[key] += sub["summary"].get(key, 0)
+        if sub.get("artifacts"):
+            if artifacts is None:
+                artifacts = []
+            artifacts.extend(sub["artifacts"])
+        if sub.get("warnings"):
+            warnings.extend(sub["warnings"])
+        if sub.get("cleanup"):
+            if cleanup is None:
+                cleanup = {
+                    "summary": {
+                        "passed": 0,
+                        "failed": 0,
+                        "unconfigured": 0,
+                        "recovered": 0,
+                        "total": 0,
+                    },
+                    "steps": [],
+                }
+            cleanup["steps"].extend(sub["cleanup"]["steps"])
+            for key in cleanup["summary"]:
+                cleanup["summary"][key] += sub["cleanup"]["summary"].get(key, 0)
+
+    if any(sub["status"] == "failed" for sub in per_domain.values()):
+        status = "failed"
+    elif any(sub["status"] == "unconfigured" for sub in per_domain.values()):
+        status = "unconfigured"
+    else:
+        status = "passed"
+
+    result: dict[str, Any] = {
+        "scenario": name,
+        "description": scenario["description"],
+        "category": scenario.get("category", "general"),
+        "status": status,
+        "summary": {**combined_counts, "total": len(matrix_steps)},
+        "steps": matrix_steps,
+        "trace_id": trace_id,
+        "matrix": {"domains": matrix_domains, "per_domain": per_domain},
+    }
+    if cleanup is not None:
+        result["cleanup"] = cleanup
+    if artifacts is not None:
+        result["artifacts"] = artifacts
+    if warnings:
+        result["warnings"] = warnings
+    for _key in ("regression", "regression_issue"):
+        if _key in scenario:
+            result[_key] = scenario[_key]
+
+    return result
+
+
+async def _execute_scenario(
+    scenario: dict[str, Any],
+    dispatch: Callable[[str, dict[str, Any]], Awaitable[dict[str, Any]]],
+    steps: list[int] | None,
+    timeout: float,
+    trace_id: str,
+) -> dict[str, Any]:
+    """Run a single scenario dict against *dispatch* and build its envelope.
+
+    Encapsulates step selection, execution, status derivation (including the
+    ``min_passing`` / ``pass_ratio`` partial-pass policy), artifact
+    collection, cleanup steps, the leak scan and the regression keys — the
+    historic body of ``run_scenario``.  ``run_scenario`` calls this once for
+    scenarios without ``matrix_domains`` (byte-identical envelope) and once
+    per member domain for matrix scenarios; the matrix expansion itself lives
+    in ``run_scenario``.
+    """
     # Determine which steps to run
     if steps is not None:
         if not steps:
@@ -1411,7 +1588,7 @@ async def run_scenario(
             if idx < 1 or idx > max_idx:
                 raise ValueError(
                     f"Step index {idx} out of range (1-{max_idx}) for "
-                    f"scenario '{name}'"
+                    f"scenario '{scenario['name']}'"
                 )
         selected = [(idx, scenario["steps"][idx - 1]) for idx in steps]
     else:
@@ -1512,7 +1689,7 @@ async def run_scenario(
         }
 
     result: dict[str, Any] = {
-        "scenario": name,
+        "scenario": scenario["name"],
         "description": scenario["description"],
         "category": scenario.get("category", "general"),
         "status": status,

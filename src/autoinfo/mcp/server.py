@@ -2472,9 +2472,11 @@ def _handle_create_kb_draft(
     tags: list[str] | None = None,
 ) -> dict[str, Any]:
     """Create a Draft entry from one or more Raw entries."""
-    from autoinfo.kb import KBStore
+    from autoinfo.kb import MIN_KB_CONTENT_CHARS, KBStore
 
-    store = KBStore()
+    # Enforce the same 50-char content floor at the Draft boundary: a
+    # Draft compiled from below-min raw content is an empty shell (#279).
+    store = KBStore(min_content_chars=MIN_KB_CONTENT_CHARS)
     try:
         entry = store.create_kb_draft(
             raw_ids=raw_ids, title=title, summary=summary, tags=tags
@@ -6399,7 +6401,7 @@ def _handle_create_kb_entry(
     from datetime import datetime, timezone
     from uuid import uuid4
 
-    from autoinfo.kb import KBStore
+    from autoinfo.kb import MIN_KB_CONTENT_CHARS, KBStore
     from autoinfo.models import Item
 
     try:
@@ -6411,6 +6413,13 @@ def _handle_create_kb_entry(
                 ),
                 "actionable": True,
             }
+
+        if len(content.strip()) < MIN_KB_CONTENT_CHARS:
+            return error_response(
+                ErrorCode.VALIDATION_ERROR,
+                f"content must be at least {MIN_KB_CONTENT_CHARS} characters",
+                actionable=True,
+            )
 
         topic_tags = topics or []
 
@@ -6429,7 +6438,7 @@ def _handle_create_kb_entry(
             quality_tier=1,
         )
 
-        store = KBStore()
+        store = KBStore(min_content_chars=MIN_KB_CONTENT_CHARS)
         entry = store.store_entry(item=item, tier="01-Raw")
 
         if entry is None:

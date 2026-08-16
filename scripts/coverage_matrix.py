@@ -358,8 +358,10 @@ def scan_source_evidence(evidence_dir: str | Path) -> set[tuple[str, str]]:
     """Scan ``collections/`` dirs for collected ``(domain, source)`` pairs.
 
     A source counts as collected when its collection dir contains at least
-    one JSON item file (``collections/<domain>/<source>/*.json``), i.e. the
-    collector really ran and produced raw data (not dry_run-only).
+    one real item JSON (``collections/<domain>/<source>/<date>/<id>.json``
+    or a legacy flat ``collections/<domain>/<source>/<id>.json``). Run
+    metadata (``_runs.json``, including failed dry-runs) and G0-rejected
+    dumps (``collections/<domain>/_failed/``) are NOT collection evidence.
     """
     root = Path(evidence_dir)
     collected: set[tuple[str, str]] = set()
@@ -370,9 +372,13 @@ def scan_source_evidence(evidence_dir: str | Path) -> set[tuple[str, str]]:
                 continue
             domain = domain_dir.name
             for src_dir in domain_dir.iterdir():
-                if not src_dir.is_dir():
+                if not src_dir.is_dir() or src_dir.name == "_failed":
                     continue
-                items = [f for f in src_dir.iterdir() if f.is_file() and f.suffix == ".json"]
+                items = [
+                    f
+                    for f in src_dir.rglob("*.json")
+                    if f.name != "_runs.json" and "_failed" not in f.parts
+                ]
                 if items:
                     collected.add((domain, src_dir.name))
     return collected

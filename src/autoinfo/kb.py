@@ -1229,7 +1229,7 @@ class SQLiteIndex:
                     (ver_num, entry_id),
                 ).fetchone()
                 if row is not None:
-                    return dict(row)["version_id"]
+                    return dict(row)["version_id"]  # type: ignore[no-any-return]
                 return None
 
         va_id = _resolve_version_id(version_a)
@@ -1361,7 +1361,7 @@ class SQLiteIndex:
                     "SELECT COUNT(*) FROM entries WHERE collected_at >= ?",
                     (today,),
                 ).fetchone()
-            return count
+            return count  # type: ignore[no-any-return]
 
     def count_entries(self, domain: str | None = None) -> int:
         """Return the total number of entries, optionally filtered by domain."""
@@ -1372,7 +1372,7 @@ class SQLiteIndex:
                 ).fetchone()
             else:
                 (count,) = conn.execute("SELECT COUNT(*) FROM entries").fetchone()
-            return count
+            return count  # type: ignore[no-any-return]
 
     # ------------------------------------------------------------------
     # Collection stats / diff
@@ -1882,7 +1882,7 @@ class SQLiteIndex:
         total = len(entries)
         paged = entries[offset : offset + limit]
 
-        result: dict[str, Any] = {
+        result: dict[str, Any] = {  # type: ignore[no-redef]
             "query": query,
             "domain": domain,
             "entries": paged,
@@ -2451,6 +2451,14 @@ def _default_kb_base_path() -> Path:
     return Path("knowledge")
 
 
+# Minimum meaningful content length for a KB entry.  The process pipeline
+# (process.py) and importers (importer.py) already enforce 50 characters;
+# centralizing the constant here lets every write boundary — MCP
+# create_kb_entry / create_kb_draft and the REST API — share the same floor
+# (issue #279: entries with empty/short content must never enter the KB).
+MIN_KB_CONTENT_CHARS = 50
+
+
 class KBStore:
     """High-level knowledge base store that combines Markdown files + SQLite.
 
@@ -2660,7 +2668,7 @@ class KBStore:
             if g1 is not None:
                 raw_score = g1.details.get("source_score")
                 if raw_score is not None:
-                    source_score = float(raw_score)
+                    source_score = float(raw_score)  # type: ignore[arg-type]
 
         entry_status: str = "active"
         if quality_results:
@@ -3214,6 +3222,7 @@ class KBStore:
         file_path = file_dir / file_name
 
         merged_body_parts: list[str] = []
+        source_bodies: list[str] = []
         for i, re in enumerate(raw_entries):  # noqa: F402
             merged_body_parts.append(
                 f"## Source {i + 1}: {re['title']}\n\n"
@@ -3222,14 +3231,26 @@ class KBStore:
             if raw_fp.is_file():
                 raw_text = raw_fp.read_text(encoding="utf-8")
                 body = _strip_frontmatter(raw_text)
+                source_bodies.append(body)
                 merged_body_parts.append(body)
             merged_body_parts.append("\n\n")
 
         merged_body = "".join(merged_body_parts)
 
+        # Same 50-char floor the process/import write paths enforce: a Draft
+        # built from a Raw entry whose content is below MIN_KB_CONTENT_CHARS
+        # is an empty shell and must not be written (issue #279).
+        if any(
+            len(body.strip()) < self.min_content_chars for body in source_bodies
+        ):
+            raise ValueError(
+                "draft content too short: a source Raw entry provides "
+                f"fewer than {self.min_content_chars} characters"
+            )
+
         # Build KBEntry
         source_raw_ids = ",".join(raw_ids)
-        entry = KBEntry(
+        entry = KBEntry(  # type: ignore[assignment]
             entry_id=entry_id,
             title=title,
             domain=domain,
@@ -3257,16 +3278,16 @@ class KBStore:
 
         # Write Markdown file
         file_dir.mkdir(parents=True, exist_ok=True)
-        frontmatter = _build_frontmatter(entry)
+        frontmatter = _build_frontmatter(entry)  # type: ignore[arg-type]
         parts = [f"---\n{frontmatter}---\n\n"]
         parts.append(f"_Compiled from: {source_raw_ids}_\n\n")
         parts.append(merged_body)
         file_path.write_text("".join(parts), encoding="utf-8")
 
         # Index in SQLite
-        self.index.index_entry(entry)
+        self.index.index_entry(entry)  # type: ignore[arg-type]
 
-        return entry
+        return entry  # type: ignore[return-value]
 
     def reject_kb_draft(
         self,

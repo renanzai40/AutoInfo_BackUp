@@ -11,11 +11,11 @@ order. This table **supersedes** the stale CI note in
 83 failed / 2707 passed / 11 skipped / 3 deselected / 1 error in 427.30s (0:07:07)
 ```
 
-- Command: `.venv/bin/python -m pytest -q --ignore tests/test_stripe.py -m "not real_api" --durations=20`
+- Command: `.venv/bin/python -m pytest -q --ignore tests/cost/test_stripe.py -m "not real_api" --durations=20`
 - Full output: `/tmp/opencode/triage-full.txt`
 - Collection: **2804 collected, 0 collection errors** under the same flags
   (baseline `pytest --collect-only -q` without exclusions = **2855**; the 51
-  delta = `tests/test_stripe.py` (51 tests) excluded here — see Count reconciliation below).
+  delta = `tests/cost/test_stripe.py` (51 tests) excluded here — see Count reconciliation below).
 - Failure count is **identical** to the plan baseline (83F + 1E) — no new failures, no stale-failure drift.
 
 ## Count reconciliation (2855 vs 2804)
@@ -23,8 +23,8 @@ order. This table **supersedes** the stale CI note in
 | Fact | Value |
 |---|---|
 | Plan baseline `--collect-only -q` (no exclusions) | 2855 collected, 0 errors |
-| This run: `--collect-only -q --ignore tests/test_stripe.py -m "not real_api"` | 2801/2804 collected, 3 deselected |
-| Delta | 51 = `tests/test_stripe.py` (51 tests; stripe is a core dep so the module imports fine — excluded per run convention) |
+| This run: `--collect-only -q --ignore tests/cost/test_stripe.py -m "not real_api"` | 2801/2804 collected, 3 deselected |
+| Delta | 51 = `tests/cost/test_stripe.py` (51 tests; stripe is a core dep so the module imports fine — excluded per run convention) |
 | `real_api` deselected | 3 (`tests/test_real_api.py`, marked `real_api` + `requires_llm_key`) |
 | Full suite (this run) | 83 failed / 2707 passed / 11 skipped / 3 deselected / 1 error |
 

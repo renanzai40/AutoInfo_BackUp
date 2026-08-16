@@ -28,7 +28,7 @@ _No executive summary available for this period._
 ## Key Findings
 
 {% for f in key_findings %}
-- {{ f }}
+- {{ f.text if f is mapping else f }}{% if f is mapping and f.source_url %} (Source: {{ f.source_url }}){% endif %}
 {% endfor %}
 
 {% endif %}

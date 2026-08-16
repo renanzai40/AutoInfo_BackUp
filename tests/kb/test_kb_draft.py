@@ -1,3 +1,4 @@
+# mypy: ignore-errors
 """Tests for 02-Draft tier — create_kb_draft, reject_kb_draft, list_kb_tier.
 
 Covers:
@@ -162,6 +163,46 @@ class TestCreateKbDraft:
         assert fp.exists(), f"Draft file not created at {fp}"
         assert fp.is_file()
         assert "02-Draft" in fp.parts
+
+    def test_rejects_draft_from_short_raw_entry(
+        self, store: KBStore
+    ) -> None:
+        """A Draft compiled from a Raw entry whose merged content is below
+        MIN_KB_CONTENT_CHARS is rejected (issue #279 — the same 50-char
+        floor process/import paths enforce must hold at Draft creation)."""
+        from autoinfo.kb import MIN_KB_CONTENT_CHARS
+
+        raw = store.store_entry(
+            Item(
+                id="raw-short",
+                source_name="pubmed",
+                source_type="api",
+                source_url="https://example.com/short",
+                source_platform="pubmed",
+                title="Tiny raw title",
+                content="tiny",
+                content_type="text",
+                collected_at="2026-07-15T10:30:00Z",
+                language="en",
+                domain="medical-research",
+                topic_tags=["IVF"],
+                quality_tier=1,
+            )
+        )
+        assert raw is not None
+
+        strict = KBStore(
+            base_path=store.base_path,
+            min_content_chars=MIN_KB_CONTENT_CHARS,
+        )
+        with pytest.raises(ValueError, match="too short"):
+            strict.create_kb_draft(
+                raw_ids=[raw.entry_id],
+                title="Draft from short raw",
+            )
+        assert not list(
+            (store.base_path / "medical-research" / "02-Draft").rglob("*.md")
+        ), "no Draft file may be written for short content"
 
     def test_draft_tier_is_02_draft(self, store: KBStore, raw_entry_ids: list[str]) -> None:
         draft = store.create_kb_draft(

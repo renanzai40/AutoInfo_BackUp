@@ -1,3 +1,4 @@
+# mypy: ignore-errors
 """Tests for ``GET /api/v1/feeds`` — RAW product feed endpoint.
 
 Follows the same pattern as ``TestRestAPI`` in ``test_v1_2_integration.py``.
@@ -61,7 +62,11 @@ class TestFeedAPI:
         """
         body: dict[str, Any] = {
             "title": title,
-            "content": f"Content for {title}",
+            "content": (
+                f"Content for {title}, expanded with enough surrounding "
+                "text to satisfy the fifty-character minimum content "
+                "guard enforced at every KB write boundary."
+            ),
             "domain": domain,
             "tags": tags or ["IVF"],
             "source_type": source_type,

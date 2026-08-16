@@ -2,11 +2,21 @@
 # renders via column.md.j2 (product_type derivation, G15 premium row).
 # LLM-required (same BYOK obligation as output-ebook): without
 # AUTOINFO_LLM_API_KEY this scenario reports unconfigured, never skipped.
+#
+# Issue #280: domain-matrix parameterization — matrix_domains runs this
+# scenario once per member demo domain, substituting {{domain}} into the
+# mcp step arguments.  requires_domain is omitted by design — the runner
+# unions requires_domain + matrix_domains for the availability gate, and
+# the domain-coverage scanner treats matrix scenarios as domain-agnostic
+# declarations.
 name: output-column
 description: "B24 — generate_report with report_type column (markdown)"
 category: output
 requires_env: ["AUTOINFO_LLM_API_KEY"]
-requires_domain: ["medical-research"]
+matrix_domains:
+  - legal-compliance
+  - general-news
+  - gaming
 collect_artifacts:
   - "outputs/**/*.md"
   - "outputs/**/*.json"
@@ -16,7 +26,7 @@ steps:
   - name: "generate_report column type markdown"
     tool: generate_report
     arguments:
-      domain: medical-research
+      domain: "{{domain}}"
       format: markdown
       period: monthly
       report_type: column
@@ -27,7 +37,7 @@ steps:
   - name: "generate_report column type weekly markdown"
     tool: generate_report
     arguments:
-      domain: medical-research
+      domain: "{{domain}}"
       format: markdown
       period: weekly
       report_type: column

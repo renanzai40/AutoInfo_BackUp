@@ -4,11 +4,20 @@
 # format="epub" requires the [ebook] extra (ebooklib); format="audiobook"
 # renders per-chapter TTS via the same BYOK key.  export_kb epub/mobi is
 # covered in kb-import-export.yaml (epub) — mobi needs calibre, omitted.
+#
+# Issue #280: domain-matrix parameterization — matrix_domains runs this
+# scenario once per member demo domain, substituting {{domain}} into the
+# mcp step arguments.  requires_domain is omitted by design — the runner
+# unions requires_domain + matrix_domains for the availability gate, and
+# the domain-coverage scanner treats matrix scenarios as domain-agnostic
+# declarations.
 name: output-ebook
 description: "B23 — digest/report EPUB and audiobook output formats"
 category: output
 requires_env: ["AUTOINFO_LLM_API_KEY"]
-requires_domain: ["medical-research"]
+matrix_domains:
+  - general-news
+  - online-education
 # generate_report industry-type epub/audiobook (LLM synthesis + per-chapter
 # TTS render) exceeds the 180s default per-step timeout; raise the cap like
 # output-premium-products (900s) and output-video (1200s) (#255).
@@ -22,7 +31,7 @@ steps:
   - name: "generate_digest epub format"
     tool: generate_digest
     arguments:
-      domain: medical-research
+      domain: "{{domain}}"
       period: daily
       format: epub
       persist: true
@@ -32,7 +41,7 @@ steps:
   - name: "generate_digest audiobook format"
     tool: generate_digest
     arguments:
-      domain: medical-research
+      domain: "{{domain}}"
       period: daily
       format: audiobook
       persist: true
@@ -42,7 +51,7 @@ steps:
   - name: "generate_report industry type epub"
     tool: generate_report
     arguments:
-      domain: medical-research
+      domain: "{{domain}}"
       format: epub
       period: monthly
       report_type: industry
@@ -53,7 +62,7 @@ steps:
   - name: "generate_report industry type audiobook"
     tool: generate_report
     arguments:
-      domain: medical-research
+      domain: "{{domain}}"
       format: audiobook
       period: monthly
       report_type: industry

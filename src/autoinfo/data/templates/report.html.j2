@@ -234,7 +234,7 @@
     <div class="section-content">
       <ul class="key-findings">
         {% for finding in key_findings %}
-        <li>{{ finding }}</li>
+        <li>{{ finding.text if finding is mapping else finding }}{% if finding is mapping and finding.source_url %} (Source: {{ finding.source_url }}){% endif %}</li>
         {% endfor %}
       </ul>
     </div>

@@ -1,0 +1,166 @@
+# Per-domain scenario coverage matrix (issue #281) — one discovery step pair
+# per demo domain that previously had ZERO scenario coverage: get_domain_schema
+# + list_output_templates. Structural discovery only: no LLM key, no network.
+# The 8 task-listed zero-coverage domains come first; ai-commercial is added
+# because the coverage scanner reads requires_domain + step arguments.domain
+# (its only prior mention lived inside a CLI command string, invisible to the
+# scanner) — without it the 13-demo-domain coverage contract stays at 12/13.
+name: domain-matrix
+description: "Domain coverage matrix: get_domain_schema + list_output_templates for all zero-coverage demo domains"
+category: discovery
+requires_env: []
+requires_domain:
+  - language-learning
+  - online-video
+  - financial-news
+  - online-education
+  - legal-compliance
+  - gaming
+  - b2b
+  - retail
+  - ai-commercial
+timeout: 60
+steps:
+  - name: "get_domain_schema for language-learning"
+    tool: get_domain_schema
+    kind: mcp
+    arguments:
+      domain: language-learning
+    expect:
+      success: true
+
+  - name: "list_output_templates for language-learning"
+    tool: list_output_templates
+    kind: mcp
+    arguments:
+      domain: language-learning
+    expect:
+      success: true
+
+  - name: "get_domain_schema for online-video"
+    tool: get_domain_schema
+    kind: mcp
+    arguments:
+      domain: online-video
+    expect:
+      success: true
+
+  - name: "list_output_templates for online-video"
+    tool: list_output_templates
+    kind: mcp
+    arguments:
+      domain: online-video
+    expect:
+      success: true
+
+  - name: "get_domain_schema for financial-news"
+    tool: get_domain_schema
+    kind: mcp
+    arguments:
+      domain: financial-news
+    expect:
+      success: true
+
+  - name: "list_output_templates for financial-news"
+    tool: list_output_templates
+    kind: mcp
+    arguments:
+      domain: financial-news
+    expect:
+      success: true
+
+  - name: "get_domain_schema for online-education"
+    tool: get_domain_schema
+    kind: mcp
+    arguments:
+      domain: online-education
+    expect:
+      success: true
+
+  - name: "list_output_templates for online-education"
+    tool: list_output_templates
+    kind: mcp
+    arguments:
+      domain: online-education
+    expect:
+      success: true
+
+  - name: "get_domain_schema for legal-compliance"
+    tool: get_domain_schema
+    kind: mcp
+    arguments:
+      domain: legal-compliance
+    expect:
+      success: true
+
+  - name: "list_output_templates for legal-compliance"
+    tool: list_output_templates
+    kind: mcp
+    arguments:
+      domain: legal-compliance
+    expect:
+      success: true
+
+  - name: "get_domain_schema for gaming"
+    tool: get_domain_schema
+    kind: mcp
+    arguments:
+      domain: gaming
+    expect:
+      success: true
+
+  - name: "list_output_templates for gaming"
+    tool: list_output_templates
+    kind: mcp
+    arguments:
+      domain: gaming
+    expect:
+      success: true
+
+  - name: "get_domain_schema for b2b"
+    tool: get_domain_schema
+    kind: mcp
+    arguments:
+      domain: b2b
+    expect:
+      success: true
+
+  - name: "list_output_templates for b2b"
+    tool: list_output_templates
+    kind: mcp
+    arguments:
+      domain: b2b
+    expect:
+      success: true
+
+  - name: "get_domain_schema for retail"
+    tool: get_domain_schema
+    kind: mcp
+    arguments:
+      domain: retail
+    expect:
+      success: true
+
+  - name: "list_output_templates for retail"
+    tool: list_output_templates
+    kind: mcp
+    arguments:
+      domain: retail
+    expect:
+      success: true
+
+  - name: "get_domain_schema for ai-commercial"
+    tool: get_domain_schema
+    kind: mcp
+    arguments:
+      domain: ai-commercial
+    expect:
+      success: true
+
+  - name: "list_output_templates for ai-commercial"
+    tool: list_output_templates
+    kind: mcp
+    arguments:
+      domain: ai-commercial
+    expect:
+      success: true

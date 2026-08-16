@@ -1,9 +1,10 @@
+# mypy: ignore-errors
 """Scenario outcome-audit tests (D-工-5 evidence, best-practice-review).
 
 Locks the behavior of ``scripts/scenario_outcome_audit.py`` so the D-工-5
 evidence stays deterministic:
 
-1. All 68 scenarios (62 functional + 6 regression) are parsed with 326
+1. All 70 scenarios (64 functional + 6 regression) are parsed with 347
    steps.
 2. **Outcome grading** — >= 95% of steps assert an explicit ``success``
    key (grade the outcome envelope, not the path).
@@ -20,6 +21,7 @@ from __future__ import annotations
 
 import importlib.util
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -43,13 +45,13 @@ def result(outcome_audit):
     return outcome_audit.audit_all()
 
 
-def test_all_68_scenarios_parsed(result):
-    assert result["summary"]["total_scenarios"] == 68
+def test_all_70_scenarios_parsed(result: dict[str, Any]) -> None:
+    assert result["summary"]["total_scenarios"] == 70
     assert result["summary"]["regression_scenarios"] == 6
 
 
 def test_total_steps(result):
-    assert result["summary"]["total_steps"] == 326
+    assert result["summary"]["total_steps"] == 347
 
 
 def test_outcome_grading_ratio_high(result):

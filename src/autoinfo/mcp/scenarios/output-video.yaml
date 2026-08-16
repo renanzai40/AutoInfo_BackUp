@@ -9,6 +9,13 @@
 #
 # The video pipeline mirrors the E8 matrix report×video implemented cell:
 # TTS narration -> HyperFrames project scaffold -> bun render -> MP4.
+#
+# Issue #280: domain-matrix parameterization — matrix_domains runs this
+# scenario once per member demo domain, substituting {{domain}} into the
+# mcp step arguments.  requires_domain is omitted by design — the runner
+# unions requires_domain + matrix_domains for the availability gate, and
+# the domain-coverage scanner treats matrix scenarios as domain-agnostic
+# declarations.
 name: output-video
 description: "V1 — report format='video' via HyperFrames (HTML+GSAP -> MP4)"
 # Issue #237: HyperFrames rendering (headless Chrome + GSAP -> MP4) on this
@@ -18,7 +25,9 @@ description: "V1 — report format='video' via HyperFrames (HTML+GSAP -> MP4)"
 timeout: 1200
 category: output
 requires_env: ["AUTOINFO_LLM_API_KEY"]
-requires_domain: ["medical-research"]
+matrix_domains:
+  - online-video
+  - gaming
 collect_artifacts:
   - "outputs/**/*.mp4"
   - "outputs/**/*.json"
@@ -26,7 +35,7 @@ steps:
   - name: "generate_report video format (HyperFrames MP4)"
     tool: generate_report
     arguments:
-      domain: medical-research
+      domain: "{{domain}}"
       period: weekly
       format: video
       persist: true

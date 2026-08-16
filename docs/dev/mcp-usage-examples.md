@@ -264,7 +264,7 @@ targeting.
 ## Run MCP-native validation
 
 ```
-1. list_validation_scenarios() → returns available scenario names (68 built-in across all MCP categories, CLI, and REST API surfaces)
+1. list_validation_scenarios() → returns available scenario names (70 built-in across all MCP categories, CLI, and REST API surfaces)
 2. run_validation_scenario(scenario="system-health") → executes steps in-process (real tool calls, real subprocesses for CLI steps, real HTTP requests for REST steps), returns {success, data: {scenario, status: passed|failed|unconfigured, summary, steps}}
 3. Scenarios with requires_env (e.g. llm-gated needs AUTOINFO_LLM_API_KEY) return status "unconfigured" when env vars are missing — never silently skipped, never fake-passed. Director User must provide BYOK keys during onboarding.
 4. Steps may use llm_assert — a real LLM call judges the tool output against a natural-language assertion (semantic validation, not just structure checks)

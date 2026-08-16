@@ -1,11 +1,24 @@
 # Output generation — digest, report, and cross-domain report tools.
 # All three are LLM-required.  Without AUTOINFO_LLM_API_KEY the
 # scenario reports unconfigured (BYOK obligation) — never skipped.
+#
+# Issue #280: domain-matrix parameterization — matrix_domains runs this
+# scenario once per member demo domain, substituting {{domain}} into the
+# mcp step arguments (generate_digest / generate_report).  The
+# generate_cross_domain_report step keeps its explicit domain list: a
+# cross-domain tool has no single per-matrix domain.  requires_domain is
+# omitted by design — the runner unions requires_domain + matrix_domains
+# for the availability gate, and the domain-coverage scanner treats
+# matrix scenarios as domain-agnostic declarations.
 name: output-digest-report
 description: "Digest, report, and cross-domain report generation"
 category: output
 requires_env: ["AUTOINFO_LLM_API_KEY"]
-requires_domain: ["medical-research"]
+matrix_domains:
+  - medical-research
+  - ai-commercial
+  - financial-intelligence
+  - tech-ai-developer
 collect_artifacts:
   - "outputs/**/*.md"
   - "outputs/**/*.json"
@@ -15,7 +28,7 @@ steps:
   - name: "generate_digest json format"
     tool: generate_digest
     arguments:
-      domain: medical-research
+      domain: "{{domain}}"
       period: daily
       format: json
       persist: true
@@ -25,7 +38,7 @@ steps:
   - name: "generate_report industry type json"
     tool: generate_report
     arguments:
-      domain: medical-research
+      domain: "{{domain}}"
       format: json
       period: monthly
       report_type: industry

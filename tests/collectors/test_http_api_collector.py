@@ -1,3 +1,4 @@
+# mypy: ignore-errors
 """Tests for the generic HTTP JSON API collector (:class:`HttpApiHandler`).
 
 Verifies:
@@ -662,6 +663,165 @@ class TestHttpApiDispatch:
             config = SourceConfig(name=name, type="api", url=f"https://api.example.com/{name}")
             handler = _build_handler(config)
             assert isinstance(handler, HttpApiHandler), f"{name} should dispatch to HttpApiHandler"
+
+
+# ---------------------------------------------------------------------------
+# Tests: feed-style API sources fetch without a query (AC4 collection gaps)
+# ---------------------------------------------------------------------------
+# Feed-style sources (fixed-URL JSON feeds like apple-music, mastodon,
+# zhihu-daily, coursera, World Bank) are the API equivalent of an RSS feed:
+# they carry no `query_param` setting and must fetch their configured URL
+# as-is.  Query-driven sources (CrossRef, GitHub Trending, bluesky) declare
+# `query_param` and need a topic.  The collect.py #182 guard must only skip
+# the former — never the latter.
+
+
+class TestFeedStyleApiSources:
+    """Feed-style API sources fetch their fixed URL without a query."""
+
+    @patch("autoinfo.collectors.http_api.httpx.get")
+    def test_fetch_without_query_does_not_inject_q_param(
+        self, mock_get: MagicMock
+    ) -> None:
+        """A feed-style source with no query_param must NOT get ?q= appended.
+
+        Regression for the apple-music 404: the old default injected
+        ``query_param="q"`` into a fixed-URL feed, breaking the endpoint.
+        """
+        config = SourceConfig(
+            name="apple-music",
+            type="api",
+            url="https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json",  # noqa: E501
+            settings={
+                "json_path": "$.feed.results",
+                "field_mapping": {
+                    "id": "id",
+                    "title": "artistName + name",
+                    "source_url": "url",
+                    "content": "content",
+                },
+            },
+        )
+        mock_response = MagicMock(spec=httpx.Response)
+        mock_response.json.return_value = {
+            "feed": {
+                "results": [
+                    {
+                        "id": "1",
+                        "artistName": "A",
+                        "name": "Song",
+                        "url": "https://music.apple.com/song/1",
+                        "content": "lyrics",
+                    }
+                ]
+            }
+        }
+        mock_response.raise_for_status.return_value = None
+        mock_get.return_value = mock_response
+
+        handler = HttpApiHandler(config)
+        items = handler.fetch(config.url, query="", limit=5)
+
+        assert len(items) == 1
+        call_kwargs = mock_get.call_args.kwargs
+        assert "q" not in call_kwargs.get("params", {}), (
+            "Feed-style source must not receive ?q= — the endpoint 404s on "
+            "unexpected query params"
+        )
+
+    @patch("autoinfo.collectors.http_api.httpx.get")
+    def test_query_injected_only_into_configured_query_param(
+        self, mock_get: MagicMock
+    ) -> None:
+        """A query is injected ONLY into an explicitly configured query_param.
+
+        Existing behaviour (CrossRef ``query_param: query``, GitHub Trending
+        ``query_param: q``) is preserved; no default param name is invented.
+        """
+        config = SourceConfig(
+            name="GitHub Trending",
+            type="api",
+            url="https://api.github.com/search/repositories",
+            settings={
+                "query_param": "q",
+                "json_path": "items",
+                "field_mapping": {
+                    "id": "id",
+                    "title": "full_name",
+                    "content": "description",
+                    "source_url": "html_url",
+                },
+            },
+        )
+        mock_response = MagicMock(spec=httpx.Response)
+        mock_response.json.return_value = {
+            "items": [{"id": 1, "full_name": "octo/repo", "description": "d"}]
+        }
+        mock_response.raise_for_status.return_value = None
+        mock_get.return_value = mock_response
+
+        handler = HttpApiHandler(config)
+        items = handler.fetch(config.url, query="AI", limit=5)
+
+        assert len(items) == 1
+        call_kwargs = mock_get.call_args.kwargs
+        assert call_kwargs["params"]["q"] == "AI"
+
+    @patch("autoinfo.collectors.http_api.httpx.get")
+    def test_feed_style_url_embedded_query_preserved(
+        self, mock_get: MagicMock
+    ) -> None:
+        """A feed-style source whose URL embeds query params (Stack Exchange)
+        must fetch as-is — httpx must NOT receive an empty ``params`` dict.
+
+        Regression for the Stack Exchange 400: passing ``params={}`` to
+        httpx.get strips the URL's own query string
+        (``?order=desc&...&site=stackoverflow``), yielding a bare endpoint.
+        When the built params dict is empty, no ``params`` kwarg may be
+        passed at all.
+        """
+        config = SourceConfig(
+            name="Stack Exchange",
+            type="api",
+            url="https://api.stackexchange.com/2.3/questions?order=desc&sort=activity&site=stackoverflow&pagesize=10",  # noqa: E501
+            settings={
+                "json_path": "items",
+                "field_mapping": {
+                    "id": "question_id",
+                    "title": "title",
+                    "content": "body",
+                    "source_url": "link",
+                },
+            },
+        )
+        mock_response = MagicMock(spec=httpx.Response)
+        mock_response.json.return_value = {
+            "items": [
+                {
+                    "question_id": 42,
+                    "title": "Q",
+                    "body": "body",
+                    "link": "https://stackoverflow.com/q/42",
+                }
+            ]
+        }
+        mock_response.raise_for_status.return_value = None
+        mock_get.return_value = mock_response
+
+        handler = HttpApiHandler(config)
+        items = handler.fetch(config.url, query="", limit=5)
+
+        assert len(items) == 1
+        call_kwargs = mock_get.call_args.kwargs
+        # The URL itself must be passed untouched (query string intact)…
+        url_arg = mock_get.call_args.args[0]
+        assert "site=stackoverflow" in url_arg
+        # …and an empty params dict must never reach httpx (it would strip
+        # the URL's own query string → 400 on the real endpoint).
+        assert "params" not in call_kwargs, (
+            "Empty params dict must not be passed to httpx.get — it strips "
+            "URL-embedded query params (Stack Exchange 400 regression)"
+        )
 
 
 # ---------------------------------------------------------------------------

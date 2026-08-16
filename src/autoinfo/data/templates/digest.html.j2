@@ -215,7 +215,7 @@
       <div class="finding-card">
         <span class="rank">#{{ loop.index }}</span>
         <h3>{{ finding.title }}</h3>
-        <p>{{ finding.text }}</p>
+        <p>{{ finding.text }}{% if finding.source_url %} (Source: {{ finding.source_url }}){% endif %}</p>
       </div>
       {% endfor %}
     </div>

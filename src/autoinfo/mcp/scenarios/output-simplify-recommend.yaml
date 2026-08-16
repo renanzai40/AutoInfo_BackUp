@@ -5,11 +5,21 @@
 # simplify_content returns success_response(...) → {success, data: {simplified, ...}}
 # recommend_content returns flat dict → call_tool wraps with success_response → {success, data: {items, count, ...}}
 # Both support data_has assertions on env["data"].
+#
+# Issue #280: domain-matrix parameterization — matrix_domains runs this
+# scenario once per member demo domain, substituting {{domain}} into the
+# mcp step arguments (recommend_content; simplify_content is domain-less
+# and unchanged).  requires_domain is omitted by design — the runner
+# unions requires_domain + matrix_domains for the availability gate, and
+# the domain-coverage scanner treats matrix scenarios as domain-agnostic
+# declarations.
 name: output-simplify-recommend
 description: "Content simplification and recommendation"
 category: output
 requires_env: ["AUTOINFO_LLM_API_KEY"]
-requires_domain: ["medical-research"]
+matrix_domains:
+  - b2b
+  - retail
 steps:
   - name: "simplify_content B1 level english"
     tool: simplify_content
@@ -25,12 +35,12 @@ steps:
         - simplified_level
         - verified
 
-  - name: "recommend_content for medical domain"
+  - name: "recommend_content per matrix domain"
     tool: recommend_content
     arguments:
       user_id: test_user
       query: medical
-      domain: medical-research
+      domain: "{{domain}}"
       limit: 5
     expect:
       success: true

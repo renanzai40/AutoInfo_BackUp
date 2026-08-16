@@ -5,11 +5,14 @@
 # mirror the demo sources.yaml contract: Finnhub's key travels in the
 # `token` query param via ${FINNHUB_API_KEY} env-refs (resolved at config
 # load, not at add time). Structural only: no network calls.
+# requires_domain declares BOTH medical-research (historical dependency)
+# and financial-intelligence, which every step targets (issue #281: the
+# step domain must be declared in the scenario's requires_domain).
 name: sources-a6-keyed
 description: "A6 — FRED + Finnhub keyed source lifecycle (financial-intelligence)"
 category: source
 requires_env: ["FRED_API_KEY", "FINNHUB_API_KEY"]
-requires_domain: ["medical-research"]
+requires_domain: ["medical-research", "financial-intelligence"]
 steps:
   - name: "add_source FRED keyed api source"
     tool: add_source

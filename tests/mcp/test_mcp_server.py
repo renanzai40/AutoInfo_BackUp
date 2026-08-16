@@ -1,3 +1,4 @@
+# mypy: ignore-errors
 """Tests for the AutoInfo MCP server.
 
 Covers:
@@ -28,6 +29,7 @@ from autoinfo.mcp.server import (
     _handle_add_source,
     _handle_add_sources,
     _handle_collect_sources,
+    _handle_create_kb_entry,
     _handle_deactivate_domain,
     _handle_diagnose_system,
     _handle_generate_presentation,
@@ -1330,3 +1332,51 @@ class TestCollectSourcesOffload:
         props = by_name["collect_sources"].inputSchema["properties"]
         assert "limit" in props
         assert props["limit"]["type"] == "integer"
+
+
+# ======================================================================
+# create_kb_entry (issue #279 — min content length guard)
+# ======================================================================
+
+
+class TestCreateKBEntryContentGuard:
+    """_handle_create_kb_entry rejects content shorter than 50 chars.
+
+    The KBStore is never touched for short content — the handler rejects
+    up front with the canonical error envelope, matching the guard that
+    process/import paths already enforce (MIN_KB_CONTENT_CHARS).
+    """
+
+    def test_short_content_returns_validation_error_envelope(self) -> None:
+        """10-char content returns success=False + VALIDATION_ERROR."""
+        result = _handle_create_kb_entry(
+            domain="medical-research",
+            title="t",
+            content="x" * 10,
+            source_url="https://e",
+            source_type="web",
+        )
+
+        assert result["success"] is False
+        assert result["error"]["code"] == "ValidationError"
+        assert result["error"]["message"] == (
+            "content must be at least 50 characters"
+        )
+        assert result["error"]["actionable"] is True
+
+    def test_whitespace_only_content_rejected(self) -> None:
+        """Whitespace-only content (stripped length 0) is rejected."""
+        result = _handle_create_kb_entry(
+            domain="medical-research",
+            title="t",
+            content="   \n  ",
+            source_url="https://e",
+            source_type="web",
+        )
+
+        assert result["success"] is False
+        assert result["error"]["code"] == "ValidationError"
+        assert result["error"]["message"] == (
+            "content must be at least 50 characters"
+        )
+

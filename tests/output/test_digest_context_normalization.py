@@ -1,3 +1,4 @@
+# mypy: ignore-errors
 """Tests for digest-path context normalization (output-quality-mega, todo 5).
 
 Covers the dual-context contract: when ``generate_digest`` is called with a
@@ -6,8 +7,10 @@ Covers the dual-context contract: when ``generate_digest`` is called with a
 report path's ``_report_data_to_dict`` output:
 
 - ``executive_summary`` (str, ``""`` when absent)
-- ``key_findings`` (``list[str]`` — ``{topic, detail}`` dicts converted to
-  ``"Topic: detail"``, partial items kept, empty items dropped)
+- ``key_findings`` (``list[dict]`` — ``{topic, detail}`` dicts converted to
+  ``{"text": "Topic: detail", "source_url": ...}`` objects; partial items
+  kept, empty items dropped; ``source_url`` back-filled from the entries
+  on an unambiguous title match — issue #279)
 - ``recommendations`` (``list[str]``)
 - ``references`` (``list[dict]`` of exactly 5 keys derived from entries:
   ``title``, ``source_url``, ``source_type``, ``source_platform``, ``domain``)
@@ -179,10 +182,19 @@ class TestNormalizeDigestProductContext:
         """executive_summary / key_findings / recommendations move to the top."""
         flat = _normalize_digest_product_context(self._context(), "medical-research")
         assert flat["executive_summary"] == _SAMPLE_LLM_SYNTHESIS["executive_summary"]
+        # {topic, detail} -> {text, source_url} objects; source_url
+        # back-filled from the entries on unambiguous title match (#279).
         assert flat["key_findings"] == [
-            "Time-lapse imaging: Significant improvement in live birth rates "
-            "(48.2% vs 39.5%).",
-            "AI embryo selection: Promising but lacks prospective clinical validation.",
+            {
+                "text": "Time-lapse imaging: Significant improvement in live "
+                        "birth rates (48.2% vs 39.5%).",
+                "source_url": "https://example.com/ivf-1",
+            },
+            {
+                "text": "AI embryo selection: Promising but lacks prospective "
+                        "clinical validation.",
+                "source_url": "https://example.com/ivf-2",
+            },
         ]
         assert flat["recommendations"] == _SAMPLE_LLM_SYNTHESIS["recommendations"]
 
@@ -211,9 +223,9 @@ class TestNormalizeDigestProductContext:
             self._context(synthesis), "medical-research"
         )
         assert flat["key_findings"] == [
-            "Full: Both parts",
-            "Topic only",
-            "Detail only",
+            {"text": "Full: Both parts"},
+            {"text": "Topic only"},
+            {"text": "Detail only"},
         ]
 
     def test_missing_synthesis_returns_empty_flat_values(self) -> None:

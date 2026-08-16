@@ -301,9 +301,9 @@ the scenario library. It also prints a `Regression scenarios: N (issues: ...)` m
 every scenario in `scenarios/regression/` must carry `regression: true` and a
 `regression_issue`, and the audit lists any that don't.
 
-## 1.8 Scenario inventory (as of 2026-08-11)
+## 1.8 Scenario inventory (as of 2026-08-16)
 
-68 scenario files in `src/autoinfo/mcp/scenarios/` (62 functional flat in `scenarios/`
+70 scenario files in `src/autoinfo/mcp/scenarios/` (64 functional flat in `scenarios/`
 + 6 regression in `scenarios/regression/`):
 
 - **System/Discovery**: system-health, discovery, meta-validation
@@ -313,7 +313,8 @@ every scenario in `scenarios/regression/` must carry `regression: true` and a
 - **Collection/Processing/Cron**: collection, collectors-e2e, processing,
   cron-schedules, collection-monitor, collect-failure-recovery, llm-failure-recovery
 - **KB**: kb-access, kb-draft, kb-versioning, kb-graph, kb-import-export,
-  kb-lifecycle, kb-extraction, kb-promote (E8: Draft→Wiki promotion end to end)
+  kb-lifecycle, kb-extraction, kb-promote (E8: Draft→Wiki promotion end to end),
+  kb-tier-matrix (AC4, 2026-08-16: 13 demo domains × 3 KB tiers matrix coverage)
 - **Output**: output-digest-report, output-ebook, output-tutorial-presentation,
   output-simplify-recommend, output-discovery, output-column, output-agent-interaction,
   output-video (2026-08-13, LLM-gated: report video format rendered end to end)
@@ -625,7 +626,7 @@ Rules inside the loop:
 
 ### 2.6.3 Final sweep
 
-1. Re-run all 68 scenarios with keys configured — all must report `passed` (expect 0
+1. Re-run all 70 scenarios with keys configured — all must report `passed` (expect 0
    failed, 0 unconfigured).
 2. Run `python3 scripts/coverage_audit.py`; report **145/145 covered, zero MISSING**.
 3. Cleanup sweep: re-run every scenario's `cleanup_steps` result (they run
@@ -709,7 +710,7 @@ Before handing off to the director, verify all of the following:
 - [ ] RED was recorded before GREEN for every row.
 - [ ] Every GREEN has a real artifact on disk / DB / log / sink, and that artifact was shown to the director (pasted or absolute path).
 - [ ] No `unconfigured` row was graded as a pass; each missing key was surfaced as a BYOK obligation.
-- [ ] All 68 scenarios re-run GREEN with keys configured (0 failed, 0 unconfigured); `python3 scripts/coverage_audit.py` reports 145/145 with zero MISSING.
+- [ ] All 70 scenarios re-run GREEN with keys configured (0 failed, 0 unconfigured); `python3 scripts/coverage_audit.py` reports 145/145 with zero MISSING.
 - [ ] All 8 REST endpoints exercised via `curl` against `uvicorn autoinfo.api.server:app --port 8741`.
 - [ ] All mutating calls have paired cleanup, verified by `list_*` and `git status --porcelain`.
 - [ ] Runtime artifacts (`collections/`, `knowledge/`, `outputs/`, `exports/`, `autoinfo.db`, `.autoinfo/`, `logs/`, `.omo/`) are NOT committed and the working tree is clean.
