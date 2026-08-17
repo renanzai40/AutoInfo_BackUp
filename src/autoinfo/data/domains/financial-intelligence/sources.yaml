@@ -15,7 +15,7 @@ sources:
 
   - name: FRED
     type: api
-    url: https://api.stlouisfed.org/fred/
+    url: https://api.stlouisfed.org/fred/series/observations
     quality_tier: 1
     frequency: daily
     access: api_key
@@ -93,6 +93,42 @@ sources:
     requires_key: true
     rate_limit: 5  # requests per minute (free tier)
     field_mapping: {id: dataset_code, title: name, content: description, source_url: ''}
+
+  # Keyless finance news RSS feeds (added 2026-08-17 for #288) — keep the
+  # flagship domain producing without third-party API keys. URLs verified live
+  # (HTTP 200 with entries): CNBC 30 items, TheStreet 49, MarketWatch DJ 20.
+  - name: CNBC Investing
+    type: rss
+    url: https://www.cnbc.com/id/100003114/device/rss/rss.html
+    quality_tier: 1
+    enabled: true
+    tos_classification: open
+    fetch_depth: abstract
+    frequency: hourly
+    access: free
+    rate_limit: 30  # requests per minute
+
+  - name: TheStreet
+    type: rss
+    url: https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml
+    quality_tier: 1
+    enabled: true
+    tos_classification: open
+    fetch_depth: abstract
+    frequency: hourly
+    access: free
+    rate_limit: 30  # requests per minute
+
+  - name: MarketWatch Markets (DJ)
+    type: rss
+    url: https://feeds.a.dj.com/rss/RSSMarketsMain.xml
+    quality_tier: 1
+    enabled: true
+    tos_classification: open
+    fetch_depth: abstract
+    frequency: hourly
+    access: free
+    rate_limit: 30  # requests per minute
 
 topics:
   - name: "Market Trends"

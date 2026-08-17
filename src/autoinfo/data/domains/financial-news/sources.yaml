@@ -31,15 +31,6 @@ sources:
     rate_limit: 10
     fetch_depth: abstract
 
-  - name: yahoo-finance
-    type: rss
-    url: https://finance.yahoo.com/news/rssindex
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-
   - name: seeking-alpha
     type: rss
     url: https://seekingalpha.com/feed.xml

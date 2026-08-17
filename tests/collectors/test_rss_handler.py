@@ -7,6 +7,8 @@ malformed feeds, and invalid URL handling.
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
+from unittest.mock import patch
 
 import pytest
 import vcr
@@ -126,6 +128,35 @@ class TestAtomParsing:
 
 class TestErrorHandling:
     """Verify the handler raises explicit SourceFailure under error conditions."""
+
+    def test_fetch_sends_identifying_user_agent(self, handler: RSSHandler) -> None:
+        """Remote fetches carry a named user agent, not bare python-httpx.
+
+        Regression #288: CNBC (and similar news sites) UA-block bare
+        ``python-httpx/*`` while accepting a named agent string — the CNBC
+        Investing feed was 403 without it.
+        """
+        from autoinfo.collectors.rss import _RSS_USER_AGENT
+
+        xml = b"""<?xml version="1.0"?>
+        <rss version="2.0"><channel><title>t</title>
+        <item><title>hello world</title><link>https://example.com/1</link>
+        <description>a real article body</description></item>
+        </channel></rss>"""
+
+        class _Resp:
+            content = xml
+
+            def raise_for_status(self) -> None:
+                pass
+
+        with patch("httpx.get", return_value=_Resp()) as mock_get:
+            items = handler.fetch("https://example.com/feed.xml")
+            captured: dict[str, Any] = dict(mock_get.call_args.kwargs)
+
+        assert len(items) == 1
+        assert captured["headers"]["User-Agent"] == _RSS_USER_AGENT
+        assert "python-httpx" not in captured["headers"]["User-Agent"]
 
     def test_invalid_url_raises_source_failure(self, handler: RSSHandler) -> None:
         """An unreachable URL raises SourceFailure (not a silent empty list)."""

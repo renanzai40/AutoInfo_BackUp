@@ -23,6 +23,11 @@ from autoinfo.models import Item
 # timeout first so a hung feed cannot stall the whole collect run.
 _RSS_FETCH_TIMEOUT = 30  # seconds
 
+# Identifying user agent — sent both on the httpx fetch and to feedparser.
+# Bare ``python-httpx/*`` UAs are UA-blocked by some feeds (e.g. CNBC)
+# while a named agent string is accepted (#288).
+_RSS_USER_AGENT = "AutoInfo/1.8 (autoinfo@example.com)"
+
 logger = logging.getLogger(__name__)
 
 FULLTEXT_MAX_CHARS = 8000
@@ -85,11 +90,16 @@ class RSSHandler(BaseHandler):
             )
             if os.path.isfile(local_path):
                 with open(local_path, "rb") as fh:
-                    parsed = feedparser.parse(fh.read(), agent="AutoInfo/1.8 (autoinfo@example.com)")
+                    parsed = feedparser.parse(fh.read(), agent=_RSS_USER_AGENT)
             else:
-                resp = httpx.get(url, timeout=_RSS_FETCH_TIMEOUT, follow_redirects=True)
+                resp = httpx.get(
+                    url,
+                    timeout=_RSS_FETCH_TIMEOUT,
+                    follow_redirects=True,
+                    headers={"User-Agent": _RSS_USER_AGENT},
+                )
                 resp.raise_for_status()
-                parsed = feedparser.parse(resp.content, agent="AutoInfo/1.8 (autoinfo@example.com)")
+                parsed = feedparser.parse(resp.content, agent=_RSS_USER_AGENT)
         except httpx.TimeoutException as exc:
             logger.error("RSS fetch timed out for %s: %s", url, exc)
             raise SourceFailure(f"RSS fetch timed out for {url}: {exc}") from exc
@@ -227,9 +237,11 @@ def _normalise_date(date_str: str) -> str:
     # but the string form is more portable; use python-dateutil if
     # available, otherwise a simple fallback.
     try:
+        from datetime import datetime
+
         from dateutil import parser as dateutil_parser
 
-        dt = dateutil_parser.parse(date_str)
+        dt: datetime = dateutil_parser.parse(date_str)
         if dt.tzinfo is None:
             dt = dt.replace(tzinfo=timezone.utc)
         return dt.isoformat()

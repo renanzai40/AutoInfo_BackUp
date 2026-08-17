@@ -176,7 +176,7 @@ def test_spec_full_capability_dimensions_present(spec):
     """Full-capability revision (2026-08-07): source + KB-tier dimensions."""
     assert len(spec["source_platforms"]) == 29
     assert set(spec["kb_tiers"]) == {"01-Raw", "02-Draft", "03-Wiki"}
-    assert len(spec["required_sources"]) == 89
+    assert len(spec["required_sources"]) == 91
     assert len(spec["required_kb_tiers"]) == 39
     # v3 (2026-08-12): C/E dimensions added from the report demand surface.
     assert len(spec["channels"]) == 14

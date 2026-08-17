@@ -1005,6 +1005,9 @@ required_sources:
   - {domain: financial-intelligence, source: Twelve Data}
   - {domain: financial-intelligence, source: World Bank Data}
   - {domain: financial-intelligence, source: Quandl/Nasdaq Data Link}
+  - {domain: financial-intelligence, source: CNBC Investing}
+  - {domain: financial-intelligence, source: TheStreet}
+  - {domain: financial-intelligence, source: MarketWatch Markets (DJ)}
   - {domain: tech-ai-developer, source: GitHub Trending}
   - {domain: tech-ai-developer, source: HackerNews API}
   - {domain: tech-ai-developer, source: Substack RSS (tech) — Pragmatic Engineer}
@@ -1026,7 +1029,6 @@ required_sources:
   - {domain: financial-news, source: reuters-business}
   - {domain: financial-news, source: cnbc}
   - {domain: financial-news, source: ft-alphaville}
-  - {domain: financial-news, source: yahoo-finance}
   - {domain: financial-news, source: seeking-alpha}
   - {domain: financial-news, source: businesswire-technology}
   - {domain: financial-news, source: prnewswire-financial-services}

@@ -1,0 +1,43 @@
+# Regression #288: financial-intelligence under-collection — 5 of 8 sources
+# were key-gated (Alpha Vantage, FRED, Finnhub, Twelve Data, Quandl), FRED's
+# URL pointed at the API root (https://api.stlouisfed.org/fred/ → 404, correct
+# endpoint is /fred/series/observations), and no keyless news RSS existed, so
+# a bare demo collect yielded only SEC EDGAR + (pre-#286) World Bank numeric
+# rows — far below the 50-item demo-package floor.
+# Fix: FRED URL corrected to the series/observations endpoint + 3 keyless
+# finance news RSS feeds added (CNBC Investing, TheStreet, MarketWatch
+# Markets DJ) — all verified live (HTTP 200, 30/49/20 items).
+# This scenario asserts the CONFIG contract deterministically (no network, no
+# env gating): the demo YAML must keep the 3 keyless feeds and the fixed FRED
+# endpoint. A regression that drops them or reverts the FRED URL fails here.
+name: regression-financial-sources
+description: "Regression #288: financial-intelligence keyless RSS sources + fixed FRED endpoint"
+category: regression
+regression: true
+regression_issue: "#288"
+requires_env: []
+steps:
+  - name: "financial-intelligence demo config keeps keyless feeds + fixed FRED URL"
+    kind: cli
+    command: |-
+      python3 -c '
+      import yaml
+      from pathlib import Path
+      cfg = yaml.safe_load(
+          Path("src/autoinfo/data/domains/financial-intelligence/sources.yaml").read_text()
+      )
+      names = {s["name"]: s for s in cfg["sources"]}
+      for keyless in ("CNBC Investing", "TheStreet", "MarketWatch Markets (DJ)"):
+          assert keyless in names, "missing keyless feed " + keyless
+          assert names[keyless]["type"] == "rss", keyless + " must be rss"
+          assert not names[keyless].get("requires_key"), keyless + " must be keyless"
+      fred = names["FRED"]
+      assert fred["url"].endswith("/fred/series/observations"), (
+          "FRED URL reverted to root: " + fred["url"]
+      )
+      print("FINANCIAL_SOURCES_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["FINANCIAL_SOURCES_OK"]
