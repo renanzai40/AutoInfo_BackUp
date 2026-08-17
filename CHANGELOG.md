@@ -2,6 +2,27 @@
 
 All notable changes to the AutoInfo project will be documented in this file.
 
+## [1.10.0](https://github.com/1StepMore/AutoInfo/compare/v1.9.1...v1.10.0) (2026-08-17)
+
+
+### Features
+
+* **validation:** AC4 scenario-coverage matrix across all 13 demo domains + release/kb/output fixes ([#275](https://github.com/1StepMore/AutoInfo/issues/275) [#277](https://github.com/1StepMore/AutoInfo/issues/277) [#278](https://github.com/1StepMore/AutoInfo/issues/278) [#279](https://github.com/1StepMore/AutoInfo/issues/279) [#280](https://github.com/1StepMore/AutoInfo/issues/280) [#281](https://github.com/1StepMore/AutoInfo/issues/281) [#165](https://github.com/1StepMore/AutoInfo/issues/165)) ([#282](https://github.com/1StepMore/AutoInfo/issues/282)) ([e1538b8](https://github.com/1StepMore/AutoInfo/commit/e1538b8b880c215d91a482081669a5cbcd808983))
+
+
+### Bug Fixes
+
+* **collectors:** financial-intelligence keyless RSS sources + FRED URL + UA fix ([#288](https://github.com/1StepMore/AutoInfo/issues/288)) ([#289](https://github.com/1StepMore/AutoInfo/issues/289)) ([77356a8](https://github.com/1StepMore/AutoInfo/commit/77356a83431e95d376e74aaae5b3b095b3340abf))
+* **collectors:** 采集层过滤非文章型 content（纯数字/无字母）([#286](https://github.com/1StepMore/AutoInfo/issues/286)) ([#287](https://github.com/1StepMore/AutoInfo/issues/287)) ([c8df7c2](https://github.com/1StepMore/AutoInfo/commit/c8df7c2a13eed8dd279459a4809690927af0659a))
+* **promotion:** G4 config=None 加载磁盘 config ([#283](https://github.com/1StepMore/AutoInfo/issues/283)) ([#284](https://github.com/1StepMore/AutoInfo/issues/284)) ([24cf1d0](https://github.com/1StepMore/AutoInfo/commit/24cf1d0a47de3443a2d89d70d476240b90ea9920))
+* **scenario:** kb-graph fixture content 加长至 &gt;50 字符（MIN_KB_CONTENT_CHARS 约束） ([#285](https://github.com/1StepMore/AutoInfo/issues/285)) ([cc97708](https://github.com/1StepMore/AutoInfo/commit/cc977089a949ad8e626aea6f5caf3517f538e1ee))
+
+
+### Documentation
+
+* **acceptance:** first formal acceptance run report for 1.9.1 (AC1-AC9) ([#274](https://github.com/1StepMore/AutoInfo/issues/274)) ([4d56571](https://github.com/1StepMore/AutoInfo/commit/4d565710a18fea3a8660b928547c2dc07a4f285e))
+* regenerate doc inventory after acceptance-run report ([#274](https://github.com/1StepMore/AutoInfo/issues/274)) ([#276](https://github.com/1StepMore/AutoInfo/issues/276)) ([372b387](https://github.com/1StepMore/AutoInfo/commit/372b387b6db285474fba732fcbfdb96678f33dae))
+
 ## [1.9.1](https://github.com/1StepMore/AutoInfo/compare/v1.9.0...v1.9.1) (2026-08-15)
 
 
