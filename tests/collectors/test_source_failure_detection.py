@@ -346,7 +346,11 @@ class TestFeedStyleApiDispatch:
         handler = _build_handler(cfg)
         resp = httpx.Response(
             200,
-            json={"items": [{"id": 1, "full_name": "octo/repo", "description": "d"}]},
+            json={
+                "items": [
+                    {"id": 1, "full_name": "octo/repo", "description": "octo/repo description"}
+                ]
+            },
             request=httpx.Request("GET", cfg.url),
         )
         with patch("httpx.get", return_value=resp) as mock_get:

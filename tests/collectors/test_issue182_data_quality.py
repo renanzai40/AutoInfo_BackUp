@@ -2,6 +2,7 @@
 
 Covers:
 - #180: http_api field coercion (numeric payloads -> str) + empty-entry guard
+- #286: non-article content filter (pure numeric content is dropped, not kept)
 - #179: auto-discovery keyword semantic filter (_is_meaningful_keyword)
 - #177: domain relevance filter (_is_relevant_item / _domain_topic_keywords)
 """
@@ -57,15 +58,31 @@ def _make_handler() -> HttpApiHandler:
     return HttpApiHandler(cfg)
 
 
-def test_http_api_coerces_numeric_content_to_str() -> None:
-    """#180: numeric payloads must become strings, not crash downstream joins."""
+def test_http_api_discards_numeric_content() -> None:
+    """#286: bare numeric payloads are dropped (counted), not recorded."""
     handler = _make_handler()
     raw_items = [
         {"id": "NY.GDP", "title": "United States", "value": 27891000000000, "url": ""}
     ]
     items = handler._map_to_items(raw_items)
+    assert items == []
+    assert handler.dropped_empty_items == 1
+
+
+def test_http_api_keeps_numeric_content_with_word_as_str() -> None:
+    """#180: numeric payloads carrying real text become str, not crash joins."""
+    handler = _make_handler()
+    raw_items = [
+        {
+            "id": "NY.GDP",
+            "title": "United States",
+            "value": "GDP 27891000000000",
+            "url": "",
+        }
+    ]
+    items = handler._map_to_items(raw_items)
     assert len(items) == 1
-    assert items[0].content == "27891000000000"
+    assert items[0].content == "GDP 27891000000000"
     assert isinstance(items[0].content, str)
 
 

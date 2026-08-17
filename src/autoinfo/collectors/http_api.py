@@ -399,6 +399,22 @@ class HttpApiHandler(BaseHandler):
                     )
                     continue
 
+                # Issue #286: JSON APIs (e.g. World Bank) return bare
+                # numeric/symbol values ("30769700000000") as content.  Such
+                # content is not article prose and must not enter the KB —
+                # drop it on the same empty-item counting path.  MIN_KB_
+                # CONTENT_CHARS alone can't catch long concatenated numbers.
+                if content and not is_article_like_content(content):
+                    self.dropped_empty_items += 1
+                    logger.info(
+                        "Dropping non-article item %d from source '%s' "
+                        "(content contains no word-like text, "
+                        "e.g. a bare numeric value)",
+                        i,
+                        self.source_name,
+                    )
+                    continue
+
                 item = Item(
                     id=_get_field(raw, field_mapping.get("id", "")) or _make_stable_id(raw, i),
                     source_name=self.source_name,
@@ -469,6 +485,38 @@ def _coerce_str(value: Any) -> str:
     cannot raise ``TypeError`` (issue #180).
     """
     return "" if value is None else str(value)
+
+
+# Issue #286: content is article-like when it carries word-like text —
+# a run of >=3 consecutive ASCII letters (every real English word is
+# >=3 letters; 2-letter tokens like "US"/"AI" are codes, not prose), or
+# any CJK ideograph / kana / hangul (each character is itself a word in
+# Chinese/Japanese/Korean, keeping CEFR EN/ZH/JA content intact).
+_ARTICLE_LIKE_RE = re.compile(r"[a-zA-Z]{3,}|[\u3400-\u9fff\u3040-\u30ff\uac00-\ud7a3]")
+
+
+def is_article_like_content(content: str) -> bool:
+    """Return whether ``content`` looks like article prose, not raw data.
+
+    HTTP JSON APIs (e.g. World Bank) return bare numeric values
+    (``"30769700000000"``) for string-intended fields; such content is
+    not an article and must be filtered out at collection time (issue
+    #286).
+
+    Parameters
+    ----------
+    content : str
+        The item's content (already coerced to ``str``).
+
+    Returns
+    -------
+    bool
+        ``True`` if ``content`` contains at least one word-like run
+        (>=3 consecutive ASCII letters, or any CJK ideograph/kana/
+        hangul), ``False`` for pure numbers, symbols, whitespace, or
+        short code-like tokens.
+    """
+    return bool(_ARTICLE_LIKE_RE.search(content or ""))
 
 
 def _get_field(data: dict[str, Any], path: str) -> Any:

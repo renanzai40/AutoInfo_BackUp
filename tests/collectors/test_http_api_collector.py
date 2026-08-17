@@ -755,7 +755,9 @@ class TestFeedStyleApiSources:
         )
         mock_response = MagicMock(spec=httpx.Response)
         mock_response.json.return_value = {
-            "items": [{"id": 1, "full_name": "octo/repo", "description": "d"}]
+            "items": [
+                {"id": 1, "full_name": "octo/repo", "description": "octo/repo description"}
+            ]
         }
         mock_response.raise_for_status.return_value = None
         mock_get.return_value = mock_response
