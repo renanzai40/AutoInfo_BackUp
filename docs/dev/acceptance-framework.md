@@ -50,7 +50,7 @@ The user model is **not** invented by this framework; it is the ratified foundat
 | User | Definition | Interface | Role in acceptance |
 |------|-----------|-----------|--------------------|
 | **B1 End User** | The paying customer. Buys Raw and Processed data. Treated uniformly (individual, creator, publisher, enterprise, licensor, agent delegate). | Receives delivered products; intent expressed via subscription config, never ad-hoc commands | The ultimate judge of value; the lens through which every deliverable is assessed (as a human) |
-| **B2 Direct User** | The AI agent that operates the platform. Agent as user **and** agent as tester. | MCP tools (145 tools, 35 categories); CLI is fallback | Executes acceptance evidence; drafts verdicts |
+| **B2 Direct User** | The AI agent that operates the platform. Agent as user **and** agent as tester. | MCP tools (146 tools, 35 categories); CLI is fallback | Executes acceptance evidence; drafts verdicts |
 | **B3 Director User** | The human owner of the agent. Configures at deploy time, monitors at runtime, intervenes on exceptions. | Natural language with the agent | Adjudicates verdicts; performs human reading of deliverables; signs off |
 
 **Critical nuance (director decision, 2026-08-08):** the acceptance lens for deliverables is **always human-first**. Even when an agent performs a test or validation, the standard of judgment is "a human, as the end user, would find this acceptable." An agent-delegate end user (B1 subtype) does not weaken this: human judgment remains the primary view.
@@ -176,7 +176,7 @@ Two orientations, one hierarchy. The **agent track** proves the tool is operable
 
 ### Binary acceptance criteria
 
-1. **Full-surface agent operability.** An agent can exercise the entire feature surface — MCP tools (145/145), CLI groups (28/28), REST endpoints (8/8), delivery channels (13/13), collector reachability (30/30) — via real calls and record per-feature verdicts. Any surface row with neither a scenario nor a real artifact = FAIL.
+1. **Full-surface agent operability.** An agent can exercise the entire feature surface — MCP tools (146/146), CLI groups (28/28), REST endpoints (8/8), delivery channels (13/13), collector reachability (30/30) — via real calls and record per-feature verdicts. Any surface row with neither a scenario nor a real artifact = FAIL.
 2. **Self-discovering coverage.** An agent can enumerate coverage and features using only MCP tools and in-repo audit scripts, with no human help. False = FAIL.
 
 ### 3.2 Human track (deliverable acceptability) — the higher bar
@@ -446,7 +446,7 @@ Re-runnable per version, run from the project root. This catalog **replaces** th
 
 | # | Check | Command / surface | Produces | Dimension |
 |---|-------|-------------------|----------|-----------|
-| A1 | Scenario coverage audit | `python3 scripts/coverage_audit.py` | covered/missing tool list, 145/145 target | AC3-agent, AC1 |
+| A1 | Scenario coverage audit | `python3 scripts/coverage_audit.py` | covered/missing tool list, 146/146 target | AC3-agent, AC1 |
 | A2 | Scenario inventory + run | MCP `list_validation_scenarios` / `run_validation_scenario` | per-scenario status (passed/failed/unconfigured), per-step trace, root-cause report | AC1, AC3, AC7 |
 | A3 | System phase + health | MCP `diagnose_system`, `get_tool_count` | health_score + phase; live tool count | AC1 |
 | A4 | No-simulated-layer scan | grep over `src/` (excl. `tests/`) for `mock`/`fixture`/`placeholder`/`example.com`/`sk_test` | SUSPECT-table hits with dispositions | AC5, AC7 |

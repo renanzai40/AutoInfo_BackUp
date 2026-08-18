@@ -996,10 +996,12 @@ class TestInitProjectNextSteps:
 
         assert result["status"] == "dry_run"
         next_steps = result["next_steps"]
-        assert len(next_steps) > 3
+        assert len(next_steps) > 4
         assert next_steps[0].startswith("configure_llm")
-        assert next_steps[1] == "collect_sources(domain='tech-ai-developer')"
-        assert next_steps[2] == "process_collection(domain='tech-ai-developer')"
+        # index 1 is the model-pool configuration example (see
+        # TestInitProjectNextStepsPoolExample in test_init_project_pool_examples.py)
+        assert next_steps[2] == "collect_sources(domain='tech-ai-developer')"
+        assert next_steps[3] == "process_collection(domain='tech-ai-developer')"
         assert any("AUTOINFO_SPOTIFY_CLIENT_ID" in s for s in next_steps)
         assert any("AUTOINFO_SPOTIFY_CLIENT_SECRET" in s for s in next_steps)
         assert any("docs/dev/required-api-keys.md" in s for s in next_steps)
@@ -1012,9 +1014,15 @@ class TestInitProjectNextSteps:
 
         assert result["status"] == "dry_run"
         next_steps = result["next_steps"]
-        assert len(next_steps) == 3
+        assert len(next_steps) == 4
         assert next_steps == [
             "configure_llm(api_key='...', provider='...', model='...')",
+            (
+                "configure_llm(llm_fallback=[{'model': 'mimo-v2.5', "
+                "'base_url': 'https://opencode.ai/zen/go/v1'}], "
+                "llm_tasks={'extraction': {'model': 'deepseek-v4-flash'}}); "
+                "verify with test_llm_connection()"
+            ),
             "collect_sources(domain='medical-research')",
             "process_collection(domain='medical-research')",
         ]

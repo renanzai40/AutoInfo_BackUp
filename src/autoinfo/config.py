@@ -150,7 +150,7 @@ class LLMConfig:
     fallback: list[LLMConfig] = field(default_factory=list)
     tasks: dict[str, LLMTaskConfig] = field(default_factory=dict)
 
-    def resolve_model(self) -> str:
+    def resolve_model(self, default_provider: str | None = None) -> str:
         """Return the fully-qualified model string for LiteLLM.
 
         ``model`` may already carry a provider prefix (e.g.
@@ -158,11 +158,18 @@ class LLMConfig:
         ``gpt-4``).  When bare, the provider is prepended.  This avoids
         double-prefixing (``openai/openai/...``) when callers configure a
         prefixed model while also passing ``provider``.
+
+        *default_provider* supplies the provider prefix when ``self.provider``
+        is empty — used by callers that inherit a provider from elsewhere
+        (e.g. an empty-provider fallback entry inheriting the primary
+        provider).  When omitted the historical ``'openrouter'`` fallback is
+        kept, so the no-argument call is fully backward compatible.
         """
         model = self.model or ""
         if "/" in model or not model:
             return model
-        return f"{self.provider or 'openrouter'}/{model}"
+        provider = self.provider or default_provider or "openrouter"
+        return f"{provider}/{model}"
 
 
 @dataclass
@@ -233,7 +240,7 @@ class DomainConfig:
     max_auto_keywords: int = 100
     auto_keyword_min_length: int = 2
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Apply domain-specific TTL defaults for built-in demo domains."""
         domain_defaults = {
             "medical-research": 180,
@@ -1177,20 +1184,20 @@ def config_to_dict(config: Config) -> dict[str, Any]:
         if domain.quality_gates:
             domain_qg_dict: dict[str, Any] = {}
             for gate_name, gc in domain.quality_gates.items():
-                entry: dict[str, Any] = {
+                domain_qg_entry: dict[str, Any] = {
                     "category": gc.category,
                     "retries": gc.retries,
                     "action": gc.action,
                 }
                 if gc.retry_models:
-                    entry["retry_models"] = gc.retry_models
+                    domain_qg_entry["retry_models"] = gc.retry_models
                 if gc.threshold is not None:
-                    entry["threshold"] = gc.threshold
+                    domain_qg_entry["threshold"] = gc.threshold
                 if gc.window_days:
-                    entry["window_days"] = gc.window_days
+                    domain_qg_entry["window_days"] = gc.window_days
                 if not gc.enabled:
-                    entry["enabled"] = gc.enabled
-                domain_qg_dict[gate_name] = entry
+                    domain_qg_entry["enabled"] = gc.enabled
+                domain_qg_dict[gate_name] = domain_qg_entry
             domain_dict["quality_gates"] = domain_qg_dict
         if domain.delivery_gates:
             domain_dg_dict: dict[str, Any] = {}

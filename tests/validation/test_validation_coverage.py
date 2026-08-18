@@ -244,12 +244,12 @@ def test_non_mcp_steps_do_not_count(coverage_audit: Any, tmp_path: Path) -> None
 
 
 def test_live_audit_prints_full_coverage() -> None:
-    """End-to-end: the real script against the real repo must report 145/145
-    with an empty MISSING list (145 tools = 142 baseline + T5's director
-    backdoor tools demote_kb_wiki/force_promote + T6's promote_pending sweep;
-    all three are covered by the director-backdoor and promotion-triggers
-    scenarios; the phantom from error-boundary.yaml is not counted as a real
-    tool)."""
+    """End-to-end: the real script against the real repo must report 146/146
+    with an empty MISSING list (146 tools = 142 baseline + T5's director
+    backdoor tools demote_kb_wiki/force_promote + T6's promote_pending sweep
+    + test_llm_connection; all four are covered by the director-backdoor,
+    promotion-triggers and llm-pool-config scenarios; the phantom from
+    error-boundary.yaml is not counted as a real tool)."""
     result = subprocess.run(
         [sys.executable, str(AUDIT_SCRIPT)],
         cwd=ROOT,
@@ -258,7 +258,7 @@ def test_live_audit_prints_full_coverage() -> None:
         timeout=120,
     )
     assert result.returncode == 0, result.stderr
-    assert "Covered by scenarios: 145/145" in result.stdout
+    assert "Covered by scenarios: 146/146" in result.stdout
     assert "MISSING tools (0):" in result.stdout
     # phantom must be reported separately, never as missing
     assert "definitely_not_a_real_tool" in result.stdout

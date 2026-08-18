@@ -1,0 +1,91 @@
+# Regression: LLM model-pool MCP surface (model-pool-improvements plan,
+# todos 1/2/3).  Locks the static model pool's configuration + visibility
+# contract through the MCP surface:
+#   1. configure_llm(llm_fallback=[...]) writes the fallback chain (todo 1)
+#   2. get_effective_llm_config() reflects the fallback_chain
+#   3. list_available_models() returns the full pool (primary + fallback + tasks)
+#   4. test_llm_connection is reachable through the MCP surface (todo 2) —
+#      MANDATORY step: scripts/coverage_audit.py only counts tools referenced
+#      by kind: mcp scenario steps, so without this step test_llm_connection
+#      falls into `missing` and the 146/146 coverage assertion fails.
+#   5. judgment tasks (g4_factual/g5_translation/llm_judge) still resolve to
+#      the release-pinned JUDGMENT_MODEL — a drifted llm.tasks entry can never
+#      change what model judges content (config.py _resolve_task_llm_config).
+#
+# The test_llm_connection step is env-agnostic via the recovery pattern
+# (mirrors llm-failure-recovery.yaml): without a key it asserts the
+# LLM_NOT_CONFIGURED error envelope (error-boundary pattern); with a key it
+# asserts connectable.  min_passing covers every step so the scenario passes
+# in both environments.
+name: regression-llm-pool-config
+description: "Regression: LLM model-pool MCP surface — configure_llm fallback write, pool visibility, test_llm_connection, judgment pinning"
+category: regression
+regression: true
+regression_issue: "#model-pool"
+requires_env: []
+min_passing: 5
+steps:
+  - name: "configure_llm writes fallback chain"
+    tool: configure_llm
+    arguments:
+      llm_fallback:
+        - model: mimo-v2.5
+          base_url: https://opencode.ai/zen/go/v1
+    expect:
+      success: true
+      data_has: ["status", "message"]
+
+  - name: "get_effective_llm_config reflects fallback_chain"
+    tool: get_effective_llm_config
+    arguments: {}
+    expect:
+      success: true
+      data_has: ["provider", "model", "fallback_chain"]
+
+  - name: "list_available_models returns full pool"
+    tool: list_available_models
+    arguments: {}
+    expect:
+      success: true
+      data_has: ["models", "count"]
+
+  - name: "test_llm_connection without key returns LLM_NOT_CONFIGURED"
+    tool: test_llm_connection
+    arguments: {}
+    expect:
+      success: false
+      error_code: "LLM_NOT_CONFIGURED"
+      error_actionable: true
+    recovery_steps:
+      - name: "test_llm_connection with key is connectable"
+        tool: test_llm_connection
+        arguments: {}
+        expect:
+          success: true
+          data_has: ["connectable", "tested_model", "latency_ms", "config_source"]
+
+  - name: "judgment tasks still resolve JUDGMENT_MODEL"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.config import (
+          Config, LLMConfig, LLMTaskConfig,
+          JUDGMENT_MODEL, JUDGMENT_TASKS, _resolve_task_llm_config,
+      )
+      c = Config()
+      c.llm = LLMConfig(provider="openai", model="deepseek-v4-flash")
+      c.llm.tasks = {
+          "g4_factual": LLMTaskConfig(model="drift-model-a"),
+          "g5_translation": LLMTaskConfig(model="drift-model-b"),
+          "llm_judge": LLMTaskConfig(model="drift-model-c"),
+          "extraction": LLMTaskConfig(model="extraction-model"),
+      }
+      for t in sorted(JUDGMENT_TASKS):
+          assert _resolve_task_llm_config(c, t).model == JUDGMENT_MODEL, t
+      assert _resolve_task_llm_config(c, "extraction").model == "extraction-model"
+      print("JUDGMENT_PINNED")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["JUDGMENT_PINNED"]

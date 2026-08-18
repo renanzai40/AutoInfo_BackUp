@@ -14,6 +14,15 @@ llm:
   # base_url: "https://api.openai.com/v1"  # optional: custom API endpoint
   json_mode: false
   # reasoning_model: false  # set to true for reasoning models that don't support response_format
+  # --- Model pool (uncomment to configure; see configure_llm(llm_fallback=..., llm_tasks=...)) ---
+  # fallback:
+  #   - model: mimo-v2.5
+  #     base_url: "https://opencode.ai/zen/go/v1"
+  # tasks:
+  #   extraction:
+  #     model: deepseek-v4-flash
+  #     provider: openai
+  #     max_tokens: 4096
 
 domains: []
 

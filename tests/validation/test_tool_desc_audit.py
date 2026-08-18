@@ -3,7 +3,7 @@
 Locks the behavior of ``scripts/tool_desc_audit.py`` so the audit the
 best-practice review dimension relies on stays deterministic:
 
-1. All 145 declared tools are parsed (matches ``get_tool_count``).
+1. All 146 declared tools are parsed (matches ``get_tool_count``).
 2. Verb-first naming — ``email_config`` is the only non-verb-style name;
    namespace+verb names (``enduser_create``, ``soft_delete_entry``,
    ``knowledge_graph_export``) are NOT violations.
@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import importlib.util
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -23,7 +24,7 @@ AUDIT_SCRIPT = ROOT / "scripts" / "tool_desc_audit.py"
 
 
 @pytest.fixture(scope="module")
-def tool_audit():
+def tool_audit() -> Any:
     spec = importlib.util.spec_from_file_location("tool_desc_audit", AUDIT_SCRIPT)
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
@@ -32,19 +33,19 @@ def tool_audit():
 
 
 @pytest.fixture(scope="module")
-def result(tool_audit):
+def result(tool_audit: Any) -> Any:
     return tool_audit.audit_tools(SERVER_SRC.read_text(encoding="utf-8"))
 
 
-def test_all_145_tools_parsed(result):
-    assert result["declared"] == 145
+def test_all_146_tools_parsed(result: Any) -> None:
+    assert result["declared"] == 146
 
 
-def test_email_config_is_only_verb_violation(result):
+def test_email_config_is_only_verb_violation(result: Any) -> None:
     assert result["violations"]["not_verb_first"] == ["email_config"]
 
 
-def test_namespace_verb_names_are_not_violations(result):
+def test_namespace_verb_names_are_not_violations(result: Any) -> None:
     tools = {t["name"]: t for t in result["tools"]}
     for name in (
         "enduser_create",
@@ -56,13 +57,13 @@ def test_namespace_verb_names_are_not_violations(result):
         assert tools[name]["namespace_verb"] is True, name
 
 
-def test_verb_first_ratio_high(result):
+def test_verb_first_ratio_high(result: Any) -> None:
     # 99.3% verb-style (verb-first + namespace+verb); keep >= 98% as the
     # regression floor so the D-工-1 evidence stays strong.
     assert result["summary"]["verb_style_ratio"] >= 0.98
 
 
-def test_summary_metrics_present(result):
+def test_summary_metrics_present(result: Any) -> None:
     s = result["summary"]
     for key in (
         "declared",
@@ -77,7 +78,7 @@ def test_summary_metrics_present(result):
         assert key in s, key
 
 
-def test_over_8_params_are_the_known_heavy_tools(result):
+def test_over_8_params_are_the_known_heavy_tools(result: Any) -> None:
     assert set(result["violations"]["over_8_params"]) == {
         "add_source",
         "generate_digest",
@@ -86,7 +87,7 @@ def test_over_8_params_are_the_known_heavy_tools(result):
     }
 
 
-def test_per_tool_row_shape(result):
+def test_per_tool_row_shape(result: Any) -> None:
     tools = {t["name"]: t for t in result["tools"]}
     row = tools["add_source"]
     assert row["verb_first"] is True

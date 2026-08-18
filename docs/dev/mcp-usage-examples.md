@@ -5,7 +5,7 @@ Worked examples for common AutoInfo MCP tool workflows. Referenced from
 expected return shape.
 
 For the compact pattern index, see `AGENTS.md` → Common Patterns. For the
-full tool catalog, see `docs/dev/specs/mcp-tools.md` (145 tools, 35 categories).
+full tool catalog, see `docs/dev/specs/mcp-tools.md` (146 tools, 35 categories).
 
 ---
 

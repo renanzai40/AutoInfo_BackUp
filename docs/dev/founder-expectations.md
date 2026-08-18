@@ -72,7 +72,7 @@ The system serves three distinct user roles. Unlike traditional multi-user syste
 | Role | Code | Description | Interface | Example | Lifecycle |
 |------|------|-------------|-----------|---------|-----------|
 | **End User** (最终用户 / 付费客户) | **B1** | **The paying customer.** Consumes curated knowledge products. Interacts in natural language; the B2 Agent (powered by LLM) translates NL into structured subscription config via the NL→Config pipeline. | Delivered products (email, Telegram, WeChat, API feeds); NL interaction with Agent for config changes; self-service portal | A pharmaceutical company subscribing to an "IVF Research Weekly" digest delivered via email + WeChat Work; a VC firm paying for "AI Competitive Intelligence" data feeds | B1.1 Discover → B1.2 Subscribe → B1.3 Onboard → B1.4 Consume → B1.5 Modify Config → B1.6 Churn → B1.7 Reactivate |
-| **Direct User** (直接执行者 / Agent) | **B2** | **The operator.** Executes automation commands via structured tools. **Agent-first**: all capabilities are MCP tools for AI agents. The agent is the primary execution layer. | MCP tools (145 across 35 categories — primary), CLI (28 command groups — fallback) | An AI agent calling `collect_sources()` and `generate_digest()`; a human running `autoinfo collect` for ad-hoc operations | B2.1 Discover → B2.2 Connect → B2.3 Configure → B2.4 Operate → B2.5 Monitor → B2.6 Report |
+| **Direct User** (直接执行者 / Agent) | **B2** | **The operator.** Executes automation commands via structured tools. **Agent-first**: all capabilities are MCP tools for AI agents. The agent is the primary execution layer. | MCP tools (146 across 35 categories — primary), CLI (28 command groups — fallback) | An AI agent calling `collect_sources()` and `generate_digest()`; a human running `autoinfo collect` for ad-hoc operations | B2.1 Discover → B2.2 Connect → B2.3 Configure → B2.4 Operate → B2.5 Monitor → B2.6 Report |
 | **Director User** (人类指挥者) | **B3** | **The commander.** Sets policy at deploy time, monitors passively, intervenes only on critical errors that B2 cannot self-heal. Never daily-operates the pipeline. | Dashboard + B2-generated reports; CLI for emergency intervention | "帮我追踪本周辅助生殖领域的重要论文，按创新程度排序，出一份简报" | B3.1 Configure → B3.2 Monitor → B3.3 Intervene |
 
 **Design principle**: Agent-oriented by default, human-capable by design. All system capabilities are exposed as structured MCP tools first (for B2 agent), with CLI as an accessible alternative. B3 communicates intent through B2, not through AutoInfo directly. B1's requirements for quality, reliability, and delivery channel flexibility are embedded as hard constraints in every subsystem — see F36-F40 plus F65-F72 for the full lifecycle specification.
@@ -289,7 +289,7 @@ This is the standard. Everything else — tests, architecture, source curation �
 | Code implementation | ✅ ~18K+ lines Python, 35+ modules |
 | Demo source curation | ✅ 7 curated sources shipped with library metadata |
 | Tests | ✅ ~3728 tests across 100+ test files (includes new collector tests) |
-| MCP tools | ✅ 145 tools across 35 categories |
+| MCP tools | ✅ 146 tools across 35 categories |
 | Technical decisions | ✅ 34 categories documented, all implemented |
 | CLI commands | ✅ 28 command groups |
 
@@ -438,7 +438,7 @@ Consumer requirements identified from global information payment research (5 rep
 | Expectations documented | 72 F-expectations across 16 phases (F01-F57 original + F58-F64 blank spaces + F65-F72 lifecycle coverage) + consumer-facing output requirements (see `docs/dev/cross-dimensional-catalog.md` CD-032..CD-036) |
 | Value propositions fulfilled | 5/5 |
 | True Test passing | 13/13 |
-| MCP tools | 145 across 35 categories |
+| MCP tools | 146 across 35 categories |
 | Source handlers | 30 collector handlers (PubMed, arXiv, Semantic Scholar, CrossRef, DBLP, OpenAlex, USPTO, NYT, RSS, Web, Webhook, Email, PDF, Reddit, Spotify, YouTube, Bilibili, Apple Podcasts, HackerNews, AP API, Reuters MCP, SSRN, GDELT, HuggingFace/Kaggle, Unpaywall/CORE, Yahoo Finance, HTTP API, AKShare, SEC EDGAR, edX sitemap) + crontab installer |
 | Quality gates | All 6 (G0-G5: G0/G4 hard, G1-G3/G5 soft) + 3 delivery gates (D1-D3) |
 | Product delivery | ✅ RAW (API feeds, webhook streams, bulk export); ✅ PROCESSED (scheduled digests, thematic reports, alert streams) |
@@ -463,7 +463,7 @@ Consumer requirements identified from global information payment research (5 rep
 - `docs/dev/specs/delivery.md` — Output generation, delivery channels, error recovery, end user lifecycle
 - `docs/dev/specs/operations.md` — Cost governance, data privacy, knowledge lifecycle, observability
 - `docs/dev/specs/market-positioning.md` — Priority matrix, competitive landscape, pricing, personas
-- `docs/dev/specs/mcp-tools.md` — Complete MCP tool inventory (145 tools, 35 categories)
+- `docs/dev/specs/mcp-tools.md` — Complete MCP tool inventory (146 tools, 35 categories)
 - `docs/dev/specs/data-models.md` — Consolidated data model schemas
 - `docs/dev/specs/user-lifecycle-definition.md` — **Root spec**: B1/B2/B3 user types and complete lifecycle definitions
 - `docs/dev/specs/multi-tenancy-auth.md` — Multi-tenancy, authentication, rate limiting, admin dashboard (architectural design; deferred until SSE transport)

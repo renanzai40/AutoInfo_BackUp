@@ -17,7 +17,7 @@ Director-user (human) ──NL──> Agent ──MCP tools──> AutoInfo MCP 
 ```
 
 1. **You (the agent)** connect to AutoInfo's MCP server over stdio (SSE transport is future work)
-2. **All capabilities** are exposed as MCP tools (145 tools across 35 categories)
+2. **All capabilities** are exposed as MCP tools (146 tools across 35 categories)
 3. **CLI mirrors MCP** — `--domain X --topic Y` flags map 1:1 to tool parameters
 4. **Human director** communicates intent to you in natural language; you translate to tool calls
 5. **Human can also use CLI directly** as a fallback, but the primary interface is through you
@@ -86,7 +86,7 @@ AutoInfo/
 │   │   │   ├── delivery.md         # Output generation, delivery channels, end user lifecycle
 │   │   │   ├── operations.md       # Cost, data privacy, knowledge lifecycle, observability
 │   │   │   ├── market-positioning.md # Priority matrix, competitive landscape, pricing, personas
-│   │   │   ├── mcp-tools.md        # 145 MCP tools across 35 categories
+│   │   │   ├── mcp-tools.md        # 146 MCP tools across 35 categories
 │   │   │   ├── data-models.md      # Consolidated data model schemas
 │   │   │   ├── user-lifecycle-definition.md # Foundational user type definitions (B1/B2/B3)
 │   │   │   ├── multi-tenancy-auth.md    # Multi-tenancy and authorization spec
@@ -102,7 +102,7 @@ AutoInfo/
 ├── src/
 │   └── autoinfo/
 │       ├── cli/                     # 28 CLI command groups
-│       ├── mcp/                     # MCP server (145 tools)
+│       ├── mcp/                     # MCP server (146 tools)
 │       ├── api/                     # REST API (FastAPI, port 8741)
 │       ├── kb.py                    # Knowledge base pipeline (4-tier KB pipeline)
 │       ├── collectors/              # 30 collector handlers (PubMed, Semantic Scholar, DBLP, OpenAlex, USPTO, NYT, Yahoo Finance, Quandl, RSS, Web, webhook, email, PDF, Reddit, Spotify, YouTube, Bilibili, Apple Podcasts, AP API, Reuters MCP, SSRN, GDELT, HuggingFace/Kaggle, Unpaywall/CORE, HackerNews, AKShare, SEC EDGAR, edX sitemap)
@@ -189,11 +189,11 @@ Hard/soft split with retry-first, block-last philosophy. G0 (Schema Integrity) a
 
 ## Tool Discovery Guidance
 
-145 MCP tools across 35 categories:
+146 MCP tools across 35 categories:
 
 | Category | Key Tools |
 |----------|-----------|
-| **System** | `health_check`, `diagnose_system`, `get_config`, `list_available_models`, `get_tool_count`, `configure_llm` |
+| **System** | `health_check`, `diagnose_system`, `get_config`, `list_available_models`, `get_tool_count`, `configure_llm`, `test_llm_connection` |
 | **Discovery** | `list_domains`, `list_available_platforms`, `get_domain_schema`, `get_effective_llm_config`, `list_output_templates`, `activate_domain`, `deactivate_domain`, `get_domain_config` |
 | **Domain** | `add_domain`, `remove_domain` |
 | **Source** | `add_source` (idempotent), `add_sources` (batch), `remove_source`, `test_source`, `list_sources`, `get_source_health`, `get_feeds` |
@@ -227,7 +227,7 @@ Hard/soft split with retry-first, block-last philosophy. G0 (Schema Integrity) a
 | **Observability** | `trace_item`, `get_metrics`, `get_prometheus_metrics`, `diagnose_system` |
 | **Agent Callbacks** | `set_agent_callback`, `list_agent_callbacks`, `remove_agent_callback` (push delivers canonical `{event, payload, schema_version: 1, trace_id, product_id}` via durable SQLite outbox) |
 | **Audit** | `query_audit_log` |
-| **Validation** | `list_validation_scenarios`, `run_validation_scenario` (71 scenarios = 64 functional + 7 regression in `scenarios/regression/`; M7T52: sources-gap-closure + output-column + sources-a6-keyed; E8 wave: per-scenario timeout, recovery_steps + partial-pass, per-step trace + root-cause report, regression flywheel, enduser-journey + UX metrics; #157: requires_http env gate; #156: premium-briefing/magazine-digest/enterprise-briefing + full source coverage; output-quality-mega wave: regression-product-routing + output-agent-interaction; AC4: kb-tier-matrix 13×3 tier coverage) |
+| **Validation** | `list_validation_scenarios`, `run_validation_scenario` (72 scenarios = 64 functional + 8 regression in `scenarios/regression/`; M7T52: sources-gap-closure + output-column + sources-a6-keyed; E8 wave: per-scenario timeout, recovery_steps + partial-pass, per-step trace + root-cause report, regression flywheel, enduser-journey + UX metrics; #157: requires_http env gate; #156: premium-briefing/magazine-digest/enterprise-briefing + full source coverage; output-quality-mega wave: regression-product-routing + output-agent-interaction; AC4: kb-tier-matrix 13×3 tier coverage) |
 
 **Discovery flow**: `health_check()` → `tools/list` (MCP auto-discovery) → `list_domains()` → `get_domain_schema(domain)` → `list_available_models()` → `list_output_templates(domain)`.
 
@@ -270,7 +270,7 @@ The table indexes every pattern; the five most-used are inlined below.
 
 **Check system health**: `diagnose_system()` → returns `health_score` (0-100) + `phase` (`uninitialized` / `llm_unconfigured` / `no_sources` / `ready_to_collect` / `operational`). On degraded status, inspect `phase`.
 
-**Configure the LLM (BYOK)**: `configure_llm(api_key, provider, model)` stores an env var reference (`${AUTOINFO_LLM_API_KEY}`), never the raw key. If missing, the 16 LLM-required tools return `LLM_NOT_CONFIGURED` at dispatch. Full variable catalog: `docs/dev/required-api-keys.md`.
+**Configure the LLM (BYOK)**: `configure_llm(api_key, provider, model, llm_fallback=[...], llm_tasks={...})` stores an env var reference (`${AUTOINFO_LLM_API_KEY}`), never the raw key; `llm_fallback` configures the fallback chain and `llm_tasks` per-task model routing. Verify connectivity with `test_llm_connection()`. If missing, the 16 LLM-required tools return `LLM_NOT_CONFIGURED` at dispatch. Full variable catalog: `docs/dev/required-api-keys.md`.
 
 **Search KB**: `search_knowledge_base(domain, query, mode="hybrid")` (FTS5 + vector), `mode="vector"` (semantic only), or `mode="faceted"` with `filters={...}`; `filter_custom_fields={...}` facets on custom_fields JSON (e.g. `{"product_analysis.action_required": ""}`). Omit `domain` to search across all domains.
 
@@ -288,7 +288,7 @@ AutoInfo uses LiteLLM under the hood. Standard OpenAI-format providers work.
 | api_key | ${AUTOINFO_LLM_API_KEY} | Set via env var or config |
 | json_mode | False | `response_format={"type":"json_object"}` sent only when `json_mode` is True AND `reasoning_model` is False (reasoning providers reject the param). |
 | reasoning_model | False | Mark the model as a reasoning model (DeepSeek R1/V4 style). When True: (1) `response_format` is always skipped, (2) chain-of-thought is disabled by default via `additional_body={"thinking":{"type":"disabled"}}` — reasoning consumes the shared `max_tokens` budget *before* content, so leaving it on truncates JSON output (finish_reason=length). Judgment gates (G4 factual, G5 translation, llm_judge, translation QA judge, validation-scenario judge) re-enable thinking with raised `max_tokens` via `disable_thinking=False`. |
-| fallback | [] | Ordered `llm.fallback` list — each entry: `provider`, `model`, optional `base_url`/`api_key`. Every LLM call path (extraction, validation judge, quality gates, translation QA, output generation, keyword suggest, Q&A, CEFR) walks `[primary] + fallback` via `llm.call_with_fallback`; the first successful model wins. Every chain entry runs under the same per-provider limiter and 429/5xx backoff (below). |
+| fallback | [] | Ordered `llm.fallback` list — each entry: `model` (required), optional `provider`/`base_url`/`api_key`. An empty `provider` inherits the primary provider; an empty `api_key` inherits the primary key (or a `${ENV}` reference). Every LLM call path (extraction, validation judge, quality gates, translation QA, output generation, keyword suggest, Q&A, CEFR) walks `[primary] + fallback` via `llm.call_with_fallback`; the first successful model wins. Every chain entry runs under the same per-provider limiter and 429/5xx backoff (below). |
 | max_concurrency | 4 | Per-provider shared rate limiting: `AUTOINFO_LLM_MAX_CONCURRENCY` env override (clamped ≥1, unparsable → default) bounds in-flight requests per `(provider, base_url)` via a shared `threading.Semaphore` in `call_with_fallback` (llm.py `_PROVIDER_SEMAPHORES`). Enforced across **every** fan-out path — process workers, post-extraction gates, cefr_batch, output grouping, MCP `to_thread` handlers, fallback chain. No single global process-wide lock. |
 | 429/5xx backoff | 3 attempts (2 retries) | Jittered exponential backoff on HTTP 429 and 5xx inside `call_with_fallback`: base 1.0s, factor 2, cap 8s, jitter ±25% (llm.py `MAX_LLM_ATTEMPTS`/`BACKOFF_*`). Non-retryable 4xx (400/403/404) surface immediately — never retried. After the final attempt the last error surfaces. |
 
@@ -300,15 +300,17 @@ AutoInfo uses LiteLLM under the hood. Standard OpenAI-format providers work.
 
 **Custom endpoint** (e.g. OpenCode Go, Ollama, Azure): set `provider="openai"`, `base_url` to your endpoint, `api_key` via env var, `model` to your model name.
 
-**Fallback example** (`.autoinfo/config.yaml`) — this is now the **actual configured fallback** (2026-08-13): `mimo-v2.5` on the same gateway (`https://opencode.ai/zen/go/v1`) inherits the primary's API key (no `api_key` entry):
+**Fallback example** (`.autoinfo/config.yaml`) — this is now the **actual configured fallback** (2026-08-13): `mimo-v2.5` on the same gateway (`https://opencode.ai/zen/go/v1`). The entry carries full fields with empty `provider`/`api_key` — an empty `provider` inherits the primary provider (`openai`), and an empty `api_key` inherits the primary key (or a `${ENV}` reference):
 ```yaml
 llm:
   provider: openai
   model: deepseek-v4-flash
   base_url: https://opencode.ai/zen/go/v1
   fallback:
-    - model: mimo-v2.5
+    - provider: ''
+      model: mimo-v2.5
       base_url: https://opencode.ai/zen/go/v1
+      api_key: ''
 ```
 
 **Per-task model routing** (2026-08-13): `_resolve_task_llm_config` (config.py) resolves the model per task and feeds `call_with_fallback(task=)` → `_build_config_with_model` (process.py). Extraction/classification tasks use the task-config model (else the base model). Judgment calls (G4 factual, G5 translation, llm_judge) resolve to the release-pinned `JUDGMENT_MODEL = "deepseek-v4-flash"` constant (config.py, beside `LLMConfig`) — a release-level decision, never runtime task-config drift.
@@ -365,7 +367,7 @@ Never hand-edit runtime artifacts to fix behavior — fix the source.
 | Knowledge graph | ✅ Entity extraction + relation discovery |
 | REST API | ✅ FastAPI CRUD (port 8741, /api/v1/entries, /health, /dashboard) |
 | Web UI Dashboard | ✅ Bootstrap 5, collection stats, KB search, source health |
-| MCP server | ✅ 145 tools across 35 categories |
+| MCP server | ✅ 146 tools across 35 categories |
 | Domain management | ✅ `add_domain`/`remove_domain` MCP tools, `autoinfo domain` CLI (add/list/show/remove/activate/deactivate) |
 | Webhook push | ✅ Per-item webhook notification on collection via `set_domain_webhooks`/`get_domain_webhooks` |
 | Scheduled digest | ✅ Cron-based email digest delivery (SMTP + crontab schedule) |
@@ -421,7 +423,7 @@ Never hand-edit runtime artifacts to fix behavior — fix the source.
 | Cost dashboard MCP | ✅ cost_dashboard MCP tool |
 | Cost allocation MCP | ✅ cost_allocation MCP tool |
 | Demo domains | ✅ 13 demo domains (medical-research, ai-commercial, financial-intelligence, tech-ai-developer, language-learning, online-video, financial-news, online-education, legal-compliance, general-news, gaming, b2b, retail) |
-| Validation scenarios | ✅ 71 scenarios (64 functional + 7 regression in `scenarios/regression/`, `regression: true` key, recursive-glob auto-load) |
+| Validation scenarios | ✅ 72 scenarios (64 functional + 8 regression in `scenarios/regression/`, `regression: true` key, recursive-glob auto-load) |
 | Validation execution | ✅ Per-step `timeout_seconds`; per-step `recovery_steps` (run after primary failure) + partial-pass (`min_passing`/`pass_ratio`); per-step trace (step_index/duration/arguments/trace_id + llm_meta model/tokens/duration); `expect.error_actionable` envelope assertion; root-cause report (`## Blockers` / `## Per-step trace` / `## Regression failures`) |
 | Regression flywheel | ✅ `scenarios/regression/` (regression-collect-int-id #104, regression-llm-key-resolution #119, regression-period-enum #126, regression-report-structure #121, regression-source-301 #135, regression-product-routing) + `coverage_audit.py` "Regression scenarios: N (issues: ...)" + `.github/ISSUE_TEMPLATE/bug_report.md` mandatory 回归场景 field |
 | Validation delivery | ✅ `scripts/validation_delivery.py` builds 01-RAW/02-PROCESSED/03-KB/04-MATRIX (E8 matrix + coverage-gaps.json, Oracle R8 unconfigured-vs-gap)/06-REJECTED + validation-report.md + manifest.json (per-file authenticity + D1-D3 gates + UX metrics) |

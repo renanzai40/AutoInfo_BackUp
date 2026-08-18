@@ -163,7 +163,7 @@ quality_gates:
 
 ## 8. ErrorCode & Error Response System
 
-The MCP server uses a unified error response system (`src/autoinfo/mcp/errors.py`) that provides consistent error classification across all 145 MCP tools. The `ErrorCode` enum (28 values) covers all known failure modes and includes eight codes added since v1.8 (incl. `DIRECTOR_ONLY`):
+The MCP server uses a unified error response system (`src/autoinfo/mcp/errors.py`) that provides consistent error classification across all 146 MCP tools. The `ErrorCode` enum (28 values) covers all known failure modes and includes eight codes added since v1.8 (incl. `DIRECTOR_ONLY`):
 
 | Code | Value | Purpose |
 |------|-------|---------|

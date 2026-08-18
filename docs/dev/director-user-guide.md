@@ -17,7 +17,7 @@ AutoInfo has three distinct user roles. This document is for the first one:
 | Role | Description | Interface | Example |
 |------|-------------|-----------|---------|
 | **Director User** (人类指挥者) | **You.** Gives high-level intent in natural language. Never touches AutoInfo directly. The agent is your interface. | Natural language conversation with the agent | "帮我追踪本周辅助生殖领域的重要论文，按创新程度排序，出一份简报" |
-| **Direct User** (Agent / 直接执行者) | The AI agent that executes commands. Translates your NL into MCP tool calls, runs collection pipelines, generates output, reports results. | MCP tools (145 tools, 35 categories). CLI is fallback. | Calling `collect_sources()`, `generate_digest()`, `search_knowledge_base()` |
+| **Direct User** (Agent / 直接执行者) | The AI agent that executes commands. Translates your NL into MCP tool calls, runs collection pipelines, generates output, reports results. | MCP tools (146 tools, 35 categories). CLI is fallback. | Calling `collect_sources()`, `generate_digest()`, `search_knowledge_base()` |
 | **End User** (最终用户 / 付费客户) | The paying customer who consumes the knowledge products you produce. They receive digests, reports, data feeds. You never talk to them through AutoInfo -- the system delivers to them. | Email digests, Telegram messages, WeChat pushes, API feeds | A pharmaceutical company receiving "IVF Research Weekly" via email |
 
 See `docs/dev/founder-expectations.md` SS1.3 for the full role specification.
@@ -68,7 +68,7 @@ The flow is always the same:
 
 ### What the Agent Can Do (In Brief)
 
-The agent has 145 MCP tools organized into 35 categories. Everything AutoInfo can do, the agent can do on your behalf:
+The agent has 146 MCP tools organized into 35 categories. Everything AutoInfo can do, the agent can do on your behalf:
 
 - Configure domains, sources, and topics
 - Run collection and processing pipelines

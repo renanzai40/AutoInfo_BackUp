@@ -1183,6 +1183,6 @@ Associated spec files:
 - [`quality-gates.md`](./quality-gates.md) — G0-G5 quality gates, D1-D3 delivery gates: catalog, philosophy, retry strategies, configuration
 - [`delivery.md`](./delivery.md) — Output generation, delivery channels, error recovery & resilience, end user lifecycle
 - [`operations.md`](./operations.md) — Cost governance, data privacy & compliance, knowledge lifecycle (TTL, versioning, decay), observability
-- [`mcp-tools.md`](./mcp-tools.md) — Complete MCP tool inventory (145 tools across 35 categories)
+- [`mcp-tools.md`](./mcp-tools.md) — Complete MCP tool inventory (146 tools across 35 categories)
 - [`data-models.md`](./data-models.md) — Consolidated data model schemas (Item, ExtractionResult, UserProfile, Subscription, DeliveryLog, CostLog, AuditLog, SystemHealth)
 - [`user-lifecycle-definition.md`](./user-lifecycle-definition.md) — B1/B2/B3 user types with complete lifecycles (root spec for F65-F72)

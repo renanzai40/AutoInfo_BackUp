@@ -4,7 +4,7 @@
 Locks the behavior of ``scripts/error_message_audit.py`` so the D-工-4
 evidence the best-practice review depends on stays deterministic:
 
-1. All error envelope call sites in ``server.py`` are parsed (109 sites:
+1. All error envelope call sites in ``server.py`` are parsed (114 sites:
    error_response / error_dict / _error_from_exc).
 2. **Actionability** — every explicit-message site (``error_response`` /
    ``error_dict``) carries a fix hint; the strong claim that
@@ -47,7 +47,7 @@ def result(error_audit):
 
 
 def test_all_error_sites_parsed(result):
-    assert result["total_sites"] == 110
+    assert result["total_sites"] == 115
 
 
 def test_call_site_kind_breakdown(result):
@@ -56,7 +56,7 @@ def test_call_site_kind_breakdown(result):
     kinds = Counter(s["call"] for s in result["sites"])
     assert kinds["_error_dict"] == 0
     assert kinds["_error_from_exc"] == 65
-    assert kinds["error_response"] == 44
+    assert kinds["error_response"] == 49
     assert kinds["error_dict"] == 1
 
 

@@ -804,9 +804,9 @@ All open CD gaps (CD-001..CD-042 minus the 12 already resolved/merged) remain op
 
 ## 2026-08-03 更新 — Agent-native validation toolset
 
-Landed after the 2026-08-02 audit: `list_validation_scenarios` / `run_validation_scenario` MCP tools (src/autoinfo/mcp/server.py:9586,9594) backed by a standalone executor (src/autoinfo/mcp/validation.py). 68 scenario YAMLs (62 functional + 6 regression; 65→67→68 on 2026-08-11→13 with output-agent-interaction + regression-product-routing) in src/autoinfo/mcp/scenarios/ cover 145/145 MCP tools (145 MCP tools), all 28 CLI groups, and 8 REST endpoints (verified via scripts/coverage_audit.py — MISSING: 0). Scenarios execute through the MCP surface plus real CLI subprocess and REST HTTP steps; `llm_assert` steps run real model calls; env-gated steps report `unconfigured` (Director User BYOK obligation). Scenario authoring contract: docs/dev/validation-scenario-contract.md.
+Landed after the 2026-08-02 audit: `list_validation_scenarios` / `run_validation_scenario` MCP tools (src/autoinfo/mcp/server.py:9586,9594) backed by a standalone executor (src/autoinfo/mcp/validation.py). 68 scenario YAMLs (62 functional + 6 regression; 65→67→68 on 2026-08-11→13 with output-agent-interaction + regression-product-routing) in src/autoinfo/mcp/scenarios/ cover 146/146 MCP tools (146 MCP tools), all 28 CLI groups, and 8 REST endpoints (verified via scripts/coverage_audit.py — MISSING: 0). Scenarios execute through the MCP surface plus real CLI subprocess and REST HTTP steps; `llm_assert` steps run real model calls; env-gated steps report `unconfigured` (Director User BYOK obligation). Scenario authoring contract: docs/dev/validation-scenario-contract.md.
 
-**Cell-impact**: no matrix cell flips — validation is a B2/B3 operational capability strengthening A7 Operations (B2.5 Monitor) and the B2 lifecycle (validation of collection/extraction/delivery), not a new pipeline stage or user lifecycle transition. Tool count is now 145 (was 139 at the 08-02 audit).
+**Cell-impact**: no matrix cell flips — validation is a B2/B3 operational capability strengthening A7 Operations (B2.5 Monitor) and the B2 lifecycle (validation of collection/extraction/delivery), not a new pipeline stage or user lifecycle transition. Tool count is now 146 (was 139 at the 08-02 audit).
 
 ---
 
@@ -923,7 +923,7 @@ All open CD gaps (CD-001..CD-042 minus resolved/merged) remain open. The format-
 | A7 | 机构金融数据 | ✅ 部分落地（2026-08-05）：`akshare` 专有 handler（`[akshare]` extra，A 股/港股 EOD+公告）+ cninfo 巨潮公告 + Wind Alice 个人版文档化（`sources-gap-closure` 场景覆盖类型注册）；tick/终端级仍无解 | Wind 账号注册（手机号实名）；tick/终端级无解 |
 | A20 | 微博 / 抖音 | ⚠️ 文档化路径（2026-08-05）：Bluesky/Mastodon 源已落地（general-news 域 http_api `json_path`），微博 RSSHub cookie 路由、抖音 hotsearch 为文档化待办 | 需预算决策 / 反爬维护 |
 | A28 | TikTok | Research API 学术审核 / Display API 资质 | 流程门槛 |
-| E15 | A2A 原生协议 | 代码实现（MCP 145 工具已覆盖 Agent 对接） | 生态未成熟 |
+| E15 | A2A 原生协议 | 代码实现（MCP 146 工具已覆盖 Agent 对接） | 生态未成熟 |
 | B23 | 电子书/音频书 | ✅ 已完成（2026-08-04）：`src/autoinfo/output/ebook.py` — EPUB3（ebooklib，xhtml+CJK `set_language`）+ MOBI（calibre `--mobi-file-type=both` KF8 承载中文）+ audiobook（`_render_audio` 分章 TTS→章节 MP3/ZIP/CHAP-CTOC） | 已从 V2 移出（用户指定要做，H6 第 1 批完成） |
 | A19-知乎 | 知乎采集 | ⚠️ 部分落地（2026-08-05）：知乎日报 JSON API（免鉴权）+ 得到 RSSHub `/dedao/*` + wewe-rss/wechat2rss（general-news 域源配置）；热榜/答案仍需 cookie 路由 | 热榜级维护成本高（日报级零维护） |
 | C10 | 移动 App | PWA + 微信小程序替代 App Store 分发 | 中-高成本 |

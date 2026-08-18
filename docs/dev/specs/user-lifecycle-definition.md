@@ -48,7 +48,7 @@
 │         configs, executes the full pipeline on behalf of B1:     │
 │         collect → extract → KB → generate → deliver.            │
 │                                                                  │
-│  Interacts via: MCP tools (145 tools across 35 categories)      │
+│  Interacts via: MCP tools (146 tools across 35 categories)      │
 │                                                                  │
 │  Does NOT: Handle money or pricing decisions.                    │
 │            Accept ad-hoc instructions from B1.                   │
@@ -216,7 +216,7 @@ B1 modifies config
 The **B2 Direct User** is an AI agent that serves as the **primary operator** of the AutoInfo platform. B2:
 
 - Connects to AutoInfo via the MCP protocol (stdio; SSE is future work)
-- Uses 145 MCP tools to configure sources, run collection, manage the KB, generate products, and orchestrate delivery
+- Uses 146 MCP tools to configure sources, run collection, manage the KB, generate products, and orchestrate delivery
 - Reads B1 subscription configs to determine what to collect, process, and deliver for each B1 user
 - Operates autonomously on a schedule — executing the full pipeline for all active subscriptions
 - Reports execution status and anomalies to B3 (Director) for oversight
@@ -245,7 +245,7 @@ B2 **does not**:
 
 ### 3.3 B2 MCP Tool Gaps
 
-> ✅ **Resolved 2026-08-04** — all tools previously listed as "backend exists, MCP not registered" in this gap table are now registered (145/145 tools). This includes `compare_versions` (Knowledge Lifecycle), `get_schedule_status` (Cron), and the End User tools `get_delivery_log`, `send_to_enduser`, `activate_trial`, `check_trial_expiry`, `update_preferences`. No MCP surface gaps remain.
+> ✅ **Resolved 2026-08-04** — all tools previously listed as "backend exists, MCP not registered" in this gap table are now registered (146/146 tools). This includes `compare_versions` (Knowledge Lifecycle), `get_schedule_status` (Cron), and the End User tools `get_delivery_log`, `send_to_enduser`, `activate_trial`, `check_trial_expiry`, `update_preferences`. No MCP surface gaps remain.
 
 ---
 

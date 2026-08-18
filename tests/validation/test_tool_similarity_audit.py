@@ -3,7 +3,7 @@
 Locks the behavior of ``scripts/tool_similarity_audit.py`` so the D-工-7
 boundary-health evidence stays deterministic:
 
-1. All 145 tools are parsed.
+1. All 146 tools are parsed.
 2. **Zero name-boundary collisions** — no two tools share the same
    first-segment + noun-stem (no ``same_stem_verb_pairs``): every tool
    name is uniquely distinguishable by name alone.
@@ -40,14 +40,14 @@ def similarity_audit() -> Any:
 
 
 @pytest.fixture(scope="module")
-def result(similarity_audit: Any) -> dict[str, Any]:
+def result(similarity_audit: Any) -> Any:
     return similarity_audit.audit_similarity(
         SERVER_SRC.read_text(encoding="utf-8")
     )
 
 
-def test_all_145_tools_parsed(result: dict[str, Any]) -> None:
-    assert result["total"] == 145
+def test_all_146_tools_parsed(result: dict[str, Any]) -> None:
+    assert result["total"] == 146
 
 
 def test_zero_same_stem_verb_name_collisions(result: dict[str, Any]) -> None:

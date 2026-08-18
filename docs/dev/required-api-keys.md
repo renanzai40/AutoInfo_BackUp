@@ -21,6 +21,17 @@ MCP tool. The `configure_llm` MCP tool writes an env var *reference*
 (`${AUTOINFO_LLM_API_KEY}`) into config rather than the raw key, so the
 secret stays in your environment.
 
+### `llm.fallback[].api_key` — per-entry key semantics
+
+Each `llm.fallback` entry may carry its own `api_key` field. The value is
+either a raw key or a `${ENV_VAR}` reference (resolved from the
+environment at call time, same rule as the primary `llm.api_key`). An
+empty `api_key` (`''`) inherits the primary key / `AUTOINFO_LLM_API_KEY`
+environment variable; an empty `provider` (`''`) inherits the primary
+provider. `configure_llm(llm_fallback=[...])` writes these entries
+verbatim — never store a raw key in a fallback entry when a `${ENV}`
+reference works.
+
 ## Core (required for any processing)
 
 | Env Var | Purpose | Required? | Source |

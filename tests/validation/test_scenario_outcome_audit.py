@@ -4,7 +4,7 @@
 Locks the behavior of ``scripts/scenario_outcome_audit.py`` so the D-工-5
 evidence stays deterministic:
 
-1. All 71 scenarios (64 functional + 7 regression) are parsed with 348
+1. All 72 scenarios (64 functional + 8 regression) are parsed with 353
    steps.
 2. **Outcome grading** — >= 95% of steps assert an explicit ``success``
    key (grade the outcome envelope, not the path).
@@ -45,13 +45,13 @@ def result(outcome_audit):
     return outcome_audit.audit_all()
 
 
-def test_all_71_scenarios_parsed(result: dict[str, Any]) -> None:
-    assert result["summary"]["total_scenarios"] == 71
-    assert result["summary"]["regression_scenarios"] == 7
+def test_all_72_scenarios_parsed(result: dict[str, Any]) -> None:
+    assert result["summary"]["total_scenarios"] == 72
+    assert result["summary"]["regression_scenarios"] == 8
 
 
 def test_total_steps(result):
-    assert result["summary"]["total_steps"] == 348
+    assert result["summary"]["total_steps"] == 353
 
 
 def test_outcome_grading_ratio_high(result):

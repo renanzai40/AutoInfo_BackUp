@@ -42,7 +42,7 @@ deprecated. Dashboard JS unwraps the envelope transparently.
 ## Consequences
 
 - One parse rule for all consumers: read `success`, branch on `data`/`error`.
-- All 145 MCP tools and all REST endpoints follow the same schema (validated
+- All 146 MCP tools and all REST endpoints follow the same schema (validated
   by validation scenarios asserting `{success, data}`); validation
   error-boundary scenarios assert `actionable` presence.
 - Breaking change for v1.8 consumers — migration path documented and shipped

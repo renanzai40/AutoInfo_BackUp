@@ -28,7 +28,7 @@ products (digests, reports, alerts, feeds) to End Users.
 ## Tool Discovery
 
 Not sure what tools exist? Use MCP protocol discovery.
-Full MCP tool catalog: see **AGENTS.md → Tool Discovery Guidance** (145 tools, 35 categories).
+Full MCP tool catalog: see **AGENTS.md → Tool Discovery Guidance** (146 tools, 35 categories).
 
 ## Common Workflows
 

@@ -105,7 +105,7 @@ Before identifying affected docs, decide **whether this change needs an ADR**:
 
 ### Step 2 — Apply changes per doc type
 - `README.md`: Features list, Status table, Quick Start, architecture diagram,
-  CLI table (28 groups), MCP tools table (145), Demo Domains table, Known Limitations.
+  CLI table (28 groups), MCP tools table (146), Demo Domains table, Known Limitations.
 - `AGENTS.md`: Project Structure tree, Architecture Rules, Agent Constraints
   (MUST NOT), Tool Discovery table, Common Patterns, LLM Configuration,
   Status table (must match README), References.
@@ -116,9 +116,9 @@ Before identifying affected docs, decide **whether this change needs an ADR**:
 - Spec files (`docs/dev/specs/*.md`): only the spec owning the changed topic.
 
 ### Step 3 — Update quantitative references
-Drift-prone facts checked by `doc_inventory.py --check`: MCP tools 145 / 35
-categories · CLI groups 28 · delivery channels 13 · validation scenarios 71
-(64 functional + 7 regression) · demo domains 13.
+Drift-prone facts checked by `doc_inventory.py --check`: MCP tools 146 / 35
+categories · CLI groups 28 · delivery channels 13 · validation scenarios 72
+(64 functional + 8 regression) · demo domains 13.
 Also keep consistent wherever they appear (README, AGENTS, CHANGELOG, specs,
 skills): source types 29, collector handlers 30, output templates 8,
 LLM-required tools 16, REST port 8741, test count ~3799.

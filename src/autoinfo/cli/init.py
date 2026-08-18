@@ -1,16 +1,15 @@
-from __future__ import annotations
-
 """`autoinfo init` — project skeleton generator.
 
 Creates the `.autoinfo/` directory structure, default config, and
 optionally populates it with a demo domain definition.
 """
 
+from __future__ import annotations
 
 import os
 import sys
 from pathlib import Path
-from typing import Optional, List
+from typing import List, Optional
 
 import typer
 import yaml
@@ -32,6 +31,10 @@ _REQUIRED_SUBDIRS = [
     "collections",
     "outputs",
 ]
+
+# Provider candidates surfaced in the interactive model prompt. Static table
+# mirroring the default_config.yaml ``llm`` section — never a network call.
+_LLM_PROVIDER_CANDIDATES = "openai, openrouter, ollama (or a custom base_url)"
 
 
 def _list_demo_domains() -> list[str]:
@@ -71,12 +74,17 @@ def _generate_config(
     domain_names: list[str],
     dst: Path,
     project_name: str = "",
+    model: str = "",
 ) -> bool:
     """Generate .autoinfo/config.yaml from default_config.yaml + domain names.
 
     When *project_name* is non-empty it is stored under both
     ``project.name`` and ``project.project_name`` in the generated YAML
     (the latter for backward compatibility).
+
+    When *model* is non-empty it overrides ``llm.model`` in the generated
+    YAML (interactive prompt result or ``--model`` flag). Empty keeps the
+    template default (``deepseek/deepseek-chat``).
 
     Can accept one or more *domain_names* to configure multiple demo
     domains in a single config file.
@@ -120,6 +128,9 @@ def _generate_config(
             proj["name"] = project_name
             proj["project_name"] = project_name
 
+        if model:
+            config.setdefault("llm", {})["model"] = model
+
         dst.parent.mkdir(parents=True, exist_ok=True)
         with open(dst, "w") as f:
             yaml.dump(config, f, default_flow_style=False, sort_keys=False)
@@ -162,6 +173,9 @@ def _generate_config(
         proj["name"] = project_name
         proj["project_name"] = project_name
 
+    if model:
+        config.setdefault("llm", {})["model"] = model
+
     dst.parent.mkdir(parents=True, exist_ok=True)
     with open(dst, "w") as f:
         yaml.dump(config, f, default_flow_style=False, sort_keys=False)
@@ -170,10 +184,15 @@ def _generate_config(
     return True
 
 
-def _run_init(domains: list[str], autoinfo_dir: Path, project_name: str = "") -> None:
+def _run_init(
+    domains: list[str],
+    autoinfo_dir: Path,
+    project_name: str = "",
+    model: str = "",
+) -> None:
     """Core init logic: generate config, create subdirs, print next steps."""
     config_dst = autoinfo_dir / "config.yaml"
-    _generate_config(domains, config_dst, project_name=project_name)
+    _generate_config(domains, config_dst, project_name=project_name, model=model)
 
     for sub in _REQUIRED_SUBDIRS:
         d = autoinfo_dir.parent / sub
@@ -204,7 +223,10 @@ def _run_init(domains: list[str], autoinfo_dir: Path, project_name: str = "") ->
     typer.echo()
     typer.echo("  2. Collect from sources:")
     if first_topic:
-        typer.echo(f"     autoinfo collect --domain {first_domain} --topic \"{first_topic}\" --limit 5")
+        typer.echo(
+            f"     autoinfo collect --domain {first_domain} --topic "
+            f"\"{first_topic}\" --limit 5"
+        )
     else:
         typer.echo(f"     autoinfo collect --domain {first_domain} --limit 5")
     typer.echo()
@@ -218,14 +240,20 @@ def init(
         None,
         "--demo",
         "-d",
-        help="Demo domain to initialize (omit to enter interactive mode). May be repeated for multiple domains.",
+        help=(
+            "Demo domain to initialize (omit to enter interactive mode). "
+            "May be repeated for multiple domains."
+        ),
         show_default=False,
     ),
     name: Optional[str] = typer.Option(
         None,
         "--name",
         "-n",
-        help="Optional human-friendly project name stored as project.name (and project.project_name for backward compat) in config.",
+        help=(
+            "Optional human-friendly project name stored as project.name "
+            "(and project.project_name for backward compat) in config."
+        ),
         show_default=False,
     ),
     interactive: bool = typer.Option(
@@ -239,6 +267,12 @@ def init(
         "--list-domains",
         help="Show available demo domains and exit.",
     ),
+    model: Optional[str] = typer.Option(
+        None,
+        "--model",
+        help="LLM model to store in config llm.model (overrides the template default).",
+        show_default=False,
+    ),
 ) -> None:
     """Initialize AutoInfo project skeleton.
 
@@ -246,10 +280,14 @@ def init(
     and (optionally) one or more demo domain definitions.
 
     Without --demo, the interactive wizard guides you through domain
-    selection, LLM provider setup, and optional API key configuration.
+    selection, LLM provider setup, optional API key configuration, and an
+    optional LLM model (empty keeps the template default).
 
     Use --name to give your project a human-friendly name (stored in config
     under ``project.name`` and ``project.project_name``).
+
+    Use --model to set llm.model non-interactively (takes priority over the
+    interactive prompt).
     """
     if list_domains:
         _print_demo_domains()
@@ -272,7 +310,14 @@ def init(
                 raise typer.Exit(code=1)
             validated.append(d)
 
-        _run_init(validated, autoinfo_dir, project_name=name or "")
+        _run_init(
+            validated,
+            autoinfo_dir,
+            project_name=name or "",
+            # Direct calls may leave `model` as a truthy OptionInfo object
+            # (Typer default) — only a real string is an override.
+            model=model if isinstance(model, str) else "",
+        )
         return
 
     if not interactive:
@@ -340,7 +385,26 @@ def init(
     else:
         typer.echo("  SKIP  LLM API key not set (use export AUTOINFO_LLM_API_KEY=... later)")
 
+    # --model flag takes priority over the interactive prompt. Guard against
+    # direct calls where `model` is a truthy OptionInfo object (Typer default).
+    if isinstance(model, str) and model:
+        model_value = model
+    else:
+        try:
+            model_value = typer.prompt(
+                "LLM model (optional, empty = default deepseek/deepseek-chat)\n"
+                f"  Providers: {_LLM_PROVIDER_CANDIDATES}",
+                default="",
+            )
+        except (EOFError, KeyboardInterrupt):
+            typer.echo("")
+            raise typer.Exit(code=0)
+    if model_value:
+        typer.echo(f"  Using model: {model_value}")
+    else:
+        typer.echo("  SKIP  LLM model not set (template default will be used)")
+
     autoinfo_dir = Path.cwd() / ".autoinfo"
     _ensure_dir(autoinfo_dir)
 
-    _run_init([selected_domain], autoinfo_dir, project_name=project_name)
+    _run_init([selected_domain], autoinfo_dir, project_name=project_name, model=model_value)

@@ -9,7 +9,7 @@ three commands:
 | Surface | Derivation command |
 |---------|-------------------|
 | CLI | `.venv/bin/autoinfo --help` + per-group `autoinfo <group> --help` (28 groups, all subcommands) |
-| MCP | `list_tools()` on `autoinfo.mcp.server` (145 tools, runtime registry) |
+| MCP | `list_tools()` on `autoinfo.mcp.server` (146 tools, runtime registry) |
 | REST | FastAPI `app.routes` + `router.routes` on `autoinfo.api.server` (3 routers: routes/portal/storefront + app-level) |
 
 Derivation date: 2026-08-05. Re-derive with the commands above whenever the

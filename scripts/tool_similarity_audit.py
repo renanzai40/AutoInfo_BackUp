@@ -1,6 +1,6 @@
 """Tool similarity audit: D-工-7 evidence for the best-practice review.
 
-Static audit of tool *boundary health* across the 145 MCP tool surface
+Static audit of tool *boundary health* across the 146 MCP tool surface
 (D-工-7 in ``docs/dev/best-practice-review.md``; sourced from Anthropic /
 OpenAI tool-design guidance — agents must be able to tell tools apart):
 
