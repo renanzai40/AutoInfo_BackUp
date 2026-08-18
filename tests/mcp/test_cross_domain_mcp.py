@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -22,7 +23,6 @@ from autoinfo.mcp.server import (
     call_tool,
     list_tools,
 )
-
 
 # ======================================================================
 # Tool registration
@@ -144,6 +144,7 @@ class TestDelegation:
             target_audience="researchers",
             report_type="trend",
             user_id="",
+            language="",
         )
 
         # Verify result structure
@@ -209,7 +210,7 @@ class TestDelegation:
 
 def _handle_init_project_direct(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> dict:
+) -> dict[str, Any]:
     """Initialize the project in tmp_path so domain config exists."""
     monkeypatch.chdir(tmp_path)
     from autoinfo.mcp.server import _handle_init_project

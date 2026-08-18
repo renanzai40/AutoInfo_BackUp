@@ -28,6 +28,7 @@ from unittest.mock import MagicMock, patch
 from autoinfo.llm import LLMExtractor
 from autoinfo.models import ExtractionResult
 from autoinfo.output import (
+    _REPORT_PRODUCT_BASE_SECTIONS,
     PRODUCT_TEMPLATES,
     ProductTemplate,
     ReportData,
@@ -271,6 +272,23 @@ class TestDigestPromptProductKeying:
         assert "index-aligned" in prompt
         # key_metrics is enterprise-only — absent here.
         assert '"key_metrics"' not in prompt
+
+    def test_premium_briefing_risks_require_concrete_numbers(self) -> None:
+        """#307: every Risk must embed a concrete number/case/entity and every
+        Action a who/what/when — no template-filler prose."""
+        sections = _REPORT_PRODUCT_BASE_SECTIONS
+        assert "concrete number, case, or named entity" in sections
+        assert "who does it" in sections
+        assert "timeline" in sections
+        assert "Valuation Bubble" in sections  # explicit anti-example
+
+    def test_premium_briefing_actions_require_who_what_when(self) -> None:
+        """#307: Actions must name WHO/WHAT/WHEN, never bare imperatives."""
+        sections = _REPORT_PRODUCT_BASE_SECTIONS
+        assert "WHO does it" in sections
+        assert "WHAT specifically" in sections
+        assert "WHEN timeline" in sections
+        assert "conduct market analysis" in sections  # explicit anti-example
 
     def test_magazine_digest_requests_three_product_fields(self) -> None:
         """magazine-digest asks for implications/risks/action_required."""

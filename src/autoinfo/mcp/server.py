@@ -3035,6 +3035,7 @@ def _handle_generate_digest(
     user_id: str = "",
     max_items: int = 0,
     product: str = "",
+    language: str = "",
     persist: bool = False,
 ) -> dict[str, Any]:
     """Generate a digest of KB entries for *domain* over the given *period*.
@@ -3105,6 +3106,7 @@ def _handle_generate_digest(
             user_id=user_id,
             max_items=max_items,
             product_template=product_template,
+            language=language,
         )
         if format in ("json", "agent"):
             # Parse JSON string back to dict for structured MCP response
@@ -3175,6 +3177,7 @@ def _handle_generate_report(
     user_id: str = "",
     report_type: str = "standard",
     product: str = "",
+    language: str = "",
     persist: bool = False,
 ) -> dict[str, Any]:
     """Generate a structured report for *domain* over the given *period*.
@@ -3243,7 +3246,7 @@ def _handle_generate_report(
         # (column was persisted as report-markdown-* and never counted for
         # the column:markdown cell — issue #229).
         _persist_product = "column" if report_type == "column" else "report"
-        result = _generate_report(domain=domain, format=format, period=period, custom_instructions=custom_instructions, target_audience=target_audience, user_id=user_id, report_type=report_type, product_template=product_template)
+        result = _generate_report(domain=domain, format=format, period=period, custom_instructions=custom_instructions, target_audience=target_audience, user_id=user_id, report_type=report_type, product_template=product_template, language=language)
         if format in ("json", "agent"):
             import json as _json
 
@@ -3337,6 +3340,7 @@ def _handle_generate_cross_domain_report(
     target_audience: str = "",
     report_type: str = "standard",
     user_id: str = "",
+    language: str = "",
     persist: bool = False,
 ) -> dict[str, Any]:
     """Generate a synthesis report across multiple domains.
@@ -3395,6 +3399,7 @@ def _handle_generate_cross_domain_report(
             target_audience=target_audience,
             report_type=report_type,
             user_id=user_id,
+            language=language,
         )
         if format in ("json", "agent"):
             import json as _json
@@ -8985,6 +8990,16 @@ async def list_tools() -> list[Tool]:
                             "premium-briefing, column, magazine-digest, enterprise-briefing."
                         ),
                     },
+                    "language": {
+                        "type": "string",
+                        "description": (
+                            "Optional ISO-639 language code (e.g. 'zh', 'en'; alias/"
+                            "case tolerant: 'zh_CN', '中文', 'en-US' all match). When "
+                            "set, only entries whose detected language matches are "
+                            "included, so the digest never mixes languages (issue #309)."
+                        ),
+                        "default": "",
+                    },
                     "persist": {
                         "type": "boolean",
                         "description": "When true, write the generated artifact to outputs/<domain>/ and return its persisted_path in the envelope (default: false).",
@@ -9061,6 +9076,16 @@ async def list_tools() -> list[Tool]:
                             "enterprise-briefing."
                         ),
                     },
+                    "language": {
+                        "type": "string",
+                        "description": (
+                            "Optional ISO-639 language code (e.g. 'zh', 'en'; alias/"
+                            "case tolerant: 'zh_CN', '中文', 'en-US' all match). When "
+                            "set, only entries whose detected language matches are "
+                            "included, so the report never mixes languages (issue #309)."
+                        ),
+                        "default": "",
+                    },
                     "persist": {
                         "type": "boolean",
                         "description": "When true, write the generated artifact to outputs/<domain>/ and return its persisted_path in the envelope (default: false).",
@@ -9116,6 +9141,16 @@ async def list_tools() -> list[Tool]:
                     "user_id": {
                         "type": "string",
                         "description": "Optional user ID for preference-based personalization. When provided, stored content_preference (raw_only / processed_only / both) is auto-loaded and KB entries are tier-filtered accordingly.",
+                        "default": "",
+                    },
+                    "language": {
+                        "type": "string",
+                        "description": (
+                            "Optional ISO-639 language code (e.g. 'zh', 'en'; alias/"
+                            "case tolerant: 'zh_CN', '中文', 'en-US' all match). When "
+                            "set, only entries whose detected language matches are "
+                            "included, so the report never mixes languages (issue #309)."
+                        ),
                         "default": "",
                     },
                     "persist": {

@@ -22,6 +22,7 @@ import pytest
 from autoinfo.llm import LLMExtractor
 from autoinfo.models import ExtractionResult
 from autoinfo.output import (
+    _REPORT_TYPE_PROMPTS,
     _VALID_REPORT_TYPES,
     PRODUCT_TEMPLATES,
     DeliveryOutput,
@@ -129,6 +130,14 @@ class TestColumnRegistry:
         row = next(r for r in PRODUCT_TEMPLATES if r["name"] == "column")
         assert row["access_level"] == "premium"
         assert row["template"].access_level == "premium"
+
+    def test_column_prompt_requires_8_10_deep_dive_subsections(self) -> None:
+        """#308: the Deep Dive must contain 8-10 distinct subsections, each
+        2-3 paragraphs, targeting 2000-3000 words — not ~4 shallow sections."""
+        prompt = _REPORT_TYPE_PROMPTS["column"]
+        assert "8-10 distinct subsections" in prompt
+        assert "2-3 paragraphs" in prompt
+        assert "2000-3000 words" in prompt
 
 
 # ===================================================================

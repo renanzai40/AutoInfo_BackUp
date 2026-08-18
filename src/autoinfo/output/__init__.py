@@ -388,6 +388,65 @@ def _filter_product_entries(entries: list[dict[str, Any]]) -> list[dict[str, Any
     return kept
 
 
+_LANG_ALIASES: dict[str, str] = {
+    "zh-cn": "zh",
+    "zh-hans": "zh",
+    "zh-hant": "zh",
+    "zh-tw": "zh",
+    "zh-hk": "zh",
+    "cn": "zh",
+    "中文": "zh",
+    "chinese": "zh",
+    "en-us": "en",
+    "en-gb": "en",
+    "eng": "en",
+    "english": "en",
+}
+
+
+def _normalize_lang(value: str) -> str:
+    """Normalize an ISO-639/alias language tag to the canonical 2-letter code.
+
+    ``zh_CN``, ``en-US``, ``中文``, ``chinese`` → ``zh`` / ``en``.  Unknown
+    values pass through lowercased.
+    """
+    v = (value or "").strip().replace("_", "-").replace(" ", "-").lower()
+    if not v:
+        return ""
+    return _LANG_ALIASES.get(v, v.split("-")[0])
+
+
+def _filter_entries_by_language(
+    entries: list[dict[str, Any]], language: str
+) -> list[dict[str, Any]]:
+    """Keep only entries whose ``language`` field matches *language* (issue #309).
+
+    *language* is normalized via :func:`_normalize_lang`; matching is done on
+    the canonical code so ``"zh"`` matches ``zh_CN``/``中文`` and ``"en"``
+    matches ``en-US``/``english``.  Entries with an empty/unknown language are
+    dropped when a language filter is active (an unfiltered product should not
+    silently mix languages).  Returns the input unchanged when *language* is
+    empty.
+    """
+    target = _normalize_lang(language)
+    if not target:
+        return entries
+    kept: list[dict[str, Any]] = []
+    dropped = 0
+    for entry in entries:
+        entry_lang = _normalize_lang(str(entry.get("language") or ""))
+        if entry_lang == target:
+            kept.append(entry)
+        else:
+            dropped += 1
+    if dropped:
+        logger.info(
+            "Excluded %d entries from product input for language='%s'",
+            dropped, target,
+        )
+    return kept
+
+
 class _DeliveryGatesBypass:
     """Sentinel type for explicitly bypassing delivery-gate resolution."""
 
@@ -3518,6 +3577,7 @@ def generate_digest(
     user_id: str = "",
     max_items: int = 0,
     domains: list[str] | None = None,
+    language: str = "",
 ) -> str | DeliveryOutput:
     """Generate a digest of KB entries for *domain* over the given *period*.
 
@@ -3576,6 +3636,12 @@ def generate_digest(
         Defaults to ``0`` (uses built-in limit of 200).  When *user_id*
         is provided and the user's stored preferences include a
         ``max_items`` key, that value is used instead.
+    language:
+        Optional ISO-639 language code (``"zh"`` / ``"en"``, case/alias
+        tolerant: ``zh_CN``, ``中文``, ``en-US`` all match).  When provided,
+        only entries whose detected ``language`` matches are included, so a
+        digest never mixes languages (issue #309).  Empty (default) includes
+        all languages as before.
 
     Returns
     -------
@@ -3756,6 +3822,12 @@ def generate_digest(
     # Drop empty/test/placeholder entries BEFORE synthesis and BEFORE render so
     # both the LLM input and the rendered body are clean.
     entries = _filter_product_entries(entries)
+
+    # --- Language filter (issue #309) ---------------------------------------
+    # When a user requests a specific language, drop entries in other
+    # languages so a digest/report is internally consistent (no zh/en interleave).
+    if language:
+        entries = _filter_entries_by_language(entries, language)
 
     # --- Parse tags for each entry (they come as JSON strings from SQLite) ----
     for entry in entries:
@@ -4078,6 +4150,7 @@ def generate_report(
     report_type: str = "standard",
     domains: list[str] | None = None,
     llm_config: Config | None = None,
+    language: str = "",
 ) -> str | DeliveryOutput:
     """Generate a structured report for the given *domain* (or *domains*).
 
@@ -4255,6 +4328,10 @@ def generate_report(
 
     # --- Test/empty entry filtering (issue #298 — layer 1) -------------------
     entries = _filter_product_entries(entries)
+
+    # --- Language filter (issue #309) ---------------------------------------
+    if language:
+        entries = _filter_entries_by_language(entries, language)
 
     if not entries:
         rendered: str
@@ -6546,7 +6623,12 @@ _REPORT_TYPE_PROMPTS: dict[str, str] = {
         "cadence — timeline of developments in the period), Implications & "
         "Outlook, Reader Takeaways. Write in a confident expert persona with "
         "analytical depth; this is a longer-form premium column, not a "
-        "briefing. Prioritize high-relevance items (relevance_score > 50)."
+        "briefing. Prioritize high-relevance items (relevance_score > 50).\n"
+        "The Deep Dive section MUST contain 8-10 distinct subsections "
+        "(numbered or headed), each with 2-3 paragraphs of analysis grounded "
+        "in specific entries — quote concrete numbers, dates, and named "
+        "companies/studies from the source material; no filler paragraphs. "
+        "Target total column length 2000-3000 words."
     ),
 }
 
@@ -6570,11 +6652,20 @@ _REPORT_PRODUCT_BASE_SECTIONS = (
     "## Risks & Opportunities\n"
     "- <risk title> | <likelihood> | <impact> | <mitigation>\n"
     "(one bullet per finding, same order; likelihood/impact values: "
-    "High/Medium/Low)\n\n"
+    "High/Medium/Low)\n"
+    "Every risk title MUST embed a concrete number, case, or named entity "
+    "from the source entries — no generic labels like 'Valuation Bubble "
+    "Risk'. Examples: 'Fintech down-rounds up 3.2x YoY (CB Insights)', "
+    "'Stripe API latency 2.1s in APAC peak'. The mitigation MUST name a "
+    "specific action, who does it, and a timeline (e.g. 'Switch 30% of "
+    "traffic to the fallback provider by 2026-09-30').\n\n"
     "## Action Required\n"
     "- <action for finding 1>\n"
     "- <action for finding 2>\n"
-    "(index-aligned with Key Findings; concise imperative sentences)"
+    "(index-aligned with Key Findings; each action MUST specify WHO does it, "
+    "WHAT specifically, and a WHEN timeline — e.g. 'CMO: ship the Q3 pricing "
+    "experiment to 10% of enterprise customers by 2026-09-15'. Never a bare "
+    "'conduct market analysis'.)"
 )
 
 _REPORT_ENTERPRISE_METRICS_SECTION = (
