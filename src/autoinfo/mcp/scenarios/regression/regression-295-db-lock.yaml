@@ -1,0 +1,92 @@
+# Regression #295: parallel `autoinfo process` workers write to the same
+# SQLite DB.  Before the fix SQLiteIndex._connect() set WAL but NO
+# `PRAGMA busy_timeout`, and the processing hot path had NO retry on
+# `sqlite3.OperationalError: database is locked` — under external-writer
+# contention an item was permanently dropped for that run (only logged as
+# a failure).
+#
+# Fix: (a) _connect() sets PRAGMA busy_timeout (default 30000 ms,
+# configurable via AUTOINFO_DB_BUSY_TIMEOUT_MS), (b) _process_item wraps
+# store_entry in a bounded retry (3 attempts, jittered backoff) that ONLY
+# retries "database is locked" — non-lock errors surface immediately.
+#
+# This scenario proves both paths with unit-level CLI steps (real lock
+# contention needs external processes, so the busy_timeout pragma value and
+# the retry helper are probed directly).  Deterministic (requires_env: []):
+# no LLM key, no network, no configured domain.
+name: regression-295-db-lock
+description: "Regression #295: SQLite busy_timeout set on _connect() and store_entry retries transient 'database is locked'"
+category: regression
+regression: true
+regression_issue: "#295"
+requires_env: []
+steps:
+  - name: "SQLiteIndex._connect() sets PRAGMA busy_timeout (default + env override)"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from autoinfo.kb import SQLiteIndex
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-295-a-"))
+      try:
+          index = SQLiteIndex(tmp / "kb.db")
+          with index._connect() as conn:
+              default_ms = conn.execute("PRAGMA busy_timeout").fetchone()[0]
+          assert default_ms == 30000, f"default busy_timeout={default_ms}"
+          os.environ["AUTOINFO_DB_BUSY_TIMEOUT_MS"] = "12345"
+          try:
+              with index._connect() as conn:
+                  override_ms = conn.execute("PRAGMA busy_timeout").fetchone()[0]
+              assert override_ms == 12345, f"override busy_timeout={override_ms}"
+          finally:
+              os.environ.pop("AUTOINFO_DB_BUSY_TIMEOUT_MS", None)
+          print("BUSY_TIMEOUT_OK")
+      finally:
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["BUSY_TIMEOUT_OK"]
+
+  - name: "store_entry retries transient 'database is locked' and stores the item"
+    kind: cli
+    command: |-
+      python3 -c '
+      import sqlite3
+      from unittest.mock import MagicMock
+      from autoinfo.kb import KBStore
+      from autoinfo.models import Item, KBEntry
+      from autoinfo.process import _store_entry_with_retry
+
+      store = MagicMock(spec=KBStore)
+      attempts = {"n": 0}
+      def flaky(item, extraction, quality_results):
+          attempts["n"] += 1
+          if attempts["n"] <= 2:
+              raise sqlite3.OperationalError("database is locked")
+          return KBEntry(entry_id="e1", title="t", domain="medical-research")
+      store.store_entry.side_effect = flaky
+      item = Item(id="i1", source_name="pubmed", source_type="api",
+                  source_platform="pubmed", source_url="https://example.com/i1",
+                  title="t", content="c")
+      entry = _store_entry_with_retry(store, item, None, None, sleep=lambda _s: None)
+      assert entry is not None and entry.entry_id == "e1", "item not stored after retry"
+      assert attempts["n"] == 3, "attempts=%d" % attempts["n"]
+      # Non-lock error must NOT be retried — surfaces immediately.
+      store2 = MagicMock(spec=KBStore)
+      store2.store_entry.side_effect = sqlite3.OperationalError("no such table: entries")
+      try:
+          _store_entry_with_retry(store2, item, None, None, sleep=lambda _s: None)
+          raise AssertionError("non-lock error was swallowed")
+      except sqlite3.OperationalError as exc:
+          assert "no such table" in str(exc)
+      assert store2.store_entry.call_count == 1, "non-lock error was retried"
+      print("LOCK_RETRY_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["LOCK_RETRY_OK"]

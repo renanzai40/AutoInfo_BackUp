@@ -1,0 +1,91 @@
+# Regression #303: empty-shell products + internal-state leak.
+# ① column.md.j2 rendered a silent empty "## Deep Dive" (and empty
+#    "Implications & Outlook") when ``sections`` was empty — now the
+#    ``{% else %}`` branches render fallback text
+#    ("_No deep-dive sections available for this column." /
+#    "_No outlook sections available.").
+# ② the KB-derived presentation fallback exposed internal state in speaker
+#    notes ("KB-derived slide" / "returned no slides") — now the notes are
+#    neutral ("Prepared from knowledge base sources.") and the rendered
+#    presentation never leaks the internal strings.
+#
+# This scenario renders the real Jinja2 templates via the shared
+# `_get_jinja_env()` and calls the real `_fallback_slides_from_entries`
+# (deterministic, no network, no LLM).  A regression that reverts either fix
+# fails here.
+name: regression-303-empty-shell-notes
+description: "Regression #303: column empty sections render fallback text; presentation notes never leak internal state"
+category: regression
+regression: true
+regression_issue: "#303"
+requires_env: []
+steps:
+  - name: "column with empty sections renders fallback text (no silent empty Deep Dive)"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.output import _get_jinja_env
+
+      env = _get_jinja_env()
+      tmpl = env.get_template("column.md.j2")
+      out = tmpl.render(
+          title="Test Column",
+          domain="medical-research",
+          generated_at="2026-07-17T00:00:00Z",
+          executive_summary="Summary.",
+          sections=[],
+          references=[],
+          appendices=[],
+      )
+      assert "No deep-dive sections available for this column." in out, (
+          "empty Deep Dive must render fallback text:\n" + out
+      )
+      assert "No outlook sections available." in out, (
+          "empty Implications must render fallback text:\n" + out
+      )
+      print("COLUMN_EMPTY_SHELL_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["COLUMN_EMPTY_SHELL_OK"]
+
+  - name: "presentation fallback slides and rendered output never leak internal state"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.output import _fallback_slides_from_entries, _get_jinja_env
+
+      entries = [
+          {"title": "IVF breakthrough", "summary": "Time-lapse imaging improves outcomes."},
+          {"title": "Embryo selection", "summary": "AI models show promise."},
+      ]
+      slides = _fallback_slides_from_entries(entries, slide_count=3)
+      assert len(slides) >= 1, "fallback produced no slides"
+      for slide in slides:
+          notes = slide.get("notes", "")
+          assert "KB-derived slide" not in notes, f"internal-state leak: {notes!r}"
+          assert "returned no slides" not in notes, f"internal-state leak: {notes!r}"
+
+      env = _get_jinja_env()
+      tmpl = env.get_template("presentation.md.j2")
+      out = tmpl.render(
+          title="IVF Overview",
+          topic="IVF",
+          domain="medical-research",
+          target_audience="general",
+          slides=slides,
+          description="",
+          generated_at="2026-07-17T00:00:00Z",
+      )
+      assert "KB-derived slide" not in out, "rendered output leaked internal state:\n" + out
+      assert "returned no slides" not in out, "rendered output leaked internal state:\n" + out
+      assert "Prepared from knowledge base sources." in out, (
+          "neutral fallback notes missing:\n" + out
+      )
+      print("PRESENTATION_NO_LEAK_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["PRESENTATION_NO_LEAK_OK"]

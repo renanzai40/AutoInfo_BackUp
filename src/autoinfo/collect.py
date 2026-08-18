@@ -82,6 +82,7 @@ def run_collection(
                 "total_new": int,
                 "duration_s": float,
                 "per_source": [CollectionResult, ...],
+                "unknown_sources": [str, ...],  # requested names not in config
                 "dry_run": bool,
             }
 
@@ -111,12 +112,15 @@ def run_collection(
     keywords = _resolve_topic_keywords(domain_config, topic)
 
     # -- Determine which sources to collect --------------------------------
-    source_configs = _resolve_sources(domain_config.sources, sources)
+    source_configs, unknown_sources = _resolve_sources(domain_config.sources, sources)
     if not source_configs:
-        raise ValueError(
-            f"No active sources found for domain '{domain}'"
-            + (f" matching: {sources}" if sources else "")
-        )
+        if sources:
+            available = ", ".join(s.name for s in domain_config.sources) or "(none)"
+            raise ValueError(
+                f"Unknown source(s) for domain '{domain}': "
+                f"{', '.join(unknown_sources)}. Available sources: {available}"
+            )
+        raise ValueError(f"No active sources found for domain '{domain}'")
 
     # -- Load existing KB entries for dedup --------------------------------
     checker = DedupChecker()
@@ -200,6 +204,7 @@ def run_collection(
         "items_filtered": sum(r.items_filtered for r in per_source),
         "duration_s": round(elapsed, 3),
         "per_source": [r.to_dict() for r in per_source],
+        "unknown_sources": unknown_sources,
         "dry_run": dry_run,
     }
 
@@ -224,13 +229,22 @@ def _find_domain(config: Config, domain: str) -> Any | None:
 def _resolve_sources(
     all_sources: list[SourceConfig],
     requested: list[str] | None,
-) -> list[SourceConfig]:
-    """Filter the source list to only those requested (or all if ``None``)."""
+) -> tuple[list[SourceConfig], list[str]]:
+    """Filter the source list to only those requested (or all if ``None``).
+
+    Returns ``(resolved, unknown)`` where *unknown* lists the requested
+    source names that are not present in *all_sources* — they are never
+    silently dropped (issue #296).  When *requested* is ``None``/empty,
+    *unknown* is empty and all sources are returned.
+    """
     if not requested:
-        return list(all_sources)
+        return list(all_sources), []
 
     requested_set = set(requested)
-    return [s for s in all_sources if s.name in requested_set]
+    resolved = [s for s in all_sources if s.name in requested_set]
+    known_names = {s.name for s in all_sources}
+    unknown = [name for name in requested if name not in known_names]
+    return resolved, unknown
 
 
 def _make_collection_id() -> str:

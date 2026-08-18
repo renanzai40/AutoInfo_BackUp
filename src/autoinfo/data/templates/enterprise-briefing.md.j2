@@ -77,7 +77,7 @@ _No material risks identified in this period._
 ## References
 
 {% for ref in references %}
-1. **{{ ref.title }}**{% if ref.source_url %} — {{ ref.source_url }}{% endif %}{% if ref.source_platform %} ({{ ref.source_platform }}){% endif %}
+1. **{{ ref.title }}**{{ (" — " ~ ref.source_url) if ref.source_url else "" }}{{ (" (" ~ ref.source_platform | platform_name ~ ")") if ref.source_platform else "" }}
 {% else %}
 _No source references available for this briefing._
 {% endfor %}

@@ -16,6 +16,7 @@ import concurrent.futures
 import json
 import logging
 import os
+import random
 import sqlite3
 import sys
 import threading
@@ -33,10 +34,15 @@ from autoinfo.config import (
     get_config_path,
     load_config,
 )
-from autoinfo.kb import _FTS5_STOPWORDS, KBStore, PromotionRejected
+from autoinfo.kb import (
+    _FTS5_STOPWORDS,
+    KBStore,
+    PromotionRejected,
+    _db_busy_timeout_ms,
+)
 from autoinfo.keywords import KeywordsFile, KeywordState
 from autoinfo.llm import LLMExtractor
-from autoinfo.models import Item
+from autoinfo.models import ExtractionResult, Item, KBEntry
 from autoinfo.quality import (
     G0SchemaIntegrity,
     G3RelevanceScoring,
@@ -102,6 +108,65 @@ _PROCESS_WORKER_CAP = 16
 # OUTSIDE this lock — only its storage writes take the lock (see
 # _classify_entry_cefr).
 _STORAGE_LOCK = threading.Lock()
+
+# Bounded retry on SQLite lock contention (issue #295): parallel workers
+# write to the same DB and an external writer (WAL checkpoint, another
+# process) can transiently raise ``OperationalError: database is locked``.
+# Retry a few times with a short jittered backoff instead of dropping the
+# item for the run; non-lock errors surface immediately.
+_DB_LOCK_MAX_ATTEMPTS = 3
+_DB_LOCK_BACKOFF_BASE_S = 0.05
+
+
+def _is_db_locked_error(exc: BaseException) -> bool:
+    """Return ``True`` when *exc* is a SQLite lock-contention error.
+
+    SQLite raises ``sqlite3.OperationalError`` with the message
+    ``database is locked`` when another connection holds a write lock.
+    These are transient under WAL and worth retrying; every other
+    OperationalError (schema, corruption, …) is not.
+    """
+    return isinstance(exc, sqlite3.OperationalError) and "database is locked" in str(exc).lower()
+
+
+def _jittered_backoff(attempt: int, base: float = _DB_LOCK_BACKOFF_BASE_S) -> float:
+    """Return a small jittered backoff delay (seconds) for *attempt* (0-indexed)."""
+    result: float = base * (2 ** attempt) * (0.5 + random.random())
+    return result
+
+
+def _store_entry_with_retry(
+    kb_store: KBStore,
+    item: Item,
+    extraction: ExtractionResult | None,
+    quality_results: dict[str, QualityResult] | None,
+    *,
+    max_attempts: int = _DB_LOCK_MAX_ATTEMPTS,
+    sleep: Callable[[float], None] = time.sleep,
+) -> KBEntry | None:
+    """Store *item* under ``_STORAGE_LOCK``, retrying transient DB-lock errors.
+
+    Parallel ``autoinfo process`` workers write to the same SQLite DB; under
+    external-writer contention a write can raise ``OperationalError: database
+    is locked``.  These are transient — retry with a short jittered backoff
+    instead of dropping the item for the run.  Non-lock errors surface
+    immediately.  On retry exhaustion the ORIGINAL error propagates to the
+    caller's ``except`` handler so the item is logged + counted exactly as
+    today.  ``sleep`` is injectable so tests never actually sleep.
+    """
+    last_error: sqlite3.OperationalError | None = None
+    for attempt in range(max_attempts):
+        try:
+            with _STORAGE_LOCK:
+                return kb_store.store_entry(item, extraction, quality_results)
+        except sqlite3.OperationalError as exc:
+            if not _is_db_locked_error(exc):
+                raise
+            last_error = exc
+            if attempt < max_attempts - 1:
+                sleep(_jittered_backoff(attempt))
+    assert last_error is not None
+    raise last_error
 
 
 def _resolve_process_workers() -> int:
@@ -179,7 +244,8 @@ def detect_language(text: str) -> str:
         top = langs[0]
         if top.prob < 0.8:
             return "unknown"
-        return top.lang
+        detected: str = top.lang
+        return detected
     except _LDE:
         return "unknown"
 
@@ -224,9 +290,9 @@ class ProcessResult:
     is_complete: bool = True
     passed_gates: int = 0
     kb_entries_created: int = 0
-    errors: list[dict] = field(default_factory=list)
+    errors: list[dict[str, Any]] = field(default_factory=list)
     duration_s: float = 0.0
-    per_item_logs: list[dict] = field(default_factory=list)
+    per_item_logs: list[dict[str, Any]] = field(default_factory=list)
     token_usage: dict[str, Any] = field(default_factory=lambda: {
         "prompt_tokens": 0,
         "completion_tokens": 0,
@@ -300,6 +366,19 @@ def _get_progress_db_path() -> Path:
     return Path("knowledge").resolve().parent / "autoinfo.db"
 
 
+def _connect_progress_db() -> sqlite3.Connection:
+    """Open the shared progress DB connection with a busy timeout.
+
+    The ``processing_progress`` table lives in the same ``autoinfo.db`` as
+    the KB index; under external-writer contention a plain connect can raise
+    ``OperationalError: database is locked``.  A busy timeout makes the
+    connection wait for the lock instead of failing immediately (issue #295).
+    """
+    conn = sqlite3.connect(str(_get_progress_db_path()))
+    conn.execute(f"PRAGMA busy_timeout={_db_busy_timeout_ms()}")
+    return conn
+
+
 def _init_progress_table(conn: sqlite3.Connection) -> None:
     """Create the ``processing_progress`` table if it does not exist."""
     conn.execute("""
@@ -311,7 +390,7 @@ def _init_progress_table(conn: sqlite3.Connection) -> None:
     """)
 
 
-def _read_progress(domain: str) -> dict:
+def _read_progress(domain: str) -> dict[str, Any]:
     """Read the persisted processing progress for *domain*.
 
     Returns
@@ -325,7 +404,7 @@ def _read_progress(domain: str) -> dict:
     if not db_path.is_file():
         return {"last_processed_index": 0, "total_items": 0}
     try:
-        with sqlite3.connect(str(db_path)) as conn:
+        with _connect_progress_db() as conn:
             _init_progress_table(conn)
             row = conn.execute(
                 "SELECT last_processed_index, total_items FROM processing_progress WHERE domain = ?",  # noqa: E501
@@ -343,7 +422,7 @@ def _write_progress(domain: str, last_processed_index: int, total_items: int) ->
     db_path = _get_progress_db_path()
     db_path.parent.mkdir(parents=True, exist_ok=True)
     try:
-        with sqlite3.connect(str(db_path)) as conn:
+        with _connect_progress_db() as conn:
             _init_progress_table(conn)
             conn.execute(
                 """INSERT OR REPLACE INTO processing_progress
@@ -361,7 +440,7 @@ def _reset_progress(domain: str) -> None:
     if not db_path.is_file():
         return
     try:
-        with sqlite3.connect(str(db_path)) as conn:
+        with _connect_progress_db() as conn:
             conn.execute(
                 "DELETE FROM processing_progress WHERE domain = ?",
                 (domain,),
@@ -699,8 +778,8 @@ def run_processing(
     new_index = 0
     if batch_size > 0:
         progress = _read_progress(domain)
-        start_index: int = progress["last_processed_index"]  # type: ignore[assignment]
-        persisted_total: int = progress["total_items"]  # type: ignore[assignment]
+        start_index: int = progress["last_processed_index"]
+        persisted_total: int = progress["total_items"]
 
         # If the cache grew (new items collected), restart from 0 so nothing
         # is missed.  If it shrank, also reset to avoid an out-of-range slice.
@@ -747,7 +826,6 @@ def run_processing(
     # accept as constructor args.
     from dataclasses import fields as _dc_fields
 
-    from autoinfo.models import KBEntry
     _KB_FIELDS = {f.name for f in _dc_fields(KBEntry)}  # noqa: N806
     existing_entries_raw = kb_store.list_entries(domain, limit=10000)
     existing_entries: list[KBEntry] = [
@@ -1284,8 +1362,14 @@ def run_processing(
                 item_log["status"] = "duplicate"
                 item_log["detail"] = str(g2.details.get("matched_by", "unknown"))
 
-            with _STORAGE_LOCK:
-                entry = kb_store.store_entry(item, extraction, quality_results)
+            # Issue #295: bounded retry on transient SQLite lock contention
+            # (external writer) — a "database is locked" OperationalError is
+            # retried with a short jittered backoff; non-lock errors surface
+            # immediately.  On retry exhaustion the original error propagates
+            # to the except handler below (item logged + counted as today).
+            entry = _store_entry_with_retry(
+                kb_store, item, extraction, quality_results
+            )
             if entry is None:
                 # Issue #182: entry rejected by KB (content too short) —
                 # skip it; do not crash or count it as created.
@@ -1554,7 +1638,7 @@ def run_processing(
     return result
 
 
-def get_processing_progress(domain: str) -> dict:
+def get_processing_progress(domain: str) -> dict[str, Any]:
     """Return the current processing progress for *domain*.
 
     Parameters

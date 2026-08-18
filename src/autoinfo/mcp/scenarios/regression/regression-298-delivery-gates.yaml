@@ -1,0 +1,107 @@
+# Regression #298: delivery gates (D1-D3) were NOT run by default in the
+# production paths — callers had to pass an explicit `delivery_gate_configs`
+# dict, so a plain `generate_digest(domain=...)` returned a bare `str` with no
+# gate checking even when the project config declared per-domain
+# `delivery_gates`.
+#
+# Fix: `_resolve_delivery_gate_configs` resolves `None` from the project
+# config (domain `delivery_gates` first, then global `delivery_gates`); the
+# `_DELIVERY_GATES_BYPASS` sentinel is the only way to explicitly bypass.
+# When config gates exist, the generator returns a `DeliveryOutput` with
+# populated `gate_results` instead of a plain `str`.
+#
+# This scenario drives the real `generate_digest` with a temp config carrying
+# a domain `delivery_gates.D1` block, a mocked KBStore + mocked LLM, and
+# `delivery_gate_configs=None` (deterministic, no network/LLM key).  A
+# regression that stops resolving config gates fails here: the result must be
+# a DeliveryOutput whose gate_results contains D1-ProductCompleteness.
+name: regression-298-delivery-gates
+description: "Regression #298: generate_digest resolves domain delivery_gates from config and runs D1-D3 by default"
+category: regression
+regression: true
+regression_issue: "#298"
+requires_env: []
+steps:
+  - name: "generate_digest with delivery_gate_configs=None resolves config gates and returns DeliveryOutput"
+    kind: cli
+    command: |-
+      python3 -c '
+      import tempfile
+      from datetime import date, timedelta
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import DeliveryOutput, generate_digest
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-298-"))
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True)
+          (cfg_dir / "config.yaml").write_text(
+              "project:\n"
+              "  name: T\n"
+              "domains:\n"
+              "  - name: medical-research\n"
+              "    active: true\n"
+              "    delivery_gates:\n"
+              "      D1:\n"
+              "        enabled: true\n"
+              "        action_on_failure: block\n"
+          )
+
+          real = {
+              "entry_id": "real-001",
+              "title": "IVF time-lapse imaging improves live birth rates",
+              "domain": "medical-research",
+              "tier": "01-Raw",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
+              "source_type": "api",
+              "source_platform": "pubmed",
+              "collected_at": (date.today() - timedelta(days=1)).isoformat(),
+              "summary": "Time-lapse imaging improves live birth rates (48.2% vs 39.5%).",
+              "tags": "[]",
+              "quality_tier": 1,
+              "relevance_score": 92.0,
+          }
+          synthesis = {
+              "executive_summary": "This week IVF technology advanced on time-lapse imaging.",
+              "key_findings": [
+                  {"topic": "Time-lapse imaging", "detail": "Improves live birth rates."}
+              ],
+              "trends": ["Growing adoption."],
+              "recommendations": ["Expand access."],
+          }
+
+          with patch("autoinfo.output.get_config_path",
+                     return_value=cfg_dir / "config.yaml"), \
+                  patch("autoinfo.output.KBStore") as mock_kb, \
+                  patch("autoinfo.output._call_llm_for_digest", return_value=synthesis), \
+                  patch("autoinfo.output._fire_agent_notification"):
+              mock_store = MagicMock()
+              mock_store.list_entries.return_value = [real]
+              mock_kb.return_value = mock_store
+              result = generate_digest(
+                  domain="medical-research",
+                  period="weekly",
+                  format="markdown",
+                  delivery_gate_configs=None,
+              )
+
+          assert isinstance(result, DeliveryOutput), (
+              "expected DeliveryOutput (config gates resolved), got " + type(result).__name__
+          )
+          assert "D1-ProductCompleteness" in result.gate_results, (
+              "D1 gate did not run: " + repr(list(result.gate_results.keys()))
+          )
+          assert result.gate_results["D1-ProductCompleteness"].passed is True, (
+              "complete digest should pass D1"
+          )
+          assert result.delivery_blocked is False, result.warnings
+          print("DELIVERY_GATES_RESOLVED_OK")
+      finally:
+          import shutil
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["DELIVERY_GATES_RESOLVED_OK"]

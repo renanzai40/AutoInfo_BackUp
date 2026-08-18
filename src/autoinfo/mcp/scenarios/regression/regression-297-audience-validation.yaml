@@ -1,0 +1,159 @@
+# Regression #297: audience validation was inconsistent across generators —
+# report/digest silently fell back to "general" for invalid target_audience
+# values while tutorial/presentation raised ValueError, hiding user typos.
+# Fix: `_normalize_report_audience` (report/digest) now raises ValueError
+# naming the invalid value and listing the valid options, matching the
+# tutorial/presentation validation — all four generators share the same
+# `_VALID_AUDIENCES` contract.
+#
+# This scenario drives all four real generators with mocked KBStore + mocked
+# LLM (deterministic, no network/LLM key).  A regression that reverts
+# report/digest to silent fallback fails here: every invalid value must raise
+# ValueError naming the value + valid list in ALL four generators, and a valid
+# audience must pass.
+name: regression-297-audience-validation
+description: "Regression #297: audience validation consistent across report/digest/tutorial/presentation"
+category: regression
+regression: true
+regression_issue: "#297"
+requires_env: []
+steps:
+  - name: "invalid audience raises ValueError naming value + valid list in all four generators"
+    kind: cli
+    command: |-
+      python3 -c '
+      from datetime import date, timedelta
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import (
+          _VALID_AUDIENCES,
+          generate_digest,
+          generate_presentation,
+          generate_report,
+          generate_tutorial,
+      )
+
+      VALID = sorted(_VALID_AUDIENCES)
+      INVALID = ["investors", "general-public", "bogus", "xyzzy"]
+
+      real = {
+          "entry_id": "real-001",
+          "title": "IVF time-lapse imaging improves live birth rates",
+          "domain": "medical-research",
+          "tier": "01-Raw",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
+          "source_type": "api",
+          "source_platform": "pubmed",
+          "collected_at": (date.today() - timedelta(days=1)).isoformat(),
+          "summary": "Time-lapse imaging improves live birth rates (48.2% vs 39.5%).",
+          "tags": "[]",
+          "quality_tier": 1,
+          "relevance_score": 92.0,
+      }
+      synthesis = {
+          "executive_summary": "This week IVF technology advanced on time-lapse imaging.",
+          "key_findings": [
+              {"topic": "Time-lapse imaging", "detail": "Improves live birth rates."}
+          ],
+          "trends": ["Growing adoption."],
+          "recommendations": ["Expand access."],
+      }
+
+      def assert_invalid_raises(fn, **kwargs):
+          for invalid in INVALID:
+              try:
+                  fn(**kwargs, target_audience=invalid)
+                  raise AssertionError(f"accepted invalid audience {invalid!r}")
+              except ValueError as exc:
+                  msg = str(exc)
+                  assert "Invalid target_audience" in msg, msg
+                  assert invalid in msg, f"invalid value not named: {msg}"
+                  for aud in VALID:
+                      assert aud in msg, f"valid option {aud} not listed: {msg}"
+
+      # --- report (real _generate_executive_summary -> _normalize_report_audience)
+      with patch("autoinfo.output.KBStore") as mock_kb, \
+              patch("autoinfo.output._call_llm_for_report_synthesis", return_value="Executive summary."), \
+              patch("autoinfo.output._llm_json_extract") as mock_extract, \
+              patch("autoinfo.output._fire_agent_notification"):
+          mock_extract.side_effect = (
+              lambda ext, prompt, field: (
+                  [{"theme": "General", "description": "All", "entry_ids": ["real-001"]}]
+                  if field == "groups"
+                  else "Summary."
+              )
+          )
+          mock_store = MagicMock()
+          mock_store.list_entries.return_value = [real]
+          mock_kb.return_value = mock_store
+          assert_invalid_raises(
+              generate_report, domain="medical-research", period="weekly", format="markdown"
+          )
+          res = generate_report(
+              domain="medical-research", period="weekly", format="markdown",
+              target_audience="general",
+          )
+          assert isinstance(res, str), type(res)
+
+      # --- digest
+      with patch("autoinfo.output.KBStore") as mock_kb, \
+              patch("autoinfo.output._call_llm_for_digest", return_value=synthesis), \
+              patch("autoinfo.output._fire_agent_notification"):
+          mock_store = MagicMock()
+          mock_store.list_entries.return_value = [real]
+          mock_kb.return_value = mock_store
+          assert_invalid_raises(
+              generate_digest, domain="medical-research", period="weekly", format="markdown"
+          )
+          res = generate_digest(
+              domain="medical-research", period="weekly", format="markdown",
+              target_audience="general",
+          )
+          assert isinstance(res, str), type(res)
+
+      # --- tutorial
+      with patch("autoinfo.output.KBStore") as mock_kb, \
+              patch("autoinfo.output._call_llm_for_tutorial") as mock_llm, \
+              patch("autoinfo.output._fire_agent_notification"):
+          mock_llm.return_value = {
+              "learning_objectives": ["Understand IVF basics."],
+              "sections": [{"title": "Introduction", "content": "IVF overview."}],
+              "exercises": [{"question": "What is IVF?", "answer": "In vitro fertilization."}],
+          }
+          mock_store = MagicMock()
+          mock_store.list_entries.return_value = [real]
+          mock_kb.return_value = mock_store
+          assert_invalid_raises(generate_tutorial, domain="medical-research", format="markdown")
+          res = generate_tutorial(
+              domain="medical-research", format="markdown", target_audience="general"
+          )
+          assert isinstance(res, str), type(res)
+
+      # --- presentation
+      with patch("autoinfo.output.KBStore") as mock_kb, \
+              patch("autoinfo.output._call_llm_for_presentation") as mock_llm, \
+              patch("autoinfo.output._fire_agent_notification"):
+          mock_llm.return_value = {
+              "title": "IVF Overview",
+              "slides": [
+                  {"title": "Introduction", "content": "IVF is a technique for assisting reproduction. " * 20},
+                  {"title": "Key Findings", "content": "AI improves embryo selection accuracy significantly. " * 20},
+              ],
+          }
+          mock_store = MagicMock()
+          mock_store.list_entries.return_value = [real]
+          mock_kb.return_value = mock_store
+          assert_invalid_raises(
+              generate_presentation, domain="medical-research", topic="IVF", format="markdown"
+          )
+          res = generate_presentation(
+              domain="medical-research", topic="IVF", format="markdown",
+              target_audience="general",
+          )
+          assert isinstance(res, str), type(res)
+
+      print("AUDIENCE_VALIDATION_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["AUDIENCE_VALIDATION_OK"]

@@ -1,0 +1,85 @@
+# Regression #290: CLI `init` printed no LLM fallback-chain guidance and the
+# MCP `diagnose_system` handler exposed no fallback-chain health.
+#
+# Fix: (a) `_run_init` now calls `_print_llm_guidance()` after writing the
+# config — echoing the fallback-chain YAML shape, the `reasoning_model` flag,
+# and a connectivity-check hint (mirroring the MCP `init_project` next_steps);
+# (b) `_handle_diagnose_system` now returns a `fallback_health` section
+# (configured / count / entries / primary) derived from the config via the
+# shared `llm_fallback_health` helper (config.py), where an empty fallback
+# `provider`/`api_key` reports `inherits_provider`/`inherits_key` True.
+#
+# This scenario asserts both contracts deterministically (requires_env: []):
+# the CLI init runs against a temp dir (no network — init never calls
+# test_llm_connection; the guidance text is asserted in stdout), and the
+# diagnose handler is driven with a patched config carrying 1 fallback entry.
+name: regression-290-init-fallback
+description: "Regression #290: init prints fallback-chain guidance; diagnose_system returns fallback_health"
+category: regression
+regression: true
+regression_issue: "#290"
+requires_env: []
+steps:
+  - name: "CLI init prints fallback-chain / reasoning_model / connectivity guidance"
+    kind: cli
+    command: |-
+      set -euo pipefail
+      TMP="$(mktemp -d)"
+      trap 'rm -rf "$TMP"' EXIT
+      cd "$TMP"
+      autoinfo init --demo medical-research > init.out 2>&1
+      grep -qi "fallback" init.out
+      grep -qi "reasoning_model" init.out
+      grep -qi "test_llm_connection" init.out
+      # config was actually written (init never performs a live connectivity
+      # check — the guidance text is static; no network is required)
+      test -f .autoinfo/config.yaml
+      echo "INIT_FALLBACK_GUIDANCE_OK"
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["INIT_FALLBACK_GUIDANCE_OK"]
+
+  - name: "diagnose_system fallback_health reflects a configured fallback chain"
+    kind: cli
+    command: |-
+      python3 -c '
+      from pathlib import Path
+      from unittest.mock import patch
+      from autoinfo.config import Config, LLMConfig, ProjectConfig
+      from autoinfo.mcp.server import _handle_diagnose_system
+
+      with patch("autoinfo.config.get_config_path",
+                 return_value=Path("/tmp/regression-290/config.yaml")), \
+              patch("autoinfo.config.load_config") as mock_load:
+          mock_load.return_value = Config(
+              project=ProjectConfig(name="T"),
+              llm=LLMConfig(
+                  provider="openai",
+                  model="gpt-4o",
+                  fallback=[
+                      LLMConfig(
+                          model="mimo-v2.5",
+                          base_url="https://opencode.ai/zen/go/v1",
+                      ),
+                  ],
+              ),
+          )
+          result = _handle_diagnose_system()
+
+      fh = result["fallback_health"]
+      assert fh["configured"] is True, fh
+      assert fh["count"] == 1, fh
+      entry = fh["entries"][0]
+      assert entry["model"] == "mimo-v2.5", entry
+      # Empty provider / empty api_key -> inherits the primary provider/key.
+      assert entry["inherits_provider"] is True, entry
+      assert entry["inherits_key"] is True, entry
+      assert fh["primary"]["model"] == "gpt-4o", fh
+      assert fh["primary"]["provider"] == "openai", fh
+      print("DIAGNOSE_FALLBACK_HEALTH_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["DIAGNOSE_FALLBACK_HEALTH_OK"]

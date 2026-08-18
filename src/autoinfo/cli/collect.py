@@ -26,8 +26,9 @@ def collect(
         False, "--all", "-A", help="Collect for all active domains",
     ),
     topic: str = typer.Option("", "--topic", help="Topic / search query filter"),
-    source: str = typer.Option(
-        None, "--source", help="Source name filter (repeatable: --source pubmed --source rss)",
+    source: list[str] | None = typer.Option(
+        None, "--source",
+        help="Source name filter (repeatable: --source pubmed --source rss)",
     ),
     limit: int = typer.Option(20, "--limit", min=1, help="Max items to collect per source"),
     dry_run: bool = typer.Option(False, "--dry-run", help="Preview without storing"),
@@ -58,13 +59,17 @@ def collect(
         raise typer.Exit(code=1)
 
     # -- Parse source filter -----------------------------------------------
-    # The `--source` option is repeatable, single-string pass-through is fine
-    # because typer collects multiple `--source` flags into a tuple → string.
-    # We normalise it into a list here.
+    # `--source` is a repeatable option (list[str]); each flag accumulates.
+    # Comma-separated values inside a single flag are still split for
+    # backward compatibility with the pre-#296 single-string behaviour.
     sources = None
     if source:
-        # source is a single string; split by comma or treat as single entry
-        sources = [s.strip() for s in source.split(",") if s.strip()]
+        sources = [
+            s.strip()
+            for entry in source
+            for s in entry.split(",")
+            if s.strip()
+        ]
 
     try:
         from autoinfo.collect import run_collection
@@ -124,6 +129,10 @@ def collect(
             if json_output:
                 typer.echo(json.dumps(aggregated, ensure_ascii=False, indent=2))
 
+            # -- Unknown / failed requested sources → non-zero exit (#296) --
+            if sources:
+                _check_requested_sources(results)
+
             # -- Optional: auto-process (across all domains) ---------------
             if auto_process and not dry_run:
                 for dom_result in results:
@@ -137,7 +146,7 @@ def collect(
 
         else:
             # -- Single-domain collection (existing behavior) --------------
-            run_kwargs: dict[str, Any] = dict(
+            single_run_kwargs: dict[str, Any] = dict(
                 domain=domain,
                 topic=topic,
                 sources=sources,
@@ -146,14 +155,18 @@ def collect(
                 progress_cb=progress_cb,
             )
             if force_full:
-                run_kwargs["force_full"] = True
-            result = run_collection(**run_kwargs)
+                single_run_kwargs["force_full"] = True
+            result = run_collection(**single_run_kwargs)
 
             # -- Output ----------------------------------------------------
             if json_output:
                 typer.echo(json.dumps(result, ensure_ascii=False, indent=2))
             else:
                 _print_human(result)
+
+            # -- Unknown / failed requested sources → non-zero exit (#296) --
+            if sources:
+                _check_requested_sources([result])
 
             # -- Optional: auto-process ------------------------------------
             if auto_process and not dry_run:
@@ -183,6 +196,38 @@ def collect(
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
+
+def _check_requested_sources(results: list[dict[str, Any]]) -> None:
+    """Exit non-zero when explicitly requested sources were unknown or failed.
+
+    Issue #296: a requested source that is missing from the domain config
+    (``unknown_sources``) or that errored/skipped during collection must
+    surface as a CLI failure — never a silent exit 0.  Only enforced when
+    ``--source`` was provided (the caller guards on ``sources``).
+    """
+    unknown: list[str] = []
+    failed: list[str] = []
+    for res in results:
+        domain_label = res.get("domain", "")
+        for name in res.get("unknown_sources") or []:
+            unknown.append(f"'{name}' (domain '{domain_label}')")
+        for src in res.get("per_source", []):
+            if src.get("status") in ("error", "skipped"):
+                failed.append(f"'{src.get('source')}' (domain '{domain_label}')")
+
+    if unknown:
+        typer.echo(
+            f"Error: requested source(s) not found in domain config: {', '.join(unknown)}",
+            err=True,
+        )
+        raise typer.Exit(code=1)
+    if failed:
+        typer.echo(
+            f"Error: requested source(s) failed during collection: {', '.join(failed)}",
+            err=True,
+        )
+        raise typer.Exit(code=1)
 
 
 def _make_progress_printer() -> Callable[[Any], None]:

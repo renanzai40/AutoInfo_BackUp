@@ -19,8 +19,13 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
+from autoinfo.llm import LLMExtractor
 from autoinfo.models import ExtractionResult
-from autoinfo.output import _VALID_REPORT_TYPES, PRODUCT_TEMPLATES
+from autoinfo.output import (
+    _VALID_REPORT_TYPES,
+    PRODUCT_TEMPLATES,
+    DeliveryOutput,
+)
 
 # ===================================================================
 # Fixtures
@@ -35,7 +40,7 @@ def sample_entries() -> list[dict[str, Any]]:
             "entry_id": "entry-001",
             "title": "Improved IVF outcomes with time-lapse imaging",
             "summary": "Time-lapse imaging improves live birth rates in IVF.",
-            "source_url": "https://example.com/ivf-1",
+            "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
             "source_type": "api",
             "source_platform": "pubmed",
             "relevance_score": 92.0,
@@ -47,7 +52,7 @@ def sample_entries() -> list[dict[str, Any]]:
             "entry_id": "entry-002",
             "title": "Neuroplasticity in early childhood development",
             "summary": "Early childhood experiences shape brain plasticity.",
-            "source_url": "https://example.com/neuro-1",
+            "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654321/",
             "source_type": "rss",
             "source_platform": "feed",
             "relevance_score": 78.0,
@@ -175,7 +180,7 @@ class TestColumnFreePath:
     """Without ``user_id`` the column report renders normally (no gating)."""
 
     def test_no_user_id_renders_report(
-        self, sample_entries: list[dict]
+        self, sample_entries: list[dict[str, Any]]
     ) -> None:
         """Free path: LLM mocked, full render through the report template."""
         mock_extract = MagicMock(
@@ -204,7 +209,7 @@ class TestColumnFreePath:
         assert "## Executive Summary" in report
         assert "IVF treatment" in report
         assert "## References" in report
-        assert "https://example.com/ivf-1" in report
+        assert "https://pubmed.ncbi.nlm.nih.gov/12345678/" in report
 
 
 # ===================================================================
@@ -240,16 +245,17 @@ def _call_report(
     """Call ``generate_report`` from ``autoinfo.output``."""
     from autoinfo.output import generate_report
 
-    return generate_report(
+    result = generate_report(
         domain=domain,
         format="markdown",
         report_type=report_type,
         user_id=user_id,
         product_template=product_template,
     )
+    return result.output if isinstance(result, DeliveryOutput) else result
 
 
-def _get_llm_extractor_class():
+def _get_llm_extractor_class() -> type[LLMExtractor]:
     """Return the ``LLMExtractor`` class from ``autoinfo.llm``."""
     from autoinfo.llm import LLMExtractor
 

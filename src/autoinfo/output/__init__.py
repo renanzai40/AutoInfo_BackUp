@@ -37,7 +37,7 @@ from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta, timezone
 from email.utils import format_datetime
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Callable, Literal, cast
+from typing import TYPE_CHECKING, Any, Callable, Final, Literal, cast
 
 import yaml
 
@@ -47,7 +47,7 @@ if TYPE_CHECKING:
     from autoinfo.quality import QualityResult
 
 import httpx
-from jinja2 import ChoiceLoader, Environment, FileSystemLoader, Template, TemplateNotFound
+from jinja2 import ChoiceLoader, Environment, FileSystemLoader, TemplateNotFound
 
 from autoinfo.config import Config, get_config_path, load_config
 from autoinfo.kb import KBStore, PromotionRejected, SQLiteIndex
@@ -189,6 +189,565 @@ def _try_notify_content_ready(
 
 
 # ---------------------------------------------------------------------------
+# Product entry filtering (issue #298 — 3-layer guardrail, layer 1)
+# ---------------------------------------------------------------------------
+# Test/placeholder markers that identify non-production KB entries.  A product
+# must never ship entries that are empty shells, test fixtures, or placeholder
+# content — they pollute the LLM synthesis input AND the rendered body.
+
+_TEST_TITLE_MARKERS: frozenset[str] = frozenset({
+    "Get Test", "Entry A", "Entry B", "Entry C", "QA Article", "Test Entry",
+    "Test", "test",
+})
+_TEST_TITLE_RE = re.compile(r"parity-t\d+|test\s+\d{4}-\d{2}-\d{2}", re.IGNORECASE)
+_TEST_TITLE_SUBSTRINGS: tuple[str, ...] = (
+    "validation import", "spotcheck", "test entry", "lorem ipsum",
+    "placeholder", "test content",
+)
+_TEST_URL_MARKERS: tuple[str, ...] = (
+    "example.org", "localhost", "127.0.0.1", ".local",
+)
+_TEST_SOURCE_PLATFORMS: frozenset[str] = frozenset({
+    "fixture", "mock", "stub", "sample",
+    "test-fixture", "test_fixture", "test-source", "test_source",
+})
+
+_NO_CONTENT_SUMMARY_RE: re.Pattern[str] = re.compile(
+    r"^\s*(no\s+content\s+provided(?:\s+to\s+summarize)?\.?"
+    r"|not\s+available\.?|n/?a\.?"
+    r"|no\s+summary(?:\s+available)?\.?|no\s+content\.?)\s*$",
+    re.IGNORECASE,
+)
+
+# ---------------------------------------------------------------------------
+# Platform display-name mapping (issue #302 — ③)
+# ---------------------------------------------------------------------------
+
+_PLATFORM_DISPLAY_NAMES: dict[str, str] = {
+    "pubmed": "PubMed",
+    "semantic_scholar": "Semantic Scholar",
+    "openalex": "OpenAlex",
+    "sec_edgar": "SEC EDGAR",
+    "rss": "RSS",
+    "web": "Web",
+    "api": "API",
+    "arxiv": "arXiv",
+    "dblp": "DBLP",
+    "nyt": "NYT",
+    "hackernews": "HackerNews",
+    "reddit": "Reddit",
+    "youtube": "YouTube",
+    "bilibili": "Bilibili",
+    "spotify": "Spotify",
+    "apple_podcasts": "Apple Podcasts",
+    "gdelt": "GDELT",
+    "uspto": "USPTO",
+    "crossref": "CrossRef",
+    "unpaywall": "Unpaywall",
+    "core": "CORE",
+    "ssrn": "SSRN",
+    "akshare": "AKShare",
+    "edgar": "EDGAR",
+}
+
+
+def _platform_name(value: Any) -> str:
+    """Map internal source_platform id to a display name (issue #302 — ③).
+
+    Known ids are mapped to human-readable names; unknown ids fall back to
+    the raw id.  Empty/None values return an em-dash.
+    """
+    if not value:
+        return "\u2014"
+    s = str(value).strip()
+    if not s:
+        return "\u2014"
+    return _PLATFORM_DISPLAY_NAMES.get(s.lower(), s)
+
+
+# ---------------------------------------------------------------------------
+# LLM leak detection (issue #302 — ①)
+# ---------------------------------------------------------------------------
+
+_LEAK_FENCED_JSON_RE: re.Pattern[str] = re.compile(
+    r"```json\s*\n", re.IGNORECASE
+)
+_LEAK_JSON_PREFIX_RE: re.Pattern[str] = re.compile(
+    r"^\s*\{\s*\"(?:title|entries|@type|digest_type)\"\s*:", re.IGNORECASE
+)
+_LEAK_PROMPT_ECHO_RE: re.Pattern[str] = re.compile(
+    r"(?:^|\n)\s*(?:You are a |As an AI |You are an AI |System:\s|User:\s|Assistant:\s)",
+    re.IGNORECASE,
+)
+
+
+def _contains_raw_llm_leak(text: str) -> bool:
+    """Heuristic check for raw LLM output leaking into a product (issue #302 — ①).
+
+    Returns True when *text* contains fenced JSON blocks, raw JSON object
+    prefixes, or prompt-echo patterns that indicate unreconstructed LLM
+    output.  This is a defensive flag, not a hard block — the caller
+    decides whether to warn or block.
+    """
+    if _LEAK_FENCED_JSON_RE.search(text):
+        return True
+    if _LEAK_JSON_PREFIX_RE.search(text):
+        return True
+    if _LEAK_PROMPT_ECHO_RE.search(text):
+        return True
+    return False
+
+
+def _is_empty_summary(summary: str) -> bool:
+    """True when *summary* is blank or a known placeholder string (issue #294).
+
+    Returns True for empty, whitespace-only, or LLM-generated placeholder
+    summaries like ``"No content provided to summarize."``.
+    """
+    stripped = summary.strip()
+    if not stripped:
+        return True
+    return bool(_NO_CONTENT_SUMMARY_RE.match(stripped))
+
+
+def _entry_custom_fields(entry: dict[str, Any]) -> dict[str, Any]:
+    """Parse an entry's ``custom_fields`` (JSON string or dict) into a dict."""
+    raw = entry.get("custom_fields")
+    if isinstance(raw, dict):
+        return raw
+    if isinstance(raw, str):
+        try:
+            parsed = json.loads(raw)
+            return parsed if isinstance(parsed, dict) else {}
+        except (json.JSONDecodeError, TypeError):
+            return {}
+    return {}
+
+
+def _is_test_entry(entry: dict[str, Any]) -> bool:
+    """True when *entry* carries a test/placeholder marker (issue #298).
+
+    Also returns True for entries with empty/placeholder summary
+    (issue #294) — these produce blank cells or "No content provided"
+    strings in rendered products.
+    """
+    title = str(entry.get("title") or "").strip()
+    summary = str(entry.get("summary") or "").strip()
+    source_url = str(entry.get("source_url") or "").strip()
+    source_platform = str(entry.get("source_platform") or "").strip()
+
+    # (a) empty title AND empty summary -> no usable content
+    if not title and not summary:
+        return True
+    # (a2) empty/placeholder summary -> no content for a product (issue #294)
+    if _is_empty_summary(summary):
+        return True
+    # (a3) summary contains lorem ipsum -> placeholder text (issue #293)
+    if "lorem ipsum" in summary.lower():
+        return True
+    # (b) URL placeholder markers
+    if any(marker in source_url.lower() for marker in _TEST_URL_MARKERS):
+        return True
+    # (b) title markers
+    if title in _TEST_TITLE_MARKERS:
+        return True
+    if _TEST_TITLE_RE.search(title):
+        return True
+    title_lower = title.lower()
+    if any(sub in title_lower for sub in _TEST_TITLE_SUBSTRINGS):
+        return True
+    # (c) custom_fields.test / status markers (issue #293)
+    cf = _entry_custom_fields(entry)
+    if cf.get("test") is True:
+        return True
+    cf_status = str(cf.get("status") or "").strip().lower()
+    if cf_status in ("test", "placeholder", "mock", "sample", "demo"):
+        return True
+    # (d) known test source platforms
+    if source_platform.lower() in _TEST_SOURCE_PLATFORMS:
+        return True
+    return False
+
+
+def _filter_product_entries(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Drop empty / test / placeholder entries from a product's entry list.
+
+    Layer 1 of the 3-layer guardrail (issue #298): the synthesis input AND the
+    rendered body must be clean.  Applied by every product generator
+    (digest/report/tutorial/presentation) BEFORE synthesis and BEFORE render.
+    """
+    kept: list[dict[str, Any]] = []
+    dropped = 0
+    for entry in entries:
+        if _is_test_entry(entry):
+            dropped += 1
+            continue
+        kept.append(entry)
+    if dropped:
+        logger.info("Filtered %d test/empty entries from product input", dropped)
+    return kept
+
+
+class _DeliveryGatesBypass:
+    """Sentinel type for explicitly bypassing delivery-gate resolution."""
+
+
+_DELIVERY_GATES_BYPASS: Final = _DeliveryGatesBypass()
+
+
+def _resolve_delivery_gate_configs(
+    domain: str,
+    delivery_gate_configs: dict[str, dict[str, Any]] | _DeliveryGatesBypass | None,
+) -> dict[str, dict[str, Any]] | None:
+    """Resolve the effective delivery-gate config for *domain*.
+
+    - An explicit dict is used as-is.
+    - The ``_DELIVERY_GATES_BYPASS`` sentinel resolves to ``None`` (gates
+      bypassed, plain ``str`` output).
+    - ``None`` resolves from the project config: the domain's
+      ``delivery_gates`` first, falling back to the global
+      ``delivery_gates``.  Returns ``None`` when the config carries no
+      delivery gates (backward-compatible plain ``str`` output).
+    """
+    if delivery_gate_configs is _DELIVERY_GATES_BYPASS:
+        return None
+    if delivery_gate_configs is not None:
+        # Both guards passed: not the sentinel, not None -> provably a dict.
+        return cast(dict[str, dict[str, Any]], delivery_gate_configs)
+    try:
+        cfg_path = get_config_path()
+        if cfg_path is None:
+            return None
+        cfg = load_config(cfg_path)
+    except Exception:
+        return None
+    domain_cfg = next((d for d in cfg.domains if d.name == domain), None)
+    gates = domain_cfg.delivery_gates if domain_cfg is not None else {}
+    if not gates:
+        gates = cfg.delivery_gates
+    if not gates:
+        return None
+    return {
+        name: {
+            "enabled": dgc.enabled,
+            "action_on_failure": dgc.action_on_failure,
+        }
+        for name, dgc in gates.items()
+    }
+
+
+# ---------------------------------------------------------------------------
+# D1 section detection on the rendered body (issue #298 — layer 2)
+# ---------------------------------------------------------------------------
+# Brought in from scripts/validation_delivery.py (do NOT import from scripts):
+# D1 completeness must be checked against the RENDERED body, not just the LLM
+# synthesis dict — a body that is empty/garbled but whose synthesis dict is
+# non-empty must fail D1.
+
+_SECTION_HEADING_ALIASES: dict[str, tuple[str, ...]] = {
+    "key_findings": (
+        "key findings", "key_findings", "key-findings", "key points",
+        "slide", "slides", "learning objectives", "main findings", "introduction",
+    ),
+    "summary": (
+        "summary", "executive summary", "overview",
+        "entries", "content", "executive overview", "body",
+    ),
+    "recommendations": (
+        "recommendations", "conclusion", "next steps",
+        "exercises", "further reading", "action items", "next actions",
+    ),
+}
+
+_SLIDE_HEADING_RE = re.compile(r"^slide\s*\d+\s*:", re.IGNORECASE)
+_ENTRY_HEADING_RE = re.compile(r"^\d+[.)]\s+\S", re.IGNORECASE)
+_EMPTY_PLACEHOLDER_RE = re.compile(r"^\s*_no\s+.+_\.?\s*$", re.IGNORECASE)
+
+_PRODUCT_TYPE_REQUIRED_SECTIONS: dict[str, tuple[str, ...]] = {
+    "report": ("key_findings", "summary", "recommendations"),
+    "presentation": ("key_findings",),
+    "digest": ("summary",),
+    "tutorial": ("key_findings", "recommendations"),
+    "column": ("key_findings",),
+    "magazine": ("key_findings",),
+    "enterprise_briefing": ("summary",),
+    "premium_briefing": ("summary",),
+    "magazine_digest": ("summary",),
+}
+
+_D1_NON_REQUIRED_MARKER = "present"
+
+
+def _is_empty_placeholder(content: str) -> bool:
+    """True when *content* is an empty-state placeholder (``_No ..._``)."""
+    stripped = content.strip()
+    if not stripped:
+        return False
+    return bool(_EMPTY_PLACEHOLDER_RE.match(stripped))
+
+
+def _sections_from_headings(text: str, product_type: str = "report") -> dict[str, str]:
+    """Map canonical D1 sections to non-empty heading content (md/html)."""
+    found: dict[str, str] = {}
+    heading_re = re.compile(r"<h([1-6])[^>]*>(.*?)</h\1>", re.IGNORECASE | re.DOTALL)
+    if heading_re.search(text):
+        converted: list[str] = []
+        pos = 0
+        for m in heading_re.finditer(text):
+            converted.append(text[pos:m.start()])
+            converted.append(
+                "\n" + "#" * int(m.group(1)) + " "
+                + re.sub(r"<[^>]+>", "", m.group(2)).strip()
+                + "\n"
+            )
+            pos = m.end()
+        converted.append(text[pos:])
+        text = re.sub(r"<[^>]+>", " ", "".join(converted))
+    blocks: list[tuple[str, list[str]]] = []
+    cur_heading: str | None = None
+    cur_lines: list[str] = []
+    for line in text.splitlines():
+        hm = re.match(r"^#{1,6}\s+(.+?)\s*$", line.strip())
+        if hm:
+            if cur_heading:
+                blocks.append((cur_heading, cur_lines))
+            cur_heading = hm.group(1).lower().replace("*", "").replace("`", "").strip()
+            cur_lines = []
+        elif cur_heading:
+            cur_lines.append(line.strip())
+    if cur_heading:
+        blocks.append((cur_heading, cur_lines))
+
+    def _block_content(heading: str, lines: list[str]) -> str:
+        body_lines = [
+            line for line in lines
+            if line and not re.match(r"^[-*=_]{3,}\s*$", line)
+        ]
+        content = " ".join(body_lines)
+        if _is_empty_placeholder(content):
+            return ""
+        return content
+
+    for canonical, aliases in _SECTION_HEADING_ALIASES.items():
+        for heading, lines in blocks:
+            if heading in aliases and canonical not in found:
+                content = _block_content(heading, lines)
+                if content or _is_empty_placeholder(
+                    " ".join(
+                        line for line in lines
+                        if line and not re.match(r"^[-*=_]{3,}\s*$", line)
+                    )
+                ):
+                    found[canonical] = content or ""
+    if "key_findings" not in found:
+        slide_parts: list[str] = []
+        for heading, lines in blocks:
+            if _SLIDE_HEADING_RE.match(heading):
+                content = _block_content(heading, lines)
+                if content:
+                    slide_parts.append(content)
+        if slide_parts:
+            found["key_findings"] = " ".join(slide_parts)
+    if "summary" not in found:
+        entry_count = 0
+        for heading, lines in blocks:
+            if _ENTRY_HEADING_RE.match(heading):
+                content = _block_content(heading, lines)
+                if content:
+                    entry_count += 1
+        if entry_count:
+            found["summary"] = "present"
+    if product_type in ("column", "magazine") and not found:
+        for heading, lines in blocks:
+            content = _block_content(heading, lines)
+            if content:
+                found["key_findings"] = content
+                break
+    return found
+
+
+def _apply_format_sections(
+    sections: dict[str, str], product_type: str
+) -> dict[str, str]:
+    """Map a product's detected sections onto the three D1 canonical keys."""
+    required = _PRODUCT_TYPE_REQUIRED_SECTIONS.get(
+        product_type, _PRODUCT_TYPE_REQUIRED_SECTIONS["report"]
+    )
+    mapped: dict[str, str] = {}
+    for canonical in ("key_findings", "summary", "recommendations"):
+        value = sections.get(canonical, "")
+        if canonical not in required and not value:
+            value = _D1_NON_REQUIRED_MARKER
+        mapped[canonical] = value
+    return mapped
+
+
+def _sections_from_rendered_body(
+    body: str, output_format: str, product_type: str
+) -> dict[str, str] | None:
+    """Detect D1 sections from the RENDERED body.
+
+    Returns a ``{key_findings, summary, recommendations}`` mapping for
+    markdown/html bodies (possibly all-empty when the body is empty), or
+    ``None`` for formats that cannot be parsed (json/agent/audio/...).
+    """
+    if output_format not in ("markdown", "html"):
+        return None
+    sections = _sections_from_headings(body, product_type)
+    return _apply_format_sections(sections, product_type)
+
+
+# Minimum content substance for a PROCESSED markdown/html product (issue #298).
+_MIN_PRODUCT_CONTENT_CHARS = 200
+_MIN_PRODUCT_HEADINGS = 1
+
+
+def _product_body_text_len(body: str, output_format: str) -> int:
+    """Length of the rendered body's visible text (tags stripped for html)."""
+    if output_format == "html":
+        return len(re.sub(r"<[^>]+>", " ", body).strip())
+    return len(body.strip())
+
+
+def _product_heading_count(body: str, output_format: str) -> int:
+    """Number of headings in the rendered body (md ``#`` or html ``<hN>``)."""
+    if output_format == "html":
+        return len(re.findall(r"<h[1-6][^>]*>", body, re.IGNORECASE))
+    return len(re.findall(r"^#{1,6}\s+", body, re.MULTILINE))
+
+
+# ---------------------------------------------------------------------------
+# LLM product judge (issue #298 — layer 3, optional)
+# ---------------------------------------------------------------------------
+_PRODUCT_JUDGE_ENABLED = True  # env AUTOINFO_PRODUCT_JUDGE=0 disables
+
+
+def _product_judge_enabled() -> bool:
+    raw = os.environ.get("AUTOINFO_PRODUCT_JUDGE", "")
+    if raw.strip().lower() in ("0", "false", "no", "off"):
+        return False
+    return _PRODUCT_JUDGE_ENABLED
+
+
+def _llm_key_available(llm_config: Config | None) -> bool:
+    """True when an LLM API key is resolvable (config or environment)."""
+    if llm_config is not None and (llm_config.llm.api_key or "").strip():
+        return True
+    if os.environ.get("AUTOINFO_LLM_API_KEY", "").strip():
+        return True
+    try:
+        cfg_path = get_config_path()
+        if cfg_path is not None and cfg_path.is_file():
+            cfg = load_config(cfg_path)
+            if (cfg.llm.api_key or "").strip():
+                return True
+    except Exception:
+        pass
+    return False
+
+
+def _build_product_judge_prompt(body: str, output_format: str) -> str:
+    return (
+        "You are a product quality reviewer. Review the following rendered "
+        f"{output_format} product body and decide whether it contains "
+        "non-trivial content covering the required sections (executive "
+        "summary, key findings, recommendations).\n\n"
+        "Return ONLY a JSON object: {\"ok\": true|false, \"reason\": \"...\"}.\n"
+        "Set ok=false when the body is empty, garbled, or missing required "
+        "sections.\n\n"
+        f"--- BODY START ---\n{body}\n--- BODY END ---"
+    )
+
+
+def _escalate_product_judge_prompt(prompt: str, reason: str) -> str:
+    return (
+        prompt
+        + f"\n\nA previous review found the body inadequate: {reason}. "
+        "Re-review carefully and return the same JSON verdict shape."
+    )
+
+
+def _parse_product_judge_verdict(response: Any) -> tuple[bool, str] | None:
+    """Parse the judge's JSON verdict; ``None`` when unparseable."""
+    content = getattr(response, "content", None)
+    if content is None:
+        content = response
+    if isinstance(content, str):
+        try:
+            data = json.loads(content)
+        except json.JSONDecodeError:
+            return None
+    elif isinstance(content, dict):
+        data = content
+    else:
+        return None
+    if not isinstance(data, dict) or "ok" not in data:
+        return None
+    return bool(data["ok"]), str(data.get("reason") or "")
+
+
+def _run_product_judge(
+    body: str,
+    output_format: str,
+    product_type: str,
+    llm_config: Config | None = None,
+) -> tuple[bool, str]:
+    """LLM-judge the rendered body for non-trivial content.
+
+    Returns ``(passed, reason)``.  Fails open on any error (no key, network,
+    parse) so the judge never blocks a product on infrastructure failure.
+    Retries once with escalating context before failing.
+    """
+    if not _product_judge_enabled():
+        return True, ""
+    if product_type.upper() != "PROCESSED" or output_format not in ("markdown", "html"):
+        return True, ""
+    if not _llm_key_available(llm_config):
+        return True, ""
+    try:
+        prompt = _build_product_judge_prompt(body, output_format)
+        for attempt in range(2):
+            response = call_with_fallback(
+                [{"role": "user", "content": prompt}],
+                config=llm_config,
+                task="product_judge",
+                json_mode=True,
+            )
+            verdict = _parse_product_judge_verdict(response)
+            if verdict is not None:
+                ok, reason = verdict
+                if ok:
+                    return True, ""
+                if attempt == 0:
+                    prompt = _escalate_product_judge_prompt(prompt, reason)
+                    continue
+                return False, reason
+        return False, "judge returned no verdict"
+    except Exception:
+        logger.debug("Product judge skipped (fail-open)", exc_info=True)
+        return True, ""
+
+
+def _apply_min_content_guard(
+    result: DeliveryOutput,
+    entries: list[dict[str, Any]],
+    product_type: str,
+) -> DeliveryOutput:
+    """Force the blocked flag when a PROCESSED product has zero usable entries.
+
+    Layer 1 min-content guard (issue #298): a product with zero usable entries
+    after filtering must never be silently shipped as an empty shell.
+    """
+    if not entries and product_type != "RAW":
+        result.delivery_blocked = True
+        if not any("min-content guard" in w for w in result.warnings):
+            result.warnings.append(
+                "min-content guard: 0 usable entries after filtering"
+            )
+    return result
+
+
+# ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
 
@@ -201,6 +760,7 @@ def _apply_delivery_gates(
     product_type: str,
     delivery_gate_configs: dict[str, dict[str, Any]] | None = None,
     fallback_render_fn: Callable[[], str] | None = None,
+    llm_config: Config | None = None,
 ) -> DeliveryOutput:
     """Run D1-D3 delivery gates on rendered output.
 
@@ -224,6 +784,8 @@ def _apply_delivery_gates(
     fallback_render_fn:
         Optional callable that re-renders the output as markdown.
         Invoked when D2 fails with ``action="fallback"``.
+    llm_config:
+        Optional :class:`Config` for the LLM product judge (layer 3).
 
     Returns
     -------
@@ -243,14 +805,30 @@ def _apply_delivery_gates(
 
     llm_synthesis: dict[str, Any] = context.get("llm_synthesis", {})
 
+    # D1 completeness is checked against the RENDERED body (issue #298): a
+    # body that is empty/garbled but whose synthesis dict is non-empty must
+    # fail D1.  Fall back to the synthesis dict only when the body cannot be
+    # parsed (json/agent/audio/...).
+    body_sections = _sections_from_rendered_body(
+        rendered_output, output_format, product_type
+    )
+    if body_sections is not None:
+        key_findings: Any = body_sections.get("key_findings", "")
+        summary: Any = body_sections.get("summary", "")
+        recommendations: Any = body_sections.get("recommendations", "")
+    else:
+        key_findings = llm_synthesis.get("key_findings", [])
+        summary = llm_synthesis.get("executive_summary", "")
+        recommendations = llm_synthesis.get("recommendations", [])
+
     # Build product_output dict expected by run_delivery_gates
     product_output: dict[str, Any] = {
         "product_type": product_type,
         "format": output_format,
         "body": rendered_output,
-        "key_findings": llm_synthesis.get("key_findings", []),
-        "summary": llm_synthesis.get("executive_summary", ""),
-        "recommendations": llm_synthesis.get("recommendations", []),
+        "key_findings": key_findings,
+        "summary": summary,
+        "recommendations": recommendations,
         "entries": entries,
     }
 
@@ -270,9 +848,42 @@ def _apply_delivery_gates(
             delivery_blocked = True
             warnings.append(f"D1 blocked: {error_detail}")
 
-    # --- D2: Format integrity (ToS block + format fallback) ----------------
+    # --- D2: Format integrity (ToS block + format fallback + content) ------
     d2_result = gate_results.get("D2-FormatIntegrity")
     if d2_result is not None:
+        # Content-substance check (issue #298): markdown/html bodies must
+        # carry a minimum amount of content and at least one heading — the
+        # quality.py D2 check treats markdown as "trivially valid".
+        if (
+            d2_result.passed
+            and output_format in ("markdown", "html")
+            and product_type.upper() != "RAW"
+        ):
+            text_len = _product_body_text_len(rendered_output, output_format)
+            heading_count = _product_heading_count(rendered_output, output_format)
+            if (
+                text_len < _MIN_PRODUCT_CONTENT_CHARS
+                or heading_count < _MIN_PRODUCT_HEADINGS
+            ):
+                d2_result = QualityResult(
+                    gate_name="D2-FormatIntegrity",
+                    passed=False,
+                    score=0.0,
+                    flagged=True,
+                    details={
+                        "action": "fallback",
+                        "format": output_format,
+                        "valid": False,
+                        "error": (
+                            f"insufficient content: {text_len} chars, "
+                            f"{heading_count} headings"
+                        ),
+                        "content_chars": text_len,
+                        "heading_count": heading_count,
+                    },
+                )
+                gate_results["D2-FormatIntegrity"] = d2_result
+
         # ToS-based block: RAW delivery from restricted/sensitive sources (F46)
         if not d2_result.passed:
             action = d2_result.details.get("action", "")
@@ -307,6 +918,16 @@ def _apply_delivery_gates(
         if stale:
             logger.warning("D3 flagged: %d/%d stale entries", stale, total)
             warnings.append(f"D3: {stale}/{total} entries stale")
+
+    # --- LLM product judge (issue #298 — layer 3, optional) --------------
+    if not delivery_blocked:
+        judge_passed, judge_reason = _run_product_judge(
+            output, final_format, product_type, llm_config
+        )
+        if not judge_passed:
+            logger.warning("Product judge blocked: %s", judge_reason)
+            delivery_blocked = True
+            warnings.append(f"product judge blocked: {judge_reason}")
 
     return DeliveryOutput(
         output=output,
@@ -1485,6 +2106,12 @@ def _export_bundle(
             "PDF was skipped — weasyprint not available. "
             "Install with: pip install weasyprint"
         )
+    # Empty-state guard (issue #301): signal when the bundle has no entries
+    # so callers never silently ship an empty deliverable.
+    if not entries:
+        result.setdefault("warnings", []).append(
+            "Bundle contains no entries — the export is an empty shell."
+        )
     return result
 
 
@@ -2082,6 +2709,9 @@ def _get_jinja_env() -> Environment:
     including both ``.md.j2`` (Markdown) and ``.html.j2`` (HTML)
     templates.  Autoescaping is enabled selectively for ``.html.j2``
     files via :func:`_html_autoescape`.
+
+    Registers a ``product_summary`` filter that returns ``""`` for
+    empty/placeholder summaries (defense-in-depth for issue #294).
     """
     global _jinja_env
     if _jinja_env is None:
@@ -2091,6 +2721,8 @@ def _get_jinja_env() -> Environment:
             trim_blocks=True,
             lstrip_blocks=True,
         )
+        _jinja_env.filters["product_summary"] = lambda v: "" if _is_empty_summary(str(v)) else v
+        _jinja_env.filters["platform_name"] = _platform_name
     return _jinja_env
 
 
@@ -2214,19 +2846,24 @@ class ProductTemplate:
 
         if len(loaders) == 1:
             # Only base dir exists — no ChoiceLoader needed
-            return Environment(
+            env = Environment(
                 loader=loaders[0],
                 autoescape=_html_autoescape,
                 trim_blocks=True,
                 lstrip_blocks=True,
             )
-
-        return Environment(
-            loader=ChoiceLoader(loaders),
-            autoescape=_html_autoescape,
-            trim_blocks=True,
-            lstrip_blocks=True,
-        )
+        else:
+            env = Environment(
+                loader=ChoiceLoader(loaders),
+                autoescape=_html_autoescape,
+                trim_blocks=True,
+                lstrip_blocks=True,
+            )
+        # Defense-in-depth for issue #294: normalize empty/placeholder summaries
+        env.filters["product_summary"] = lambda v: "" if _is_empty_summary(str(v)) else v
+        # Defense-in-depth for issue #302: map internal platform ids to display names
+        env.filters["platform_name"] = _platform_name
+        return env
 
 
 # ---------------------------------------------------------------------------
@@ -2877,7 +3514,7 @@ def generate_digest(
     recipients: list[str] | None = None,
     product_template: ProductTemplate | None = None,
     product_type: str = "PROCESSED",
-    delivery_gate_configs: dict[str, dict[str, Any]] | None = None,
+    delivery_gate_configs: dict[str, dict[str, Any]] | _DeliveryGatesBypass | None = None,
     user_id: str = "",
     max_items: int = 0,
     domains: list[str] | None = None,
@@ -2964,6 +3601,13 @@ def generate_digest(
         raise ValueError(
             f"Invalid format '{format}'. Must be one of: {', '.join(sorted(valid_formats))}"
         )
+
+    # --- Resolve delivery-gate config (issue #298: default-on in production) --
+    # ``None`` resolves from the project config (domain ``delivery_gates`` /
+    # global ``delivery_gates``); the ``_DELIVERY_GATES_BYPASS`` sentinel
+    # explicitly bypasses.  When resolution yields nothing, the caller keeps
+    # getting a plain ``str`` (backward compatible).
+    delivery_gate_configs = _resolve_delivery_gate_configs(domain, delivery_gate_configs)
 
     # --- Determine cross-domain mode -----------------------------------------
     is_cross_domain_digest: bool = domains is not None and len(domains) >= 2
@@ -3107,6 +3751,11 @@ def generate_digest(
             continue
         digest_active.append(entry)
     entries = digest_active
+
+    # --- Test/empty entry filtering (issue #298 — layer 1) -------------------
+    # Drop empty/test/placeholder entries BEFORE synthesis and BEFORE render so
+    # both the LLM input and the rendered body are clean.
+    entries = _filter_product_entries(entries)
 
     # --- Parse tags for each entry (they come as JSON strings from SQLite) ----
     for entry in entries:
@@ -3351,7 +4000,9 @@ def generate_digest(
             product_type=product_type,
             delivery_gate_configs=delivery_gate_configs,
             fallback_render_fn=lambda: _render_markdown(context),
+            llm_config=llm_config,
         )
+        result = _apply_min_content_guard(result, entries, product_type)
         if user_id:
             _try_notify_content_ready(
                 user_id=user_id,
@@ -3422,10 +4073,11 @@ def generate_report(
     target_audience: str = "",
     product_template: ProductTemplate | None = None,
     product_type: str = "PROCESSED",
-    delivery_gate_configs: dict[str, dict[str, Any]] | None = None,
+    delivery_gate_configs: dict[str, dict[str, Any]] | _DeliveryGatesBypass | None = None,
     user_id: str = "",
     report_type: str = "standard",
     domains: list[str] | None = None,
+    llm_config: Config | None = None,
 ) -> str | DeliveryOutput:
     """Generate a structured report for the given *domain* (or *domains*).
 
@@ -3522,6 +4174,9 @@ def generate_report(
             f"Invalid period '{period}'. Must be one of: {', '.join(sorted(PERIOD_DAYS))}"
         )
 
+    # --- Resolve delivery-gate config (issue #298: default-on in production) --
+    delivery_gate_configs = _resolve_delivery_gate_configs(domain, delivery_gate_configs)
+
     # --- Determine cross-domain mode -----------------------------------------
     is_cross_domain: bool = domains is not None and len(domains) >= 2
     if is_cross_domain:
@@ -3598,6 +4253,9 @@ def generate_report(
             )
         entries = filtered_entries
 
+    # --- Test/empty entry filtering (issue #298 — layer 1) -------------------
+    entries = _filter_product_entries(entries)
+
     if not entries:
         rendered: str
         if format in ("json", "agent"):
@@ -3650,7 +4308,7 @@ def generate_report(
             rendered = _render_empty_report(report_title_domain)
 
         if delivery_gate_configs is not None:
-            return _apply_delivery_gates(
+            result = _apply_delivery_gates(
                 rendered_output=rendered,
                 output_format=format,
                 entries=[],
@@ -3658,6 +4316,7 @@ def generate_report(
                 product_type=product_type,
                 delivery_gate_configs=delivery_gate_configs,
             )
+            return _apply_min_content_guard(result, [], product_type)
         return rendered
 
     # -- Build reference list from entries --------------------------------
@@ -4039,7 +4698,9 @@ def generate_report(
             fallback_render_fn=lambda: _render_report_template(
                 report_data, source_tier_badge=source_tier_badge
             ),
+            llm_config=llm_config,
         )
+        result = _apply_min_content_guard(result, entries, product_type)
         if user_id:
             _try_notify_content_ready(
                 user_id=user_id,
@@ -4630,22 +5291,21 @@ def _ensure_all_entries_grouped(
 def _normalize_report_audience(target_audience: str) -> str:
     """Validate and normalize target_audience for report/digest generation.
 
-    Returns the audience key if valid, otherwise logs a warning and falls
-    back to ``"general"``.  An empty or ``None``-like string is treated as
-    ``"general"`` (no special structure).
+    Returns the audience key if valid.  An empty or ``None``-like string
+    resolves to ``"general"`` (no error).  A non-empty invalid audience
+    raises :class:`ValueError` with a message naming the invalid value
+    and listing valid options — mirroring tutorial/presentation behavior
+    (issue #297).
     """
     if not target_audience:
         return "general"
     audience = target_audience.strip().lower()
     if audience in _VALID_REPORT_AUDIENCES:
         return audience
-    logger.warning(
-        "Invalid target_audience '%s' for report/digest, falling back to 'general'. "
-        "Valid audiences: %s",
-        target_audience,
-        _VALID_REPORT_AUDIENCES,
+    raise ValueError(
+        f"Invalid target_audience '{target_audience}'. "
+        f"Must be one of: {', '.join(sorted(_VALID_REPORT_AUDIENCES))}"
     )
-    return "general"
 
 
 # Bounded smaller-prompt retry budgets for the report synthesis (F3 fix,
@@ -5224,11 +5884,17 @@ def _render_report_json(report_data: ReportData, period: str = "weekly") -> str:
             url = item.get("source_url", "") or ""
             if url and url in seen_urls:
                 continue
+            # Defense-in-depth for issue #294: skip entries with empty title
+            # or empty/placeholder summary.
+            title = item.get("title", "")
+            summary = item.get("summary", "")
+            if not title.strip() or _is_empty_summary(summary):
+                continue
             if url:
                 seen_urls.add(url)
             entries_list.append({
-                "title": item.get("title", ""),
-                "summary": item.get("summary", ""),
+                "title": title,
+                "summary": summary,
                 "url": url,
                 "source_url": url,
                 "source_type": item.get("source_type", ""),
@@ -5287,11 +5953,20 @@ def _report_chapters(report_data: ReportData) -> list[tuple[str, str]]:
         body = section.content or ""
         if section.items:
             rows = ["| # | Title | Summary |", "|---|-------|---------|"]
-            for i, item in enumerate(section.items, 1):
+            row_idx = 0
+            for item in section.items:
+                title = item.get("title", "")
+                summary = item.get("summary", "")
+                # Defense-in-depth for issue #294: skip empty-title rows
+                # and rows with empty/placeholder summary.
+                if not title.strip() or _is_empty_summary(summary):
+                    continue
+                row_idx += 1
                 rows.append(
-                    f"| {i} | {item.get('title', '')} | {item.get('summary', '')} |"
+                    f"| {row_idx} | {title} | {summary} |"
                 )
-            body = f"{body}\n\n{chr(10).join(rows)}".strip()
+            if row_idx:
+                body = f"{body}\n\n{chr(10).join(rows)}".strip()
         chapters.append((section.title or f"Section {idx}", body))
     if report_data.references:
         ref_lines = []
@@ -5312,7 +5987,8 @@ def _render_report_template(report_data: ReportData, source_tier_badge: bool = T
         )
 
     template_source = TEMPLATE_PATH.read_text(encoding="utf-8")
-    template = Template(template_source)
+    env = _get_jinja_env()
+    template = env.from_string(template_source)
 
     return str(
         template.render(
@@ -5396,11 +6072,18 @@ def _render_report_html(report_data: ReportData, period: str = "weekly") -> str:
         content_md = section.content or ""
         if section.items:
             rows = ["| # | Title | Summary |", "|---|-------|---------|"]
-            for i, item in enumerate(section.items, 1):
+            row_idx = 0
+            for item in section.items:
                 title = item.get("title", "")
                 summary = item.get("summary", "")
-                rows.append(f"| {i} | {title} | {summary} |")
-            content_md = (content_md + "\n\n" + "\n".join(rows)).strip()
+                # Defense-in-depth for issue #294: skip rows with empty title
+                # or empty/placeholder summary (rendered as blank cells).
+                if not title.strip() or _is_empty_summary(summary):
+                    continue
+                row_idx += 1
+                rows.append(f"| {row_idx} | {title} | {summary} |")
+            if row_idx:
+                content_md = (content_md + "\n\n" + "\n".join(rows)).strip()
 
         section_id = f"section-{idx}"
         html_sections.append({
@@ -5934,7 +6617,9 @@ def generate_tutorial(
     format: str = "markdown",
     custom_instructions: str = "",
     user_id: str = "",
-) -> str:
+    delivery_gate_configs: dict[str, dict[str, Any]] | _DeliveryGatesBypass | None = None,
+    llm_config: Config | None = None,
+) -> str | DeliveryOutput:
     """Generate a structured tutorial for *domain*, adapted to *target_audience*.
 
     Fetches KB entries, asks the LLM to structure a learning path with
@@ -5987,6 +6672,9 @@ def generate_tutorial(
             f"Must be one of: {', '.join(sorted(_VALID_AUDIENCES))}"
         )
 
+    # --- Resolve delivery-gate config (issue #298: default-on in production) --
+    delivery_gate_configs = _resolve_delivery_gate_configs(domain, delivery_gate_configs)
+
     # -- Load KB entries --------------------------------------------------
     kb_store = KBStore()
     entries = kb_store.list_entries(domain, limit=5000)
@@ -6007,6 +6695,9 @@ def generate_tutorial(
             )
         entries = filtered_entries
 
+    # --- Test/empty entry filtering (issue #298 — layer 1) -------------------
+    entries = _filter_product_entries(entries)
+
     if not entries:
         if format == "agent":
             return json.dumps(
@@ -6025,10 +6716,22 @@ def generate_tutorial(
                 indent=2,
                 ensure_ascii=False,
             )
-        return (
+        empty_md = (
             f"# {domain} — Tutorial\n\n"
             f"_No knowledge base entries found for domain '{domain}'._"
         )
+        if delivery_gate_configs is not None:
+            result = _apply_delivery_gates(
+                rendered_output=empty_md,
+                output_format=format,
+                entries=[],
+                context={},
+                product_type="tutorial",
+                delivery_gate_configs=delivery_gate_configs,
+                llm_config=llm_config,
+            )
+            return _apply_min_content_guard(result, [], "tutorial")
+        return empty_md
 
     # -- Build LLM prompt with audience adaptation ------------------------
     audience_desc = _AUDIENCE_DESCRIPTIONS.get(target_audience, "general audience")
@@ -6101,6 +6804,32 @@ def generate_tutorial(
 
     # -- Render via Jinja2 template ---------------------------------------
     rendered_tutorial = _render_tutorial_template(context)
+
+    # --- Delivery gates (D1-D3) ---------------------------------------------
+    if delivery_gate_configs is not None:
+        result = _apply_delivery_gates(
+            rendered_output=rendered_tutorial,
+            output_format=format,
+            entries=entries,
+            context=context,
+            product_type="tutorial",
+            delivery_gate_configs=delivery_gate_configs,
+            llm_config=llm_config,
+        )
+        result = _apply_min_content_guard(result, entries, "tutorial")
+        if user_id:
+            _try_notify_content_ready(
+                user_id=user_id,
+                product_type="tutorial",
+                title=f"{domain} — Tutorial",
+            )
+        _fire_agent_notification(
+            "new_tutorial",
+            result.output if isinstance(result, DeliveryOutput) else rendered_tutorial,
+            product_id=f"{domain}-tutorial",
+        )
+        return result
+
     _fire_agent_notification(
         "new_tutorial", rendered_tutorial, product_id=f"{domain}-tutorial"
     )
@@ -6520,7 +7249,9 @@ def generate_presentation(
     custom_instructions: str = "",
     user_id: str = "",
     allow_empty: bool = False,
-) -> str:
+    delivery_gate_configs: dict[str, dict[str, Any]] | _DeliveryGatesBypass | None = None,
+    llm_config: Config | None = None,
+) -> str | DeliveryOutput:
     """Generate a slide-based presentation for *topic* within *domain*.
 
     Searches the KB for entries related to *topic*, asks the LLM to
@@ -6588,6 +7319,9 @@ def generate_presentation(
 
     slide_count = max(3, min(30, slide_count))
 
+    # --- Resolve delivery-gate config (issue #298: default-on in production) --
+    delivery_gate_configs = _resolve_delivery_gate_configs(domain, delivery_gate_configs)
+
     # -- Load KB entries related to topic --------------------------------
     kb_store = KBStore()
     entries = kb_store.list_entries(domain, limit=5000)
@@ -6607,6 +7341,9 @@ def generate_presentation(
                 content_preference,
             )
         entries = filtered_entries
+
+    # --- Test/empty entry filtering (issue #298 — layer 1) -------------------
+    entries = _filter_product_entries(entries)
 
     # Filter entries by topic relevance (title/summary contains topic terms)
     topic_terms = topic.lower().split()
@@ -6712,6 +7449,25 @@ def generate_presentation(
     if format == "agent":
         return _render_presentation_agent_json(llm_result, domain, topic, target_audience, generated_at, topic_entries)  # noqa: E501
 
+    # --- Delivery gates (D1-D3) ---------------------------------------------
+    if delivery_gate_configs is not None:
+        result = _apply_delivery_gates(
+            rendered_output=rendered,
+            output_format=format,
+            entries=entries,
+            context=context,
+            product_type="presentation",
+            delivery_gate_configs=delivery_gate_configs,
+            llm_config=llm_config,
+        )
+        result = _apply_min_content_guard(result, entries, "presentation")
+        _fire_agent_notification(
+            "new_presentation",
+            result.output if isinstance(result, DeliveryOutput) else rendered,
+            product_id=f"{domain}-presentation",
+        )
+        return result
+
     return rendered
 
 
@@ -6785,7 +7541,7 @@ def _fallback_slides_from_entries(
                 "title": title,
                 "content": summary[:600],
                 "bullets": bullets,
-                "notes": "KB-derived slide (LLM synthesis returned no slides)",
+                "notes": "Prepared from knowledge base sources.",
             }
         )
         if len(slides) >= slide_count:

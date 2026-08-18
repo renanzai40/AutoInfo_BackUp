@@ -1331,6 +1331,48 @@ def get_effective_llm_config(task: str | None = None) -> dict[str, Any]:
     }
 
 
+def llm_fallback_health(config: Config) -> dict[str, Any]:
+    """Derive the LLM fallback-chain health state from *config*.
+
+    Returns
+    -------
+    dict
+        Keys: ``configured`` (bool — a non-empty ``llm.fallback`` list),
+        ``count`` (int), ``entries`` (list of per-fallback-entry dicts with
+        ``model``/``provider``/``inherits_provider``/``inherits_key``), and
+        ``primary`` (dict with ``model``/``provider``/``reasoning_model``/
+        ``json_mode``).
+
+        ``inherits_provider`` is True when the entry's ``provider`` is empty
+        (``call_with_fallback`` resolves it to the primary provider);
+        ``inherits_key`` is True when the entry's ``api_key`` is empty (the
+        primary key — or its ``${ENV}`` reference — applies).  An explicit
+        ``${ENV}`` reference on the entry is NOT inheritance.
+    """
+    llm = config.llm
+    primary = {
+        "model": llm.model,
+        "provider": llm.provider,
+        "reasoning_model": llm.reasoning_model,
+        "json_mode": llm.json_mode,
+    }
+    entries = [
+        {
+            "model": fb.model,
+            "provider": fb.provider,
+            "inherits_provider": not bool(fb.provider),
+            "inherits_key": not bool(fb.api_key),
+        }
+        for fb in llm.fallback
+    ]
+    return {
+        "configured": bool(llm.fallback),
+        "count": len(llm.fallback),
+        "entries": entries,
+        "primary": primary,
+    }
+
+
 def ensure_config_exists() -> None:
     """Exit with an error message when no configuration file is found."""
     if get_config_path() is None:

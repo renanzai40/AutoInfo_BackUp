@@ -17,6 +17,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
+from autoinfo.llm import LLMExtractor
 from autoinfo.models import ExtractionResult
 
 # Fixtures
@@ -30,7 +31,7 @@ def medical_entries() -> list[dict[str, Any]]:
             "entry_id": "med-001",
             "title": "CRISPR gene editing advances",
             "summary": "New CRISPR techniques reduce off-target effects.",
-            "source_url": "https://example.com/crispr",
+            "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
             "source_type": "api",
             "source_platform": "pubmed",
             "relevance_score": 92.0,
@@ -43,7 +44,7 @@ def medical_entries() -> list[dict[str, Any]]:
             "entry_id": "med-002",
             "title": "mRNA vaccine platform improvements",
             "summary": "Improved mRNA delivery for cancer vaccines.",
-            "source_url": "https://example.com/mrna-vax",
+            "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654321/",
             "source_type": "api",
             "source_platform": "pubmed",
             "relevance_score": 85.0,
@@ -63,7 +64,7 @@ def ai_entries() -> list[dict[str, Any]]:
             "entry_id": "ai-001",
             "title": "OpenAI raises $40B in new funding round",
             "summary": "OpenAI valuation reaches $300B after latest round.",
-            "source_url": "https://example.com/openai-funding",
+            "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654322/",
             "source_type": "rss",
             "source_platform": "techcrunch",
             "relevance_score": 95.0,
@@ -83,7 +84,7 @@ def finance_entries() -> list[dict[str, Any]]:
             "entry_id": "fin-001",
             "title": "Fed maintains interest rates steady",
             "summary": "Federal Reserve holds rates amid inflation concerns.",
-            "source_url": "https://example.com/fed-rates",
+            "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654323/",
             "source_type": "api",
             "source_platform": "alpha-vantage",
             "relevance_score": 88.0,
@@ -124,7 +125,7 @@ def _make_summary() -> ExtractionResult:
     )
 
 
-def _get_llm_extractor_class():
+def _get_llm_extractor_class() -> type[LLMExtractor]:
     """Return the LLMExtractor class for mocking."""
     from autoinfo.llm import LLMExtractor
 
@@ -136,9 +137,10 @@ def _get_llm_extractor_class():
 
 def _call_report(domain: str = "test-domain", **kwargs: Any) -> str:
     """Call generate_report from autoinfo.output."""
-    from autoinfo.output import generate_report
+    from autoinfo.output import DeliveryOutput, generate_report
 
-    return generate_report(domain=domain, format="markdown", **kwargs)
+    result = generate_report(domain=domain, format="markdown", **kwargs)
+    return result.output if isinstance(result, DeliveryOutput) else result
 
 
 # Tests — generate_report cross-domain
@@ -149,7 +151,7 @@ class TestCrossDomainReport:
     """Cross-domain report generation via ``generate_report``."""
 
     def test_single_domain_unchanged(
-        self, medical_entries: list[dict]
+        self, medical_entries: list[dict[str, Any]]
     ) -> None:
         """Single-domain report behavior is unchanged — backward compat."""
         mock_extract = MagicMock(
@@ -182,7 +184,7 @@ class TestCrossDomainReport:
         assert "mRNA vaccine platform improvements" in report
 
     def test_cross_domain_two_domains(
-        self, medical_entries: list[dict], ai_entries: list[dict]
+        self, medical_entries: list[dict[str, Any]], ai_entries: list[dict[str, Any]]
     ) -> None:
         """Cross-domain with 2 domains aggregates entries from both."""
         all_entry_ids = ["med-001", "med-002", "ai-001"]
@@ -205,7 +207,7 @@ class TestCrossDomainReport:
         ):
             mock_store = MagicMock()
 
-            def _list_entries(domain: str, **_: Any) -> list[dict]:
+            def _list_entries(domain: str, **_: Any) -> list[dict[str, Any]]:
                 if domain == "medical-research":
                     return medical_entries
                 if domain == "ai-commercial":
@@ -229,9 +231,9 @@ class TestCrossDomainReport:
 
     def test_cross_domain_three_domains(
         self,
-        medical_entries: list[dict],
-        ai_entries: list[dict],
-        finance_entries: list[dict],
+        medical_entries: list[dict[str, Any]],
+        ai_entries: list[dict[str, Any]],
+        finance_entries: list[dict[str, Any]],
     ) -> None:
         """Cross-domain with 3+ domains aggregates entries from all."""
         all_entry_ids = ["med-001", "med-002", "ai-001", "fin-001"]
@@ -254,7 +256,7 @@ class TestCrossDomainReport:
         ):
             mock_store = MagicMock()
 
-            def _list_entries(domain: str, **_: Any) -> list[dict]:
+            def _list_entries(domain: str, **_: Any) -> list[dict[str, Any]]:
                 if domain == "medical-research":
                     return medical_entries
                 if domain == "ai-commercial":
@@ -277,7 +279,7 @@ class TestCrossDomainReport:
         assert "Fed maintains interest rates steady" in report
 
     def test_cross_domain_items_have_domain_labels(
-        self, medical_entries: list[dict], ai_entries: list[dict]
+        self, medical_entries: list[dict[str, Any]], ai_entries: list[dict[str, Any]]
     ) -> None:
         """Each section item in a cross-domain report has a domain field."""
         all_entry_ids = ["med-001", "med-002", "ai-001"]
@@ -300,7 +302,7 @@ class TestCrossDomainReport:
         ):
             mock_store = MagicMock()
 
-            def _list_entries(domain: str, **_: Any) -> list[dict]:
+            def _list_entries(domain: str, **_: Any) -> list[dict[str, Any]]:
                 if domain == "medical-research":
                     return medical_entries
                 if domain == "ai-commercial":
@@ -311,17 +313,18 @@ class TestCrossDomainReport:
             mock_kb_cls.return_value = mock_store
 
             # Use JSON format to inspect item-level data
-            from autoinfo.output import generate_report
+            from autoinfo.output import DeliveryOutput, generate_report
 
-            report_json = generate_report(
+            result = generate_report(
                 domain="medical-research",
                 domains=["medical-research", "ai-commercial"],
                 format="json",
             )
+            report_json = result.output if isinstance(result, DeliveryOutput) else result
             import json
 
             data: dict[str, Any] = json.loads(report_json)
-            entries_list: list[dict] = data.get("entries", [])
+            entries_list: list[dict[str, Any]] = data.get("entries", [])
             domains_found: set[str] = {
                 e.get("domain", "") for e in entries_list
             }
@@ -346,7 +349,7 @@ class TestCrossDomainReport:
         assert "No knowledge base entries found" in report
 
     def test_domains_single_entry_uses_single_domain(
-        self, medical_entries: list[dict]
+        self, medical_entries: list[dict[str, Any]]
     ) -> None:
         """domains with only 1 entry behaves as single-domain (no cross-domain)."""
         mock_extract = MagicMock(
@@ -379,7 +382,7 @@ class TestCrossDomainReport:
         assert "# medical-research — Report" in report
 
     def test_references_include_domain(
-        self, medical_entries: list[dict], ai_entries: list[dict]
+        self, medical_entries: list[dict[str, Any]], ai_entries: list[dict[str, Any]]
     ) -> None:
         """References in cross-domain report include domain field."""
         all_entry_ids = ["med-001", "ai-001"]
@@ -402,7 +405,7 @@ class TestCrossDomainReport:
         ):
             mock_store = MagicMock()
 
-            def _list_entries(domain: str, **_: Any) -> list[dict]:
+            def _list_entries(domain: str, **_: Any) -> list[dict[str, Any]]:
                 if domain == "medical-research":
                     return [medical_entries[0]]
                 if domain == "ai-commercial":
@@ -412,17 +415,18 @@ class TestCrossDomainReport:
             mock_store.list_entries.side_effect = _list_entries
             mock_kb_cls.return_value = mock_store
 
-            from autoinfo.output import generate_report
+            from autoinfo.output import DeliveryOutput, generate_report
 
-            report_json = generate_report(
+            result = generate_report(
                 domain="medical-research",
                 domains=["medical-research", "ai-commercial"],
                 format="json",
             )
+            report_json = result.output if isinstance(result, DeliveryOutput) else result
             import json
 
             data: dict[str, Any] = json.loads(report_json)
-            entries_list: list[dict] = data.get("entries", [])
+            entries_list: list[dict[str, Any]] = data.get("entries", [])
             domains_found: set[str] = {
                 e.get("domain", "") for e in entries_list
             }
@@ -435,18 +439,19 @@ class TestCrossDomainReport:
 
 def _call_cross_digest(**kwargs: Any) -> str:
     """Call generate_digest for cross-domain tests."""
-    from autoinfo.output import generate_digest
+    from autoinfo.output import DeliveryOutput, generate_digest
 
     if "domain" not in kwargs:
         kwargs["domain"] = "test-domain"
-    return generate_digest(format="markdown", **kwargs)
+    result = generate_digest(format="markdown", **kwargs)
+    return result.output if isinstance(result, DeliveryOutput) else result
 
 
 class TestCrossDomainDigest:
     """Cross-domain digest generation via ``generate_digest``."""
 
     def test_single_domain_digest_unchanged(
-        self, medical_entries: list[dict]
+        self, medical_entries: list[dict[str, Any]]
     ) -> None:
         """Single-domain digest behavior is unchanged — backward compat."""
         with patch("autoinfo.output.KBStore") as mock_kb_cls:
@@ -460,13 +465,13 @@ class TestCrossDomainDigest:
         assert "medical-research" in digest
 
     def test_cross_domain_digest_two_domains(
-        self, medical_entries: list[dict], ai_entries: list[dict]
+        self, medical_entries: list[dict[str, Any]], ai_entries: list[dict[str, Any]]
     ) -> None:
         """Cross-domain digest with 2 domains aggregates both."""
         with patch("autoinfo.output.KBStore") as mock_kb_cls:
             mock_store = MagicMock()
 
-            def _list_entries(domain: str, **_: Any) -> list[dict]:
+            def _list_entries(domain: str, **_: Any) -> list[dict[str, Any]]:
                 if domain == "medical-research":
                     return medical_entries
                 if domain == "ai-commercial":
@@ -501,7 +506,7 @@ class TestCrossDomainDigest:
         assert "Cross-Domain" in digest
 
     def test_domains_single_entry_uses_single_domain_digest(
-        self, medical_entries: list[dict]
+        self, medical_entries: list[dict[str, Any]]
     ) -> None:
         """domains with 1 entry behaves as single-domain digest."""
         with patch("autoinfo.output.KBStore") as mock_kb_cls:

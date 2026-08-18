@@ -32,6 +32,12 @@ class Item:
     previous_version: int = 0
     supersedes: str = ""
     trace_id: str = ""
+    # Runtime caches for the processing pipeline (CEFR + language detection).
+    # Defaults MUST stay None — process.py uses `getattr(item, "_cefr_classification",
+    # None) is not None` as a "was this stashed?" sentinel; a default dict/str would
+    # make the check always-true and double-fire the CEFR call (see #295 wave).
+    _cefr_classification: dict[str, Any] | None = None
+    _detected_language: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -98,7 +104,7 @@ class CollectionResult:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> CollectionStats:
+    def from_dict(cls, data: dict[str, Any]) -> "CollectionResult":
         return cls(**data)
 
 

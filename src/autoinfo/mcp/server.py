@@ -350,12 +350,23 @@ def _handle_diagnose_system() -> dict[str, Any]:
         "sources": {"count": 0, "items": []},
         "disk": {},
         "db": {"exists": False},
+        "fallback_health": {
+            "configured": False,
+            "count": 0,
+            "entries": [],
+            "primary": {
+                "model": "",
+                "provider": "",
+                "reasoning_model": False,
+                "json_mode": False,
+            },
+        },
     }
 
     # -- Config -----------------------------------------------------------
     config_path = None
     try:
-        from autoinfo.config import get_config_path, load_config
+        from autoinfo.config import get_config_path, llm_fallback_health, load_config
 
         config_path = get_config_path()
         if config_path:
@@ -369,6 +380,7 @@ def _handle_diagnose_system() -> dict[str, Any]:
                     or os.environ.get("AUTOINFO_LLM_API_KEY")
                 ),
             }
+            result["fallback_health"] = llm_fallback_health(config)
             sources = []
             for d in config.domains:
                 if d.active:
@@ -3065,6 +3077,12 @@ def _handle_generate_digest(
     _store = KBStore()
     _preview = _store.list_entries(domain=domain, date_from=_date_from, limit=1)
     if not _preview:
+        # generate_digest relaxes the date filter to the full domain set when
+        # no entries fall in the window (data-staleness fallback).  Match that
+        # so the preview gate never suppresses content the generator would
+        # produce (issue #10).
+        _preview = _store.list_entries(domain=domain, limit=1)
+    if not _preview:
         return {
             "success": True,
             "domain": domain,
@@ -3204,6 +3222,11 @@ def _handle_generate_report(
     _date_from = (date.today() - timedelta(days=_days)).isoformat()
     _store = KBStore()
     _preview = _store.list_entries(domain=domain, date_from=_date_from, limit=1)
+    if not _preview:
+        # generate_report relaxes the date filter to the full domain set when
+        # no entries fall in the window.  Match that so the preview gate never
+        # suppresses content the generator would produce (issue #10).
+        _preview = _store.list_entries(domain=domain, limit=1)
     if not _preview:
         return {
             "success": True,

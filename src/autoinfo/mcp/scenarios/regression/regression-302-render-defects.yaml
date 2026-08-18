@@ -1,0 +1,120 @@
+# Regression #302: render defects in the product templates.
+# ① magazine-digest.md.j2 always printed "publications" (plural) even for a
+#    single distinct source_platform — now "1 publication".
+# ② reference lists jammed the platform suffix onto the next reference line
+#    (e.g. "(rss)- **...") because the old `{% if %}` chain emitted no
+#    newline; the new `{{ (" (" ~ ref.source_platform | platform_name ~ ")") if ... }}`
+#    expression keeps each reference on its own line.
+# ③ raw internal source_platform ids (rss, sec_edgar) leaked into rendered
+#    output; the `platform_name` filter now maps them to display names
+#    (RSS, SEC EDGAR).
+#
+# This scenario renders the real Jinja2 templates via the shared
+# `_get_jinja_env()` (which registers the `platform_name` / `product_summary`
+# filters) — deterministic, no network, no LLM.  A regression that reverts
+# any of the three fixes fails here.
+name: regression-302-render-defects
+description: "Regression #302: magazine pluralization, platform_name display mapping, one-per-line references"
+category: regression
+regression: true
+regression_issue: "#302"
+requires_env: []
+steps:
+  - name: "magazine-digest renders '1 publication' and display platform names"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.output import _get_jinja_env
+
+      env = _get_jinja_env()
+      tmpl = env.get_template("magazine-digest.md.j2")
+      entries = [
+          {
+              "title": "IVF breakthrough",
+              "summary": "Time-lapse imaging improves outcomes.",
+              "source_platform": "rss",
+              "relevance_score": 92.0,
+              "collected_at": "2026-07-15T10:00:00Z",
+              "source_url": "https://example.org/feed/1",
+          },
+          {
+              "title": "Embryo selection",
+              "summary": "AI models show promise.",
+              "source_platform": "rss",
+              "relevance_score": 85.0,
+              "collected_at": "2026-07-16T10:00:00Z",
+              "source_url": "https://example.org/feed/2",
+          },
+      ]
+      out = tmpl.render(
+          title="Weekly Magazine",
+          period_label="Weekly",
+          domain="medical-research",
+          date_from="2026-07-10",
+          date_to="2026-07-17",
+          entries=entries,
+          llm_synthesis={"executive_summary": "Summary."},
+          generated_at="2026-07-17T00:00:00Z",
+      )
+      assert "1 publication" in out, "expected singular 1 publication:\n" + out
+      assert "2 publications" not in out, "pluralization not fixed:\n" + out
+      # Per-entry metadata line uses the display name (groupby headings keep
+      # the raw publication id — that is the publication name, not a leak).
+      assert "*RSS*" in out, "platform_name did not map rss to RSS:\n" + out
+      assert "*rss* \u00b7 relevance" not in out, "raw platform id leaked on entry line:\n" + out
+      print("MAGAZINE_PLURAL_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["MAGAZINE_PLURAL_OK"]
+
+  - name: "report references render one-per-line with display platform names"
+    kind: cli
+    command: |-
+      python3 -c '
+      import re
+      from autoinfo.output import _get_jinja_env
+
+      env = _get_jinja_env()
+      tmpl = env.get_template("report.md.j2")
+      references = [
+          {
+              "title": "IVF time-lapse imaging",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
+              "source_platform": "rss",
+          },
+          {
+              "title": "SEC filing on trial results",
+              "source_url": "https://www.sec.gov/edgar/1",
+              "source_platform": "sec_edgar",
+          },
+      ]
+      out = tmpl.render(
+          title="Weekly Report",
+          domain="medical-research",
+          generated_at="2026-07-17T00:00:00Z",
+          sections=[],
+          references=references,
+          executive_summary="Summary.",
+          key_findings=[],
+          recommendations=[],
+          source_tier_badge=False,
+      )
+      # Each reference on its own line (numbered list).
+      ref_lines = re.findall(r"^\d+\. \*\*", out, re.MULTILINE)
+      assert len(ref_lines) == 2, "references not one-per-line:\n" + out
+      # Display names, not raw ids.
+      assert "(RSS)" in out, "rss not mapped to RSS:\n" + out
+      assert "(SEC EDGAR)" in out, "sec_edgar not mapped to SEC EDGAR:\n" + out
+      assert "(rss)" not in out, "raw rss id leaked:\n" + out
+      assert "(sec_edgar)" not in out, "raw sec_edgar id leaked:\n" + out
+      # No jammed platform-suffix -> next-reference pattern.
+      assert "(rss)- **" not in out, "jammed reference pattern:\n" + out
+      assert "(rss)1. **" not in out, "jammed reference pattern:\n" + out
+      print("REPORT_REFERENCES_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["REPORT_REFERENCES_OK"]

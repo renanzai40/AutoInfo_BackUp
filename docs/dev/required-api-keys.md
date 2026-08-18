@@ -39,6 +39,12 @@ reference works.
 | `AUTOINFO_LLM_API_KEY` | API key for the configured LLM provider (OpenRouter, OpenAI, DeepSeek, Ollama, Azure, etc.). Drives extraction, summarization, Q&A synthesis, CEFR classification, translation, and TTS rendering. | **Required** for collection processing, KB extraction, Q&A, and audio output. Optional only if you never run `process`, `qa`, `cefr`, or `format=audio`. | `src/autoinfo/llm.py`, `src/autoinfo/qa.py`, `src/autoinfo/doctor.py`, `src/autoinfo/config.py`, `src/autoinfo/cli/init.py`, `src/autoinfo/mcp/server.py`, `src/autoinfo/output/__init__.py` |
 | `OPENAI_API_KEY` | Fallback key for OpenAI Text-to-Speech when `AUTOINFO_LLM_API_KEY` is unset and `llm.api_key` is blank. Only consulted by the audio renderer. | Optional. Only needed for `format=audio` output via OpenAI TTS. | `src/autoinfo/output/__init__.py` (`_render_audio_openai`) |
 
+## Runtime tuning
+
+| Env Var | Purpose | Required? | Source |
+|---------|---------|-----------|--------|
+| `AUTOINFO_DB_BUSY_TIMEOUT_MS` | SQLite `PRAGMA busy_timeout` in milliseconds. Controls how long a write waits for the database lock before returning `SQLITE_BUSY`. Default 30000 (30s). | Optional. Only tune if you see `database is locked` errors under heavy concurrent writes. | `src/autoinfo/kb.py` (`_db_busy_timeout_ms`) |
+
 ## Audit actor identity
 
 | Env Var | Purpose | Required? | Source |

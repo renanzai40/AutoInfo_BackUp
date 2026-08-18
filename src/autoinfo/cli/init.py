@@ -37,6 +37,44 @@ _REQUIRED_SUBDIRS = [
 _LLM_PROVIDER_CANDIDATES = "openai, openrouter, ollama (or a custom base_url)"
 
 
+def _validate_llm_inputs(
+    provider: str, model: str = "", model_required: bool = False
+) -> str | None:
+    """Return an error message for empty provider/model, else ``None``.
+
+    *provider* must always be non-empty.  *model* is validated only when
+    *model_required* is True — the interactive wizard treats an empty model
+    as "use the template default" (documented in the prompt), so it calls
+    with ``model_required=False``.
+    """
+    if not provider.strip():
+        return "LLM provider must not be empty"
+    if model_required and not model.strip():
+        return "LLM model must not be empty"
+    return None
+
+
+def _print_llm_guidance() -> None:
+    """Print LLM fallback-chain / reasoning-model / connectivity guidance.
+
+    Mirrors the ``next_steps`` returned by the MCP ``init_project`` tool so
+    CLI onboarding and agent onboarding converge on the same advice.
+    """
+    typer.echo("  2. Configure an LLM fallback chain (recommended):")
+    typer.echo("     Edit .autoinfo/config.yaml → llm.fallback:")
+    typer.echo("       llm:")
+    typer.echo("         fallback:")
+    typer.echo("           - model: mimo-v2.5")
+    typer.echo("             base_url: https://opencode.ai/zen/go/v1")
+    typer.echo("     An empty provider/api_key inherits the primary provider/key.")
+    typer.echo()
+    typer.echo("  3. Mark the primary model as a reasoning model (if applicable):")
+    typer.echo("     Edit .autoinfo/config.yaml → llm.reasoning_model: true")
+    typer.echo()
+    typer.echo("  4. Verify LLM connectivity:")
+    typer.echo("     autoinfo doctor   # or the MCP tool test_llm_connection()")
+
+
 def _list_demo_domains() -> list[str]:
     """Return sorted list of available demo domain names (directory names)."""
     if not _DEMO_DOMAINS_DIR.is_dir():
@@ -221,7 +259,9 @@ def _run_init(
     typer.echo("  1. Set your LLM API key:")
     typer.echo("     export AUTOINFO_LLM_API_KEY='sk-...'")
     typer.echo()
-    typer.echo("  2. Collect from sources:")
+    _print_llm_guidance()
+    typer.echo()
+    typer.echo("  5. Collect from sources:")
     if first_topic:
         typer.echo(
             f"     autoinfo collect --domain {first_domain} --topic "
@@ -230,7 +270,7 @@ def _run_init(
     else:
         typer.echo(f"     autoinfo collect --domain {first_domain} --limit 5")
     typer.echo()
-    typer.echo("  3. Process collected items:")
+    typer.echo("  6. Process collected items:")
     typer.echo(f"     autoinfo process --domain {first_domain}")
 
 
@@ -372,6 +412,10 @@ def init(
     except (EOFError, KeyboardInterrupt):
         typer.echo("")
         raise typer.Exit(code=0)
+    validation_error = _validate_llm_inputs(provider)
+    if validation_error:
+        typer.echo(f"  ERROR  {validation_error}", err=True)
+        raise typer.Exit(code=1)
     typer.echo(f"  Using provider: {provider}")
 
     try:

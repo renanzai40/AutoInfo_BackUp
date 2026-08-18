@@ -24,7 +24,7 @@ the loadable procedure — read the contract doc when authoring scenarios.
   auto-loads them).
 - **Acceptance run** → produce `docs/dev/validation-reports/acceptance-*.md`.
 
-## Scenario library (68 = 62 functional + 6 regression)
+## Scenario library (85 = 64 functional + 21 regression)
 
 Functional (`src/autoinfo/mcp/scenarios/*.yaml`): system-health, discovery,
 domain-management, source-management, topic-management, keyword-management,
@@ -41,11 +41,19 @@ webhooks-alerts, agent-callbacks, enduser-journey, enduser-lifecycle,
 enduser-preferences, products-billing, projects-config, cost-budget,
 data-privacy, data-lifecycle-e2e, llm-gated, llm-failure-recovery,
 observability, quality-gate-config, curated-priority-consumption,
-sources-coverage, sources-a6-keyed, sources-gap-closure, … (62 total — run `list_validation_scenarios()` for the live list).
+sources-coverage, sources-a6-keyed, sources-gap-closure, … (64 total — run `list_validation_scenarios()` for the live list).
 
 Regression (`src/autoinfo/mcp/scenarios/regression/`, `regression: true` key):
 collect-int-id (#104), llm-key-resolution (#119), period-enum (#126),
-report-structure (#121), source-301 (#135), regression-product-routing.
+report-structure (#121), source-301 (#135), regression-product-routing,
+regression-financial-sources (#288), regression-290-init-fallback (#290),
+regression-291-demo-merge (#291), regression-292-web-ua (#292),
+regression-293-test-entry-filter (#293), regression-294-empty-summary (#294),
+regression-295-db-lock (#295), regression-296-multi-source (#296),
+regression-297-audience-validation (#297), regression-297-preview-fallback (#10),
+regression-298-delivery-gates (#298), regression-301-bundle-nonempty (#301),
+regression-302-render-defects (#302), regression-303-empty-shell-notes (#303).
+(21 total — run `list_validation_scenarios()` for the live list).
 
 ## Execution discipline
 

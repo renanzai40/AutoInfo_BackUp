@@ -26,7 +26,12 @@ from concurrent.futures import Future, ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
 
-from autoinfo.config import get_config_path, load_config, validate_config
+from autoinfo.config import (
+    get_config_path,
+    llm_fallback_health,
+    load_config,
+    validate_config,
+)
 from autoinfo.schema import get_schema_version as _get_schema_version
 
 # ---------------------------------------------------------------------------
@@ -107,6 +112,26 @@ def run_doctor() -> dict[str, Any]:
         "model": llm_model,
         "key_configured": key_configured,
     }
+
+    # -- LLM fallback-chain health ------------------------------------------
+    fallback_health: dict[str, Any] = {
+        "configured": False,
+        "count": 0,
+        "entries": [],
+        "primary": {
+            "model": "",
+            "provider": "",
+            "reasoning_model": False,
+            "json_mode": False,
+        },
+    }
+    if config_path:
+        try:
+            cfg = load_config(config_path)
+            fallback_health = llm_fallback_health(cfg)
+        except Exception:
+            pass
+    results["fallback_health"] = fallback_health
 
     # -- Source reachability checks -----------------------------------------
     sources_status: list[dict[str, Any]] = []
@@ -354,7 +379,7 @@ def _pipeline_log_dir() -> Path:
     return Path("logs")
 
 
-def _load_run_history(limit: int = 50) -> list[dict[str, Any]]:
+def _load_run_history(limit: int | None = 50) -> list[dict[str, Any]]:
     """Load the most recent pipeline log entries (newest first).
 
     Reads ``logs/pipeline-*.log`` — the JSON structured log written by

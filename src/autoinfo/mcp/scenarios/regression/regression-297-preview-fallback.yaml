@@ -1,0 +1,84 @@
+# Regression #10: the MCP output preview gate suppressed content the
+# generators would produce.  `_handle_generate_digest` / `_handle_generate_report`
+# queried KB entries inside the period window only (`date_from = today - days`);
+# when the window was empty they returned a "noop" envelope.  But the
+# generators themselves relax the date filter to the full domain set when the
+# window is empty (data-staleness fallback — online-education 2026-07-2x
+# entries in a weekly 08-04..08-11 window produced 0 entries and empty
+# product shells), so the preview never matched the generator:  a user with
+# stale-but-present content saw "no entries" and the product was never
+# generated.
+#
+# Fix: the preview gate now performs the SAME two-query sequence as the
+# generator — first the window query (with `date_from`), then, when empty,
+# a full-domain query (`limit=1`) before deciding noop.
+#
+# This scenario drives the real MCP handlers with a mocked KBStore (no LLM,
+# no network, no configured domain — deterministic).  A regression that drops
+# the fallback query fails here: the second `list_entries` call without
+# `date_from` is asserted, and the window-empty + domain-non-empty case must
+# produce a generate, not a noop.
+name: regression-297-preview-fallback
+description: "Regression #10: generate_digest/generate_report preview falls back to full domain when the period window is empty"
+category: regression
+regression: true
+regression_issue: "#10"
+requires_env: []
+steps:
+  - name: "digest preview falls back to full domain when the window is empty"
+    kind: cli
+    command: |-
+      python3 -c '
+      from unittest.mock import MagicMock, patch
+      from autoinfo.mcp.server import _handle_generate_digest
+
+      with patch("autoinfo.kb.KBStore") as mock_kb, \
+              patch("autoinfo.output.generate_digest", return_value="# Digest\n\ncontent") as mock_gen:
+          mock_kb.return_value.list_entries.side_effect = [
+              [],  # window query (date_from set) -> empty
+              [{"entry_id": "e1", "title": "Stale but real entry"}],  # fallback
+          ]
+          result = _handle_generate_digest(domain="medical-research", format="markdown")
+          assert result["success"] is True, result
+          assert result.get("status") != "noop", "preview suppressed content the generator would produce"
+          assert "# Digest" in result["content"], result
+          calls = mock_kb.return_value.list_entries.call_args_list
+          assert len(calls) == 2, "expected window query + full-domain fallback query"
+          assert "date_from" in calls[0].kwargs, "first query must be the window query"
+          assert "date_from" not in calls[1].kwargs, "fallback query must relax the date filter"
+          mock_gen.assert_called_once()
+      print("DIGEST_PREVIEW_FALLBACK_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["DIGEST_PREVIEW_FALLBACK_OK"]
+
+  - name: "report preview falls back to full domain when the window is empty"
+    kind: cli
+    command: |-
+      python3 -c '
+      from unittest.mock import MagicMock, patch
+      from autoinfo.mcp.server import _handle_generate_report
+
+      with patch("autoinfo.kb.KBStore") as mock_kb, \
+              patch("autoinfo.output.generate_report", return_value="# Report\n\ncontent") as mock_gen:
+          mock_kb.return_value.list_entries.side_effect = [
+              [],  # window query (date_from set) -> empty
+              [{"entry_id": "e1", "title": "Stale but real entry"}],  # fallback
+          ]
+          result = _handle_generate_report(domain="medical-research", format="markdown")
+          assert result["success"] is True, result
+          assert result.get("status") != "noop", "preview suppressed content the generator would produce"
+          assert "# Report" in result["content"], result
+          calls = mock_kb.return_value.list_entries.call_args_list
+          assert len(calls) == 2, "expected window query + full-domain fallback query"
+          assert "date_from" in calls[0].kwargs, "first query must be the window query"
+          assert "date_from" not in calls[1].kwargs, "fallback query must relax the date filter"
+          mock_gen.assert_called_once()
+      print("REPORT_PREVIEW_FALLBACK_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["REPORT_PREVIEW_FALLBACK_OK"]

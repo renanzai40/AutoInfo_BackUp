@@ -1,0 +1,64 @@
+# Regression #296: `autoinfo collect --source` defects.
+# (a) `--source` was declared as a single `str` option despite claiming
+#     "repeatable" — Typer collapsed repeated flags to the LAST value, so
+#     `--source pubmed --source rss` silently dropped `pubmed`.
+# (b) requested-but-unknown source names were silently filtered out by
+#     `_resolve_sources` and the CLI exited 0 even when a requested source
+#     was dropped or failed.
+# Fix: `--source` is now a repeatable list[str] option that accumulates, and
+# the CLI warns + exits non-zero when a requested source is unknown or failed.
+# This scenario exercises the CLI wiring deterministically (no network): it
+# drives the typer app through CliRunner with a mocked run_collection and
+# asserts (1) two --source flags BOTH reach run_collection, and (2) an unknown
+# requested source produces a warning + non-zero exit code.
+name: regression-296-multi-source
+description: "Regression #296: collect --source accumulates + unknown source exits non-zero"
+category: regression
+regression: true
+regression_issue: "#296"
+requires_env: []
+steps:
+  - name: "collect --source accumulates and unknown source exits non-zero"
+    kind: cli
+    command: |-
+      python3 -c '
+      from unittest.mock import patch
+      from typer.testing import CliRunner
+      from autoinfo.cli.collect import app
+
+      runner = CliRunner()
+      base = {
+          "collection_id": "col-296",
+          "domain": "medical-research",
+          "total_found": 0,
+          "total_new": 0,
+          "duration_s": 0.1,
+          "per_source": [],
+          "dry_run": False,
+      }
+
+      # (a) two --source flags must BOTH reach run_collection
+      with patch("autoinfo.collect.run_collection", return_value=dict(base)) as mock_run:
+          res = runner.invoke(
+              app,
+              ["--domain", "medical-research", "--source", "pubmed", "--source", "rss"],
+          )
+          assert res.exit_code == 0, res.output
+          got = mock_run.call_args.kwargs["sources"]
+          assert got == ["pubmed", "rss"], (
+              "two --source flags must accumulate, got " + repr(got)
+          )
+
+      # (b) an unknown requested source must warn + exit non-zero
+      unknown = dict(base, unknown_sources=["rss"])
+      with patch("autoinfo.collect.run_collection", return_value=unknown):
+          res = runner.invoke(app, ["--domain", "medical-research", "--source", "rss"])
+          assert res.exit_code != 0, "unknown source must exit non-zero"
+          assert "rss" in res.output, "unknown source must be listed in output"
+
+      print("MULTI_SOURCE_296_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["MULTI_SOURCE_296_OK"]

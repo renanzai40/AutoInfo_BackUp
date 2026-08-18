@@ -19,11 +19,13 @@ Covers:
 
 from __future__ import annotations
 
-from typing import Any
+from pathlib import Path
+from typing import Any, cast
 from unittest.mock import MagicMock, patch
 
 import pytest
 
+from autoinfo.llm import LLMExtractor
 from autoinfo.models import ExtractionResult
 from autoinfo.output import (
     PRODUCT_TEMPLATES,
@@ -46,7 +48,7 @@ def sample_entries() -> list[dict[str, Any]]:
             "entry_id": "entry-001",
             "title": "Improved IVF outcomes with time-lapse imaging",
             "summary": "Time-lapse imaging improves live birth rates in IVF.",
-            "source_url": "https://example.com/ivf-1",
+            "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
             "source_type": "api",
             "source_platform": "pubmed",
             "relevance_score": 92.0,
@@ -58,7 +60,7 @@ def sample_entries() -> list[dict[str, Any]]:
             "entry_id": "entry-002",
             "title": "Neuroplasticity in early childhood development",
             "summary": "Early childhood experiences shape brain plasticity.",
-            "source_url": "https://example.com/neuro-1",
+            "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654321/",
             "source_type": "rss",
             "source_platform": "feed",
             "relevance_score": 78.0,
@@ -73,7 +75,7 @@ def _registry_template(name: str) -> ProductTemplate:
     """Return the ProductTemplate instance of a PRODUCT_TEMPLATES row."""
     for row in PRODUCT_TEMPLATES:
         if row["name"] == name:
-            return row["template"]
+            return cast(ProductTemplate, row["template"])
     raise AssertionError(f"{name} ProductTemplate row missing from PRODUCT_TEMPLATES")
 
 
@@ -120,7 +122,7 @@ def _make_summary_result() -> ExtractionResult:
     )
 
 
-def _get_llm_extractor_class():
+def _get_llm_extractor_class() -> type[LLMExtractor]:
     """Return the ``LLMExtractor`` class from ``autoinfo.llm``."""
     from autoinfo.llm import LLMExtractor
 
@@ -153,7 +155,7 @@ class TestResolveReportProductType:
             == "enterprise-briefing"
         )
 
-    def test_falls_back_to_report_when_template_file_absent(self, tmp_path) -> None:
+    def test_falls_back_to_report_when_template_file_absent(self, tmp_path: Path) -> None:
         """A registry row whose template file is missing falls back — no error.
 
         Guard-first: the on-disk existence check must never let a registry
@@ -215,7 +217,7 @@ class TestResolveDigestProductType:
             _resolve_digest_product_type(_registry_template("digest"), "md") == "digest"
         )
 
-    def test_falls_back_to_digest_when_template_file_absent(self, tmp_path) -> None:
+    def test_falls_back_to_digest_when_template_file_absent(self, tmp_path: Path) -> None:
         """A registry row whose template file is missing falls back — no error.
 
         Guard-first: the on-disk existence check must never let a registry
@@ -244,7 +246,7 @@ class TestGenerateReportRouting:
     """``generate_report`` renders through the resolved template family."""
 
     def test_premium_briefing_renders_through_own_template(
-        self, sample_entries: list[dict]
+        self, sample_entries: list[dict[str, Any]]
     ) -> None:
         """product_template=premium-briefing produces premium-briefing output.
 
@@ -284,7 +286,7 @@ class TestGenerateReportRouting:
         assert "## Sections" not in result
 
     def test_standard_report_without_product_template_unchanged(
-        self, sample_entries: list[dict]
+        self, sample_entries: list[dict[str, Any]]
     ) -> None:
         """Existing callers without ``product_template`` render report.md.j2."""
         mock_extract = MagicMock(

@@ -48,7 +48,7 @@ _SAMPLE_ENTRIES: list[dict[str, Any]] = [
         "entry_id": "entry-001",
         "title": "Improved IVF outcomes with time-lapse imaging",
         "summary": "Time-lapse imaging improves live birth rates in IVF.",
-        "source_url": "https://example.com/ivf-1",
+        "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
         "source_type": "api",
         "source_platform": "pubmed",
         "domain": "medical-research",
@@ -61,7 +61,7 @@ _SAMPLE_ENTRIES: list[dict[str, Any]] = [
         "entry_id": "entry-002",
         "title": "AI-driven embryo selection: a systematic review",
         "summary": "AI models show promise but lack prospective validation.",
-        "source_url": "https://example.com/ivf-2",
+        "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654321/",
         "source_type": "api",
         "source_platform": "pubmed",
         "domain": "medical-research",
@@ -188,12 +188,12 @@ class TestNormalizeDigestProductContext:
             {
                 "text": "Time-lapse imaging: Significant improvement in live "
                         "birth rates (48.2% vs 39.5%).",
-                "source_url": "https://example.com/ivf-1",
+                "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
             },
             {
                 "text": "AI embryo selection: Promising but lacks prospective "
                         "clinical validation.",
-                "source_url": "https://example.com/ivf-2",
+                "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654321/",
             },
         ]
         assert flat["recommendations"] == _SAMPLE_LLM_SYNTHESIS["recommendations"]
@@ -243,14 +243,14 @@ class TestNormalizeDigestProductContext:
         assert flat["references"] == [
             {
                 "title": "Improved IVF outcomes with time-lapse imaging",
-                "source_url": "https://example.com/ivf-1",
+                "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
                 "source_type": "api",
                 "source_platform": "pubmed",
                 "domain": "medical-research",
             },
             {
                 "title": "AI-driven embryo selection: a systematic review",
-                "source_url": "https://example.com/ivf-2",
+                "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654321/",
                 "source_type": "api",
                 "source_platform": "pubmed",
                 "domain": "medical-research",
@@ -270,7 +270,7 @@ class TestNormalizeDigestProductContext:
         entries = [
             {
                 "title": "No domain entry",
-                "source_url": "https://example.com/none",
+                "source_url": "https://pubmed.ncbi.nlm.nih.gov/99999999/",
                 "source_type": "rss",
                 "source_platform": "feed",
             }
@@ -341,8 +341,8 @@ class TestPremiumBriefingDigestPath:
         assert "2. AI embryo selection: Promising but lacks" in result
         # References — 5-key items derived from entries
         assert "## References" in result
-        assert "https://example.com/ivf-1" in result
-        assert "https://example.com/ivf-2" in result
+        assert "https://pubmed.ncbi.nlm.nih.gov/12345678/" in result
+        assert "https://pubmed.ncbi.nlm.nih.gov/87654321/" in result
         # Footer marker literal to premium-briefing.md.j2
         assert "AutoInfo Premium Briefing" in result
         # NOT the default digest.md.j2 layout
@@ -368,7 +368,7 @@ class TestPremiumBriefingDigestPath:
         assert "_No material risks identified in this period._" in result
         # References derived from entries
         assert "## References" in result
-        assert "https://example.com/ivf-1" in result
+        assert "https://pubmed.ncbi.nlm.nih.gov/12345678/" in result
         # Footer marker literal to enterprise-briefing.md.j2
         assert "AutoInfo Enterprise Briefing" in result
         assert "## Entries" not in result

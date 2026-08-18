@@ -14,7 +14,9 @@ from __future__ import annotations
 
 import re
 import threading
+from typing import Any
 
+from autoinfo.llm import LLMExtractor
 from autoinfo.output import (
     _GROUPING_BATCH_SIZE,
     _ensure_all_entries_grouped,
@@ -28,16 +30,16 @@ from autoinfo.output import (
 # ---------------------------------------------------------------------------
 
 
-def _make_entries(n: int, start: int = 1) -> list[dict]:
+def _make_entries(n: int, start: int = 1) -> list[dict[str, Any]]:
     """Deterministic fixture entries (identical shape to the baseline capture)."""
-    entries: list[dict] = []
+    entries: list[dict[str, Any]] = []
     for i in range(start, start + n):
         eid = f"e{i}"
         entries.append({
             "entry_id": eid,
             "title": f"Title {i}",
             "summary": f"Summary {i} for entry {i}.",
-            "source_url": f"https://example.com/{i}",
+            "source_url": f"https://pubmed.ncbi.nlm.nih.gov/{i:08d}/",
             "source_type": "rss",
             "source_platform": "test",
             "domain": "test-domain",
@@ -46,11 +48,11 @@ def _make_entries(n: int, start: int = 1) -> list[dict]:
 
 
 class _FakeResult:
-    def __init__(self, custom_fields: dict) -> None:
+    def __init__(self, custom_fields: dict[str, Any]) -> None:
         self.custom_fields = custom_fields
 
 
-class _MockExtractor:
+class _MockExtractor(LLMExtractor):
     """Deterministic mocked LLMExtractor.
 
     Parses entry ids out of the prompt and groups them into two themes
@@ -68,7 +70,7 @@ class _MockExtractor:
         self.gate = gate
         self.calls = 0
 
-    def extract(self, item, schema=None) -> _FakeResult:
+    def extract(self, item: Any, schema: Any = None) -> Any:
         self.calls += 1
         if self.gate is not None:
             self.gate.enter()
@@ -115,14 +117,17 @@ class _ConcurrencyGate:
 
 
 def _sequential_group_by_theme(
-    extractor, entries: list[dict], domain: str = "", domains=None
-) -> list[dict]:
+    extractor: LLMExtractor,
+    entries: list[dict[str, Any]],
+    domain: str = "",
+    domains: list[str] | None = None,
+) -> list[dict[str, Any]]:
     """Replicates the pre-change sequential batch loop of ``_group_by_theme``."""
     batch_size = _GROUPING_BATCH_SIZE
     batches = [
         entries[i : i + batch_size] for i in range(0, len(entries), batch_size)
     ]
-    merged: list[dict] = []
+    merged: list[dict[str, Any]] = []
     for batch in batches:
         merged.extend(
             _group_batch_by_theme(extractor, batch, domain=domain, domains=domains)
@@ -135,7 +140,7 @@ def _sequential_group_by_theme(
 # exact fixtures + mock above; the post-change output must match byte-for-byte.
 # ---------------------------------------------------------------------------
 
-_SEQUENTIAL_BASELINE = "[{'theme': 'Theme A', 'description': '', 'entries': [{'entry_id': 'e1', 'title': 'Title 1', 'summary': 'Summary 1 for entry 1.', 'source_url': 'https://example.com/1', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}, {'entry_id': 'e2', 'title': 'Title 2', 'summary': 'Summary 2 for entry 2.', 'source_url': 'https://example.com/2', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}, {'entry_id': 'e3', 'title': 'Title 3', 'summary': 'Summary 3 for entry 3.', 'source_url': 'https://example.com/3', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}, {'entry_id': 'e4', 'title': 'Title 4', 'summary': 'Summary 4 for entry 4.', 'source_url': 'https://example.com/4', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}, {'entry_id': 'e9', 'title': 'Title 9', 'summary': 'Summary 9 for entry 9.', 'source_url': 'https://example.com/9', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}]}, {'theme': 'Theme B', 'description': '', 'entries': [{'entry_id': 'e5', 'title': 'Title 5', 'summary': 'Summary 5 for entry 5.', 'source_url': 'https://example.com/5', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}, {'entry_id': 'e6', 'title': 'Title 6', 'summary': 'Summary 6 for entry 6.', 'source_url': 'https://example.com/6', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}, {'entry_id': 'e7', 'title': 'Title 7', 'summary': 'Summary 7 for entry 7.', 'source_url': 'https://example.com/7', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}, {'entry_id': 'e8', 'title': 'Title 8', 'summary': 'Summary 8 for entry 8.', 'source_url': 'https://example.com/8', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}, {'entry_id': 'e10', 'title': 'Title 10', 'summary': 'Summary 10 for entry 10.', 'source_url': 'https://example.com/10', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}]}]"  # noqa: E501
+_SEQUENTIAL_BASELINE = "[{'theme': 'Theme A', 'description': '', 'entries': [{'entry_id': 'e1', 'title': 'Title 1', 'summary': 'Summary 1 for entry 1.', 'source_url': 'https://pubmed.ncbi.nlm.nih.gov/00000001/', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}, {'entry_id': 'e2', 'title': 'Title 2', 'summary': 'Summary 2 for entry 2.', 'source_url': 'https://pubmed.ncbi.nlm.nih.gov/00000002/', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}, {'entry_id': 'e3', 'title': 'Title 3', 'summary': 'Summary 3 for entry 3.', 'source_url': 'https://pubmed.ncbi.nlm.nih.gov/00000003/', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}, {'entry_id': 'e4', 'title': 'Title 4', 'summary': 'Summary 4 for entry 4.', 'source_url': 'https://pubmed.ncbi.nlm.nih.gov/00000004/', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}, {'entry_id': 'e9', 'title': 'Title 9', 'summary': 'Summary 9 for entry 9.', 'source_url': 'https://pubmed.ncbi.nlm.nih.gov/00000009/', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}]}, {'theme': 'Theme B', 'description': '', 'entries': [{'entry_id': 'e5', 'title': 'Title 5', 'summary': 'Summary 5 for entry 5.', 'source_url': 'https://pubmed.ncbi.nlm.nih.gov/00000005/', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}, {'entry_id': 'e6', 'title': 'Title 6', 'summary': 'Summary 6 for entry 6.', 'source_url': 'https://pubmed.ncbi.nlm.nih.gov/00000006/', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}, {'entry_id': 'e7', 'title': 'Title 7', 'summary': 'Summary 7 for entry 7.', 'source_url': 'https://pubmed.ncbi.nlm.nih.gov/00000007/', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}, {'entry_id': 'e8', 'title': 'Title 8', 'summary': 'Summary 8 for entry 8.', 'source_url': 'https://pubmed.ncbi.nlm.nih.gov/00000008/', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}, {'entry_id': 'e10', 'title': 'Title 10', 'summary': 'Summary 10 for entry 10.', 'source_url': 'https://pubmed.ncbi.nlm.nih.gov/00000010/', 'source_type': 'rss', 'source_platform': 'test', 'domain': 'test-domain'}]}]"  # noqa: E501
 
 
 # ---------------------------------------------------------------------------

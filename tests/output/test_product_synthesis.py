@@ -49,7 +49,7 @@ _SAMPLE_ENTRIES: list[dict[str, Any]] = [
         "entry_id": "entry-001",
         "title": "Improved IVF outcomes with time-lapse imaging",
         "summary": "Time-lapse imaging improves live birth rates in IVF.",
-        "source_url": "https://example.com/ivf-1",
+                    "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
         "source_type": "api",
         "source_platform": "pubmed",
         "domain": "medical-research",
@@ -62,7 +62,7 @@ _SAMPLE_ENTRIES: list[dict[str, Any]] = [
         "entry_id": "entry-002",
         "title": "AI-driven embryo selection: a systematic review",
         "summary": "AI models show promise but lack prospective validation.",
-        "source_url": "https://example.com/ivf-2",
+        "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654321/",
         "source_type": "api",
         "source_platform": "pubmed",
         "domain": "medical-research",
@@ -547,17 +547,20 @@ class TestReportDataToDictProductFields:
             generated_at="2026-08-10 00:00 UTC",
             domain="medical-research",
             executive_summary="Summary.",
-            key_findings=[
-                "Time-lapse imaging: Significant improvement in live birth rates.",
-                "AI embryo selection: Promising but lacks prospective validation.",
-            ],
+            key_findings=cast(
+                list[dict[str, Any]],
+                [
+                    "Time-lapse imaging: Significant improvement in live birth rates.",
+                    "AI embryo selection: Promising but lacks prospective validation.",
+                ],
+            ),
             sections=[
                 ReportSection(title="IVF", content="c", items=[_SAMPLE_ENTRIES[0]])
             ],
             references=[
                 {
                     "title": "Improved IVF outcomes",
-                    "source_url": "https://example.com/ivf-1",
+        "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
                     "source_type": "api",
                     "source_platform": "pubmed",
                     "domain": "medical-research",
@@ -616,7 +619,7 @@ def _build_large_entry(i: int) -> dict[str, Any]:
             "reproductive technology outcomes and clinical practice" % i
         ),
         "summary": "S" * 120,
-        "source_url": f"https://example.com/entry-{i}",
+        "source_url": f"https://pubmed.ncbi.nlm.nih.gov/{i:08d}/",
         "source_type": "api",
         "source_platform": "pubmed",
         "domain": "medical-research",

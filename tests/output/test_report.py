@@ -36,7 +36,7 @@ def sample_entries() -> list[dict[str, Any]]:
             "entry_id": "entry-001",
             "title": "Improved IVF outcomes with time-lapse imaging",
             "summary": "Time-lapse imaging improves live birth rates in IVF.",
-            "source_url": "https://example.com/ivf-1",
+            "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
             "source_type": "api",
             "source_platform": "pubmed",
             "relevance_score": 92.0,
@@ -48,7 +48,7 @@ def sample_entries() -> list[dict[str, Any]]:
             "entry_id": "entry-002",
             "title": "Neuroplasticity in early childhood development",
             "summary": "Early childhood experiences shape brain plasticity.",
-            "source_url": "https://example.com/neuro-1",
+            "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654321/",
             "source_type": "rss",
             "source_platform": "feed",
             "relevance_score": 78.0,
@@ -60,7 +60,7 @@ def sample_entries() -> list[dict[str, Any]]:
             "entry_id": "entry-003",
             "title": "Synaptic pruning mechanisms in adolescents",
             "summary": "Adolescent brain undergoes significant synaptic pruning.",
-            "source_url": "https://example.com/neuro-2",
+            "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654322/",
             "source_type": "api",
             "source_platform": "pubmed",
             "relevance_score": 85.0,
@@ -228,9 +228,9 @@ class TestGenerateReport:
 
         # References
         assert "## References" in report
-        assert "https://example.com/ivf-1" in report
-        assert "https://example.com/neuro-1" in report
-        assert "https://example.com/neuro-2" in report
+        assert "https://pubmed.ncbi.nlm.nih.gov/12345678/" in report
+        assert "https://pubmed.ncbi.nlm.nih.gov/87654321/" in report
+        assert "https://pubmed.ncbi.nlm.nih.gov/87654322/" in report
 
         # Metadata
         assert "**Domain**: medical-research" in report

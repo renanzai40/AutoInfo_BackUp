@@ -1,0 +1,55 @@
+# Regression #292: web collector missing User-Agent header — sites like CNBC
+# returned HTTP 403 on fulltext fetches because the web collector's httpx.get
+# sent NO User-Agent.  Fix: USER_AGENT constant in web.py passed as
+# headers={"User-Agent": USER_AGENT} to httpx.get, and imported by
+# web_playwright.py for the Playwright browser context.
+# This scenario asserts the SOURCE CONTRACT deterministically (no network):
+# web.py must contain the UA header in the httpx.get call, and web_playwright
+# must reuse the same constant.  A regression that drops the header fails here.
+name: regression-292-web-ua
+description: "Regression #292: web collector User-Agent header for fulltext fetches"
+category: regression
+regression: true
+regression_issue: "#292"
+requires_env: []
+steps:
+  - name: "web.py sends User-Agent in httpx.get call"
+    kind: cli
+    command: |-
+      python3 -c '
+      import inspect
+      from autoinfo.collectors.web import WebHandler, USER_AGENT
+      # USER_AGENT constant must exist and be browser-like
+      assert USER_AGENT, "USER_AGENT is empty"
+      assert "Mozilla" in USER_AGENT, "USER_AGENT not browser-like"
+      assert "Chrome" in USER_AGENT, "USER_AGENT not browser-like"
+      # The _fetch_html method must pass headers with User-Agent
+      src = inspect.getsource(WebHandler._fetch_html)
+      assert "headers=" in src, "_fetch_html missing headers="
+      assert "USER_AGENT" in src, "_fetch_html not using USER_AGENT"
+      print("WEB_UA_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["WEB_UA_OK"]
+
+  - name: "web_playwright.py reuses web.py USER_AGENT for browser context"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.collectors.web import USER_AGENT
+      from autoinfo.collectors.web_playwright import PlaywrightWebHandler, USER_AGENT as PW_UA
+      # Must import the same constant
+      assert PW_UA is USER_AGENT, "web_playwright.USER_AGENT is not web.USER_AGENT"
+      # PlaywrightWebHandler._fetch_via_playwright must use new_context(user_agent=...)
+      import inspect
+      src = inspect.getsource(PlaywrightWebHandler._fetch_via_playwright)
+      assert "new_context" in src, "PlaywrightWebHandler not using new_context"
+      assert "user_agent=" in src, "new_context missing user_agent parameter"
+      print("PW_UA_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["PW_UA_OK"]

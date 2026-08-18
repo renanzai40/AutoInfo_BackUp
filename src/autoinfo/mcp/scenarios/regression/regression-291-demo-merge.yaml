@@ -1,0 +1,72 @@
+# Regression #291: merge_demo_domains.py skipped domains that already existed
+# in .autoinfo/config.yaml (`if dname in existing: continue`), so new
+# sources/topics from the demo domain's sources.yaml were never merged into
+# the existing block — the script was add-only for new domains.
+# Fix: the existing-domain branch now reads the demo sources.yaml and merges
+# missing sources (matched by name, falling back to url) and topics (matched
+# by name) into the existing block, preserving existing config; --dry-run
+# reports would-be merges.
+# This scenario asserts the CONFIG contract deterministically (no network, no
+# env gating): running the script against a temp config with an existing
+# domain must append the missing source/topic and skip the already-present
+# one. A regression that reverts to skipping existing domains fails here.
+name: regression-291-demo-merge
+description: "Regression #291: merge_demo_domains.py merges sources/topics into existing domains"
+category: regression
+regression: true
+regression_issue: "#291"
+requires_env: []
+steps:
+  - name: "existing-domain merge adds missing source/topic and skips present ones"
+    kind: cli
+    command: |-
+      set -euo pipefail
+      TMP="$(mktemp -d)"
+      trap 'rm -rf "$TMP"' EXIT
+      mkdir -p "$TMP/.autoinfo" "$TMP/domains/demo-domain"
+      cat > "$TMP/.autoinfo/config.yaml" <<'EOF'
+      project:
+        name: test
+      domains:
+      - name: demo-domain
+        active: true
+        sources:
+        - name: existing-src
+          type: rss
+          url: https://existing.example/rss
+        topics:
+        - name: Existing Topic
+          keywords: [existing]
+      EOF
+      cat > "$TMP/domains/demo-domain/sources.yaml" <<'EOF'
+      name: demo-domain
+      sources:
+      - name: existing-src
+        type: rss
+        url: https://existing.example/rss
+      - name: new-src
+        type: api
+        url: https://new.example/api
+      topics:
+      - name: Existing Topic
+        keywords: [existing]
+      - name: New Topic
+        keywords: [new]
+      EOF
+      python3 scripts/merge_demo_domains.py \
+        --config "$TMP/.autoinfo/config.yaml" --domains-dir "$TMP/domains"
+      python3 -c '
+      import sys, yaml
+      cfg = yaml.safe_load(open(sys.argv[1]))
+      block = next(d for d in cfg["domains"] if d["name"] == "demo-domain")
+      names = [s["name"] for s in block["sources"]]
+      assert names == ["existing-src", "new-src"], "sources not merged: " + str(names)
+      topics = [t["name"] for t in block["topics"]]
+      assert topics == ["Existing Topic", "New Topic"], "topics not merged: " + str(topics)
+      assert block["active"] is True, "existing config not preserved"
+      print("DEMO_MERGE_OK")
+      ' "$TMP/.autoinfo/config.yaml"
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["DEMO_MERGE_OK"]

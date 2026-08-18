@@ -32,7 +32,9 @@ from autoinfo.mcp.server import (
     _handle_create_kb_entry,
     _handle_deactivate_domain,
     _handle_diagnose_system,
+    _handle_generate_digest,
     _handle_generate_presentation,
+    _handle_generate_report,
     _handle_generate_tutorial,
     _handle_get_collection_progress,
     _handle_get_collection_status,
@@ -820,6 +822,120 @@ class TestGenerateOutput:
             custom_instructions="",
             user_id="",
         )
+
+
+# ======================================================================
+# _handle_generate_digest / _handle_generate_report — preview date-window
+# fallback (issue #10)
+# ======================================================================
+# The preview gate queries KB entries inside the period window to decide
+# noop-vs-generate.  The generators themselves relax the date filter to the
+# full domain set when the window is empty (data-staleness fallback), so the
+# preview must do the same — otherwise it suppresses content the generator
+# would produce.  These tests lock the two-query sequence: first the window
+# query (with date_from), then the full-domain fallback query (without).
+
+
+class TestGenerateOutputPreviewFallback:
+    @patch("autoinfo.kb.KBStore")
+    @patch("autoinfo.output.generate_digest")
+    def test_digest_falls_back_to_full_domain_when_window_empty(
+        self, mock_gen: MagicMock, mock_kb: MagicMock
+    ) -> None:
+        """Window query empty + full domain non-empty -> generate, not noop."""
+        mock_kb.return_value.list_entries.side_effect = [
+            [],  # window query (date_from set)
+            [{"entry_id": "e1", "title": "Stale but real entry"}],  # fallback
+        ]
+        mock_gen.return_value = "# Digest\n\ncontent"
+
+        result = _handle_generate_digest(
+            domain="medical-research", format="markdown"
+        )
+        assert result["success"] is True
+        assert result.get("status") != "noop"
+        assert "# Digest" in result["content"]
+
+        calls = mock_kb.return_value.list_entries.call_args_list
+        assert len(calls) == 2
+        assert "date_from" in calls[0].kwargs, "first query must be the window query"
+        assert "date_from" not in calls[1].kwargs, "fallback query must relax the date"
+        mock_gen.assert_called_once()
+
+    @patch("autoinfo.kb.KBStore")
+    @patch("autoinfo.output.generate_digest")
+    def test_digest_noop_when_both_window_and_domain_empty(
+        self, mock_gen: MagicMock, mock_kb: MagicMock
+    ) -> None:
+        """Both queries empty -> noop, generator never called."""
+        mock_kb.return_value.list_entries.return_value = []
+
+        result = _handle_generate_digest(
+            domain="medical-research", format="markdown"
+        )
+        assert result["status"] == "noop"
+        assert result["content"] == ""
+        assert mock_kb.return_value.list_entries.call_count == 2
+        mock_gen.assert_not_called()
+
+    @patch("autoinfo.kb.KBStore")
+    @patch("autoinfo.output.generate_digest")
+    def test_digest_no_fallback_when_window_has_entries(
+        self, mock_gen: MagicMock, mock_kb: MagicMock
+    ) -> None:
+        """Window non-empty -> single query, no fallback query."""
+        mock_kb.return_value.list_entries.return_value = [
+            {"entry_id": "e1", "title": "Fresh entry"}
+        ]
+        mock_gen.return_value = "# Digest\n\ncontent"
+
+        result = _handle_generate_digest(
+            domain="medical-research", format="markdown"
+        )
+        assert result["success"] is True
+        assert mock_kb.return_value.list_entries.call_count == 1
+        mock_gen.assert_called_once()
+
+    @patch("autoinfo.kb.KBStore")
+    @patch("autoinfo.output.generate_report")
+    def test_report_falls_back_to_full_domain_when_window_empty(
+        self, mock_gen: MagicMock, mock_kb: MagicMock
+    ) -> None:
+        """Window empty + full domain non-empty -> generate, not noop."""
+        mock_kb.return_value.list_entries.side_effect = [
+            [],  # window query (date_from set)
+            [{"entry_id": "e1", "title": "Stale but real entry"}],  # fallback
+        ]
+        mock_gen.return_value = "# Report\n\ncontent"
+
+        result = _handle_generate_report(
+            domain="medical-research", format="markdown"
+        )
+        assert result["success"] is True
+        assert result.get("status") != "noop"
+        assert "# Report" in result["content"]
+
+        calls = mock_kb.return_value.list_entries.call_args_list
+        assert len(calls) == 2
+        assert "date_from" in calls[0].kwargs, "first query must be the window query"
+        assert "date_from" not in calls[1].kwargs, "fallback query must relax the date"
+        mock_gen.assert_called_once()
+
+    @patch("autoinfo.kb.KBStore")
+    @patch("autoinfo.output.generate_report")
+    def test_report_noop_when_both_window_and_domain_empty(
+        self, mock_gen: MagicMock, mock_kb: MagicMock
+    ) -> None:
+        """Both queries empty -> noop, generator never called."""
+        mock_kb.return_value.list_entries.return_value = []
+
+        result = _handle_generate_report(
+            domain="medical-research", format="markdown"
+        )
+        assert result["status"] == "noop"
+        assert result["content"] == ""
+        assert mock_kb.return_value.list_entries.call_count == 2
+        mock_gen.assert_not_called()
 
 
 # ======================================================================

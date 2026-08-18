@@ -22,12 +22,11 @@ import sqlite3
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 from unittest.mock import MagicMock, patch
 
 import jsonschema
 import pytest
-
 
 # ---------------------------------------------------------------------------
 # Schema loading (read from disk — real published schemas)
@@ -41,7 +40,7 @@ def _load_schema(name: str) -> dict[str, Any]:
     path = SCHEMA_DIR / f"{name}-v1.json"
     assert path.is_file(), f"Schema not found: {path}"
     with open(path, encoding="utf-8") as f:
-        return json.load(f)
+        return cast(dict[str, Any], json.load(f))
 
 
 SCHEMA_DIGEST = _load_schema("knowledge-digest")
@@ -58,8 +57,11 @@ SCHEMA_EXPORT = _load_schema("knowledge-base-export")
 _CJK_ENTRY: dict[str, Any] = {
     "entry_id": "cjk-001",
     "title": "量子コンピューティングの最新動向",
-    "summary": "量子コンピューティングの研究は加速しており、バイオ医薬品の分子シミュレーション応用が期待されています。",
-    "source_url": "https://example.com/quantum-jp",
+    "summary": (
+        "量子コンピューティングの研究は加速しており、"
+        "バイオ医薬品の分子シミュレーション応用が期待されています。"
+    ),
+    "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
     "source_type": "api",
     "source_platform": "pubmed",
     "relevance_score": 88.0,
@@ -73,7 +75,7 @@ _ENGLISH_ENTRY: dict[str, Any] = {
     "entry_id": "eng-001",
     "title": "CRISPR gene editing advances",
     "summary": "New CRISPR techniques reduce off-target effects significantly.",
-    "source_url": "https://example.com/crispr",
+    "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654321/",
     "source_type": "api",
     "source_platform": "pubmed",
     "relevance_score": 92.0,
@@ -316,7 +318,7 @@ class TestDigestAgentSchema:
     """generate_digest with format="agent" → knowledge-digest-v1.json"""
 
     def test_digest_agent_validates_against_schema(
-        self, cjk_and_english_entries: list[dict]
+        self, cjk_and_english_entries: list[dict[str, Any]]
     ) -> None:
         """Digest agent output must validate against the published schema."""
         from autoinfo.output import generate_digest
@@ -344,7 +346,7 @@ class TestDigestAgentSchema:
         _validate_against_schema(data, SCHEMA_DIGEST)
 
     def test_digest_agent_has_uuid(
-        self, cjk_and_english_entries: list[dict]
+        self, cjk_and_english_entries: list[dict[str, Any]]
     ) -> None:
         """Agent digest must include a UUID."""
         from autoinfo.output import generate_digest
@@ -361,13 +363,14 @@ class TestDigestAgentSchema:
                     format="agent",
                 )
 
+        assert isinstance(result, str)
         data = json.loads(result)
         assert "uuid" in data
         # Must be a valid UUID
         uuid.UUID(data["uuid"])
 
     def test_digest_agent_cjk_survives_roundtrip(
-        self, single_cjk_entry: list[dict]
+        self, single_cjk_entry: list[dict[str, Any]]
     ) -> None:
         """CJK content must survive JSON round-trip."""
         from autoinfo.output import generate_digest
@@ -384,6 +387,7 @@ class TestDigestAgentSchema:
                     format="agent",
                 )
 
+        assert isinstance(result, str)
         data = json.loads(result)
         _assert_cjk_survives(data, "量子コンピューティングの最新動向")
         _assert_utf8_safety(data)
@@ -398,7 +402,7 @@ class TestReportAgentSchema:
     """generate_report with format="agent" → knowledge-digest-v1.json"""
 
     def test_report_agent_validates_against_schema(
-        self, cjk_and_english_entries: list[dict]
+        self, cjk_and_english_entries: list[dict[str, Any]]
     ) -> None:
         """Report agent output must validate against the digest schema."""
         from autoinfo.output import generate_report
@@ -432,7 +436,7 @@ class TestReportAgentSchema:
         _validate_against_schema(data, SCHEMA_DIGEST)
 
     def test_report_agent_cjk_survives_roundtrip(
-        self, single_cjk_entry: list[dict]
+        self, single_cjk_entry: list[dict[str, Any]]
     ) -> None:
         """CJK content in report agent output must survive JSON round-trip."""
         from autoinfo.output import generate_report
@@ -457,6 +461,7 @@ class TestReportAgentSchema:
                             period="monthly",
                         )
 
+        assert isinstance(result, str)
         data = json.loads(result)
         _assert_cjk_survives(data, "量子コンピューティングの最新動向")
         _assert_utf8_safety(data)
@@ -471,7 +476,7 @@ class TestTutorialAgentSchema:
     """generate_tutorial with format="agent" → knowledge-tutorial-v1.json"""
 
     def test_tutorial_agent_validates_against_schema(
-        self, cjk_and_english_entries: list[dict]
+        self, cjk_and_english_entries: list[dict[str, Any]]
     ) -> None:
         """Tutorial agent output must validate against the published schema."""
         from autoinfo.output import generate_tutorial
@@ -497,7 +502,7 @@ class TestTutorialAgentSchema:
         _validate_against_schema(data, SCHEMA_TUTORIAL)
 
     def test_tutorial_agent_has_required_fields(
-        self, cjk_and_english_entries: list[dict]
+        self, cjk_and_english_entries: list[dict[str, Any]]
     ) -> None:
         """Tutorial agent must have all required fields per schema."""
         from autoinfo.output import generate_tutorial
@@ -514,6 +519,7 @@ class TestTutorialAgentSchema:
                     format="agent",
                 )
 
+        assert isinstance(result, str)
         data = json.loads(result)
         required = SCHEMA_TUTORIAL["required"]
         for field in required:
@@ -528,7 +534,7 @@ class TestTutorialAgentSchema:
             assert "body" in step
 
     def test_tutorial_agent_cjk_survives_roundtrip(
-        self, single_cjk_entry: list[dict]
+        self, single_cjk_entry: list[dict[str, Any]]
     ) -> None:
         """CJK content in tutorial agent output must survive JSON round-trip."""
         from autoinfo.output import generate_tutorial
@@ -545,6 +551,7 @@ class TestTutorialAgentSchema:
                     format="agent",
                 )
 
+        assert isinstance(result, str)
         data = json.loads(result)
         _assert_cjk_survives(data, "量子コンピューティング入門")
         _assert_utf8_safety(data)
@@ -559,7 +566,7 @@ class TestPresentationAgentSchema:
     """generate_presentation with format="agent" → knowledge-presentation-v1.json"""
 
     def test_presentation_agent_validates_against_schema(
-        self, cjk_and_english_entries: list[dict]
+        self, cjk_and_english_entries: list[dict[str, Any]]
     ) -> None:
         """Presentation agent output must validate against the published schema."""
         from autoinfo.output import generate_presentation
@@ -587,7 +594,7 @@ class TestPresentationAgentSchema:
         _validate_against_schema(data, SCHEMA_PRESENTATION)
 
     def test_presentation_agent_has_slides(
-        self, cjk_and_english_entries: list[dict]
+        self, cjk_and_english_entries: list[dict[str, Any]]
     ) -> None:
         """Presentation agent must have slides array with proper structure."""
         from autoinfo.output import generate_presentation
@@ -606,6 +613,7 @@ class TestPresentationAgentSchema:
                     format="agent",
                 )
 
+        assert isinstance(result, str)
         data = json.loads(result)
         assert "slides" in data
         assert isinstance(data["slides"], list)
@@ -616,7 +624,7 @@ class TestPresentationAgentSchema:
             assert "bullets" in slide
 
     def test_presentation_agent_cjk_survives_roundtrip(
-        self, single_cjk_entry: list[dict]
+        self, single_cjk_entry: list[dict[str, Any]]
     ) -> None:
         """CJK content in presentation agent output must survive JSON round-trip."""
         from autoinfo.output import generate_presentation
@@ -635,6 +643,7 @@ class TestPresentationAgentSchema:
                     format="agent",
                 )
 
+        assert isinstance(result, str)
         data = json.loads(result)
         _assert_cjk_survives(data, "分子シミュレーション")
         _assert_utf8_safety(data)
@@ -649,7 +658,7 @@ class TestExportAgentSchema:
     """export_kb with format="agent" → knowledge-base-export-v1.json"""
 
     def test_export_agent_validates_against_schema(
-        self, cjk_and_english_entries: list[dict], tmp_path: Path
+        self, cjk_and_english_entries: list[dict[str, Any]], tmp_path: Path
     ) -> None:
         """Export agent output must validate against the published schema."""
         from autoinfo.output import export_kb
@@ -669,7 +678,7 @@ class TestExportAgentSchema:
         _validate_against_schema(result, SCHEMA_EXPORT)
 
     def test_export_agent_has_uuid_and_entries(
-        self, cjk_and_english_entries: list[dict], tmp_path: Path
+        self, cjk_and_english_entries: list[dict[str, Any]], tmp_path: Path
     ) -> None:
         """Export agent must have uuid and entries array."""
         from autoinfo.output import export_kb
@@ -689,7 +698,7 @@ class TestExportAgentSchema:
         assert len(result["entries"]) == 2
 
     def test_export_agent_cjk_survives_roundtrip(
-        self, single_cjk_entry: list[dict], tmp_path: Path
+        self, single_cjk_entry: list[dict[str, Any]], tmp_path: Path
     ) -> None:
         """CJK content in export agent output must survive JSON round-trip."""
         from autoinfo.output import export_kb
@@ -706,7 +715,7 @@ class TestExportAgentSchema:
         _assert_utf8_safety(result)
 
     def test_export_agent_constants_match(
-        self, cjk_and_english_entries: list[dict], tmp_path: Path
+        self, cjk_and_english_entries: list[dict[str, Any]], tmp_path: Path
     ) -> None:
         """@context/@type must match the T33 constants exactly."""
         from autoinfo.output import (
@@ -752,7 +761,9 @@ class TestConstantsSchemaAlignment:
         """_JSONLD_PRESENTATION @context/@type must match knowledge-presentation-v1.json"""
         from autoinfo.output import _JSONLD_PRESENTATION
 
-        assert _JSONLD_PRESENTATION["@context"] == SCHEMA_PRESENTATION["properties"]["@context"]["const"]
+        assert _JSONLD_PRESENTATION["@context"] == (
+            SCHEMA_PRESENTATION["properties"]["@context"]["const"]
+        )
         assert _JSONLD_PRESENTATION["@type"] == SCHEMA_PRESENTATION["properties"]["@type"]["const"]
 
     def test_export_constants_match_schema(self) -> None:
@@ -825,7 +836,7 @@ class TestAgentProductFields:
     """
 
     def test_digest_premium_briefing_agent_has_product_fields(
-        self, cjk_and_english_entries: list[dict]
+        self, cjk_and_english_entries: list[dict[str, Any]]
     ) -> None:
         """Digest premium-briefing agent output carries the three fields."""
         from autoinfo.output import generate_digest
@@ -855,7 +866,7 @@ class TestAgentProductFields:
         _validate_against_schema(data, SCHEMA_DIGEST)
 
     def test_digest_enterprise_briefing_agent_has_key_metrics(
-        self, cjk_and_english_entries: list[dict]
+        self, cjk_and_english_entries: list[dict[str, Any]]
     ) -> None:
         """Enterprise-briefing agent output additionally carries key_metrics."""
         from autoinfo.output import generate_digest
@@ -873,6 +884,7 @@ class TestAgentProductFields:
                     product_template=_registry_template("enterprise-briefing"),
                 )
 
+        assert isinstance(result, str)
         data = json.loads(result)
         for field in _PRODUCT_KEYS:
             assert field in data, f"Missing product field: {field}"
@@ -883,7 +895,7 @@ class TestAgentProductFields:
         _validate_against_schema(data, SCHEMA_DIGEST)
 
     def test_report_premium_briefing_agent_has_product_fields(
-        self, cjk_and_english_entries: list[dict]
+        self, cjk_and_english_entries: list[dict[str, Any]]
     ) -> None:
         """Report premium-briefing agent output carries the three fields."""
         from autoinfo.output import generate_report
@@ -918,7 +930,7 @@ class TestAgentProductFields:
         _validate_against_schema(data, SCHEMA_DIGEST)
 
     def test_report_enterprise_briefing_agent_has_key_metrics(
-        self, cjk_and_english_entries: list[dict]
+        self, cjk_and_english_entries: list[dict[str, Any]]
     ) -> None:
         """Enterprise report agent output additionally carries key_metrics."""
         from autoinfo.output import generate_report
@@ -941,6 +953,7 @@ class TestAgentProductFields:
                             product_template=_registry_template("enterprise-briefing"),
                         )
 
+        assert isinstance(result, str)
         data = json.loads(result)
         for field in _PRODUCT_KEYS:
             assert field in data, f"Missing product field: {field}"
@@ -951,7 +964,7 @@ class TestAgentProductFields:
         _validate_against_schema(data, SCHEMA_DIGEST)
 
     def test_default_digest_agent_output_unchanged(
-        self, cjk_and_english_entries: list[dict]
+        self, cjk_and_english_entries: list[dict[str, Any]]
     ) -> None:
         """Default digest agent output must not gain the product keys."""
         from autoinfo.output import generate_digest
@@ -968,12 +981,13 @@ class TestAgentProductFields:
                     format="agent",
                 )
 
+        assert isinstance(result, str)
         data = json.loads(result)
         for field in _PRODUCT_KEYS:
             assert field not in data, f"Unexpected product key on default digest: {field}"
 
     def test_default_report_agent_output_unchanged(
-        self, cjk_and_english_entries: list[dict]
+        self, cjk_and_english_entries: list[dict[str, Any]]
     ) -> None:
         """Default report agent output must not gain the product keys."""
         from autoinfo.output import generate_report
@@ -995,6 +1009,7 @@ class TestAgentProductFields:
                             period="monthly",
                         )
 
+        assert isinstance(result, str)
         data = json.loads(result)
         for field in _PRODUCT_KEYS:
             assert field not in data, f"Unexpected product key on default report: {field}"

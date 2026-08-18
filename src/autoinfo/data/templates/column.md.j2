@@ -26,10 +26,12 @@
 | # | Title | Summary |
 |---|-------|---------|
 {% for entry in section.entries %}
-| {{ loop.index }} | {{ entry.title }} | {{ entry.summary }} |
+| {{ loop.index }} | {{ entry.title }} | {{ entry.summary | product_summary or "—" }} |
 {% endfor %}
 {% endif %}
 
+{% else %}
+_No deep-dive sections available for this column._
 {% endfor %}
 
 ---
@@ -37,7 +39,7 @@
 ## What Changed This Week
 
 {% for ref in references %}
-- **{{ ref.title }}**{% if ref.source_url %} — {{ ref.source_url }}{% endif %}{% if ref.source_platform %} ({{ ref.source_platform }}){% endif %}
+- **{{ ref.title }}**{{ (" — " ~ ref.source_url) if ref.source_url else "" }}{{ (" (" ~ ref.source_platform | platform_name ~ ")") if ref.source_platform else "" }}
 {% else %}
 _No developments this week._
 {% endfor %}
@@ -48,6 +50,8 @@ _No developments this week._
 
 {% for section in sections %}
 - **{{ section.title }}** — {{ section.content }}
+{% else %}
+_No outlook sections available._
 {% endfor %}
 
 ## Reader Takeaways

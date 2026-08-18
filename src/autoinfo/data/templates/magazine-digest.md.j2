@@ -7,7 +7,7 @@
 
 ## {{ period_label }} Magazine Edition
 
-**{{ domain }}** · {{ date_from }} – {{ date_to }} · **{{ entries|length }} articles** from {{ (entries|groupby('source_platform', default='General'))|length }} publications
+**{{ domain }}** · {{ date_from }} – {{ date_to }} · **{{ entries|length }} articles** from {{ (entries|groupby('source_platform', default='General'))|length }} publication{{ "s" if (entries|groupby('source_platform', default='General'))|length != 1 else "" }}
 
 {% if llm_synthesis and llm_synthesis.executive_summary %}
 > *{{ llm_synthesis.executive_summary }}*
@@ -33,7 +33,7 @@
 > {{ entry.summary }}
 {% endif %}
 
-*{{ entry.source_platform or "—" }}* {% if entry.relevance_score is not none %}· relevance {{ entry.relevance_score }}/100{% endif %} {% if entry.collected_at %}· {{ entry.collected_at }}{% endif %}
+*{{ entry.source_platform | platform_name }}* {% if entry.relevance_score is not none %}· relevance {{ entry.relevance_score }}/100{% endif %} {% if entry.collected_at %}· {{ entry.collected_at }}{% endif %}
 
 {% if entry.source_url %}
 [Read the full article]({{ entry.source_url }})

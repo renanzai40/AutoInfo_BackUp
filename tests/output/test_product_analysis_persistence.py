@@ -23,7 +23,7 @@ from __future__ import annotations
 import json
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -118,14 +118,14 @@ def store(tmp_path: Path) -> KBStore:
     kb_store.index.index_entry(
         _entry(
             "medical-research-ivf-entry-1",
-            "https://example.com/article1",
+            "https://pubmed.ncbi.nlm.nih.gov/12345678/",
             "Time-lapse imaging improves IVF outcomes",
         )
     )
     kb_store.index.index_entry(
         _entry(
             "medical-research-ivf-entry-2",
-            "https://example.com/article2",
+            "https://pubmed.ncbi.nlm.nih.gov/87654321/",
             "AI embryo selection shows promise",
         )
     )
@@ -146,7 +146,7 @@ def _product_analysis(store: KBStore, entry_id: str) -> dict[str, Any]:
         if isinstance(custom_fields_raw, str)
         else dict(custom_fields_raw)
     )
-    return custom_fields["product_analysis"]
+    return cast(dict[str, Any], custom_fields["product_analysis"])
 
 
 # ===========================================================================

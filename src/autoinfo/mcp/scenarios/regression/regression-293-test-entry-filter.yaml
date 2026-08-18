@@ -1,0 +1,144 @@
+# Regression #293: products leaked test/placeholder KB entries into rendered
+# output.  `_filter_product_entries` (issue #298 layer 1) now drops entries
+# carrying test/placeholder markers — example.com/example.org/localhost URLs,
+# "Get Test"/"Test Entry" titles, lorem-ipsum summaries, custom_fields.test —
+# BEFORE synthesis and BEFORE render, so neither the LLM input nor the
+# rendered body ships them.
+#
+# This scenario drives the real generators with a mocked KBStore + mocked LLM
+# (no network, no LLM key — deterministic).  A regression that stops filtering
+# fails here: the rendered digest/report must contain the real entry and must
+# NOT contain the test entry ("Get Test" title, example.com URL).
+name: regression-293-test-entry-filter
+description: "Regression #293: digest/report never render test/placeholder KB entries"
+category: regression
+regression: true
+regression_issue: "#293"
+requires_env: []
+steps:
+  - name: "digest renders the real entry and drops the test entry"
+    kind: cli
+    command: |-
+      python3 -c '
+      from datetime import date, timedelta
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import generate_digest
+
+      real = {
+          "entry_id": "real-001",
+          "title": "IVF time-lapse imaging improves live birth rates",
+          "domain": "medical-research",
+          "tier": "01-Raw",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
+          "source_type": "api",
+          "source_platform": "pubmed",
+          "collected_at": (date.today() - timedelta(days=1)).isoformat(),
+          "summary": "Time-lapse imaging improves live birth rates (48.2% vs 39.5%).",
+          "tags": "[]",
+          "quality_tier": 1,
+          "relevance_score": 92.0,
+      }
+      test_entry = {
+          "entry_id": "test-001",
+          "title": "Get Test",
+          "domain": "medical-research",
+          "tier": "01-Raw",
+          "source_url": "https://example.com/test",
+          "source_type": "web",
+          "source_platform": "web",
+          "collected_at": (date.today() - timedelta(days=1)).isoformat(),
+          "summary": "Test content for QA.",
+          "tags": "[]",
+          "relevance_score": 10.0,
+      }
+      synthesis = {
+          "executive_summary": "This week IVF technology advanced on time-lapse imaging.",
+          "key_findings": [
+              {"topic": "Time-lapse imaging", "detail": "Improves live birth rates."}
+          ],
+          "trends": ["Growing adoption."],
+          "recommendations": ["Expand access."],
+      }
+
+      with patch("autoinfo.output.KBStore") as mock_kb, \
+              patch("autoinfo.output._call_llm_for_digest", return_value=synthesis), \
+              patch("autoinfo.output._fire_agent_notification"):
+          mock_store = MagicMock()
+          mock_store.list_entries.return_value = [real, test_entry]
+          mock_kb.return_value = mock_store
+          result = generate_digest(domain="medical-research", period="weekly", format="markdown")
+
+      assert isinstance(result, str), type(result)
+      assert "Get Test" not in result, "test entry leaked into digest"
+      assert "example.com" not in result, "test URL leaked into digest"
+      assert "IVF time-lapse imaging improves live birth rates" in result, "real entry missing"
+      print("DIGEST_TEST_FILTER_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["DIGEST_TEST_FILTER_OK"]
+
+  - name: "report renders the real entry and drops the test entry"
+    kind: cli
+    command: |-
+      python3 -c '
+      from datetime import date, timedelta
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import generate_report
+
+      real = {
+          "entry_id": "real-001",
+          "title": "IVF time-lapse imaging improves live birth rates",
+          "domain": "medical-research",
+          "tier": "01-Raw",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
+          "source_type": "api",
+          "source_platform": "pubmed",
+          "collected_at": (date.today() - timedelta(days=1)).isoformat(),
+          "summary": "Time-lapse imaging improves live birth rates (48.2% vs 39.5%).",
+          "tags": "[]",
+          "quality_tier": 1,
+          "relevance_score": 92.0,
+      }
+      test_entry = {
+          "entry_id": "test-001",
+          "title": "Get Test",
+          "domain": "medical-research",
+          "tier": "01-Raw",
+          "source_url": "https://example.com/test",
+          "source_type": "web",
+          "source_platform": "web",
+          "collected_at": (date.today() - timedelta(days=1)).isoformat(),
+          "summary": "Test content for QA.",
+          "tags": "[]",
+          "relevance_score": 10.0,
+      }
+
+      with patch("autoinfo.output.KBStore") as mock_kb, \
+              patch("autoinfo.output._group_by_theme") as mock_group, \
+              patch("autoinfo.output._generate_executive_summary") as mock_synth, \
+              patch("autoinfo.output._fire_agent_notification"):
+          mock_store = MagicMock()
+          mock_store.list_entries.return_value = [real, test_entry]
+          mock_kb.return_value = mock_store
+          mock_group.return_value = [
+              {"theme": "General", "description": "All", "entries": [real]}
+          ]
+          mock_synth.return_value = {
+              "executive_summary": "Summary.",
+              "key_findings": [{"text": "Finding"}],
+              "recommendations": ["Rec"],
+          }
+          result = generate_report(domain="medical-research", period="weekly", format="markdown")
+
+      assert isinstance(result, str), type(result)
+      assert "Get Test" not in result, "test entry leaked into report"
+      assert "example.com" not in result, "test URL leaked into report"
+      assert "IVF time-lapse imaging improves live birth rates" in result, "real entry missing"
+      print("REPORT_TEST_FILTER_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["REPORT_TEST_FILTER_OK"]

@@ -311,6 +311,33 @@ def _meaningful_search_terms(query: str) -> list[str]:
 # ---------------------------------------------------------------------------
 
 
+# ---------------------------------------------------------------------------
+# SQLite busy timeout (issue #295)
+# ---------------------------------------------------------------------------
+
+_DEFAULT_DB_BUSY_TIMEOUT_MS = 30000
+_DB_BUSY_TIMEOUT_ENV = "AUTOINFO_DB_BUSY_TIMEOUT_MS"
+
+
+def _db_busy_timeout_ms() -> int:
+    """Return the SQLite ``busy_timeout`` (ms) for KB connections.
+
+    Parallel ``autoinfo process`` workers write to the same SQLite DB; under
+    external-writer contention a write can raise ``OperationalError: database
+    is locked``.  A generous busy timeout makes a connection wait for the
+    lock instead of failing immediately.  Configurable via
+    ``AUTOINFO_DB_BUSY_TIMEOUT_MS`` (default 30000); unparsable values fall
+    back to the default.
+    """
+    raw = os.environ.get(_DB_BUSY_TIMEOUT_ENV)
+    if raw is None:
+        return _DEFAULT_DB_BUSY_TIMEOUT_MS
+    try:
+        return int(raw)
+    except (TypeError, ValueError):
+        return _DEFAULT_DB_BUSY_TIMEOUT_MS
+
+
 class SQLiteIndex:
     """Lightweight SQLite metadata index for KB entries.
 
@@ -331,6 +358,7 @@ class SQLiteIndex:
         conn.row_factory = sqlite3.Row
         conn.execute("PRAGMA journal_mode=WAL")
         conn.execute("PRAGMA synchronous=NORMAL")
+        conn.execute(f"PRAGMA busy_timeout={_db_busy_timeout_ms()}")
         return conn
 
     # ------------------------------------------------------------------
@@ -4885,13 +4913,14 @@ def _build_frontmatter(
     if extraction and extraction.custom_fields:
         data["extracted_fields"] = extraction.custom_fields
 
-    return yaml.dump(
+    result: str = yaml.dump(
         data,
         default_flow_style=False,
         allow_unicode=True,
         sort_keys=False,
         width=120,
     )
+    return result
 
 
 def _build_body(

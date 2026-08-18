@@ -117,11 +117,11 @@ Before identifying affected docs, decide **whether this change needs an ADR**:
 
 ### Step 3 — Update quantitative references
 Drift-prone facts checked by `doc_inventory.py --check`: MCP tools 146 / 35
-categories · CLI groups 28 · delivery channels 13 · validation scenarios 72
-(64 functional + 8 regression) · demo domains 13.
+categories · CLI groups 28 · delivery channels 13 · validation scenarios 85
+(64 functional + 21 regression) · demo domains 13.
 Also keep consistent wherever they appear (README, AGENTS, CHANGELOG, specs,
 skills): source types 29, collector handlers 30, output templates 8,
-LLM-required tools 16, REST port 8741, test count ~3799.
+LLM-required tools 16, REST port 8741, test count ~4114.
 
 ### Step 4 — Verify
 1. `python3 scripts/doc_inventory.py --check` — must exit 0 (README↔AGENTS↔skill

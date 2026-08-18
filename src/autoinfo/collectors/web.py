@@ -28,6 +28,13 @@ DEFAULT_TIMEOUT = 30  # seconds
 MAX_RETRIES = 3
 RETRY_DELAYS = [2, 4, 8]  # exponential backoff in seconds
 
+# Browser-like User-Agent — many sites (e.g. CNBC) return HTTP 403 when a
+# request carries no UA header.  Shared with web_playwright.py.
+USER_AGENT = (
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+)
+
 # ---------------------------------------------------------------------------
 # Handler
 # ---------------------------------------------------------------------------
@@ -103,6 +110,7 @@ class WebHandler(BaseHandler):
                     url,
                     timeout=DEFAULT_TIMEOUT,
                     follow_redirects=True,
+                    headers={"User-Agent": USER_AGENT},
                 )
                 response.raise_for_status()
 

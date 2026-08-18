@@ -76,7 +76,7 @@ Mirrors the `unconfigured` verdict semantics in `docs/dev/acceptance-framework.m
 ### 0.4 Baseline honesty
 
 Before any key is configured, record the system's known no-keys profile (the RED
-baseline): run `list_validation_scenarios()` (expect 68) then `run_validation_scenario`
+baseline): run `list_validation_scenarios()` (expect 85) then `run_validation_scenario`
 for every scenario, and record the aggregate. The env-gated set is stable — **15
 scenarios need keys**: 13 need `AUTOINFO_LLM_API_KEY` (cli-llm, data-lifecycle-e2e,
 enduser-journey, kb-extraction, llm-gated, output-column, output-digest-report,
@@ -85,7 +85,7 @@ output-tutorial-presentation, output-video, processing), products-billing needs
 `STRIPE_API_KEY`, and sources-a6-keyed needs `FRED_API_KEY` + `FINNHUB_API_KEY`.
 After configuring keys, re-run those to GREEN (`passed`, never
 `unconfigured`). Observed example (47-scenario suite, 2026-08-05): **37 passed / 0 failed
-/ 10 unconfigured**; the suite has since grown to 68 (§1.8) — the baseline shape (all
+/ 10 unconfigured**; the suite has since grown to 85 (64 functional + 21 regression; §1.8) — the baseline shape (all
 env-gated `unconfigured`, nothing failed) is unchanged.
 
 ---
@@ -577,7 +577,7 @@ but the matrix row additionally requires the real call and the artifact.
 | I3 | Metrics | MCP `get_metrics()` and `get_prometheus_metrics()`; REST `curl http://localhost:8741/metrics` | The metrics JSON and the Prometheus text exposition from the REST endpoint | no | observability |
 | I4 | Alert rules | MCP `add_alert_rule(domain, topic_keywords, relevance_threshold, channel, kind)` → `get_alert_rules()` → trigger a rule → `remove_alert_rule(...)` | The rules YAML file (persisted), the alert list JSON, and the dispatch log line when the rule fired | no | webhooks-alerts |
 | I5 | REST API | Start `uvicorn autoinfo.api.server:app --port 8741`; `curl` each endpoint: `GET /health`, `GET /api/v1/entries`, `POST /api/v1/entries`, `GET /api/v1/entries/{id}`, `DELETE /api/v1/entries/{id}`, `GET /api/v1/search`, `GET /dashboard`, `GET /metrics` | The envelope JSON for each endpoint (success + error envelopes) and the dashboard HTML | no | rest-api |
-| I6 | Validation meta-coverage | MCP `list_validation_scenarios()`; `run_validation_scenario` for all 68; then `python3 scripts/coverage_audit.py` | The 68-scenario inventory JSON, per-scenario results, and the audit report showing **146/146** covered with zero MISSING | no | meta-validation |
+| I6 | Validation meta-coverage | MCP `list_validation_scenarios()`; `run_validation_scenario` for all 85; then `python3 scripts/coverage_audit.py` | The 85-scenario inventory JSON, per-scenario results, and the audit report showing **146/146** covered with zero MISSING | no | meta-validation |
 
 ## 2.6 Step-by-Step Walkthrough
 
@@ -591,7 +591,7 @@ Run from the project root (`/mnt/d/贯维/AutoInfo`). The venv interpreter is
    `exports/`, `autoinfo.db`, `.autoinfo/`, `logs/`, `.omo/`) are gitignored and must
    **never** be committed. If the tree is dirty, stop and report to the director.
 2. **No-keys profile.** Record the RED baseline (§0.4): with no BYOK keys, run
-   `list_validation_scenarios()` (expect 68) then `run_validation_scenario` for every
+   `list_validation_scenarios()` (expect 85) then `run_validation_scenario` for every
    scenario; record the aggregate. Honest, recorded, never graded as pass.
 3. **Configure the key.** `export AUTOINFO_LLM_API_KEY="sk-..."` then MCP
    `configure_llm(...)`; confirm with `get_effective_llm_config()`.
@@ -699,7 +699,7 @@ Deliver this table to the director at the end of the walkthrough:
 
 Plus the two hard meta-results:
 
-- Scenario suite: **68/68 passed** (0 failed, 0 unconfigured) with keys set.
+- Scenario suite: **85/85 passed** (0 failed, 0 unconfigured) with keys set.
 - `scripts/coverage_audit.py`: **146/146 MCP tools covered, zero MISSING**.
 
 ## 2.9 QA Checklist (Pre-Handoff)

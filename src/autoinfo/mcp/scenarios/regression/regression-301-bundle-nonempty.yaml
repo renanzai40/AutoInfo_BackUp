@@ -1,0 +1,110 @@
+# Regression #301: `export_kb(format="bundle")` silently produced an empty
+# deliverable when the KB had no entries — the ZIP was written with an empty
+# data.json and no signal to the caller.
+#
+# Fix: `_export_bundle` appends an empty-state warning
+# ("Bundle contains no entries — the export is an empty shell.") to the
+# result's ``warnings`` list when ``entries`` is empty; populated bundles
+# carry no such warning.
+#
+# This scenario drives the real `export_kb` against a temp project (real
+# SQLite KB, no network, no LLM — deterministic).  A regression that drops
+# the empty-state guard fails here: the empty bundle must carry the warning
+# and the populated bundle must not.
+name: regression-301-bundle-nonempty
+description: "Regression #301: bundle export warns on empty-entry exports instead of silently shipping an empty deliverable"
+category: regression
+regression: true
+regression_issue: "#301"
+requires_env: []
+steps:
+  - name: "empty-KB bundle export carries an empty-state warning"
+    kind: cli
+    command: |-
+      python3 -c '
+      import tempfile, shutil
+      from pathlib import Path
+      from unittest.mock import patch
+      from autoinfo.output import export_kb
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-301-empty-"))
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True)
+          (cfg_dir / "config.yaml").write_text(
+              "project:\n  name: T\n"
+              "domains:\n"
+              "  - name: medical-research\n"
+              "    active: true\n"
+              "    sources: []\n"
+              "    topics: []\n"
+          )
+          with patch("autoinfo.output.get_config_path",
+                     return_value=cfg_dir / "config.yaml"):
+              result = export_kb(domain="medical-research", format="bundle")
+
+          assert result["entries_count"] == 0, result
+          warnings = result.get("warnings", [])
+          assert any("empty" in w.lower() or "no entries" in w.lower() for w in warnings), (
+              "empty bundle must carry an empty-state warning, got " + repr(warnings)
+          )
+          assert Path(result["path"]).is_file(), "bundle zip not written"
+          print("BUNDLE_EMPTY_WARNING_OK")
+      finally:
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["BUNDLE_EMPTY_WARNING_OK"]
+
+  - name: "populated-KB bundle export carries no empty-state warning"
+    kind: cli
+    command: |-
+      python3 -c '
+      import tempfile, shutil
+      from pathlib import Path
+      from unittest.mock import patch
+      from autoinfo.kb import KBStore
+      from autoinfo.models import Item
+      from autoinfo.output import export_kb
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-301-pop-"))
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True)
+          (cfg_dir / "config.yaml").write_text(
+              "project:\n  name: T\n"
+              "domains:\n"
+              "  - name: medical-research\n"
+              "    active: true\n"
+              "    sources: []\n"
+              "    topics: []\n"
+          )
+          store = KBStore(base_path=tmp / "knowledge")
+          store.store_entry(Item(
+              id="m1", source_name="pubmed", source_type="api",
+              source_url="https://pubmed.ncbi.nlm.nih.gov/111/",
+              title="IVF breakthrough", content="Real medical content.",
+              collected_at="2026-07-15T10:00:00Z",
+              domain="medical-research", topic_tags=["IVF"],
+          ))
+          with patch("autoinfo.output.get_config_path",
+                     return_value=cfg_dir / "config.yaml"):
+              result = export_kb(domain="medical-research", format="bundle")
+
+          assert result["entries_count"] >= 1, result
+          warnings = result.get("warnings", [])
+          assert not any("empty" in w.lower() for w in warnings), (
+              "populated bundle must not carry an empty-state warning, got "
+              + repr(warnings)
+          )
+          assert Path(result["path"]).is_file(), "bundle zip not written"
+          print("BUNDLE_POPULATED_OK")
+      finally:
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["BUNDLE_POPULATED_OK"]
