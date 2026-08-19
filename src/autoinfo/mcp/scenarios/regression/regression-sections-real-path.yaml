@@ -1,0 +1,164 @@
+# Regression #326: real-KB generation path must produce non-empty sections
+# for the column Deep Dive and the report Sections (not empty shells).
+#
+# Two blind-spot defects previously let the real path render empty:
+#   (a) `_normalize_digest_product_context` only derived sections for the
+#       "column" family; the "report" family got NO deterministic fallback,
+#       so the report product rendered `**Sections**: 0` + an empty shell.
+#   (b) real Draft/Wiki KB entries store their extracted text in the KB
+#       markdown file (under `## Original Content`) but the SQLite
+#       `entries` table has no `content` column and its `summary` column may
+#       be empty.  `_is_test_entry` treated these as empty entries (issue
+#       #294) and dropped them, leaving the column Deep Dive / report
+#       Sections empty.  The product pipeline now enriches entries with
+#       their file `content` (`_enrich_product_entries`) before filtering,
+#       so real entries survive.
+#
+# This regression drives generate_digest with the column + report product
+# templates using real-KB-shaped entries: a real `file_path` holding the
+# `## Original Content` body, empty DB `summary`.  The synthesis carries NO
+# "sections", so the deterministic derivation must fire (matching the real
+# LLM returning no sections).
+#
+# Deterministic (requires_env: []): entries write temp KB markdown files in
+# an ABSOLUTE temp cwd; KBStore and _call_llm_for_digest are patched.
+name: regression-sections-real-path
+description: "Regression #326: column/report products from real-KB entries render non-empty Deep Dive / Sections"
+category: regression
+regression: true
+regression_issue: "#326"
+requires_env: []
+steps:
+  - name: "column product derives Deep Dive sections from real-KB entries"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_digest
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-sections-col-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          # Real-KB shape: empty DB summary + a real KB markdown file whose
+          # body lives under "## Original Content" (the pipeline enriches
+          # entry["content"] from file_path before filtering).
+          ENTRIES = []
+          for i in range(1, 11):
+              fname = f"e{i}.md"
+              (tmp / fname).write_text(
+                  f"---\ntitle: IVF time-lapse imaging study {i}\n---\n\n"
+                  f"## Original Content\n"
+                  f"Time-lapse imaging improved live birth rates ({i}).\n",
+                  encoding="utf-8",
+              )
+              ENTRIES.append({
+                  "entry_id": f"e{i}", "title": f"IVF time-lapse imaging study {i}",
+                  "summary": "",
+                  "source_url": f"https://pubmed.ncbi.nlm.nih.gov/{10000000 + i}/",
+                  "source_type": "api", "source_platform": "pubmed",
+                  "relevance_score": 90.0 - i, "tags": json.dumps(["IVF", "embryo"]),
+                  "tier": "02-Draft", "collected_at": "2026-07-15T10:00:00Z",
+                  "file_path": str(tmp / fname),
+              })
+          SYNTH = {
+              "executive_summary": "This week\u2019s column covers ten IVF time-lapse studies.",
+              "key_findings": [{"topic": "Time-lapse imaging", "detail": "Improved outcomes."}],
+              "trends": ["Time-lapse imaging adoption"],
+              "recommendations": ["Consider time-lapse imaging as standard of care."],
+          }
+
+          def tmpl(name):
+              return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_digest(domain="medical-research", period="weekly",
+                                    format="markdown",
+                                    product_template=tmpl("column"))
+          assert isinstance(out, str), type(out)
+          assert "## Deep Dive" in out, "missing Deep Dive section"
+          assert "_No deep-dive sections available" not in out, \
+              "empty placeholder rendered despite real entries"
+          subs = [ln for ln in out.splitlines() if ln.startswith("### ")]
+          assert len(subs) >= 8, f"expected >=8 derived subsections, got {len(subs)}"
+          assert f"**Sections**: {len(subs)}" in out, \
+              "Sections metadata does not match derived subsection count"
+          print(f"COLUMN_REALPATH_SECTIONS_OK: {len(subs)}")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["COLUMN_REALPATH_SECTIONS_OK"]
+
+  - name: "report product derives non-empty Sections from real-KB entries"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, re, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_digest
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-sections-rpt-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          ENTRIES = []
+          for i in range(1, 10):
+              fname = f"e{i}.md"
+              (tmp / fname).write_text(
+                  f"---\ntitle: Research finding {i}\n---\n\n"
+                  f"## Original Content\n"
+                  f"Research finding {i} on time-lapse imaging.\n",
+                  encoding="utf-8",
+              )
+              ENTRIES.append({
+                  "entry_id": f"e{i}", "title": f"Research finding {i} on time-lapse imaging",
+                  "summary": "",
+                  "source_url": f"https://pubmed.ncbi.nlm.nih.gov/{10000000 + i}/",
+                  "source_type": "api", "source_platform": "pubmed",
+                  "relevance_score": 90.0 - i, "tags": json.dumps(["IVF"]),
+                  "tier": "03-Wiki", "collected_at": "2026-07-15T10:00:00Z",
+                  "file_path": str(tmp / fname),
+              })
+          SYNTH = {
+              "executive_summary": "This briefing covers nine findings.",
+              "key_findings": [{"topic": "Time-lapse", "detail": "Improved outcomes."}],
+              "recommendations": ["Adopt time-lapse imaging as standard of care."],
+          }
+
+          def tmpl(name):
+              return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_digest(domain="medical-research", period="weekly",
+                                    format="markdown",
+                                    product_template=tmpl("report"))
+          assert isinstance(out, str), type(out)
+          assert "**Sections**:" in out, "Sections metadata missing"
+          m = re.search(r"\*\*Sections\*\*:\s*(\d+)", out)
+          assert m, "Sections count not parseable"
+          n = int(m.group(1))
+          assert n >= 8, f"report Sections empty shell (got {n}):\n{out}"
+          print(f"REPORT_REALPATH_SECTIONS_OK: {n}")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["REPORT_REALPATH_SECTIONS_OK"]

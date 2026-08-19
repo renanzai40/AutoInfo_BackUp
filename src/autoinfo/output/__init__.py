@@ -38,6 +38,7 @@ from datetime import date, datetime, timedelta, timezone
 from email.utils import format_datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Callable, Final, Literal, cast
+from urllib.parse import urlsplit
 
 import yaml
 
@@ -310,6 +311,67 @@ def _is_empty_summary(summary: str) -> bool:
     return bool(_NO_CONTENT_SUMMARY_RE.match(stripped))
 
 
+def _is_empty_content(content: Any) -> bool:
+    """True when *content* is blank (no real body text).
+
+    Issue #326: the product pipeline enriches real KB entries with their
+    ``content`` (body loaded from the KB markdown file).  An entry whose
+    ``content`` is missing, empty, or whitespace-only has no extractable body
+    and is treated as an empty entry (like issue #294's empty summaries).  A
+    non-empty ``content`` signals a real Draft/Wiki entry even when the DB
+    ``summary`` column is empty.
+    """
+    if content is None:
+        return True
+    stripped = str(content).strip()
+    return not stripped
+
+
+def _enrich_entry_content(entry: dict[str, Any]) -> dict[str, Any]:
+    """Load an entry's body ``content`` from its KB markdown file when the
+    DB ``summary`` column is empty (issue #326).
+
+    Real Draft/Wiki entries store their extracted text under
+    ``## Original Content`` in the KB markdown file, but the SQLite
+    ``entries`` table has no ``content`` column and its ``summary`` column
+    may be empty.  ``_is_test_entry`` would otherwise drop these real entries
+    as "empty-summary" (issue #294) — leaving the column Deep Dive / report
+    Sections empty.  This helper reads the file body so ``_is_empty_content``
+    sees real content and the entry is kept.
+
+    The file is only read when the summary is empty (the common case has a
+    non-empty summary and skips the I/O entirely).
+    """
+    if not _is_empty_summary(str(entry.get("summary") or "")):
+        return entry
+    file_path = entry.get("file_path")
+    if not file_path or not Path(str(file_path)).is_file():
+        return entry
+    try:
+        raw = Path(str(file_path)).read_text(encoding="utf-8")
+    except OSError:
+        return entry
+    # Prefer the "## Original Content" section; fall back to the raw body.
+    marker = "## Original Content"
+    if marker in raw:
+        body = raw.split(marker, 1)[1].strip()
+    else:
+        body = raw.strip()
+    if body:
+        entry["content"] = body
+    return entry
+
+
+def _enrich_product_entries(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Enrich product entries with file ``content`` (issue #326).
+
+    Applied after entry loading and before ``_filter_product_entries`` so real
+    Draft/Wiki entries with an empty DB summary but file content survive the
+    empty-entry guard.
+    """
+    return [_enrich_entry_content(dict(e)) if isinstance(e, dict) else e for e in entries]
+
+
 def _entry_custom_fields(entry: dict[str, Any]) -> dict[str, Any]:
     """Parse an entry's ``custom_fields`` (JSON string or dict) into a dict."""
     raw = entry.get("custom_fields")
@@ -339,8 +401,14 @@ def _is_test_entry(entry: dict[str, Any]) -> bool:
     # (a) empty title AND empty summary -> no usable content
     if not title and not summary:
         return True
-    # (a2) empty/placeholder summary -> no content for a product (issue #294)
-    if _is_empty_summary(summary):
+    # (a2) empty/placeholder summary -> only treated as a test/empty entry
+    # when there is no real body content either.  A real Draft/Wiki entry
+    # whose body lives in the KB markdown file (loaded into the entry dict's
+    # ``content`` field by the product pipeline) but whose DB ``summary``
+    # column is empty is meaningful and must NOT be dropped (issue #326).
+    # Entries without a ``content`` field (never enriched from a file) keep
+    # the #294 behaviour: empty summary -> dropped.
+    if _is_empty_summary(summary) and _is_empty_content(entry.get("content")):
         return True
     # (a3) summary contains lorem ipsum -> placeholder text (issue #293)
     if "lorem ipsum" in summary.lower():
@@ -3565,6 +3633,65 @@ def _get_domain_source_configs(domain: str) -> list["SourceConfig"]:
     return []
 
 
+# Generic source_platform values that carry no specific source identity (the
+# #325 re-derivation replaces these with the configured source name when a
+# hostname match can be made against the domain's source configs).
+_GENERIC_PLATFORMS = frozenset({"", "rss", "web", "api"})
+
+# SourceConfig types whose entries can be matched to a source by hostname.
+_MATCHABLE_SOURCE_TYPES = frozenset({"rss", "web", "webhook", "api", "pdf"})
+
+
+def _derive_source_label(
+    entry: dict[str, Any],
+    domain: str,
+    *,
+    source_configs: list["SourceConfig"] | None = None,
+) -> str:
+    """Derive a specific source name for *entry* when its stored
+    ``source_platform`` is a generic placeholder (``rss``/``web``/``api`` or
+    empty) — issue #325.
+
+    Pre-#323 KB entries carry ``source_platform='rss'`` even for real sources
+    (TechCrunch, arXiv, 36Kr, …), so the References section rendered the
+    generic ``(RSS)`` label.  The #323 collector fix only affects newly
+    collected items; this re-derivation recovers the specific source name for
+    existing entries by matching the entry's ``source_url`` host against the
+    domain's configured source URLs.
+
+    Returns the derived source identifier (a source config ``name``) when a
+    match is found, otherwise returns the entry's stored ``source_platform``
+    unchanged.  Matching is deterministic — no LLM.
+    """
+    platform = str(entry.get("source_platform") or "").strip()
+    if platform.lower() not in _GENERIC_PLATFORMS:
+        return platform
+    source_url = str(entry.get("source_url") or "").strip()
+    if not source_url:
+        return platform
+    try:
+        url_host = urlsplit(source_url).hostname or ""
+    except ValueError:
+        return platform
+    if not url_host:
+        return platform
+    configs = source_configs if source_configs is not None else _get_domain_source_configs(domain)
+    for sc in configs:
+        if sc.type not in _MATCHABLE_SOURCE_TYPES:
+            continue
+        sc_url = str(sc.url or "").strip()
+        if not sc_url:
+            continue
+        try:
+            sc_host = urlsplit(sc_url).hostname or ""
+        except ValueError:
+            continue
+        # Hostname match (strip leading www. for robustness).
+        if sc_host == url_host or sc_host.lstrip("www.") == url_host.lstrip("www."):
+            return sc.name.strip() or platform
+    return platform
+
+
 def _build_attribution_footer(
     sources: list["SourceConfig"],
     output_format: str = "markdown",
@@ -3819,12 +3946,17 @@ def _normalize_digest_product_context(
     )
 
     # --- References derived from entries (report-path item shape) ----------
+    # #325: derive the specific source label for entries whose stored
+    # source_platform is a generic placeholder (pre-#323 'rss' etc.).
+    _src_configs = _get_domain_source_configs(domain)
     flat["references"] = [
         {
             "title": e.get("title", ""),
             "source_url": e.get("source_url", ""),
             "source_type": e.get("source_type", ""),
-            "source_platform": e.get("source_platform", ""),
+            "source_platform": _derive_source_label(
+                e, e.get("domain", domain), source_configs=_src_configs,
+            ),
             "domain": e.get("domain", domain),
         }
         for e in entries_list
@@ -3854,7 +3986,11 @@ def _normalize_digest_product_context(
     # and no usable sections exist but entries do, derive them
     # deterministically so the template never renders the empty placeholder.
     sections = _normalize_column_sections(synthesis.get("sections"))
-    if product_family == "column" and not sections and entries_list:
+    if product_family in ("column", "report") and not sections and entries_list:
+        # #326: derive sections deterministically for the report family too
+        # (previously only "column" got a deterministic fallback, so the
+        # report product rendered `**Sections**: 0` + an empty shell whenever
+        # the LLM synthesis carried no explicit sections).
         sections = _deterministic_column_sections(entries_list, domain)
     flat["sections"] = sections
 
@@ -4124,8 +4260,11 @@ def generate_digest(
 
     # --- Test/empty entry filtering (issue #298 — layer 1) -------------------
     # Drop empty/test/placeholder entries BEFORE synthesis and BEFORE render so
-    # both the LLM input and the rendered body are clean.
-    entries = _filter_product_entries(entries)
+    # both the LLM input and the rendered body are clean.  Real Draft/Wiki
+    # entries with an empty DB summary but file content are first enriched
+    # (issue #326) so their column Deep Dive / report Sections are never an
+    # empty shell from real KB data.
+    entries = _filter_product_entries(_enrich_product_entries(entries))
 
     # --- Language filter (issue #309 / #317) --------------------------------
     # When a user requests a specific language (or a domain declares a
@@ -4652,7 +4791,11 @@ def generate_report(
         entries = filtered_entries
 
     # --- Test/empty entry filtering (issue #298 — layer 1) -------------------
-    entries = _filter_product_entries(entries)
+    # Drop empty/test/placeholder entries BEFORE synthesis and BEFORE render.
+    # Real Draft/Wiki entries with an empty DB summary but file content are
+    # first enriched (issue #326) so the report Sections are never an empty
+    # shell from real KB data.
+    entries = _filter_product_entries(_enrich_product_entries(entries))
 
     # --- Language filter (issue #309 / #317) --------------------------------
     # An explicit param wins; otherwise the domain default fills in;
@@ -4732,12 +4875,17 @@ def generate_report(
         return rendered
 
     # -- Build reference list from entries --------------------------------
+    # #325: derive the specific source label for entries whose stored
+    # source_platform is a generic placeholder (pre-#323 'rss' etc.).
+    _src_configs = _get_domain_source_configs(domain)
     references = [
         {
             "title": e.get("title", ""),
             "source_url": e.get("source_url", ""),
             "source_type": e.get("source_type", ""),
-            "source_platform": e.get("source_platform", ""),
+            "source_platform": _derive_source_label(
+                e, e.get("domain", domain), source_configs=_src_configs,
+            ),
             "domain": e.get("domain", domain),
         }
         for e in entries

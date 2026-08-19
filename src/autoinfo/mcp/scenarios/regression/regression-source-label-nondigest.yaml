@@ -1,0 +1,129 @@
+# Regression #325: report-path References must render the specific source
+# name (TechCrunch / 36Kr / …), not the generic "(RSS)" placeholder.
+#
+# The #323 collector fix only affects newly-collected items.  Pre-#323 KB
+# entries carry source_platform='rss' even for real sources, so report /
+# column / premium-briefing / enterprise-briefing References rendered the
+# generic "(RSS)" label.  This regression locks the re-derivation
+# (_derive_source_label) that maps a stale/generic source_platform to the
+# configured source name (matched by source_url host against the domain
+# source configs) and asserts the report template renders that name.
+#
+# Deterministic (requires_env: []): exercises _derive_source_label directly
+# (no LLM, no network) and renders the report template with the derived label.
+name: regression-source-label-nondigest
+description: "Regression #325: report-path References render specific source name, not generic (RSS)"
+category: regression
+regression: true
+regression_issue: "#325"
+requires_env: []
+steps:
+  - name: "stale RSS entry re-derives specific source name via report-path references"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.config import SourceConfig
+      from autoinfo.output import _derive_source_label, _report_data_to_dict
+      from autoinfo.output import ReportData
+
+      # Simulate the ai-commercial domain source configs (rss-based feeds).
+      configs = [
+          SourceConfig(name="techcrunch", type="rss", url="https://techcrunch.com/feed/"),
+          SourceConfig(name="producthunt", type="rss", url="https://www.producthunt.com/feed"),
+          SourceConfig(name="36kr", type="rss", url="https://www.36kr.com/feed"),
+      ]
+
+      # A pre-#323 KB entry: source_platform="rss" but source_url points at a
+      # specific source.  The report path builds references via
+      # _derive_source_label, which must recover "techcrunch".
+      stale = {
+          "title": "AI startup raises $50M",
+          "source_url": "https://techcrunch.com/2026/01/01/ai-startup",
+          "source_type": "rss",
+          "source_platform": "rss",
+      }
+      derived = _derive_source_label(stale, "ai-commercial", source_configs=configs)
+      assert derived == "techcrunch", f"expected techcrunch, got {derived!r}"
+
+      # Ensure the report-path flat context carries the derived label
+      # (the same _report_data_to_dict the markdown render uses).
+      rd = ReportData(
+          title="Test", domain="ai-commercial", generated_at="2026-08-19",
+          executive_summary="Summary.", key_findings=[], recommendations=[],
+          references=[{
+              "title": stale["title"],
+              "source_url": stale["source_url"],
+              "source_type": stale["source_type"],
+              "source_platform": derived,
+              "domain": "ai-commercial",
+          }],
+          sections=[], appendices=[],
+      )
+      flat = _report_data_to_dict(rd)
+      ref = flat["references"][0]
+      assert ref["source_platform"] == "techcrunch", ref
+      assert ref["source_platform"] != "rss", ref
+      print(f"REPORT_SOURCE_LABEL_OK: {ref[\"source_platform\"]}")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["REPORT_SOURCE_LABEL_OK"]
+
+  - name: "report template renders the derived source name, not (RSS)"
+    kind: cli
+    command: |-
+      python3 -c '
+      from pathlib import Path
+      from jinja2 import Environment
+      import re
+
+      from autoinfo.output import _derive_source_label, _report_data_to_dict, ReportData
+      from autoinfo.config import SourceConfig
+
+      tpl_path = (
+          Path("src/autoinfo/data/templates/report.md.j2")
+          if Path("src/autoinfo/data/templates/report.md.j2").is_file()
+          else Path(__file__).parent.parent.parent.parent.parent
+          / "src" / "autoinfo" / "data" / "templates" / "report.md.j2"
+      )
+      configs = [
+          SourceConfig(name="36kr", type="rss", url="https://www.36kr.com/feed"),
+      ]
+      stale = {
+          "title": "中国AI大模型融资",
+          "source_url": "https://www.36kr.com/p/123",
+          "source_type": "rss",
+          "source_platform": "rss",
+      }
+      derived = _derive_source_label(stale, "ai-commercial", source_configs=configs)
+      assert derived == "36kr", derived
+
+      rd = ReportData(
+          title="Test", domain="ai-commercial", generated_at="2026-08-19",
+          executive_summary="Summary.", key_findings=[],
+          recommendations=[],
+          references=[{
+              "title": stale["title"],
+              "source_url": stale["source_url"],
+              "source_type": "rss",
+              "source_platform": derived,
+              "domain": "ai-commercial",
+          }],
+          sections=[], appendices=[],
+      )
+      flat = _report_data_to_dict(rd)
+      env = Environment(trim_blocks=True, lstrip_blocks=True)
+      env.filters["product_summary"] = lambda v: v
+      env.filters["platform_name"] = lambda v: v or "\u2014"
+      tmpl = env.from_string(tpl_path.read_text())
+      out = tmpl.render(**flat)
+      refs_sec = out.split("## References")[1] if "## References" in out else ""
+      assert "(RSS)" not in refs_sec, f"(RSS) placeholder in References:\n{refs_sec}"
+      assert "36kr" in refs_sec, f"specific source name missing:\n{refs_sec}"
+      print("REPORT_TEMPLATE_SOURCE_LABEL_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["REPORT_TEMPLATE_SOURCE_LABEL_OK"]
