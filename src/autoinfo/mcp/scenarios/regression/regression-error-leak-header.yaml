@@ -1,0 +1,85 @@
+# Regression #328: product output must never carry raw LLM-library error text
+# (litellm / BerriAI / ANSI color codes) at the top of the file.
+#
+# Under high concurrency a failed LLM call can leave an error block like
+#   Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+#   LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'
+# (including ANSI escapes, e.g. \x1b[1;31m) prepended to the rendered product,
+# pushing the real title down.  The #294 guard sniffed only JSON/prompt-echo
+# leaks — never external-library error text.
+#
+# The fix extends `_contains_raw_llm_leak` with `_LEAK_ERROR_TEXT_RE`
+# (ANSI escapes / Give Feedback / BerriAI / LiteLLM.Info /
+# litellm._turn_on_debug / traceback) and wires it into the D2 gate so a
+# leak-polluted product is treated as D2-format failure (action=fallback).
+#
+# Deterministic (requires_env: []): exercises `_contains_raw_llm_leak`
+# directly (no LLM) and asserts the sniff rejects the exact error shapes from
+# the report + accepts clean markdown.
+name: regression-error-leak-header
+description: "Regression #328: product header must not carry litellm error text or ANSI color codes"
+category: regression
+regression: true
+regression_issue: "#328"
+requires_env: []
+steps:
+  - name: "leak sniff detects litellm error text with ANSI"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.output import _contains_raw_llm_leak
+
+      # The exact litellm error block from the v2 report, with ANSI escapes.
+      leak = (
+          "\x1b[1;31m"
+          "Give Feedback / Get Help: "
+          "https://github.com/BerriAI/litellm/issues/new\n"
+          "LiteLLM.Info: If you need to debug this error, "
+          "use `litellm._turn_on_debug()"
+          "\x1b[0m"
+      )
+      assert _contains_raw_llm_leak(leak), "litellm error text must be detected"
+      assert _contains_raw_llm_leak("\x1b[31mred\x1b[0m"), "bare ANSI must be detected"
+      assert _contains_raw_llm_leak(
+          "Traceback (most recent call last):\n  File \"x.py\""
+      ), "traceback must be detected"
+      # Clean markdown is NOT a false positive.
+      clean = "# Weekly Report\n\n## Summary\n\nReal content here."
+      assert not _contains_raw_llm_leak(clean), "clean markdown falsely flagged"
+      print("ERROR_LEAK_SNIFF_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["ERROR_LEAK_SNIFF_OK"]
+
+  - name: "D2 gate rejects leak-polluted product output"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.output import _contains_raw_llm_leak
+
+      # The exact #328 symptom: the litellm error block is PREPENDED to a
+      # real product (title pushed to line ~13) — a rendered digest/report
+      # whose first lines carry the library error.  The sniff must flag the
+      # whole rendered body so the D2 gate (which calls
+      # _contains_raw_llm_leak on the rendered output) rejects it.
+      leaky_product = (
+          "\x1b[1;31m"
+          "Give Feedback / Get Help: "
+          "https://github.com/BerriAI/litellm/issues/new\n"
+          "LiteLLM.Info: If you need to debug this error, "
+          "use `litellm._turn_on_debug()"
+          "\x1b[0m"
+          "\n\n"
+          "# AI Commercial \u2014 Report\n\n"
+          "## Summary\n\nSubstantive content follows the polluted header."
+      )
+      assert _contains_raw_llm_leak(leaky_product), \
+          "leak-polluted product must be sniffed (D2 would reject it)"
+      print("ERROR_LEAK_GATE_SNIFF_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["ERROR_LEAK_GATE_SNIFF_OK"]

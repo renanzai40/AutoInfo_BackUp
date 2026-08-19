@@ -281,12 +281,30 @@ _LEAK_PROMPT_ECHO_RE: re.Pattern[str] = re.compile(
     re.IGNORECASE,
 )
 
+# External LLM-library error text leaking into a product (issue #328):
+# ANSI color escapes plus litellm / BerriAI markers.  Under high concurrency a
+# failed LLM call can leave a raw error block (e.g. "Give Feedback / Get Help:
+# https://github.com/BerriAI/litellm/issues/new\nLiteLLM.Info: If you need to
+# debug this error, use `litellm._turn_on_debug()'") prepended to the rendered
+# output, pushing the real title down.  The #294 guard never sniffed for this.
+_LEAK_ERROR_TEXT_RE: re.Pattern[str] = re.compile(
+    r"(?:\x1b\[[0-9;]*m|"
+    r"Give Feedback / Get Help|"
+    r"BerriAI|"
+    r"LiteLLM\.Info|"
+    r"litellm\._turn_on_debug|"
+    r"litellm\.exceptions\.|"
+    r"^Traceback \(most recent call last\):)",
+    re.IGNORECASE | re.MULTILINE,
+)
+
 
 def _contains_raw_llm_leak(text: str) -> bool:
     """Heuristic check for raw LLM output leaking into a product (issue #302 — ①).
 
     Returns True when *text* contains fenced JSON blocks, raw JSON object
-    prefixes, or prompt-echo patterns that indicate unreconstructed LLM
+    prefixes, prompt-echo patterns, or external LLM-library error text
+    (litellm/BerriAI/ANSI — issue #328) that indicate unreconstructed LLM
     output.  This is a defensive flag, not a hard block — the caller
     decides whether to warn or block.
     """
@@ -295,6 +313,8 @@ def _contains_raw_llm_leak(text: str) -> bool:
     if _LEAK_JSON_PREFIX_RE.search(text):
         return True
     if _LEAK_PROMPT_ECHO_RE.search(text):
+        return True
+    if _LEAK_ERROR_TEXT_RE.search(text):
         return True
     return False
 
@@ -1133,6 +1153,11 @@ def _apply_delivery_gates(
         # Content-substance check (issue #298): markdown/html bodies must
         # carry a minimum amount of content and at least one heading — the
         # quality.py D2 check treats markdown as "trivially valid".
+        _leak_detected = bool(
+            rendered_output
+            and output_format in ("markdown", "html")
+            and _contains_raw_llm_leak(rendered_output)
+        )
         if (
             d2_result.passed
             and output_format in ("markdown", "html")
@@ -1143,6 +1168,7 @@ def _apply_delivery_gates(
             if (
                 text_len < _MIN_PRODUCT_CONTENT_CHARS
                 or heading_count < _MIN_PRODUCT_HEADINGS
+                or _leak_detected
             ):
                 d2_result = QualityResult(
                     gate_name="D2-FormatIntegrity",
@@ -1156,6 +1182,11 @@ def _apply_delivery_gates(
                         "error": (
                             f"insufficient content: {text_len} chars, "
                             f"{heading_count} headings"
+                            + (
+                                "; raw LLM error text detected"
+                                if _leak_detected
+                                else ""
+                            )
                         ),
                         "content_chars": text_len,
                         "heading_count": heading_count,
@@ -3841,6 +3872,65 @@ def _deterministic_column_sections(
     return sections
 
 
+def _entry_text(e: dict[str, Any], maxlen: int = 140) -> str:
+    """Short readable text for an entry (title — summary) for derivation."""
+    title = str(e.get("title") or "this entry").strip()
+    summary = str(e.get("summary") or "").strip()
+    body = summary or title
+    return f"{title}: {body}"[:maxlen]
+
+
+def _deterministic_takeaway_fields(
+    entries: list[dict[str, Any]],
+    domain: str = "",
+) -> tuple[list[str], list[dict[str, Any]], list[str]]:
+    """Derive premium-briefing per-takeaway implication / risk / action
+    deterministically from real entries (issue #329).
+
+    Mirrors :func:`_deterministic_column_sections`: when the LLM synthesis
+    carries no (or too few) per-takeaway implication/risk/action entries,
+    derive them one-per-ranked-entry from the actual KB entries so the
+    premium template never renders the ``_No ..._`` empty-state placeholders.
+
+    Returns ``(implications, risks, action_required)`` — index-aligned lists
+    (one item per entry) in the same shape the premium-briefing template
+    reads.
+    """
+    ranked = sorted(
+        (e for e in entries if isinstance(e, dict)),
+        key=lambda e: float(e.get("relevance_score") or 0.0),
+        reverse=True,
+    )
+    implications: list[str] = []
+    risks: list[dict[str, Any]] = []
+    action_required: list[str] = []
+    for e in ranked:
+        title = str(e.get("title") or "this topic").strip()
+        if not title:
+            continue
+        url = str(e.get("source_url") or "").strip()
+        implications.append(
+            f"Monitor developments around {title} for follow-up "
+            f"implications across the tracked source set ("
+            f"{_entry_text(e, 60)})."
+        )
+        risks.append(
+            {
+                "title": f"Uncertain trajectory for {title}",
+                "likelihood": "medium",
+                "impact": "medium",
+                "mitigation": (
+                    "Validate against additional sources and "
+                    "revisit next period."
+                ),
+            }
+        )
+        action_required.append(
+            f"Track {title} ({url}) for validation in the next period."
+        )
+    return implications, risks, action_required
+
+
 def _normalize_digest_product_context(
     context: dict[str, Any], domain: str, product_family: str = "digest"
 ) -> dict[str, Any]:
@@ -3978,6 +4068,26 @@ def _normalize_digest_product_context(
         flat[synthesis_field] = (
             value if isinstance(value, list) else (str(value) if isinstance(value, str) else [])
         )
+
+    # --- Deterministic per-takeaway fields (issue #329) --------------------
+    # premium-briefing's takeaway layer renders per-takeaway implication /
+    # risk / action by index-aligning with key_findings.  When the LLM
+    # synthesis carries none (or fewer than the takeaways), the template's
+    # `{% else %}` empty-state renders `_No ..._` placeholders.  Derive them
+    # deterministically from the real entries so the premium product never
+    # ships 24 placeholder spots (same pattern as #316/#326 column sections).
+    if product_family == "premium-briefing" and entries_list and not (
+        flat.get("implications") and flat.get("risks") and flat.get("action_required")
+    ):
+        _impl, _risks, _actions = _deterministic_takeaway_fields(
+            entries_list, domain
+        )
+        if not flat.get("implications"):
+            flat["implications"] = _impl
+        if not flat.get("risks"):
+            flat["risks"] = _risks
+        if not flat.get("action_required"):
+            flat["action_required"] = _actions
 
     # --- Column deep-dive sections (issue #316) ---------------------------
     # The column template renders ``sections`` (list of {title, content,
@@ -5025,6 +5135,22 @@ def generate_report(
                 for e in ranked[:3]
                 if e.get("title")
             ]
+
+    # -- Deterministic per-takeaway fields (issue #329) ----------------------
+    # premium-briefing's takeaway layer renders per-takeaway implication /
+    # risk / action by index-aligning with key_findings.  When the LLM
+    # synthesis carries none (line 5053-5056 initializes them to []), the
+    # template's `{% else %}` empty-state renders `_No ..._` placeholders.
+    # Derive them deterministically from the ranked entries (same pattern as
+    # #316/#326 column sections and the KB fallback above), only for premium.
+    if report_family == "premium-briefing":
+        _impl, _risks, _actions = _deterministic_takeaway_fields(entries, domain)
+        if not implications:
+            implications = _impl
+        if not risks:
+            risks = _risks
+        if not action_required:
+            action_required = _actions
 
     # -- Build report data -------------------------------------------------
     sections = [

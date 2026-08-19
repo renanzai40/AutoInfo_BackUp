@@ -1,0 +1,90 @@
+# Regression #329: premium-briefing takeaway layers must never fall back to
+# `_No ..._` placeholders (24 spots: 8 takeaways × implication/risk/action).
+#
+# Before the fix: #314 cleaned enterprise-briefing's placeholders but
+# premium-briefing's per-takeaway implication / risk / action layers were
+# NOT covered.  The template's `{% else %}` empty-state branches (premium-
+# briefing.md.j2 lines 29-45) rendered placeholders whenever the LLM
+# synthesis carried no (or too few) per-takeaway fields — under an empty or
+# partial LLM response the premium product shipped
+#   _No implication captured for this takeaway._
+#   _No material risks or opportunities identified for this takeaway._
+#   _No follow-up actions suggested._
+# The fix adds a deterministic per-takeaway derivation
+# (_deterministic_takeaway_fields) applied in both the digest
+# (_normalize_digest_product_context) and report (KB-derived fallback) paths.
+#
+# Deterministic (requires_env: []): KBStore + _call_llm_for_digest patched;
+# the synthesis carries NO implications/risks/action_required, so the
+# derivation must fire.  Runs in an ABSOLUTE temp cwd.
+name: regression-premium-takeaway-placeholders
+description: "Regression #329: premium-briefing takeaway implications/risks/actions are never `_No ..._` placeholders"
+category: regression
+regression: true
+regression_issue: "#329"
+requires_env: []
+steps:
+  - name: "premium-briefing digest derives per-takeaway fields instead of placeholders"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_digest
+
+      ENTRIES = [
+          {"entry_id": f"e{i}", "title": f"AI funding round {i}",
+           "summary": f"Startup {i} raised $20M.",
+           "source_url": f"https://techcrunch.com/{i}",
+           "source_type": "rss", "source_platform": "techcrunch",
+           "relevance_score": 90 - i, "tags": json.dumps(["ai"]),
+           "tier": "01-Raw", "collected_at": "2026-07-15T10:00:00Z"}
+          for i in range(1, 6)
+      ]
+      # LLM synthesis carries NO implications/risks/action_required -> the
+      # deterministic per-takeaway derivation must fire.
+      SYNTH = {
+          "executive_summary": "The AI funding landscape accelerated this week.",
+          "key_findings": [
+              {"topic": f"Startup {i}", "detail": f"Raised $20M."} for i in range(1, 4)
+          ],
+          "recommendations": ["Watch consolidation in the segment."],
+      }
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-p329-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_digest(domain="ai-commercial", period="weekly",
+                                    format="markdown",
+                                    product_template=tmpl("premium-briefing"))
+          assert isinstance(out, str), type(out)
+          # None of the three takeaway placeholders may appear.
+          forbidden = [
+              "_No implication captured for this takeaway.",
+              "_No material risks or opportunities identified for this takeaway.",
+              "_No follow-up actions suggested.",
+          ]
+          for ph in forbidden:
+              assert ph not in out, f"placeholder present: {ph!r}\n{out[:1500]}"
+          # Real derived content must be present.
+          assert "Monitor developments around" in out, "derived implication missing"
+          assert "Track AI funding round" in out, "derived action missing"
+          print("PREMIUM_TAKEAWAY_PLACEHOLDER_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["PREMIUM_TAKEAWAY_PLACEHOLDER_OK"]
