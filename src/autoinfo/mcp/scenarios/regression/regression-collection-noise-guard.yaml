@@ -1,0 +1,47 @@
+# Regression #332-B: collection-layer domain topic guard drops noise items at
+# ingest time (before they enter the raw cache / KB).
+#
+# Blind spot being closed: product-layer guards (#319, D-governance) could only
+# see what was already collected — ai-commercial digests kept drifting in
+# financial/regulatory items (贝达药业, 华能, SEC 8-K, 财报) and financial-
+# intelligence kept diluting with SEC 8-K/10-Q pure-metadata entries.  #332-B
+# moves the guard to 入库时: collection drops surface-noise items before any
+# downstream product can pick them up.
+#
+# Deterministic (requires_env: []): exercises `_item_matches_domain_noise`
+# directly on Item objects (no network, no LLM).
+name: regression-collection-noise-guard
+description: "Regression #332-B: collection-layer domain noise guard drops wrong-domain items at ingest"
+category: regression
+regression: true
+regression_issue: "#332"
+requires_env: []
+steps:
+  - name: "collection guard flags and drops domain-noise items"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.models import Item
+      from autoinfo.collect import _item_matches_domain_noise
+
+      def item(iid, title, content, src="rss"):
+          return Item(id=iid, source_name=src, source_type=src,
+                      source_platform=src, source_url=f"https://x.com/{iid}",
+                      title=title, content=content, collected_at="2026-01-01")
+
+      # ai-commercial must flag financial/regulatory noise.
+      assert _item_matches_domain_noise(item("n1", "贝达药业 年度报告 财报", "..."), "ai-commercial")
+      assert _item_matches_domain_noise(item("n2", "Form 8-K filing", "..."), "ai-commercial")
+      # financial-intelligence must flag SEC 8-K/10-Q metadata dilution.
+      assert _item_matches_domain_noise(item("n3", "Form 8-K filing", "metadata"), "financial-intelligence")
+      assert _item_matches_domain_noise(item("n4", "10-Q quarterly report", "..."), "financial-intelligence")
+      # Clean in-domain content is NOT flagged.
+      assert not _item_matches_domain_noise(item("c1", "AI startup raises $50M for GPU cloud", "..."), "ai-commercial")
+      # Domains with no guard config are never flagged.
+      assert not _item_matches_domain_noise(item("c2", "贝达药业", "..."), "medical-research")
+      print("COLLECTION_NOISE_GUARD_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["COLLECTION_NOISE_GUARD_OK"]

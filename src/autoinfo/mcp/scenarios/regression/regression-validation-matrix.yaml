@@ -1,0 +1,88 @@
+# Regression #331: the full-matrix acceptance executor + formalized assertion
+# set must be wired to the REAL generation path and produce a report card.
+#
+# Blind spot being closed (the "each rerun finds one more thing" root cause):
+# scenario assertions previously ran mocks/templates detached from the real
+# `output --product` KB path, so regressions passed while the real product was
+# broken (#316/#323).  The new `autoinfo validate --matrix` executor runs the
+# formalized assertion set (11 assertions, each a readable function carrying
+# its source issue) against the real generation output and emits a report card.
+#
+# This regression exercises the assertion set + diff machinery deterministically
+# (no LLM, no network): clean vs polluted sample products, and the #332-A
+# regression diff keyword classification.
+name: regression-validation-matrix
+description: "Regression #331: validate --matrix assertion set + report-card/diff machinery"
+category: regression
+regression: true
+regression_issue: "#331"
+requires_env: []
+steps:
+  - name: "formalized assertion set passes a clean report"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.validation_matrix import run_assertions
+
+      clean = """# AI Commercial Report
+
+      **Domain**: ai-commercial
+      **Sections**: 2
+
+      ## Summary
+
+      AI funding accelerated this week.
+
+      ## Key Takeaways
+
+      ### 1. Startup A raised $50M (Source: https://techcrunch.com/1)
+      Monitor developments.
+
+      ### 2. Startup B raised $30M (Source: https://techcrunch.com/2)
+      Watch consolidation.
+
+      ## References
+
+      1. **Startup A** \u2014 https://techcrunch.com/1 (techcrunch)
+      2. **Startup B** \u2014 https://techcrunch.com/2 (techcrunch)
+      """
+      results = run_assertions(clean, domain="ai-commercial", product="report")
+      failed = [r.name for r in results if not r.passed]
+      assert not failed, f"assertions failed on clean report: {failed}"
+      assert len(results) == 11, f"expected 11 assertions, got {len(results)}"
+
+      # A leak-polluted header must be caught by the #328 assertion.
+      polluted = "\x1b[1;31mGive Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new\x1b[0m\n# Title\n"
+      leak_res = {r.name: r.passed for r in run_assertions(polluted)}
+      assert leak_res.get("no_error_leak") is False, "leak not caught"
+      print("VALIDATION_MATRIX_ASSERTIONS_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["VALIDATION_MATRIX_ASSERTIONS_OK"]
+
+  - name: "report-card diff classifies regressed vs fixed (#332-A)"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.validation_matrix import MatrixReport, diff_report_cards
+
+      rc1 = MatrixReport(generated_at="t1", commit="abc")
+      rc1.products = [{"domain":"d","product":"p","status":"ok","assertions":[
+          {"assertion":"_title_first","passed":True},
+          {"assertion":"_not_empty","passed":True}]}]
+      rc2 = MatrixReport(generated_at="t2", commit="abc")
+      rc2.products = [{"domain":"d","product":"p","status":"ok","assertions":[
+          {"assertion":"_title_first","passed":False},   # regressed
+          {"assertion":"_not_empty","passed":True}]}]
+      d = diff_report_cards(rc1.to_dict(), rc2.to_dict())
+      assert ("p", "_title_first") in d["regressed"], d
+      assert ("p", "_not_empty") not in d["regressed"], d
+      assert d["counts"]["regressed"] == 1, d
+      print("VALIDATION_MATRIX_DIFF_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["VALIDATION_MATRIX_DIFF_OK"]

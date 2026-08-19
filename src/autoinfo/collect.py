@@ -35,6 +35,42 @@ plog = get_pipeline_logger("collect")
 
 
 # ---------------------------------------------------------------------------
+# Collection-layer domain topic guard (#332-B)
+#
+# Prevents dirty data entering the raw cache at collection time: e.g.
+# ai-commercial digests drifting in financial/regulatory/macro items
+# (贝达药业, 华能, SEC 8-K, 财报 …) or financial-intelligence SEC 8-K/10-Q
+# pure-metadata dilution.  The product-layer guards (#319, D-governance) can
+# only see what was already collected; this keeps noise out at 入库时 so
+# every downstream product is clean by construction.
+# ---------------------------------------------------------------------------
+
+# Per-domain "surface" keyword → drop the item when it appears in the
+# item's title/summary.  Deliberately surface markers (company names /
+# form numbers), NOT broad health terms — e.g. "clinical trial" legitimately
+# appears in AI-commercial content ("AI drug discovery").
+_DOMAIN_NOISE_KEYWORDS: dict[str, tuple[str, ...]] = {
+    "ai-commercial": (
+        "贝达药业", "华能", "株冶", "平安好医生", "DURAVYU",
+        "SEC 8-K", "SEC 8K", "10-Q", "10Q", "财报", "年度报告",
+    ),
+    "financial-intelligence": (
+        "SEC 8-K", "SEC 8K", "10-Q", "10Q", "8-K filing",
+    ),
+}
+
+
+def _item_matches_domain_noise(item: Item, domain: str) -> bool:
+    """True when the item's title+summary matches a surface noise keyword
+    for *domain* (#332-B).  Deterministic substring match, no LLM."""
+    keywords = _DOMAIN_NOISE_KEYWORDS.get(domain)
+    if not keywords:
+        return False
+    haystack = f"{item.title}\n{item.content}".casefold()
+    return any(str(kw).casefold() in haystack for kw in keywords)
+
+
+# ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
 
@@ -565,6 +601,27 @@ def _collect_from_source(
                 new_items.append(item)
 
     items_new = len(new_items)
+
+    # -- Collection-layer domain topic guard (#332-B) ------------------------
+    # Drop items matching the domain's surface noise keywords (ai-commercial:
+    # 贝达药业/华能/SEC 8-K/财报; financial: SEC 8-K/10-Q metadata dilutions)
+    # BEFORE they enter the raw cache, so no downstream product can pick them up.
+    if domain in _DOMAIN_NOISE_KEYWORDS:
+        pre = len(new_items)
+        new_items = [
+            item for item in new_items
+            if not _item_matches_domain_noise(item, domain)
+        ]
+        dropped_noise = pre - len(new_items)
+        if dropped_noise:
+            plog.info(
+                "Dropped domain-noise items at collection",
+                extra={
+                    "domain": domain,
+                    "count": dropped_noise,
+                },
+            )
+        items_new = len(new_items)
 
     # -- Assign trace_id to each new item ----------------------------------
     trace_ids: list[str] = []

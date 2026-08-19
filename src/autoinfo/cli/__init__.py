@@ -31,6 +31,7 @@ from . import (
     summaries,
     topics,
     trace,
+    validate,
 )
 
 # Import init function directly (not as typer app — single-command module)
@@ -47,7 +48,7 @@ app = typer.Typer(
 def main(
     ctx: typer.Context,
     json: bool = typer.Option(False, "--json", help="Enable JSON output"),
-):
+) -> None:
     """AutoInfo CLI — collect, process, and manage your information."""
     ctx.obj = {"json": json}
 
@@ -55,17 +56,37 @@ def main(
 # Register subcommand modules as top-level commands
 app.command()(init_func)
 app.add_typer(doctor.app, name="doctor")
-app.add_typer(collect.app, name="collect", help="Collect content from configured sources for a domain")
-app.add_typer(process.app, name="process", help="Process collected items with LLM extraction and quality gates")
+app.add_typer(
+    collect.app,
+    name="collect",
+    help="Collect content from configured sources for a domain",
+)
+app.add_typer(
+    process.app,
+    name="process",
+    help="Process collected items with LLM extraction and quality gates",
+)
 app.add_typer(status.app, name="status", help="Show collection and processing status overview")
 app.add_typer(sources.app, name="sources", help="Manage source configurations for domains")
 app.add_typer(topics.app, name="topics", help="Manage topics and keywords for domains")
-app.add_typer(topics.topic_group_app, name="topic-group", help="Manage topic groups (MCP topic_group_add/remove parity)")
-app.add_typer(domain.app, name="domain", help="Manage domains (add, remove, list, activate, deactivate)")
+app.add_typer(
+    topics.topic_group_app,
+    name="topic-group",
+    help="Manage topic groups (MCP topic_group_add/remove parity)",
+)
+app.add_typer(
+    domain.app,
+    name="domain",
+    help="Manage domains (add, remove, list, activate, deactivate)",
+)
 app.add_typer(audit.app, name="audit")
 app.add_typer(billing.app, name="billing")
 app.add_typer(kb.app, name="kb")
-app.add_typer(output.app, name="output", help="Generate digests, reports, tutorials, presentations, and exports")
+app.add_typer(
+    output.app,
+    name="output",
+    help="Generate digests, reports, tutorials, presentations, and exports",
+)
 app.add_typer(cefr.app, name="cefr", help="Classify text by CEFR reading level (EN/ZH/JA)")
 app.add_typer(clean.app, name="clean")
 app.add_typer(email.app, name="email", help="Send email digests via SMTP")
@@ -77,6 +98,11 @@ app.add_typer(cost.app, name="cost")
 app.add_typer(enduser.app, name="enduser")
 app.add_typer(portal.app, name="portal")
 app.add_typer(trace.app, name="trace")
+app.add_typer(
+    validate.app,
+    name="validate",
+    help="Run the full-matrix acceptance executor + regression guard (#331/#332)",
+)
 app.add_typer(
     import_kb.app,
     name="import-kb",
