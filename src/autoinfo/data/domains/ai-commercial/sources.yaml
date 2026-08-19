@@ -2,6 +2,20 @@
 # Tracks AI startup funding, product launches, and industry trends
 name: ai-commercial
 description: "AI commercial intelligence — startup funding, product launches, industry trends"
+# Issue #317: 3 of 4 sources are English (TechCrunch/ProductHunt/Crunchbase);
+# 36KR is Chinese.  Default the output language to English so products come out
+# single-language without an explicit --language param.
+default_language: en
+
+# Cross-domain noise filter (#319): entries whose title/summary/tags contain
+# any of these keywords are excluded from product generation (digest/report)
+# BEFORE LLM synthesis.  Focused on the specific entities from issue #319
+# (贝达药业, DURAVYU) — deliberately NOT broad medical terms like 医药/临床
+# trial, which legitimately appear in AI-commercial content (e.g. "AI drug
+# discovery", "AI clinical trials").
+exclude_keywords:
+  - 贝达药业
+  - DURAVYU
 
 sources:
   - name: techcrunch

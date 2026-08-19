@@ -227,7 +227,7 @@ Hard/soft split with retry-first, block-last philosophy. G0 (Schema Integrity) a
 | **Observability** | `trace_item`, `get_metrics`, `get_prometheus_metrics`, `diagnose_system` |
 | **Agent Callbacks** | `set_agent_callback`, `list_agent_callbacks`, `remove_agent_callback` (push delivers canonical `{event, payload, schema_version: 1, trace_id, product_id}` via durable SQLite outbox) |
 | **Audit** | `query_audit_log` |
-| **Validation** | `list_validation_scenarios`, `run_validation_scenario` (89 scenarios = 64 functional + 25 regression in `scenarios/regression/`; M7T52: sources-gap-closure + output-column + sources-a6-keyed; E8 wave: per-scenario timeout, recovery_steps + partial-pass, per-step trace + root-cause report, regression flywheel, enduser-journey + UX metrics; #157: requires_http env gate; #156: premium-briefing/magazine-digest/enterprise-briefing + full source coverage; output-quality-mega wave: regression-product-routing + output-agent-interaction; AC4: kb-tier-matrix 13×3 tier coverage) |
+| **Validation** | `list_validation_scenarios`, `run_validation_scenario` (93 scenarios = 64 functional + 29 regression in `scenarios/regression/`; M7T52: sources-gap-closure + output-column + sources-a6-keyed; E8 wave: per-scenario timeout, recovery_steps + partial-pass, per-step trace + root-cause report, regression flywheel, enduser-journey + UX metrics; #157: requires_http env gate; #156: premium-briefing/magazine-digest/enterprise-briefing + full source coverage; output-quality-mega wave: regression-product-routing + output-agent-interaction; AC4: kb-tier-matrix 13×3 tier coverage; #316-#319 wave: regression-column-sections + regression-domain-language-default + regression-product-h1-titles + regression-crossdomain-noise-filter) |
 
 **Discovery flow**: `health_check()` → `tools/list` (MCP auto-discovery) → `list_domains()` → `get_domain_schema(domain)` → `list_available_models()` → `list_output_templates(domain)`.
 
@@ -423,7 +423,7 @@ Never hand-edit runtime artifacts to fix behavior — fix the source.
 | Cost dashboard MCP | ✅ cost_dashboard MCP tool |
 | Cost allocation MCP | ✅ cost_allocation MCP tool |
 | Demo domains | ✅ 13 demo domains (medical-research, ai-commercial, financial-intelligence, tech-ai-developer, language-learning, online-video, financial-news, online-education, legal-compliance, general-news, gaming, b2b, retail) |
-| Validation scenarios | ✅ 89 scenarios (64 functional + 25 regression in `scenarios/regression/`, `regression: true` key, recursive-glob auto-load) |
+| Validation scenarios | ✅ 93 scenarios (64 functional + 29 regression in `scenarios/regression/`, `regression: true` key, recursive-glob auto-load) |
 | Validation execution | ✅ Per-step `timeout_seconds`; per-step `recovery_steps` (run after primary failure) + partial-pass (`min_passing`/`pass_ratio`); per-step trace (step_index/duration/arguments/trace_id + llm_meta model/tokens/duration); `expect.error_actionable` envelope assertion; root-cause report (`## Blockers` / `## Per-step trace` / `## Regression failures`) |
 | Regression flywheel | ✅ `scenarios/regression/` (regression-collect-int-id #104, regression-llm-key-resolution #119, regression-period-enum #126, regression-report-structure #121, regression-source-301 #135, regression-product-routing) + `coverage_audit.py` "Regression scenarios: N (issues: ...)" + `.github/ISSUE_TEMPLATE/bug_report.md` mandatory 回归场景 field |
 | Validation delivery | ✅ `scripts/validation_delivery.py` builds 01-RAW/02-PROCESSED/03-KB/04-MATRIX (E8 matrix + coverage-gaps.json, Oracle R8 unconfigured-vs-gap)/06-REJECTED + validation-report.md + manifest.json (per-file authenticity + D1-D3 gates + UX metrics) |
@@ -448,6 +448,10 @@ Never hand-edit runtime artifacts to fix behavior — fix the source.
 | RAW product variants (E11) | ✅ RAW product carries `variants: ["api_feed", "webhook", "bulk_export"]` field |
 | Podcast RSS publishing (C11) | ✅ RSS 2.0 delivery channel with `<enclosure>` + `itunes:*` namespace; audio output auto-persists MP3 |
 | Column product (B24) | ✅ `generate_report(report_type="column")` + premium ProductTemplate + G15 `check_access` gate + `column.md.j2` |
+| Column digest sections (#316) | ✅ column digest renders 8+ deep-dive sections with substantive content; `Sections` metadata count matches rendered sections (`_normalize_digest_product_context` materializes `sections`) |
+| Domain language default (#317) | ✅ single-domain products fall back to domain `default_language` when no explicit `--language` (ai-commercial: en); cross-domain never silently picks one domain's default |
+| Product H1 titles (#318) | ✅ 6 digest/report products render distinct product-specific H1 titles matching product names (digest, report, column, premium-briefing, enterprise-briefing, magazine-digest) |
+| Cross-domain noise filter (#319) | ✅ per-domain `exclude_keywords` blacklist drops off-topic entries (deterministic substring on title/summary/tags, per-entry domain lookup, no LLM); ai-commercial excludes 贝达药业/DURAVYU medical noise |
 | Magazine digest (D11) | ✅ `generate_digest` magazine-digest ProductTemplate + `magazine-digest.md.j2` per-title RSS clustering (templates 6→8) |
 | Validated source types | ✅ `VALID_SOURCE_TYPES` frozenset (29 types) as single source of truth for source type validation |
 

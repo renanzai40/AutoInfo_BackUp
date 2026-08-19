@@ -67,6 +67,12 @@ def _merge_domain(existing_block: dict[str, Any], demo: dict[str, Any]) -> tuple
             existing_topic_names.add(tname)
             added_topics += 1
 
+    # Cross-domain noise filter (#319): carry the demo domain's
+    # exclude_keywords into the existing block when it declares any.
+    demo_exclusions = demo.get("exclude_keywords")
+    if demo_exclusions:
+        existing_block.setdefault("exclude_keywords", demo_exclusions)
+
     return added_sources, added_topics
 
 
@@ -108,6 +114,8 @@ def main(argv: list[str] | None = None) -> int:
         }
         if demo.get("topics"):
             block["topics"] = demo["topics"]
+        if demo.get("exclude_keywords"):
+            block["exclude_keywords"] = demo["exclude_keywords"]
         cfg["domains"].append(block)
         added.append(dname)
         print(f"  + {dname}: {len(demo['sources'])} sources")

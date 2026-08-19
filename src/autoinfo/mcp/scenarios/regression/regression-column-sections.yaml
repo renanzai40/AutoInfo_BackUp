@@ -1,0 +1,153 @@
+# Regression (#316): column digest Deep Dive sections + Sections metadata.
+#
+# Before #316 the digest path never materialized `sections` for the column
+# product template: `_normalize_digest_product_context` flattened
+# executive_summary / key_findings / recommendations / references but NOT
+# `sections`, so `column.md.j2` rendered `_No deep-dive sections available
+# for this column._` with `**Sections**: 0` even when entries existed.
+# Fixes: the column digest synthesis prompt requests a `sections` array
+# (8-10 subsections), `_normalize_digest_product_context` flattens
+# `llm_synthesis["sections"]`, and a deterministic fallback derives sections
+# from the entries when the synthesis carries none.
+#
+# Deterministic (requires_env: []): the KBStore and LLM seams are patched in
+# the subprocess (same pattern as tests/test_column_digest_sections.py and
+# regression-magazine-editorial.yaml), so the scenario runs in a bare
+# sandbox — no LLM key, no network, no configured domain.  Runs inside an
+# ABSOLUTE temp cwd (tempfile.mkdtemp, try/finally cleanup) so no repo or
+# project config can influence rendering.
+# Failure means the column Deep Dive regressed — never a silent skip.
+name: regression-column-sections
+description: "Regression #316: column digest renders >=8 deep-dive subsections with a matching Sections count, never the empty placeholder"
+category: regression
+regression: true
+regression_issue: "#316"
+requires_env: []
+steps:
+  - name: "column digest renders 8+ deep-dive subsections from synthesis sections"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_digest
+
+      ENTRIES = [
+          {"entry_id": "e1", "title": "Improved IVF outcomes with time-lapse imaging",
+           "summary": "Time-lapse imaging improves live birth rates in IVF.",
+           "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
+           "source_type": "api", "source_platform": "pubmed",
+           "relevance_score": 92.0, "tags": json.dumps(["IVF", "embryo"]),
+           "tier": "01-Raw", "collected_at": "2026-07-15T10:00:00Z"},
+          {"entry_id": "e2", "title": "AI-driven embryo selection: a systematic review",
+           "summary": "AI models show promise but lack prospective validation.",
+           "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654321/",
+           "source_type": "api", "source_platform": "pubmed",
+           "relevance_score": 85.0, "tags": json.dumps(["AI", "IVF"]),
+           "tier": "01-Raw", "collected_at": "2026-07-16T10:00:00Z"},
+      ]
+      SYNTH = {
+          "executive_summary": "This week column covers IVF time-lapse imaging and AI embryo selection.",
+          "key_findings": [{"topic": "Time-lapse imaging", "detail": "Live birth rates improved."}],
+          "trends": ["Time-lapse imaging adoption"],
+          "recommendations": ["Consider time-lapse imaging as standard of care."],
+          "sections": [
+              {"title": f"Deep dive subsection {i}",
+               "content": f"Analysis of subsection {i}: time-lapse imaging improved live "
+                          "birth rates by 8.7 percentage points (48.2% vs 39.5%) in the "
+                          "2026 cohort, a statistically significant gain."}
+              for i in range(1, 9)
+          ],
+      }
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-column-sections-a-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_digest(domain="medical-research", period="weekly",
+                                    format="markdown",
+                                    product_template=tmpl("column"))
+          assert isinstance(out, str), type(out)
+          assert "## Deep Dive" in out, "missing Deep Dive section"
+          subs = [ln for ln in out.splitlines() if ln.startswith("### ")]
+          assert len(subs) >= 8, f"expected >=8 subsections, got {len(subs)}"
+          assert "_No deep-dive sections available" not in out, \
+              "empty placeholder rendered despite sections"
+          assert f"**Sections**: {len(subs)}" in out, \
+              "Sections metadata does not match rendered subsection count"
+          print("COLUMN_SECTIONS_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["COLUMN_SECTIONS_OK"]
+
+  - name: "column digest derives sections deterministically when synthesis carries none"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_digest
+
+      ENTRIES = [
+          {"entry_id": f"e{i}", "title": f"Research finding {i} on IVF time-lapse imaging",
+           "summary": f"Study {i} reports improved live birth rates with time-lapse imaging.",
+           "source_url": f"https://pubmed.ncbi.nlm.nih.gov/{10000000 + i}/",
+           "source_type": "api", "source_platform": "pubmed",
+           "relevance_score": 90.0 - i, "tags": json.dumps(["IVF", "embryo"]),
+           "tier": "01-Raw", "collected_at": "2026-07-15T10:00:00Z"}
+          for i in range(1, 11)
+      ]
+      SYNTH = {
+          "executive_summary": "This week column covers ten studies on IVF time-lapse imaging.",
+          "key_findings": [{"topic": "Time-lapse imaging", "detail": "Live birth rates improved."}],
+          "trends": ["Time-lapse imaging adoption"],
+          "recommendations": ["Consider time-lapse imaging as standard of care."],
+      }
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-column-sections-b-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_digest(domain="medical-research", period="weekly",
+                                    format="markdown",
+                                    product_template=tmpl("column"))
+          assert isinstance(out, str), type(out)
+          assert "## Deep Dive" in out, "missing Deep Dive section"
+          assert "_No deep-dive sections available" not in out, \
+              "empty placeholder rendered despite entries existing"
+          subs = [ln for ln in out.splitlines() if ln.startswith("### ")]
+          assert len(subs) >= 8, f"expected >=8 derived subsections, got {len(subs)}"
+          assert f"**Sections**: {len(subs)}" in out, \
+              "Sections metadata does not match derived subsection count"
+          print("COLUMN_SECTIONS_FALLBACK_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["COLUMN_SECTIONS_FALLBACK_OK"]

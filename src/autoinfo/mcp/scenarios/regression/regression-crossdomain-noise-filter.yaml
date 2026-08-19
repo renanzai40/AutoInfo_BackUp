@@ -1,0 +1,230 @@
+# Regression #319: per-domain exclude_keywords cross-domain noise filter.
+#
+# ai-commercial (AI business) digests/magazine-digests contained medical
+# entries (贝达药业, EyePoint DURAVYU eye-drug phase III trial) even though the
+# G1-G3 relevance gates passed them.  The fix is a product-generation-layer
+# filter (NOT a gate change): DomainConfig.exclude_keywords declares a
+# per-domain blacklist, and generate_digest / generate_report (and the
+# cross-domain digest) drop entries whose title/summary/tags contain an
+# excluded keyword (substring match, casefold for latin, CJK-aware) BEFORE LLM
+# synthesis.  Domains with an empty list are unaffected.
+#
+# Deterministic (requires_env: []): the KBStore and LLM seams are patched in
+# the subprocess (same pattern as tests/output/test_domain_exclude_keywords.py),
+# so the scenario runs in a bare sandbox — no LLM key, no network.  A temp
+# project config declaring exclude_keywords is written into an ABSOLUTE temp
+# cwd (tempfile.mkdtemp, try/finally cleanup) so get_config_path() resolves it.
+# Failure means the cross-domain noise filter regressed — never a silent skip.
+name: regression-crossdomain-noise-filter
+description: "Regression #319: ai-commercial products exclude cross-domain medical entries via per-domain exclude_keywords"
+category: regression
+regression: true
+regression_issue: "#319"
+requires_env: []
+steps:
+  - name: "ai-commercial digest excludes 贝达药业/DURAVYU entries before synthesis"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      import yaml
+      from autoinfo.output import generate_digest
+
+      def entry(eid, title, summary, tags="[]", domain="ai-commercial"):
+          return {"entry_id": eid, "title": title, "summary": summary,
+                  "domain": domain, "tier": "01-Raw",
+                  "source_url": f"https://example.com/{eid}",
+                  "source_type": "rss", "source_platform": "techcrunch",
+                  "relevance_score": 85.0, "tags": tags,
+                  "collected_at": "2026-08-17"}
+
+      ENTRIES = [
+          entry("med-1", "贝达药业 2026 半年报", "医药公司业绩"),
+          entry("med-2", "EyePoint DURAVYU phase III", "眼药三期临床",
+                json.dumps(["DURAVYU", "ophthalmology"])),
+          entry("ai-1", "AI startup raises series A", "Venture funding"),
+          entry("ai-2", "Generative AI product launch", "New LLM features"),
+      ]
+      SYNTH = {"executive_summary": "Synthesis.", "key_findings": [],
+               "recommendations": []}
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-319-a-"))
+      old = os.getcwd()
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True)
+          cfg = {"project": {"name": "test"},
+                 "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+                 "domains": [{"name": "ai-commercial", "active": True,
+                              "sources": [{"name": "techcrunch", "type": "rss",
+                                           "url": "https://techcrunch.com/feed/"}],
+                              "topics": [],
+                              "exclude_keywords": ["贝达药业", "DURAVYU"]}]}
+          (cfg_dir / "config.yaml").write_text(
+              yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False),
+              encoding="utf-8")
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH) as llm:
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_digest(domain="ai-commercial", period="weekly",
+                                    format="markdown")
+          assert isinstance(out, str), type(out)
+          # Excluded medical entries never reach the LLM prompt nor the body.
+          prompt = llm.call_args[0][0]
+          assert "贝达药业" not in prompt, "medical entry leaked into LLM prompt"
+          assert "DURAVYU" not in prompt, "medical entry leaked into LLM prompt"
+          assert "贝达药业" not in out, "medical entry leaked into rendered body"
+          assert "DURAVYU" not in out, "medical entry leaked into rendered body"
+          # Legitimate AI-commercial entries pass through.
+          assert "AI startup raises series A" in out, "legit entry dropped"
+          assert "Generative AI product launch" in out, "legit entry dropped"
+          print("AI_COMMERCIAL_EXCLUSION_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["AI_COMMERCIAL_EXCLUSION_OK"]
+
+  - name: "cross-domain digest filters per-entry by the entry OWN domain"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      import yaml
+      from autoinfo.output import generate_digest
+
+      def entry(eid, title, domain):
+          return {"entry_id": eid, "title": title,
+                  "summary": "Summary content for the entry.",
+                  "domain": domain, "tier": "01-Raw",
+                  "source_url": f"https://example.com/{eid}",
+                  "source_type": "rss", "source_platform": "techcrunch",
+                  "relevance_score": 85.0, "tags": "[]",
+                  "collected_at": "2026-08-17"}
+
+      AI_ENTRIES = [entry("ai-med-1", "贝达药业 半年报", "ai-commercial"),
+                    entry("ai-1", "AI startup funding", "ai-commercial")]
+      MED_ENTRIES = [entry("med-1", "贝达药业 临床进展", "medical-research"),
+                     entry("med-2", "IVF breakthrough", "medical-research")]
+      SYNTH = {"executive_summary": "Synthesis.", "key_findings": [],
+               "recommendations": []}
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-319-b-"))
+      old = os.getcwd()
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True)
+          cfg = {"project": {"name": "test"},
+                 "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+                 "domains": [
+                     {"name": "ai-commercial", "active": True,
+                      "sources": [{"name": "techcrunch", "type": "rss",
+                                   "url": "https://techcrunch.com/feed/"}],
+                      "topics": [], "exclude_keywords": ["贝达药业", "DURAVYU"]},
+                     {"name": "medical-research", "active": True,
+                      "sources": [{"name": "pubmed", "type": "api",
+                                   "url": "https://eutils.ncbi.nlm.nih.gov/"}],
+                      "topics": []},
+                 ]}
+          (cfg_dir / "config.yaml").write_text(
+              yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False),
+              encoding="utf-8")
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.side_effect = lambda domain, **kw: (
+                  AI_ENTRIES if domain == "ai-commercial" else MED_ENTRIES)
+              kb_cls.return_value = kb
+              out = generate_digest(domain="ai-commercial",
+                                    domains=["ai-commercial", "medical-research"],
+                                    period="weekly", format="markdown")
+          assert isinstance(out, str), type(out)
+          # The ai-commercial medical entry is excluded; the medical-research
+          # entry (its own domain has an empty exclude list) is kept.
+          assert "贝达药业 半年报" not in out, "ai-commercial medical entry leaked"
+          assert "贝达药业 临床进展" in out, "medical-research entry wrongly dropped"
+          assert "AI startup funding" in out, "legit ai-commercial entry dropped"
+          assert "IVF breakthrough" in out, "legit medical entry dropped"
+          print("CROSS_DOMAIN_PER_ENTRY_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["CROSS_DOMAIN_PER_ENTRY_OK"]
+
+  - name: "ai-commercial report excludes cross-domain medical entries"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      import yaml
+      from autoinfo.output import generate_report
+
+      def entry(eid, title, summary):
+          return {"entry_id": eid, "title": title, "summary": summary,
+                  "domain": "ai-commercial", "tier": "01-Raw",
+                  "source_url": f"https://example.com/{eid}",
+                  "source_type": "rss", "source_platform": "techcrunch",
+                  "relevance_score": 85.0, "tags": "[]",
+                  "collected_at": "2026-08-17"}
+
+      ENTRIES = [
+          entry("med-1", "贝达药业 2026 半年报", "医药公司业绩"),
+          entry("med-2", "EyePoint DURAVYU phase III", "眼药三期临床"),
+          entry("ai-1", "AI startup raises series A", "Venture funding"),
+      ]
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-319-c-"))
+      old = os.getcwd()
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True)
+          cfg = {"project": {"name": "test"},
+                 "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+                 "domains": [{"name": "ai-commercial", "active": True,
+                              "sources": [{"name": "techcrunch", "type": "rss",
+                                           "url": "https://techcrunch.com/feed/"}],
+                              "topics": [],
+                              "exclude_keywords": ["贝达药业", "DURAVYU"]}]}
+          (cfg_dir / "config.yaml").write_text(
+              yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False),
+              encoding="utf-8")
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._group_by_theme", return_value=[]), \
+               patch("autoinfo.output._generate_executive_summary",
+                     return_value="Overview."):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_report(domain="ai-commercial", period="weekly",
+                                    format="markdown")
+          assert isinstance(out, str), type(out)
+          assert "贝达药业" not in out, "medical entry leaked into report"
+          assert "DURAVYU" not in out, "medical entry leaked into report"
+          assert "AI startup raises series A" in out, "legit entry dropped"
+          print("AI_COMMERCIAL_REPORT_EXCLUSION_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["AI_COMMERCIAL_REPORT_EXCLUSION_OK"]

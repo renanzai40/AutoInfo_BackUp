@@ -1,0 +1,212 @@
+# Regression (issue #317): a domain-level default_language must make products
+# for mixed-language domains come out single-language WITHOUT an explicit
+# --language param.  Before the fix, the #309 language filter was OPTIONAL and
+# defaulted to no filtering, so ai-commercial (36KR zh + TechCrunch/ProductHunt/
+# Crunchbase en) produced mixed-language products unless the caller passed
+# --language explicitly.
+#
+# Resolution precedence (_resolve_effective_language):
+#   1. explicit language param wins;
+#   2. else the domain's configured default_language;
+#   3. else "" (no filter — legacy).
+# Cross-domain products never silently pick one domain's default.
+#
+# Deterministic (requires_env: []): KBStore and the LLM seam are patched in the
+# subprocess (same pattern as tests/output/test_domain_language_default.py).
+# Runs inside an ABSOLUTE temp cwd with a written .autoinfo/config.yaml so
+# get_config_path() resolves the ai-commercial default_language.  Failure means
+# the domain-default resolution regressed — never a silent skip.
+name: regression-domain-language-default
+description: "Regression #317: domain-level default_language filters digest/report without explicit --language"
+category: regression
+regression: true
+regression_issue: "#317"
+requires_env: []
+steps:
+  - name: "ai-commercial digest without --language applies domain default 'en'"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      import yaml
+      from autoinfo.output import generate_digest
+
+      ENTRIES = [
+          {"entry_id": "zh-001", "title": "中文 AI 融资动态",
+           "domain": "ai-commercial", "tier": "01-Raw",
+           "source_url": "https://36kr.com/zh/1", "source_type": "web",
+           "source_platform": "web", "language": "zh",
+           "collected_at": "2026-08-19", "summary": "中文摘要内容",
+           "tags": "[]", "quality_tier": 1, "relevance_score": 80.0},
+          {"entry_id": "en-001", "title": "English AI funding round",
+           "domain": "ai-commercial", "tier": "01-Raw",
+           "source_url": "https://techcrunch.com/en/1", "source_type": "web",
+           "source_platform": "web", "language": "en",
+           "collected_at": "2026-08-19", "summary": "English summary content",
+           "tags": "[]", "quality_tier": 1, "relevance_score": 85.0},
+      ]
+      SYNTH = {"executive_summary": "Synthesis.", "key_findings": [],
+               "recommendations": []}
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-domain-lang-a-"))
+      old = os.getcwd()
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True, exist_ok=True)
+          with open(cfg_dir / "config.yaml", "w", encoding="utf-8") as fh:
+              yaml.dump({
+                  "project": {"name": "T", "created_at": "2026-08-19"},
+                  "llm": {"provider": "openrouter", "model": "deepseek/deepseek-chat",
+                          "api_key": "test-key"},
+                  "domains": [{"name": "ai-commercial", "active": True,
+                               "default_language": "en",
+                               "sources": [{"name": "techcrunch", "type": "rss",
+                                            "url": "https://techcrunch.com/feed/"}]}],
+              }, fh, default_flow_style=False)
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_digest(domain="ai-commercial", period="weekly",
+                                    format="markdown")
+          assert isinstance(out, str), type(out)
+          assert "English AI funding round" in out, "en entry dropped by domain default"
+          assert "中文 AI 融资动态" not in out, "zh entry not filtered by domain default"
+          print("DOMAIN_DEFAULT_EN_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["DOMAIN_DEFAULT_EN_OK"]
+
+  - name: "explicit --language overrides the domain default"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      import yaml
+      from autoinfo.output import generate_digest
+
+      ENTRIES = [
+          {"entry_id": "zh-001", "title": "中文 AI 融资动态",
+           "domain": "ai-commercial", "tier": "01-Raw",
+           "source_url": "https://36kr.com/zh/1", "source_type": "web",
+           "source_platform": "web", "language": "zh",
+           "collected_at": "2026-08-19", "summary": "中文摘要内容",
+           "tags": "[]", "quality_tier": 1, "relevance_score": 80.0},
+          {"entry_id": "en-001", "title": "English AI funding round",
+           "domain": "ai-commercial", "tier": "01-Raw",
+           "source_url": "https://techcrunch.com/en/1", "source_type": "web",
+           "source_platform": "web", "language": "en",
+           "collected_at": "2026-08-19", "summary": "English summary content",
+           "tags": "[]", "quality_tier": 1, "relevance_score": 85.0},
+      ]
+      SYNTH = {"executive_summary": "Synthesis.", "key_findings": [],
+               "recommendations": []}
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-domain-lang-b-"))
+      old = os.getcwd()
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True, exist_ok=True)
+          with open(cfg_dir / "config.yaml", "w", encoding="utf-8") as fh:
+              yaml.dump({
+                  "project": {"name": "T", "created_at": "2026-08-19"},
+                  "llm": {"provider": "openrouter", "model": "deepseek/deepseek-chat",
+                          "api_key": "test-key"},
+                  "domains": [{"name": "ai-commercial", "active": True,
+                               "default_language": "en",
+                               "sources": [{"name": "techcrunch", "type": "rss",
+                                            "url": "https://techcrunch.com/feed/"}]}],
+              }, fh, default_flow_style=False)
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_digest(domain="ai-commercial", period="weekly",
+                                    format="markdown", language="zh")
+          assert isinstance(out, str), type(out)
+          assert "中文 AI 融资动态" in out, "zh entry dropped despite explicit language"
+          assert "English AI funding round" not in out, "explicit language not honored"
+          print("EXPLICIT_LANGUAGE_OVERRIDE_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["EXPLICIT_LANGUAGE_OVERRIDE_OK"]
+
+  - name: "domain without default keeps legacy no-filter behavior"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      import yaml
+      from autoinfo.output import generate_digest
+
+      ENTRIES = [
+          {"entry_id": "zh-001", "title": "中文 AI 融资动态",
+           "domain": "medical-research", "tier": "01-Raw",
+           "source_url": "https://36kr.com/zh/1", "source_type": "web",
+           "source_platform": "web", "language": "zh",
+           "collected_at": "2026-08-19", "summary": "中文摘要内容",
+           "tags": "[]", "quality_tier": 1, "relevance_score": 80.0},
+          {"entry_id": "en-001", "title": "English AI funding round",
+           "domain": "medical-research", "tier": "01-Raw",
+           "source_url": "https://techcrunch.com/en/1", "source_type": "web",
+           "source_platform": "web", "language": "en",
+           "collected_at": "2026-08-19", "summary": "English summary content",
+           "tags": "[]", "quality_tier": 1, "relevance_score": 85.0},
+      ]
+      SYNTH = {"executive_summary": "Synthesis.", "key_findings": [],
+               "recommendations": []}
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-domain-lang-c-"))
+      old = os.getcwd()
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True, exist_ok=True)
+          with open(cfg_dir / "config.yaml", "w", encoding="utf-8") as fh:
+              yaml.dump({
+                  "project": {"name": "T", "created_at": "2026-08-19"},
+                  "llm": {"provider": "openrouter", "model": "deepseek/deepseek-chat",
+                          "api_key": "test-key"},
+                  "domains": [{"name": "medical-research", "active": True,
+                               "sources": [{"name": "pubmed", "type": "api",
+                                            "url": "https://eutils.ncbi.nlm.nih.gov/"}]}],
+              }, fh, default_flow_style=False)
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_digest(domain="medical-research", period="weekly",
+                                    format="markdown")
+          assert isinstance(out, str), type(out)
+          assert "English AI funding round" in out, "en entry dropped without default"
+          assert "中文 AI 融资动态" in out, "zh entry dropped without default"
+          print("NO_DEFAULT_LEGACY_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["NO_DEFAULT_LEGACY_OK"]

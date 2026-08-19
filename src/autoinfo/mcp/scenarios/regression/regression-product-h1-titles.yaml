@@ -1,0 +1,230 @@
+# Regression (issue #318): product-specific H1 titles.  Before the fix,
+# generate_digest hardcoded the H1 product word to "Digest"
+# (context["title"] = f"{period_label} Digest — {domain}") regardless of
+# product_template, so every --product rendered "# Weekly Digest — <domain>".
+# generate_report likewise hardcoded "Report" in ReportData.title regardless
+# of product.  Fix: _PRODUCT_H1_WORDS maps each resolved product family to
+# its H1 word (digest→Digest, report→Report, premium-briefing→Premium
+# Briefing, column→Column, magazine-digest→Magazine Digest,
+# enterprise-briefing→Enterprise Briefing); the period label still drives the
+# Daily/Weekly/Monthly prefix.
+#
+# This scenario drives the DIGEST-PATH invocation of the #156 pattern
+# (generate_digest(domain=..., period=..., format='markdown',
+# product_template=<registry row>)) and asserts:
+#   (a) each of the 6 product families renders an H1 ("# " line) matching
+#       "{period_label} {product word} — {domain}",
+#   (b) the 6 H1s are all distinct from each other,
+#   (c) period="daily" yields a "Daily" prefix while period="weekly" yields
+#       "Weekly",
+#   (d) the report path (generate_report(product_template=...)) is
+#       product-aware too ("{domain} — {product word}"),
+#   (e) the default digest/report paths (no product_template) keep their
+#       historical titles byte-identical.
+#
+# Deterministic (requires_env: []): the KBStore and LLM seams are patched in
+# the subprocess (same pattern as tests/output/test_product_titles.py), so
+# the scenario runs in a bare sandbox — no LLM key, no network, no
+# configured domain.  Runs inside an ABSOLUTE temp cwd (tempfile.mkdtemp,
+# try/finally cleanup) so no repo or project config can influence rendering.
+# Failure means the product-aware H1 titles regressed — never a silent skip.
+name: regression-product-h1-titles
+description: "Regression #318: 6 product families render distinct product-aware H1 titles (period prefix + product word + domain) on digest and report paths"
+category: regression
+regression: true
+regression_issue: "#318"
+requires_env: []
+steps:
+  - name: "digest path renders 6 distinct product-aware H1 titles"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_digest
+
+      ENTRIES = [
+          {"entry_id": "e1", "title": "Improved IVF outcomes with time-lapse imaging",
+           "summary": "Time-lapse imaging improves live birth rates in IVF.",
+           "source_url": "https://example.com/ivf-1", "source_type": "api",
+           "source_platform": "pubmed", "relevance_score": 92.0,
+           "tags": json.dumps(["IVF", "embryo"]), "tier": "01-Raw",
+           "collected_at": "2026-07-15T10:00:00Z"},
+          {"entry_id": "e2", "title": "AI embryo selection: a systematic review",
+           "summary": "AI models show promise but lack prospective validation.",
+           "source_url": "https://example.com/ivf-2", "source_type": "api",
+           "source_platform": "pubmed", "relevance_score": 85.0,
+           "tags": json.dumps(["AI", "IVF"]), "tier": "01-Raw",
+           "collected_at": "2026-07-16T10:00:00Z"},
+      ]
+      SYNTH = {
+          "executive_summary": "IVF technology advanced with time-lapse imaging and AI selection.",
+          "key_findings": [
+              {"topic": "Time-lapse imaging", "detail": "Significant improvement in live birth rates."},
+              {"topic": "AI embryo selection", "detail": "Promising but lacks prospective validation."},
+          ],
+          "recommendations": ["Support prospective AI validation trials."],
+      }
+      # Product family -> expected H1 product word (issue #318).
+      WORDS = {
+          "digest": "Digest",
+          "report": "Report",
+          "premium-briefing": "Premium Briefing",
+          "column": "Column",
+          "magazine-digest": "Magazine Digest",
+          "enterprise-briefing": "Enterprise Briefing",
+      }
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      def h1(md):
+          for line in md.splitlines():
+              if line.startswith("# "):
+                  return line
+          raise AssertionError("no H1 (# ) line in output")
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-product-h1-titles-a-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              h1s = {}
+              for family, word in WORDS.items():
+                  out = generate_digest(domain="medical-research", period="weekly",
+                                        format="markdown",
+                                        product_template=tmpl(family))
+                  assert isinstance(out, str), type(out)
+                  expected = f"# Weekly {word} \u2014 medical-research"
+                  assert h1(out) == expected, f"{family}: {h1(out)!r} != {expected!r}"
+                  h1s[family] = h1(out)
+          # All 6 H1s distinct (acceptance #318).
+          assert len(set(h1s.values())) == 6, f"duplicate H1s: {h1s}"
+          # Period label drives the prefix.
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              daily = generate_digest(domain="medical-research", period="daily",
+                                      format="markdown",
+                                      product_template=tmpl("column"))
+              assert h1(daily) == "# Daily Column \u2014 medical-research", h1(daily)
+          print("PRODUCT_H1_DIGEST_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["PRODUCT_H1_DIGEST_OK"]
+
+  - name: "report path renders product-aware H1 titles and default paths stay unchanged"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.models import ExtractionResult
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_digest, generate_report
+
+      ENTRIES = [
+          {"entry_id": "e1", "title": "Improved IVF outcomes with time-lapse imaging",
+           "summary": "Time-lapse imaging improves live birth rates in IVF.",
+           "source_url": "https://example.com/ivf-1", "source_type": "api",
+           "source_platform": "pubmed", "relevance_score": 92.0,
+           "tags": json.dumps(["IVF", "embryo"]), "tier": "01-Raw",
+           "collected_at": "2026-07-15T10:00:00Z"},
+          {"entry_id": "e2", "title": "AI embryo selection: a systematic review",
+           "summary": "AI models show promise but lack prospective validation.",
+           "source_url": "https://example.com/ivf-2", "source_type": "api",
+           "source_platform": "pubmed", "relevance_score": 85.0,
+           "tags": json.dumps(["AI", "IVF"]), "tier": "01-Raw",
+           "collected_at": "2026-07-16T10:00:00Z"},
+      ]
+      SYNTH = {
+          "executive_summary": "IVF technology advanced with time-lapse imaging and AI selection.",
+          "key_findings": [
+              {"topic": "Time-lapse imaging", "detail": "Significant improvement in live birth rates."},
+              {"topic": "AI embryo selection", "detail": "Promising but lacks prospective validation."},
+          ],
+          "recommendations": ["Support prospective AI validation trials."],
+      }
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      def h1(md):
+          for line in md.splitlines():
+              if line.startswith("# "):
+                  return line
+          raise AssertionError("no H1 (# ) line in output")
+
+      def grouping():
+          return ExtractionResult(item_id="_g", title="Groups", custom_fields={
+              "groups": [{"theme": "IVF & Reproductive Medicine", "description": "IVF advances.",
+                          "entry_ids": ["e1"]}]})
+
+      def summary():
+          return ExtractionResult(item_id="_s", title="Executive Summary", custom_fields={
+              "executive_summary": "IVF treatment continues to advance."})
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-product-h1-titles-b-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          # Report path: product-aware H1s following the "{domain} — {word}" shape.
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.llm.LLMExtractor.extract",
+                     side_effect=[grouping(), summary()]), \
+               patch("autoinfo.output._call_llm_for_report_synthesis", return_value=""):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              premium = generate_report(domain="medical-research", format="markdown",
+                                        report_type="standard",
+                                        product_template=tmpl("premium-briefing"))
+              column = generate_report(domain="medical-research", format="markdown",
+                                       report_type="column",
+                                       product_template=tmpl("column"))
+              enterprise = generate_report(domain="medical-research", format="markdown",
+                                           report_type="standard",
+                                           product_template=tmpl("enterprise-briefing"))
+              standard_report = generate_report(domain="medical-research", format="markdown",
+                                                report_type="standard")
+              column_default = generate_report(domain="medical-research", format="markdown",
+                                               report_type="column")
+          for out in (premium, column, enterprise, standard_report, column_default):
+              assert isinstance(out, str), type(out)
+          assert h1(premium) == "# medical-research \u2014 Premium Briefing", h1(premium)
+          assert h1(column) == "# medical-research \u2014 Column", h1(column)
+          assert h1(enterprise) == "# medical-research \u2014 Enterprise Briefing", h1(enterprise)
+          # Default report paths keep the historical title byte-identical.
+          assert h1(standard_report) == "# medical-research \u2014 Report", h1(standard_report)
+          assert h1(column_default) == "# medical-research \u2014 Report", h1(column_default)
+          # Default digest path keeps the historical title byte-identical.
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              standard_digest = generate_digest(domain="medical-research", period="weekly",
+                                                format="markdown")
+          assert isinstance(standard_digest, str), type(standard_digest)
+          assert h1(standard_digest) == "# Weekly Digest \u2014 medical-research", h1(standard_digest)
+          print("PRODUCT_H1_REPORT_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["PRODUCT_H1_REPORT_OK"]

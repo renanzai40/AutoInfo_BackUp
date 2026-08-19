@@ -235,10 +235,20 @@ class DomainConfig:
     delivery_gates: dict[str, DeliveryGateConfig] = field(default_factory=dict)
     ttl_days: int = 90
     freshness_threshold: float = 0.5
+    # Default output language (issue #317): when a product is generated for
+    # this domain without an explicit ``language`` param, entries are filtered
+    # to this language so mixed-language domains (e.g. ai-commercial) come out
+    # single-language.  Empty (default) preserves legacy no-filter behavior.
+    default_language: str = ""
     # Keyword auto-discovery (#179): defaults keep pre-#179 behavior.
     auto_keyword_discovery: bool = True
     max_auto_keywords: int = 100
     auto_keyword_min_length: int = 2
+    # Cross-domain noise filter (#319): per-domain blacklist of keywords whose
+    # presence in an entry's title/summary/tags excludes it from product
+    # generation (digest/report) BEFORE LLM synthesis.  Empty by default —
+    # no behavior change for domains that don't declare it.
+    exclude_keywords: list[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         """Apply domain-specific TTL defaults for built-in demo domains."""
@@ -697,6 +707,8 @@ def _dict_to_config(raw: dict[str, Any]) -> Config:
                 ),
                 max_auto_keywords=int(d.get("max_auto_keywords", 100)),
                 auto_keyword_min_length=int(d.get("auto_keyword_min_length", 2)),
+default_language=str(d.get("default_language", "")),
+                exclude_keywords=list(d.get("exclude_keywords", [])),
             )
         )
 
@@ -1179,6 +1191,10 @@ def config_to_dict(config: Config) -> dict[str, Any]:
             domain_dict["max_auto_keywords"] = domain.max_auto_keywords
         if domain.auto_keyword_min_length != 2:
             domain_dict["auto_keyword_min_length"] = domain.auto_keyword_min_length
+        if domain.default_language:
+            domain_dict["default_language"] = domain.default_language
+        if domain.exclude_keywords:
+            domain_dict["exclude_keywords"] = domain.exclude_keywords
         if domain.webhook_urls:
             domain_dict["webhook_urls"] = domain.webhook_urls
         if domain.quality_gates:

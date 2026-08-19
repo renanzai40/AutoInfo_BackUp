@@ -447,6 +447,126 @@ def _filter_entries_by_language(
     return kept
 
 
+def _resolve_effective_language(
+    language: str, domain: str, *, cross_domain: bool = False
+) -> str:
+    """Resolve the effective language for a product (issue #317).
+
+    Precedence:
+    1. An explicit *language* param always wins.
+    2. Otherwise, for a single-domain product, fall back to the domain's
+       configured ``default_language`` (so mixed-language domains like
+       ai-commercial come out single-language without manual params).
+    3. Otherwise ``""`` — no filtering (legacy behavior).
+
+    For a cross-domain product (*cross_domain* True) we never silently pick
+    one domain's default across multiple domains: an explicit param wins,
+    otherwise no filtering.
+    """
+    if language:
+        return language
+    if cross_domain:
+        return ""
+    config_path = get_config_path()
+    if config_path is None or not config_path.is_file():
+        return ""
+    try:
+        config = load_config(config_path)
+    except Exception:
+        return ""
+    for d in config.domains:
+        if d.name == domain:
+            return d.default_language or ""
+    return ""
+
+
+def _get_domain_exclude_keywords(domain: str) -> list[str]:
+    """Load the ``exclude_keywords`` list for *domain* from the project config.
+
+    Returns an empty list when the config cannot be loaded or the domain is
+    not found — an empty list means "no filtering" (backward compatible).
+    Mirrors the config-loading pattern of :func:`_get_domain_source_configs`.
+    """
+    config_path = get_config_path()
+    if config_path is None or not config_path.is_file():
+        return []
+    try:
+        config = load_config(config_path)
+    except Exception:
+        return []
+    for d in config.domains:
+        if d.name == domain:
+            return list(d.exclude_keywords)
+    return []
+
+
+def _entry_matches_exclude_keywords(
+    entry: dict[str, Any], keywords: list[str]
+) -> bool:
+    """Return True when any excluded keyword appears in the entry's content.
+
+    Matching is a deterministic substring check (casefold for latin, CJK-aware)
+    over the entry's title + summary + tags.  Tags may arrive as a JSON string
+    (SQLite) or a list — the same parsing pattern as ``_build_digest_llm_prompt``.
+    """
+    if not keywords:
+        return False
+    title = str(entry.get("title") or "")
+    summary = str(entry.get("summary") or "")
+    tags_raw = entry.get("tags", "")
+    if isinstance(tags_raw, str):
+        try:
+            tags_list = json.loads(tags_raw)
+        except (json.JSONDecodeError, TypeError):
+            tags_list = [tags_raw] if tags_raw else []
+    elif isinstance(tags_raw, list):
+        tags_list = tags_raw
+    else:
+        tags_list = []
+    tags_text = " ".join(str(t) for t in tags_list)
+    haystack = f"{title}\n{summary}\n{tags_text}".casefold()
+    return any(kw and kw.casefold() in haystack for kw in keywords)
+
+
+def _filter_entries_by_domain_exclusions(
+    entries: list[dict[str, Any]], domain: str
+) -> list[dict[str, Any]]:
+    """Drop entries matching a per-domain ``exclude_keywords`` blacklist (#319).
+
+    Issue #319: ai-commercial digests contained medical entries (贝达药业,
+    EyePoint DURAVYU) that passed the G1-G3 relevance gates.  This is a
+    product-generation-layer filter (NOT a gate change): each entry is checked
+    against the ``exclude_keywords`` of its OWN domain (entry dicts carry
+    ``domain``; falls back to *domain* when absent), so a cross-domain digest
+    filters per-entry.  Matching is deterministic — substring on
+    title+summary+tags, no LLM involvement.  Returns the input unchanged when
+    no domain declares exclusions.
+    """
+    if not entries:
+        return entries
+    exclude_by_domain: dict[str, list[str]] = {}
+    kept: list[dict[str, Any]] = []
+    dropped = 0
+    for entry in entries:
+        entry_domain = str(entry.get("domain") or domain)
+        if entry_domain not in exclude_by_domain:
+            exclude_by_domain[entry_domain] = _get_domain_exclude_keywords(
+                entry_domain
+            )
+        keywords = exclude_by_domain[entry_domain]
+        if keywords and _entry_matches_exclude_keywords(entry, keywords):
+            dropped += 1
+            continue
+        kept.append(entry)
+    if dropped:
+        logger.info(
+            "Excluded %d entries from product input for domain '%s' via "
+            "exclude_keywords (cross-domain noise filter)",
+            dropped, domain,
+        )
+    return kept
+
+
 class _DeliveryGatesBypass:
     """Sentinel type for explicitly bypassing delivery-gate resolution."""
 
@@ -2981,6 +3101,33 @@ PRODUCT_TEMPLATES: list[dict[str, Any]] = [
 ]
 
 
+# Product family → H1 product word (issue #318).  Keyed by the family name
+# resolved by :func:`_resolve_digest_product_type` /
+# :func:`_resolve_report_product_type` (the registry row name when its flat
+# template file exists, else the default family).  The default
+# ``digest``/``report`` families map to their own words so the non-product
+# paths keep their historical titles byte-identical.
+_PRODUCT_H1_WORDS: dict[str, str] = {
+    "digest": "Digest",
+    "report": "Report",
+    "premium-briefing": "Premium Briefing",
+    "column": "Column",
+    "magazine-digest": "Magazine Digest",
+    "enterprise-briefing": "Enterprise Briefing",
+}
+
+
+def _product_h1_word(family: str, default: str = "Digest") -> str:
+    """Return the H1 product word for a resolved product *family* (issue #318).
+
+    *family* is the template family name produced by
+    :func:`_resolve_digest_product_type` / :func:`_resolve_report_product_type`
+    (e.g. ``"premium-briefing"``).  Unknown families fall back to *default*
+    so the non-product paths keep their historical titles.
+    """
+    return _PRODUCT_H1_WORDS.get(family, default)
+
+
 def _resolve_digest_product_type(template: ProductTemplate, variant: str) -> str:
     """Map a ProductTemplate instance back to its digest template family.
 
@@ -3114,12 +3261,24 @@ _DIGEST_MAGAZINE_EDITORIAL_FIELDS: list[str] = (
     ]
 )
 
+# Issue #316: column deep-dive sections — the column template renders a
+# Deep Dive from a ``sections`` array (each ``{title, content}``), so the
+# digest synthesis must request it (mirroring the #308 report-path wording).
+_DIGEST_COLUMN_SECTIONS_FIELDS: list[str] = [
+    '"sections": [{"title": "Subsection title", "content": "2-3 paragraphs '
+    'of analysis grounded in specific entries \u2014 quote concrete numbers, '
+    'dates, and named companies/studies from the source material; no filler '
+    'paragraphs"}], 8-10 distinct deep-dive subsections, each with '
+    'substantive content',
+]
+
 _DIGEST_PRODUCT_FIELD_DESCRIPTIONS: dict[str, list[str]] = {
     "premium-briefing": _DIGEST_PRODUCT_BASE_FIELDS,
     "magazine-digest": _DIGEST_MAGAZINE_EDITORIAL_FIELDS,
     "enterprise-briefing": (
         _DIGEST_PRODUCT_BASE_FIELDS + _DIGEST_ENTERPRISE_METRICS_FIELDS
     ),
+    "column": _DIGEST_COLUMN_SECTIONS_FIELDS,
 }
 
 
@@ -3454,8 +3613,77 @@ def _build_attribution_footer(
     return f"---\n\n## Source Attribution\n\n{body}\n"
 
 
+def _normalize_column_sections(raw: Any) -> list[dict[str, Any]]:
+    """Normalize the LLM ``sections`` array to ``{title, content, entries}``.
+
+    Drops items without a usable ``title`` or ``content`` so the column
+    template never renders empty subsections (issue #316).  ``entries`` is
+    carried through when the LLM provides it (optional — the template
+    renders an entry table only when present).
+    """
+    if not isinstance(raw, list):
+        return []
+    sections: list[dict[str, Any]] = []
+    for item in raw:
+        if not isinstance(item, dict):
+            continue
+        title = str(item.get("title") or "").strip()
+        content = str(item.get("content") or "").strip()
+        if not title or not content:
+            continue
+        section: dict[str, Any] = {"title": title, "content": content}
+        entries = item.get("entries")
+        if isinstance(entries, list):
+            section["entries"] = entries
+        sections.append(section)
+    return sections
+
+
+def _deterministic_column_sections(
+    entries: list[dict[str, Any]], domain: str = ""
+) -> list[dict[str, Any]]:
+    """Derive column deep-dive sections deterministically from entries (#316).
+
+    Groups entries by theme (source_type → domain → keyword, the same
+    deterministic fallback the report path uses) and emits one section per
+    group; when the grouping yields fewer than 8 sections but there are at
+    least 8 entries, falls back to one section per entry (title + summary)
+    so the column Deep Dive never renders the empty placeholder when
+    entries exist.
+    """
+    groups = _deterministic_grouping(entries, domain=domain)
+    if groups:
+        sections = [
+            {
+                "title": str(g.get("theme") or "").strip(),
+                "content": str(g.get("description") or "").strip(),
+                "entries": list(g.get("entries") or []),
+            }
+            for g in groups
+            if (str(g.get("theme") or "").strip())
+        ]
+        if len(sections) >= 8:
+            return sections
+    # One section per entry (title + summary) — real content, never
+    # fabricated, and never an empty Deep Dive when entries exist.
+    sections = []
+    for e in entries:
+        title = str(e.get("title") or "").strip()
+        if not title:
+            continue
+        summary = str(e.get("summary") or "").strip()
+        sections.append(
+            {
+                "title": title,
+                "content": summary or title,
+                "entries": [e],
+            }
+        )
+    return sections
+
+
 def _normalize_digest_product_context(
-    context: dict[str, Any], domain: str
+    context: dict[str, Any], domain: str, product_family: str = "digest"
 ) -> dict[str, Any]:
     """Normalize the digest context to the flat §2.1 product-template shape.
 
@@ -3482,6 +3710,13 @@ def _normalize_digest_product_context(
       ``action_required``, ``key_metrics`` ← flattened from
       ``llm_synthesis`` when present, else ``[]`` — generic, so any new
       synthesis field flows through automatically
+    - ``sections`` (issue #316): the column template's Deep Dive source —
+      flattened from ``llm_synthesis["sections"]`` when present (list of
+      ``{title, content, entries}`` dicts, unusable items dropped); when
+      *product_family* is ``"column"`` and no usable sections exist but
+      entries do, sections are derived deterministically from the entries
+      so the template never renders the empty placeholder.  Non-column
+      families default to ``[]`` (backward compatible).
 
     All other top-level digest keys (``title``, ``domain``, ``generated_at``,
     ``period``, ``entries``, …) are kept untouched — templates must simply
@@ -3579,6 +3814,17 @@ def _normalize_digest_product_context(
         flat[synthesis_field] = (
             value if isinstance(value, list) else (str(value) if isinstance(value, str) else [])
         )
+
+    # --- Column deep-dive sections (issue #316) ---------------------------
+    # The column template renders ``sections`` (list of {title, content,
+    # entries}) for the Deep Dive + Implications sections.  Flatten the LLM
+    # synthesis ``sections`` array when present; when the family is column
+    # and no usable sections exist but entries do, derive them
+    # deterministically so the template never renders the empty placeholder.
+    sections = _normalize_column_sections(synthesis.get("sections"))
+    if product_family == "column" and not sections and entries_list:
+        sections = _deterministic_column_sections(entries_list, domain)
+    flat["sections"] = sections
 
     return flat
 
@@ -3849,11 +4095,23 @@ def generate_digest(
     # both the LLM input and the rendered body are clean.
     entries = _filter_product_entries(entries)
 
-    # --- Language filter (issue #309) ---------------------------------------
-    # When a user requests a specific language, drop entries in other
-    # languages so a digest/report is internally consistent (no zh/en interleave).
-    if language:
-        entries = _filter_entries_by_language(entries, language)
+    # --- Language filter (issue #309 / #317) --------------------------------
+    # When a user requests a specific language (or a domain declares a
+    # default_language), drop entries in other languages so a digest/report is
+    # internally consistent (no zh/en interleave).  An explicit param wins;
+    # otherwise the domain default fills in; cross-domain never auto-picks one.
+    effective_language = _resolve_effective_language(
+        language, domain, cross_domain=is_cross_domain_digest
+    )
+    if effective_language:
+        entries = _filter_entries_by_language(entries, effective_language)
+
+    # --- Per-domain exclude_keywords filter (issue #319) ---------------------
+    # Cross-domain noise guard: drop entries whose title/summary/tags match a
+    # keyword on the entry's OWN domain's exclude_keywords blacklist BEFORE LLM
+    # synthesis.  Deterministic substring match, no LLM involvement.  No-op for
+    # domains with an empty list.
+    entries = _filter_entries_by_domain_exclusions(entries, domain)
 
     # --- Parse tags for each entry (they come as JSON strings from SQLite) ----
     for entry in entries:
@@ -3970,8 +4228,14 @@ def generate_digest(
 
     # --- Build template context ----------------------------------------------
     generated_at = datetime.now(timezone.utc).isoformat()
+    # Issue #318: the H1 product word follows the resolved product family
+    # (digest/report/premium-briefing/column/magazine-digest/enterprise-briefing)
+    # instead of being hardcoded to "Digest"; the period label still drives
+    # the Daily/Weekly/Monthly prefix.  The default digest family keeps the
+    # historical "{period_label} Digest — {domain}" title byte-identical.
+    digest_h1_word = _product_h1_word(digest_family)
     context = {
-        "title": f"{period_label} Digest \u2014 {digest_title_domain}",
+        "title": f"{period_label} {digest_h1_word} \u2014 {digest_title_domain}",
         "domain": digest_title_domain,
         "period": period,
         "period_label": period_label,
@@ -3995,7 +4259,9 @@ def generate_digest(
         _persist_product_analysis_to_kb(store, entries, llm_synthesis)
     elif product_template is not None:
         product_type = digest_family
-        pt_context = _normalize_digest_product_context(context, domain)
+        pt_context = _normalize_digest_product_context(
+            context, domain, product_family=digest_family
+        )
         rendered = product_template.render(product_type, variant, pt_context)
     elif format == "json":
         rendered = _render_json(context)
@@ -4105,7 +4371,7 @@ def generate_digest(
             _try_notify_content_ready(
                 user_id=user_id,
                 product_type="digest",
-                title=f"{period_label} Digest \u2014 {digest_title_domain}",
+                title=f"{period_label} {digest_h1_word} \u2014 {digest_title_domain}",
             )
         _fire_agent_notification(
             "new_digest",
@@ -4118,7 +4384,7 @@ def generate_digest(
         _try_notify_content_ready(
             user_id=user_id,
             product_type="digest",
-            title=f"{period_label} Digest \u2014 {digest_title_domain}",
+            title=f"{period_label} {digest_h1_word} \u2014 {digest_title_domain}",
         )
     _fire_agent_notification(
         "new_digest", rendered, product_id=f"{digest_title_domain}-{period}"
@@ -4355,9 +4621,19 @@ def generate_report(
     # --- Test/empty entry filtering (issue #298 — layer 1) -------------------
     entries = _filter_product_entries(entries)
 
-    # --- Language filter (issue #309) ---------------------------------------
-    if language:
-        entries = _filter_entries_by_language(entries, language)
+    # --- Language filter (issue #309 / #317) --------------------------------
+    # An explicit param wins; otherwise the domain default fills in;
+    # cross-domain never auto-picks one domain's default.
+    effective_language = _resolve_effective_language(
+        language, domain, cross_domain=is_cross_domain
+    )
+    if effective_language:
+        entries = _filter_entries_by_language(entries, effective_language)
+
+    # --- Per-domain exclude_keywords filter (issue #319) ---------------------
+    # Cross-domain noise guard: drop entries matching their own domain's
+    # exclude_keywords blacklist BEFORE thematic grouping / LLM synthesis.
+    entries = _filter_entries_by_domain_exclusions(entries, domain)
 
     if not entries:
         rendered: str
@@ -4591,8 +4867,19 @@ def generate_report(
         for g in groupings
     ]
 
+    # Issue #318: the report H1 product word follows the resolved product
+    # family when a product template is used (premium-briefing/column/
+    # enterprise-briefing); the default report path (no product_template,
+    # incl. report_type="column" T40) keeps the historical
+    # "{domain} — Report" title byte-identical.
+    report_h1_word = (
+        _product_h1_word(report_family, default="Report")
+        if product_template is not None
+        else "Report"
+    )
+
     report_data = ReportData(
-        title=f"{report_title_domain} \u2014 Report",
+        title=f"{report_title_domain} \u2014 {report_h1_word}",
         generated_at=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         domain=report_title_domain,
         collection_id=collection_id or "",
@@ -4808,7 +5095,7 @@ def generate_report(
             _try_notify_content_ready(
                 user_id=user_id,
                 product_type="report",
-                title=f"{report_title_domain} \u2014 Report",
+                title=f"{report_title_domain} \u2014 {report_h1_word}",
             )
         _fire_agent_notification(
             "new_report",
@@ -4821,7 +5108,7 @@ def generate_report(
         _try_notify_content_ready(
             user_id=user_id,
             product_type="report",
-            title=f"{report_title_domain} \u2014 Report",
+            title=f"{report_title_domain} \u2014 {report_h1_word}",
         )
     _fire_agent_notification(
         "new_report", rendered, product_id=f"{report_title_domain}-{period}"

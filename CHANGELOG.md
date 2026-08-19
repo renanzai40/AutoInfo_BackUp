@@ -21,11 +21,15 @@ All notable changes to the AutoInfo project will be documented in this file.
 ### Features
 
 * **output:** magazine-digest editorial intro + personality/deep-dive feature — the magazine synthesis prompt requests `editorial_intro` + `feature_story` fields and `magazine-digest.md.j2` renders "## Editor's Note" + "## The Feature" sections when the LLM synthesis carries them ([#313](https://github.com/1StepMore/AutoInfo/issues/313))
+* **output:** domain-level default language for digest/report filtering — a single-domain product falls back to the domain's configured `default_language` when no explicit `--language` is passed, so mixed-language domains (e.g. ai-commercial: English sources + 36KR Chinese) produce single-language output without manual params; cross-domain products never silently pick one domain's default ([#317](https://github.com/1StepMore/AutoInfo/issues/317))
+* **output:** per-domain `exclude_keywords` cross-domain noise filter — product generation drops entries whose title/summary/tags match a domain's configured blacklist (per-entry domain lookup, deterministic substring match, no LLM), removing medical/off-topic entries that pass G1-G3 from ai-commercial products ([#319](https://github.com/1StepMore/AutoInfo/issues/319))
 
 ### Bug Fixes
 
 * **output:** report section headings are semantic theme titles (short noun phrases, never raw keyword dumps) with near-duplicate heading dedup ([#311](https://github.com/1StepMore/AutoInfo/issues/311))
 * **output:** tutorial bodies carry inline citations to real source URLs, aligned with digest/report citations ([#312](https://github.com/1StepMore/AutoInfo/issues/312))
+* **output:** column digest renders 8+ deep-dive sections with substantive content and a `Sections` metadata count matching the rendered sections (previously `_normalize_digest_product_context` never materialized `sections`, leaving the template to render 0 + a "no sections available" placeholder) ([#316](https://github.com/1StepMore/AutoInfo/issues/316))
+* **output:** digest/report products render distinct product-specific H1 titles matching their product names (6 products, previously all shared a generic title) ([#318](https://github.com/1StepMore/AutoInfo/issues/318))
 
 ## [1.10.0](https://github.com/1StepMore/AutoInfo/compare/v1.9.1...v1.10.0) (2026-08-17)
 
