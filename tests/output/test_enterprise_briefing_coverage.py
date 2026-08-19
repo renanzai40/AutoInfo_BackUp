@@ -1,0 +1,166 @@
+"""Tests for issue #314: enterprise-briefing coverage claim consistency.
+
+The enterprise-briefing Executive Summary is written by the LLM, and
+previously nothing bound its opening "coverage" claim to the actual number
+of Key Findings bullets rendered below — the summary could claim "20
+items" while only 9 findings were detailed (or vice versa), which breaks
+the paid-product credibility contract.
+
+Fix has two parts (both asserted here):
+
+1. Prompt-level guard: the report synthesis prompt (shared by
+   premium-briefing / magazine-digest / enterprise-briefing via
+   ``_REPORT_PRODUCT_BASE_SECTIONS``) MUST instruct the model to name
+   exactly the number of Key Findings it writes, never a larger count.
+2. Render-level determinism: the enterprise-briefing template labels the
+   selection scope deterministically — ``精选 N 条详述 · selected N of M
+   items`` — so even a stale summary claim is visibly scoped, on BOTH
+   flat-context paths (report ``_report_data_to_dict`` and digest
+   ``_normalize_digest_product_context``).
+"""
+
+from __future__ import annotations
+
+from typing import Any, cast
+
+from autoinfo.output import (
+    PRODUCT_TEMPLATES,
+    ProductTemplate,
+    ReportData,
+    _build_report_synthesis_prompt,
+    _normalize_digest_product_context,
+    _report_data_to_dict,
+)
+
+
+def _registry_template(name: str) -> ProductTemplate:
+    """Return the ProductTemplate instance of a PRODUCT_TEMPLATES row."""
+    for row in PRODUCT_TEMPLATES:
+        if row["name"] == name:
+            return cast(ProductTemplate, row["template"])
+    raise AssertionError(f"{name} ProductTemplate row missing from PRODUCT_TEMPLATES")
+
+
+def _make_report_data(n_findings: int, n_references: int) -> ReportData:
+    """A ReportData with ``n_findings`` key findings and ``n_references`` refs."""
+    return ReportData(
+        title="medical-research \u2014 Enterprise Briefing",
+        generated_at="2026-08-19 00:00 UTC",
+        domain="medical-research",
+        executive_summary="This briefing details 20 selected items from the period.",
+        key_findings=cast(
+            list[dict[str, Any]],
+            [{"text": f"Finding number {i}"} for i in range(1, n_findings + 1)],
+        ),
+        references=[
+            {
+                "title": f"Reference {i}",
+                "source_url": f"https://example.com/ref-{i}",
+                "source_type": "api",
+                "source_platform": "pubmed",
+                "domain": "medical-research",
+            }
+            for i in range(1, n_references + 1)
+        ],
+    )
+
+
+def _make_digest_context(n_findings: int, n_entries: int) -> dict[str, Any]:
+    """A raw digest context whose synthesis has ``n_findings`` key findings."""
+    return {
+        "title": "Weekly Digest \u2014 medical-research",
+        "domain": "medical-research",
+        "entries": [
+            {
+                "entry_id": f"entry-{i:03d}",
+                "title": f"Entry number {i}",
+                "summary": f"Summary of entry {i}.",
+                "source_url": f"https://example.com/entry-{i}",
+                "source_type": "rss",
+                "source_platform": "pubmed",
+                "domain": "medical-research",
+            }
+            for i in range(1, n_entries + 1)
+        ],
+        "llm_synthesis": {
+            "executive_summary": "This briefing details 20 selected items.",
+            "key_findings": [
+                {"topic": f"Topic {i}", "detail": f"Detail {i}."}
+                for i in range(1, n_findings + 1)
+            ],
+            "recommendations": ["Watch the trial results."],
+        },
+    }
+
+
+# ===================================================================
+# Prompt-level guard
+# ===================================================================
+
+
+class TestSynthesisPromptCoverageConsistency:
+    """The synthesis prompt must bind the coverage claim to the findings count."""
+
+    def test_synthesis_prompt_requires_coverage_consistency(self) -> None:
+        """enterprise-briefing prompt names the exact Key Findings count rule.
+
+        The Executive Summary's opening sentence MUST state the number of
+        Key Findings actually written below — never a larger coverage
+        count. This guard lives in ``_REPORT_PRODUCT_BASE_SECTIONS`` so it
+        applies to enterprise-briefing (and the sibling product families).
+        """
+        prompt = _build_report_synthesis_prompt(
+            "Themes and entries:\n<entries>",
+            product_family="enterprise-briefing",
+        )
+        assert "coverage" in prompt
+        assert "number of Key Findings" in prompt
+
+    def test_coverage_guard_shared_by_all_product_families(self) -> None:
+        """premium-briefing and magazine-digest inherit the same guard."""
+        for family in ("premium-briefing", "magazine-digest"):
+            prompt = _build_report_synthesis_prompt(
+                "Themes and entries:\n<entries>",
+                product_family=family,
+            )
+            assert "number of Key Findings" in prompt
+
+
+# ===================================================================
+# Render-level scope label
+# ===================================================================
+
+
+class TestEnterpriseTemplateScopeLabel:
+    """The template deterministically labels the selection scope."""
+
+    def test_enterprise_template_annotates_selected_count(self) -> None:
+        """Report path: 9 findings + 20 references render ``精选 9 条详述``."""
+        flat = _report_data_to_dict(_make_report_data(9, 20))
+        out = _registry_template("enterprise-briefing").render(
+            "enterprise-briefing", "md", flat
+        )
+        assert "精选 9 条详述" in out
+        assert "selected 9 of 20 items detailed below" in out
+        # The deterministic label sits between the summary and the findings.
+        assert out.index("> **Scope**:") < out.index("## Key Findings")
+
+    def test_enterprise_digest_path_annotates_too(self) -> None:
+        """Digest path: same label through ``_normalize_digest_product_context``."""
+        flat = _normalize_digest_product_context(
+            _make_digest_context(9, 20), "medical-research"
+        )
+        out = _registry_template("enterprise-briefing").render(
+            "enterprise-briefing", "md", flat
+        )
+        assert "精选 9 条详述" in out
+        assert "selected 9 of 20 items detailed below" in out
+
+    def test_scope_label_absent_when_no_findings(self) -> None:
+        """No key findings -> no scope label (empty-state unchanged)."""
+        flat = _report_data_to_dict(_make_report_data(0, 3))
+        out = _registry_template("enterprise-briefing").render(
+            "enterprise-briefing", "md", flat
+        )
+        assert "精选" not in out
+        assert "**Scope**" not in out

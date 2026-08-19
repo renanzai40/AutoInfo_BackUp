@@ -1,0 +1,207 @@
+# Regression #314: enterprise-briefing Executive Summary coverage claim must
+# match the actual Key Findings count (or be explicitly scoped).
+#
+# Before the fix: the LLM-written Executive Summary could claim "20 items"
+# while only 9 Key Findings bullets were detailed below (or vice versa) —
+# nothing bound the opening coverage sentence to the rendered findings
+# count, breaking the paid-product credibility contract.
+#
+# Fix has two parts:
+#   ① prompt guard: the report synthesis prompt (shared via
+#      _REPORT_PRODUCT_BASE_SECTIONS) now instructs the model to name
+#      exactly the number of Key Findings it writes, never a larger count;
+#   ② deterministic scope label: enterprise-briefing.md.j2 renders
+#      "精选 N 条详述 · selected N of M items" computed from the ACTUAL
+#      rendered context (key_findings|length vs references|length) on both
+#      flat-context paths (report _report_data_to_dict, digest
+#      _normalize_digest_product_context), so even a stale summary claim is
+#      visibly scoped.
+#
+# This scenario drives the REAL generate_report / generate_digest paths
+# with the enterprise-briefing registry ProductTemplate (KBStore + LLM
+# seams patched — deterministic, requires_env: []), parses the rendered
+# Key Findings count N, and asserts "精选 N 条详述" is present with a
+# matching N.  A regression that reverts either fix fails here.
+name: regression-enterprise-coverage
+description: "Regression #314: enterprise-briefing coverage claim matches key-findings count (prompt guard + 精选 N 条详述 scope label)"
+category: regression
+regression: true
+regression_issue: "#314"
+requires_env: []
+steps:
+  - name: "enterprise-briefing report-path render labels the exact key-findings count"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, re, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.models import ExtractionResult
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_report
+
+      ENTRIES = [
+          {"entry_id": f"e{i}", "title": f"IVF study number {i}",
+           "summary": f"Time-lapse imaging outcome {i}.",
+           "source_url": f"https://example.com/ivf-{i}", "source_type": "api",
+           "source_platform": "pubmed", "relevance_score": 90 - i,
+           "tags": json.dumps(["IVF"]), "tier": "01-Raw",
+           "collected_at": "2026-07-15T10:00:00Z"}
+          for i in range(1, 21)
+      ]
+      SYNTH_MD = """## Executive Summary
+      This briefing details 3 selected items from the period.
+
+      ## Key Findings
+      - Time-lapse imaging: Significant improvement in live birth rates.
+      - AI embryo selection: Promising but lacks prospective validation.
+      - Embryo freezing: Comparable outcomes across protocols.
+
+      ## Implications
+      - Clinics should evaluate time-lapse imaging adoption.
+      - Regulators should watch unvalidated AI selection tools.
+      - Labs should standardize freezing protocols.
+
+      ## Risks & Opportunities
+      - Validation lag | high | medium | Run prospective trials.
+      - Adoption cost | medium | low | Pilot programs.
+
+      ## Action Required
+      - Run a pilot evaluation of time-lapse imaging.
+      - Fund prospective AI validation trials.
+      - Update freezing protocol guidelines.
+
+      ## Key Metrics
+      - Live birth rate | 48.2% vs 39.5% | time-lapse RCT
+
+      ## Recommendations
+      - Consider time-lapse imaging as standard of care.
+      """
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      def grouping():
+          return ExtractionResult(item_id="_g", title="Groups", custom_fields={
+              "groups": [{"theme": "IVF & Reproductive Medicine", "description": "IVF advances.",
+                          "entry_ids": ["e1", "e2", "e3"]}]})
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-enterprise-coverage-a-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.llm.LLMExtractor.extract", side_effect=[grouping()]), \
+               patch("autoinfo.output._call_llm_for_report_synthesis", return_value=SYNTH_MD):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_report(domain="medical-research", period="weekly",
+                                    format="markdown",
+                                    product_template=tmpl("enterprise-briefing"))
+          assert isinstance(out, str), type(out)
+          # Parse the rendered Key Findings count N.  The template renders
+          # with trim_blocks, so adjacent bullets can jam onto one line
+          # ("- A- B- C"); count the "- " bullet prefixes in the section.
+          m = re.search(r"## Key Findings\n(.*?)(?:\n## |\Z)", out, re.DOTALL)
+          assert m, "Key Findings section missing:\n" + out
+          n = len(re.findall(r"-\s+\S", m.group(1)))
+          assert n == 3, f"expected 3 rendered findings, got {n}:\n" + out
+          # The scope label MUST name exactly the rendered count.
+          assert f"精选 {n} 条详述" in out, f"scope label missing/mismatched:\n" + out
+          assert f"selected {n} of 20 items detailed below" in out, \
+              f"selected-count label missing/mismatched:\n" + out
+          # The summary text still states its own (LLM-written) claim.
+          assert "This briefing details 3 selected items" in out
+          print("ENTERPRISE_COVERAGE_REPORT_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["ENTERPRISE_COVERAGE_REPORT_OK"]
+
+  - name: "enterprise-briefing digest-path render labels the exact key-findings count"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, re, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_digest
+
+      ENTRIES = [
+          {"entry_id": f"e{i}", "title": f"IVF study number {i}",
+           "summary": f"Time-lapse imaging outcome {i}.",
+           "source_url": f"https://example.com/ivf-{i}", "source_type": "api",
+           "source_platform": "pubmed", "relevance_score": 90 - i,
+           "tags": json.dumps(["IVF"]), "tier": "01-Raw",
+           "collected_at": "2026-07-15T10:00:00Z"}
+          for i in range(1, 21)
+      ]
+      SYNTH = {
+          "executive_summary": "This briefing details 3 selected items.",
+          "key_findings": [
+              {"topic": "Time-lapse imaging", "detail": "Significant improvement in live birth rates."},
+              {"topic": "AI embryo selection", "detail": "Promising but lacks prospective validation."},
+              {"topic": "Embryo freezing", "detail": "Comparable outcomes across protocols."},
+          ],
+          "recommendations": ["Consider time-lapse imaging as standard of care."],
+          "implications": ["Clinics should evaluate time-lapse imaging adoption."],
+          "risks": [{"title": "Validation lag", "likelihood": "high", "impact": "medium",
+                     "mitigation": "Run prospective trials."}],
+          "action_required": ["Run a pilot evaluation of time-lapse imaging."],
+          "key_metrics": [{"metric": "Live birth rate", "value": "48.2% vs 39.5%", "source": "RCT"}],
+      }
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-enterprise-coverage-b-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_digest(domain="medical-research", period="weekly",
+                                    format="markdown",
+                                    product_template=tmpl("enterprise-briefing"))
+          assert isinstance(out, str), type(out)
+          m = re.search(r"## Key Findings\n(.*?)(?:\n## |\Z)", out, re.DOTALL)
+          assert m, "Key Findings section missing:\n" + out
+          n = len(re.findall(r"-\s+\S", m.group(1)))
+          assert n == 3, f"expected 3 rendered findings, got {n}:\n" + out
+          assert f"精选 {n} 条详述" in out, f"scope label missing/mismatched:\n" + out
+          assert f"selected {n} of 20 items detailed below" in out, \
+              f"selected-count label missing/mismatched:\n" + out
+          print("ENTERPRISE_COVERAGE_DIGEST_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["ENTERPRISE_COVERAGE_DIGEST_OK"]
+
+  - name: "enterprise-briefing synthesis prompt carries the coverage-count guard"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.output import _build_report_synthesis_prompt
+      prompt = _build_report_synthesis_prompt(
+          "Themes and entries:\n<entries>",
+          product_family="enterprise-briefing",
+      )
+      assert "coverage" in prompt, "coverage guard missing from prompt"
+      assert "number of Key Findings" in prompt, "count rule missing from prompt"
+      print("ENTERPRISE_COVERAGE_PROMPT_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["ENTERPRISE_COVERAGE_PROMPT_OK"]

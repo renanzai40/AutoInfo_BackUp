@@ -1,0 +1,114 @@
+# Regression (#311): report section headings are SEMANTIC theme titles, not
+# raw keyword dumps or duplicated titles.
+#
+# Before #311 the thematic-grouping prompts did not constrain title shape
+# (the LLM could emit raw keyword lists like "Funding / M&A / Deals" or
+# concatenated entry titles) and `_merge_theme_groups` only merged themes
+# whose NORMALIZED names were identical — near-duplicates ("AI Funding &
+# M&A" vs "AI Funding and M&A") surfaced as separate report sections.
+# Fixes: SHORT SEMANTIC-title instruction in both the main and strict-retry
+# grouping prompts + a Jaccard (>= 0.6, subset) near-duplicate merge pass in
+# `_merge_theme_groups`.
+#
+# Deterministic (requires_env: []): the KBStore and LLM seams are patched in
+# the subprocess (same pattern as tests/test_digest_context_normalization.py
+# and regression-product-routing.yaml), so the scenario runs in a bare
+# sandbox — no LLM key, no network, no configured domain.  The mocked
+# grouping returns a near-duplicate pair ("&" vs "and") plus a distinct
+# theme, so a revert of the merge pass re-introduces the duplicate section
+# heading and the scenario fails.  Runs inside an ABSOLUTE temp cwd
+# (tempfile.mkdtemp, try/finally cleanup).
+name: regression-report-theme-titles
+description: "Regression #311: report section headings are semantic themes — >=1 heading, all unique, none a separator-dumped keyword list"
+category: regression
+regression: true
+regression_issue: "#311"
+requires_env: []
+steps:
+  - name: "medical-research report renders semantic, unique, non-keyword-dump section headings"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, re, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.models import ExtractionResult
+      from autoinfo.output import generate_report
+
+      ENTRIES = [
+          {"entry_id": "e1", "title": "AI-driven deal screening accelerates biotech funding",
+           "summary": "AI models screen early-stage biotech deals at scale.",
+           "source_url": "https://example.com/e1", "source_type": "api",
+           "source_platform": "crunchbase", "relevance_score": 92.0,
+           "tags": json.dumps(["AI", "funding"]), "tier": "01-Raw",
+           "collected_at": "2026-08-01T10:00:00Z"},
+          {"entry_id": "e2", "title": "M&A momentum in digital health reaches record pace",
+           "summary": "Digital health M&A volume hit a record in Q2.",
+           "source_url": "https://example.com/e2", "source_type": "api",
+           "source_platform": "crunchbase", "relevance_score": 88.0,
+           "tags": json.dumps(["M&A", "health"]), "tier": "01-Raw",
+           "collected_at": "2026-08-02T10:00:00Z"},
+          {"entry_id": "e3", "title": "Reproductive health outcomes after IVF policy change",
+           "summary": "Policy shifts correlate with improved IVF outcomes.",
+           "source_url": "https://example.com/e3", "source_type": "api",
+           "source_platform": "pubmed", "relevance_score": 85.0,
+           "tags": json.dumps(["IVF"]), "tier": "01-Raw",
+           "collected_at": "2026-08-03T10:00:00Z"},
+      ]
+
+      def grouping():
+          # Near-duplicate pair ("&" vs "and") must collapse into ONE section
+          # (#311 merge pass); a keyword-dump style title must never surface.
+          return ExtractionResult(item_id="_g", title="Groups", custom_fields={
+              "groups": [
+                  {"theme": "AI Funding & M&A Momentum",
+                   "description": "AI-driven deal flow and M&A pace.", "entry_ids": ["e1", "e2"]},
+                  {"theme": "AI Funding and M&A Momentum",
+                   "description": "", "entry_ids": ["e2"]},
+                  {"theme": "Reproductive Health Outcomes",
+                   "description": "IVF outcomes under the new policy.", "entry_ids": ["e3"]},
+              ]})
+
+      def summary():
+          return ExtractionResult(item_id="_s", title="Executive Summary", custom_fields={
+              "executive_summary": "Biotech funding and IVF outcomes moved this week."})
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-report-theme-titles-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.llm.LLMExtractor.extract",
+                     side_effect=[grouping(), summary()]), \
+               patch("autoinfo.output._call_llm_for_report_synthesis",
+                     return_value=""):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_report(domain="medical-research", period="weekly",
+                                    format="markdown", report_type="standard")
+          assert isinstance(out, str), type(out)
+          headings = re.findall(r"^#{2,3} .*$", out, re.MULTILINE)
+          assert len(headings) >= 1, "no ## headings in report"
+          assert len(set(headings)) == len(headings), \
+              f"duplicated report headings: {headings}"
+          for h in headings:
+              stripped = h.lstrip("#").strip()
+              assert not re.match(r"^[A-Za-z]+(?: / [A-Za-z]+)+", stripped), \
+                  f"keyword-dump heading in report: {h!r}"
+          # Near-duplicate pair collapsed into a single section (#311).
+          assert "AI Funding & M&A Momentum" not in out, \
+              "near-duplicate theme section survived the merge pass"
+          assert out.count("AI Funding and M&A Momentum") == 1, \
+              "merged theme section missing"
+          assert "Reproductive Health Outcomes" in out, \
+              "distinct theme section missing"
+          print("REPORT_THEME_TITLES_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["REPORT_THEME_TITLES_OK"]

@@ -1,0 +1,81 @@
+# Regression (#312): tutorial bodies must carry inline citations to real
+# source_urls — aligned with the digest/report citation mechanism.  Before
+# the fix: (a) the entry-summary lines fed to the LLM carried no source URL,
+# (b) neither generation prompt instructed inline citations, (c) the
+# deterministic completeness fallback filled content bodies with bare
+# summaries — a rendered tutorial contained no "(Source: <url>)" marker.
+# Fixes: entry_summaries appends "(Source: <source_url>)", both prompts
+# instruct citing URLs from the KB Entries list, and
+# _entry_derived_sections appends "(Source: <url>)" to fallback bodies.
+#
+# Deterministic (requires_env: []): KBStore and _call_llm_for_tutorial are
+# patched in the subprocess (LLM result empty -> exercises the deterministic
+# completeness fallback, so no LLM key / network needed).  Runs inside an
+# ABSOLUTE temp cwd (tempfile.mkdtemp, try/finally cleanup).  Failure means
+# the citation mechanism regressed — never a silent skip.
+name: regression-tutorial-citations
+description: "Regression #312: tutorial bodies carry inline citations to real source_urls"
+category: regression
+regression: true
+regression_issue: "#312"
+requires_env: []
+steps:
+  - name: "tutorial renders inline citations pointing at real source_urls"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, re, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import generate_tutorial
+
+      ENTRIES = [
+          {"entry_id": "pmid-12345678",
+           "title": "Time-lapse imaging improves IVF outcomes",
+           "summary": "Time-lapse imaging improves live birth rates (48.2% vs 39.5%).",
+           "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
+           "source_type": "api", "source_platform": "pubmed",
+           "relevance_score": 92.0, "tier": "01-Raw",
+           "tags": json.dumps(["IVF", "embryo"]),
+           "collected_at": "2026-07-15T10:00:00Z"},
+          {"entry_id": "pmid-87654321",
+           "title": "AI embryo selection: a systematic review",
+           "summary": "AI models show promise but lack prospective validation.",
+           "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654321/",
+           "source_type": "api", "source_platform": "pubmed",
+           "relevance_score": 85.0, "tier": "01-Raw",
+           "tags": json.dumps(["AI", "IVF"]),
+           "collected_at": "2026-07-16T10:00:00Z"},
+      ]
+      known_urls = {e["source_url"] for e in ENTRIES}
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-tutorial-citations-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_tutorial", return_value={}):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_tutorial(domain="medical-research",
+                                      format="markdown",
+                                      target_audience="student")
+          assert isinstance(out, str), type(out)
+          # (a) at least one inline citation marker in the body
+          citations = re.findall(r"\(Source: ([^)]+)\)", out)
+          assert len(citations) >= 1, f"no inline citations in: {out}"
+          # (b) every cited URL is a real source_url from the KB entries
+          for url in citations:
+              assert url in known_urls, f"cited URL not in KB entries: {url}"
+          # (c) the URL actually renders in the body content section
+          assert "pubmed.ncbi.nlm.nih.gov" in out, "citation URL missing from body"
+          print(f"TUTORIAL_CITATIONS_OK: {len(citations)} citations")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["TUTORIAL_CITATIONS_OK"]

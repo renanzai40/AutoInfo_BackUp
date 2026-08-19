@@ -2,6 +2,17 @@
 
 All notable changes to the AutoInfo project will be documented in this file.
 
+## [Unreleased]
+
+### Features
+
+* **output:** magazine-digest editorial intro + personality/deep-dive feature — the magazine synthesis prompt requests `editorial_intro` + `feature_story` fields and `magazine-digest.md.j2` renders "## Editor's Note" + "## The Feature" sections when the LLM synthesis carries them ([#313](https://github.com/1StepMore/AutoInfo/issues/313))
+
+### Bug Fixes
+
+* **output:** report section headings are semantic theme titles (short noun phrases, never raw keyword dumps) with near-duplicate heading dedup ([#311](https://github.com/1StepMore/AutoInfo/issues/311))
+* **output:** tutorial bodies carry inline citations to real source URLs, aligned with digest/report citations ([#312](https://github.com/1StepMore/AutoInfo/issues/312))
+
 ## [1.10.0](https://github.com/1StepMore/AutoInfo/compare/v1.9.1...v1.10.0) (2026-08-17)
 
 
@@ -468,6 +479,9 @@ All notable changes to the AutoInfo project will be documented in this file.
 
 ### Infrastructure
 - Test suite now ~3728 tests (3728 collected via `pytest --collect-only`, 2026-08-13).
+
+### Fixed (2026-08-19)
+- **#314 enterprise-briefing coverage claim consistency** — the LLM-written Executive Summary could claim "20 items" while only 9 Key Findings were detailed (or vice versa); nothing bound the opening coverage sentence to the rendered findings count. Fix: ① the shared report synthesis prompt (`_REPORT_PRODUCT_BASE_SECTIONS`, benefits premium-briefing/magazine-digest/enterprise-briefing) now instructs the model to name exactly the number of Key Findings it writes — never a larger count; ② `enterprise-briefing.md.j2` renders a deterministic scope label (`> **Scope**: 精选 N 条详述 · selected N of M items detailed below.`) computed from the actual context on both flat-context paths (report `_report_data_to_dict`, digest `_normalize_digest_product_context`), so even a stale summary claim is visibly scoped. Regression scenario: `scenarios/regression/regression-enterprise-coverage.yaml`.
 
 ### Fixed (2026-08-10 quality wave)
 - **#179 keyword hygiene** — stopword filtering, toggle/cap auto-discovered keywords (`cccad4a`, `f889e09`).

@@ -3099,9 +3099,24 @@ _DIGEST_ENTERPRISE_METRICS_FIELDS: list[str] = [
     "(enterprise decision-support table)",
 ]
 
+# Issue #313: magazine-digest editorial framing — an editor's note framing
+# the week plus a personality profile / deep-dive feature story, so the
+# magazine is a narrative product rather than a bare summary list.
+_DIGEST_MAGAZINE_EDITORIAL_FIELDS: list[str] = (
+    _DIGEST_PRODUCT_BASE_FIELDS
+    + [
+        '"editorial_intro": "A 2-3 sentence editorial introduction paragraph '
+        'for this magazine edition \u2014 the editor\'s framing of the week, '
+        'written in a magazine voice (opinionated but factual)"',
+        '"feature_story": "A 3-5 paragraph personality profile / deep-dive '
+        "story on one notable person, company, or trend from the period, in "
+        "magazine feature style \u2014 a narrative beyond the summary list\"",
+    ]
+)
+
 _DIGEST_PRODUCT_FIELD_DESCRIPTIONS: dict[str, list[str]] = {
     "premium-briefing": _DIGEST_PRODUCT_BASE_FIELDS,
-    "magazine-digest": _DIGEST_PRODUCT_BASE_FIELDS,
+    "magazine-digest": _DIGEST_MAGAZINE_EDITORIAL_FIELDS,
     "enterprise-briefing": (
         _DIGEST_PRODUCT_BASE_FIELDS + _DIGEST_ENTERPRISE_METRICS_FIELDS
     ),
@@ -3550,9 +3565,20 @@ def _normalize_digest_product_context(
     ]
 
     # --- Product-specific fields (todo 7), flattened generically ----------
-    for synthesis_field in ("implications", "risks", "action_required", "key_metrics"):
+    # List-shaped fields flow through as-is; string-shaped editorial fields
+    # (editorial_intro / feature_story, issue #313) carry through as strings.
+    for synthesis_field in (
+        "implications",
+        "risks",
+        "action_required",
+        "key_metrics",
+        "editorial_intro",
+        "feature_story",
+    ):
         value = synthesis.get(synthesis_field, [])
-        flat[synthesis_field] = value if isinstance(value, list) else []
+        flat[synthesis_field] = (
+            value if isinstance(value, list) else (str(value) if isinstance(value, str) else [])
+        )
 
     return flat
 
@@ -5064,7 +5090,13 @@ def _llm_group_batch(
         cross_domain_instruction +
         "Group the following knowledge base entries into 3\u20135 themes. "
         "Each entry goes into exactly one theme. Do NOT use catch-all names "
-        "like \"General\" or \"Additional\".\n\n"
+        "like \"General\" or \"Additional\". "
+        "Give each theme a SHORT SEMANTIC title: a concise noun phrase "
+        "(2-6 words) naming the theme (e.g. 'Funding & M&A Momentum', "
+        "'Reproductive Health Outcomes'). Never use a raw keyword list, "
+        "concatenated entry titles, or separator-dumped keywords (no '/' or "
+        "'&'-joined keyword strings). Titles must be unique and "
+        "descriptive.\n\n"
         'Return JSON: {"groups": [{"theme": str, "entry_ids": [str]}]}\n\n'
         f"Entries:\n{entry_summaries}"
     )
@@ -5090,7 +5122,13 @@ def _llm_group_batch(
             "2\u20133 DISTINCT themes. Do NOT use catch-all themes like "
             "\"General\", \"Miscellaneous\", or \"Other\". Each entry must "
             "be assigned to the most specific theme that describes its "
-            "content.\n\n"
+            "content. "
+            "Give each theme a SHORT SEMANTIC title: a concise noun phrase "
+            "(2-6 words) naming the theme (e.g. 'Funding & M&A Momentum', "
+            "'Reproductive Health Outcomes'). Never use a raw keyword list, "
+            "concatenated entry titles, or separator-dumped keywords (no '/' or "
+            "'&'-joined keyword strings). Titles must be unique and "
+            "descriptive.\n\n"
             'Return JSON: {"groups": [{"theme": str, "entry_ids": [str]}]}\n\n'
             f"Entries:\n{entry_summaries}"
         )
@@ -5321,7 +5359,54 @@ def _merge_theme_groups(
             "description": description,
             "entries": entries,
         })
-    return result
+
+    # -- Near-duplicate theme merge pass ------------------------------------
+    # The exact-name pass above merges themes that normalize to the same
+    # string, but near-duplicates (case, "&" vs "and", word order) still
+    # slip through and surface as duplicate report sections.  Merge pairs
+    # whose normalized token sets have Jaccard similarity >= 0.6 with one
+    # set a subset of the other; keep the longest original title and
+    # deduplicate entries by ``entry_id``.
+    pending = list(result)
+    final: list[dict[str, Any]] = []
+    while pending:
+        group = pending.pop(0)
+        group_tokens = set(_normalize_theme_text(group["theme"]).split())
+        rest: list[dict[str, Any]] = []
+        for other in pending:
+            other_tokens = set(_normalize_theme_text(other["theme"]).split())
+            union = group_tokens | other_tokens
+            if (
+                group_tokens
+                and other_tokens
+                and len(group_tokens & other_tokens) / len(union) >= 0.6
+                and (group_tokens <= other_tokens or other_tokens <= group_tokens)
+            ):
+                # Absorb *other* into *group*: keep the longest original
+                # title, prefer the first non-empty description, dedupe ids.
+                if len(str(other["theme"])) > len(str(group["theme"])):
+                    group["theme"] = other["theme"]
+                if not group.get("description") and other.get("description"):
+                    group["description"] = other["description"]
+                seen = {
+                    e.get("entry_id", "") for e in group["entries"]
+                    if e.get("entry_id")
+                }
+                for e in other["entries"]:
+                    eid = e.get("entry_id", "")
+                    if eid and eid in seen:
+                        continue
+                    if eid:
+                        seen.add(eid)
+                    group["entries"].append(e)
+                group_tokens = set(
+                    _normalize_theme_text(group["theme"]).split()
+                )
+            else:
+                rest.append(other)
+        final.append(group)
+        pending = rest
+    return final
 
 
 def _ensure_all_entries_grouped(
@@ -6665,7 +6750,11 @@ _REPORT_PRODUCT_BASE_SECTIONS = (
     "(index-aligned with Key Findings; each action MUST specify WHO does it, "
     "WHAT specifically, and a WHEN timeline — e.g. 'CMO: ship the Q3 pricing "
     "experiment to 10% of enterprise customers by 2026-09-15'. Never a bare "
-    "'conduct market analysis'.)"
+    "'conduct market analysis'.)\n\n"
+    "The Executive Summary's opening coverage sentence MUST name exactly the "
+    "number of Key Findings you detail below — e.g. \"This briefing details N "
+    "selected items from the period.\" Never state a coverage count larger "
+    "than the number of Key Findings bullets you actually write."
 )
 
 _REPORT_ENTERPRISE_METRICS_SECTION = (
@@ -6829,6 +6918,7 @@ def generate_tutorial(
     entry_summaries = "\n".join(
         f"- [{e.get('entry_id', '?')}] {e.get('title', '?')}: "
         f"{e.get('summary', '(no summary)')}"
+        + (f" (Source: {e['source_url']})" if e.get("source_url") else "")
         for e in entries
     )
 
@@ -7069,6 +7159,9 @@ def _build_tutorial_json_prompt(
         '  - "summary": 2-3 sentence summary of the tutorial\n'
         '  - "further_reading": array of reference strings\n\n'
         f"KB Entries:\n{entry_summaries}\n\n"
+        "In every \"content\" section body, follow each key claim with an "
+        "inline citation to its source entry, e.g. \"(Source: <source_url>)\". "
+        "Only cite URLs present in the KB Entries list.\n"
         "Return all fields in a single JSON object. Adapt depth, terminology, "
         f"and examples specifically for a {target_audience} audience."
     )
@@ -7115,6 +7208,9 @@ def _build_tutorial_markdown_prompt(
         "## Further Reading\n"
         "- <reference 1>\n"
         "- <reference 2>\n\n"
+        "In every content paragraph, follow each key claim with an inline "
+        "citation to its source entry, e.g. \"(Source: <source_url>)\". Only "
+        "cite URLs present in the KB Entries list.\n\n"
         "Use exactly the heading names above. Do NOT wrap your answer in a "
         "code fence or emit JSON.\n\n"
         f"KB Entries:\n{entry_summaries}\n\n"
@@ -7274,7 +7370,11 @@ def _entry_derived_sections(
         summary = entry.get("summary") or "(no summary available)"
         if len(objectives) < 5:
             objectives.append(title)
-        content.append({"heading": title, "body": summary})
+        body = summary
+        url = entry.get("source_url")
+        if url:
+            body += f" (Source: {url})"
+        content.append({"heading": title, "body": body})
         exercises.append(
             {
                 "title": f"What is the key finding in '{title}'?",
@@ -7284,7 +7384,6 @@ def _entry_derived_sections(
                 ),
             }
         )
-        url = entry.get("source_url")
         if url and url not in further_reading:
             further_reading.append(url)
     return objectives[:5], content, exercises, further_reading[:20]

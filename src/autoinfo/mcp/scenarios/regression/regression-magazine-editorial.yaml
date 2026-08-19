@@ -1,0 +1,145 @@
+# Regression (#313): magazine-digest editorial intro + personality feature.
+#
+# Before #313, magazine-digest was a bare summary list: the synthesis prompt
+# requested no editorial fields and the magazine-digest.md.j2 template had no
+# editorial sections, so the product could never carry an editor's framing or
+# a personality profile / deep-dive feature story.
+#
+# This scenario drives the digest path with the magazine ProductTemplate and
+# asserts:
+#   (a) with a synthesis carrying editorial_intro/feature_story, the rendered
+#       digest contains BOTH the "## Editor's Note" and "## The Feature"
+#       sections and their content is non-empty,
+#   (b) with a synthesis carrying NO editorial fields, the guarded sections
+#       are absent (no empty-section regression).
+#
+# Deterministic (requires_env: []): the KBStore and LLM seams are patched in
+# the subprocess (same pattern as tests/test_magazine_digest.py), so the
+# scenario runs in a bare sandbox — no LLM key, no network, no configured
+# domain.  Runs inside an ABSOLUTE temp cwd (tempfile.mkdtemp, try/finally
+# cleanup) so no repo or project config can influence rendering.
+# Failure means the editorial feature regressed — never a silent skip.
+name: regression-magazine-editorial
+description: "Regression #313: magazine-digest renders Editor's Note + The Feature when the synthesis carries them, and hides them when it does not"
+category: regression
+regression: true
+regression_issue: "#313"
+requires_env: []
+steps:
+  - name: "magazine-digest renders Editor's Note + The Feature from synthesis"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_digest
+
+      ENTRIES = [
+          {"entry_id": "e1", "title": "The Quiet AI Revolution in Newsrooms",
+           "summary": "Newsrooms are quietly adopting AI tools for copy editing.",
+           "source_url": "https://www.theatlantic.com/tech/archive/2026/07/ai-newsrooms/",
+           "source_type": "rss", "source_platform": "the-atlantic",
+           "relevance_score": 91.0, "tags": json.dumps(["AI", "journalism"]),
+           "tier": "01-Raw", "collected_at": "2026-07-29T10:00:00Z"},
+          {"entry_id": "e2", "title": "Why Wired Readers Trust Slow Journalism",
+           "summary": "Long-form reporting builds trust in an age of speed.",
+           "source_url": "https://www.wired.com/story/slow-journalism-trust/",
+           "source_type": "rss", "source_platform": "wired",
+           "relevance_score": 84.0, "tags": json.dumps(["journalism", "trust"]),
+           "tier": "01-Raw", "collected_at": "2026-07-29T11:00:00Z"},
+      ]
+      SYNTH = {
+          "executive_summary": "Magazine coverage spans AI in newsrooms and slow journalism.",
+          "key_findings": [{"topic": "AI adoption", "detail": "Newsrooms scale AI quietly."}],
+          "trends": ["Trust-centric journalism"],
+          "recommendations": ["Watch the Atlantic AI desk."],
+          "editorial_intro": "This weeks edition finds newsrooms quietly retooling around AI.",
+          "feature_story": "Maya Chen spent a decade inside the Atlantics copy desk. "
+                           "Her AI-assisted workflow cut turnaround by a third. "
+                           "Whether the newsroom follows her may decide the next decade.",
+      }
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-magazine-editorial-a-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_digest(domain="general-news", period="weekly",
+                                    format="markdown",
+                                    product_template=tmpl("magazine-digest"))
+          assert isinstance(out, str), type(out)
+          assert "## Editor\u0027s Note" in out, "missing editorial section"
+          assert "## The Feature" in out, "missing The Feature section"
+          # Non-empty editorial content carried through the flatten + render.
+          assert "retooling around AI" in out, "editorial_intro content missing"
+          assert "Maya Chen" in out, "feature_story content missing"
+          assert "Magazine Edition" in out, "missing cover masthead"
+          print("MAGAZINE_EDITORIAL_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["MAGAZINE_EDITORIAL_OK"]
+
+  - name: "magazine-digest hides editorial sections when synthesis carries none"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_digest
+
+      ENTRIES = [
+          {"entry_id": "e1", "title": "The Quiet AI Revolution in Newsrooms",
+           "summary": "Newsrooms are quietly adopting AI tools for copy editing.",
+           "source_url": "https://www.theatlantic.com/tech/archive/2026/07/ai-newsrooms/",
+           "source_type": "rss", "source_platform": "the-atlantic",
+           "relevance_score": 91.0, "tags": json.dumps(["AI", "journalism"]),
+           "tier": "01-Raw", "collected_at": "2026-07-29T10:00:00Z"},
+      ]
+      SYNTH = {
+          "executive_summary": "Magazine coverage spans AI in newsrooms.",
+          "key_findings": [{"topic": "AI adoption", "detail": "Newsrooms scale AI quietly."}],
+          "recommendations": ["Watch the Atlantic AI desk."],
+      }
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-magazine-editorial-b-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_digest(domain="general-news", period="weekly",
+                                    format="markdown",
+                                    product_template=tmpl("magazine-digest"))
+          assert isinstance(out, str), type(out)
+          assert "## Editor\u0027s Note" not in out, "editorial section rendered empty"
+          assert "## The Feature" not in out, "The Feature rendered empty"
+          assert "## In This Issue" in out, "core magazine layout missing"
+          print("MAGAZINE_EDITORIAL_ABSENT_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["MAGAZINE_EDITORIAL_ABSENT_OK"]

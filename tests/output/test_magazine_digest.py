@@ -15,12 +15,13 @@ Covers:
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 from unittest.mock import MagicMock, patch
 
 from autoinfo.output import (
     PRODUCT_TEMPLATES,
     ProductTemplate,
+    _build_digest_llm_prompt,
     generate_digest,
     list_output_templates,
 )
@@ -80,6 +81,26 @@ _SAMPLE_LLM_SYNTHESIS: dict[str, Any] = {
     "recommendations": ["Watch the Atlantic AI desk."],
 }
 
+_SAMPLE_LLM_SYNTHESIS_EDITORIAL: dict[str, Any] = {
+    **_SAMPLE_LLM_SYNTHESIS,
+    "editorial_intro": (
+        "This week's magazine edition finds the news industry quietly "
+        "retooling itself around AI while readers rediscover the value of "
+        "slow, deliberate reporting."
+    ),
+    "feature_story": (
+        "Maya Chen spent a decade inside the Atlantic's copy desk. This "
+        "month she became one of the first editors in the building to run "
+        "an AI-assisted editing workflow end to end. In an industry that "
+        "moves between hype and hand-wringing, her desk treats the tool as "
+        "a junior colleague: fast, eager, and never left unsupervised. The "
+        "experiment has cut turnaround times by a third without a single "
+        "factual correction so far. Whether the rest of the newsroom "
+        "follows her lead may decide how the next decade of journalism is "
+        "produced."
+    ),
+}
+
 
 def _mock_list_entries(
     domain: str | None = None,
@@ -96,7 +117,7 @@ def _magazine_template() -> ProductTemplate:
     """Return the ``magazine-digest`` ProductTemplate row from the registry."""
     for row in PRODUCT_TEMPLATES:
         if row["name"] == "magazine-digest":
-            return row["template"]
+            return cast(ProductTemplate, row["template"])
     raise AssertionError(
         "magazine-digest ProductTemplate row missing from PRODUCT_TEMPLATES"
     )
@@ -106,7 +127,7 @@ def _digest_template() -> ProductTemplate:
     """Return the base ``digest`` ProductTemplate row from the registry."""
     for row in PRODUCT_TEMPLATES:
         if row["name"] == "digest":
-            return row["template"]
+            return cast(ProductTemplate, row["template"])
     raise AssertionError("digest ProductTemplate row missing from PRODUCT_TEMPLATES")
 
 
@@ -233,3 +254,74 @@ class TestMagazineRender:
         assert isinstance(result, str)
         assert "Access level required" not in result
         assert "The Quiet AI Revolution in Newsrooms" in result
+
+
+# ===================================================================
+# Issue #313: editorial intro + personality/deep-dive feature
+# ===================================================================
+
+
+class TestMagazineEditorialFeature:
+    """Magazine digests carry an editor's note + a feature story (#313)."""
+
+    def test_magazine_synthesis_prompt_requests_editorial_and_feature(
+        self,
+    ) -> None:
+        """The magazine synthesis prompt asks for editorial + feature fields."""
+        prompt = _build_digest_llm_prompt(
+            _SAMPLE_ENTRIES, product_family="magazine-digest"
+        )
+
+        assert isinstance(prompt, str)
+        assert "editorial_intro" in prompt
+        assert "feature_story" in prompt
+
+    def test_magazine_template_renders_editorial_and_feature(self) -> None:
+        """Rendering magazine-digest.md.j2 emits Editor's Note + The Feature.
+
+        Renders through the real ProductTemplate render path with a
+        synthesis dict carrying the new editorial fields.
+        """
+        context: dict[str, Any] = {
+            "title": "Weekly Digest \u2014 general-news",
+            "domain": "general-news",
+            "period": "weekly",
+            "period_label": "Weekly",
+            "date_from": "2026-07-27",
+            "date_to": "2026-08-02",
+            "generated_at": "2026-08-03T00:00:00+00:00",
+            "entries": _SAMPLE_ENTRIES,
+            "llm_synthesis": _SAMPLE_LLM_SYNTHESIS_EDITORIAL,
+            "target_audience": "",
+            "source_tier_badge": False,
+        }
+
+        out = _magazine_template().render("magazine-digest", "md", context)
+
+        assert isinstance(out, str)
+        assert "## Editor's Note" in out
+        assert "retooling itself around AI" in out
+        assert "## The Feature" in out
+        assert "Maya Chen" in out
+
+    @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._call_llm_for_digest")
+    def test_generate_digest_magazine_contains_editorial_sections(
+        self, mock_llm: MagicMock, mock_kb: MagicMock
+    ) -> None:
+        """generate_digest surfaces the editorial sections end to end."""
+        mock_llm.return_value = _SAMPLE_LLM_SYNTHESIS_EDITORIAL
+        mock_store = MagicMock()
+        mock_store.list_entries.side_effect = _mock_list_entries
+        mock_kb.return_value = mock_store
+
+        result = generate_digest(
+            domain="general-news",
+            period="weekly",
+            product_template=_magazine_template(),
+        )
+
+        assert isinstance(result, str)
+        assert "## Editor's Note" in result
+        assert "## The Feature" in result
+        assert "Maya Chen" in result

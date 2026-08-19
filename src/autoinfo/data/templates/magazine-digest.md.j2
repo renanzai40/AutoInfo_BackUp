@@ -2,7 +2,8 @@
    Groups entries into per-title clusters (by source_platform, the publication
    the RSS feed belongs to — e.g. the-atlantic / wired / time) under a
    cover-style masthead header. Free product (access_level "free"); no
-   full-issue delivery (licensing ceiling). #}
+   full-issue delivery (licensing ceiling). #313: editorial intro + feature
+   story sections when the LLM synthesis carries them. #}
 # {{ title }}
 
 ## {{ period_label }} Magazine Edition
@@ -11,6 +12,18 @@
 
 {% if llm_synthesis and llm_synthesis.executive_summary %}
 > *{{ llm_synthesis.executive_summary }}*
+{% endif %}
+
+{% if llm_synthesis and llm_synthesis.editorial_intro %}
+## Editor's Note
+
+{{ llm_synthesis.editorial_intro }}
+{% endif %}
+
+{% if llm_synthesis and llm_synthesis.feature_story %}
+## The Feature
+
+{{ llm_synthesis.feature_story }}
 {% endif %}
 
 ---

@@ -25,6 +25,10 @@ _No executive summary available for this period._
 {% endif %}
 
 {% if key_findings %}
+> **Scope**: 精选 {{ key_findings|length }} 条详述 · selected {{ key_findings|length }} of {{ references|length }} items detailed below.
+{% endif %}
+
+{% if key_findings %}
 ## Key Findings
 
 {% for f in key_findings %}
