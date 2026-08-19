@@ -2,6 +2,20 @@
 
 All notable changes to the AutoInfo project will be documented in this file.
 
+## [1.11.0](https://github.com/1StepMore/AutoInfo/compare/v1.10.0...v1.11.0) (2026-08-19)
+
+
+### Features
+
+* **mcp:** expose llm fallback/tasks in configure_llm and add test_llm_connection ([#299](https://github.com/1StepMore/AutoInfo/issues/299)) ([0377571](https://github.com/1StepMore/AutoInfo/commit/037757181229e9c9d242b23bee9617807a84e53f))
+* **output:** premium-briefing concrete risks/actions ([#307](https://github.com/1StepMore/AutoInfo/issues/307)) + column Deep Dive depth ([#308](https://github.com/1StepMore/AutoInfo/issues/308)) + entry-language filter ([#309](https://github.com/1StepMore/AutoInfo/issues/309)) ([#310](https://github.com/1StepMore/AutoInfo/issues/310)) ([0f788e6](https://github.com/1StepMore/AutoInfo/commit/0f788e6165e4c96bbebaf7cd1f3673012cb232a2))
+* **output:** report semantic titles + tutorial citations + magazine editorial + enterprise coverage ([#311](https://github.com/1StepMore/AutoInfo/issues/311)-[#314](https://github.com/1StepMore/AutoInfo/issues/314)) ([#315](https://github.com/1StepMore/AutoInfo/issues/315)) ([74c0078](https://github.com/1StepMore/AutoInfo/commit/74c00789f91a20448a167111b0da58e63ee8eabb))
+
+
+### Bug Fixes
+
+* output pipeline robustification + 13 issue fixes ([#290](https://github.com/1StepMore/AutoInfo/issues/290)-[#303](https://github.com/1StepMore/AutoInfo/issues/303)) ([#306](https://github.com/1StepMore/AutoInfo/issues/306)) ([fc08074](https://github.com/1StepMore/AutoInfo/commit/fc080744fde80c5b6a843c3e98121480ee1d5412))
+
 ## [Unreleased]
 
 ### Features
