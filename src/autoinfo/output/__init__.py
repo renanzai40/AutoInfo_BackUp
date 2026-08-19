@@ -641,6 +641,11 @@ _SECTION_HEADING_ALIASES: dict[str, tuple[str, ...]] = {
 _SLIDE_HEADING_RE = re.compile(r"^slide\s*\d+\s*:", re.IGNORECASE)
 _ENTRY_HEADING_RE = re.compile(r"^\d+[.)]\s+\S", re.IGNORECASE)
 _EMPTY_PLACEHOLDER_RE = re.compile(r"^\s*_no\s+.+_\.?\s*$", re.IGNORECASE)
+_LLM_SKELETON_RE = re.compile(
+    r"^\s*[-*|]?\s*<[a-z0-9 _\-]+>"
+    r"(\s*[-*|]\s*<[a-z0-9 _\-]+>)*\s*$",
+    re.IGNORECASE,
+)
 
 _PRODUCT_TYPE_REQUIRED_SECTIONS: dict[str, tuple[str, ...]] = {
     "report": ("key_findings", "summary", "recommendations"),
@@ -658,11 +663,38 @@ _D1_NON_REQUIRED_MARKER = "present"
 
 
 def _is_empty_placeholder(content: str) -> bool:
-    """True when *content* is an empty-state placeholder (``_No ..._``)."""
+    """True when *content* is an empty-state placeholder or LLM skeleton echo."""
     stripped = content.strip()
     if not stripped:
         return False
-    return bool(_EMPTY_PLACEHOLDER_RE.match(stripped))
+    return bool(_EMPTY_PLACEHOLDER_RE.match(stripped) or _LLM_SKELETON_RE.match(stripped))
+
+
+_SKELETON_TOKEN_RE = re.compile(r"<[a-z][a-z0-9 _\-]+>", re.IGNORECASE)
+
+
+def _clean_skeleton_placeholders(text: str) -> str:
+    """Strip LLM skeleton placeholders (``<finding 1>``, ``<metric>``, etc.)
+    that the model echoed verbatim from the prompt template.
+
+    Returns the cleaned text with placeholder tokens removed.  Lines that
+    become empty after stripping are removed.  Table rows that become
+    all-pipes are removed.
+    """
+    lines = text.split("\n")
+    cleaned: list[str] = []
+    for line in lines:
+        new_line = _SKELETON_TOKEN_RE.sub("", line)
+        # Collapse runs of whitespace left by removal
+        new_line = re.sub(r"  +", " ", new_line).strip()
+        # Remove empty table rows (e.g. "| | | |" → empty)
+        if re.match(r"^[\s|]*$", new_line):
+            continue
+        # Remove empty list items (e.g. "- " after stripping)
+        if re.match(r"^[-*]\s*$", new_line):
+            continue
+        cleaned.append(new_line)
+    return "\n".join(cleaned)
 
 
 def _sections_from_headings(text: str, product_type: str = "report") -> dict[str, str]:
@@ -4263,6 +4295,7 @@ def generate_digest(
             context, domain, product_family=digest_family
         )
         rendered = product_template.render(product_type, variant, pt_context)
+        rendered = _clean_skeleton_placeholders(rendered)
     elif format == "json":
         rendered = _render_json(context)
     elif format == "html":
@@ -4959,6 +4992,7 @@ def generate_report(
         # family ("column" stays column for T40 backward compatibility).
         product_type = report_family
         rendered = product_template.render(product_type, variant, pt_context)
+        rendered = _clean_skeleton_placeholders(rendered)
     elif format == "json":
         rendered = _render_report_json(report_data, period=period)
     elif format == "html":

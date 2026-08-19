@@ -134,7 +134,7 @@ class RSSHandler(BaseHandler):
         web_handler = WebHandler() if self.fetch_depth == "fulltext" else None
         for i, entry in enumerate(parsed.entries):
             try:
-                item = self._entry_to_item(entry, url)
+                item = self._entry_to_item(entry, url, self.source_name)
                 if web_handler is not None:
                     self._enrich_fulltext(item, web_handler)
                 items.append(item)
@@ -151,7 +151,7 @@ class RSSHandler(BaseHandler):
     # ------------------------------------------------------------------
 
     @staticmethod
-    def _entry_to_item(entry: dict[str, Any], feed_url: str) -> Item:
+    def _entry_to_item(entry: dict[str, Any], feed_url: str, source_name: str = "rss") -> Item:
         """Convert a feedparser entry ``dict`` into an :class:`Item`.
 
         Parameters
@@ -180,9 +180,9 @@ class RSSHandler(BaseHandler):
 
         return Item(
             id=_make_item_id(feed_url, link),
-            source_name="rss",
+            source_name=source_name,
             source_type="rss",
-            source_platform="rss",
+            source_platform=source_name,
             source_url=link,
             title=title,
             content=summary,

@@ -1,0 +1,48 @@
+# Regression #323: RSS-sourced items must carry the configured source name
+# (e.g. "techcrunch") as their source_platform, not the hardcoded "rss".
+#
+# Before the fix: rss.py:_entry_to_item() hardcoded source_platform="rss"
+# even though the dispatch passed self.source_name.  Every RSS item showed
+# "(RSS)" in the References section instead of the specific source name.
+#
+# Deterministic (requires_env: []): exercises the RSS collector's
+# _entry_to_item method directly (no network), then checks the resulting
+# item's source_platform.
+name: regression-source-label-rss
+description: "Regression #323: RSS items carry configured source name as source_platform"
+category: regression
+regression: true
+regression_issue: "#323"
+requires_env: []
+steps:
+  - name: "RSS collector propagates source_name to source_platform"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.collectors.rss import RSSHandler
+
+      # _entry_to_item is a @staticmethod; pass source_name as 3rd arg
+      entry = {
+          "title": "AI startup raises $50M",
+          "summary": "TechCrunch reports on funding round.",
+          "link": "https://techcrunch.com/2026/01/01/ai-startup",
+          "published": "2026-01-01T00:00:00Z",
+      }
+      feed_url = "https://techcrunch.com/feed/"
+
+      item = RSSHandler._entry_to_item(entry, feed_url, "techcrunch")
+
+      # The item must carry the configured source name, not "rss"
+      assert item.source_name == "techcrunch", \
+          f"source_name={item.source_name!r}, expected techcrunch"
+      assert item.source_platform == "techcrunch", \
+          f"source_platform={item.source_platform!r}, expected techcrunch"
+      # source_type stays "rss" (the collector type)
+      assert item.source_type == "rss", \
+          f"source_type={item.source_type!r}, expected rss"
+      print(f"RSS_SOURCE_LABEL_OK: name={item.source_name} platform={item.source_platform}")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["RSS_SOURCE_LABEL_OK"]

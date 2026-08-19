@@ -288,7 +288,7 @@ class TestReferenceNewlineIntegrity:
                 continue
             if in_refs and line.startswith("---"):
                 break
-            if in_refs and line.startswith("1.") or (in_refs and line.startswith("- **")):
+            if in_refs and (line.lstrip()[:2].rstrip(".").isdigit() or line.startswith("- **")):
                 ref_lines.append(line)
         # Should be on separate lines
         assert len(ref_lines) == 2, (

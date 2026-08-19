@@ -1,0 +1,149 @@
+# Regression #322: References section numbering must increment (1/2/3…),
+# not show "1." for every entry.
+#
+# Before the fix: report.md.j2, premium-briefing.md.j2, and
+# enterprise-briefing.md.j2 all hardcoded literal "1." in the references
+# list — every item rendered as "1." instead of incrementing.
+#
+# Deterministic (requires_env: []): KBStore and _call_llm_for_report_synthesis
+# are patched.  The references list is derived from KB entries (no LLM needed).
+name: regression-references-numbering
+description: "Regression #322: report References numbering increments 1/2/3 (not all 1.)"
+category: regression
+regression: true
+regression_issue: "#322"
+requires_env: []
+steps:
+  - name: "report markdown references increment correctly"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, re, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.models import ExtractionResult
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_report
+
+      ENTRIES = [
+          {"entry_id": f"e{i}", "title": f"Research paper {i}",
+           "summary": f"Finding {i} from the study.",
+           "source_url": f"https://example.com/paper-{i}",
+           "source_type": "api", "source_platform": "pubmed",
+           "relevance_score": 90 - i,
+           "tags": json.dumps(["research"]), "tier": "01-Raw",
+           "collected_at": "2026-07-15T10:00:00Z"}
+          for i in range(1, 6)
+      ]
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-refs-numbering-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_report_synthesis",
+                     return_value="## Key Findings\n- Finding 1.\n- Finding 2.\n"):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_report(domain="medical-research", period="weekly",
+                                    format="markdown",
+                                    product_template=tmpl("report"))
+          assert isinstance(out, str), type(out)
+          # Find the References section
+          m = re.search(r"## References\n(.*?)(?:\n## |\Z)", out, re.DOTALL)
+          assert m, "References section missing:\n" + out
+          refs_text = m.group(1)
+          # Count lines starting with N. (numbered list)
+          nums = re.findall(r"^(\d+)\.\s+\*\*", refs_text, re.MULTILINE)
+          assert len(nums) >= 3, f"Expected >=3 references, got {len(nums)}:\n{refs_text}"
+          # Verify they are 1, 2, 3, ... (not all 1.)
+          expected = [str(i) for i in range(1, len(nums) + 1)]
+          assert nums == expected, f"Numbering wrong: {nums} (expected {expected}):\n{refs_text}"
+          print(f"REFS_NUMBERING_OK: {nums}")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["REFS_NUMBERING_OK"]
+
+  - name: "enterprise-briefing references increment correctly"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, re, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_report
+
+      ENTRIES = [
+          {"entry_id": f"e{i}", "title": f"Enterprise finding {i}",
+           "summary": f"Detail {i}.",
+           "source_url": f"https://example.com/ent-{i}",
+           "source_type": "api", "source_platform": "pubmed",
+           "relevance_score": 90 - i,
+           "tags": json.dumps(["enterprise"]), "tier": "01-Raw",
+           "collected_at": "2026-07-15T10:00:00Z"}
+          for i in range(1, 5)
+      ]
+
+      SYNTH_MD = """## Executive Summary
+      This briefing details 4 selected items.
+
+      ## Key Findings
+      - Finding 1: Significant result.
+      - Finding 2: Promising outcome.
+      - Finding 3: Emerging trend.
+      - Finding 4: Notable development.
+
+      ## Implications
+      - Implication 1.
+
+      ## Risks & Opportunities
+      - Risk 1 | high | medium | Mitigation.
+
+      ## Action Required
+      - Action 1.
+
+      ## Key Metrics
+      - Metric 1 | 50% | study.
+      """
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-ent-refs-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.llm.LLMExtractor.extract", return_value=None), \
+               patch("autoinfo.output._call_llm_for_report_synthesis",
+                     return_value=SYNTH_MD):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_report(domain="medical-research", period="weekly",
+                                    format="markdown",
+                                    product_template=tmpl("enterprise-briefing"))
+          assert isinstance(out, str), type(out)
+          m = re.search(r"## References\n(.*?)(?:\n## |\Z)", out, re.DOTALL)
+          assert m, "References section missing:\n" + out
+          nums = re.findall(r"^(\d+)\.\s+\*\*", m.group(1), re.MULTILINE)
+          assert len(nums) >= 3, f"Expected >=3, got {len(nums)}:\n" + m.group(1)
+          expected = [str(i) for i in range(1, len(nums) + 1)]
+          assert nums == expected, f"Numbering wrong: {nums}:\n" + m.group(1)
+          print(f"ENT_REFS_NUMBERING_OK: {nums}")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["ENT_REFS_NUMBERING_OK"]

@@ -30,6 +30,9 @@ All notable changes to the AutoInfo project will be documented in this file.
 * **output:** tutorial bodies carry inline citations to real source URLs, aligned with digest/report citations ([#312](https://github.com/1StepMore/AutoInfo/issues/312))
 * **output:** column digest renders 8+ deep-dive sections with substantive content and a `Sections` metadata count matching the rendered sections (previously `_normalize_digest_product_context` never materialized `sections`, leaving the template to render 0 + a "no sections available" placeholder) ([#316](https://github.com/1StepMore/AutoInfo/issues/316))
 * **output:** digest/report products render distinct product-specific H1 titles matching their product names (6 products, previously all shared a generic title) ([#318](https://github.com/1StepMore/AutoInfo/issues/318))
+* **output:** References section numbering increments correctly (1/2/3…) instead of showing "1." for every entry — three markdown templates had hardcoded `1.` instead of `{{ loop.index }}` ([#322](https://github.com/1StepMore/AutoInfo/issues/322))
+* **collectors:** RSS-sourced items carry the configured source name (e.g. "techcrunch") as their platform label instead of the hardcoded generic "rss" — `_entry_to_item` now propagates the handler's `source_name` ([#323](https://github.com/1StepMore/AutoInfo/issues/323))
+* **output:** enterprise-briefing and report products strip LLM skeleton placeholders (`<finding 1>`, `<metric> | <value> | <source>`, etc.) echoed verbatim from prompt templates — a post-render cleanup removes angle-bracket tokens before delivery ([#314](https://github.com/1StepMore/AutoInfo/issues/314))
 
 ## [1.10.0](https://github.com/1StepMore/AutoInfo/compare/v1.9.1...v1.10.0) (2026-08-17)
 
