@@ -64,7 +64,7 @@ When you modify code, the listed docs **must** be reviewed and updated:
 | LLM extraction / config | `AGENTS.md` (LLM Configuration), `docs/dev/specs/pipeline.md`, `docs/dev/required-api-keys.md`, `README.md` | Provider/model/fallback docs, extraction spec, env-var catalog |
 | Output formats / delivery channels | `README.md`, `AGENTS.md`, `docs/dev/specs/delivery.md`, `CHANGELOG.md` | Format lists, channel matrix (13), output spec |
 | End-user lifecycle / billing | `docs/dev/specs/delivery.md`, `docs/dev/specs/user-lifecycle-definition.md`, `docs/dev/specs/operations.md` (cost, privacy, lifecycle), `docs/dev/enduser-capabilities-guide.md`, `AGENTS.md`, `README.md`, `CHANGELOG.md` | User types (B1/B2/B3), subscription tiers, check_access, B1 capabilities guide |
-| Validation engine / scenarios | `docs/dev/validation-scenario-contract.md`, `docs/dev/specs/end-user-matrix.yaml` (E8 matrix source, consumed by `scripts/coverage_matrix.py`), `docs/autoinfo-validation-master-plan/`, `docs/dev/validation-reports/` (acceptance + evidence, produced by `scripts/validation_delivery.py` / `scripts/validation_report.py`), `AGENTS.md`, `README.md`, `CHANGELOG.md`, `src/autoinfo/mcp/scenarios/` | Scenario counts (110 = 64 + 46 regression), schema fields, per-run acceptance evidence |
+| Validation engine / scenarios | `docs/dev/validation-scenario-contract.md`, `docs/dev/specs/end-user-matrix.yaml` (E8 matrix source, consumed by `scripts/coverage_matrix.py`), `docs/autoinfo-validation-master-plan/`, `docs/dev/validation-reports/` (acceptance + evidence, produced by `scripts/validation_delivery.py` / `scripts/validation_report.py`), `AGENTS.md`, `README.md`, `CHANGELOG.md`, `src/autoinfo/mcp/scenarios/` | Scenario counts (111 = 64 + 47 regression), schema fields, per-run acceptance evidence |
 | Alert rules / agent callbacks | `docs/dev/agent-alerting.md`, `AGENTS.md`, `README.md`, `CHANGELOG.md` | Alert rule config, YAML persistence, dispatch |
 | Research / market intelligence | `docs/dev/research/*` (active research reports, e.g. 综合报告-资讯付费与AI触达研究) | Update only when a research deliverable is added/revised; not code-coupled |
 | Feature addition / scope change | `docs/dev/cross-dimensional-catalog.md` (keystone — mandatory), `docs/dev/new-domain-guide.md`, `docs/dev/specs/multi-tenancy-auth.md`, `docs/dev/specs/ops-runbook.md`, all P0 docs, `CHANGELOG.md` | Cell statuses (🟢/🟡/🔴/🟠), gap-to-spec mapping, domain onboarding, auth/ops implications |
@@ -117,8 +117,8 @@ Before identifying affected docs, decide **whether this change needs an ADR**:
 
 ### Step 3 — Update quantitative references
 Drift-prone facts checked by `doc_inventory.py --check`: MCP tools 146 / 35
-categories · CLI groups 28 · delivery channels 13 · validation scenarios 110
-(64 functional + 46 regression) · demo domains 13.
+categories · CLI groups 28 · delivery channels 13 · validation scenarios 111
+(64 functional + 47 regression) · demo domains 13.
 Also keep consistent wherever they appear (README, AGENTS, CHANGELOG, specs,
 skills): source types 29, collector handlers 30, output templates 8,
 LLM-required tools 16, REST port 8741, test count ~4114.

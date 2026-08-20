@@ -139,10 +139,26 @@ def _generate_config(
 
         existing = {d.get("name") for d in config.get("domains", [])}
         added: list[str] = []
+        backfilled: list[str] = []
         for domain_name in domain_names:
-            if domain_name in existing:
-                continue
             demo_sources_path = _DEMO_DOMAINS_DIR / domain_name / "sources.yaml"
+            if domain_name in existing:
+                # Issue #319: backfill exclude_keywords for existing domains
+                # whose config predates the field (additive only — never
+                # overwrite a present value).
+                if demo_sources_path.is_file():
+                    with open(demo_sources_path) as f:
+                        domain_data = yaml.safe_load(f)
+                    seed_kw = domain_data.get("exclude_keywords")
+                    if seed_kw:
+                        for d in config.get("domains", []):
+                            if (
+                                d.get("name") == domain_name
+                                and "exclude_keywords" not in d
+                            ):
+                                d["exclude_keywords"] = seed_kw
+                                backfilled.append(domain_name)
+                continue
             if demo_sources_path.is_file():
                 with open(demo_sources_path) as f:
                     domain_data = yaml.safe_load(f)
@@ -185,9 +201,14 @@ def _generate_config(
 
         if added:
             typer.echo(f"  MERGE  {dst}  (added domains: {', '.join(added)})")
+        elif backfilled:
+            typer.echo(
+                f"  MERGE  {dst}  (backfilled exclude_keywords for: "
+                f"{', '.join(backfilled)})"
+            )
         else:
             typer.echo(f"  SKIP  {dst}  (already exists, no new domains to add)")
-        return bool(added)
+        return bool(added or backfilled)
 
     if not _DEFAULT_CONFIG.is_file():
         typer.echo(f"  ERROR  default config template missing: {_DEFAULT_CONFIG}", err=True)

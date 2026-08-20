@@ -221,7 +221,7 @@ server restarts, and failed pushes are requeued at process start.
 
 ### Run Agent-native validation
 ```
-list_validation_scenarios() → 110 built-in scenarios (64 functional + 46 regression)
+list_validation_scenarios() → 111 built-in scenarios (64 functional + 47 regression)
 run_validation_scenario(scenario="sources-gap-closure") → {status, summary, steps}
 ```
 Each scenario executes real MCP calls (plus real CLI subprocesses and REST HTTP

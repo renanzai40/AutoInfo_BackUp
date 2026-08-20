@@ -21,8 +21,11 @@ from autoinfo.config import Config, DomainConfig, config_to_dict, load_config
 from autoinfo.output import (
     DeliveryOutput,
     _filter_entries_by_domain_exclusions,
+    _get_domain_exclude_keywords,
     generate_digest,
+    generate_presentation,
     generate_report,
+    generate_tutorial,
 )
 
 
@@ -337,3 +340,113 @@ class TestReportExcludeKeywords:
         assert "DURAVYU" not in body
         assert "AI startup raises series A" in body
         assert "Generative AI product launch" in body
+
+
+# ---------------------------------------------------------------------------
+# End-to-end: generate_tutorial / generate_presentation with exclude_keywords
+# ---------------------------------------------------------------------------
+
+
+class TestTutorialExcludeKeywords:
+    @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._call_llm_for_tutorial")
+    def test_tutorial_excludes_noise_entries(
+        self, mock_llm: MagicMock, mock_kb_store: MagicMock, tmp_path: Any, monkeypatch: Any
+    ) -> None:
+        _write_config(tmp_path, ["贝达药业", "DURAVYU"])
+        monkeypatch.chdir(tmp_path)
+        # Empty LLM result forces the KB-derived fallback path, which renders
+        # entry titles/summaries verbatim — the strongest leak surface.
+        mock_llm.return_value = {}
+        mock_kb_store.return_value = _digest_mock_store(_MIXED_ENTRIES)
+        body = _as_text(generate_tutorial(domain="ai-commercial", format="markdown"))
+        assert "贝达药业" not in body
+        assert "DURAVYU" not in body
+        assert "AI startup raises series A" in body
+        assert "Generative AI product launch" in body
+
+
+class TestPresentationExcludeKeywords:
+    @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._call_llm_for_presentation")
+    def test_presentation_excludes_noise_entries(
+        self, mock_llm: MagicMock, mock_kb_store: MagicMock, tmp_path: Any, monkeypatch: Any
+    ) -> None:
+        _write_config(tmp_path, ["贝达药业", "DURAVYU"])
+        monkeypatch.chdir(tmp_path)
+        mock_llm.return_value = {
+            "title": "AI deck",
+            "description": "d",
+            "slides": [
+                {
+                    "title": "AI startup raises series A",
+                    "content": "Venture funding",
+                    "bullets": ["Venture funding"],
+                    "notes": "",
+                }
+            ],
+        }
+        mock_kb_store.return_value = _digest_mock_store(_MIXED_ENTRIES)
+        body = _as_text(generate_presentation(
+            domain="ai-commercial", topic="医药", format="markdown", allow_empty=True
+        ))
+        # The noise entries never reach the LLM prompt nor the rendered body.
+        prompt = mock_llm.call_args[0][0]
+        assert "贝达药业" not in prompt
+        assert "DURAVYU" not in prompt
+        assert "贝达药业" not in body
+        assert "DURAVYU" not in body
+        assert "AI startup raises series A" in body
+
+
+# ---------------------------------------------------------------------------
+# Seed fallback (issue #319): config lacking the key falls back to the
+# demo-domain seed so existing projects filter without a config migration.
+# ---------------------------------------------------------------------------
+
+
+class TestSeedFallback:
+    def test_seed_fallback_when_config_lacks_key(
+        self, tmp_path: Any, monkeypatch: Any
+    ) -> None:
+        # Runtime config WITHOUT exclude_keywords (the pre-#319 live shape).
+        cfg_dir = tmp_path / ".autoinfo"
+        cfg_dir.mkdir(parents=True)
+        cfg = {
+            "project": {"name": "test"},
+            "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+            "domains": [
+                {
+                    "name": "ai-commercial",
+                    "active": True,
+                    "sources": [
+                        {
+                            "name": "techcrunch",
+                            "type": "rss",
+                            "url": "https://techcrunch.com/feed/",
+                        }
+                    ],
+                    "topics": [],
+                }
+            ],
+        }
+        (cfg_dir / "config.yaml").write_text(
+            yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False), encoding="utf-8"
+        )
+        monkeypatch.chdir(tmp_path)
+        assert _get_domain_exclude_keywords("ai-commercial") == ["贝达药业", "DURAVYU"]
+
+    def test_explicit_empty_list_wins_over_seed(
+        self, tmp_path: Any, monkeypatch: Any
+    ) -> None:
+        # An explicitly declared empty list means "no filtering" — the seed
+        # fallback must NOT override it (backward compatible).
+        _write_config(tmp_path, [])
+        monkeypatch.chdir(tmp_path)
+        assert _get_domain_exclude_keywords("ai-commercial") == []
+
+    def test_unknown_domain_returns_empty(self, tmp_path: Any, monkeypatch: Any) -> None:
+        _write_config(tmp_path, ["贝达药业", "DURAVYU"])
+        monkeypatch.chdir(tmp_path)
+        # No demo seed exists for this domain -> [] (no filtering).
+        assert _get_domain_exclude_keywords("no-such-domain") == []

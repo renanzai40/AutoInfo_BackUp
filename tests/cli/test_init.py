@@ -9,6 +9,7 @@ written (it previously only reflected the first domain).
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 import pytest
 import yaml
@@ -21,9 +22,11 @@ def autoinfo_dir(tmp_path: Path) -> Path:
     return tmp_path / ".autoinfo"
 
 
-def _read_config(path: Path) -> dict:
+def _read_config(path: Path) -> dict[str, Any]:
     assert path.is_file(), f"config.yaml not created at {path}"
-    return yaml.safe_load(path.read_text())
+    data = yaml.safe_load(path.read_text())
+    assert isinstance(data, dict), f"config.yaml parsed to {type(data).__name__}"
+    return data
 
 
 class TestMultiDomainInit:
@@ -73,7 +76,9 @@ class TestMultiDomainInit:
 class TestInitDirLayout:
     """Regression: runtime dirs must be at project root, NOT under .autoinfo/ (issue #106)."""
 
-    def test_runtime_dirs_at_project_root(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_runtime_dirs_at_project_root(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Fresh init creates knowledge/, collections/, outputs/ at project root.
 
         Only config.yaml stays in .autoinfo/.
@@ -84,27 +89,45 @@ class TestInitDirLayout:
 
         # Runtime dirs MUST be at project root
         assert (tmp_path / "collections").is_dir(), "collections/ must be at project root"
-        assert (tmp_path / "knowledge" / "01-Raw").is_dir(), "knowledge/01-Raw must be at project root"
-        assert (tmp_path / "knowledge" / "02-Draft").is_dir(), "knowledge/02-Draft must be at project root"
-        assert (tmp_path / "knowledge" / "03-Wiki").is_dir(), "knowledge/03-Wiki must be at project root"
+        assert (tmp_path / "knowledge" / "01-Raw").is_dir(), (
+            "knowledge/01-Raw must be at project root"
+        )
+        assert (tmp_path / "knowledge" / "02-Draft").is_dir(), (
+            "knowledge/02-Draft must be at project root"
+        )
+        assert (tmp_path / "knowledge" / "03-Wiki").is_dir(), (
+            "knowledge/03-Wiki must be at project root"
+        )
         assert (tmp_path / "outputs").is_dir(), "outputs/ must be at project root"
 
         # Runtime dirs must NOT be under .autoinfo/
-        assert not (autoinfo_dir / "collections").exists(), "collections/ must NOT be under .autoinfo/"
-        assert not (autoinfo_dir / "knowledge").exists(), "knowledge/ must NOT be under .autoinfo/"
-        assert not (autoinfo_dir / "outputs").exists(), "outputs/ must NOT be under .autoinfo/"
+        assert not (autoinfo_dir / "collections").exists(), (
+            "collections/ must NOT be under .autoinfo/"
+        )
+        assert not (autoinfo_dir / "knowledge").exists(), (
+            "knowledge/ must NOT be under .autoinfo/"
+        )
+        assert not (autoinfo_dir / "outputs").exists(), (
+            "outputs/ must NOT be under .autoinfo/"
+        )
 
-    def test_autoinfo_dir_only_config(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_autoinfo_dir_only_config(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """.autoinfo/ should only contain config.yaml (no runtime data)."""
         monkeypatch.chdir(tmp_path)
         autoinfo_dir = tmp_path / ".autoinfo"
         _run_init(["medical-research"], autoinfo_dir)
 
         assert autoinfo_dir.is_dir(), ".autoinfo/ must exist"
-        assert (autoinfo_dir / "config.yaml").is_file(), "config.yaml must exist in .autoinfo/"
+        assert (autoinfo_dir / "config.yaml").is_file(), (
+            "config.yaml must exist in .autoinfo/"
+        )
         # No runtime directories under .autoinfo/
         for sub in ["knowledge", "collections", "outputs"]:
-            assert not (autoinfo_dir / sub).exists(), f".autoinfo/{sub}/ must NOT exist (runtime dir goes to root)"
+            assert not (autoinfo_dir / sub).exists(), (
+                f".autoinfo/{sub}/ must NOT exist (runtime dir goes to root)"
+            )
 
 
 class TestSingleDomainInit:
@@ -121,3 +144,75 @@ class TestSingleDomainInit:
         """sources.yaml removed even for single-domain init (consistency)."""
         _run_init(["medical-research"], autoinfo_dir)
         assert not (autoinfo_dir / "sources.yaml").exists()
+
+
+class TestInitMergeBackfill:
+    """Issue #319: init --demo backfills exclude_keywords for existing domains."""
+
+    def test_init_merge_backfills_exclude_keywords(
+        self, autoinfo_dir: Path
+    ) -> None:
+        """An existing ai-commercial domain lacking exclude_keywords gets the
+        demo-seed value backfilled (additive only)."""
+        autoinfo_dir.mkdir(parents=True)
+        cfg = {
+            "project": {"name": "test"},
+            "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+            "domains": [
+                {
+                    "name": "ai-commercial",
+                    "active": True,
+                    "sources": [
+                        {
+                            "name": "techcrunch",
+                            "type": "rss",
+                            "url": "https://techcrunch.com/feed/",
+                        }
+                    ],
+                    "topics": [],
+                }
+            ],
+        }
+        (autoinfo_dir / "config.yaml").write_text(
+            yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False), encoding="utf-8"
+        )
+
+        _run_init(["ai-commercial"], autoinfo_dir)
+
+        data = _read_config(autoinfo_dir / "config.yaml")
+        ai = next(d for d in data["domains"] if d["name"] == "ai-commercial")
+        assert ai["exclude_keywords"] == ["贝达药业", "DURAVYU"]
+
+    def test_init_merge_never_overwrites_present_exclude_keywords(
+        self, autoinfo_dir: Path
+    ) -> None:
+        """A present exclude_keywords value is never overwritten by the seed."""
+        autoinfo_dir.mkdir(parents=True)
+        cfg = {
+            "project": {"name": "test"},
+            "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+            "domains": [
+                {
+                    "name": "ai-commercial",
+                    "active": True,
+                    "sources": [
+                        {
+                            "name": "techcrunch",
+                            "type": "rss",
+                            "url": "https://techcrunch.com/feed/",
+                        }
+                    ],
+                    "topics": [],
+                    "exclude_keywords": ["custom-term"],
+                }
+            ],
+        }
+        (autoinfo_dir / "config.yaml").write_text(
+            yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False), encoding="utf-8"
+        )
+
+        _run_init(["ai-commercial"], autoinfo_dir)
+
+        data = _read_config(autoinfo_dir / "config.yaml")
+        ai = next(d for d in data["domains"] if d["name"] == "ai-commercial")
+        assert ai["exclude_keywords"] == ["custom-term"]

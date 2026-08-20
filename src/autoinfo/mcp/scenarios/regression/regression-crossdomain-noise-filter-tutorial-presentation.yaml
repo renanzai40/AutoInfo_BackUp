@@ -1,0 +1,205 @@
+# Regression #319: per-domain exclude_keywords must also gate tutorial +
+# presentation generation (the "never truly fixed" gap).
+#
+# The digest/report path already dropped cross-domain noise entries via
+# DomainConfig.exclude_keywords; generate_tutorial and generate_presentation
+# BYPASSED that filter, so medical noise (贝达药业 / EyePoint DURAVYU) could
+# still flow into ai-commercial tutorial bodies and presentation slides via
+# _entry_derived_sections.  This scenario locks the tutorial/presentation
+# filter AND the demo-seed fallback (_get_domain_exclude_keywords returns the
+# seed values when the runtime config lacks the key — the root cause that made
+# even the digest/report filter a no-op on real projects).
+#
+# Deterministic (requires_env: []): KBStore and the LLM seams are patched in
+# the subprocess; a temp project config is written into an ABSOLUTE temp cwd
+# (tempfile.mkdtemp, try/finally cleanup) so get_config_path() resolves it.
+# Failure means the tutorial/presentation noise filter regressed — never a
+# silent skip.
+name: regression-crossdomain-noise-filter-tutorial-presentation
+description: "Regression #319: ai-commercial tutorial + presentation exclude medical entries via per-domain exclude_keywords + seed fallback"
+category: regression
+regression: true
+regression_issue: "#319"
+requires_env: []
+steps:
+  - name: "generate_tutorial excludes 贝达药业/DURAVYU entries before synthesis"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      import yaml
+      from autoinfo.output import generate_tutorial
+
+      def entry(eid, title, summary):
+          return {"entry_id": eid, "title": title, "summary": summary,
+                  "domain": "ai-commercial", "tier": "01-Raw",
+                  "source_url": f"https://example.com/{eid}",
+                  "source_type": "rss", "source_platform": "techcrunch",
+                  "relevance_score": 85.0, "tags": "[]",
+                  "collected_at": "2026-08-17"}
+
+      ENTRIES = [
+          entry("med-1", "贝达药业 2026 半年报", "医药公司业绩"),
+          entry("med-2", "EyePoint DURAVYU phase III", "眼药三期临床"),
+          entry("ai-1", "AI startup raises series A", "Venture funding"),
+      ]
+      LLM = {"title": "AI Tutorial", "objectives": ["Understand AI funding"],
+              "content": [{"heading": "Overview", "body": "Body."}],
+              "exercises": [], "summary": "S.", "further_reading": []}
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-319-tut-"))
+      old = os.getcwd()
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True)
+          cfg = {"project": {"name": "test"},
+                 "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+                 "domains": [{"name": "ai-commercial", "active": True,
+                              "sources": [{"name": "techcrunch", "type": "rss",
+                                           "url": "https://techcrunch.com/feed/"}],
+                              "topics": [],
+                              "exclude_keywords": ["贝达药业", "DURAVYU"]}]}
+          (cfg_dir / "config.yaml").write_text(
+              yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False),
+              encoding="utf-8")
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_tutorial", return_value=LLM) as llm:
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_tutorial(domain="ai-commercial")
+          assert isinstance(out, str), type(out)
+          prompt = llm.call_args[0][0]
+          assert "贝达药业" not in prompt, "medical entry leaked into tutorial prompt"
+          assert "DURAVYU" not in prompt, "medical entry leaked into tutorial prompt"
+          assert "贝达药业" not in out, "medical entry leaked into tutorial body"
+          assert "DURAVYU" not in out, "medical entry leaked into tutorial body"
+          assert "AI startup raises series A" in out, "legit entry dropped"
+          print("TUTORIAL_EXCLUSION_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["TUTORIAL_EXCLUSION_OK"]
+
+  - name: "generate_presentation excludes 贝达药业/DURAVYU entries before synthesis"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      import yaml
+      from autoinfo.output import generate_presentation
+
+      def entry(eid, title, summary):
+          return {"entry_id": eid, "title": title, "summary": summary,
+                  "domain": "ai-commercial", "tier": "01-Raw",
+                  "source_url": f"https://example.com/{eid}",
+                  "source_type": "rss", "source_platform": "techcrunch",
+                  "relevance_score": 85.0, "tags": "[]",
+                  "collected_at": "2026-08-17"}
+
+      ENTRIES = [
+          entry("med-1", "贝达药业 2026 半年报", "医药公司业绩"),
+          entry("med-2", "EyePoint DURAVYU phase III", "眼药三期临床"),
+          entry("ai-1", "AI startup raises series A", "Venture funding"),
+      ]
+      LLM = {"title": "AI Deck", "description": "An overview of the AI landscape.",
+              "slides": [
+          {"title": "Market Overview",
+           "content": "The AI funding landscape is expanding rapidly across multiple sectors as capital continues to flow into the industry.",
+           "bullets": ["Startups continue to raise significant venture capital rounds.",
+                       "Enterprise adoption of AI solutions is accelerating."],
+           "notes": "Open with the market context."},
+          {"title": "Key Players",
+           "content": "Established AI companies are scaling their platforms globally while new entrants compete with innovative approaches.",
+           "bullets": ["Foundation model development attracts most funding.",
+                       "New entrants are differentiating on specialized use cases."],
+           "notes": "Highlight the competitive dynamics."},
+          {"title": "Investment Trends",
+           "content": "Venture funding is concentrating in foundation model development and enterprise AI adoption.",
+           "bullets": ["Capital is flowing into infrastructure and tooling.",
+                       "Horizontal platforms versus vertical solutions."],
+           "notes": "Close with the trend outlook."},
+      ]}
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-319-pres-"))
+      old = os.getcwd()
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True)
+          cfg = {"project": {"name": "test"},
+                 "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+                 "domains": [{"name": "ai-commercial", "active": True,
+                              "sources": [{"name": "techcrunch", "type": "rss",
+                                           "url": "https://techcrunch.com/feed/"}],
+                              "topics": [],
+                              "exclude_keywords": ["贝达药业", "DURAVYU"]}]}
+          (cfg_dir / "config.yaml").write_text(
+              yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False),
+              encoding="utf-8")
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_presentation", return_value=LLM) as llm:
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_presentation(domain="ai-commercial", topic="AI")
+          assert isinstance(out, str), type(out)
+          prompt = llm.call_args[0][0]
+          assert "贝达药业" not in prompt, "medical entry leaked into presentation prompt"
+          assert "DURAVYU" not in prompt, "medical entry leaked into presentation prompt"
+          assert "贝达药业" not in out, "medical entry leaked into slide body"
+          assert "DURAVYU" not in out, "medical entry leaked into slide body"
+          print("PRESENTATION_EXCLUSION_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["PRESENTATION_EXCLUSION_OK"]
+
+  - name: "demo-seed fallback returns exclude_keywords when runtime config lacks the key"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      import yaml
+      from autoinfo.output import _get_domain_exclude_keywords
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-319-seed-"))
+      old = os.getcwd()
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True)
+          cfg = {"project": {"name": "test"},
+                 "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+                 "domains": [{"name": "ai-commercial", "active": True,
+                              "sources": [{"name": "techcrunch", "type": "rss",
+                                           "url": "https://techcrunch.com/feed/"}],
+                              "topics": []}]}
+          (cfg_dir / "config.yaml").write_text(
+              yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False),
+              encoding="utf-8")
+          os.chdir(tmp)
+          v = _get_domain_exclude_keywords("ai-commercial")
+          assert v == ["贝达药业", "DURAVYU"], f"seed fallback wrong: {v}"
+          print("SEED_FALLBACK_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SEED_FALLBACK_OK"]

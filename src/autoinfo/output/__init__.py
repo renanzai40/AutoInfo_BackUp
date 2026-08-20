@@ -56,6 +56,11 @@ from autoinfo.llm import call_with_fallback
 
 logger = logging.getLogger(__name__)
 
+# Demo-domain seed directory (issue #319): the same seed ``init`` reads when
+# scaffolding a domain.  Used as the exclude_keywords fallback so existing
+# projects whose runtime config predates the field still filter noise.
+_DEMO_DOMAINS_DIR = Path(__file__).resolve().parent.parent / "data" / "domains"
+
 
 def _fire_agent_notification(event: str, output: Any, product_id: str) -> None:
     """Fire a fire-and-forget agent callback for a just-generated product.
@@ -574,18 +579,66 @@ def _get_domain_exclude_keywords(domain: str) -> list[str]:
     Returns an empty list when the config cannot be loaded or the domain is
     not found — an empty list means "no filtering" (backward compatible).
     Mirrors the config-loading pattern of :func:`_get_domain_source_configs`.
+
+    Seed fallback (issue #319): when the runtime config's domain carries no
+    ``exclude_keywords`` key at all (projects initialized before the field
+    existed — ``init`` only propagates it for NEW domains), fall back to the
+    demo-domain seed ``src/autoinfo/data/domains/<domain>/sources.yaml`` so
+    live surfaces filter immediately without a config migration.  An
+    explicitly declared (even empty) list always wins — backward compatible
+    "no filtering".  The seed file is read once per call (tiny YAML); an
+    absent file yields ``[]``.
     """
     config_path = get_config_path()
     if config_path is None or not config_path.is_file():
-        return []
+        return _seed_domain_exclude_keywords(domain)
     try:
         config = load_config(config_path)
     except Exception:
-        return []
+        return _seed_domain_exclude_keywords(domain)
     for d in config.domains:
         if d.name == domain:
-            return list(d.exclude_keywords)
-    return []
+            if _config_declares_exclude_keywords(config_path, domain):
+                return list(d.exclude_keywords)
+            break
+    return _seed_domain_exclude_keywords(domain)
+
+
+def _config_declares_exclude_keywords(config_path: Path, domain: str) -> bool:
+    """True when the raw config YAML declares an ``exclude_keywords`` key for
+    *domain* (even an empty list).
+
+    The parsed :class:`DomainConfig` cannot distinguish "key present but
+    empty" from "key missing" — both parse to ``[]`` — so the raw dict is
+    consulted for the seed-fallback decision (issue #319).
+    """
+    try:
+        raw = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
+    except Exception:
+        return False
+    for d in raw.get("domains", []):
+        if d.get("name") == domain:
+            return "exclude_keywords" in d
+    return False
+
+
+def _seed_domain_exclude_keywords(domain: str) -> list[str]:
+    """Demo-domain seed fallback for ``exclude_keywords`` (issue #319).
+
+    Reads ``src/autoinfo/data/domains/<domain>/sources.yaml`` (the same seed
+    ``init`` uses) so existing projects whose runtime config predates the
+    field still filter cross-domain noise without a config migration.
+    Returns ``[]`` when the seed file is absent or unreadable.
+    """
+    seed_path = _DEMO_DOMAINS_DIR / domain / "sources.yaml"
+    if not seed_path.is_file():
+        return []
+    try:
+        with open(seed_path, encoding="utf-8") as f:
+            seed = yaml.safe_load(f) or {}
+    except Exception:
+        return []
+    return list(seed.get("exclude_keywords") or [])
 
 
 def _entry_matches_exclude_keywords(
@@ -7549,6 +7602,11 @@ def generate_tutorial(
     # --- Test/empty entry filtering (issue #298 — layer 1) -------------------
     entries = _filter_product_entries(entries)
 
+    # --- Per-domain exclude_keywords filter (issue #319) ---------------------
+    # Cross-domain noise guard: drop entries matching their own domain's
+    # exclude_keywords blacklist BEFORE LLM synthesis / KB-derived sections.
+    entries = _filter_entries_by_domain_exclusions(entries, domain)
+
     if not entries:
         if format == "agent":
             return json.dumps(
@@ -8205,6 +8263,12 @@ def generate_presentation(
 
     # --- Test/empty entry filtering (issue #298 — layer 1) -------------------
     entries = _filter_product_entries(entries)
+
+    # --- Per-domain exclude_keywords filter (issue #319) ---------------------
+    # Cross-domain noise guard: drop entries matching their own domain's
+    # exclude_keywords blacklist BEFORE topic relevance filtering / LLM
+    # synthesis / KB-derived slides.
+    entries = _filter_entries_by_domain_exclusions(entries, domain)
 
     # Filter entries by topic relevance (title/summary contains topic terms)
     topic_terms = topic.lower().split()

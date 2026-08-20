@@ -517,6 +517,7 @@ All notable changes to the AutoInfo project will be documented in this file.
 
 ### Fixed (2026-08-19)
 - **#314 enterprise-briefing coverage claim consistency** — the LLM-written Executive Summary could claim "20 items" while only 9 Key Findings were detailed (or vice versa); nothing bound the opening coverage sentence to the rendered findings count. Fix: ① the shared report synthesis prompt (`_REPORT_PRODUCT_BASE_SECTIONS`, benefits premium-briefing/magazine-digest/enterprise-briefing) now instructs the model to name exactly the number of Key Findings it writes — never a larger count; ② `enterprise-briefing.md.j2` renders a deterministic scope label (`> **Scope**: 精选 N 条详述 · selected N of M items detailed below.`) computed from the actual context on both flat-context paths (report `_report_data_to_dict`, digest `_normalize_digest_product_context`), so even a stale summary claim is visibly scoped. Regression scenario: `scenarios/regression/regression-enterprise-coverage.yaml`.
+- **output:** apply domain exclude_keywords filter in generate_tutorial + generate_presentation so cross-domain noise never reaches tutorial/presentation bodies, + demo-seed fallback so existing domains filter without config migration ([#319](https://github.com/1StepMore/AutoInfo/issues/319)).
 
 ### Fixed (2026-08-10 quality wave)
 - **#179 keyword hygiene** — stopword filtering, toggle/cap auto-discovered keywords (`cccad4a`, `f889e09`).
