@@ -72,8 +72,19 @@ class TestAssertionSet:
         assert not vm._references_numbered(broken, "d", "report").passed
 
     def test_source_labels_specific_rejects_rss(self) -> None:
-        bad = "# T\n\n## References\n\n1. **A** — https://x.com (RSS)\n"
-        assert not vm._source_labels_specific(bad, "d", "report").passed
+        """#325 — the whole body is scanned, not just the References section:
+        RSS residue in the masthead/byline position (no References heading)
+        must fail loudly."""
+        bad = "# T\n\n*RSS* · relevance 90.0/100\n\n## Entries\n\n| **Source** | RSS |\n"
+        assert not vm._source_labels_specific(bad, "d", "magazine-digest").passed
+        # RSS residue BEFORE a References section also fails (whole-body scan).
+        bad_with_refs = (
+            "# T\n\n*RSS* · relevance 90.0/100\n\n## References\n\n"
+            "1. **A** — https://x.com (techcrunch)\n"
+        )
+        assert not vm._source_labels_specific(
+            bad_with_refs, "d", "magazine-digest"
+        ).passed
         assert vm._source_labels_specific(CLEAN, "d", "report").passed
 
     def test_no_placeholder(self) -> None:

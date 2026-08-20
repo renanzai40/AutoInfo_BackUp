@@ -3723,6 +3723,25 @@ def _derive_source_label(
     return platform
 
 
+def _label_entries(entries: list[dict[str, Any]], domain: str) -> list[dict[str, Any]]:
+    """Enrich each entry with a derived ``source_label`` (issue #325).
+
+    Adds ``source_label = _derive_source_label(entry, entry.get("domain",
+    domain))`` to every entry so every render surface (markdown entry table,
+    magazine byline/clusters, json/agent formats) shows the specific source
+    name instead of the generic ``(RSS)`` label for stale pre-#323 entries.
+    Per-entry own domain is used for cross-domain products.  Returns the
+    enriched list (entries are dicts, mutated in place).
+    """
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        entry["source_label"] = _derive_source_label(
+            entry, str(entry.get("domain") or domain)
+        )
+    return entries
+
+
 def _build_attribution_footer(
     sources: list["SourceConfig"],
     output_format: str = "markdown",
@@ -4415,6 +4434,14 @@ def generate_digest(
     # synthesis.  Deterministic substring match, no LLM involvement.  No-op for
     # domains with an empty list.
     entries = _filter_entries_by_domain_exclusions(entries, domain)
+
+    # --- Source-label enrichment (issue #325) --------------------------------
+    # Derive the specific source name for every entry (stale pre-#323 entries
+    # carry source_platform='rss') so ALL render surfaces — markdown entry
+    # table, magazine byline/clusters, json/agent formats — show the specific
+    # source name instead of the generic "(RSS)" label.  Per-entry own domain
+    # for cross-domain products.
+    entries = _label_entries(entries, domain)
 
     # --- Parse tags for each entry (they come as JSON strings from SQLite) ----
     for entry in entries:
@@ -5243,7 +5270,12 @@ def generate_report(
                     "title": item.get("title", ""),
                     "summary": item.get("summary", ""),
                     "source_url": item.get("source_url", ""),
-                    "source_platform": item.get("source_platform", ""),
+                    # #325: derive the specific source label for stale
+                    # pre-#323 entries (source_platform='rss') so the agent
+                    # payload never carries the generic "rss" label.
+                    "source_platform": _derive_source_label(
+                        item, item.get("domain", domain)
+                    ),
                     "collected_at": item.get("date", ""),
                     "relevance_score": item.get("relevance_score", 0),
                     "tags": [],
@@ -6638,6 +6670,7 @@ def _report_data_to_dict(
             "source_url": ref.get("source_url", ""),
             "source_type": ref.get("source_type", ""),
             "source_platform": ref.get("source_platform", ""),
+            "source_label": ref.get("source_platform", ""),
             "relevance_score": None,
             "collected_at": "",
         }
@@ -9318,7 +9351,7 @@ def _render_agent_json(
             "title": e.get("title", ""),
             "tl_dr": summary,
             "source_url": e.get("source_url", ""),
-            "source_platform": e.get("source_platform", ""),
+            "source_platform": e.get("source_label") or e.get("source_platform", ""),
             "collected_at": e.get("collected_at", ""),
             "relevance_score": e.get("relevance_score"),
             "confidence_score": confidence,

@@ -1,0 +1,366 @@
+# Regression #325: specific source labels across ALL product surfaces.
+#
+# The #323/#325 fix (_derive_source_label) was applied at only the report
+# references and digest product-context builders, so stale pre-#323 entries
+# (source_platform='rss') still rendered the generic "(RSS)" label on the
+# entry-level surfaces: the digest markdown entry table, the magazine-digest
+# byline + per-title clusters, the digest json/agent formats, and the report
+# agent payload.  The _source_labels_specific matrix assertion also only
+# scanned AFTER the References heading, so masthead/byline/table residue
+# escaped detection (false green).
+#
+# The fix: generate_digest enriches every entry with a derived source_label
+# (via _label_entries) before the context is built; the digest/magazine
+# templates render source_label; the report agent path derives the label per
+# item; and _source_labels_specific scans the WHOLE body.
+#
+# Deterministic (requires_env: []): KBStore + LLM seams are patched in the
+# subprocess (same pattern as tests/output/test_source_label_surfaces.py), so
+# the scenario runs in a bare sandbox — no LLM key, no network.  Runs in an
+# ABSOLUTE temp cwd.
+name: regression-source-label-all-surfaces
+description: "Regression #325: specific source labels render on every product surface (digest table, magazine byline/clusters, json/agent, report agent) + whole-body matrix scan"
+category: regression
+regression: true
+regression_issue: "#325"
+requires_env: []
+steps:
+  - name: "digest markdown entry table renders the specific source name, not (RSS)"
+    kind: cli
+    command: |-
+      PYTHONPATH=/tmp/opencode/wt-325/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      import yaml
+      from autoinfo.output import generate_digest
+
+      STALE = {
+          "entry_id": "e-325", "title": "AI startup raises $50M",
+          "summary": "TechCrunch reports on the funding round.",
+          "source_url": "https://techcrunch.com/2026/01/01/ai-startup",
+          "source_type": "rss", "source_platform": "rss",
+          "relevance_score": 90.0, "tags": "[]", "tier": "01-Raw",
+          "collected_at": "2026-08-19T10:00:00Z",
+      }
+      SYNTH = {"executive_summary": "Synthesis.", "key_findings": [],
+               "recommendations": []}
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-325-a-"))
+      old = os.getcwd()
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True)
+          cfg = {"project": {"name": "test"},
+                 "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+                 "domains": [{"name": "ai-commercial", "active": True,
+                              "sources": [{"name": "techcrunch", "type": "rss",
+                                           "url": "https://techcrunch.com/feed/"}],
+                              "topics": []}]}
+          (cfg_dir / "config.yaml").write_text(
+              yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False),
+              encoding="utf-8")
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = [STALE]
+              kb_cls.return_value = kb
+              out = generate_digest(domain="ai-commercial", period="weekly",
+                                    format="markdown")
+          assert isinstance(out, str), type(out)
+          assert "techcrunch" in out, "specific source name missing"
+          assert "(RSS)" not in out, "(RSS) residue in digest entry table"
+          assert "RSS" not in out, "RSS residue in digest entry table"
+          print("SOURCE_SURFACE_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SOURCE_SURFACE_OK"]
+
+  - name: "magazine-digest byline + per-title clusters use the specific source name"
+    kind: cli
+    command: |-
+      PYTHONPATH=/tmp/opencode/wt-325/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      import yaml
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_digest
+
+      STALE = {
+          "entry_id": "e-325", "title": "AI startup raises $50M",
+          "summary": "TechCrunch reports on the funding round.",
+          "source_url": "https://techcrunch.com/2026/01/01/ai-startup",
+          "source_type": "rss", "source_platform": "rss",
+          "relevance_score": 90.0, "tags": "[]", "tier": "01-Raw",
+          "collected_at": "2026-08-19T10:00:00Z",
+      }
+      SYNTH = {"executive_summary": "Synthesis.", "key_findings": [],
+               "recommendations": []}
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES
+                      if r["name"] == name)
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-325-b-"))
+      old = os.getcwd()
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True)
+          cfg = {"project": {"name": "test"},
+                 "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+                 "domains": [{"name": "ai-commercial", "active": True,
+                              "sources": [{"name": "techcrunch", "type": "rss",
+                                           "url": "https://techcrunch.com/feed/"}],
+                              "topics": []}]}
+          (cfg_dir / "config.yaml").write_text(
+              yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False),
+              encoding="utf-8")
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = [STALE]
+              kb_cls.return_value = kb
+              out = generate_digest(domain="ai-commercial", period="weekly",
+                                    format="markdown",
+                                    product_template=tmpl("magazine-digest"))
+          assert isinstance(out, str), type(out)
+          assert "techcrunch" in out, "specific source name missing"
+          assert "**techcrunch**" in out, "cluster header missing"
+          assert "## techcrunch" in out, "per-title cluster heading missing"
+          assert "(RSS)" not in out, "(RSS) residue in magazine byline/clusters"
+          assert "RSS" not in out, "RSS residue in magazine byline/clusters"
+          print("SOURCE_SURFACE_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SOURCE_SURFACE_OK"]
+
+  - name: "digest json carries the derived source_label, no generic rss label"
+    kind: cli
+    command: |-
+      PYTHONPATH=/tmp/opencode/wt-325/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      import json, os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      import yaml
+      from autoinfo.output import generate_digest
+
+      STALE = {
+          "entry_id": "e-325", "title": "AI startup raises $50M",
+          "summary": "TechCrunch reports on the funding round.",
+          "source_url": "https://techcrunch.com/2026/01/01/ai-startup",
+          "source_type": "rss", "source_platform": "rss",
+          "relevance_score": 90.0, "tags": "[]", "tier": "01-Raw",
+          "collected_at": "2026-08-19T10:00:00Z",
+      }
+      SYNTH = {"executive_summary": "Synthesis.", "key_findings": [],
+               "recommendations": []}
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-325-c-"))
+      old = os.getcwd()
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True)
+          cfg = {"project": {"name": "test"},
+                 "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+                 "domains": [{"name": "ai-commercial", "active": True,
+                              "sources": [{"name": "techcrunch", "type": "rss",
+                                           "url": "https://techcrunch.com/feed/"}],
+                              "topics": []}]}
+          (cfg_dir / "config.yaml").write_text(
+              yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False),
+              encoding="utf-8")
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = [STALE]
+              kb_cls.return_value = kb
+              out = generate_digest(domain="ai-commercial", period="weekly",
+                                    format="json")
+          data = json.loads(out)
+          entry = data["entries"][0]
+          assert entry["source_label"] == "techcrunch", entry
+          assert "techcrunch" in out, "specific source name missing in json"
+          assert "(RSS)" not in out, "(RSS) residue in digest json"
+          assert "RSS" not in out, "RSS residue in digest json"
+          print("SOURCE_SURFACE_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SOURCE_SURFACE_OK"]
+
+  - name: "digest agent payload carries the specific source name, not rss"
+    kind: cli
+    command: |-
+      PYTHONPATH=/tmp/opencode/wt-325/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      import json, os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      import yaml
+      from autoinfo.output import generate_digest
+
+      STALE = {
+          "entry_id": "e-325", "title": "AI startup raises $50M",
+          "summary": "TechCrunch reports on the funding round.",
+          "source_url": "https://techcrunch.com/2026/01/01/ai-startup",
+          "source_type": "rss", "source_platform": "rss",
+          "relevance_score": 90.0, "tags": "[]", "tier": "01-Raw",
+          "collected_at": "2026-08-19T10:00:00Z",
+      }
+      SYNTH = {"executive_summary": "Synthesis.", "key_findings": [],
+               "recommendations": []}
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-325-d-"))
+      old = os.getcwd()
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True)
+          cfg = {"project": {"name": "test"},
+                 "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+                 "domains": [{"name": "ai-commercial", "active": True,
+                              "sources": [{"name": "techcrunch", "type": "rss",
+                                           "url": "https://techcrunch.com/feed/"}],
+                              "topics": []}]}
+          (cfg_dir / "config.yaml").write_text(
+              yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False),
+              encoding="utf-8")
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = [STALE]
+              kb_cls.return_value = kb
+              out = generate_digest(domain="ai-commercial", period="weekly",
+                                    format="agent")
+          data = json.loads(out)
+          assert data["entries"][0]["source_platform"] == "techcrunch", data
+          assert "techcrunch" in out, "specific source name missing in agent"
+          assert "(RSS)" not in out, "(RSS) residue in digest agent"
+          assert "RSS" not in out, "RSS residue in digest agent"
+          print("SOURCE_SURFACE_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SOURCE_SURFACE_OK"]
+
+  - name: "report agent payload carries the specific source name, not rss"
+    kind: cli
+    command: |-
+      PYTHONPATH=/tmp/opencode/wt-325/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      import json, os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      import yaml
+      from autoinfo.output import generate_report
+
+      STALE = {
+          "entry_id": "e-325", "title": "AI startup raises $50M",
+          "summary": "TechCrunch reports on the funding round.",
+          "source_url": "https://techcrunch.com/2026/01/01/ai-startup",
+          "source_type": "rss", "source_platform": "rss",
+          "relevance_score": 90.0, "tags": "[]", "tier": "01-Raw",
+          "collected_at": "2026-08-19T10:00:00Z",
+      }
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-325-e-"))
+      old = os.getcwd()
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True)
+          cfg = {"project": {"name": "test"},
+                 "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+                 "domains": [{"name": "ai-commercial", "active": True,
+                              "sources": [{"name": "techcrunch", "type": "rss",
+                                           "url": "https://techcrunch.com/feed/"}],
+                              "topics": []}]}
+          (cfg_dir / "config.yaml").write_text(
+              yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False),
+              encoding="utf-8")
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._group_by_theme",
+                     return_value=[{"theme": "AI Funding",
+                                    "description": "Funding rounds.",
+                                    "entries": [STALE]}]), \
+               patch("autoinfo.output._generate_executive_summary",
+                     return_value={"executive_summary": "Overview.",
+                                   "key_findings": [], "recommendations": []}):
+              kb = MagicMock()
+              kb.list_entries.return_value = [STALE]
+              kb_cls.return_value = kb
+              out = generate_report(domain="ai-commercial", period="weekly",
+                                    format="agent")
+          data = json.loads(out)
+          assert data["entries"][0]["source_platform"] == "techcrunch", data
+          assert "techcrunch" in out, "specific source name missing in report agent"
+          assert "(RSS)" not in out, "(RSS) residue in report agent"
+          assert "RSS" not in out, "RSS residue in report agent"
+          print("SOURCE_SURFACE_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SOURCE_SURFACE_OK"]
+
+  - name: "_source_labels_specific scans the whole body — masthead RSS fails loudly"
+    kind: cli
+    command: |-
+      PYTHONPATH=/tmp/opencode/wt-325/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      from autoinfo import validation_matrix as vm
+
+      # RSS residue in the masthead/byline position with NO References heading:
+      # the whole-body scan must reject it (previously only the text AFTER the
+      # References heading was scanned, so this escaped detection).
+      masthead = (
+          "# Weekly Digest — ai-commercial\n\n"
+          "*RSS* · relevance 90.0/100\n\n"
+          "## Entries\n\n"
+          "| **Source** | RSS |\n"
+      )
+      r = vm._source_labels_specific(masthead, "ai-commercial", "magazine-digest")
+      assert not r.passed, f"masthead RSS escaped whole-body scan: {r.details!r}"
+
+      # RSS residue BEFORE a References section also fails.
+      with_refs = (
+          "# T\n\n*RSS* · relevance 90.0/100\n\n"
+          "## References\n\n1. **A** — https://x.com (techcrunch)\n"
+      )
+      r2 = vm._source_labels_specific(with_refs, "ai-commercial", "magazine-digest")
+      assert not r2.passed, f"pre-References RSS escaped whole-body scan: {r2.details!r}"
+
+      # A clean body (specific names only) passes.
+      clean = (
+          "# Weekly Digest — ai-commercial\n\n"
+          "*techcrunch* · relevance 90.0/100\n\n"
+          "## References\n\n1. **A** — https://techcrunch.com/1 (techcrunch)\n"
+      )
+      assert vm._source_labels_specific(clean, "ai-commercial", "magazine-digest").passed
+      print("SOURCE_SURFACE_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SOURCE_SURFACE_OK"]

@@ -198,11 +198,15 @@ def _references_numbered(text: str, domain: str, product: str) -> AssertionResul
 
 
 def _source_labels_specific(text: str, domain: str, product: str) -> AssertionResult:
-    """#325 — References source labels are specific names; '(RSS)' residue is 0."""
+    """#325 — every label surface (masthead/byline/table/references) carries a
+    specific source name; '(RSS)' residue is 0 anywhere in the product.
+
+    Scans the WHOLE body (not just the References section): stale
+    pre-#323 entries can render the generic ``(RSS)`` label in the magazine
+    byline/clusters, the digest entry table, or the masthead — all of which
+    sit BEFORE the References heading and previously escaped detection.
+    """
     body = text
-    refs = _REFS_HEADING.search(text)
-    if refs is not None:
-        body = text[refs.end():]
     matches = _RSS_LABEL.findall(body)
     return AssertionResult(
         "_source_labels_specific", not matches, "#325", "P1", domain, product,

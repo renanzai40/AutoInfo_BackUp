@@ -8,7 +8,7 @@
 
 ## {{ period_label }} Magazine Edition
 
-**{{ domain }}** · {{ date_from }} – {{ date_to }} · **{{ entries|length }} articles** from {{ (entries|groupby('source_platform', default='General'))|length }} publication{{ "s" if (entries|groupby('source_platform', default='General'))|length != 1 else "" }}
+**{{ domain }}** · {{ date_from }} – {{ date_to }} · **{{ entries|length }} articles** from {{ (entries|groupby('source_label', default='General'))|length }} publication{{ "s" if (entries|groupby('source_label', default='General'))|length != 1 else "" }}
 
 {% if llm_synthesis and llm_synthesis.executive_summary %}
 > *{{ llm_synthesis.executive_summary }}*
@@ -30,13 +30,13 @@
 
 ## In This Issue
 
-{% for publication, items in entries|groupby('source_platform', default='General') %}
+{% for publication, items in entries|groupby('source_label', default='General') %}
 - **{{ publication }}** — {{ items|length }} article{{ 's' if items|length != 1 else '' }}
 {% endfor %}
 
 ---
 
-{% for publication, items in entries|groupby('source_platform', default='General') %}
+{% for publication, items in entries|groupby('source_label', default='General') %}
 ## {{ publication }}
 
 {% for entry in items %}
@@ -46,7 +46,7 @@
 > {{ entry.summary }}
 {% endif %}
 
-*{{ entry.source_platform | platform_name }}* {% if entry.relevance_score is not none %}· relevance {{ entry.relevance_score }}/100{% endif %} {% if entry.collected_at %}· {{ entry.collected_at }}{% endif %}
+*{{ entry.source_label or entry.source_platform | platform_name }}* {% if entry.relevance_score is not none %}· relevance {{ entry.relevance_score }}/100{% endif %} {% if entry.collected_at %}· {{ entry.collected_at }}{% endif %}
 
 {% if entry.source_url %}
 [Read the full article]({{ entry.source_url }})

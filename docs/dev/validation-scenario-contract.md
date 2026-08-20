@@ -85,7 +85,7 @@ output-tutorial-presentation, output-video, processing), products-billing needs
 `STRIPE_API_KEY`, and sources-a6-keyed needs `FRED_API_KEY` + `FINNHUB_API_KEY`.
 After configuring keys, re-run those to GREEN (`passed`, never
 `unconfigured`). Observed example (47-scenario suite, 2026-08-05): **37 passed / 0 failed
-/ 10 unconfigured**; the suite has since grown to 109 (64 functional + 45 regression; §1.8) — the baseline shape (all
+/ 10 unconfigured**; the suite has since grown to 110 (64 functional + 46 regression; §1.8) — the baseline shape (all
 env-gated `unconfigured`, nothing failed) is unchanged.
 
 ---
@@ -303,8 +303,8 @@ every scenario in `scenarios/regression/` must carry `regression: true` and a
 
 ## 1.8 Scenario inventory (as of 2026-08-20)
 
-108 scenario files in `src/autoinfo/mcp/scenarios/` (64 functional flat in `scenarios/`
-+ 45 regression in `scenarios/regression/`):
+110 scenario files in `src/autoinfo/mcp/scenarios/` (64 functional flat in `scenarios/`
++ 46 regression in `scenarios/regression/`):
 
 - **System/Discovery**: system-health, discovery, meta-validation
 - **Errors**: error-boundary
