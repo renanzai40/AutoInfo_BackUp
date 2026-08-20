@@ -165,10 +165,10 @@ class TestB04TutorialAgentEmptyGuard:
             result = generate_tutorial(domain="medical-research", format="agent")
 
         # Must be JSON (agent-native), not a silent Markdown fallback.
-        data = json.loads(result)
+        data = json.loads(str(result))
         assert data["@type"] == "KnowledgeTutorial"
         assert data["error"]["code"] == "EMPTY_CONTENT"
-        assert "No knowledge base entries found" in data["error"]["message"]
+        assert "No curated items are available" in data["error"]["message"]
 
     def test_generate_tutorial_agent_nonempty_renders_normally(self) -> None:
         from autoinfo.output import generate_tutorial
@@ -209,7 +209,7 @@ class TestB04TutorialAgentEmptyGuard:
             mock_kb_cls.return_value.list_entries.return_value = entries
             result = generate_tutorial(domain="medical-research", format="agent")
 
-        data = json.loads(result)
+        data = json.loads(str(result))
         assert data["@type"] == "KnowledgeTutorial"
         assert data["title"] == "Quantum Tutorial"
         assert "error" not in data

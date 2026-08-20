@@ -346,7 +346,9 @@ class TestCrossDomainReport:
             )
 
         assert "Cross-Domain" in report
-        assert "No knowledge base entries found" in report
+        assert "This edition has no curated items yet" in report
+        assert "No knowledge base entr" not in report
+        assert "_No " not in report
 
     def test_domains_single_entry_uses_single_domain(
         self, medical_entries: list[dict[str, Any]]

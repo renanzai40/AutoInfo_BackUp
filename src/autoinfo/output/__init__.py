@@ -4104,6 +4104,28 @@ def _normalize_digest_product_context(
         sections = _deterministic_column_sections(entries_list, domain)
     flat["sections"] = sections
 
+    # --- Tutorial sections (issue #342) -----------------------------------
+    # The digest path renders the tutorial template (the matrix generates
+    # tutorial via generate_digest with the tutorial template).  The flat
+    # context carries no objectives/content/exercises/further_reading keys,
+    # so the template's ``{% else %}`` branches render ``_No objectives
+    # defined._`` / ``_No exercises provided._`` / ``_No references
+    # provided._``.  Fill them from the real entries via the same
+    # ``_entry_derived_sections`` helper the real ``generate_tutorial``
+    # uses; when there are no entries, leave them empty and let the
+    # template's neutral prose render (never a placeholder).
+    if product_family == "tutorial":
+        if entries_list:
+            _objectives, _content, _exercises, _further = _entry_derived_sections(
+                entries_list
+            )
+        else:
+            _objectives, _content, _exercises, _further = [], [], [], []
+        flat.setdefault("objectives", _objectives)
+        flat.setdefault("content", _content)
+        flat.setdefault("exercises", _exercises)
+        flat.setdefault("further_reading", _further)
+
     return flat
 
 
@@ -6601,7 +6623,26 @@ def _report_data_to_dict(
     (``implications`` / ``risks`` / ``action_required`` / ``key_metrics``,
     spec §2.4, todo 7) — empty lists for plain reports, so existing callers
     are unchanged.
+
+    Issue #342: the report-path magazine product (``generate_report`` with
+    the ``magazine-digest`` template) reads the top-level ``entries`` list
+    for its per-title clusters.  Build it from the references — the report
+    path already derives the specific source labels there — so the magazine
+    layout renders real per-title clusters instead of the
+    ``_No articles found..._`` empty-state.
     """
+    entries = [
+        {
+            "title": ref.get("title", ""),
+            "summary": "",
+            "source_url": ref.get("source_url", ""),
+            "source_type": ref.get("source_type", ""),
+            "source_platform": ref.get("source_platform", ""),
+            "relevance_score": None,
+            "collected_at": "",
+        }
+        for ref in report_data.references
+    ]
     return {
         "title": report_data.title,
         "generated_at": report_data.generated_at,
@@ -6615,6 +6656,7 @@ def _report_data_to_dict(
         "action_required": report_data.action_required,
         "key_metrics": report_data.key_metrics,
         "source_tier_badge": source_tier_badge,
+        "entries": entries,
         "sections": [
             {
                 "title": s.title,
@@ -6776,7 +6818,7 @@ def _render_empty_report(domain: str) -> str:
     """Return a brief message when there are no entries for *domain*."""
     return (
         f"# {domain} \u2014 Report\n\n"
-        f"_No knowledge base entries found for domain '{domain}'._"
+        f"This edition has no curated items yet. Check back after the next collection run."
     )
 
 
@@ -7483,7 +7525,7 @@ def generate_tutorial(
                     "error": {
                         "code": "EMPTY_CONTENT",
                         "message": (
-                            f"No knowledge base entries found for domain '{domain}'. "
+                            f"No curated items are available for domain '{domain}' yet. "
                             "Cannot generate an agent-format tutorial."
                         ),
                     },
@@ -7494,7 +7536,7 @@ def generate_tutorial(
             )
         empty_md = (
             f"# {domain} — Tutorial\n\n"
-            f"_No knowledge base entries found for domain '{domain}'._"
+            f"This edition has no curated items yet. Check back after the next collection run."
         )
         if delivery_gate_configs is not None:
             result = _apply_delivery_gates(

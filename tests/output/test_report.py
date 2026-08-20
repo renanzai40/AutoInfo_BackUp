@@ -157,7 +157,8 @@ class TestGenerateReport:
     """``generate_report()`` — structured report generation."""
 
     def test_empty_entries_returns_empty_message(self) -> None:
-        """No KB entries yields a brief empty-report message."""
+        """No KB entries yields a brief empty-report message (#342: neutral
+        prose, never a ``_No ..._`` / ``No knowledge base entries`` marker)."""
         with patch("autoinfo.output.KBStore") as mock_kb_cls:
             mock_store = MagicMock()
             mock_store.list_entries.return_value = []
@@ -165,8 +166,10 @@ class TestGenerateReport:
 
             report = _call_report("test-domain")
 
-        assert "No knowledge base entries found" in report
+        assert "This edition has no curated items yet" in report
         assert "test-domain" in report
+        assert "No knowledge base entr" not in report
+        assert "_No " not in report
 
     def test_unsupported_format_raises_value_error(self) -> None:
         """Formats other than 'markdown', 'json', 'html' raise ``ValueError``."""

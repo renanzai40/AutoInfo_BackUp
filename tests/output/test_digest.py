@@ -287,15 +287,17 @@ class TestGenerateDigest:
     def test_empty_domain_shows_no_entries_message(
         self, mock_llm: MagicMock, mock_kb: MagicMock
     ) -> None:
-        """Digest for empty domain shows 'No entries found'."""
+        """Digest for empty domain shows a neutral empty-state message (#342)."""
         mock_llm.return_value = {}
         mock_store = MagicMock()
         mock_store.list_entries.side_effect = _mock_list_entries
         mock_kb.return_value = mock_store
 
         result = generate_digest(domain="empty-domain", period="weekly")
-        assert "No entries found" in cast(str, result)
+        assert "This edition has no curated items yet" in cast(str, result)
         assert "empty-domain" in cast(str, result)
+        assert "No entries found" not in cast(str, result)
+        assert "_No " not in cast(str, result)
 
     @patch("autoinfo.output.KBStore")
     @patch("autoinfo.output._call_llm_for_digest")

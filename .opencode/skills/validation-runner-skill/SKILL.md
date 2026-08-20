@@ -24,7 +24,7 @@ the loadable procedure — read the contract doc when authoring scenarios.
   auto-loads them).
 - **Acceptance run** → produce `docs/dev/validation-reports/acceptance-*.md`.
 
-## Scenario library (107 = 64 functional + 43 regression)
+## Scenario library (108 = 64 functional + 44 regression)
 
 Functional (`src/autoinfo/mcp/scenarios/*.yaml`): system-health, discovery,
 domain-management, source-management, topic-management, keyword-management,

@@ -1,0 +1,214 @@
+# Regression #342: magazine-digest and tutorial products must never render
+# placeholder empty-states (`_No articles found..._` / `_No objectives
+# defined._` / `_No exercises provided._` / `_No references provided._` /
+# `No knowledge base entries found...`).
+#
+# Before the fix: the report-path magazine product (generate_report with the
+# magazine-digest template) rendered `entries=[]` because
+# `_report_data_to_dict` emitted no top-level `entries` key, so the magazine
+# template's `{% else %}` branch fired `_No articles found for <domain> in
+# the <period> period._`.  The digest-path tutorial (generate_digest with the
+# tutorial template) carried no objectives/content/exercises/further_reading
+# keys, so tutorial.md.j2 fired `_No objectives defined._` / `_No exercises
+# provided._` / `_No references provided._`.  The zero-entry paths
+# (generate_tutorial and _render_empty_report) emitted
+# `_No knowledge base entries found for domain '<X>'._`, which matches BOTH
+# the `_No [^_]+_` placeholder regex and the `No knowledge base entr(?:y|ies)
+# ...` regex in validation_matrix.py.
+#
+# The fix: `_report_data_to_dict` now builds a top-level `entries` list from
+# the report references; `_normalize_digest_product_context` fills the
+# tutorial sections from the real entries via `_entry_derived_sections`; the
+# magazine/tutorial/digest templates render neutral prose instead of
+# placeholders; and the zero-entry paths emit neutral prose that matches
+# neither regex.
+#
+# Deterministic (requires_env: []): KBStore + LLM seams are patched in the
+# subprocess (same pattern as tests/output/test_tutorial_no_placeholder.py),
+# so the scenario runs in a bare sandbox — no LLM key, no network.  Runs in
+# an ABSOLUTE temp cwd.
+name: regression-no-placeholder-magazine-tutorial
+description: "Regression #342: magazine-digest and tutorial products never render placeholder empty-states"
+category: regression
+regression: true
+regression_issue: "#342"
+requires_env: []
+steps:
+  - name: "report-path magazine renders real per-title clusters, not `_No articles found`"
+    kind: cli
+    command: |-
+      PYTHONPATH=/tmp/opencode/wt-342/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_report
+
+      ENTRIES = [
+          {"entry_id": f"e{i}", "title": f"AI funding round {i}",
+           "summary": f"Startup {i} raised $20M.",
+           "source_url": f"https://techcrunch.com/{i}",
+           "source_type": "rss", "source_platform": "techcrunch",
+           "relevance_score": 90 - i, "tags": "[]",
+           "tier": "01-Raw", "collected_at": "2026-07-15T10:00:00Z"}
+          for i in range(1, 4)
+      ]
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-342-a-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._group_by_theme", return_value=[]), \
+               patch("autoinfo.output._generate_executive_summary",
+                     return_value={"executive_summary": "Overview.",
+                                   "key_findings": [], "recommendations": []}):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_report(domain="ai-commercial", period="weekly",
+                                    format="markdown",
+                                    product_template=tmpl("magazine-digest"))
+          assert isinstance(out, str), type(out)
+          assert "AI funding round 1" in out, "real entry title missing"
+          assert "techcrunch" in out, "per-title cluster missing"
+          assert "_No articles found" not in out, "magazine placeholder present"
+          assert "No knowledge base entr" not in out, "empty-state marker present"
+          print("NO_PLACEHOLDER_MAGAZINE_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["NO_PLACEHOLDER_MAGAZINE_OK"]
+
+  - name: "digest-path tutorial derives objectives/content from real entries"
+    kind: cli
+    command: |-
+      PYTHONPATH=/tmp/opencode/wt-342/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_digest
+
+      ENTRIES = [
+          {"entry_id": f"e{i}", "title": f"AI funding round {i}",
+           "summary": f"Startup {i} raised $20M.",
+           "source_url": f"https://techcrunch.com/{i}",
+           "source_type": "rss", "source_platform": "techcrunch",
+           "relevance_score": 90 - i, "tags": "[]",
+           "tier": "01-Raw", "collected_at": "2026-07-15T10:00:00Z"}
+          for i in range(1, 4)
+      ]
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-342-b-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value={}):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_digest(domain="ai-commercial", period="weekly",
+                                    format="markdown",
+                                    product_template=tmpl("tutorial"))
+          assert isinstance(out, str), type(out)
+          assert "## Learning Objectives" in out, "objectives section missing"
+          assert "## Content" in out, "content section missing"
+          assert "AI funding round 1" in out, "entry-derived objective missing"
+          assert "_No objectives defined." not in out, "objectives placeholder present"
+          assert "_No exercises provided." not in out, "exercises placeholder present"
+          assert "_No references provided." not in out, "references placeholder present"
+          print("NO_PLACEHOLDER_TUTORIAL_DIGEST_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["NO_PLACEHOLDER_TUTORIAL_DIGEST_OK"]
+
+  - name: "generate_tutorial with empty LLM result falls back to KB-derived content"
+    kind: cli
+    command: |-
+      PYTHONPATH=/tmp/opencode/wt-342/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import generate_tutorial
+
+      ENTRIES = [
+          {"entry_id": f"e{i}", "title": f"AI funding round {i}",
+           "summary": f"Startup {i} raised $20M.",
+           "source_url": f"https://techcrunch.com/{i}",
+           "source_type": "rss", "source_platform": "techcrunch",
+           "relevance_score": 90 - i, "tags": "[]",
+           "tier": "01-Raw", "collected_at": "2026-07-15T10:00:00Z"}
+          for i in range(1, 4)
+      ]
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-342-c-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_tutorial", return_value={}):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_tutorial(domain="ai-commercial", format="markdown")
+          assert isinstance(out, str), type(out)
+          assert "AI funding round 1" in out, "entry-derived content missing"
+          assert "_No objectives defined." not in out, "objectives placeholder present"
+          assert "_No exercises provided." not in out, "exercises placeholder present"
+          assert "_No references provided." not in out, "references placeholder present"
+          print("NO_PLACEHOLDER_TUTORIAL_EMPTY_LLM_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["NO_PLACEHOLDER_TUTORIAL_EMPTY_LLM_OK"]
+
+  - name: "zero-entry paths render neutral prose, never a placeholder"
+    kind: cli
+    command: |-
+      PYTHONPATH=/tmp/opencode/wt-342/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import generate_tutorial
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-342-d-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls:
+              kb = MagicMock()
+              kb.list_entries.return_value = []
+              kb_cls.return_value = kb
+              out = generate_tutorial(domain="ai-commercial", format="markdown")
+          assert isinstance(out, str), type(out)
+          assert "No knowledge base entr" not in out, "empty-state marker present"
+          assert "_No " not in out, "placeholder present"
+          assert "This edition has no curated items yet" in out, "neutral prose missing"
+          print("NO_PLACEHOLDER_ZERO_ENTRY_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["NO_PLACEHOLDER_ZERO_ENTRY_OK"]
