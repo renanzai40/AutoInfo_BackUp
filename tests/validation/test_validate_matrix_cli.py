@@ -46,9 +46,9 @@ Watch consolidation.
 
 
 class TestAssertionSet:
-    def test_clean_report_all_11_pass(self) -> None:
+    def test_clean_report_all_12_pass(self) -> None:
         results = vm.run_assertions(CLEAN, domain="ai-commercial", product="report")
-        assert len(results) == 11
+        assert len(results) == 12
         failed = [r.name for r in results if not r.passed]
         assert not failed, failed
 
@@ -168,6 +168,25 @@ class TestAssertionSet:
     def test_not_empty(self) -> None:
         assert not vm._not_empty("", "d", "report").passed
         assert vm._not_empty(CLEAN, "d", "report").passed
+
+    def test_no_internal_leak(self) -> None:
+        """#338 — products must not carry internal keyword-search/counting
+        logs (``N entries related to <kw>``, ``N entry(ies) not matched to a
+        topic keyword``, per-theme count bullets, ``N entries included in
+        this report``)."""
+        leaky = [
+            "# T\n\n6 entries related to 'new'.\n",
+            "# T\n\n66 entry(ies) not matched to a topic keyword.\n",
+            "## Additional Topics\n\n5 entry(ies) not covered by other themes.\n",
+            "# T\n\nThis report covers 67 knowledge base entries grouped into\n"
+            "44 themes:\n\n- **API**: 12 entry(ies)\n",
+            "# T\n\nAll 3 entries included in this report.\n",
+            "# T\n\n12 entries from rss sources.\n",
+        ]
+        for i, sample in enumerate(leaky):
+            r = vm._no_internal_leak(sample, "ai-commercial", "report")
+            assert not r.passed, f"leak sample #{i} escaped: {r.details!r}"
+        assert vm._no_internal_leak(CLEAN, "ai-commercial", "report").passed
 
 
 class TestMatrix:

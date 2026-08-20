@@ -226,3 +226,100 @@ def test_single_batch_still_works() -> None:
     assert {e["entry_id"] for g in result for e in g["entries"]} == {
         e["entry_id"] for e in entries
     }
+
+
+class TestGroupingDescriptionsUserFacing:
+    """#338 — deterministic grouping must never surface internal search / count
+    mechanics to end users: no ``N entries related to <kw>``, no ``N entry(ies)
+    not matched to a topic keyword``, no per-theme count bullets, no
+    ``N entries included in this report``."""
+
+    LEAK_RE = re.compile(
+        r"\d+\s+entries?\s+related to|entry\(ies\)|"
+        r"\d+\s+entries?\s+from .+?sources?|"
+        r"\d+\s+entries?\s+included in this report|"
+        r"grouped into \d+ themes?|not matched to a topic keyword",
+        re.IGNORECASE,
+    )
+
+    def _kw_entries(self) -> list[dict[str, Any]]:
+        return [
+            {"entry_id": f"e{i}", "title": t, "summary": "developments",
+             "source_url": f"https://x.com/{i}", "source_type": "rss",
+             "source_platform": "techcrunch"}
+            for i, t in enumerate([
+                "AI funding round new", "GPU cloud new",
+                "biotech drug trial", "chip manufacturing",
+            ])
+        ]
+
+    def test_keyword_group_descriptions_are_user_facing(self, tmp_path: Any) -> None:
+        import os
+
+        from autoinfo.output import _keyword_group_entries
+
+        kdir = tmp_path / "knowledge" / "ai-commercial"
+        kdir.mkdir(parents=True)
+        (kdir / "_keywords.yaml").write_text(
+            "keywords:\n  new:\n    state: active\n"
+            "  biotech:\n    state: active\n",
+            encoding="utf-8",
+        )
+        old = os.getcwd()
+        try:
+            os.chdir(tmp_path)
+            groups = _keyword_group_entries(self._kw_entries(), domain="ai-commercial")
+        finally:
+            os.chdir(old)
+        assert groups, "keyword grouping produced no groups"
+        for g in groups:
+            desc = str(g.get("description") or "")
+            assert not self.LEAK_RE.search(desc), f"internal leak in description: {desc!r}"
+
+    def test_deterministic_grouping_descriptions_are_user_facing(self) -> None:
+        from autoinfo.output import _deterministic_grouping
+
+        entries = [
+            {"entry_id": f"e{i}", "title": f"T{i}", "summary": "s",
+             "source_url": f"https://x.com/{i}", "source_type": st,
+             "source_platform": "x", "domain": "d"}
+            for i, st in enumerate(["rss", "api", "pubmed"])
+        ]
+        groups = _deterministic_grouping(entries, domain="d")
+        assert groups, "deterministic grouping produced no groups"
+        for g in groups:
+            desc = str(g.get("description") or "")
+            assert not self.LEAK_RE.search(desc), f"internal leak in description: {desc!r}"
+
+    def test_executive_summary_fallback_is_user_facing(self) -> None:
+        import os
+        from unittest.mock import MagicMock
+
+        from autoinfo.output import _generate_executive_summary
+
+        entries = [
+            {"entry_id": f"e{i}", "title": t, "summary": "summary",
+             "source_url": f"https://x.com/{i}", "source_type": "rss",
+             "source_platform": "techcrunch"}
+            for i, t in enumerate(["AI funding round", "GPU cloud", "biotech"])
+        ]
+        groupings = [
+            {"theme": "API", "description": "x", "entries": entries[:1]},
+            {"theme": "IMPORT", "description": "y", "entries": entries[1:]},
+        ]
+        failing = MagicMock()
+        failing.extract.side_effect = RuntimeError("llm down")
+        old = os.getcwd()
+        # _generate_executive_summary may touch the KB/config; run in a clean
+        # temp cwd so the fallback path is reached without side effects.
+        result = _generate_executive_summary(
+            failing, entries, groupings, product_family="report"
+        )
+        os.chdir(old)
+        summary = result["executive_summary"]
+        assert isinstance(summary, str) and summary.strip()
+        assert not self.LEAK_RE.search(summary), (
+            f"internal leak in executive summary fallback: {summary!r}"
+        )
+        # The fallback still names real entries (user-facing content).
+        assert "AI funding round" in summary or "biotech" in summary

@@ -5579,9 +5579,9 @@ def _group_batch_by_theme(
         return [
             {
                 "theme": "General",
-                "description": (
-                    f"All {len(entries)} entries included in this report."
-                ),
+                # #338: never surface the internal "All N entries included in
+                # this report" counting line to end users.
+                "description": "Overview of the tracked developments this period.",
                 "entries": list(entries),
             }
         ]
@@ -5623,9 +5623,7 @@ def _group_batch_by_theme(
         return [
             {
                 "theme": "General",
-                "description": (
-                    f"All {len(entries)} entries included in this report."
-                ),
+                "description": "Overview of the tracked developments this period.",
                 "entries": list(entries),
             }
         ]
@@ -5641,9 +5639,9 @@ def _group_batch_by_theme(
     if ungrouped:
         result.append({
             "theme": "Additional Topics",
-            "description": (
-                f"{len(ungrouped)} entry(ies) not covered by other themes."
-            ),
+            # #338: the previous "N entry(ies) not covered by other themes."
+            # count line leaked internal grouping mechanics to end users.
+            "description": "Other notable developments across the tracked sources.",
             "entries": ungrouped,
         })
 
@@ -5769,7 +5767,8 @@ def _deterministic_grouping(
         return [
             {
                 "theme": st.upper(),
-                "description": f"{len(es)} entries from {st} sources.",
+                # #338: user-facing lead, no internal "N entries from" count.
+                "description": f"Updates and analysis from {st} sources.",
                 "entries": es,
             }
             for st, es in sorted(source_groups.items())
@@ -5787,7 +5786,11 @@ def _deterministic_grouping(
                 "theme": (
                     d.replace("-", " ").title() if d != "Unknown" else "Other Sources"
                 ),
-                "description": f"{len(es)} entries from {d or 'other sources'}.",
+                # #338: user-facing lead, no internal "N entries from" count.
+                "description": (
+                    f"Developments across "
+                    f"{d if d and d != 'Unknown' else 'other sources'}."
+                ),
                 "entries": es,
             }
             for d, es in sorted(domain_groups.items())
@@ -5853,7 +5856,10 @@ def _keyword_group_entries(
             continue
         result.append({
             "theme": name.title(),
-            "description": f"{len(es)} entries related to '{name}'.",
+            # #338: the old "N entries related to '<kw>'." description exposed
+            # the internal keyword-search/counting to end users — use a
+            # user-facing section lead instead.
+            "description": f"Key developments and analysis on {name.title()}.",
             "entries": es,
         })
 
@@ -5861,9 +5867,9 @@ def _keyword_group_entries(
     if unmatched:
         result.append({
             "theme": "Additional Topics",
-            "description": (
-                f"{len(unmatched)} entry(ies) not matched to a topic keyword."
-            ),
+            # #338: no internal "N entry(ies) not matched to a topic keyword."
+            # count line in the delivered product.
+            "description": "Other notable developments across the tracked sources.",
             "entries": unmatched,
         })
     return result
@@ -6013,9 +6019,8 @@ def _ensure_all_entries_grouped(
         return [
             {
                 "theme": "General",
-                "description": (
-                    f"All {len(entries)} entries included in this report."
-                ),
+                # #338: no internal "All N entries included in this report."
+                "description": "Overview of the tracked developments this period.",
                 "entries": list(entries),
             }
         ]
@@ -6035,9 +6040,8 @@ def _ensure_all_entries_grouped(
         if len(groups) >= 2:
             groups.append({
                 "theme": "Additional Topics",
-                "description": (
-                    f"{len(missing)} entry(ies) not covered by other themes."
-                ),
+                # #338: no internal "N entry(ies) not covered by other themes."
+                "description": "Other notable developments across the tracked sources.",
                 "entries": missing,
             })
         else:
@@ -6397,21 +6401,18 @@ def _generate_executive_summary(
         logger.warning("Executive summary via LLM failed: %s", exc)
 
     # Fallback
-    theme_bullets = "\n".join(
-        f"- **{g['theme']}**: {len(g['entries'])} entry(ies)"
-        for g in groupings
-    )
     # Issue #217: the fallback must still carry non-empty D1-required
     # sections — key_findings / recommendations derived from the real
     # entries (never fabricated), so D1 never blocks the report.
+    # Issue #338: the previous per-theme count summary ("This report covers
+    # N entries grouped into M themes: - **API**: N entry(ies)") leaked the
+    # internal grouping/search mechanics to end users — use the user-facing
+    # summary derived from the real entry titles instead.
     fallback = _deterministic_synthesis_fallback(
         entries, summary_prefix="This report covers"
     )
     return {
-        "executive_summary": (
-            f"This report covers {len(entries)} knowledge base entries "
-            f"grouped into {len(groupings)} themes:\n\n{theme_bullets}"
-        ),
+        "executive_summary": fallback["executive_summary"],
         "key_findings": fallback["key_findings"],
         "recommendations": fallback["recommendations"],
     }

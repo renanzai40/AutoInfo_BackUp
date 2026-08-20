@@ -1,0 +1,109 @@
+# Regression #338: products must never expose internal keyword-search / count
+# logs ('N entries related to <kw>' / 'N entry(ies) not matched to a topic
+# keyword' / per-theme count bullets / 'N entries included in this report').
+#
+# Before the fix, the deterministic grouping helpers wrote internal counts
+# into the group descriptions that are rendered as section content:
+#   _keyword_group_entries  -> "N entries related to '<kw>'."
+#   Additional Topics       -> "N entry(ies) not matched to a topic keyword."
+#   source/domain groups    -> "N entries from <src> sources."
+#   General catch-all       -> "All N entries included in this report."
+#   report exec-summary     -> "This report covers N KB entries grouped into
+#                              M themes: - **API**: N entry(ies)"
+# A paying user saw the product's internal query mechanism.
+#
+# The fix makes every group description user-facing (no counts/mechanics) and
+# adds the `_no_internal_leak` assertion to the validate assertion set.
+#
+# Deterministic (requires_env: []): exercises the grouping helpers and the
+# guard directly, in an absolute temp cwd.
+name: regression-internal-log-leak
+description: "Regression #338: no internal keyword-search/counting logs ('entries related to', 'not matched to a topic keyword', per-theme count bullets) in products; guard sniffs them"
+category: regression
+regression: true
+regression_issue: "#338"
+requires_env: []
+steps:
+  - name: "internal search/count lines are flagged by the guard"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.validation_matrix import _no_internal_leak
+
+      leak = (
+          "# AI Commercial Report\n\n"
+          "## Executive Summary\n\n"
+          "This report covers 67 knowledge base entries grouped into 37 "
+          "themes:\n\n"
+          "- **API**: 12 entry(ies)\n"
+          "- **IMPORT**: 2 entry(ies)\n\n"
+          "## Key Takeaways\n\n"
+          "6 entries related to '\''new'\''.\n"
+          "66 entry(ies) not matched to a topic keyword.\n"
+      )
+      r = _no_internal_leak(leak, "ai-commercial", "report")
+      assert not r.passed, "internal-count leak escaped the guard: %r" % r.details
+      for token in ("entries related to", "not matched to a topic keyword",
+                    "entry(ies)", "grouped into"):
+          assert token in r.details, "token %r not reported: %r" % (token, r.details)
+
+      clean = (
+          "# AI Commercial Report\n\n"
+          "## Summary\n\nAI funding accelerated this week.\n\n"
+          "## Key Takeaways\n\n"
+          "### 1. Startup A raised $50M (Source: https://techcrunch.com/1)\n"
+          "Monitor developments.\n\n"
+          "## References\n\n"
+          "1. **Startup A** — https://techcrunch.com/1 (techcrunch)\n"
+      )
+      assert _no_internal_leak(clean, "ai-commercial", "report").passed, \
+          "clean report falsely flagged"
+      print("NO_INTERNAL_LOG_LEAK_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["NO_INTERNAL_LOG_LEAK_OK"]
+
+  - name: "deterministic group descriptions are user-facing"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, re, shutil, tempfile
+      from pathlib import Path
+
+      from autoinfo.output import _deterministic_grouping
+
+      LEAK_RE = re.compile(
+          r"\d+\s+entries?\s+related to|entry\(ies\)|"
+          r"\d+\s+entries?\s+from .+?sources?|"
+          r"\d+\s+entries?\s+included in this report|"
+          r"grouped into \d+ themes?|not matched to a topic keyword",
+          re.IGNORECASE,
+      )
+      entries = [
+          {"entry_id": f"e{i}", "title": f"Title {i}", "summary": "s",
+           "source_url": f"https://x.com/{i}", "source_type": st,
+           "source_platform": "x", "domain": "ai-commercial"}
+          for i, st in enumerate(["rss", "api", "pubmed", "web"])
+      ]
+      old = os.getcwd()
+      tmp = tempfile.mkdtemp(prefix="internal-leak-")
+      try:
+          os.chdir(tmp)
+          groups = _deterministic_grouping(entries, domain="ai-commercial")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      assert groups, "deterministic grouping produced no groups"
+      for g in groups:
+          desc = str(g.get("description") or "")
+          assert not LEAK_RE.search(desc), \
+              "group description leaks internals: %r" % desc
+      assert "entries related to" not in str(groups)
+      print("GROUP_DESCRIPTIONS_USER_FACING_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["GROUP_DESCRIPTIONS_USER_FACING_OK"]

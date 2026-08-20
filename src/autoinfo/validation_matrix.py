@@ -111,6 +111,17 @@ _NO_ENTRIES_PLACEHOLDER = re.compile(
 )
 _SKELETON_ECHO = re.compile(r"<[a-z][a-z0-9 _-]+>", re.IGNORECASE)
 _LIST_MARKER = re.compile(r"^[-*•]?\s*(?:\[\s*[ xX]\s*\])?\s*")
+# #338 — internal keyword-search/counting lines must never reach the product:
+# keyword-group descriptions, "entry(ies) not matched/covered" catch-alls,
+# per-theme count bullets and source-group counts.
+_INTERNAL_LEAK_RE = re.compile(
+    r"\d+\s+entries?\s+related to\b|"
+    r"entry\(ies\)\s+not\s+(?:matched to a topic keyword|covered by other themes)|"
+    r"\d+\s+entries?\s+included in this report|"
+    r"knowledge base entries grouped into\s+\d+\s+themes?|"
+    r"\d+\s+entries?\s+from [a-z-]+ sources?",
+    re.IGNORECASE,
+)
 _ANSI = re.compile(r"\x1b\[[0-9;]*m")
 _TRACEBACK = re.compile(r"^Traceback \(most recent call last\):", re.MULTILINE)
 _LITELLM = re.compile(
@@ -235,6 +246,17 @@ def _no_placeholder(text: str, domain: str, product: str) -> AssertionResult:
     )
 
 
+def _no_internal_leak(text: str, domain: str, product: str) -> AssertionResult:
+    """#338 — products never expose internal keyword-search/counting lines
+    (``N entries related to <kw>``, ``N entry(ies) not matched to a topic
+    keyword``, per-theme count bullets, source-group counts)."""
+    found = sorted(set(_INTERNAL_LEAK_RE.findall(text)))
+    return AssertionResult(
+        "_no_internal_leak", not found, "#338", "P0", domain, product,
+        "leak=" + ", ".join(found) if found else "none",
+    )
+
+
 def _column_deep_dive(text: str, domain: str, product: str) -> AssertionResult:
     """#316/#326 — the column Deep Dive section has content (>=1 subsection)
     or is absent (non-column products skip; this is an informational pass)."""
@@ -340,6 +362,7 @@ ASSERTION_FUNCS: list[tuple[str, Callable[[str, str, str], AssertionResult]]] = 
     ("_references_numbered", _references_numbered),
     ("_source_labels_specific", _source_labels_specific),
     ("_no_placeholder", _no_placeholder),
+    ("_no_internal_leak", _no_internal_leak),
     ("_column_deep_dive", _column_deep_dive),
     ("_report_sections", _report_sections),
     ("_metadata_consistency", _metadata_consistency),
