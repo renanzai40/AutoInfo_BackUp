@@ -73,6 +73,7 @@ class MatrixReport:
 
     generated_at: str = ""
     commit: str = ""
+    batch_id: str = ""
     products: list[dict[str, Any]] = field(default_factory=list)
     summary: dict[str, Any] = field(default_factory=dict)
 
@@ -82,6 +83,7 @@ class MatrixReport:
             "tool": "autoinfo validate --matrix",
             "generated_at": self.generated_at,
             "commit": self.commit,
+            "batch_id": self.batch_id,
             "products": self.products,
             "summary": self.summary,
         }
@@ -95,6 +97,20 @@ _REFS_HEADING = re.compile(r"^##\s+References", re.MULTILINE)
 _REF_ENTRY = re.compile(r"^\s*(?:(\d+)\.|[-*])\s+\S", re.MULTILINE)
 _RSS_LABEL = re.compile(r"\bRSS\b")
 _PLACEHOLDER = re.compile(r"_No [^_]+_")
+# #334 — premium/enterprise analysis layer can fill N/A / None / TBD style
+# standalone cells (LLM filler), plus deterministic/skeleton echoes.
+_PLACEHOLDER_TOKEN = re.compile(
+    r"^(?:n/?a|tbd|tba|tbc|none|not available|not provided|not specified|"
+    r"not disclosed|no data(?: available)?|no content(?: provided)?|"
+    r"to be determined|to be announced|to be confirmed)[.,;:]*$",
+    re.IGNORECASE,
+)
+_NO_ENTRIES_PLACEHOLDER = re.compile(
+    r"No knowledge base entr(?:y|ies) (?:were )?(?:available|found)",
+    re.IGNORECASE,
+)
+_SKELETON_ECHO = re.compile(r"<[a-z][a-z0-9 _-]+>", re.IGNORECASE)
+_LIST_MARKER = re.compile(r"^[-*•]?\s*(?:\[\s*[ xX]\s*\])?\s*")
 _ANSI = re.compile(r"\x1b\[[0-9;]*m")
 _TRACEBACK = re.compile(r"^Traceback \(most recent call last\):", re.MULTILINE)
 _LITELLM = re.compile(
@@ -183,9 +199,36 @@ def _source_labels_specific(text: str, domain: str, product: str) -> AssertionRe
     )
 
 
+def _collect_placeholder_tokens(text: str) -> list[str]:
+    """Return every placeholder marker found in ``text``.
+
+    Covers (a) the template ``_No ..._`` empty-state markers, (b) standalone
+    analysis-layer filler values (``N/A``/``None``/``TBD``/``Not available``
+    /``To be determined`` used as a whole table cell or list item — #334),
+    (c) the deterministic ``No knowledge base entries were available.``
+    fallback message, and (d) residual LLM skeleton echoes (``<finding 1>``).
+    """
+    found: list[str] = list(dict.fromkeys(_PLACEHOLDER.findall(text)))
+    for line in text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        cells = line.strip("|").split("|") if line.startswith("|") else [line]
+        for cell in cells:
+            cell = _LIST_MARKER.sub("", cell.strip()).strip()
+            if cell and _PLACEHOLDER_TOKEN.match(cell):
+                found.append(cell)
+    for m in _NO_ENTRIES_PLACEHOLDER.finditer(text):
+        found.append(m.group(0))
+    for m in _SKELETON_ECHO.finditer(text):
+        found.append(m.group(0))
+    return list(dict.fromkeys(found))
+
+
 def _no_placeholder(text: str, domain: str, product: str) -> AssertionResult:
-    """#329/#314/#326 — no `_No ..._` empty-state placeholders in any product."""
-    found = sorted(set(_PLACEHOLDER.findall(text)))
+    """#329/#314/#326/#334 — no placeholder/empty-state residue in any product,
+    including the premium/enterprise analysis layer (issues #329, #334)."""
+    found = _collect_placeholder_tokens(text)
     return AssertionResult(
         "_no_placeholder", not found, "#329", "P0", domain, product,
         "placeholders=" + ", ".join(found) if found else "none",
@@ -348,9 +391,16 @@ def _generate_product(
     ))
 
 
-def _persisted_product_paths(domain: str, product: str) -> list[Path]:
-    """Locate previously-persisted product files under outputs/<domain>/."""
-    base = Path("outputs") / domain
+def _persisted_product_paths(
+    domain: str, product: str, base_dir: Path | None = None
+) -> list[Path]:
+    """Locate previously-persisted product files under ``<base>/<domain>/``.
+
+    ``base`` defaults to the shared ``outputs/`` for backward compatibility;
+    pass the per-batch products root (``<artifacts>/<batch_id>/products``) to
+    scan an isolated batch tree (#335) instead.
+    """
+    base = (base_dir or Path("outputs")) / domain
     if not base.is_dir():
         return []
     # Prefer the newest matching file; names like digest-<product>-* or
@@ -385,35 +435,59 @@ def run_matrix(
     products: list[str] | None = None,
     *,
     only_assert: bool = False,
+    batch_id: str | None = None,
+    artifacts_dir: Path | None = None,
 ) -> MatrixReport:
     """Run the domain x product matrix.
 
     Full mode generates each product through the REAL generation path when a
     matching ProductTemplate exists; products without a template fall back to
     digest/report with the product name (so the grid always renders).
-    ``only_assert`` scans already-persisted outputs/ files instead.
+    ``only_assert`` scans already-persisted product files instead.
+
+    Batch isolation (#335): every run owns a ``batch_id`` (explicit, or
+    ``<commit>-<stamp>``).  When ``artifacts_dir`` is given, full mode persists
+    its generated products under ``artifacts_dir/<batch_id>/products/
+    <domain>/<product>-markdown-<batch_id>.md`` (successive batches never
+    overwrite each other) and ``only_assert`` scans that same batch tree.
+    Without ``artifacts_dir``, full mode stays in-memory and ``only_assert``
+    falls back to the legacy shared ``outputs/`` scan.
     """
     chosen = list(products or MATRIX_PRODUCTS)
     templates: dict[str, Any] = dict(_product_templates())
+    commit = _current_commit()
+    batch_id = batch_id or (
+        f"{commit}-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+    )
+    batch_root = (
+        (artifacts_dir / batch_id / "products") if artifacts_dir is not None else None
+    )
     report = MatrixReport(
         generated_at=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        commit=_current_commit(),
+        commit=commit,
+        batch_id=batch_id,
     )
     per_product: dict[str, list[dict[str, Any]]] = {p: [] for p in chosen}
     summary_failures = 0
+    failing_assertions = 0
+    missing_products = 0
+    error_products = 0
     total_asserts = 0
 
     for domain in domains:
         for product in chosen:
             template = templates.get(product)
             if only_assert:
-                paths = _persisted_product_paths(domain, product)
+                paths = _persisted_product_paths(
+                    domain, product, base_dir=batch_root
+                )
                 if not paths:
                     per_product[product].append({
                         "domain": domain, "product": product, "status": "missing",
                         "assertions": [], "error": "no persisted product file",
                     })
                     summary_failures += 1
+                    missing_products += 1
                     continue
                 text = paths[0].read_text(encoding="utf-8", errors="replace")
             else:
@@ -425,10 +499,18 @@ def run_matrix(
                         "assertions": [], "error": str(exc)[:200],
                     })
                     summary_failures += 1
+                    error_products += 1
                     continue
+                if batch_root is not None:
+                    out_path = (
+                        batch_root / domain / f"{product}-markdown-{batch_id}.md"
+                    )
+                    out_path.parent.mkdir(parents=True, exist_ok=True)
+                    out_path.write_text(text, encoding="utf-8")
             results = run_assertions(text, domain=domain, product=product)
             total_asserts += len(results)
             failing = [r for r in results if not r.passed]
+            failing_assertions += len(failing)
             summary_failures += len(failing)
             per_product[product].append({
                 "domain": domain, "product": product, "status": "ok",
@@ -441,18 +523,44 @@ def run_matrix(
             products_out.append({**entry, "product": product})
     report.products = products_out
     report.summary = {
+        "batch_id": batch_id,
         "domains": domains,
         "products": chosen,
         "total_products": sum(len(v) for v in per_product.values()),
         "total_asserts": total_asserts,
         "failures": summary_failures,
+        "failing_assertions": failing_assertions,
+        "missing_products": missing_products,
+        "error_products": error_products,
     }
     return report
 
 
 # ---------------------------------------------------------------------------
-# Report card persistence + regression diff (#332-A)
+# Report card persistence + regression diff (#332-A, #336)
 # ---------------------------------------------------------------------------
+
+PRODUCT_STATUS = "@status"
+
+
+def card_issue_counts(card: dict[str, Any]) -> dict[str, int]:
+    """Break a report card's failures down into the components a reader would
+    count by hand (#336): failing assertions, missing products, error products."""
+    failing = missing = error = 0
+    for p in card.get("products", []):
+        status = p.get("status", "ok")
+        if status == "missing":
+            missing += 1
+        elif status == "error":
+            error += 1
+        for a in p.get("assertions", []):
+            if not a.get("passed"):
+                failing += 1
+    return {
+        "failing_assertions": failing,
+        "missing_products": missing,
+        "error_products": error,
+    }
 
 
 def save_report_card(
@@ -472,12 +580,20 @@ def save_report_card(
 def diff_report_cards(prev: dict[str, Any], cur: dict[str, Any]) -> dict[str, Any]:
     """#332-A regression diff: classify every (product, assertion) pair as
     new (cur-fail, not in prev), regressed (prev-pass, cur-fail),
-    fixed (prev-fail, cur-pass) or existing-failing (both fail)."""
+    fixed (prev-fail, cur-pass) or existing-failing (both fail).
+
+    Product-level failures (``status`` missing/error) are first-class diff
+    items via the ``(product, PRODUCT_STATUS)`` pseudo-assertion (#336), so
+    the counts reconcile with the failure count a reader computes from the
+    cards: ``cur issues == new + regressed + existing_failing``.
+    """
     def index(card: dict[str, Any]) -> dict[tuple[str, str], bool]:
         idx: dict[tuple[str, str], bool] = {}
         for p in card.get("products", []):
+            product = p.get("product", "")
+            idx[(product, PRODUCT_STATUS)] = p.get("status", "ok") == "ok"
             for a in p.get("assertions", []):
-                key = (p.get("product", ""), a.get("assertion", ""))
+                key = (product, a.get("assertion", ""))
                 idx[key] = bool(a.get("passed"))
         return idx
 

@@ -16,6 +16,7 @@ Subcommands:
 from __future__ import annotations
 
 import json
+from datetime import datetime
 from pathlib import Path
 
 import typer
@@ -24,7 +25,10 @@ from rich.table import Table
 
 from autoinfo.validation_matrix import (
     MATRIX_PRODUCTS,
+    PRODUCT_STATUS,
     MatrixReport,
+    _current_commit,
+    card_issue_counts,
     diff_report_cards,
     run_matrix,
     save_report_card,
@@ -73,7 +77,13 @@ def matrix(
     html_out: str = typer.Option("", "--html-out", help="Write report card HTML to this path"),
     snapshot_dir: str = typer.Option(
         "validation-runs/matrix", "--snapshot-dir",
-        help="Directory to persist report-card snapshots for validate diff",
+        help="Batch root: products + report-card snapshot are persisted under "
+             "<snapshot-dir>/<batch_id>/ (per-batch isolation, #335)",
+    ),
+    batch: str = typer.Option(
+        "", "--batch",
+        help="Explicit batch id (default: <commit>-<stamp>); re-runs with the "
+             "same id land in the same isolated batch dir",
     ),
 ) -> None:
     """Run the full-matrix acceptance executor (#331).
@@ -87,7 +97,20 @@ def matrix(
         [p.strip() for p in products.split(",") if p.strip()]
         or list(MATRIX_PRODUCTS)
     )
-    report = run_matrix(domain_list, product_list, only_assert=only_assert)
+    batch_id = batch or (
+        f"{_current_commit()}-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+    )
+    batch_root = Path(snapshot_dir)
+    # #335: full mode always persists into an isolated per-batch dir; only-
+    # assert targets the batch tree only when --batch is given, otherwise it
+    # keeps the legacy shared outputs/ scan (backward compatible).
+    artifacts_dir = batch_root if (not only_assert or batch) else None
+    report = run_matrix(
+        domain_list, product_list,
+        only_assert=only_assert,
+        batch_id=batch_id,
+        artifacts_dir=artifacts_dir,
+    )
     _render_report_card(report)
     if json_out:
         Path(json_out).write_text(
@@ -98,7 +121,8 @@ def matrix(
     if html_out:
         _write_html(report, Path(html_out))
         console.print(f"[green]report card HTML → {html_out}[/green]")
-    snap = save_report_card(report, Path(snapshot_dir))
+    snap = save_report_card(report, batch_root / batch_id)
+    console.print(f"[cyan]batch → {batch_id}[/cyan]")
     console.print(f"[cyan]snapshot → {snap}[/cyan]")
 
     # Non-zero exit when any P0/P1 assertion failed (CI / release gate).
@@ -116,10 +140,32 @@ def diff_cmd(
     cur_card = json.loads(Path(cur).read_text(encoding="utf-8"))
     d = diff_report_cards(prev_card, cur_card)
     counts = d["counts"]
+    prev_counts = card_issue_counts(prev_card)
+    cur_counts = card_issue_counts(cur_card)
+    reconciled = counts["new"] + counts["regressed"] + counts["existing_failing"]
+    cur_issues = (
+        cur_counts["failing_assertions"]
+        + cur_counts["missing_products"]
+        + cur_counts["error_products"]
+    )
+    console.print(
+        f"[bold]failures[/bold] {prev_card.get('batch_id', '?')} -> "
+        f"{cur_card.get('batch_id', '?')} | "
+        f"prev={sum(prev_counts.values())} -> cur={cur_issues} "
+        f"(assertions={cur_counts['failing_assertions']} "
+        f"missing={cur_counts['missing_products']} "
+        f"error={cur_counts['error_products']})"
+    )
     console.print(
         f"[bold]diff[/bold] new={counts['new']} regressed={counts['regressed']} "
-        f"fixed={counts['fixed']} existing={counts['existing_failing']}"
+        f"fixed={counts['fixed']} existing={counts['existing_failing']} "
+        f"(new+regressed+existing={reconciled})"
     )
+    if cur_issues != reconciled:
+        console.print(
+            f"[yellow]WARNING: diff buckets ({reconciled}) do not reconcile with "
+            f"card failures ({cur_issues}) (#336)[/yellow]"
+        )
     table = Table(title="Regression diff")
     table.add_column("Class")
     table.add_column("Product")
@@ -131,6 +177,13 @@ def diff_cmd(
         ("existing", d["existing_failing"]),
     ):
         for product, assertion in items:
+            if assertion == PRODUCT_STATUS:
+                _status = next(
+                    (p.get("status", "?") for p in cur_card.get("products", [])
+                     if p.get("product") == product),
+                    "?",
+                )
+                assertion = f"product {_status}"
             table.add_row(cls, product, assertion)
     console.print(table)
     if d["regressed"] or d["new"]:
@@ -158,7 +211,10 @@ def _render_report_card(report: MatrixReport) -> None:
     console.print(
         f"total_products={summary.get('total_products')} "
         f"total_asserts={summary.get('total_asserts')} "
-        f"failures={summary.get('failures')}"
+        f"failures={summary.get('failures')} "
+        f"(assertions={summary.get('failing_assertions')} "
+        f"missing={summary.get('missing_products')} "
+        f"error={summary.get('error_products')})"
     )
 
 

@@ -1,0 +1,74 @@
+# Regression #335: `validate matrix` artifacts/snapshots are batch-isolated.
+#
+# Before the fix, full-mode products were generated in-memory and never
+# persisted, while `--only-assert` picked the newest file under the shared
+# `outputs/<domain>/` — successive batches overwrote / mixed each other's
+# artifacts, so a run could never be re-inspected or diffed against a later
+# batch.
+#
+# The fix gives every run a `batch_id` (explicit `--batch` or `<commit>-<stamp>`).
+# Full mode persists its products under
+# `artifacts_dir/<batch_id>/products/<domain>/<product>-markdown-<batch_id>.md`
+# and `--only-assert --batch <id>` scans that same isolated tree — the legacy
+# shared `outputs/` scan is preserved for `--only-assert` without `--batch`.
+#
+# Deterministic (requires_env: []): runs in a temp cwd with generation mocked.
+name: regression-validation-batch-isolation
+description: "Regression #335: validate matrix products + snapshots are isolated per batch; re-runs never overwrite the previous batch"
+category: regression
+regression: true
+regression_issue: "#335"
+requires_env: []
+steps:
+  - name: "full-mode products land in per-batch dirs without overwrite"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import patch
+
+      from autoinfo.validation_matrix import run_matrix
+
+      CLEAN = (
+          "# Digest — test\n\n"
+          "## Summary\n\nAI funding accelerated this week.\n\n"
+          "### 1. Startup A raised $50M (Source: https://techcrunch.com/1)\n"
+          "Monitor developments.\n\n"
+          "## References\n\n"
+          "1. **Startup A** — https://techcrunch.com/1 (techcrunch)\n"
+      )
+      old = os.getcwd()
+      tmp = tempfile.mkdtemp(prefix="validation-batch-")
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.validation_matrix._generate_product",
+                     return_value=CLEAN), \
+               patch("autoinfo.validation_matrix._current_commit",
+                     return_value="abc"):
+              r1 = run_matrix(["d"], ["digest"], only_assert=False,
+                              batch_id="b1", artifacts_dir=Path("V"))
+              r2 = run_matrix(["d"], ["digest"], only_assert=False,
+                              batch_id="b2", artifacts_dir=Path("V"))
+          assert r1.batch_id == "b1" and r2.batch_id == "b2"
+          p1 = Path("V") / "b1" / "products" / "d" / "digest-markdown-b1.md"
+          p2 = Path("V") / "b2" / "products" / "d" / "digest-markdown-b2.md"
+          assert p1.is_file() and p1.read_text(encoding="utf-8") == CLEAN
+          assert p2.is_file() and p2.read_text(encoding="utf-8") == CLEAN
+
+          # only_assert on the batch tree sees b1; a missing batch is empty.
+          r3 = run_matrix(["d"], ["digest"], only_assert=True,
+                          batch_id="b1", artifacts_dir=Path("V"))
+          assert r3.summary["failures"] == 0
+          r4 = run_matrix(["d"], ["digest"], only_assert=True,
+                          batch_id="nope", artifacts_dir=Path("V"))
+          assert r4.summary["failures"] == 1
+          print("VALIDATION_BATCH_ISOLATION_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["VALIDATION_BATCH_ISOLATION_OK"]

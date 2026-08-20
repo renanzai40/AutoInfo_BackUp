@@ -1,0 +1,69 @@
+# Regression #334: `_no_placeholder` must cover the premium/enterprise
+# ANALYSIS layer, not just the template `_No ..._` markers.
+#
+# Before the fix the assertion was `_No [^_]+_` only.  When the LLM (mimo)
+# filled the paid analysis layer (executive_summary / key_metrics /
+# action_required / risk_matrix / implications) with placeholder FILLER —
+# standalone `N/A`, `None`, `TBD`, `Not available`, `To be determined`,
+# `No data`, or the deterministic `No knowledge base entries were available.`
+# fallback — those 9 spots escaped detection because none of them is an
+# underscore-wrapped `_No X_` marker.
+#
+# The fix widens detection to standalone placeholder cells/list items,
+# the deterministic fallback message, and LLM skeleton echoes.
+#
+# Deterministic (requires_env: []): exercises `_no_placeholder` directly.
+name: regression-no-placeholder-analysis-layer
+description: "Regression #334: _no_placeholder detects N/A / None / TBD / Not available / To be determined filler in the premium/enterprise analysis layer"
+category: regression
+regression: true
+regression_issue: "#334"
+requires_env: []
+steps:
+  - name: "analysis-layer placeholder filler is flagged"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.validation_matrix import _no_placeholder
+
+      sample = (
+          "# autoinfo Enterprise Briefing\n\n"
+          "## Executive Summary\n\n"
+          "No knowledge base entries were available.\n\n"
+          "## Key Metrics\n\n"
+          "| Metric | Value | Source |\n"
+          "|--------|-------|--------|\n"
+          "| Revenue | N/A | Not available |\n"
+          "| Pipeline | None | No data |\n\n"
+          "## Action Required\n\n"
+          "- [ ] To be determined\n\n"
+          "## Risk Matrix\n\n"
+          "| Risk | Likelihood | Impact | Mitigation |\n"
+          "|------|-----------|--------|------------|\n"
+          "| Market | TBD | Medium | None |\n"
+      )
+      r = _no_placeholder(sample, "ai-commercial", "enterprise-briefing")
+      assert not r.passed, \
+          "analysis-layer placeholder filler escaped _no_placeholder: %r" % r.details
+      for token in ("N/A", "None", "TBD", "Not available", "To be determined",
+                    "No data", "No knowledge base entries were available"):
+          assert token in r.details, "token %r not reported: %r" % (token, r.details)
+
+      clean = (
+          "# AI Commercial Report\n\n"
+          "**Sections**: 2\n\n"
+          "## Summary\n\nAI funding accelerated this week.\n\n"
+          "## Key Takeaways\n\n"
+          "### 1. Startup A raised $50M (Source: https://techcrunch.com/1)\n"
+          "Monitor developments.\n\n"
+          "## References\n\n"
+          "1. **Startup A** — https://techcrunch.com/1 (techcrunch)\n"
+      )
+      assert _no_placeholder(clean, "ai-commercial", "report").passed, \
+          "clean report falsely flagged"
+      print("NO_PLACEHOLDER_ANALYSIS_LAYER_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["NO_PLACEHOLDER_ANALYSIS_LAYER_OK"]
