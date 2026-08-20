@@ -167,7 +167,7 @@ AutoInfo has a practice that is rare in open source, and we are proud of it:
 **every bug fix must ship a validation scenario that guards against the bug
 returning.**
 
-The project maintains 108 validation scenarios (64 functional + 44 regression)
+The project maintains 109 validation scenarios (64 functional + 45 regression)
 under `src/autoinfo/mcp/scenarios/`. Regression scenarios live in
 `src/autoinfo/mcp/scenarios/regression/` and are marked `category: regression`
 plus `regression: true`. They auto-load via recursive glob and run through

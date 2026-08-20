@@ -49,13 +49,18 @@ plog = get_pipeline_logger("collect")
 # item's title/summary.  Deliberately surface markers (company names /
 # form numbers), NOT broad health terms — e.g. "clinical trial" legitimately
 # appears in AI-commercial content ("AI drug discovery").
+#
+# The bare form numbers ("8-K", "10-K", "10-Q") are required because real
+# SEC EDGAR titles are `8-K Apple Inc. (2025-01-15)` — the "SEC 8-K" /
+# "8-K filing" phrasings never appear in them, so without the bare forms the
+# guard silently misses 8-K/10-K at collection time (#332-B).
 _DOMAIN_NOISE_KEYWORDS: dict[str, tuple[str, ...]] = {
     "ai-commercial": (
         "贝达药业", "华能", "株冶", "平安好医生", "DURAVYU",
-        "SEC 8-K", "SEC 8K", "10-Q", "10Q", "财报", "年度报告",
+        "SEC 8-K", "SEC 8K", "8-K", "10-K", "10-Q", "10Q", "财报", "年度报告",
     ),
     "financial-intelligence": (
-        "SEC 8-K", "SEC 8K", "10-Q", "10Q", "8-K filing",
+        "SEC 8-K", "SEC 8K", "8-K", "10-K", "10-Q", "10Q", "8-K filing",
     ),
 }
 

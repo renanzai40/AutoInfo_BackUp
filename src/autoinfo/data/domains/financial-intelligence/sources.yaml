@@ -59,6 +59,7 @@ sources:
     access: free
     settings:
       tickers: "AAPL,MSFT,GOOGL"  # comma-separated string — SecEdgarHandler contract (M2T20), NOT a YAML list
+      forms: "8-K,10-K,10-Q"  # SEC form allowlist — SecEdgarHandler `forms` config key (#332-B)
       user_agent: "AutoInfoResearch/1.0 (contact: ops@autoinfo.ai)"  # SEC requires an identifying UA; override per install
       rate_limit: 0.1  # seconds between requests — ≤10 req/s per SEC fair-access policy
 

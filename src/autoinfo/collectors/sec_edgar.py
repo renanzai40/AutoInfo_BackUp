@@ -61,6 +61,10 @@ class SecEdgarHandler(BaseHandler):
     Config keys (all optional):
 
     * ``tickers`` — comma/space separated tickers (default ``"AAPL"``)
+    * ``forms`` — comma/space separated SEC form allowlist (default
+      ``"8-K,10-K,10-Q"`` = :data:`INTERESTING_FORMS`); only filings whose
+      form is in this set are returned, e.g. ``"10-K"`` restricts the
+      handler to annual reports only
     * ``limit`` — max filings per ticker (default 10)
     * ``rate_limit`` — seconds to wait between requests (default 0.1)
     * ``user_agent`` — descriptive UA for SEC fair access (default
@@ -87,6 +91,19 @@ class SecEdgarHandler(BaseHandler):
             if t.strip()
         ]
         self.limit: int = int(config.get("limit") or DEFAULT_LIMIT)
+        forms_raw = config.get("forms")
+        if forms_raw is None:
+            self.forms: frozenset[str] = INTERESTING_FORMS
+        elif isinstance(forms_raw, str):
+            self.forms = frozenset(
+                f.strip().upper()
+                for f in forms_raw.replace(";", ",").split(",")
+                if f.strip()
+            )
+        else:
+            self.forms = frozenset(
+                str(f).strip().upper() for f in forms_raw if str(f).strip()
+            )
         rate_limit = config.get("rate_limit")
         self.rate_limit: float = (
             float(rate_limit) if rate_limit is not None else DEFAULT_RATE_LIMIT
@@ -170,7 +187,7 @@ class SecEdgarHandler(BaseHandler):
         filings: list[dict[str, Any]] = []
         for i in range(n):
             form: str = str(forms[i])
-            if form not in INTERESTING_FORMS:
+            if form not in self.forms:
                 continue
             accession: str = str(accessions[i])
             accession_clean: str = accession.replace("-", "")

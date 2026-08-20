@@ -12,6 +12,7 @@ EVERY request and rate limiting (default 0.1 s between requests = <=10 req/s).
 from __future__ import annotations
 
 import json
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import httpx
@@ -19,6 +20,7 @@ import pytest
 
 from autoinfo.collectors.sec_edgar import (
     DEFAULT_USER_AGENT,
+    INTERESTING_FORMS,
     SecEdgarHandler,
 )
 from autoinfo.config import SourceConfig
@@ -47,7 +49,7 @@ def _fake_response(json_payload: object) -> MagicMock:
     return resp
 
 
-def _tickers_payload() -> dict:
+def _tickers_payload() -> dict[str, Any]:
     """company_tickers.json: a compact ticker → CIK map."""
     return {
         "0": {"cik_str": 320193, "ticker": "AAPL", "title": "Apple Inc."},
@@ -55,7 +57,7 @@ def _tickers_payload() -> dict:
     }
 
 
-def _submissions_payload() -> dict:
+def _submissions_payload() -> dict[str, Any]:
     """Submissions JSON: recent filings array with 8-K / 10-K / 10-Q / 4."""
     return {
         "cik": "0000320193",
@@ -102,10 +104,10 @@ def _submissions_payload() -> dict:
 def _make_side_effect(
     tickers_payload: object,
     submissions_payload: object,
-):
+) -> Any:
     """Side effect routing company_tickers.json vs data.sec.gov/submissions/."""
 
-    def side_effect(url: str, **kwargs: object):
+    def side_effect(url: str, **kwargs: object) -> MagicMock:
         if "company_tickers.json" in url:
             return _fake_response(tickers_payload)
         if "data.sec.gov/submissions/" in url:
@@ -171,6 +173,35 @@ class TestSecEdgarHandler:
             "000032019325000001/0000320193-25-000001.htm"
         )
         assert first["title"] == "8-K Apple Inc. (2025-01-15)"
+
+    def test_forms_defaults_to_interesting_forms(self) -> None:
+        handler = SecEdgarHandler()
+        assert handler.forms == INTERESTING_FORMS
+        handler = SecEdgarHandler(config={"forms": "10-K, 8-K"})
+        assert handler.forms == frozenset({"10-K", "8-K"})
+
+    @patch("autoinfo.collectors.sec_edgar.httpx.get")
+    def test_forms_allowlist_restricts_filings(
+        self, mock_get: MagicMock, sec_config: SourceConfig
+    ) -> None:
+        mock_get.side_effect = _make_side_effect(_tickers_payload(), _submissions_payload())
+
+        # Config with a restricted allowlist: only 10-K filings may pass.
+        handler = SecEdgarHandler(
+            config={"tickers": "AAPL", "forms": "10-K", "rate_limit": 0.0}
+        )
+        raw_items = handler.fetch(limit=10)
+
+        # The fixture carries 8-K / 10-K / 10-Q / 4 — only 10-K survives.
+        assert len(raw_items) == 1
+        assert raw_items[0]["form"] == "10-K"
+        assert raw_items[0]["title"] == "10-K Apple Inc. (2025-01-10)"
+
+        # Default config keeps all three interesting forms.
+        default = SecEdgarHandler(config=sec_config.settings)
+        assert default.forms == INTERESTING_FORMS
+        default_items = default.fetch(limit=10)
+        assert [r["form"] for r in default_items] == ["8-K", "10-K", "10-Q"]
 
     @patch("autoinfo.collectors.sec_edgar.httpx.get")
     def test_user_agent_present_on_every_request(
@@ -243,7 +274,7 @@ class TestSecEdgarHandler:
 
     @patch("autoinfo.collectors.sec_edgar.httpx.get")
     def test_fetch_403_returns_empty(self, mock_get: MagicMock) -> None:
-        def side_effect(url: str, **kwargs: object):
+        def side_effect(url: str, **kwargs: object) -> MagicMock:
             if "company_tickers.json" in url:
                 resp = _fake_response({})
                 resp.raise_for_status.side_effect = httpx.HTTPStatusError(

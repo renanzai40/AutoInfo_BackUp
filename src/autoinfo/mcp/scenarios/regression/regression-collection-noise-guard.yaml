@@ -35,6 +35,10 @@ steps:
       # financial-intelligence must flag SEC 8-K/10-Q metadata dilution.
       assert _item_matches_domain_noise(item("n3", "Form 8-K filing", "metadata"), "financial-intelligence")
       assert _item_matches_domain_noise(item("n4", "10-Q quarterly report", "..."), "financial-intelligence")
+      # Real SEC EDGAR titles (`8-K Apple Inc. (2025-01-15)`) must be caught
+      # too — the bare form numbers are the only markers they carry (#332-B).
+      assert _item_matches_domain_noise(item("n5", "8-K Apple Inc. (2025-01-15)", "{\"form\": \"8-K\"}"), "financial-intelligence")
+      assert _item_matches_domain_noise(item("n6", "10-K Microsoft Corp (2025-06-30)", "{\"form\": \"10-K\"}"), "financial-intelligence")
       # Clean in-domain content is NOT flagged.
       assert not _item_matches_domain_noise(item("c1", "AI startup raises $50M for GPU cloud", "..."), "ai-commercial")
       # Domains with no guard config are never flagged.

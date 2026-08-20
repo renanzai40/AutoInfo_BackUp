@@ -1,0 +1,115 @@
+# Regression #332-B: the collection-time SEC noise guard must catch REAL SEC
+# EDGAR titles, and SecEdgarHandler must expose a configurable forms allowlist.
+#
+# Blind spot being closed: `_DOMAIN_NOISE_KEYWORDS["financial-intelligence"]`
+# only carried "SEC 8-K" / "SEC 8K" / "8-K filing" / "10-Q" — but real SEC
+# EDGAR titles are `8-K Apple Inc. (2025-01-15)` (form + company + date), so
+# 8-K and 10-K items sailed past the guard at collection time (only 10-Q was
+# caught). The bare form numbers ("8-K", "10-K") are now keywords, and the
+# SEC EDGAR handler accepts a `forms` allowlist config key (default
+# INTERESTING_FORMS = 8-K/10-K/10-Q) so operators can restrict which filings
+# are collected.
+#
+# Deterministic (requires_env: []): exercises `_item_matches_domain_noise` and
+# the handler's form filtering directly (no network, no LLM).
+name: regression-sec-real-title-guard
+description: "Regression #332-B: real SEC 8-K/10-K titles caught by the collection noise guard + configurable SEC forms allowlist"
+category: regression
+regression: true
+regression_issue: "#332"
+requires_env: []
+steps:
+  - name: "real SEC EDGAR titles are caught by the collection noise guard"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.models import Item
+      from autoinfo.collect import _item_matches_domain_noise
+
+      def item(iid, title, content):
+          return Item(id=iid, source_name="sec_edgar", source_type="sec_edgar",
+                      source_platform="sec_edgar", source_url=f"https://x.com/{iid}",
+                      title=title, content=content, collected_at="2026-01-01")
+
+      # Real SEC EDGAR title format: `8-K Apple Inc. (2025-01-15)`.
+      assert _item_matches_domain_noise(item("r1", "8-K Apple Inc. (2025-01-15)", "{\"form\": \"8-K\"}"), "financial-intelligence")
+      assert _item_matches_domain_noise(item("r2", "10-K Microsoft Corp (2025-06-30)", "{\"form\": \"10-K\"}"), "financial-intelligence")
+      assert _item_matches_domain_noise(item("r3", "10-Q Apple Inc. (2025-04-30)", "{\"form\": \"10-Q\"}"), "financial-intelligence")
+      # ai-commercial carries the same bare-form keywords for parity.
+      assert _item_matches_domain_noise(item("r4", "8-K Apple Inc. (2025-01-15)", "{\"form\": \"8-K\"}"), "ai-commercial")
+      # Control: in-domain content with no SEC form markers is NOT flagged.
+      assert not _item_matches_domain_noise(item("c1", "Apple announces new M5 chip", "Apple unveiled its next-gen silicon."), "financial-intelligence")
+      print("SEC_REAL_TITLE_GUARD_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SEC_REAL_TITLE_GUARD_OK"]
+
+  - name: "SecEdgarHandler forms allowlist parses config and defaults to INTERESTING_FORMS"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.collectors.sec_edgar import SecEdgarHandler, INTERESTING_FORMS
+
+      restricted = SecEdgarHandler(config={"forms": "10-K"})
+      assert restricted.forms == frozenset({"10-K"}), restricted.forms
+      csv = SecEdgarHandler(config={"forms": "8-K, 10-K, 10-Q"})
+      assert csv.forms == INTERESTING_FORMS, csv.forms
+      default = SecEdgarHandler()
+      assert default.forms == INTERESTING_FORMS, default.forms
+      print("SEC_FORMS_ALLOWLIST_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SEC_FORMS_ALLOWLIST_OK"]
+
+  - name: "stubbed SEC submissions fetch returns only allowlisted forms"
+    kind: cli
+    command: |-
+      python3 -c '
+      from unittest.mock import MagicMock, patch
+      import httpx
+      from autoinfo.collectors.sec_edgar import SecEdgarHandler, INTERESTING_FORMS
+
+      def fake_response(payload):
+          resp = MagicMock(spec=httpx.Response)
+          resp.json.return_value = payload
+          resp.raise_for_status.return_value = None
+          return resp
+
+      tickers = {"0": {"cik_str": 320193, "ticker": "AAPL", "title": "Apple Inc."}}
+      submissions = {
+          "cik": "0000320193",
+          "name": "Apple Inc.",
+          "filings": {"recent": {
+              "accessionNumber": ["0000320193-25-000001", "0000320193-25-000002", "0000320193-25-000003"],
+              "filingDate": ["2025-01-15", "2025-01-10", "2024-11-01"],
+              "reportDate": ["2025-01-10", "2025-01-03", "2024-09-28"],
+              "form": ["8-K", "10-K", "10-Q"],
+              "primaryDocument": ["0000320193-25-000001.htm", "aapl-20250927.htm", "aapl-10q.htm"],
+          }},
+      }
+
+      def side_effect(url, **kwargs):
+          if "company_tickers.json" in url:
+              return fake_response(tickers)
+          if "data.sec.gov/submissions/" in url:
+              return fake_response(submissions)
+          return fake_response({})
+
+      with patch("autoinfo.collectors.sec_edgar.httpx.get", side_effect=side_effect):
+          restricted = SecEdgarHandler(config={"tickers": "AAPL", "forms": "10-K", "rate_limit": 0.0})
+          items = restricted.fetch(limit=10)
+          assert [r["form"] for r in items] == ["10-K"], items
+          default = SecEdgarHandler(config={"tickers": "AAPL", "rate_limit": 0.0})
+          assert default.forms == INTERESTING_FORMS, default.forms
+          all_items = default.fetch(limit=10)
+          assert [r["form"] for r in all_items] == ["8-K", "10-K", "10-Q"], all_items
+      print("SEC_FORMS_FETCH_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SEC_FORMS_FETCH_OK"]
