@@ -163,11 +163,13 @@ def diff_cmd(
     )
     if cur_issues != reconciled:
         console.print(
-            f"[yellow]WARNING: diff buckets ({reconciled}) do not reconcile with "
-            f"card failures ({cur_issues}) (#336)[/yellow]"
+            f"[red]ERROR: diff buckets ({reconciled}) do not reconcile with "
+            f"card failures ({cur_issues}) (#340)[/red]"
         )
+        raise typer.Exit(code=1)
     table = Table(title="Regression diff")
     table.add_column("Class")
+    table.add_column("Domain")
     table.add_column("Product")
     table.add_column("Assertion")
     for cls, items in (
@@ -176,15 +178,15 @@ def diff_cmd(
         ("fixed", d["fixed"]),
         ("existing", d["existing_failing"]),
     ):
-        for product, assertion in items:
+        for domain, product, assertion in items:
             if assertion == PRODUCT_STATUS:
                 _status = next(
                     (p.get("status", "?") for p in cur_card.get("products", [])
-                     if p.get("product") == product),
+                     if p.get("domain") == domain and p.get("product") == product),
                     "?",
                 )
                 assertion = f"product {_status}"
-            table.add_row(cls, product, assertion)
+            table.add_row(cls, domain, product, assertion)
     console.print(table)
     if d["regressed"] or d["new"]:
         raise typer.Exit(code=1)

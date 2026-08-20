@@ -1,0 +1,132 @@
+# Regression #340: `validate diff` must truly reconcile across domains
+# (the #336 fix was incomplete — buckets vs card failures still diverged).
+#
+# Before the fix, `diff_report_cards` keyed every assertion by
+# ``(product, assertion)`` only.  A real matrix card spans several domains x
+# the same product (ai-commercial/medical/financial ... x report/digest), so
+# the keys collided across domains: the index kept only the LAST domain's
+# value and the other domains' failures silently vanished from every diff
+# bucket.  On the v4-flash/v4-mimo snapshots the CLI printed
+#   WARNING: diff buckets (12) do not reconcile with card failures (28) (#336)
+# — a self-aware but SOFT inconsistency.
+#
+# The fix keys by ``(domain, product, assertion)`` so every failure is
+# individually tracked, and the CLI turns any residual reconciliation
+# mismatch into a HARD non-zero exit instead of a soft WARNING.
+#
+# Deterministic (requires_env: []): exercises diff_report_cards + the CLI
+# exit contract directly.
+name: regression-validation-diff-multidomain
+description: "Regression #340: diff buckets keyed by (domain, product, assertion) reconcile with the card failure count; reconciliation mismatch is a hard non-zero exit"
+category: regression
+regression: true
+regression_issue: "#340"
+requires_env: []
+steps:
+  - name: "multi-domain diff reconciles and classifies per domain"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.validation_matrix import (
+          MatrixReport, PRODUCT_STATUS, card_issue_counts, diff_report_cards,
+      )
+
+      def card(products, batch):
+          m = MatrixReport(generated_at="t", commit="c", batch_id=batch)
+          m.products = products
+          return m.to_dict()
+
+      def F(a):
+          return {"assertion": a, "passed": False}
+
+      def P(a):
+          return {"assertion": a, "passed": True}
+
+      prev = card([
+          {"domain": "ai-commercial", "product": "report", "status": "ok",
+           "assertions": [F("_no_cross_domain_noise"), P("_not_empty")]},
+          {"domain": "medical-research", "product": "report", "status": "ok",
+           "assertions": [P("_not_empty")]},
+          {"domain": "financial-intelligence", "product": "report", "status": "ok",
+           "assertions": [P("_no_financial_dilution")]},
+          {"domain": "ai-commercial", "product": "digest", "status": "ok",
+           "assertions": []},
+      ], "v4-flash")
+      cur = card([
+          {"domain": "ai-commercial", "product": "report", "status": "ok",
+           "assertions": [F("_no_cross_domain_noise"), P("_not_empty")]},
+          {"domain": "medical-research", "product": "report", "status": "ok",
+           "assertions": [F("_references_numbered"), F("_not_empty")]},
+          {"domain": "financial-intelligence", "product": "report", "status": "ok",
+           "assertions": [F("_no_financial_dilution"), F("_not_empty")]},
+          {"domain": "ai-commercial", "product": "digest", "status": "missing",
+           "assertions": []},
+      ], "v4-mimo")
+
+      d = diff_report_cards(prev, cur)
+      c = d["counts"]
+      cc = card_issue_counts(cur)
+      cur_issues = cc["failing_assertions"] + cc["missing_products"] + cc["error_products"]
+      reconciled = c["new"] + c["regressed"] + c["existing_failing"]
+      assert cur_issues == 6, cc
+      assert reconciled == cur_issues, (c, cur_issues)
+      assert c == {"new": 2, "regressed": 3, "fixed": 0, "existing_failing": 1}
+      assert ("medical-research", "report", "_references_numbered") in d["new"]
+      assert ("financial-intelligence", "report", "_not_empty") in d["new"]
+      assert ("medical-research", "report", "_not_empty") in d["regressed"]
+      assert ("ai-commercial", "digest", PRODUCT_STATUS) in d["regressed"]
+      assert ("ai-commercial", "report", "_no_cross_domain_noise") in d["existing_failing"]
+      print("MULTIDOMAIN_DIFF_RECONCILED_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["MULTIDOMAIN_DIFF_RECONCILED_OK"]
+
+  - name: "reconciliation mismatch is a hard non-zero exit"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, tempfile
+      from pathlib import Path
+
+      from typer.testing import CliRunner
+
+      from autoinfo.cli.validate import app as validate_app
+      from autoinfo.validation_matrix import MatrixReport
+
+      def card(products, batch):
+          m = MatrixReport(generated_at="t", commit="c", batch_id=batch)
+          m.products = products
+          return m.to_dict()
+
+      prev_p = card([{"domain": "d", "product": "p", "status": "ok",
+                      "assertions": [{"assertion": "a", "passed": True}]}], "prev")
+      cur_p = card([{"domain": "d", "product": "p", "status": "ok",
+                     "assertions": [{"assertion": "a", "passed": True}]}], "cur")
+      tmp = Path(tempfile.mkdtemp(prefix="uidiff-"))
+      prev_f, cur_f = tmp / "prev.json", tmp / "cur.json"
+      prev_f.write_text(json.dumps(prev_p), encoding="utf-8")
+      cur_f.write_text(json.dumps(cur_p), encoding="utf-8")
+      # Force a fabricated failure count so the buckets cannot reconcile —
+      # the CLI must exit non-zero rather than continue with a soft warning.
+      import autoinfo.cli.validate as cli_mod
+      real = cli_mod.card_issue_counts
+      def fake(card):
+          base = real(card)
+          # The CLI re-parses the JSON, so identity is lost — key on batch_id.
+          if card.get("batch_id") == "cur":
+              base = dict(base, failing_assertions=base["failing_assertions"] + 28)
+          return base
+      cli_mod.card_issue_counts = fake
+      from unittest.mock import patch
+      with patch("autoinfo.cli.validate.card_issue_counts", fake):
+          result = CliRunner().invoke(validate_app, ["diff", str(prev_f), str(cur_f)])
+      assert result.exit_code != 0, "diff must exit non-zero on reconciliation failure"
+      assert "do not reconcile" in result.output, result.output
+      print("DIFF_RECONCILIATION_HARD_EXIT_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["DIFF_RECONCILIATION_HARD_EXIT_OK"]

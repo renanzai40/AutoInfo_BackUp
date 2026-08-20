@@ -256,10 +256,10 @@ class TestMatrix:
         ])
         d = vm.diff_report_cards(prev.to_dict(), cur.to_dict())
         assert d["counts"] == {"new": 1, "regressed": 1, "fixed": 1, "existing_failing": 1}
-        assert ("p", "_title_first") in d["regressed"]
-        assert ("p", "_not_empty") in d["fixed"]
-        assert ("q", "_not_empty") in d["new"]
-        assert ("p", "_no_leak") in d["existing_failing"]
+        assert ("d", "p", "_title_first") in d["regressed"]
+        assert ("d", "p", "_not_empty") in d["fixed"]
+        assert ("d", "q", "_not_empty") in d["new"]
+        assert ("d", "p", "_no_leak") in d["existing_failing"]
 
     def test_diff_counts_reconcile_with_cur_failures(self) -> None:
         """#336 — diff counts must reconcile with the failure count a reader
@@ -308,8 +308,74 @@ class TestMatrix:
             f"{cur_issues(cur)}"
         )
         assert c == {"new": 1, "regressed": 2, "fixed": 0, "existing_failing": 0}
-        assert ("b", vm.PRODUCT_STATUS) in d["regressed"]
-        assert ("d", vm.PRODUCT_STATUS) in d["new"]
+        assert ("", "b", vm.PRODUCT_STATUS) in d["regressed"]
+        assert ("", "d", vm.PRODUCT_STATUS) in d["new"]
+
+    def test_diff_reconciles_across_domains(self) -> None:
+        """#340 — the diff key must include the DOMAIN: a real matrix card
+        spans 3 domains x the same product, so a ``(product, assertion)`` key
+        collides across domains and drops failures.  With the domain in the
+        key, every cur failure (incl. missing/error products) lands in
+        exactly one bucket and ``cur issues == new + regressed + existing``."""
+        def card(
+            domain_products: list[tuple[str, str, str, list[dict[str, Any]]]],
+        ) -> dict[str, Any]:
+            m = vm.MatrixReport(generated_at="t", commit="c")
+            m.products = [
+                {"domain": dom, "product": prod, "status": st, "assertions": asc}
+                for dom, prod, st, asc in domain_products
+            ]
+            return m.to_dict()
+
+        def fail(a: str) -> dict[str, Any]:
+            return {"assertion": a, "passed": False}
+
+        def ok(a: str) -> dict[str, Any]:
+            return {"assertion": a, "passed": True}
+
+        def cur_issues(card_data: dict[str, Any]) -> int:
+            return sum(
+                1
+                for p in card_data["products"]
+                for a in p.get("assertions", [])
+                if not a.get("passed")
+            ) + sum(
+                1
+                for p in card_data["products"]
+                if p.get("status", "ok") not in ("ok",)
+            )
+
+        prev = card([
+            ("ai-commercial", "report", "ok", [ok("_no_cross_domain_noise"), ok("_not_empty")]),
+            ("medical-research", "report", "ok", [ok("_not_empty")]),
+            ("financial-intelligence", "report", "ok", [ok("_no_financial_dilution")]),
+            ("ai-commercial", "digest", "ok", []),
+        ])
+        cur = card([
+            ("ai-commercial", "report", "ok",
+             [fail("_no_cross_domain_noise"), ok("_not_empty")]),
+            ("medical-research", "report", "ok",
+             [fail("_references_numbered"), fail("_not_empty")]),
+            ("financial-intelligence", "report", "ok",
+             [fail("_no_financial_dilution"), fail("_not_empty")]),
+            ("ai-commercial", "digest", "missing", []),
+        ])
+        d = vm.diff_report_cards(prev, cur)
+        c = d["counts"]
+        reconciled = c["new"] + c["regressed"] + c["existing_failing"]
+        hand = cur_issues(cur)
+        assert hand == 6
+        assert reconciled == hand, (
+            f"#340: diff buckets {c} fail to reconcile across domains "
+            f"(hand-counted {hand})"
+        )
+        # Domain is part of every bucket item's identity.
+        assert c == {"new": 2, "regressed": 4, "fixed": 0, "existing_failing": 0}
+        assert ("medical-research", "report", "_references_numbered") in d["new"]
+        assert ("financial-intelligence", "report", "_not_empty") in d["new"]
+        assert ("medical-research", "report", "_not_empty") in d["regressed"]
+        assert ("ai-commercial", "digest", vm.PRODUCT_STATUS) in d["regressed"]
+        assert ("financial-intelligence", "report", "_no_financial_dilution") in d["regressed"]
 
     def test_run_matrix_summary_breakdown_reconciles(self, tmp_path: Path) -> None:
         """#336 — the matrix report summary must break down failures into
@@ -443,6 +509,27 @@ class TestValidateCli:
         }]}), encoding="utf-8")
         result = runner.invoke(app, ["diff", str(prev), str(cur)])
         assert "regressed" in result.output
+        assert result.exit_code == 1
+
+    def test_diff_command_reconciliation_failure_is_hard_exit(self, tmp_path: Path) -> None:
+        """#340 — when the diff buckets do NOT reconcile with the card failure
+        count, the CLI must exit non-zero (hard gate), not print a soft
+        WARNING and continue."""
+        prev = tmp_path / "prev.json"
+        cur = tmp_path / "cur.json"
+        prev.write_text(json.dumps({"products": [{
+            "product": "p", "assertions": [{"assertion": "_title_first", "passed": True}],
+        }]}), encoding="utf-8")
+        cur.write_text(json.dumps({"products": [{
+            "product": "p", "assertions": [{"assertion": "_title_first", "passed": True}],
+        }]}), encoding="utf-8")
+        with patch("autoinfo.cli.validate.card_issue_counts",
+                   side_effect=[{"failing_assertions": 0, "missing_products": 0,
+                                 "error_products": 0},
+                                {"failing_assertions": 99, "missing_products": 0,
+                                 "error_products": 0}]):
+            result = runner.invoke(app, ["diff", str(prev), str(cur)])
+        assert "do not reconcile" in result.output
         assert result.exit_code == 1
 
     def test_default_domains_fallback(self) -> None:

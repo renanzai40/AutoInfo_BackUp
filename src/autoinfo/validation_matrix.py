@@ -601,31 +601,35 @@ def save_report_card(
 
 
 def diff_report_cards(prev: dict[str, Any], cur: dict[str, Any]) -> dict[str, Any]:
-    """#332-A regression diff: classify every (product, assertion) pair as
-    new (cur-fail, not in prev), regressed (prev-pass, cur-fail),
+    """#332-A regression diff: classify every (domain, product, assertion)
+    triple as new (cur-fail, not in prev), regressed (prev-pass, cur-fail),
     fixed (prev-fail, cur-pass) or existing-failing (both fail).
 
-    Product-level failures (``status`` missing/error) are first-class diff
-    items via the ``(product, PRODUCT_STATUS)`` pseudo-assertion (#336), so
-    the counts reconcile with the failure count a reader computes from the
+    The identity includes the DOMAIN (#340): a real matrix card spans
+    several domains x the same product, so a ``(product, assertion)`` key
+    would collide across domains and silently drop failures.  Product-level
+    failures (``status`` missing/error) are first-class diff items via the
+    ``(domain, product, PRODUCT_STATUS)`` pseudo-assertion (#336), so the
+    counts reconcile with the failure count a reader computes from the
     cards: ``cur issues == new + regressed + existing_failing``.
     """
-    def index(card: dict[str, Any]) -> dict[tuple[str, str], bool]:
-        idx: dict[tuple[str, str], bool] = {}
+    def index(card: dict[str, Any]) -> dict[tuple[str, str, str], bool]:
+        idx: dict[tuple[str, str, str], bool] = {}
         for p in card.get("products", []):
+            domain = p.get("domain", "")
             product = p.get("product", "")
-            idx[(product, PRODUCT_STATUS)] = p.get("status", "ok") == "ok"
+            idx[(domain, product, PRODUCT_STATUS)] = p.get("status", "ok") == "ok"
             for a in p.get("assertions", []):
-                key = (product, a.get("assertion", ""))
+                key = (domain, product, a.get("assertion", ""))
                 idx[key] = bool(a.get("passed"))
         return idx
 
     prev_idx = index(prev)
     cur_idx = index(cur)
-    new: list[tuple[str, str]] = []
-    regressed: list[tuple[str, str]] = []
-    fixed: list[tuple[str, str]] = []
-    existing: list[tuple[str, str]] = []
+    new: list[tuple[str, str, str]] = []
+    regressed: list[tuple[str, str, str]] = []
+    fixed: list[tuple[str, str, str]] = []
+    existing: list[tuple[str, str, str]] = []
     for key, cur_pass in cur_idx.items():
         prev_pass = prev_idx.get(key)
         if prev_pass is None:
