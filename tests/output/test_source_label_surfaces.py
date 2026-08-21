@@ -27,6 +27,9 @@ import yaml
 from autoinfo.output import (
     PRODUCT_TEMPLATES,
     DeliveryOutput,
+    ReportData,
+    ReportSection,
+    _report_data_to_dict,
     generate_digest,
     generate_report,
 )
@@ -98,6 +101,14 @@ def _magazine_template() -> Any:
         if row["name"] == "magazine-digest":
             return row["template"]
     raise AssertionError("magazine-digest ProductTemplate row missing")
+
+
+def _report_template(name: str) -> Any:
+    """The ProductTemplate for a report-path product family (#325)."""
+    for row in PRODUCT_TEMPLATES:
+        if row["name"] == name:
+            return row["template"]
+    raise AssertionError(f"{name} ProductTemplate row missing")
 
 
 @pytest.fixture
@@ -212,3 +223,156 @@ class TestSourceLabelSurfaces:
         assert data["entries"][0]["source_platform"] == STALE_SOURCE_NAME
         assert STALE_SOURCE_NAME in out
         _assert_no_rss_residue(out)
+
+    def test_report_json_entries_carry_derived_source_label(
+        self, stale_config: Any
+    ) -> None:
+        """#325 — the report json ``entries`` carry the derived source label
+        instead of the raw ``source_platform='rss'`` for stale pre-#323
+        entries.  RED today: ``_render_report_json`` emits the raw item
+        ``source_platform`` (verified ``entries[0].source_platform == 'rss'``).
+        """
+        with patch("autoinfo.output.KBStore") as kb_cls, \
+             patch("autoinfo.output._group_by_theme",
+                   return_value=[{
+                       "theme": "AI Funding",
+                       "description": "Funding rounds.",
+                       "entries": [_stale_entry()],
+                   }]), \
+             patch("autoinfo.output._generate_executive_summary",
+                   return_value=_SYNTH):
+            kb = MagicMock()
+            kb.list_entries.return_value = [_stale_entry()]
+            kb_cls.return_value = kb
+            out = _as_text(generate_report(
+                domain="ai-commercial", period="weekly", format="json"
+            ))
+        data = json.loads(out)
+        assert data["entries"][0]["source_platform"] == STALE_SOURCE_NAME
+        assert STALE_SOURCE_NAME in out
+        _assert_no_rss_residue(out)
+
+    def test_report_markdown_references_prefer_source_label(
+        self, stale_config: Any
+    ) -> None:
+        """#325 — the report markdown References render the specific source
+        name, and no RSS residue appears in the whole body.
+
+        The report-path references are already derived at generation time
+        (``_derive_source_label``), so this locks the rendered surface and —
+        the NEW behavior — the flat render context carries the derived
+        ``source_label`` on the references for the templates to consume.
+        """
+        with patch("autoinfo.output.KBStore") as kb_cls, \
+             patch("autoinfo.output._group_by_theme",
+                   return_value=[{
+                       "theme": "AI Funding",
+                       "description": "Funding rounds.",
+                       "entries": [_stale_entry()],
+                   }]), \
+             patch("autoinfo.output._generate_executive_summary",
+                   return_value=_SYNTH):
+            kb = MagicMock()
+            kb.list_entries.return_value = [_stale_entry()]
+            kb_cls.return_value = kb
+            out = _as_text(generate_report(
+                domain="ai-commercial", period="weekly", format="markdown"
+            ))
+        # The references line renders the derived name, never "(RSS)".
+        assert "(techcrunch)" in out
+        assert STALE_SOURCE_NAME in out
+        _assert_no_rss_residue(out)
+        # The flat context the report templates consume carries a derived
+        # ``source_label`` on the reference (target fix: templates render
+        # ``ref.source_label or ref.source_platform``).
+        flat = _report_data_to_dict(
+            ReportData(
+                title="ai-commercial \u2014 Report",
+                generated_at="2026-08-21 00:00 UTC",
+                domain="ai-commercial",
+                executive_summary="Synthesis.",
+                sections=[
+                    ReportSection(
+                        title="AI Funding",
+                        content="Funding rounds.",
+                        items=[_stale_entry()],
+                    )
+                ],
+                references=[{
+                    "title": _stale_entry()["title"],
+                    "source_url": STALE_SOURCE_URL,
+                    "source_type": "rss",
+                    "source_platform": STALE_SOURCE_NAME,
+                    "domain": "ai-commercial",
+                }],
+            )
+        )
+        assert flat["references"][0]["source_label"] == STALE_SOURCE_NAME
+
+    def test_column_premium_enterprise_markdown_no_rss_residue(
+        self, stale_config: Any
+    ) -> None:
+        """#325 — column / premium-briefing / enterprise-briefing templates
+        prefer the derived ``source_label`` over the raw ``source_platform``
+        in their References.  RED today: the templates render
+        ``ref.source_platform | platform_name`` with no ``source_label``
+        fallback, so a stale reference (``source_platform='rss'``) renders
+        "(RSS)".  After the fix the flat context carries the derived
+        ``source_label`` and the templates render it.
+        """
+        entry = _stale_entry()
+        data = ReportData(
+            title="ai-commercial \u2014 Report",
+            generated_at="2026-08-21 00:00 UTC",
+            domain="ai-commercial",
+            executive_summary="Synthesis.",
+            sections=[
+                ReportSection(
+                    title="AI Funding",
+                    content="Funding rounds.",
+                    items=[entry],
+                )
+            ],
+            references=[{
+                "title": entry["title"],
+                "source_url": STALE_SOURCE_URL,
+                "source_type": entry["source_type"],
+                "source_platform": entry["source_platform"],
+                "domain": "ai-commercial",
+            }],
+        )
+        flat = _report_data_to_dict(data)
+        for name in ("column", "premium-briefing", "enterprise-briefing"):
+            out = _report_template(name).render(name, "md", flat)
+            assert STALE_SOURCE_NAME in out, f"{name} lost the specific source"
+            _assert_no_rss_residue(out)
+
+    def test_report_section_items_carry_source_label(
+        self, stale_config: Any
+    ) -> None:
+        """#325 — every section ``entries[i].source_platform`` in the report
+        JSON output is the derived source name, not the raw ``'rss'``.  RED
+        today: the section items are built verbatim from the KB entries at
+        L5262-5272, so the JSON render surfaces ``source_platform='rss'``.
+        """
+        with patch("autoinfo.output.KBStore") as kb_cls, \
+             patch("autoinfo.output._group_by_theme",
+                   return_value=[{
+                       "theme": "AI Funding",
+                       "description": "Funding rounds.",
+                       "entries": [_stale_entry()],
+                   }]), \
+             patch("autoinfo.output._generate_executive_summary",
+                   return_value=_SYNTH):
+            kb = MagicMock()
+            kb.list_entries.return_value = [_stale_entry()]
+            kb_cls.return_value = kb
+            out = _as_text(generate_report(
+                domain="ai-commercial", period="weekly", format="json"
+            ))
+        data = json.loads(out)
+        assert data["entries"], "report JSON carried no entries"
+        for entry in data["entries"]:
+            assert entry["source_platform"] == STALE_SOURCE_NAME, (
+                f"section entry rendered raw platform {entry['source_platform']!r}"
+            )

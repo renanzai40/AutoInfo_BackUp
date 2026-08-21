@@ -37,7 +37,7 @@ steps:
   - name: "report-path magazine renders real per-title clusters, not `_No articles found`"
     kind: cli
     command: |-
-      PYTHONPATH=/tmp/opencode/wt-342/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      python3 -c '
       import os, shutil, tempfile
       from pathlib import Path
       from unittest.mock import MagicMock, patch
@@ -89,7 +89,7 @@ steps:
   - name: "digest-path tutorial derives objectives/content from real entries"
     kind: cli
     command: |-
-      PYTHONPATH=/tmp/opencode/wt-342/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      python3 -c '
       import os, shutil, tempfile
       from pathlib import Path
       from unittest.mock import MagicMock, patch
@@ -140,7 +140,7 @@ steps:
   - name: "generate_tutorial with empty LLM result falls back to KB-derived content"
     kind: cli
     command: |-
-      PYTHONPATH=/tmp/opencode/wt-342/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      python3 -c '
       import os, shutil, tempfile
       from pathlib import Path
       from unittest.mock import MagicMock, patch
@@ -184,7 +184,7 @@ steps:
   - name: "zero-entry paths render neutral prose, never a placeholder"
     kind: cli
     command: |-
-      PYTHONPATH=/tmp/opencode/wt-342/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      python3 -c '
       import os, shutil, tempfile
       from pathlib import Path
       from unittest.mock import MagicMock, patch

@@ -193,7 +193,11 @@ steps:
               encoding="utf-8")
           os.chdir(tmp)
           v = _get_domain_exclude_keywords("ai-commercial")
-          assert v == ["贝达药业", "DURAVYU"], f"seed fallback wrong: {v}"
+          # #319: the seed now carries the full noise set (mirrors the
+          # validation-matrix contract), not just 贝达药业/DURAVYU.
+          for term in ("贝达药业", "DURAVYU", "华能", "株冶", "平安好医生",
+                       "SEC 8-K", "10-Q", "财报", "年报"):
+              assert term in v, f"seed fallback missing {term!r}: {v}"
           print("SEED_FALLBACK_OK")
       finally:
           os.chdir(old)

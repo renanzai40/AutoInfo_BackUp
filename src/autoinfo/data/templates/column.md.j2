@@ -39,7 +39,7 @@ _No deep-dive sections available for this column._
 ## What Changed This Week
 
 {% for ref in references %}
-- **{{ ref.title }}**{{ (" — " ~ ref.source_url) if ref.source_url else "" }}{{ (" (" ~ ref.source_platform | platform_name ~ ")") if ref.source_platform else "" }}
+- **{{ ref.title }}**{{ (" — " ~ ref.source_url) if ref.source_url else "" }}{{ (" (" ~ ref.source_label | default(ref.source_platform, "") | platform_name ~ ")") if (ref.source_platform or ref.source_label) else "" }}
 {% else %}
 _No developments this week._
 {% endfor %}

@@ -85,7 +85,7 @@ output-tutorial-presentation, output-video, processing), products-billing needs
 `STRIPE_API_KEY`, and sources-a6-keyed needs `FRED_API_KEY` + `FINNHUB_API_KEY`.
 After configuring keys, re-run those to GREEN (`passed`, never
 `unconfigured`). Observed example (47-scenario suite, 2026-08-05): **37 passed / 0 failed
-/ 10 unconfigured**; the suite has since grown to 111 (64 functional + 47 regression; §1.8) — the baseline shape (all
+/ 10 unconfigured**; the suite has since grown to 112 (64 functional + 48 regression; §1.8) — the baseline shape (all
 env-gated `unconfigured`, nothing failed) is unchanged.
 
 ---
@@ -98,7 +98,7 @@ Scenarios must be real, loadable, and self-verifying: every implemented MCP tool
 exercised by a `kind: mcp` step in at least one scenario. The executor engine lives in
 `src/autoinfo/mcp/validation.py` (scenario loading via `load_scenarios()`); the MCP
 surface is `list_validation_scenarios` / `run_validation_scenario`. Every scenario runs
-against the live system from the **project root** (`/mnt/d/贯维/AutoInfo`) where
+against the live system from the **project root** (`<repo-root>`) where
 `.autoinfo/config.yaml` exists and the `medical-research` domain is configured with 5
 sources, 3 topics, and populated `knowledge/medical-research/01-Raw/` data. This is the
 REAL operation context — do NOT write "empty state" assertions; tools return real data
@@ -303,8 +303,8 @@ every scenario in `scenarios/regression/` must carry `regression: true` and a
 
 ## 1.8 Scenario inventory (as of 2026-08-20)
 
-110 scenario files in `src/autoinfo/mcp/scenarios/` (64 functional flat in `scenarios/`
-+ 47 regression in `scenarios/regression/`):
+112 scenario files in `src/autoinfo/mcp/scenarios/` (64 functional flat in `scenarios/`
++ 48 regression in `scenarios/regression/`):
 
 - **System/Discovery**: system-health, discovery, meta-validation
 - **Errors**: error-boundary
@@ -581,7 +581,7 @@ but the matrix row additionally requires the real call and the artifact.
 
 ## 2.6 Step-by-Step Walkthrough
 
-Run from the project root (`/mnt/d/贯维/AutoInfo`). The venv interpreter is
+Run from the project root (`<repo-root>`). The venv interpreter is
 `.venv/bin/python`; the `autoinfo` console script must be on PATH.
 
 ### 2.6.1 Pre-flight (RED baseline first)

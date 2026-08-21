@@ -5,7 +5,7 @@
 # scenario assertions previously ran mocks/templates detached from the real
 # `output --product` KB path, so regressions passed while the real product was
 # broken (#316/#323).  The new `autoinfo validate --matrix` executor runs the
-# formalized assertion set (11 assertions, each a readable function carrying
+# formalized assertion set (12 assertions, each a readable function carrying
 # its source issue) against the real generation output and emits a report card.
 #
 # This regression exercises the assertion set + diff machinery deterministically
@@ -49,12 +49,12 @@ steps:
       results = run_assertions(clean, domain="ai-commercial", product="report")
       failed = [r.name for r in results if not r.passed]
       assert not failed, f"assertions failed on clean report: {failed}"
-      assert len(results) == 11, f"expected 11 assertions, got {len(results)}"
+      assert len(results) == 12, f"expected 12 assertions, got {len(results)}"
 
       # A leak-polluted header must be caught by the #328 assertion.
       polluted = "\x1b[1;31mGive Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new\x1b[0m\n# Title\n"
       leak_res = {r.name: r.passed for r in run_assertions(polluted)}
-      assert leak_res.get("no_error_leak") is False, "leak not caught"
+      assert leak_res.get("_no_error_leak") is False, "leak not caught"
       print("VALIDATION_MATRIX_ASSERTIONS_OK")
       '
     expect:
@@ -77,8 +77,8 @@ steps:
           {"assertion":"_title_first","passed":False},   # regressed
           {"assertion":"_not_empty","passed":True}]}]
       d = diff_report_cards(rc1.to_dict(), rc2.to_dict())
-      assert ("p", "_title_first") in d["regressed"], d
-      assert ("p", "_not_empty") not in d["regressed"], d
+      assert ("d", "p", "_title_first") in d["regressed"], d
+      assert ("d", "p", "_not_empty") not in d["regressed"], d
       assert d["counts"]["regressed"] == 1, d
       print("VALIDATION_MATRIX_DIFF_OK")
       '

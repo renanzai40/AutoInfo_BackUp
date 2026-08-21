@@ -3,6 +3,21 @@
 name: financial-intelligence
 description: "Financial and business intelligence — market data, economic indicators, corporate filings"
 
+# SEC-filing dilution filter (#332): SEC EDGAR 8-K/10-K/10-Q items are
+# metadata-only filings (form + company + date) whose titles and summaries
+# carry the bare form id.  Excluding them from product input keeps the
+# financial digest/report focused on substantive analysis instead of a list
+# of filing notices.  The collection-time guard already drops NEW SEC items
+# (collect.py _DOMAIN_NOISE_KEYWORDS); this seed filter also protects against
+# stale pre-fix KB entries and re-processed caches.
+exclude_keywords:
+  - 8-K
+  - 10-K
+  - 10-Q
+  - 10Q
+  - SEC 8-K
+  - 8-K filing
+
 sources:
   - name: Alpha Vantage
     type: api

@@ -44,6 +44,8 @@ jobs:
             'stdio or SSE' \
             'init/collect/process/healthy/degraded' \
             '{callback_event, product}' \
+            '/tmp/opencode' \
+            '/mnt/d/贯维/AutoInfo' \
           )
           for pat in "${BANNED[@]}"; do
             if grep -rInF $EXCLUDE "$pat" docs/ README.md AGENTS.md; then

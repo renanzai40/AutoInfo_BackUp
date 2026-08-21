@@ -115,3 +115,54 @@ jobs:
           name: pytest-output
           path: pytest-output.log
           retention-days: 7
+
+  # #347: regression scenarios must be runnable as-is in a clean checkout +
+  # standard venv (CI can run all). This job is the portability proof: every
+  # scenario command now uses bare `python3` (resolved via the installed
+  # package), and a fresh venv here contains NO dev-machine paths — if a
+  # scenario hardcodes one, this job turns RED even though it passes on the
+  # author's box.
+  scenario-portability:
+    name: Scenario portability
+    runs-on: ubuntu-latest
+    env:
+      # rich/typer render --help with ANSI escapes that split double-dash
+      # flags when they detect a CI terminal (GITHUB_ACTIONS=true). TERM=dumb
+      # forces plain output so CLI help-substring assertions in scenario
+      # steps behave identically to local runs (same as the test job).
+      TERM: dumb
+    steps:
+      # fetch-depth: 0 — the smart-skip `_code_changed` helper and the
+      # scenario runner both need git history (git diff against the base).
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      # Editable install: bare `python3` in the scenario commands must resolve
+      # the autoinfo package through the standard interpreter on PATH — no
+      # absolute venv path, exactly what #347 fixes.
+      - name: Install package
+        run: pip install -e ".[dev]"
+      - name: Guard test — no dev-machine absolute paths in scenarios
+        run: pytest tests/validation/test_no_dev_abs_paths.py -q
+      - name: "Run ported regression scenarios (requires_env: [], no LLM/network)"
+        run: |
+          python3 - <<'PY'
+          import asyncio
+          from autoinfo.mcp.validation import run_scenario
+
+          async def main():
+              for name in ("regression-no-placeholder-magazine-tutorial",
+                           "regression-source-label-all-surfaces"):
+                  result = await run_scenario(name, dispatch=None)
+                  status = result.get("status")
+                  print(f"{name}: {status}")
+                  assert status == "passed", result
+
+          asyncio.run(main())
+          PY
+      - name: Full scenario library parses
+        run: |
+          python3 -c "from autoinfo.mcp.validation import load_scenarios; print(len(load_scenarios()))"

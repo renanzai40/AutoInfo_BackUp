@@ -28,7 +28,7 @@ steps:
   - name: "digest markdown entry table renders the specific source name, not (RSS)"
     kind: cli
     command: |-
-      PYTHONPATH=/tmp/opencode/wt-325/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      python3 -c '
       import os, shutil, tempfile
       from pathlib import Path
       from unittest.mock import MagicMock, patch
@@ -85,7 +85,7 @@ steps:
   - name: "magazine-digest byline + per-title clusters use the specific source name"
     kind: cli
     command: |-
-      PYTHONPATH=/tmp/opencode/wt-325/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      python3 -c '
       import os, shutil, tempfile
       from pathlib import Path
       from unittest.mock import MagicMock, patch
@@ -149,7 +149,7 @@ steps:
   - name: "digest json carries the derived source_label, no generic rss label"
     kind: cli
     command: |-
-      PYTHONPATH=/tmp/opencode/wt-325/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      python3 -c '
       import json, os, shutil, tempfile
       from pathlib import Path
       from unittest.mock import MagicMock, patch
@@ -208,7 +208,7 @@ steps:
   - name: "digest agent payload carries the specific source name, not rss"
     kind: cli
     command: |-
-      PYTHONPATH=/tmp/opencode/wt-325/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      python3 -c '
       import json, os, shutil, tempfile
       from pathlib import Path
       from unittest.mock import MagicMock, patch
@@ -266,7 +266,7 @@ steps:
   - name: "report agent payload carries the specific source name, not rss"
     kind: cli
     command: |-
-      PYTHONPATH=/tmp/opencode/wt-325/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      python3 -c '
       import json, os, shutil, tempfile
       from pathlib import Path
       from unittest.mock import MagicMock, patch
@@ -328,7 +328,7 @@ steps:
   - name: "_source_labels_specific scans the whole body — masthead RSS fails loudly"
     kind: cli
     command: |-
-      PYTHONPATH=/tmp/opencode/wt-325/src /mnt/d/贯维/AutoInfo/.venv/bin/python -c '
+      python3 -c '
       from autoinfo import validation_matrix as vm
 
       # RSS residue in the masthead/byline position with NO References heading:

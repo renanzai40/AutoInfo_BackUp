@@ -28,6 +28,20 @@ from autoinfo.output import (
     generate_tutorial,
 )
 
+# The full 11-term ai-commercial noise set from the #319 validation assertion
+# (_AI_COMMERCIAL_NOISE).  The seed sources.yaml currently declares only
+# 贝达药业 + DURAVYU; the remaining 7 terms (华能/株冶/平安好医生/SEC 8-K/
+# 10-Q/财报/年报) still leak through product generation.
+_FULL_AI_NOISE_SET = [
+    "华能", "株冶", "平安好医生", "贝达药业", "DURAVYU",
+    "SEC 8-K", "10-Q", "财报", "年报",
+]
+
+# The SEC-form dilution terms for financial-intelligence (#332): the
+# collection guard allowlists 8-K/10-K/10-Q, but products have no
+# exclude_keywords filter, so stale SEC entries dilute financial digests.
+_SEC_FORM_TERMS = ["8-K", "10-K", "10-Q", "10Q"]
+
 
 def _as_text(result: str | DeliveryOutput) -> str:
     """Extract the rendered body from a generate_* return value."""
@@ -434,7 +448,48 @@ class TestSeedFallback:
             yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False), encoding="utf-8"
         )
         monkeypatch.chdir(tmp_path)
-        assert _get_domain_exclude_keywords("ai-commercial") == ["贝达药业", "DURAVYU"]
+        # #319: the ai-commercial seed now carries the full 9-term noise set
+        # (mirrors the validation-matrix contract), not just 贝达药业/DURAVYU.
+        got = _get_domain_exclude_keywords("ai-commercial")
+        assert set(_FULL_AI_NOISE_SET).issubset(set(got))
+
+    def test_ai_commercial_seed_excludes_full_noise_set(
+        self, tmp_path: Any, monkeypatch: Any
+    ) -> None:
+        """#319 — the ai-commercial seed ``exclude_keywords`` covers the full
+        11-term validation set, not just 贝达药业 + DURAVYU.  RED today: the
+        seed declares only 2 terms, so 华能/株冶/平安好医生/SEC 8-K/10-Q/
+        财报/年报 pass straight through into products."""
+        _write_config(tmp_path, [])
+        monkeypatch.chdir(tmp_path)
+        # Drop the config entirely so the seed fallback (the #319 mechanism)
+        # is exercised; a config that declares nothing to filter must fall
+        # back to the demo-domain seed.
+        (tmp_path / ".autoinfo" / "config.yaml").unlink()
+        got = _get_domain_exclude_keywords("ai-commercial")
+        for term in _FULL_AI_NOISE_SET:
+            assert term in got, (
+                f"ai-commercial seed exclude_keywords missing {term!r}; "
+                f"got {got!r}"
+            )
+
+    def test_financial_seed_excludes_sec_forms(
+        self, tmp_path: Any, monkeypatch: Any
+    ) -> None:
+        """#332 — the financial-intelligence seed declares ``exclude_keywords``
+        for SEC form dilution (8-K/10-K/10-Q/10Q) so stale SEC filings never
+        reach financial products.  RED today: the seed declares no
+        ``exclude_keywords`` at all, so ``_get_domain_exclude_keywords``
+        returns ``[]`` and the filter is a no-op."""
+        _write_config(tmp_path, [])
+        monkeypatch.chdir(tmp_path)
+        (tmp_path / ".autoinfo" / "config.yaml").unlink()
+        got = _get_domain_exclude_keywords("financial-intelligence")
+        for term in _SEC_FORM_TERMS:
+            assert term in got, (
+                f"financial-intelligence seed exclude_keywords missing {term!r}; "
+                f"got {got!r}"
+            )
 
     def test_explicit_empty_list_wins_over_seed(
         self, tmp_path: Any, monkeypatch: Any
@@ -450,3 +505,132 @@ class TestSeedFallback:
         monkeypatch.chdir(tmp_path)
         # No demo seed exists for this domain -> [] (no filtering).
         assert _get_domain_exclude_keywords("no-such-domain") == []
+
+
+# ---------------------------------------------------------------------------
+# Issue #319: digest-level E2E filtering of the full noise set
+# ---------------------------------------------------------------------------
+
+
+_HUANENG_NOISE_ENTRIES = [
+    _entry("huaneng-1", "华能国际 2026 中期业绩", summary="华能发电量同比上升"),
+    _entry("pingan-1", "平安好医生 2026 财报", summary="平安好医生营收增长"),
+    _entry("zhuye-1", "株冶集团 2026 半年报", summary="株冶业绩公告"),
+    _entry("ai-1", "AI startup raises series A", summary="Venture funding"),
+]
+
+
+class TestDigestFiltersHuanengNoise:
+    @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._call_llm_for_digest")
+    def test_digest_filters_huaneng_noise(
+        self, mock_llm: MagicMock, mock_kb_store: MagicMock, tmp_path: Any,
+        monkeypatch: Any,
+    ) -> None:
+        """#319 — a digest built from entries whose title/summary contains
+        华能/平安好医生/株冶 must exclude them BEFORE synthesis.  RED today:
+        the config declares no ``exclude_keywords`` and the seed covers only
+        贝达药业 + DURAVYU, so the 3 noise entries pass through into the LLM
+        prompt and the rendered body."""
+        # Config WITHOUT exclude_keywords (the pre-#319 live shape): the
+        # seed fallback is the only mechanism that can filter, so this test
+        # goes GREEN only when the seed covers the full noise set.
+        cfg_dir = tmp_path / ".autoinfo"
+        cfg_dir.mkdir(parents=True, exist_ok=True)
+        cfg = {
+            "project": {"name": "test"},
+            "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+            "domains": [
+                {
+                    "name": "ai-commercial",
+                    "active": True,
+                    "sources": [
+                        {
+                            "name": "techcrunch",
+                            "type": "rss",
+                            "url": "https://techcrunch.com/feed/",
+                        }
+                    ],
+                    "topics": [],
+                }
+            ],
+        }
+        (cfg_dir / "config.yaml").write_text(
+            yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False), encoding="utf-8"
+        )
+        monkeypatch.chdir(tmp_path)
+        mock_llm.return_value = {
+            "executive_summary": "Synthesis.",
+            "key_findings": [],
+            "recommendations": [],
+        }
+        mock_kb_store.return_value = _digest_mock_store(_HUANENG_NOISE_ENTRIES)
+        body = _as_text(generate_digest(
+            domain="ai-commercial", period="weekly", format="markdown"
+        ))
+        prompt = mock_llm.call_args[0][0]
+        assert "华能" not in prompt
+        assert "平安好医生" not in prompt
+        assert "株冶" not in prompt
+        assert "华能" not in body
+        assert "平安好医生" not in body
+        assert "株冶" not in body
+        assert "AI startup raises series A" in body
+
+
+# ---------------------------------------------------------------------------
+# Issue #332: SEC form dilution filtering for financial-intelligence
+# ---------------------------------------------------------------------------
+
+
+def _sec_filing_entry(entry_id: str, title: str) -> dict[str, Any]:
+    """A stale SEC EDGAR filing entry (the #332 KB dilution shape)."""
+    return {
+        "entry_id": entry_id,
+        "title": title,
+        "summary": "SEC filing metadata.",
+        "domain": "financial-intelligence",
+        "tier": "01-Raw",
+        "source_url": f"https://www.sec.gov/edgar/{entry_id}",
+        "source_type": "sec_edgar",
+        "source_platform": "sec_edgar",
+        "relevance_score": 85.0,
+        "tags": "[]",
+        "collected_at": "2026-08-17",
+    }
+
+
+_SEC_FILING_ENTRIES = [
+    _sec_filing_entry("sec-8k", "8-K Apple Inc. (2026-07-30)"),
+    _sec_filing_entry("sec-10q", "10-Q Apple Inc. (2026-07-31)"),
+    _sec_filing_entry("fin-1", "Fed holds rates steady"),
+]
+
+
+class TestReportFiltersSecFilingEntries:
+    @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._group_by_theme")
+    @patch("autoinfo.output._generate_executive_summary")
+    def test_report_filters_sec_filing_entries(
+        self,
+        mock_synthesis: MagicMock,
+        mock_group: MagicMock,
+        mock_kb: MagicMock,
+        tmp_path: Any,
+        monkeypatch: Any,
+    ) -> None:
+        """#332 — a report built from SEC 8-K/10-Q filing entries must exclude
+        them via financial-intelligence ``exclude_keywords``.  RED today:
+        financial-intelligence declares no ``exclude_keywords``, so the
+        filing titles flow straight into the rendered report."""
+        _write_config(tmp_path, [])
+        monkeypatch.chdir(tmp_path)
+        mock_kb.return_value = _digest_mock_store(_SEC_FILING_ENTRIES)
+        mock_group.return_value = []
+        mock_synthesis.return_value = "Overview."
+        body = _as_text(generate_report(
+            domain="financial-intelligence", period="weekly", format="markdown"
+        ))
+        assert "8-K Apple Inc." not in body
+        assert "10-Q Apple Inc." not in body
+        assert "Fed holds rates steady" in body

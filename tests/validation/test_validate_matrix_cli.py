@@ -175,6 +175,15 @@ class TestAssertionSet:
         fin = "# T\n\nForm 8-K and 10-Q metadata only\n"
         assert not vm._no_financial_dilution(fin, "financial-intelligence", "digest").passed
         assert vm._no_financial_dilution(fin, "medical-research", "digest").passed
+        # #332 — bare "8-K"/"10-K" (no "SEC"/"filing" qualifier) must ALSO be
+        # caught: the stale KB entries carry those bare form ids.  RED today:
+        # _FIN_DILUTION lacks the bare terms, so these assertions pass when
+        # they should fail.
+        for bare in ("8-K Apple Inc. (2026-07-30)", "10-K Apple Inc. (2026-01-15)"):
+            sample = f"# T\n\n{bare}\n"
+            assert not vm._no_financial_dilution(
+                sample, "financial-intelligence", "digest"
+            ).passed, f"bare SEC form id escaped detection: {bare!r}"
 
     def test_not_empty(self) -> None:
         assert not vm._not_empty("", "d", "report").passed
@@ -219,7 +228,7 @@ class TestMatrix:
             report = vm.run_matrix(["ai-commercial"], ["report"], only_assert=True)
         assert report.summary["total_products"] == 1
         assert report.summary["failures"] == 0
-        assert report.to_dict()["schema_version"] == 1
+        assert report.to_dict()["schema_version"] == 2
         assert report.to_dict()["tool"] == "autoinfo validate --matrix"
 
     def test_run_matrix_missing_file_reports_failure(self) -> None:
@@ -241,7 +250,7 @@ class TestMatrix:
         path = vm.save_report_card(report, out_dir)
         assert path.is_file()
         data = json.loads(path.read_text(encoding="utf-8"))
-        assert data["schema_version"] == 1
+        assert data["schema_version"] == 2
 
     def test_diff_report_cards_all_classes(self) -> None:
         def card(

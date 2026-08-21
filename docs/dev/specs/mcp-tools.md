@@ -43,7 +43,7 @@
 | **Audit** | `query_audit_log` (immutable audit log query) |
 | **Agent Callbacks** | `set_agent_callback`, `list_agent_callbacks`, `remove_agent_callback` |
 | **Delivery Schedule** | `add_delivery_schedule`, `list_delivery_schedules`, `remove_delivery_schedule` |
-| **Validation** | `list_validation_scenarios` (list available Agent-native scenarios; 111 built-in across all MCP categories, CLI, and REST API surfaces — 64 functional + 47 regression), `run_validation_scenario` (execute a scenario in-process: each step makes a real MCP/CLI/HTTP call and asserts on the `{success, data}` envelope; `llm_assert` steps run a real model call; env-gated steps report `unconfigured` when BYOK keys are missing — parameters: scenario (required), steps (optional, 1-based indices)). Scenarios in `src/autoinfo/mcp/scenarios/`; authoring contract in `docs/dev/validation-scenario-contract.md`. |
+| **Validation** | `list_validation_scenarios` (list available Agent-native scenarios; 112 built-in across all MCP categories, CLI, and REST API surfaces — 64 functional + 48 regression), `run_validation_scenario` (execute a scenario in-process: each step makes a real MCP/CLI/HTTP call and asserts on the `{success, data}` envelope; `llm_assert` steps run a real model call; env-gated steps report `unconfigured` when BYOK keys are missing — parameters: scenario (required), steps (optional, 1-based indices)). Scenarios in `src/autoinfo/mcp/scenarios/`; authoring contract in `docs/dev/validation-scenario-contract.md`. |
 
 All tools accept `domain` parameter where applicable. Pagination (`limit`/`offset`/`total_count`) on all list/search tools.
 

@@ -5023,6 +5023,16 @@ def generate_report(
     # exclude_keywords blacklist BEFORE thematic grouping / LLM synthesis.
     entries = _filter_entries_by_domain_exclusions(entries, domain)
 
+    # --- Source-label enrichment (issue #325) --------------------------------
+    # Mirror the digest path: stamp the derived specific source name on every
+    # entry so ALL report-path surfaces (markdown references, section entry
+    # tables, JSON entries, product-template variants column / premium-briefing
+    # / enterprise-briefing / magazine-digest) render the specific source
+    # instead of the generic "(RSS)" for stale pre-#323 entries.  In-place
+    # mutation flows into section items because _group_by_theme reuses the same
+    # entry dict objects.
+    entries = _label_entries(entries, domain)
+
     if not entries:
         rendered: str
         if format in ("json", "agent"):
@@ -5255,6 +5265,11 @@ def generate_report(
             action_required = _actions
 
     # -- Build report data -------------------------------------------------
+    # #325: every section item carries the derived source label.  When the
+    # entry was already stamped by _label_entries (the real generate_report
+    # path), reuse it; when the grouping path returns unlabeled entries (e.g.
+    # tests patching _group_by_theme, or a grouping that rebuilds entry
+    # dicts), derive the label here so no section surface shows "(RSS)".
     sections = [
         ReportSection(
             title=g["theme"],
@@ -5265,7 +5280,20 @@ def generate_report(
                     "summary": e.get("summary", ""),
                     "source_url": e.get("source_url", ""),
                     "source_type": e.get("source_type", ""),
-                    "source_platform": e.get("source_platform", ""),
+                    "source_platform": (
+                        e.get("source_label", "")
+                        or _derive_source_label(
+                            e, str(e.get("domain") or domain)
+                        )
+                        or e.get("source_platform", "")
+                    ),
+                    "source_label": (
+                        e.get("source_label", "")
+                        or _derive_source_label(
+                            e, str(e.get("domain") or domain)
+                        )
+                        or e.get("source_platform", "")
+                    ),
                     "relevance_score": e.get("relevance_score", 0),
                     "source_tier": e.get("source_tier"),
                     "domain": e.get("domain", domain),
@@ -6716,18 +6744,32 @@ def _report_data_to_dict(
     layout renders real per-title clusters instead of the
     ``_No articles found..._`` empty-state.
     """
+    # #325: stamp a derived ``source_label`` on every reference so the
+    # report-path templates (report/column/premium-briefing/enterprise-briefing
+    # /magazine-digest) can render ``ref.source_label or ref.source_platform``
+    # and never show the generic "(RSS)" for stale pre-#323 entries.  A
+    # reference may already carry the derived label (the generate_report
+    # references builder calls _derive_source_label); when it does not (e.g.
+    # a flat context built directly), derive it here from the ref's own data.
+    labeled_refs = []
+    for ref in report_data.references:
+        ref_label = str(ref.get("source_label") or "").strip()
+        if not ref_label:
+            ref_label = _derive_source_label(ref, str(ref.get("domain") or report_data.domain))
+        labeled_refs.append({**ref, "source_label": ref_label})
+
     entries = [
         {
             "title": ref.get("title", ""),
             "summary": "",
             "source_url": ref.get("source_url", ""),
             "source_type": ref.get("source_type", ""),
-            "source_platform": ref.get("source_platform", ""),
-            "source_label": ref.get("source_platform", ""),
+            "source_platform": ref.get("source_label", "") or ref.get("source_platform", ""),
+            "source_label": ref.get("source_label", ""),
             "relevance_score": None,
             "collected_at": "",
         }
-        for ref in report_data.references
+        for ref in labeled_refs
     ]
     return {
         "title": report_data.title,
@@ -6747,11 +6789,19 @@ def _report_data_to_dict(
             {
                 "title": s.title,
                 "content": s.content,
-                "entries": s.items,
+                "entries": [
+                    {
+                        **item,
+                        "source_platform": (
+                            item.get("source_label", "") or item.get("source_platform", "")
+                        ),
+                    }
+                    for item in s.items
+                ],
             }
             for s in report_data.sections
         ],
-        "references": report_data.references,
+        "references": labeled_refs,
         "appendices": report_data.appendices,
     }
 
@@ -6784,7 +6834,7 @@ def _render_report_json(report_data: ReportData, period: str = "weekly") -> str:
                 "url": url,
                 "source_url": url,
                 "source_type": item.get("source_type", ""),
-                "source_platform": item.get("source_platform", ""),
+                "source_platform": item.get("source_label", "") or item.get("source_platform", ""),
                 "date": item.get("collected_at", ""),
                 "domain": item.get("domain", ""),
             })

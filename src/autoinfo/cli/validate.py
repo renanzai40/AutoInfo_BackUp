@@ -27,6 +27,7 @@ from autoinfo.validation_matrix import (
     MATRIX_PRODUCTS,
     PRODUCT_STATUS,
     MatrixReport,
+    SkipPolicy,
     _current_commit,
     card_issue_counts,
     diff_report_cards,
@@ -85,6 +86,22 @@ def matrix(
         help="Explicit batch id (default: <commit>-<stamp>); re-runs with the "
              "same id land in the same isolated batch dir",
     ),
+    no_skip: bool = typer.Option(
+        False, "--no-skip",
+        help="Disable #348 smart-skip — force full regeneration of every "
+             "(domain, product) pair",
+    ),
+    skip_threshold: int = typer.Option(
+        3, "--skip-threshold",
+        help="#348 smart-skip: consecutive passing batches required before a "
+             "(domain, product) pair is reused instead of regenerated "
+             "(premium products need threshold + 2 unless --skip-premium)",
+    ),
+    skip_premium: bool = typer.Option(
+        False, "--skip-premium",
+        help="#348 smart-skip: allow premium products (premium-briefing, "
+             "column, enterprise-briefing) to skip at the plain threshold",
+    ),
 ) -> None:
     """Run the full-matrix acceptance executor (#331).
 
@@ -105,11 +122,18 @@ def matrix(
     # assert targets the batch tree only when --batch is given, otherwise it
     # keeps the legacy shared outputs/ scan (backward compatible).
     artifacts_dir = batch_root if (not only_assert or batch) else None
+    skip_policy = SkipPolicy(
+        allow_skip=not no_skip,
+        threshold=skip_threshold,
+        skip_premium=skip_premium,
+        data_dir=Path.cwd(),
+    )
     report = run_matrix(
         domain_list, product_list,
         only_assert=only_assert,
         batch_id=batch_id,
         artifacts_dir=artifacts_dir,
+        skip=skip_policy,
     )
     _render_report_card(report)
     if json_out:

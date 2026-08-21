@@ -181,7 +181,11 @@ class TestInitMergeBackfill:
 
         data = _read_config(autoinfo_dir / "config.yaml")
         ai = next(d for d in data["domains"] if d["name"] == "ai-commercial")
-        assert ai["exclude_keywords"] == ["贝达药业", "DURAVYU"]
+        # #319: the ai-commercial seed now carries the full noise set.
+        got = ai["exclude_keywords"]
+        for term in ("贝达药业", "DURAVYU", "华能", "株冶", "平安好医生",
+                     "SEC 8-K", "10-Q", "财报", "年报"):
+            assert term in got, f"init backfill missing {term!r}: {got}"
 
     def test_init_merge_never_overwrites_present_exclude_keywords(
         self, autoinfo_dir: Path

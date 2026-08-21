@@ -73,7 +73,7 @@ _No key takeaways were extracted for this period._
 ## References
 
 {% for ref in references %}
-{{ loop.index }}. **{{ ref.title | default('') }}**{{ (" — " ~ ref.source_url) if ref.source_url else "" }}{{ (" (" ~ ref.source_platform | platform_name ~ ")") if ref.source_platform else "" }}
+{{ loop.index }}. **{{ ref.title | default('') }}**{{ (" — " ~ ref.source_url) if ref.source_url else "" }}{{ (" (" ~ ref.source_label | default(ref.source_platform, "") | platform_name ~ ")") if (ref.source_platform or ref.source_label) else "" }}
 {% else %}
 _No source references available for this briefing._
 {% endfor %}

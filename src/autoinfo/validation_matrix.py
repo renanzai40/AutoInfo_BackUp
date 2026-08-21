@@ -79,7 +79,7 @@ class MatrixReport:
 
     def to_dict(self) -> dict[str, Any]:
         return {
-            "schema_version": 1,
+            "schema_version": 2,
             "tool": "autoinfo validate --matrix",
             "generated_at": self.generated_at,
             "commit": self.commit,
@@ -87,6 +87,178 @@ class MatrixReport:
             "products": self.products,
             "summary": self.summary,
         }
+
+
+@dataclass
+class SkipPolicy:
+    """#348 — smart-skip policy for ``validate --matrix``.
+
+    When ``allow_skip`` is True and a (domain, product) pair has passed
+    ``threshold`` consecutive batches with no code change and no new raw data,
+    the pair is NOT regenerated: the last persisted artifact is reused, the
+    cheap assertion pass runs on it (防漏 — a now-failing artifact is reported
+    as failing, not skipped), and the row is marked ``frozen``/``stale``.
+
+    Default ``allow_skip=False`` keeps every existing caller regenerating.
+    """
+
+    allow_skip: bool = False
+    threshold: int = 3
+    skip_premium: bool = False
+    data_dir: Path | None = None  # KB root; raw-entry counts under <data_dir>/<domain>/01-Raw/
+
+
+# ---------------------------------------------------------------------------
+# #348 — smart-skip of stable (domain, product) pairs
+# ---------------------------------------------------------------------------
+
+
+def _premium_products() -> set[str]:
+    """The products held to the stricter #348 skip bar: the non-free
+    PRODUCT_TEMPLATES rows that appear in the matrix grid."""
+    from autoinfo.output import PRODUCT_TEMPLATES
+
+    return {
+        row["name"]
+        for row in PRODUCT_TEMPLATES
+        if row.get("access_level") != "free" and row["name"] in MATRIX_PRODUCTS
+    }
+
+
+def _load_batch_history(snapshot_dir: Path) -> list[dict[str, Any]]:
+    """Glob ``report-card-*.json`` under the snapshot dir's batch subdirs and
+    return the parsed cards sorted oldest→newest by ``(generated_at, batch_id)``."""
+    if snapshot_dir is None or not snapshot_dir.is_dir():
+        return []
+    cards: list[dict[str, Any]] = []
+    for batch_dir in snapshot_dir.iterdir():
+        if not batch_dir.is_dir():
+            continue
+        for card_path in batch_dir.glob("report-card-*.json"):
+            try:
+                cards.append(json.loads(card_path.read_text(encoding="utf-8")))
+            except (OSError, ValueError):
+                continue
+    cards.sort(
+        key=lambda c: (
+            str(c.get("generated_at", "")),
+            str(c.get("batch_id", "")),
+        )
+    )
+    return cards
+
+
+def _find_product_row(
+    card: dict[str, Any], domain: str, product: str
+) -> dict[str, Any] | None:
+    """The (domain, product) row of one report card, or None when absent."""
+    return next(
+        (
+            p for p in card.get("products", [])
+            if p.get("domain") == domain and p.get("product") == product
+        ),
+        None,
+    )
+
+
+def _row_passes(card: dict[str, Any], domain: str, product: str) -> bool:
+    """True when the (domain, product) row exists, status == "ok" and every
+    stored assertion passed."""
+    row = _find_product_row(card, domain, product)
+    if row is None or row.get("status") != "ok":
+        return False
+    return all(a.get("passed") for a in row.get("assertions", []))
+
+
+def _consecutive_passes(
+    history: list[dict[str, Any]], domain: str, product: str
+) -> int:
+    """TRAILING count of consecutive fully-passing batches for (domain,
+    product); a failing/missing row anywhere in the middle resets the count."""
+    count = 0
+    for card in reversed(history):
+        if _row_passes(card, domain, product):
+            count += 1
+        else:
+            break
+    return count
+
+
+def _last_pass_commit(
+    history: list[dict[str, Any]], domain: str, product: str
+) -> str | None:
+    """The commit of the newest trailing fully-passing batch, or None when the
+    newest batch's row is missing or failing."""
+    if not history or not _row_passes(history[-1], domain, product):
+        return None
+    return history[-1].get("commit")
+
+
+def _code_changed(
+    since_commit: str, product: str, domain: str, template_paths: list[str]
+) -> bool:
+    """True when any tracked file under the product's template/render paths
+    changed since ``since_commit``.  Conservative on failure: a git error
+    returns True (regenerate rather than skip on unknown state)."""
+    if not template_paths:
+        return False
+    paths = [str(p) for p in template_paths]
+    try:
+        out = subprocess.run(
+            ["git", "diff", "--name-only", f"{since_commit}..HEAD", "--", *paths],
+            capture_output=True, text=True, cwd=Path.cwd(), timeout=5,
+        )
+        if out.returncode != 0:
+            return True
+        return bool(out.stdout.strip())
+    except Exception:
+        return True
+
+
+def _raw_entry_count(domain: str, data_dir: Path) -> int:
+    """Count ``.md`` files under ``<data_dir>/<domain>/01-Raw/`` (recursively —
+    entries live under ``01-Raw/<topic>/...``).  Missing dir → 0."""
+    raw_dir = data_dir / domain / "01-Raw"
+    if not raw_dir.is_dir():
+        return 0
+    return len(list(raw_dir.rglob("*.md")))
+
+
+def _should_skip(
+    history: list[dict[str, Any]],
+    domain: str,
+    product: str,
+    *,
+    policy: SkipPolicy,
+    template_paths: list[str],
+    raw_counts: dict[str, int],
+) -> bool:
+    """Pure #348 skip decision for one (domain, product) pair.
+
+    All of the following must hold:
+
+    * trailing consecutive passes >= threshold (premium products need
+      ``threshold + 2`` unless ``skip_premium`` opts in);
+    * no code change since the newest passing commit (only checked when that
+      commit is real — with a None commit the consecutive count is 0 anyway);
+    * raw data unchanged: if the newest card recorded per-domain raw counts,
+      the run's counts must match.
+    """
+    threshold = policy.threshold
+    if product in _premium_products() and not policy.skip_premium:
+        threshold += 2
+    if _consecutive_passes(history, domain, product) < threshold:
+        return False
+    last_commit = _last_pass_commit(history, domain, product)
+    if last_commit is not None and _code_changed(
+        last_commit, product, domain, template_paths
+    ):
+        return False
+    if history:
+        recorded = history[-1].get("summary", {}).get("raw_counts", {}).get(domain)
+        if recorded is not None and raw_counts.get(domain) != recorded:
+            return False
+    return True
 
 
 # ---------------------------------------------------------------------------
@@ -133,7 +305,15 @@ _AI_COMMERCIAL_NOISE = (
     "贝达药业", "华能", "株冶", "平安好医生", "DURAVYU", "SEC 8-K", "SEC 8K",
     "10-Q", "10Q", "财报", "年报",
 )
-_FIN_DILUTION = ("SEC 8-K", "SEC 8K", "10-Q", "10Q", "8-K filing", "8K filing")
+# #332: bare form ids ("8-K", "10-K") are included — stale SEC KB entries
+# carry titles like "8-K Apple Inc. (2026-07-30)" / "10-K Apple Inc.
+# (2026-01-15)" with no "SEC"/"filing" qualifier, so the dilution markers
+# must match the bare form string too.
+_FIN_DILUTION = (
+    "SEC 8-K", "SEC 8K", "8-K", "8K",
+    "10-Q", "10Q", "10-K", "10K",
+    "8-K filing", "8K filing",
+)
 
 _X = "cross-domain-noise-filter"
 
@@ -464,6 +644,7 @@ def run_matrix(
     only_assert: bool = False,
     batch_id: str | None = None,
     artifacts_dir: Path | None = None,
+    skip: SkipPolicy | None = None,
 ) -> MatrixReport:
     """Run the domain x product matrix.
 
@@ -479,6 +660,11 @@ def run_matrix(
     overwrite each other) and ``only_assert`` scans that same batch tree.
     Without ``artifacts_dir``, full mode stays in-memory and ``only_assert``
     falls back to the legacy shared ``outputs/`` scan.
+
+    #348 smart-skip: when ``skip`` is enabled (``allow_skip``) and not in
+    ``only_assert`` mode, a (domain, product) pair that has passed
+    ``threshold`` consecutive batches with no code change and no new raw data
+    reuses its last persisted artifact instead of regenerating.
     """
     chosen = list(products or MATRIX_PRODUCTS)
     templates: dict[str, Any] = dict(_product_templates())
@@ -500,9 +686,69 @@ def run_matrix(
     missing_products = 0
     error_products = 0
     total_asserts = 0
+    skipped_products: list[str] = []
+
+    skip_enabled = (
+        skip is not None and skip.allow_skip and not only_assert
+        and artifacts_dir is not None
+    )
+    history: list[dict[str, Any]] = []
+    raw_counts: dict[str, int] = {}
+    template_paths: list[str] = []
+    skip_policy: SkipPolicy | None = None
+    artifacts_root: Path | None = None
+    if skip_enabled and skip is not None and artifacts_dir is not None:
+        # mypy narrowing: skip_enabled is a compound boolean, so re-check the
+        # two Optionals here to give mypy concrete types for the block below.
+        skip_policy = skip
+        artifacts_root = artifacts_dir
+        history = _load_batch_history(artifacts_root)
+        if skip.data_dir is not None:
+            raw_counts = {
+                d: _raw_entry_count(d, skip.data_dir) for d in domains
+            }
+        template_paths = [
+            "src/autoinfo/data/templates",
+            "src/autoinfo/output",
+            "src/autoinfo/validation_matrix.py",
+            "src/autoinfo/cli/validate.py",
+        ]
 
     for domain in domains:
         for product in chosen:
+            if skip_policy is not None and artifacts_root is not None and _should_skip(
+                history, domain, product,
+                policy=skip_policy, template_paths=template_paths,
+                raw_counts=raw_counts,
+            ):
+                reused_batch = history[-1]["batch_id"]
+                paths = _persisted_product_paths(
+                    domain, product,
+                    base_dir=artifacts_root / reused_batch / "products",
+                )
+                if paths:
+                    reused_text = paths[0].read_text(
+                        encoding="utf-8", errors="replace"
+                    )
+                    reused_results = run_assertions(
+                        reused_text, domain=domain, product=product
+                    )
+                    reused_failing = [r for r in reused_results if not r.passed]
+                    if not reused_failing:
+                        reused_row = _find_product_row(
+                            history[-1], domain, product
+                        ) or {}
+                        per_product[product].append({
+                            "domain": domain, "product": product, "status": "ok",
+                            "frozen": True, "reused_batch": reused_batch,
+                            "freshness": "stale",
+                            "consecutive_passes": _consecutive_passes(
+                                history, domain, product
+                            ),
+                            "assertions": reused_row.get("assertions", []),
+                        })
+                        skipped_products.append(product)
+                        continue
             template = templates.get(product)
             if only_assert:
                 paths = _persisted_product_paths(
@@ -559,6 +805,8 @@ def run_matrix(
         "failing_assertions": failing_assertions,
         "missing_products": missing_products,
         "error_products": error_products,
+        "skipped_products": skipped_products,
+        "raw_counts": raw_counts,
     }
     return report
 

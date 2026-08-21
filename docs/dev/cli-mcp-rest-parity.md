@@ -384,7 +384,7 @@ CLI human mode prints text + exit 0; CLI `--json` mirrors the MCP shape exactly.
 
 | Capability | CLI | MCP | REST | Status | Notes |
 |------------|-----|-----|------|--------|-------|
-| List validation scenarios | — | `list_validation_scenarios` | — | MCP-only | 111 scenarios (64 functional + 47 regression) |
+| List validation scenarios | — | `list_validation_scenarios` | — | MCP-only | 112 scenarios (64 functional + 48 regression) |
 | Run validation scenario | — | `run_validation_scenario` | — | MCP-only | Scenario steps may invoke CLI/REST internally |
 
 ### REST-only endpoints (no CLI / MCP counterpart)

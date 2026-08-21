@@ -1,0 +1,365 @@
+# Regression #348: `validate --matrix` smart-skip of stable (domain, product)
+# pairs.
+#
+# Before the fix, every batch regenerated every (domain, product) pair through
+# the real KB generation path — stable products burned LLM tokens and wall-clock
+# on unchanged work, and one broken render could fail an otherwise-stable batch.
+#
+# The fix adds SkipPolicy to run_matrix: when a pair has passed `threshold`
+# consecutive batches with (a) no code change under its template/render paths
+# and (b) no new raw data (the per-domain 01-Raw entry count matches the last
+# card), regeneration is skipped — the last persisted artifact is reused, the
+# cheap assertion pass still runs on it (防漏: a now-failing artifact is reported
+# failing, never silently skipped), and the row is marked frozen/stale with its
+# reused_batch. `--no-skip` (allow_skip=False) forces regeneration; premium
+# products (premium-briefing, column, enterprise-briefing) need threshold + 2
+# passes unless `--skip-premium`. Report-card schema_version bumps 1 -> 2.
+#
+# Deterministic (requires_env: []): runs in a temp cwd with the code-change /
+# raw-count / generation seams mocked — no LLM call, no network, no real git.
+name: regression-validation-smart-skip
+description: "Regression #348: validate --matrix reuses stable (domain, product) artifacts marked frozen/stale; code/data changes and --no-skip force regeneration"
+category: regression
+regression: true
+regression_issue: "#348"
+requires_env: []
+steps:
+  - name: "stable product is skipped and marked frozen"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+
+      from autoinfo.validation_matrix import SkipPolicy, run_matrix
+
+      # A fully-passing rendered report — passes all 12 formalized assertions
+      # for the ai-commercial/report pair (Sections: 2, Summary, Key Takeaways
+      # with numbered subsections, References with numbered real-source entries).
+      CLEAN = (
+          "# AI Commercial Report\n\n"
+          "**Domain**: ai-commercial\n"
+          "**Sections**: 2\n\n"
+          "## Summary\n\n"
+          "AI funding accelerated this week.\n\n"
+          "## Key Takeaways\n\n"
+          "### 1. Startup A raised $50M (Source: https://techcrunch.com/1)\n"
+          "Monitor developments.\n\n"
+          "### 2. Startup B raised $30M (Source: https://techcrunch.com/2)\n"
+          "Watch consolidation.\n\n"
+          "## References\n\n"
+          "1. **Startup A** — https://techcrunch.com/1 (techcrunch)\n"
+          "2. **Startup B** — https://techcrunch.com/2 (techcrunch)\n"
+      )
+
+      def card(bid, stamp, generated_at):
+          return {
+              "schema_version": 1,
+              "tool": "autoinfo validate --matrix",
+              "generated_at": generated_at,
+              "commit": "c" + bid[1:],
+              "batch_id": bid,
+              "products": [{
+                  "domain": "ai-commercial", "product": "report", "status": "ok",
+                  "assertions": [{"assertion": "_not_empty", "passed": True}],
+              }],
+              "summary": {"raw_counts": {"ai-commercial": 5}},
+          }
+
+      old = os.getcwd()
+      tmp = tempfile.mkdtemp(prefix="regression-348-a-")
+      try:
+          os.chdir(tmp)
+          snap = Path("snap")
+          for bid, stamp, ts in [("b1", "1", "2026-08-01T00:00:00Z"),
+                                 ("b2", "2", "2026-08-02T00:00:00Z"),
+                                 ("b3", "3", "2026-08-03T00:00:00Z")]:
+              bdir = snap / bid
+              bdir.mkdir(parents=True, exist_ok=True)
+              (bdir / ("report-card-c%s-%s.json" % (bid[1:], stamp))).write_text(
+                  json.dumps(card(bid, stamp, ts)), encoding="utf-8")
+          art = snap / "b3" / "products" / "ai-commercial" / "report-markdown-b3.md"
+          art.parent.mkdir(parents=True, exist_ok=True)
+          art.write_text(CLEAN, encoding="utf-8")
+          kb = Path("kb")  # empty KB root; _raw_entry_count is patched
+
+          gen = MagicMock()
+          with patch("autoinfo.validation_matrix._generate_product", gen), \
+               patch("autoinfo.validation_matrix._current_commit", return_value="c4"), \
+               patch("autoinfo.validation_matrix._code_changed", return_value=False), \
+               patch("autoinfo.validation_matrix._raw_entry_count", return_value=5):
+              report = run_matrix(
+                  ["ai-commercial"], ["report"], only_assert=False,
+                  batch_id="b4", artifacts_dir=snap,
+                  skip=SkipPolicy(allow_skip=True, threshold=3, data_dir=kb),
+              )
+          # Regeneration was genuinely skipped — prove the real path was not hit.
+          gen.assert_not_called()
+          row = next(p for p in report.products if p["product"] == "report")
+          assert row["status"] == "ok"
+          assert row.get("frozen") is True
+          assert row.get("reused_batch") == "b3"
+          assert row.get("freshness") == "stale"
+          assert row.get("consecutive_passes") == 3
+          assert report.summary["failures"] == 0
+          assert report.summary["skipped_products"] == ["report"]
+          assert report.to_dict()["schema_version"] == 2
+          print("SMART_SKIP_STABLE_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SMART_SKIP_STABLE_OK"]
+
+  - name: "code change invalidates the skip (regenerate)"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import patch
+
+      from autoinfo.validation_matrix import SkipPolicy, run_matrix
+
+      CLEAN = (
+          "# AI Commercial Report\n\n"
+          "**Domain**: ai-commercial\n"
+          "**Sections**: 2\n\n"
+          "## Summary\n\n"
+          "AI funding accelerated this week.\n\n"
+          "## Key Takeaways\n\n"
+          "### 1. Startup A raised $50M (Source: https://techcrunch.com/1)\n"
+          "Monitor developments.\n\n"
+          "### 2. Startup B raised $30M (Source: https://techcrunch.com/2)\n"
+          "Watch consolidation.\n\n"
+          "## References\n\n"
+          "1. **Startup A** — https://techcrunch.com/1 (techcrunch)\n"
+          "2. **Startup B** — https://techcrunch.com/2 (techcrunch)\n"
+      )
+
+      def card(bid, stamp, generated_at):
+          return {
+              "schema_version": 1,
+              "tool": "autoinfo validate --matrix",
+              "generated_at": generated_at,
+              "commit": "c" + bid[1:],
+              "batch_id": bid,
+              "products": [{
+                  "domain": "ai-commercial", "product": "report", "status": "ok",
+                  "assertions": [{"assertion": "_not_empty", "passed": True}],
+              }],
+              "summary": {"raw_counts": {"ai-commercial": 5}},
+          }
+
+      old = os.getcwd()
+      tmp = tempfile.mkdtemp(prefix="regression-348-b-")
+      try:
+          os.chdir(tmp)
+          snap = Path("snap")
+          for bid, stamp, ts in [("b1", "1", "2026-08-01T00:00:00Z"),
+                                 ("b2", "2", "2026-08-02T00:00:00Z"),
+                                 ("b3", "3", "2026-08-03T00:00:00Z")]:
+              bdir = snap / bid
+              bdir.mkdir(parents=True, exist_ok=True)
+              (bdir / ("report-card-c%s-%s.json" % (bid[1:], stamp))).write_text(
+                  json.dumps(card(bid, stamp, ts)), encoding="utf-8")
+          art = snap / "b3" / "products" / "ai-commercial" / "report-markdown-b3.md"
+          art.parent.mkdir(parents=True, exist_ok=True)
+          art.write_text(CLEAN, encoding="utf-8")
+          kb = Path("kb")
+
+          with patch("autoinfo.validation_matrix._generate_product",
+                     return_value=CLEAN) as gen, \
+               patch("autoinfo.validation_matrix._current_commit", return_value="c4"), \
+               patch("autoinfo.validation_matrix._code_changed", return_value=True), \
+               patch("autoinfo.validation_matrix._raw_entry_count", return_value=5):
+              report = run_matrix(
+                  ["ai-commercial"], ["report"], only_assert=False,
+                  batch_id="b4", artifacts_dir=snap,
+                  skip=SkipPolicy(allow_skip=True, threshold=3, data_dir=kb),
+              )
+          # Raw count matches the last card; the ONLY invalidator is the code
+          # change on the template/render path — regeneration must happen.
+          assert gen.called
+          row = next(p for p in report.products if p["product"] == "report")
+          assert row["status"] == "ok"
+          assert "frozen" not in row
+          assert report.summary["skipped_products"] == []
+          print("SMART_SKIP_CODE_CHANGE_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SMART_SKIP_CODE_CHANGE_OK"]
+
+  - name: "--no-skip equivalence (allow_skip=False forces regen)"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import patch
+
+      from autoinfo.validation_matrix import SkipPolicy, run_matrix
+
+      CLEAN = (
+          "# AI Commercial Report\n\n"
+          "**Domain**: ai-commercial\n"
+          "**Sections**: 2\n\n"
+          "## Summary\n\n"
+          "AI funding accelerated this week.\n\n"
+          "## Key Takeaways\n\n"
+          "### 1. Startup A raised $50M (Source: https://techcrunch.com/1)\n"
+          "Monitor developments.\n\n"
+          "### 2. Startup B raised $30M (Source: https://techcrunch.com/2)\n"
+          "Watch consolidation.\n\n"
+          "## References\n\n"
+          "1. **Startup A** — https://techcrunch.com/1 (techcrunch)\n"
+          "2. **Startup B** — https://techcrunch.com/2 (techcrunch)\n"
+      )
+
+      def card(bid, stamp, generated_at):
+          return {
+              "schema_version": 1,
+              "tool": "autoinfo validate --matrix",
+              "generated_at": generated_at,
+              "commit": "c" + bid[1:],
+              "batch_id": bid,
+              "products": [{
+                  "domain": "ai-commercial", "product": "report", "status": "ok",
+                  "assertions": [{"assertion": "_not_empty", "passed": True}],
+              }],
+              "summary": {"raw_counts": {"ai-commercial": 5}},
+          }
+
+      old = os.getcwd()
+      tmp = tempfile.mkdtemp(prefix="regression-348-c-")
+      try:
+          os.chdir(tmp)
+          snap = Path("snap")
+          for bid, stamp, ts in [("b1", "1", "2026-08-01T00:00:00Z"),
+                                 ("b2", "2", "2026-08-02T00:00:00Z"),
+                                 ("b3", "3", "2026-08-03T00:00:00Z")]:
+              bdir = snap / bid
+              bdir.mkdir(parents=True, exist_ok=True)
+              (bdir / ("report-card-c%s-%s.json" % (bid[1:], stamp))).write_text(
+                  json.dumps(card(bid, stamp, ts)), encoding="utf-8")
+          art = snap / "b3" / "products" / "ai-commercial" / "report-markdown-b3.md"
+          art.parent.mkdir(parents=True, exist_ok=True)
+          art.write_text(CLEAN, encoding="utf-8")
+
+          with patch("autoinfo.validation_matrix._generate_product",
+                     return_value=CLEAN) as gen, \
+               patch("autoinfo.validation_matrix._current_commit", return_value="c4"):
+              report = run_matrix(
+                  ["ai-commercial"], ["report"], only_assert=False,
+                  batch_id="b4", artifacts_dir=snap,
+                  skip=SkipPolicy(allow_skip=False),
+              )
+          # allow_skip=False mirrors `validate matrix --no-skip`: history is
+          # never consulted, every pair is regenerated, no frozen row.
+          assert gen.called
+          row = next(p for p in report.products if p["product"] == "report")
+          assert row["status"] == "ok"
+          assert "frozen" not in row
+          assert report.summary["skipped_products"] == []
+          print("SMART_SKIP_NO_SKIP_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SMART_SKIP_NO_SKIP_OK"]
+
+  - name: "data change invalidates the skip (regenerate)"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import patch
+
+      from autoinfo.validation_matrix import SkipPolicy, run_matrix
+
+      CLEAN = (
+          "# AI Commercial Report\n\n"
+          "**Domain**: ai-commercial\n"
+          "**Sections**: 2\n\n"
+          "## Summary\n\n"
+          "AI funding accelerated this week.\n\n"
+          "## Key Takeaways\n\n"
+          "### 1. Startup A raised $50M (Source: https://techcrunch.com/1)\n"
+          "Monitor developments.\n\n"
+          "### 2. Startup B raised $30M (Source: https://techcrunch.com/2)\n"
+          "Watch consolidation.\n\n"
+          "## References\n\n"
+          "1. **Startup A** — https://techcrunch.com/1 (techcrunch)\n"
+          "2. **Startup B** — https://techcrunch.com/2 (techcrunch)\n"
+      )
+
+      def card(bid, stamp, generated_at):
+          return {
+              "schema_version": 1,
+              "tool": "autoinfo validate --matrix",
+              "generated_at": generated_at,
+              "commit": "c" + bid[1:],
+              "batch_id": bid,
+              "products": [{
+                  "domain": "ai-commercial", "product": "report", "status": "ok",
+                  "assertions": [{"assertion": "_not_empty", "passed": True}],
+              }],
+              "summary": {"raw_counts": {"ai-commercial": 5}},
+          }
+
+      old = os.getcwd()
+      tmp = tempfile.mkdtemp(prefix="regression-348-d-")
+      try:
+          os.chdir(tmp)
+          snap = Path("snap")
+          for bid, stamp, ts in [("b1", "1", "2026-08-01T00:00:00Z"),
+                                 ("b2", "2", "2026-08-02T00:00:00Z"),
+                                 ("b3", "3", "2026-08-03T00:00:00Z")]:
+              bdir = snap / bid
+              bdir.mkdir(parents=True, exist_ok=True)
+              (bdir / ("report-card-c%s-%s.json" % (bid[1:], stamp))).write_text(
+                  json.dumps(card(bid, stamp, ts)), encoding="utf-8")
+          art = snap / "b3" / "products" / "ai-commercial" / "report-markdown-b3.md"
+          art.parent.mkdir(parents=True, exist_ok=True)
+          art.write_text(CLEAN, encoding="utf-8")
+          kb = Path("kb")
+
+          with patch("autoinfo.validation_matrix._generate_product",
+                     return_value=CLEAN) as gen, \
+               patch("autoinfo.validation_matrix._current_commit", return_value="c4"), \
+               patch("autoinfo.validation_matrix._code_changed", return_value=False), \
+               patch("autoinfo.validation_matrix._raw_entry_count", return_value=99):
+              report = run_matrix(
+                  ["ai-commercial"], ["report"], only_assert=False,
+                  batch_id="b4", artifacts_dir=snap,
+                  skip=SkipPolicy(allow_skip=True, threshold=3, data_dir=kb),
+              )
+          # Code unchanged, but new raw data arrived: the run sees 99 01-Raw
+          # entries while the last card recorded 5 — the skip is invalidated.
+          assert gen.called
+          row = next(p for p in report.products if p["product"] == "report")
+          assert row["status"] == "ok"
+          assert "frozen" not in row
+          assert report.summary["skipped_products"] == []
+          print("SMART_SKIP_DATA_CHANGE_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SMART_SKIP_DATA_CHANGE_OK"]

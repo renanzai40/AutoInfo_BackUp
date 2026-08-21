@@ -9,13 +9,23 @@ default_language: en
 
 # Cross-domain noise filter (#319): entries whose title/summary/tags contain
 # any of these keywords are excluded from product generation (digest/report)
-# BEFORE LLM synthesis.  Focused on the specific entities from issue #319
-# (贝达药业, DURAVYU) — deliberately NOT broad medical terms like 医药/临床
+# BEFORE LLM synthesis.  The set mirrors the validation-matrix noise contract
+# (_AI_COMMERCIAL_NOISE in validation_matrix.py): the specific entities from
+# issue #319 (贝达药业, DURAVYU) plus the financial/regulatory noise terms
+# (华能, 株冶, 平安好医生, SEC 8-K, 10-Q, 财报, 年报) that leak from
+# cross-domain collection.  Deliberately NOT broad medical terms like 医药/临床
 # trial, which legitimately appear in AI-commercial content (e.g. "AI drug
 # discovery", "AI clinical trials").
 exclude_keywords:
   - 贝达药业
   - DURAVYU
+  - 华能
+  - 株冶
+  - 平安好医生
+  - SEC 8-K
+  - 10-Q
+  - 财报
+  - 年报
 
 sources:
   - name: techcrunch

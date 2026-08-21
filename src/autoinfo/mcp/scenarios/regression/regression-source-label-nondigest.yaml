@@ -63,7 +63,7 @@ steps:
       ref = flat["references"][0]
       assert ref["source_platform"] == "techcrunch", ref
       assert ref["source_platform"] != "rss", ref
-      print(f"REPORT_SOURCE_LABEL_OK: {ref[\"source_platform\"]}")
+      print(f"REPORT_SOURCE_LABEL_OK: {ref["source_platform"]}")
       '
     expect:
       success: true
