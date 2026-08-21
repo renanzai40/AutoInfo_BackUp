@@ -364,3 +364,83 @@ steps:
       success: true
       exit_code: 0
       stdout_has: ["SOURCE_SURFACE_OK"]
+
+  - name: "report-path products recover host-mismatch RSS entries (arXiv)"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      import yaml
+      from autoinfo.output import (
+          PRODUCT_TEMPLATES, ReportData, ReportSection,
+          _report_data_to_dict,
+      )
+
+      # Issue #325 data layer: a stale pre-#323 entry with source_platform
+      # "rss" whose article-link host (arxiv.org) differs from the feed host
+      # (rss.arxiv.org) must render the specific source name in the
+      # column/premium-briefing/enterprise-briefing references — not "(RSS)".
+      # The derivation reads the domain source configs, so this step writes
+      # its OWN temp project config (self-contained, like the other steps).
+      stale = {
+          "entry_id": "e-arxiv-stale",
+          "title": "An AI paper about retrieval",
+          "summary": "New method.",
+          "source_url": "https://arxiv.org/abs/2401.12345",
+          "source_type": "rss",
+          "source_platform": "rss",
+          "relevance_score": 90.0, "tags": "[]", "tier": "01-Raw",
+          "collected_at": "2026-08-19T10:00:00Z",
+      }
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      old = os.getcwd()
+      tmp = Path(tempfile.mkdtemp(prefix="regression-325-host-"))
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True)
+          cfg = {"project": {"name": "test"},
+                 "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+                 "domains": [{"name": "medical-research", "active": True,
+                              "sources": [{"name": "arXiv", "type": "rss",
+                                           "url": "https://rss.arxiv.org/rss/q-bio"}],
+                              "topics": []}]}
+          (cfg_dir / "config.yaml").write_text(
+              yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False),
+              encoding="utf-8")
+          os.chdir(tmp)
+          data = ReportData(
+              title="medical-research \u2014 Report",
+              generated_at="2026-08-21 00:00 UTC",
+              domain="medical-research",
+              executive_summary="Synthesis.",
+              sections=[
+                  ReportSection(title="AI", content="Papers.", items=[stale]),
+              ],
+              references=[{
+                  "title": stale["title"],
+                  "source_url": stale["source_url"],
+                  "source_type": stale["source_type"],
+                  "source_platform": stale["source_platform"],
+                  "domain": "medical-research",
+              }],
+          )
+          flat = _report_data_to_dict(data)
+          # The flat references carry the derived source label (not "rss").
+          assert flat["references"][0]["source_label"].lower() != "rss", flat
+          for name in ("column", "premium-briefing", "enterprise-briefing"):
+              out = tmpl(name).render(name, "md", flat)
+              assert "(RSS)" not in out, f"{name} rendered (RSS) for host-mismatch entry"
+              assert "arXiv" in out or "arxiv" in out, f"{name} lost the arXiv source"
+              print(f"{name.upper()}_HOST_MISMATCH_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["COLUMN_HOST_MISMATCH_OK", "PREMIUM-BRIEFING_HOST_MISMATCH_OK", "ENTERPRISE-BRIEFING_HOST_MISMATCH_OK"]

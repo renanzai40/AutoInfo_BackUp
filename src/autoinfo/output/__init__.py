@@ -3726,6 +3726,32 @@ _GENERIC_PLATFORMS = frozenset({"", "rss", "web", "api"})
 _MATCHABLE_SOURCE_TYPES = frozenset({"rss", "web", "webhook", "api", "pdf"})
 
 
+def _host_matches_source(entry_host: str, sc_host: str) -> bool:
+    """True when an entry's URL host belongs to a configured source host.
+
+    Issue #325 data layer: RSS feed URLs are often on a different host than
+    the article links they carry (arXiv articles on ``arxiv.org`` vs the
+    ``rss.arxiv.org`` feed), so exact-equality host matching leaves stale
+    pre-#323 entries stuck on the generic ``(RSS)`` label.  Match when the
+    hosts are equal or one is a subdomain of the other (``arxiv.org`` ⊂
+    ``rss.arxiv.org``).  A bare substring match is rejected (``evil-arxiv.org``
+    must not match ``arxiv.org``).  Pure stdlib (urllib.parse only — no
+    tldextract dependency).
+    """
+    eh = (entry_host or "").lower().rstrip(".").lstrip("www1.").lstrip("www.")
+    sh = (sc_host or "").lower().rstrip(".").lstrip("www1.").lstrip("www.")
+    if not eh or not sh:
+        return False
+    if eh == sh:
+        return True
+    # Subdomain of each other (arXiv articles on arxiv.org vs the
+    # rss.arxiv.org feed host) — never a bare substring (evil-arxiv.org
+    # must not match arxiv.org).
+    if eh.endswith("." + sh) or sh.endswith("." + eh):
+        return True
+    return False
+
+
 def _derive_source_label(
     entry: dict[str, Any],
     domain: str,
@@ -3770,8 +3796,10 @@ def _derive_source_label(
             sc_host = urlsplit(sc_url).hostname or ""
         except ValueError:
             continue
-        # Hostname match (strip leading www. for robustness).
-        if sc_host == url_host or sc_host.lstrip("www.") == url_host.lstrip("www."):
+        # Host match (issue #325 data layer): exact or subdomain (arXiv
+        # articles on arxiv.org vs the rss.arxiv.org feed host) — never a
+        # bare substring.
+        if _host_matches_source(url_host, sc_host):
             return sc.name.strip() or platform
     return platform
 

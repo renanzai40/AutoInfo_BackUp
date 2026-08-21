@@ -74,19 +74,17 @@ steps:
     kind: cli
     command: |-
       python3 -c '
-      from pathlib import Path
       from jinja2 import Environment
       import re
 
-      from autoinfo.output import _derive_source_label, _report_data_to_dict, ReportData
+      from autoinfo.output import (
+          _TEMPLATES_DIR, _derive_source_label, _report_data_to_dict, ReportData,
+      )
       from autoinfo.config import SourceConfig
 
-      tpl_path = (
-          Path("src/autoinfo/data/templates/report.md.j2")
-          if Path("src/autoinfo/data/templates/report.md.j2").is_file()
-          else Path(__file__).parent.parent.parent.parent.parent
-          / "src" / "autoinfo" / "data" / "templates" / "report.md.j2"
-      )
+      # Resolve the report template from the installed package (portable —
+      # not from a cwd-relative path, so the step runs in any checkout).
+      tpl_path = _TEMPLATES_DIR / "report.md.j2"
       configs = [
           SourceConfig(name="36kr", type="rss", url="https://www.36kr.com/feed"),
       ]
@@ -127,3 +125,49 @@ steps:
       success: true
       exit_code: 0
       stdout_has: ["REPORT_TEMPLATE_SOURCE_LABEL_OK"]
+
+  - name: "host-mismatch stale entry recovers the specific source name (arXiv)"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.config import SourceConfig
+      from autoinfo.output import _derive_source_label
+
+      # Issue #325 data layer: the arXiv RSS feed URL host (rss.arxiv.org)
+      # differs from the article link host (arxiv.org).  A stale pre-#323
+      # entry with source_platform="rss" pointing at the article link must
+      # recover the configured source name, not stay on "(RSS)".
+      # Pass the source configs explicitly (same pattern as the other steps
+      # in this scenario) so the step is deterministic — no runtime config.
+      configs = [
+          SourceConfig(name="arXiv", type="rss",
+                       url="https://rss.arxiv.org/rss/q-bio"),
+      ]
+      stale = {
+          "entry_id": "e-arxiv-stale",
+          "title": "An AI paper about retrieval",
+          "summary": "New method.",
+          "source_url": "https://arxiv.org/abs/2401.12345",
+          "source_type": "rss",
+          "source_platform": "rss",
+          "relevance_score": 90.0, "tags": "[]", "tier": "01-Raw",
+          "collected_at": "2026-08-19T10:00:00Z",
+      }
+      derived = _derive_source_label(
+          stale, "medical-research", source_configs=configs,
+      )
+      assert derived.lower() != "rss", f"arXiv host mismatch not recovered: {derived!r}"
+      assert derived, f"empty label: {derived!r}"
+      print("HOST_MISMATCH_RECOVERED")
+
+      # Negative: an unrelated host must NOT be mislabelled (stays generic).
+      unrelated = dict(stale, source_url="https://example.com/random")
+      assert _derive_source_label(
+          unrelated, "medical-research", source_configs=configs,
+      ) == "rss"
+      print("NO_FALSE_POSITIVE_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["HOST_MISMATCH_RECOVERED", "NO_FALSE_POSITIVE_OK"]

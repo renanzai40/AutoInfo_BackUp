@@ -376,3 +376,140 @@ class TestSourceLabelSurfaces:
             assert entry["source_platform"] == STALE_SOURCE_NAME, (
                 f"section entry rendered raw platform {entry['source_platform']!r}"
             )
+
+
+# ---------------------------------------------------------------------------
+# T1/T2 (issue #325 data layer): _host_matches_source contract + recovery of
+# stale entries whose URL host does NOT exactly equal the configured feed host
+# (arXiv article links on arxiv.org vs feed host rss.arxiv.org) and stale
+# entries from non-rss source types (openalex/dblp/quandl/sec_edgar).
+# ---------------------------------------------------------------------------
+
+
+class TestHostMatchesSource:
+    """Contract for ``autoinfo.output._host_matches_source`` (RED until T3)."""
+
+    def test_subdomain_matches(self) -> None:
+        from autoinfo.output import _host_matches_source
+
+        # RSS feed host vs article host: subdomain relationship.
+        assert _host_matches_source("arxiv.org", "rss.arxiv.org") is True
+        assert _host_matches_source("arxiv.org", "export.arxiv.org") is True
+        assert _host_matches_source("36kr.com", "www.36kr.com") is True
+
+    def test_exact_and_www_normalised(self) -> None:
+        from autoinfo.output import _host_matches_source
+
+        assert _host_matches_source("techcrunch.com", "techcrunch.com") is True
+        assert _host_matches_source("techcrunch.com", "www.techcrunch.com") is True
+
+    def test_unrelated_hosts_do_not_match(self) -> None:
+        from autoinfo.output import _host_matches_source
+
+        assert _host_matches_source("example.com", "arxiv.org") is False
+        assert _host_matches_source("pitchfork.com", "techcrunch.com") is False
+
+    def test_substring_trap_rejected(self) -> None:
+        from autoinfo.output import _host_matches_source
+
+        # "evil-arxiv.org" ends with "arxiv.org" as a bare substring but NOT
+        # at a label boundary — must not match.
+        assert _host_matches_source("evil-arxiv.org", "arxiv.org") is False
+
+    def test_empty_or_invalid_hosts_do_not_match(self) -> None:
+        from autoinfo.output import _host_matches_source
+
+        assert _host_matches_source("", "arxiv.org") is False
+        assert _host_matches_source("arxiv.org", "") is False
+        assert _host_matches_source("", "") is False
+
+
+class TestSourceLabelDataLayerRecovery:
+    """Issue #325 data layer — stale entries recovered by host/type matching.
+
+    RED until T3/T4: ``_derive_source_label`` only does exact host equality
+    (fails arXiv article-vs-feed host) and ``_MATCHABLE_SOURCE_TYPES`` skips
+    openalex/dblp/quandl/sec_edgar.
+    """
+
+    def _label(self, source_url: str, platform: str = "rss",
+               domain: str = "medical-research",
+               source_configs: list[Any] | None = None) -> str:
+        from autoinfo.output import _derive_source_label
+
+        entry = {
+            "entry_id": "e-stale",
+            "title": "t",
+            "summary": "s",
+            "source_url": source_url,
+            "source_type": "rss",
+            "source_platform": platform,
+            "relevance_score": 90.0,
+            "tags": "[]",
+            "tier": "01-Raw",
+            "collected_at": "2026-08-19T10:00:00Z",
+        }
+        if source_configs is not None:
+            return _derive_source_label(
+                entry, domain, source_configs=source_configs,
+            )
+        return _derive_source_label(entry, domain)
+
+    def test_host_mismatch_arxiv_recovered(self) -> None:
+        """arXiv article link (arxiv.org) vs configured feed host
+        (rss.arxiv.org) — the stale 'rss' entry must recover 'arXiv'.
+
+        The source configs are passed EXPLICITLY so the test is deterministic
+        (the derivation reads the runtime config when source_configs is None,
+        which is absent in CI's fresh checkout).
+        """
+        from autoinfo.config import SourceConfig
+
+        configs = [
+            SourceConfig(name="arXiv", type="rss",
+                         url="https://rss.arxiv.org/rss/q-bio"),
+        ]
+        label = self._label(
+            "https://arxiv.org/abs/2401.12345", source_configs=configs,
+        )
+        assert label.lower() != "rss", f"arXiv host mismatch not recovered: {label!r}"
+        assert label
+
+    def test_openalex_source_recovered(self) -> None:
+        label = self._label(
+            "https://api.openalex.org/works/W123", platform="openalex"
+        )
+        assert label.lower() != "rss", f"openalex not recovered: {label!r}"
+        assert label
+
+    def test_dblp_source_recovered(self) -> None:
+        label = self._label("https://dblp.org/rec/conf/aaai/2023", platform="dblp")
+        assert label.lower() != "rss", f"dblp not recovered: {label!r}"
+        assert label
+
+    def test_quandl_source_recovered(self) -> None:
+        label = self._label(
+            "https://www.quandl.com/data/EIA/PET", platform="quandl",
+            domain="financial-intelligence",
+        )
+        assert label.lower() != "rss", f"quandl not recovered: {label!r}"
+        assert label
+
+    def test_sec_edgar_source_recovered(self) -> None:
+        label = self._label(
+            "https://www.sec.gov/Archives/edgar/data/320193/000032019326000013/aapl-20260328.htm",
+            platform="sec_edgar", domain="financial-intelligence",
+        )
+        assert label.lower() != "rss", f"sec_edgar not recovered: {label!r}"
+        assert label
+
+    def test_unrelated_host_stays_unchanged(self) -> None:
+        """A stale rss entry pointing at an unrelated host must NOT be
+        mislabelled — it keeps its generic platform (no false positive)."""
+        label = self._label("https://example.com/some/random/article")
+        assert label == "rss"
+
+    def test_specific_platform_passthrough(self) -> None:
+        """Non-generic stored platforms are returned unchanged."""
+        label = self._label("https://eutils.ncbi.nlm.nih.gov/...", platform="pubmed")
+        assert label == "pubmed"
