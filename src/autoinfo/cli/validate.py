@@ -30,6 +30,7 @@ from autoinfo.validation_matrix import (
     SkipPolicy,
     _current_commit,
     card_issue_counts,
+    diff_batches,
     diff_report_cards,
     run_matrix,
     save_report_card,
@@ -102,6 +103,11 @@ def matrix(
         help="#348 smart-skip: allow premium products (premium-briefing, "
              "column, enterprise-briefing) to skip at the plain threshold",
     ),
+    link_check: bool = typer.Option(
+        False, "--link-check",
+        help="#352.2: HEAD-check every [View Source]/References URL for "
+             "reachability (slow, opt-in; never runs on the default path)",
+    ),
 ) -> None:
     """Run the full-matrix acceptance executor (#331).
 
@@ -134,6 +140,7 @@ def matrix(
         batch_id=batch_id,
         artifacts_dir=artifacts_dir,
         skip=skip_policy,
+        include_slow=link_check,
     )
     _render_report_card(report)
     if json_out:
@@ -213,6 +220,109 @@ def diff_cmd(
             table.add_row(cls, domain, product, assertion)
     console.print(table)
     if d["regressed"] or d["new"]:
+        raise typer.Exit(code=1)
+
+
+@app.command(name="stability")
+def stability(
+    prev: str = typer.Argument(..., help="Previous batch id under --snapshot-dir"),
+    cur: str = typer.Argument(..., help="Current batch id under --snapshot-dir"),
+    snapshot_dir: str = typer.Option(
+        "validation-runs/matrix", "--snapshot-dir",
+        help="Batch root: each batch's products live under "
+             "<snapshot-dir>/<batch_id>/products (#335)",
+    ),
+    domains: str = typer.Option(
+        "", "--domains", "--domain",
+        help="Comma-separated domain subset (default: all active domains)",
+    ),
+    products: str = typer.Option(
+        "", "--products", "--product",
+        help=(
+            "Comma-separated product subset (default: all 8) — "
+            f"{', '.join(MATRIX_PRODUCTS)}"
+        ),
+    ),
+    link_check: bool = typer.Option(
+        False, "--link-check",
+        help="#352.2: HEAD-check every [View Source]/References URL for "
+             "reachability (slow, opt-in; never runs on the default path)",
+    ),
+) -> None:
+    """Cross-day stability diff of two persisted batches (#352.1).
+
+    Re-asserts the persisted products of ``--prev`` and ``--cur`` (deterministic
+    ``run_assertions`` — NEVER regenerates, so LLM nondeterminism cannot cause
+    false diffs) and diffs their assertion pass/fail state.  Exits non-zero
+    when a regression or new failure appears.
+    """
+    domain_list = [d.strip() for d in domains.split(",") if d.strip()] or _default_domains()
+    product_list = (
+        [p.strip() for p in products.split(",") if p.strip()]
+        or list(MATRIX_PRODUCTS)
+    )
+    base = Path(snapshot_dir)
+    result = diff_batches(
+        base / prev / "products",
+        base / cur / "products",
+        domain_list,
+        product_list,
+        include_slow=link_check,
+    )
+    d = result["diff"]
+    counts = d["counts"]
+    prev_card = result["prev_batch"]
+    cur_card = result["cur_batch"]
+    prev_counts = card_issue_counts(prev_card)
+    cur_counts = card_issue_counts(cur_card)
+    cur_issues = (
+        cur_counts["failing_assertions"]
+        + cur_counts["missing_products"]
+        + cur_counts["error_products"]
+    )
+    reconciled = counts["new"] + counts["regressed"] + counts["existing_failing"]
+    console.print(
+        f"[bold]stability[/bold] {prev} -> {cur} | "
+        f"prev_issues={sum(prev_counts.values())} -> cur_issues={cur_issues} "
+        f"(assertions={cur_counts['failing_assertions']} "
+        f"missing={cur_counts['missing_products']} "
+        f"error={cur_counts['error_products']})"
+    )
+    console.print(
+        f"[bold]diff[/bold] new={counts['new']} regressed={counts['regressed']} "
+        f"fixed={counts['fixed']} existing={counts['existing_failing']}"
+    )
+    if cur_issues != reconciled:
+        console.print(
+            f"[red]ERROR: diff buckets ({reconciled}) do not reconcile with "
+            f"batch failures ({cur_issues}) (#340)[/red]"
+        )
+        raise typer.Exit(code=1)
+    table = Table(title="Stability diff")
+    table.add_column("Class")
+    table.add_column("Domain")
+    table.add_column("Product")
+    table.add_column("Assertion")
+    for cls, items in (
+        ("regressed", d["regressed"]),
+        ("new", d["new"]),
+        ("fixed", d["fixed"]),
+        ("existing", d["existing_failing"]),
+    ):
+        for domain, product, assertion in items:
+            if assertion == PRODUCT_STATUS:
+                _status = next(
+                    (p.get("status", "?") for p in cur_card.get("products", [])
+                     if p.get("domain") == domain and p.get("product") == product),
+                    "?",
+                )
+                assertion = f"product {_status}"
+            table.add_row(cls, domain, product, assertion)
+    console.print(table)
+    if result["stable"]:
+        console.print("[green]stable[/green] — no regressions, nothing new")
+    else:
+        console.print("[red]UNSTABLE[/red] — regressions/new failures present")
         raise typer.Exit(code=1)
 
 

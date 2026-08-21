@@ -22,6 +22,11 @@ This module provides:
   product x assertion pass/fail + summary) persisted with commit sha + timestamp.
 * ``diff_report_cards`` (#332-A) — regression diff classifying each
   (product, assertion) as new / regressed / fixed / existing-failing.
+* ``_references_reachable`` (#352) — deterministic form-check on every
+  ``[View Source]`` / References / bare http(s) URL plus an OPTIONAL network
+  reachability HEAD pass.  The slow (network) half runs ONLY when explicitly
+  requested via ``run_assertions(..., include_slow=True)`` / the CLI
+  ``--link-check`` flag; the default fast path never touches the network.
 
 Deterministic and import-safe (no side effects on import); the run path reuses
 the existing output generators so the deterministic fallbacks apply when no LLM
@@ -685,10 +690,18 @@ assertion_names = [name for name, _ in ASSERTION_FUNCS]
 
 
 def run_assertions(
-    text: str, *, domain: str = "", product: str = ""
+    text: str, *, domain: str = "", product: str = "", include_slow: bool = False
 ) -> list[AssertionResult]:
-    """Run the full formalized assertion set against one rendered product."""
-    return [fn(text, domain, product) for _, fn in ASSERTION_FUNCS]
+    """Run the full formalized assertion set against one rendered product.
+
+    ``include_slow`` appends the SLOW (network) assertions — currently the
+    #352 link-reachability pass.  Default ``False`` keeps the fast path
+    deterministic and network-free.
+    """
+    results = [fn(text, domain, product) for _, fn in ASSERTION_FUNCS]
+    if include_slow:
+        results.extend(fn(text, domain, product) for _, fn in SLOW_ASSERTION_FUNCS)
+    return results
 
 
 # ---------------------------------------------------------------------------
@@ -771,6 +784,7 @@ def run_matrix(
     batch_id: str | None = None,
     artifacts_dir: Path | None = None,
     skip: SkipPolicy | None = None,
+    include_slow: bool = False,
 ) -> MatrixReport:
     """Run the domain x product matrix.
 
@@ -791,6 +805,8 @@ def run_matrix(
     ``only_assert`` mode, a (domain, product) pair that has passed
     ``threshold`` consecutive batches with no code change and no new raw data
     reuses its last persisted artifact instead of regenerating.
+    ``include_slow`` (#352) threads the opt-in network link-reachability
+    assertion into every ``run_assertions`` call below.
     """
     chosen = list(products or MATRIX_PRODUCTS)
     templates: dict[str, Any] = dict(_product_templates())
@@ -857,7 +873,8 @@ def run_matrix(
                         encoding="utf-8", errors="replace"
                     )
                     reused_results = run_assertions(
-                        reused_text, domain=domain, product=product
+                        reused_text, domain=domain, product=product,
+                        include_slow=include_slow,
                     )
                     reused_failing = [r for r in reused_results if not r.passed]
                     if not reused_failing:
@@ -906,7 +923,9 @@ def run_matrix(
                     )
                     out_path.parent.mkdir(parents=True, exist_ok=True)
                     out_path.write_text(text, encoding="utf-8")
-            results = run_assertions(text, domain=domain, product=product)
+            results = run_assertions(
+                text, domain=domain, product=product, include_slow=include_slow
+            )
             total_asserts += len(results)
             failing = [r for r in results if not r.passed]
             failing_assertions += len(failing)
@@ -1030,3 +1049,245 @@ def diff_report_cards(prev: dict[str, Any], cur: dict[str, Any]) -> dict[str, An
             "fixed": len(fixed), "existing_failing": len(existing),
         },
     }
+
+
+# ---------------------------------------------------------------------------
+# Cross-day stability (#352.1) — deterministic re-assertion + batch diff
+# ---------------------------------------------------------------------------
+
+
+def _newest_persisted_product(
+    products_root: Path, domain: str, product: str
+) -> Path | None:
+    """Newest ``<product>-markdown-*.md`` for (domain, product), or None.
+
+    Newest = highest ``-markdown-*`` suffix (lexical; the #335 stamps are
+    zero-padded ``%Y%m%d-%H%M%S`` so lexical order == chronological and is
+    immune to mtime skew from copy/rsync).
+    """
+    base = products_root / domain
+    if not base.is_dir():
+        return None
+    matches = sorted(
+        (p for p in base.iterdir()
+         if p.is_file() and p.name.startswith(f"{product}-markdown-")),
+        key=lambda p: p.name,
+        reverse=True,
+    )
+    return matches[0] if matches else None
+
+
+def assert_persisted_batch(
+    batch_root: Path,
+    domains: list[str],
+    products: list[str],
+    *,
+    include_slow: bool = False,
+) -> dict[str, Any]:
+    """Re-assert the persisted products of one batch into a report-card-shaped
+    dict (#352.1).  NEVER regenerates: each (domain, product) row reads the
+    newest ``<product>-markdown-*.md`` file and runs the deterministic
+    ``run_assertions`` on it, so a stability diff reflects genuine assertion
+    pass/fail drift — LLM nondeterminism cannot produce a false diff.
+
+    Returns a ``MatrixReport.to_dict()``-shaped card: ``schema_version 2``,
+    ``tool``, ``commit`` (via ``_current_commit``), ``batch_id`` (the root
+    dir name), ``products`` rows with ``status`` ``ok``/``missing``/``error``
+    and per-assertion dicts, plus a ``summary`` breakdown.
+    """
+    rows: list[dict[str, Any]] = []
+    failures = missing = error = total = 0
+    for domain in domains:
+        for product in products:
+            path = _newest_persisted_product(batch_root, domain, product)
+            if path is None:
+                rows.append({
+                    "domain": domain, "product": product, "status": "missing",
+                    "assertions": [], "error": "no persisted product file",
+                })
+                missing += 1
+                failures += 1
+                continue
+            try:
+                text = path.read_text(encoding="utf-8", errors="replace")
+            except OSError as exc:
+                rows.append({
+                    "domain": domain, "product": product, "status": "error",
+                    "assertions": [], "error": str(exc)[:200],
+                })
+                error += 1
+                failures += 1
+                continue
+            results = run_assertions(
+                text, domain=domain, product=product, include_slow=include_slow
+            )
+            failing = [r for r in results if not r.passed]
+            failures += len(failing)
+            total += len(results)
+            rows.append({
+                "domain": domain, "product": product, "status": "ok",
+                "assertions": [r.to_dict() for r in results],
+            })
+    batch_id = batch_root.name
+    summary = {
+        "batch_id": batch_id,
+        "domains": domains,
+        "products": products,
+        "total_products": len(rows),
+        "total_asserts": total,
+        "failures": failures,
+        "failing_assertions": failures - missing - error,
+        "missing_products": missing,
+        "error_products": error,
+    }
+    return {
+        "schema_version": 2,
+        "tool": "autoinfo validate --matrix",
+        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "commit": _current_commit(),
+        "batch_id": batch_id,
+        "products": rows,
+        "summary": summary,
+    }
+
+
+def diff_batches(
+    prev_root: Path,
+    cur_root: Path,
+    domains: list[str],
+    products: list[str],
+    *,
+    include_slow: bool = False,
+) -> dict[str, Any]:
+    """Cross-day stability diff of two persisted batches (#352.1).
+
+    Re-asserts both batches (deterministic, no regeneration) and runs
+    ``diff_report_cards`` on the two report cards.  Returns ``prev_batch``
+    and ``cur_batch`` cards, the ``diff`` output and ``stable`` — True when
+    nothing regressed and nothing is new.
+
+    ``include_slow`` (#352) threads the opt-in link-reachability assertion
+    into both batch re-assertions.
+    """
+    prev_card = assert_persisted_batch(
+        prev_root, domains, products, include_slow=include_slow
+    )
+    cur_card = assert_persisted_batch(
+        cur_root, domains, products, include_slow=include_slow
+    )
+    diff = diff_report_cards(prev_card, cur_card)
+    stable = diff["counts"]["regressed"] == 0 and diff["counts"]["new"] == 0
+    return {
+        "prev_batch": prev_card,
+        "cur_batch": cur_card,
+        "stable": stable,
+        "diff": diff,
+    }
+
+
+# ---------------------------------------------------------------------------
+# References link reachability (#352.2) — deterministic form-check + opt-in
+# network reachability.  The network half runs ONLY when the caller asks
+# (``include_slow=True`` / CLI ``--link-check``); the default fast path never
+# touches the network.
+# ---------------------------------------------------------------------------
+
+# ``[View Source](url)`` targets, ``(Source: url)`` citations, bare http(s).
+# Target groups allow one balanced paren level and the empty target (a bare
+# ``[View Source]()`` is itself a form violation the check must catch).
+_URL_EXTRACT_RE = re.compile(
+    r"(?:\[View Source\]\(((?:\([^()]*\)|[^()])*)\)"
+    r"|\(Source:\s*((?:\([^()]*\)|[^()])+)\)"
+    r"|(https?://\S+))"
+)
+
+_LINK_CHECK_TIMEOUT = 3.0
+
+
+def _extract_candidate_urls(text: str) -> list[str]:
+    """Ordered candidate URLs in a product body: ``[View Source](url)``
+    targets, ``(Source: url)`` citations and bare http(s) URLs.
+
+    Duplicates are dropped keeping first occurrence order.  The link text
+    itself is intentionally ignored — only the target is reachability-relevant.
+    An empty ``[View Source]()`` target IS a candidate (it is a form
+    violation), so empty captures are preserved, not skipped.
+    """
+    seen: set[str] = set()
+    out: list[str] = []
+    for m in _URL_EXTRACT_RE.finditer(text):
+        target = next(
+            (g for g in (m.group(1), m.group(2), m.group(3)) if g is not None),
+            None,
+        )
+        if target is None:
+            continue
+        target = target.strip()
+        if target not in seen:
+            seen.add(target)
+            out.append(target)
+    return out
+
+
+def _head_url(url: str, timeout: float) -> Any:
+    """HEAD ``url``; returns the response (``.status_code``).  Deferred httpx
+    import keeps module import safe; this seam is what tests patch."""
+    import httpx
+
+    return httpx.head(url, timeout=timeout, follow_redirects=True)
+
+
+def _references_reachable(text: str, domain: str, product: str) -> AssertionResult:
+    """#352 — every ``[View Source]``/References candidate URL must be real.
+
+    Sub-check 1 (deterministic, always): the URL is non-empty and has an
+    http/https scheme — ``javascript:``, bare relative paths and empty
+    targets fail instantly, no network.
+
+    Sub-check 2 (network, only when actually requested): HEAD each http(s)
+    URL with a short timeout; 2xx/3xx resolves → ok; 4xx/5xx/connection
+    error → fail (dead URL listed); timeout / unreachable → "unknown" (pass —
+    flaky networks must not break validation).
+
+    This assertion is wired ONLY into ``SLOW_ASSERTION_FUNCS`` (opt-in), so
+    the deterministic form half never runs on the default fast path either.
+    """
+    import httpx  # noqa: PLC0415 — deferred import (network paths are opt-in)
+
+    urls = _extract_candidate_urls(text)
+    bad_form = [u for u in urls if not re.match(r"^https?://", u)]
+    if bad_form:
+        return AssertionResult(
+            "_references_reachable", False, "#352", "P1", domain, product,
+            f"invalid reference URL(s): {', '.join(repr(u) for u in bad_form)}",
+        )
+    http_urls = [u for u in urls if re.match(r"^https?://", u)]
+    dead: list[str] = []
+    unknown: list[str] = []
+    for url in http_urls:
+        try:
+            resp = _head_url(url, _LINK_CHECK_TIMEOUT)
+            code = int(getattr(resp, "status_code", 0))
+            if 200 <= code < 400:
+                continue
+            dead.append(f"{url} (HTTP {code})")
+        except (TimeoutError, httpx.TimeoutException):
+            unknown.append(url)
+        except httpx.RequestError:
+            dead.append(url)
+    if dead:
+        return AssertionResult(
+            "_references_reachable", False, "#352", "P1", domain, product,
+            "unreachable reference URL(s): " + ", ".join(dead),
+        )
+    detail = f"checked {len(http_urls)} URL(s)"
+    if unknown:
+        detail += f"; {len(unknown)} timeout/unreachable treated as unknown"
+    return AssertionResult(
+        "_references_reachable", True, "#352", "P1", domain, product, detail,
+    )
+
+
+SLOW_ASSERTION_FUNCS: list[tuple[str, Callable[[str, str, str], AssertionResult]]] = [
+    ("_references_reachable", _references_reachable),
+]
