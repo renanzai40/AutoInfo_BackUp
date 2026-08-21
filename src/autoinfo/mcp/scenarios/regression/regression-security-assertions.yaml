@@ -34,7 +34,9 @@ steps:
           _no_broken_reference, _no_external_error_text,
       )
 
-      # Year hallucination: future year, pre-1950, bare month-year.
+      # Year hallucination: future year, pre-1950, out-of-range bare
+      # month-year (plausible bare month-years like "July 2023" are prose —
+      # see regression-351-year-hallucination-tuning.yaml).
       assert not _no_year_hallucination(
           "# T\n\nIn 2031, adoption tripled\n", "d", "report"
       ).passed
@@ -42,7 +44,7 @@ steps:
           "# T\n\na 1947 patent\n", "d", "report"
       ).passed
       assert not _no_year_hallucination(
-          "# T\n\nJuly 2023 marked a turning point\n", "d", "report"
+          "# T\n\nJuly 2031 marked a turning point\n", "d", "report"
       ).passed
 
       # Code / key leak: fenced block, sk- key, JWT.

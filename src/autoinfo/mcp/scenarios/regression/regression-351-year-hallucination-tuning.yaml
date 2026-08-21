@@ -1,0 +1,94 @@
+# Regression #351: _no_year_hallucination tuning — plausible month-year prose
+# must not be flagged.
+#
+# The bare-month-year loop previously flagged EVERY "Month Year" in prose as
+# P1 — including legitimate references like "In March 2020, the market
+# crashed" or "founded in June 1995" (13 false positives in the real-product
+# run).  After the fix, a bare month-year only fires when its YEAR is
+# out of range (< 1950 or > current year), the same gate as the standalone
+# year check.  This scenario pins:
+#
+#   Step 1 — out-of-range month-years in the BODY still FAIL (future
+#            "In 2031, adoption tripled" + pre-1950 "back in 1850, ...").
+#   Step 2 — legitimate plausible prose PASSES: "In March 2020, the market
+#            crashed", "founded in June 1995", and a current-year month-year
+#            ("In July {current_year}, growth continued").
+#   Step 3 — a plausible bare month-year "In July 2023, the team shipped"
+#            passes (not flagged).
+#
+# Deterministic (requires_env: []): exercises _no_year_hallucination directly
+# on defect + clean bodies — no LLM, no network.
+name: regression-351-year-hallucination-tuning
+description: "Regression #351: _no_year_hallucination no longer flags plausible month-year prose (March 2020 / June 1995 / current year), while future and pre-1950 month-years still fail"
+category: regression
+regression: true
+regression_issue: "#351"
+requires_env: []
+steps:
+  - name: "out-of-range month-years still fail in the body"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.validation_matrix import _no_year_hallucination
+
+      # Future month-year in the BODY (not References) — must fail.
+      BODY = "# T\n\nIn 2031, adoption tripled\n\nback in 1850, the crisis deepened\n"
+      assert not _no_year_hallucination(BODY, "d", "report").passed
+      print("YEAR_HALLUCINATION_OUT_OF_RANGE_FAILS_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["YEAR_HALLUCINATION_OUT_OF_RANGE_FAILS_OK"]
+
+  - name: "plausible month-year prose passes (no false positive)"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.validation_matrix import _no_year_hallucination
+
+      # Clean product with legitimate "Month Year" prose in the plausible
+      # range — the #351 false-positive class.  Must PASS after the fix.
+      CLEAN = """# AI Commercial Report
+
+      **Domain**: ai-commercial
+
+      ## Summary
+
+      In March 2020, the market crashed.
+
+      ## Key Takeaways
+
+      The firm was founded in June 1995 and kept growing.
+
+      ## Current Status
+
+      In July {current_year}, growth continued.
+
+      ## References
+
+      1. **Source** — https://example.com/1
+      """.replace("{current_year}", str(__import__("datetime").datetime.now().year))
+      assert _no_year_hallucination(CLEAN, "d", "report").passed is True
+      print("YEAR_HALLUCINATION_PLAUSIBLE_PASSES_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["YEAR_HALLUCINATION_PLAUSIBLE_PASSES_OK"]
+
+  - name: "plausible bare month-year passes"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.validation_matrix import _no_year_hallucination
+
+      # A plausible bare month-year in the body must pass (not flagged).
+      BODY = "# T\n\nIn July 2023, the team shipped the release.\n"
+      assert _no_year_hallucination(BODY, "d", "report").passed
+      print("YEAR_HALLUCINATION_BARE_PLAUSIBLE_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["YEAR_HALLUCINATION_BARE_PLAUSIBLE_OK"]

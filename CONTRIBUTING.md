@@ -289,6 +289,30 @@ fix; it will not be silence. Issues that are duplicates, out of scope, or
 already fixed are closed with an explanation. If an issue has had no human
 response after 7 days, ping the thread to surface it again.
 
+## Close discipline: verify on real products before closing
+
+A fix is **not** done when its regression scenario turns green. Regression
+scenarios run on mock/synthetic or local data and cannot catch problems that
+only surface in real generated products (stale config, live source quirks,
+residual placeholders). Before closing an issue whose fix touches output or
+collection behavior:
+
+1. After the fix merges, run `validate --matrix` (or `run_validation_scenario`
+   against the real generation path) on a freshly generated product for the
+   affected domain/product.
+2. Confirm the assertion or behavior the issue tracked is **cleared on the real
+   product**, not merely on the synthetic scenario.
+3. If the real-product run still shows the problem, keep the issue **open** and
+   add the `needs-real-verification` label; do not close it. The label marks
+   issues that passed regression but have not been proven clear on real output.
+4. Only close once real-product evidence is attached (a comment linking the
+   `validate --matrix` / `--only-assert` result).
+
+This rule exists because several issues were historically closed on regression
+pass alone while the real product still reproduced the defect. It is tracked in
+issue #356. The `needs-real-verification` label is the marker; treat it as a
+hard block on closing, not a soft note.
+
 ## Release process
 
 Releases follow semantic versioning, driven by the same Conventional Commits

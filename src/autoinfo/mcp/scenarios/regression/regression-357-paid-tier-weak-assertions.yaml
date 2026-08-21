@@ -1,0 +1,136 @@
+# Regression #357: paid-tier semantic weak assertions.
+#
+# The paid products can carry weak-semantic defects that the existing hard
+# form assertions (placeholder, sections, references) never catch: empty/
+# placeholder/too-short per-takeaway So-what/Risk/Actions, generic boilerplate
+# risk labels ("Valuation Bubble Risk"), and So-what text that merely restates
+# the takeaway heading.  #357 codifies them as 3 deterministic P1 assertions
+# in ASSERTION_FUNCS:
+#
+#   _so_what_substantive      — paid products carry substantive analysis, not
+#                               placeholder / <40-char / formulaic text.
+#   _recommendation_relevant   — recommendation/risk labels are not generic
+#                               boilerplate (valuation bubble risk, market
+#                               risk, ...) and not placeholders.
+#   _analysis_not_mere_repeat — premium So-what does not merely restate the
+#                               takeaway heading (word-Jaccard > 0.85 on a
+#                               short <120-char So-what).
+#
+# Deterministic (requires_env: []): exercises run_assertions directly on
+# defect + clean premium-briefing bodies — no LLM, no network.
+name: regression-357-paid-tier-weak-assertions
+description: "Regression #357: paid-tier semantic weak assertions fire on defect premium-briefing and pass a clean one"
+category: regression
+regression: true
+regression_issue: "#357"
+requires_env: []
+steps:
+  - name: "paid-tier weak assertions fire on defect premium-briefing"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.validation_matrix import (
+          _so_what_substantive, _recommendation_relevant,
+          _analysis_not_mere_repeat,
+      )
+
+      DEFECT = """# AutoInfo Premium Briefing
+
+      **Domain**: ai-commercial
+      **Generated**: 2026-08-21T00:00:00Z
+
+      ## Executive Summary
+
+      Funding accelerated this week across AI infrastructure.
+
+      ## Key Takeaways
+
+      ### 1. Startup A raises $50M Series B (Source: https://techcrunch.com/1)
+
+      > _No implication captured for this takeaway._
+
+      **Risk / Opportunity:** Valuation Bubble Risk — likelihood High / impact Medium; mitigation: None
+
+      **Actions:** Monitor developments around the sector.
+
+      ### 2. Startup B partners with Enterprise Co (Source: https://techcrunch.com/2)
+
+      > **So what**: Startup B partners with Enterprise Co.
+
+      **Risk / Opportunity:** Unknown risk — likelihood Low / impact Low; mitigation: Watch.
+
+      **Actions:** _No follow-up actions suggested._
+
+      ## References
+
+      1. **Startup A** — https://techcrunch.com/1 (techcrunch)
+      2. **Startup B** — https://techcrunch.com/2 (techcrunch)
+      """
+
+      # Takeaway 1: placeholder So-what; generic risk label; formulaic actions.
+      assert not _so_what_substantive(DEFECT, "ai-commercial", "premium-briefing").passed
+      assert not _recommendation_relevant(DEFECT, "ai-commercial", "premium-briefing").passed
+      # Takeaway 2: So-what merely restates the heading, is <120 chars.
+      assert not _analysis_not_mere_repeat(DEFECT, "ai-commercial", "premium-briefing").passed
+      print("PAID_WEAK_ASSERTIONS_FIRE_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["PAID_WEAK_ASSERTIONS_FIRE_OK"]
+
+  - name: "clean premium-briefing passes all paid-tier assertions"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.validation_matrix import (
+          _so_what_substantive, _recommendation_relevant,
+          _analysis_not_mere_repeat, run_assertions,
+      )
+
+      CLEAN = """# AutoInfo Premium Briefing
+
+      **Domain**: ai-commercial
+      **Generated**: 2026-08-21T00:00:00Z
+
+      ## Executive Summary
+
+      AI infrastructure funding accelerated this week with three new rounds
+      and a notable enterprise partnership.
+
+      ## Key Takeaways
+
+      ### 1. Startup A raises $50M Series B led by fund X (Source: https://techcrunch.com/1)
+
+      > **So what**: The round values Startup A at $1.2B post-money and shifts the competitive balance in vector-database tooling, pressuring incumbent vendors to cut prices.
+
+      **Risk / Opportunity:** FDA rejection of Candidate X — likelihood Low / impact High; mitigation: diversified pipeline.
+
+      **Actions:** Update the competitive market map quarterly after each funding round.
+
+      ### 2. Startup B partners with Enterprise Co (Source: https://techcrunch.com/2)
+
+      > **So what**: The partnership gives Startup B distribution into 40 enterprise accounts and materially de-risks its near-term revenue plan.
+
+      **Risk / Opportunity:** Churn at Enterprise Co — likelihood Medium / impact Medium; mitigation: dual-vendor strategy.
+
+      **Actions:** Run a customer-success check-in with the joint account team within 30 days.
+
+      ## References
+
+      1. **Startup A** — https://techcrunch.com/1 (techcrunch)
+      2. **Startup B** — https://techcrunch.com/2 (techcrunch)
+      """
+
+      assert _so_what_substantive(CLEAN, "ai-commercial", "premium-briefing").passed
+      assert _recommendation_relevant(CLEAN, "ai-commercial", "premium-briefing").passed
+      assert _analysis_not_mere_repeat(CLEAN, "ai-commercial", "premium-briefing").passed
+      results = run_assertions(CLEAN, domain="ai-commercial", product="premium-briefing")
+      failed = [r.name for r in results if not r.passed]
+      assert not failed, failed
+      print("PAID_WEAK_ASSERTIONS_CLEAN_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["PAID_WEAK_ASSERTIONS_CLEAN_OK"]

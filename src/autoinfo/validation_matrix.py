@@ -13,7 +13,7 @@ Root cause was not missing scenarios (100 exist) but three structural gaps:
 
 This module provides:
 
-* ``AssertionResult`` + a formalized 16-assertion set (``run_assertions``) —
+* ``AssertionResult`` + a formalized 19-assertion set (``run_assertions``) —
   one readable function per assertion, each with the source issue commented.
 * ``run_matrix`` — generates products over a domains x products grid on the real
   KB path (``generate_digest``/``generate_report``) and asserts each; supports
@@ -313,7 +313,7 @@ _MIN_PLAUSIBLE_YEAR = 1950
 _YEAR_RE = re.compile(r"\b(?:18|19|20)\d{2}\b")
 _MONTH_YEAR_RE = re.compile(
     r"\b(?:January|February|March|April|May|June|July|August|September|"
-    r"October|November|December)\s+(?:18|19|20)\d{2}\b"
+    r"October|November|December)\s+(?P<y>(?:18|19|20)\d{2})\b"
 )
 # URL-embedded 4-digit runs (e.g. "https://x.com/2023/01") are legitimate —
 # never fire the year checks on the path/query portion of a URL.
@@ -583,16 +583,23 @@ def _current_year() -> int:
 
 def _no_year_hallucination(text: str, domain: str, product: str) -> AssertionResult:
     """#351 — product prose carries no hallucinated/out-of-range years:
-    bare month-name+year "dead date" forms (no day, P1), future years
-    (P0), and distant-past years < 1950 (P0).  The References section
-    (from the ``## References`` heading) is EXCLUDED — legitimate
-    citations carry old years.  URL-embedded 4-digit runs never fire."""
+    bare month-name+year forms (no day) whose YEAR is out of range (P0 for
+    future / pre-1950), future years (P0), and distant-past years < 1950
+    (P0).  A bare month-year with a plausible year (1950..current year) is
+    legitimate prose — e.g. "In March 2020, the market crashed" — and is
+    NOT flagged.  The References section (from the ``## References``
+    heading) is EXCLUDED — legitimate citations carry old years.
+    URL-embedded 4-digit runs never fire."""
     refs = _REFS_HEADING.search(text)
     body = text[:refs.start()] if refs else text
     body = _URL_RE.sub(" ", body)
     offending: list[str] = []
     for m in _MONTH_YEAR_RE.finditer(body):
-        offending.append(f"bare month-year {m.group(0)!r}")
+        year = int(m.group("y"))
+        if year > _current_year():
+            offending.append(f"future bare month-year {m.group(0)!r} ({year})")
+        elif year < _MIN_PLAUSIBLE_YEAR:
+            offending.append(f"implausible past bare month-year {m.group(0)!r} ({year})")
     for m in _YEAR_RE.finditer(body):
         year = int(m.group(0))
         if year > _current_year():
@@ -667,6 +674,267 @@ def _no_external_error_text(text: str, domain: str, product: str) -> AssertionRe
     )
 
 
+# ---------------------------------------------------------------------------
+# #357 — paid-tier semantic weak assertions.  The paid products must carry
+# substantive analysis: per-takeaway So-what/Risk/Actions in premium-briefing,
+# Action Required + Recommendations in enterprise-briefing, Implications &
+# Outlook in column, and Recommendations in report.  The checks below are
+# weak/WARN (P1) — they flag placeholders, sub-40-char filler, formulaic
+# deterministic fallbacks, generic boilerplate risk labels, and So-what text
+# that merely restates the takeaway heading.
+# ---------------------------------------------------------------------------
+
+_PAID_ANALYSIS_PRODUCTS = ("premium-briefing", "enterprise-briefing", "column", "report")
+# premium-briefing per-takeaway field extraction regexes (re.MULTILINE on
+# heading split; per-field match on stripped single lines).
+_PREMIUM_TAKEAWAY_RE = re.compile(r"^###\s+\d+\.\s", re.MULTILINE)
+_SOURCE_SUFFIX_RE = re.compile(r"\s*\(Source:\s*[^)]*\)\s*$")
+_SO_WHAT_RE = re.compile(r"^>\s*\*\*So what\*\*:\s*(.*)$")
+_RISK_LINE_RE = re.compile(r"^\*\*Risk / Opportunity:\*\*\s*(.*)$")
+_RISK_TITLE_RE = re.compile(r"^\*\*Risk / Opportunity:\*\*\s*(.*?)(?:\s*—\s*|$)")
+_ACTIONS_LINE_RE = re.compile(r"^\*\*Actions:\*\*\s*(.*)$")
+# section-scoped extraction helpers
+_CHECKBOX_ITEM_RE = re.compile(r"^-\s*\[\s*[ xX]\s*\]\s*(.+)$", re.MULTILINE)
+_BULLET_ITEM_RE = re.compile(r"^-\s+(?:\[\s*[ xX]\s*\]\s*)?(.+)$", re.MULTILINE)
+_BOLD_BULLET_TITLE_RE = re.compile(r"^-\s*\*\*(.+?)\*\*", re.MULTILINE)
+# generic risk label blocklist (case-insensitive exact match)
+_GENERIC_RISK_LABELS = (
+    "valuation bubble risk", "market risk", "general risk",
+    "unknown risk", "n/a risk", "risk risk",
+)
+# deterministic no-LLM fallback formula prefixes (lowered)
+_FORMULAIC_PREFIXES = (
+    "monitor developments around", "track ", "uncertain trajectory for",
+)
+
+
+# --- #357 shared helpers --------------------------------------------------
+
+
+def _premium_takeaways(text: str) -> list[dict[str, str]]:
+    """Split the premium-briefing ``## Key Takeaways`` section (up to
+    ``## References``) into per-takeaway dicts: ``heading`` / ``so_what`` /
+    ``risk`` (full line) / ``risk_title`` / ``actions`` ('' when the field
+    marker line is absent — the ``_No ..._`` empty-state placeholders render
+    without the ``**So what**`` / ``**Risk / Opportunity:**`` /
+    ``**Actions:**`` labels)."""
+    m = re.search(r"^##\s+Key Takeaways", text, re.MULTILINE)
+    if not m:
+        return []
+    tail = text[m.end():]
+    refs = _REFS_HEADING.search(tail)
+    if refs:
+        tail = tail[: refs.start()]
+    parts = _PREMIUM_TAKEAWAY_RE.split(tail)
+    takeaways: list[dict[str, str]] = []
+    for part in parts[1:]:
+        lines = part.splitlines()
+        heading = ""
+        if lines:
+            heading = _SOURCE_SUFFIX_RE.sub("", lines[0].strip()).strip()
+        takeaways.append({
+            "heading": heading,
+            "so_what": _takeaway_field(lines, _SO_WHAT_RE),
+            "risk": _takeaway_field(lines, _RISK_LINE_RE),
+            "risk_title": _takeaway_field(lines, _RISK_TITLE_RE),
+            "actions": _takeaway_field(lines, _ACTIONS_LINE_RE),
+        })
+    return takeaways
+
+
+def _takeaway_field(lines: list[str], field_re: re.Pattern[str]) -> str:
+    """The captured text of the first line in *lines* matching *field_re*
+    ('' when no line carries the field)."""
+    for line in lines:
+        m = field_re.match(line.strip())
+        if m:
+            return m.group(1).strip()
+    return ""
+
+
+def _is_weak_analysis(field: str) -> bool:
+    """True when a premium per-takeaway analysis field is weak: empty,
+    a template ``_No ..._`` placeholder, ``< 40`` chars, or a deterministic
+    no-LLM formulaic fallback (``Monitor developments around …``,
+    ``Track …``, ``Uncertain trajectory for …``)."""
+    stripped = field.strip()
+    if not stripped:
+        return True
+    if _PLACEHOLDER.search(stripped) or _PLACEHOLDER_TOKEN.match(stripped):
+        return True
+    if len(stripped) < 40:
+        return True
+    return stripped.lower().startswith(_FORMULAIC_PREFIXES)
+
+
+def _section_text(text: str, section_name: str) -> str:
+    """The body between ``## <section_name>`` and the next ``##`` heading
+    ('' when the section is absent)."""
+    m = re.search(rf"^##\s+{re.escape(section_name)}\b", text, re.MULTILINE)
+    if not m:
+        return ""
+    tail = text[m.end() :]
+    nxt = re.search(r"^##\s+\S", tail, re.MULTILINE)
+    if nxt:
+        tail = tail[: nxt.start()]
+    return tail
+
+
+def _table_first_cells(section: str) -> list[str]:
+    """First cell (the Risk name) of every data row in a markdown table;
+    the header row and ``---`` separator rows are skipped."""
+    rows = [ln.strip() for ln in section.splitlines() if ln.strip().startswith("|")]
+    cells: list[str] = []
+    for i, row in enumerate(rows):
+        parts = [p.strip() for p in row.strip("|").split("|")]
+        if i == 0 or not parts:
+            continue
+        first = parts[0]
+        if re.fullmatch(r"-{2,}", first) or first.lower() == "risk":
+            continue
+        if first:
+            cells.append(first)
+    return cells
+
+
+def _word_jaccard(a: str, b: str) -> float:
+    """Case-insensitive word-set Jaccard similarity between two strings."""
+    words_a = set(re.findall(r"[a-z0-9]+", a.lower()))
+    words_b = set(re.findall(r"[a-z0-9]+", b.lower()))
+    if not words_a or not words_b:
+        return 0.0
+    return len(words_a & words_b) / len(words_a | words_b)
+
+
+# --- #357 assertion functions ---------------------------------------------
+
+
+def _so_what_substantive(text: str, domain: str, product: str) -> AssertionResult:
+    """#357 — paid-tier products carry substantive analysis: premium-briefing
+    per-takeaway So-what/Risk/Actions, enterprise Action Required +
+    Recommendations, column Implications & Outlook, report Recommendations.
+    Flags empty/placeholder/less-than-40-char/formulaic fields.  Other products pass
+    informationally (like ``_column_deep_dive`` does for non-column)."""
+    if product not in _PAID_ANALYSIS_PRODUCTS:
+        return AssertionResult(
+            "_so_what_substantive", True, "#357", "P1", domain, product,
+            "not a paid-analysis product",
+        )
+    weak: list[str] = []
+    if product == "premium-briefing":
+        for i, tk in enumerate(_premium_takeaways(text), start=1):
+            for label, field in (
+                ("so-what", tk["so_what"]),
+                ("risk", tk["risk"]),
+                ("actions", tk["actions"]),
+            ):
+                if _is_weak_analysis(field):
+                    weak.append(f"takeaway {i} {label} is weak")
+    elif product == "enterprise-briefing":
+        if not _CHECKBOX_ITEM_RE.search(_section_text(text, "Action Required")):
+            weak.append("Action Required has no - [ ] item")
+        recs = _section_text(text, "Recommendations")
+        if recs and not _BULLET_ITEM_RE.search(recs):
+            weak.append("Recommendations empty")
+    elif product == "column":
+        outlook = _section_text(text, "Implications & Outlook")
+        if outlook and not _BULLET_ITEM_RE.search(outlook):
+            weak.append("Implications & Outlook empty")
+    elif product == "report":
+        recs = _section_text(text, "Recommendations")
+        if recs and not _BULLET_ITEM_RE.search(recs):
+            weak.append("Recommendations empty")
+    return AssertionResult(
+        "_so_what_substantive", not weak, "#357", "P1", domain, product,
+        "; ".join(weak) if weak else "substantive analysis present",
+    )
+
+
+def _recommendation_labels(text: str, product: str) -> list[str]:
+    """Extract the recommendation/action/risk label texts for a paid product:
+    premium Actions + Risk titles; enterprise Action Required + Recommendations
+    + Risk Matrix Risk column; column Implications & Outlook bullet titles;
+    report Recommendations bullets."""
+    labels: list[str] = []
+    if product == "premium-briefing":
+        for tk in _premium_takeaways(text):
+            labels.append(tk["risk_title"])
+            labels.append(tk["actions"])
+    elif product == "enterprise-briefing":
+        labels.extend(
+            _BULLET_ITEM_RE.findall(_section_text(text, "Action Required"))
+        )
+        labels.extend(
+            _BULLET_ITEM_RE.findall(_section_text(text, "Recommendations"))
+        )
+        labels.extend(_table_first_cells(_section_text(text, "Risk Matrix")))
+    elif product == "column":
+        labels.extend(
+            _BOLD_BULLET_TITLE_RE.findall(
+                _section_text(text, "Implications & Outlook")
+            )
+        )
+    elif product == "report":
+        labels.extend(
+            _BULLET_ITEM_RE.findall(_section_text(text, "Recommendations"))
+        )
+    return labels
+
+
+def _recommendation_relevant(
+    text: str, domain: str, product: str
+) -> AssertionResult:
+    """#357 — recommendation/risk labels are not generic boilerplate (the
+    prompt forbids labels like "Valuation Bubble Risk") and not placeholders.
+    Only clearly-generic labels with no concrete entity flag; no cross-domain
+    relevance scoring."""
+    if product not in _PAID_ANALYSIS_PRODUCTS:
+        return AssertionResult(
+            "_recommendation_relevant", True, "#357", "P1", domain, product,
+            "not a paid-analysis product",
+        )
+    flagged: list[str] = []
+    for label in _recommendation_labels(text, product):
+        stripped = label.strip().strip("*").rstrip(".,;:")
+        if not stripped:
+            continue
+        if _collect_placeholder_tokens(label):
+            flagged.append(f"placeholder {stripped[:40]!r}")
+        elif stripped.lower() in _GENERIC_RISK_LABELS:
+            flagged.append(f"generic label {stripped[:40]!r}")
+    return AssertionResult(
+        "_recommendation_relevant", not flagged, "#357", "P1", domain, product,
+        "; ".join(flagged) if flagged else "no generic risk labels",
+    )
+
+
+def _analysis_not_mere_repeat(
+    text: str, domain: str, product: str
+) -> AssertionResult:
+    """#357 — premium-briefing So-what analysis must not merely restate the
+    takeaway heading (which derives from the KB entry title/summary).  Flags
+    word-Jaccard > 0.75 between So-what and heading on a short (< 120 chars)
+    So-what — mostly repeating the heading with little added analysis."""
+    if product != "premium-briefing":
+        return AssertionResult(
+            "_analysis_not_mere_repeat", True, "#357", "P1", domain, product,
+            "not a premium-briefing product",
+        )
+    repetitive: list[str] = []
+    for i, tk in enumerate(_premium_takeaways(text), start=1):
+        so_what = tk["so_what"].strip()
+        heading = tk["heading"].strip()
+        if not so_what or not heading or len(so_what) >= 120:
+            continue
+        if _word_jaccard(so_what, heading) > 0.75:
+            repetitive.append(f"takeaway {i} So-what restates heading")
+    return AssertionResult(
+        "_analysis_not_mere_repeat", not repetitive, "#357", "P1", domain,
+        product,
+        "; ".join(repetitive) if repetitive else "analysis adds beyond heading",
+    )
+
+
 ASSERTION_FUNCS: list[tuple[str, Callable[[str, str, str], AssertionResult]]] = [
     ("_title_first", _title_first),
     ("_no_error_leak", _no_error_leak),
@@ -684,6 +952,9 @@ ASSERTION_FUNCS: list[tuple[str, Callable[[str, str, str], AssertionResult]]] = 
     ("_no_code_or_key_leak", _no_code_or_key_leak),
     ("_no_broken_reference", _no_broken_reference),
     ("_no_external_error_text", _no_external_error_text),
+    ("_so_what_substantive", _so_what_substantive),
+    ("_recommendation_relevant", _recommendation_relevant),
+    ("_analysis_not_mere_repeat", _analysis_not_mere_repeat),
 ]
 
 assertion_names = [name for name, _ in ASSERTION_FUNCS]

@@ -1,6 +1,6 @@
 """Tests for the full-matrix validation executor (#331) and its CLI (#332-A).
 
-Covers ``autoinfo.validation_matrix`` (the 16-assertion set, matrix runner,
+Covers ``autoinfo.validation_matrix`` (the 19-assertion set, matrix runner,
 report-card snapshot + regression diff) and ``autoinfo.cli.validate`` (the
 ``validate matrix`` / ``validate diff`` CLI commands).  These are the new
 modules introduced by #331/#332, so the coverage gate requires >=60%
@@ -46,13 +46,13 @@ Watch consolidation.
 
 
 class TestAssertionSet:
-    def test_clean_report_all_16_pass(self) -> None:
-        """The CLEAN fixture must satisfy every assertion in the 16-assertion
-        set (#351): it carries http URLs, no bare month-year / out-of-range
-        years, no code/key shapes, and no error text — so the four new hard
-        security assertions pass on it unchanged."""
+    def test_clean_report_all_pass(self) -> None:
+        """The CLEAN fixture must satisfy every assertion in the 19-assertion
+        set (#357): it carries http URLs, no bare month-year / out-of-range
+        years, no code/key shapes, no error text, and passes the three new
+        paid-tier weak-assertion checks (#357)."""
         results = vm.run_assertions(CLEAN, domain="ai-commercial", product="report")
-        assert len(results) == 16
+        assert len(results) == 19
         failed = [r.name for r in results if not r.passed]
         assert not failed, failed
 
@@ -213,26 +213,45 @@ class TestAssertionSet:
         assert vm._no_internal_leak(CLEAN, "ai-commercial", "report").passed
 
     def test_no_year_hallucination(self) -> None:
-        """#351 — hallucinated/out-of-range years in PRODUCT PROSE fail: bare
-        month-name+year "dead date" forms (no day), future years (> current
-        year), and distant-past years (< 1950).  The References section is
-        EXCLUDED from scanning (legitimate citations carry old years)."""
-        # Bare month-year, no day — the #351 RED baseline.
-        bare = "# T\n\nJuly 2023 marked a turning point\n"
-        r = vm._no_year_hallucination(bare, "d", "report")
-        assert not r.passed, r.details
-        assert r.issue == "#351"
-        assert r.severity == "P1"
-        # Future year (P0).
-        future = "# T\n\nIn 2031, adoption tripled\n"
+        """#351 — hallucinated/out-of-range years in PRODUCT PROSE fail: future
+        years (> current year), distant-past years (< 1950), and bare
+        month-name+year "dead date" forms whose YEAR is out of range.  A bare
+        month-year with a plausible year (1950..current year) is legitimate
+        prose and must PASS (e.g. "In March 2020, the market crashed").  The
+        References section is EXCLUDED from scanning (legitimate citations
+        carry old years)."""
+        # Future month-year (P0).
+        future = "# T\n\nIn March 2031, adoption tripled\n"
         r = vm._no_year_hallucination(future, "d", "report")
         assert not r.passed, r.details
+        assert r.issue == "#351"
         assert r.severity == "P0"
-        # Distant past, pre-1950 (P0).
-        past = "# T\n\na 1947 patent\n"
+        # Distant-past month-year, pre-1950 (P0).
+        past = "# T\n\nfounded in June 1850, the firm collapsed\n"
         r = vm._no_year_hallucination(past, "d", "report")
         assert not r.passed, r.details
         assert r.severity == "P0"
+        # Future year (P0).
+        future_plain = "# T\n\nIn 2031, adoption tripled\n"
+        r = vm._no_year_hallucination(future_plain, "d", "report")
+        assert not r.passed, r.details
+        assert r.severity == "P0"
+        # Distant past, pre-1950 (P0).
+        past_plain = "# T\n\na 1947 patent\n"
+        r = vm._no_year_hallucination(past_plain, "d", "report")
+        assert not r.passed, r.details
+        assert r.severity == "P0"
+        # Plausible bare month-year prose is NOT flagged (#351 tuning) —
+        # the false-positive class is gone.
+        for sample in (
+            "# T\n\nIn March 2020, the market crashed\n",
+            "# T\n\nfounded in June 1995\n",
+            "# T\n\nIn July 2023, the team shipped\n",
+            "# T\n\nIn July 2026, growth continued\n",  # current year
+        ):
+            r = vm._no_year_hallucination(sample, "d", "report")
+            assert r.passed, f"plausible month-year falsely flagged: {r.details!r}"
+            assert r.severity == "P1"
         # Prose-scoped: old years inside the References section are legitimate.
         refs = "# T\n\nbody\n\n## References\n\n1. **A** — https://x.com (1999)\n"
         assert vm._no_year_hallucination(refs, "d", "report").passed
@@ -702,3 +721,166 @@ class TestValidateCli:
         _v._write_html(report, out)
         assert out.is_file()
         assert "report card" in out.read_text(encoding="utf-8")
+
+
+# ---------------------------------------------------------------------------
+# #357 — paid-tier semantic weak assertions
+# ---------------------------------------------------------------------------
+
+_PREMIUM_DEFECT = """# AutoInfo Premium Briefing
+
+**Domain**: ai-commercial
+**Generated**: 2026-08-21T00:00:00Z
+
+## Key Takeaways
+
+### 1. Startup A raises $50M Series B (Source: https://techcrunch.com/1)
+
+> _No implication captured for this takeaway._
+
+**Risk / Opportunity:** Valuation Bubble Risk — likelihood High / impact Medium; mitigation: None
+
+**Actions:** Monitor developments around the sector.
+
+### 2. Startup B partners with Enterprise Co (Source: https://techcrunch.com/2)
+
+> **So what**: Startup B partners with Enterprise Co.
+
+**Risk / Opportunity:** Unknown risk — likelihood Low / impact Low; mitigation: Watch.
+
+**Actions:** _No follow-up actions suggested._
+
+## References
+
+1. **Startup A** — https://techcrunch.com/1 (techcrunch)
+2. **Startup B** — https://techcrunch.com/2 (techcrunch)
+"""
+
+_PREMIUM_CLEAN = """# AutoInfo Premium Briefing
+
+**Domain**: ai-commercial
+**Generated**: 2026-08-21T00:00:00Z
+
+## Executive Summary
+
+AI infrastructure funding accelerated this week with three new rounds
+and a notable enterprise partnership.
+
+## Key Takeaways
+
+### 1. Startup A raises $50M Series B led by fund X (Source: https://techcrunch.com/1)
+
+> **So what**: The round values Startup A at $1.2B and pressures incumbents to cut prices.
+
+**Risk / Opportunity:** FDA rejection of Candidate X — Low impact, diversify pipeline.
+
+**Actions:** Update the competitive market map quarterly after each funding round.
+
+### 2. Startup B partners with Enterprise Co (Source: https://techcrunch.com/2)
+
+> **So what**: The partnership gives Startup B 40 enterprise accounts, de-risking revenue.
+
+**Risk / Opportunity:** Churn at Enterprise Co — Medium impact, dual-vendor plan.
+
+**Actions:** Run a customer-success check-in with the joint account team within 30 days.
+
+## References
+
+1. **Startup A** — https://techcrunch.com/1 (techcrunch)
+2. **Startup B** — https://techcrunch.com/2 (techcrunch)
+"""
+
+
+class TestPaidTierWeakAssertions:
+    """#357 — paid-tier semantic weak assertions: _so_what_substantive,
+    _recommendation_relevant, _analysis_not_mere_repeat."""
+
+    def test_so_what_substantive_flags_premium_weak_fields(self) -> None:
+        r = vm._so_what_substantive(
+            _PREMIUM_DEFECT, "ai-commercial", "premium-briefing"
+        )
+        assert not r.passed
+        assert r.issue == "#357"
+        assert r.severity == "P1"
+        assert "so-what" in r.details or "actions" in r.details
+        assert vm._so_what_substantive(
+            _PREMIUM_CLEAN, "ai-commercial", "premium-briefing"
+        ).passed
+
+    def test_so_what_substantive_enterprise_column_report(self) -> None:
+        ent = (
+            "# E\n\n## Action Required\n\n"
+            "_No actions required in this period._\n"
+        )
+        assert not vm._so_what_substantive(
+            ent, "d", "enterprise-briefing"
+        ).passed
+        ent_ok = (
+            "# E\n\n## Action Required\n\n"
+            "- [ ] Draft the Q3 filing.\n\n"
+            "## Recommendations\n\n- Monitor market shifts.\n"
+        )
+        assert vm._so_what_substantive(
+            ent_ok, "d", "enterprise-briefing"
+        ).passed
+        col = (
+            "# C\n\n## Implications & Outlook\n\n"
+            "_No outlook sections available._\n"
+        )
+        assert not vm._so_what_substantive(col, "d", "column").passed
+        col_ok = (
+            "# C\n\n## Implications & Outlook\n\n"
+            "- **EU rollout** — regulatory delay risk is elevated.\n"
+        )
+        assert vm._so_what_substantive(col_ok, "d", "column").passed
+        rep = (
+            "# R\n\n## Recommendations\n\n(no bullets)\n"
+        )
+        assert not vm._so_what_substantive(rep, "d", "report").passed
+        assert vm._so_what_substantive(CLEAN, "d", "report").passed
+
+    def test_so_what_substantive_not_in_scope_passes(self) -> None:
+        r = vm._so_what_substantive("anything", "d", "digest")
+        assert r.passed
+        assert "not a paid-analysis product" in r.details
+
+    def test_recommendation_relevant_flags_generic_and_placeholder(
+        self,
+    ) -> None:
+        r = vm._recommendation_relevant(
+            _PREMIUM_DEFECT, "ai-commercial", "premium-briefing"
+        )
+        assert not r.passed
+        assert r.issue == "#357"
+        assert "Valuation Bubble Risk" in r.details
+        ent = (
+            "# E\n\n## Risk Matrix\n\n"
+            "| Risk | Likelihood | Impact | Mitigation |\n"
+            "|------|-----------|--------|------------|\n"
+            "| Market Risk | High | Medium | Watch |\n"
+        )
+        assert not vm._recommendation_relevant(
+            ent, "d", "enterprise-briefing"
+        ).passed
+        assert vm._recommendation_relevant(
+            _PREMIUM_CLEAN, "ai-commercial", "premium-briefing"
+        ).passed
+
+    def test_analysis_not_mere_repeat_flags_restatement(self) -> None:
+        r = vm._analysis_not_mere_repeat(
+            _PREMIUM_DEFECT, "ai-commercial", "premium-briefing"
+        )
+        assert not r.passed
+        assert r.issue == "#357"
+        assert "takeaway 2" in r.details
+        assert vm._analysis_not_mere_repeat(
+            _PREMIUM_CLEAN, "ai-commercial", "premium-briefing"
+        ).passed
+        assert vm._analysis_not_mere_repeat("x", "d", "report").passed
+
+    def test_paid_assertions_pass_on_clean_full_run(self) -> None:
+        results = vm.run_assertions(
+            _PREMIUM_CLEAN, domain="ai-commercial", product="premium-briefing"
+        )
+        failed = [r.name for r in results if not r.passed]
+        assert not failed, failed

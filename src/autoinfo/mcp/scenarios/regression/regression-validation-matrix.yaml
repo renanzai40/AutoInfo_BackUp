@@ -5,7 +5,7 @@
 # scenario assertions previously ran mocks/templates detached from the real
 # `output --product` KB path, so regressions passed while the real product was
 # broken (#316/#323).  The new `autoinfo validate --matrix` executor runs the
-# formalized assertion set (12 assertions, each a readable function carrying
+# formalized assertion set (19 assertions, each a readable function carrying
 # its source issue) against the real generation output and emits a report card.
 #
 # This regression exercises the assertion set + diff machinery deterministically
@@ -49,7 +49,7 @@ steps:
       results = run_assertions(clean, domain="ai-commercial", product="report")
       failed = [r.name for r in results if not r.passed]
       assert not failed, f"assertions failed on clean report: {failed}"
-      assert len(results) == 12, f"expected 12 assertions, got {len(results)}"
+      assert len(results) == 19, f"expected 19 assertions, got {len(results)}"
 
       # A leak-polluted header must be caught by the #328 assertion.
       polluted = "\x1b[1;31mGive Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new\x1b[0m\n# Title\n"

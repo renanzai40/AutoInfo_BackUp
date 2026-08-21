@@ -172,21 +172,36 @@ def test_raw_entry_count_real_kb_scan(tmp_path: Path) -> None:
 
 def test_year_regex_edges() -> None:
     """_no_year_hallucination's real regex branches: a bare month-year form is
-    pinned as P1; future and pre-1950 years are P0; the year regex does not
-    fire on 4-digit runs inside URLs or on plausible years; the References
-    section (from the ``## References`` heading) is excluded from scanning."""
+    pinned as P1 when its YEAR is out of range (future / pre-1950); future and
+    pre-1950 years are P0; the year regex does not fire on 4-digit runs inside
+    URLs or on plausible years; a bare month-year with a plausible year
+    (1950..current year) passes (#351 tuning); the References section (from
+    the ``## References`` heading) is excluded from scanning."""
     r = vm._no_year_hallucination("# T\n\nJuly 2023\n", "d", "report")
-    assert not r.passed
+    assert r.passed  # plausible bare month-year — NOT flagged (#351 tuning)
     assert r.severity == "P1"
+    r = vm._no_year_hallucination("# T\n\nIn March 2031, adoption tripled\n", "d", "report")
+    assert not r.passed
+    assert r.severity == "P0"
+    r = vm._no_year_hallucination("# T\n\nback in June 1850, the crisis deepened\n", "d", "report")
+    assert not r.passed
+    assert r.severity == "P0"
     r = vm._no_year_hallucination("# T\n\nIn 2031, adoption tripled\n", "d", "report")
     assert not r.passed
     assert r.severity == "P0"
     r = vm._no_year_hallucination("# T\n\na 1947 patent\n", "d", "report")
     assert not r.passed
     assert r.severity == "P0"
-    # Plausible years and URL-embedded 4-digit runs pass in prose.
+    # Plausible years, plausible bare month-years and URL-embedded 4-digit
+    # runs pass in prose — the #351 false-positive class is gone.
     assert vm._no_year_hallucination(
         "# T\n\nFounded in 2024, growth continued.\n", "d", "report"
+    ).passed
+    assert vm._no_year_hallucination(
+        "# T\n\nIn March 2020, the market crashed\n", "d", "report"
+    ).passed
+    assert vm._no_year_hallucination(
+        "# T\n\nfounded in June 1995\n", "d", "report"
     ).passed
     assert vm._no_year_hallucination(
         "# T\n\nSee https://example.com/2023-report\n", "d", "report"
