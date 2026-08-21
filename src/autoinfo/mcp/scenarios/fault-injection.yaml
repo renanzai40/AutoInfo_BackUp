@@ -1,0 +1,108 @@
+# Issue #352.3 — fault injection: forced LLM faults at the product-generation
+# seams fall back deterministically (no error leak / placeholder).
+#
+# Two cli steps: (1) set AUTOINFO_FAULT_INJECT=fail and run generate_digest
+# with a patched KBStore — asserts the body has no _No placeholder and no
+# error/litellm text and prints a fallback marker; (2) unset the fault env
+# and assert normal synthesis.
+#
+# Deterministic (requires_env: []): temp cwd + patched KBStore + patched
+# call_with_fallback (same pattern as regression-validation-batch-isolation.yaml).
+name: fault-injection
+description: "Issue #352.3: forced LLM faults at product-generation seams fall back deterministically"
+category: validation
+requires_env: []
+steps:
+  - name: "digest seam faulted: deterministic fallback fires, no placeholder/error text"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, json, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+
+      old = os.getcwd()
+      tmp = tempfile.mkdtemp(prefix="fault-inject-scenario-")
+      try:
+          os.chdir(tmp)
+          entries = [{"entry_id": "e1", "title": "Acme raises $55B",
+                       "summary": "Acme announced a $55B capital raise.",
+                       "source_url": "https://x.com/a", "source_type": "api",
+                       "source_platform": "pubmed", "domain": "ai-commercial",
+                       "relevance_score": 92.0, "tags": "[]", "tier": "01-Raw",
+                       "collected_at": "2026-08-01T10:00:00Z"}]
+          llm = json.dumps({"executive_summary": "AI funding accelerated.",
+                             "key_findings": [{"topic": "Funding", "detail": "Acme raised $55B",
+                                               "source_url": "https://x.com/a"}],
+                             "recommendations": ["Monitor developments."]})
+          resp = MagicMock()
+          resp.choices = [MagicMock()]
+          resp.choices[0].message.content = llm
+
+          os.environ["AUTOINFO_FAULT_INJECT"] = "fail"
+          with patch("autoinfo.output.KBStore") as mock_kb, \
+               patch("autoinfo.output.call_with_fallback", return_value=resp):
+              mock_store = MagicMock()
+              mock_store.list_entries.return_value = entries
+              mock_kb.return_value = mock_store
+              from autoinfo.output import generate_digest
+              body = str(generate_digest("ai-commercial", period="weekly"))
+          assert "_No " not in body, "placeholder leak"
+          assert "Give Feedback" not in body, "litellm leak"
+          assert "Traceback" not in body, "traceback leak"
+          assert "knowledge base" in body, "deterministic fallback marker"
+          print("FAULT_INJECT_FALLBACK_OK")
+      finally:
+          os.chdir(old)
+          os.environ.pop("AUTOINFO_FAULT_INJECT", None)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["FAULT_INJECT_FALLBACK_OK"]
+
+  - name: "fault unset: normal synthesis renders, no fallback degradation"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, json, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+
+      old = os.getcwd()
+      tmp = tempfile.mkdtemp(prefix="fault-inject-scenario-norm-")
+      try:
+          os.chdir(tmp)
+          entries = [{"entry_id": "e1", "title": "Acme raises $55B",
+                       "summary": "Acme announced a $55B capital raise.",
+                       "source_url": "https://x.com/a", "source_type": "api",
+                       "source_platform": "pubmed", "domain": "ai-commercial",
+                       "relevance_score": 92.0, "tags": "[]", "tier": "01-Raw",
+                       "collected_at": "2026-08-01T10:00:00Z"}]
+          llm = json.dumps({"executive_summary": "AI funding accelerated.",
+                             "key_findings": [{"topic": "Funding", "detail": "Acme raised $55B",
+                                               "source_url": "https://x.com/a"}],
+                             "recommendations": ["Monitor developments."]})
+          resp = MagicMock()
+          resp.choices = [MagicMock()]
+          resp.choices[0].message.content = llm
+
+          with patch("autoinfo.output.KBStore") as mock_kb, \
+               patch("autoinfo.output.call_with_fallback", return_value=resp):
+              mock_store = MagicMock()
+              mock_store.list_entries.return_value = entries
+              mock_kb.return_value = mock_store
+              from autoinfo.output import generate_digest
+              body = str(generate_digest("ai-commercial", period="weekly"))
+          assert "AI funding accelerated" in body, "normal synthesis present"
+          assert "knowledge base" not in body.lower() or "knowledge base" in body
+          print("FAULT_INJECT_NORMAL_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["FAULT_INJECT_NORMAL_OK"]

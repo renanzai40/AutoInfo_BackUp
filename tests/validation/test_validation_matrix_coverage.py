@@ -159,3 +159,100 @@ def test_raw_entry_count_real_kb_scan(tmp_path: Path) -> None:
     raw_b.mkdir(parents=True)
     (raw_b / "2026-08-03.md").write_text("z", encoding="utf-8")
     assert vm._raw_entry_count("ai-commercial", kb) == 3
+
+
+# ---------------------------------------------------------------------------
+# #351 — unpatched-branch coverage for the four new hard security assertions.
+# These tests exercise the REAL regex branches the implementer will add; they
+# fail RED today (AttributeError) and must pass GREEN with the implementer's
+# module constants (_MIN_PLAUSIBLE_YEAR / _YEAR_RE / _MONTH_YEAR_RE /
+# _FENCE / _KEY_SHAPES / _REF_URL_TOKEN / _EXT_ERROR_*) in place.
+# ---------------------------------------------------------------------------
+
+
+def test_year_regex_edges() -> None:
+    """_no_year_hallucination's real regex branches: a bare month-year form is
+    pinned as P1; future and pre-1950 years are P0; the year regex does not
+    fire on 4-digit runs inside URLs or on plausible years; the References
+    section (from the ``## References`` heading) is excluded from scanning."""
+    r = vm._no_year_hallucination("# T\n\nJuly 2023\n", "d", "report")
+    assert not r.passed
+    assert r.severity == "P1"
+    r = vm._no_year_hallucination("# T\n\nIn 2031, adoption tripled\n", "d", "report")
+    assert not r.passed
+    assert r.severity == "P0"
+    r = vm._no_year_hallucination("# T\n\na 1947 patent\n", "d", "report")
+    assert not r.passed
+    assert r.severity == "P0"
+    # Plausible years and URL-embedded 4-digit runs pass in prose.
+    assert vm._no_year_hallucination(
+        "# T\n\nFounded in 2024, growth continued.\n", "d", "report"
+    ).passed
+    assert vm._no_year_hallucination(
+        "# T\n\nSee https://example.com/2023-report\n", "d", "report"
+    ).passed
+    # References section is exempt: old citation years must not fail.
+    refs = "# T\n\nbody\n\n## References\n\n1. **A** — https://x.com (1999)\n"
+    assert vm._no_year_hallucination(refs, "d", "report").passed
+
+
+def test_key_regex_length_thresholds() -> None:
+    """_no_code_or_key_leak's real length thresholds: short hex/base64 tokens
+    (below the 32-char hex / 40-char base64 cutoffs) pass, long runs fail,
+    and the prefix shapes (sk-/AIza/AKIA/ghp_/eyJ) fail at any length."""
+    # Long hex run (>=32 chars) fails; short hex passes.
+    long_hex = "0" * 32
+    assert not vm._no_code_or_key_leak(
+        f"# T\n\ntoken {long_hex}\n", "d", "report"
+    ).passed
+    assert vm._no_code_or_key_leak(
+        "# T\n\nsha1 0a1b2c3d4e5f\n", "d", "report"
+    ).passed
+    # Long base64 (>=40 chars) fails; a short base64-looking slug passes.
+    long_b64 = "a" * 40
+    assert not vm._no_code_or_key_leak(
+        f"# T\n\npayload {long_b64}==\n", "d", "report"
+    ).passed
+    assert vm._no_code_or_key_leak(
+        "# T\n\nid abcdefghijklmnop\n", "d", "report"
+    ).passed
+    # Prefix shapes fail regardless of length.
+    assert not vm._no_code_or_key_leak("# T\n\nsk-abc\n", "d", "report").passed
+    assert not vm._no_code_or_key_leak("# T\n\nghp_abc\n", "d", "report").passed
+
+
+def test_reference_url_parse_edges() -> None:
+    """_no_broken_reference's real parse branches: empty View Source targets,
+    scheme-less targets, and bare (identifier) placeholders fail; the legit
+    identifier schemes (doi:/pmid:/arxiv:/isbn:) pass."""
+    assert not vm._no_broken_reference(
+        "# T\n\n[View Source]()\n", "d", "report"
+    ).passed
+    assert not vm._no_broken_reference(
+        "# T\n\n[View Source](not a url)\n", "d", "report"
+    ).passed
+    assert not vm._no_broken_reference(
+        "# T\n\n## References\n\n1. **A** — (pubmed)\n", "d", "report"
+    ).passed
+    assert vm._no_broken_reference(
+        "# T\n\n[View Source](https://example.com/a)\n", "d", "report"
+    ).passed
+    assert vm._no_broken_reference(
+        "# T\n\n## References\n\n1. **A** — (doi:10.1000/xyz123)\n",
+        "d", "report",
+    ).passed
+    assert vm._no_broken_reference(
+        "# T\n\n## References\n\n1. **A** — (arxiv:2301.00001)\n",
+        "d", "report",
+    ).passed
+
+
+def test_whole_body_ansi_beyond_500() -> None:
+    """_no_external_error_text scans the WHOLE body for ANSI escapes — the
+    #351 gap where _no_error_leak only checks ``text[:500]``.  A code with a
+    legit bare link (no ANSI) must pass."""
+    ansi_beyond_500 = ("plain body text " * 40) + "\x1b[1;31mred\x1b[0m\n"
+    r = vm._no_external_error_text(ansi_beyond_500, "d", "report")
+    assert not r.passed
+    clean = "# T\n\n[View Source](https://example.com/a)\n"
+    assert vm._no_external_error_text(clean, "d", "report").passed

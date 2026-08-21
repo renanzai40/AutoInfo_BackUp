@@ -13,8 +13,8 @@ Root cause was not missing scenarios (100 exist) but three structural gaps:
 
 This module provides:
 
-* ``AssertionResult`` + a formalized assertion set (``run_assertions``) — one
-  readable function per assertion, each with the source issue commented.
+* ``AssertionResult`` + a formalized 16-assertion set (``run_assertions``) —
+  one readable function per assertion, each with the source issue commented.
 * ``run_matrix`` — generates products over a domains x products grid on the real
   KB path (``generate_digest``/``generate_report``) and asserts each; supports
   ``only_assert`` (scan existing persisted products, no regeneration).
@@ -300,6 +300,37 @@ _LITELLM = re.compile(
     r"Give Feedback / Get Help|BerriAI|LiteLLM\.Info|litellm\._turn_on_debug",
     re.IGNORECASE,
 )
+# #351 — hard security assertions.  Years below 1950 (and any future year) are
+# treated as hallucination in product prose; years 1950..current year are the
+# only plausible ones.  ``datetime.now()`` is a small helper so tests can patch
+# the current year without touching the module's regex constants.
+_MIN_PLAUSIBLE_YEAR = 1950
+_YEAR_RE = re.compile(r"\b(?:18|19|20)\d{2}\b")
+_MONTH_YEAR_RE = re.compile(
+    r"\b(?:January|February|March|April|May|June|July|August|September|"
+    r"October|November|December)\s+(?:18|19|20)\d{2}\b"
+)
+# URL-embedded 4-digit runs (e.g. "https://x.com/2023/01") are legitimate —
+# never fire the year checks on the path/query portion of a URL.
+_URL_RE = re.compile(r"https?://\S+")
+# Fenced code blocks are never acceptable in a delivered product.
+_FENCE_RE = re.compile(r"```[\s\S]*?```")
+# API-key / token / secret prefix shapes: sk- (OpenAI), AIza (Google),
+# AKIA (AWS access key id), ghp_/gho_/github_pat_ (GitHub), eyJ (JWT header).
+_KEY_SHAPES_RE = re.compile(
+    r"\b(?:sk-|AIza[0-9A-Za-z_-]+|AKIA[0-9A-Z]+|gh[pous]_[0-9A-Za-z]+"
+    r"|github_pat_[0-9A-Za-z_]+|eyJ[A-Za-z0-9_-]+)"
+)
+# Long hex runs (>=32 chars) and long base64 runs (>=40 chars, optional ==
+# padding) are credential-shaped.
+_LONG_HEX_RE = re.compile(r"\b[0-9a-fA-F]{32,}\b")
+_LONG_B64_RE = re.compile(r"\b[A-Za-z0-9+/]{40,}={0,2}\b")
+# Broken-reference shapes (#351): [View Source](...) targets that are empty or
+# scheme-less; References entries carrying no URL/identifier-bearing token.
+_VIEW_SOURCE_RE = re.compile(r"\[View Source\]\(([^)]*)\)")
+_REF_URL_TOKEN = re.compile(
+    r"https?://|doi:|pmid:|arxiv:|isbn:", re.IGNORECASE
+)
 # Cross-domain noise markers (issue #319) / financial dilution markers.
 _AI_COMMERCIAL_NOISE = (
     "贝达药业", "华能", "株冶", "平安好医生", "DURAVYU", "SEC 8-K", "SEC 8K",
@@ -540,6 +571,97 @@ def _not_empty(text: str, domain: str, product: str) -> AssertionResult:
     )
 
 
+def _current_year() -> int:
+    """The current calendar year (small helper so tests can patch it)."""
+    return datetime.now().year
+
+
+def _no_year_hallucination(text: str, domain: str, product: str) -> AssertionResult:
+    """#351 — product prose carries no hallucinated/out-of-range years:
+    bare month-name+year "dead date" forms (no day, P1), future years
+    (P0), and distant-past years < 1950 (P0).  The References section
+    (from the ``## References`` heading) is EXCLUDED — legitimate
+    citations carry old years.  URL-embedded 4-digit runs never fire."""
+    refs = _REFS_HEADING.search(text)
+    body = text[:refs.start()] if refs else text
+    body = _URL_RE.sub(" ", body)
+    offending: list[str] = []
+    for m in _MONTH_YEAR_RE.finditer(body):
+        offending.append(f"bare month-year {m.group(0)!r}")
+    for m in _YEAR_RE.finditer(body):
+        year = int(m.group(0))
+        if year > _current_year():
+            offending.append(f"future year {year}")
+        elif year < _MIN_PLAUSIBLE_YEAR:
+            offending.append(f"implausible past year {year}")
+    severe = any(o.startswith(("future", "implausible")) for o in offending)
+    return AssertionResult(
+        "_no_year_hallucination", not offending, "#351",
+        "P0" if severe else "P1", domain, product,
+        "; ".join(dict.fromkeys(offending)) if offending else "no year issues",
+    )
+
+
+def _no_code_or_key_leak(text: str, domain: str, product: str) -> AssertionResult:
+    """#351 — fenced code blocks and API-key/token shapes never reach a
+    product: ``sk-``/``AIza``/``AKIA``/``ghp_``/``gho_``/``github_pat_``/
+    ``eyJ`` prefixes, long hex runs (>=32), long base64 runs (>=40)."""
+    bad: list[str] = []
+    if _FENCE_RE.search(text):
+        bad.append("fenced code block")
+    for m in _KEY_SHAPES_RE.finditer(text):
+        bad.append(f"{m.group(0)[:20]}...")
+    for m in _LONG_HEX_RE.finditer(text):
+        bad.append(f"long hex run ({len(m.group(0))} chars)")
+    for m in _LONG_B64_RE.finditer(text):
+        bad.append(f"long base64 run ({len(m.group(0))} chars)")
+    return AssertionResult(
+        "_no_code_or_key_leak", not bad, "#351", "P0", domain, product,
+        "leak=" + ", ".join(dict.fromkeys(bad)) if bad else "no code/key shapes",
+    )
+
+
+def _no_broken_reference(text: str, domain: str, product: str) -> AssertionResult:
+    """#351 — no empty ``[View Source]()``, no scheme-less ``[View Source]
+    (not a url)`` target, and no References entry without a URL-bearing
+    token (http/https or the legit identifier schemes doi:/pmid:/arxiv:/
+    isbn:)."""
+    bad: list[str] = []
+    for m in _VIEW_SOURCE_RE.finditer(text):
+        target = m.group(1).strip()
+        if not target:
+            bad.append("empty [View Source] target")
+        elif not re.match(r"^[A-Za-z][A-Za-z0-9+.-]*:", target):
+            bad.append(f"[View Source] target {target[:30]!r} has no scheme")
+    refs = _REFS_HEADING.search(text)
+    if refs:
+        for line in text[refs.start():].splitlines():
+            if _REF_ENTRY.match(line) and not _REF_URL_TOKEN.search(line):
+                bad.append(f"reference without URL/identifier: {line[:40]!r}")
+    return AssertionResult(
+        "_no_broken_reference", not bad, "#351", "P0", domain, product,
+        "broken=" + "; ".join(bad) if bad else "no broken references",
+    )
+
+
+def _no_external_error_text(text: str, domain: str, product: str) -> AssertionResult:
+    """#351 — the WHOLE body carries no external-lib error text: ANSI
+    escapes anywhere (the ``_no_error_leak`` header-only gap), litellm
+    'Give Feedback / Get Help' / 'BerriAI' markers, and Python
+    tracebacks."""
+    bad: list[str] = []
+    if _ANSI.search(text):
+        bad.append("ANSI escape")
+    if _LITELLM.search(text):
+        bad.append("litellm/BerriAI marker")
+    if _TRACEBACK.search(text):
+        bad.append("traceback")
+    return AssertionResult(
+        "_no_external_error_text", not bad, "#351", "P0", domain, product,
+        "; ".join(bad) if bad else "no external error text",
+    )
+
+
 ASSERTION_FUNCS: list[tuple[str, Callable[[str, str, str], AssertionResult]]] = [
     ("_title_first", _title_first),
     ("_no_error_leak", _no_error_leak),
@@ -553,6 +675,10 @@ ASSERTION_FUNCS: list[tuple[str, Callable[[str, str, str], AssertionResult]]] = 
     ("_no_cross_domain_noise", _no_cross_domain_noise),
     ("_no_financial_dilution", _no_financial_dilution),
     ("_not_empty", _not_empty),
+    ("_no_year_hallucination", _no_year_hallucination),
+    ("_no_code_or_key_leak", _no_code_or_key_leak),
+    ("_no_broken_reference", _no_broken_reference),
+    ("_no_external_error_text", _no_external_error_text),
 ]
 
 assertion_names = [name for name, _ in ASSERTION_FUNCS]

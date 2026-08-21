@@ -1,6 +1,6 @@
 """Tests for the full-matrix validation executor (#331) and its CLI (#332-A).
 
-Covers ``autoinfo.validation_matrix`` (the 11-assertion set, matrix runner,
+Covers ``autoinfo.validation_matrix`` (the 16-assertion set, matrix runner,
 report-card snapshot + regression diff) and ``autoinfo.cli.validate`` (the
 ``validate matrix`` / ``validate diff`` CLI commands).  These are the new
 modules introduced by #331/#332, so the coverage gate requires >=60%
@@ -46,9 +46,13 @@ Watch consolidation.
 
 
 class TestAssertionSet:
-    def test_clean_report_all_12_pass(self) -> None:
+    def test_clean_report_all_16_pass(self) -> None:
+        """The CLEAN fixture must satisfy every assertion in the 16-assertion
+        set (#351): it carries http URLs, no bare month-year / out-of-range
+        years, no code/key shapes, and no error text — so the four new hard
+        security assertions pass on it unchanged."""
         results = vm.run_assertions(CLEAN, domain="ai-commercial", product="report")
-        assert len(results) == 12
+        assert len(results) == 16
         failed = [r.name for r in results if not r.passed]
         assert not failed, failed
 
@@ -207,6 +211,101 @@ class TestAssertionSet:
             r = vm._no_internal_leak(sample, "ai-commercial", "report")
             assert not r.passed, f"leak sample #{i} escaped: {r.details!r}"
         assert vm._no_internal_leak(CLEAN, "ai-commercial", "report").passed
+
+    def test_no_year_hallucination(self) -> None:
+        """#351 — hallucinated/out-of-range years in PRODUCT PROSE fail: bare
+        month-name+year "dead date" forms (no day), future years (> current
+        year), and distant-past years (< 1950).  The References section is
+        EXCLUDED from scanning (legitimate citations carry old years)."""
+        # Bare month-year, no day — the #351 RED baseline.
+        bare = "# T\n\nJuly 2023 marked a turning point\n"
+        r = vm._no_year_hallucination(bare, "d", "report")
+        assert not r.passed, r.details
+        assert r.issue == "#351"
+        assert r.severity == "P1"
+        # Future year (P0).
+        future = "# T\n\nIn 2031, adoption tripled\n"
+        r = vm._no_year_hallucination(future, "d", "report")
+        assert not r.passed, r.details
+        assert r.severity == "P0"
+        # Distant past, pre-1950 (P0).
+        past = "# T\n\na 1947 patent\n"
+        r = vm._no_year_hallucination(past, "d", "report")
+        assert not r.passed, r.details
+        assert r.severity == "P0"
+        # Prose-scoped: old years inside the References section are legitimate.
+        refs = "# T\n\nbody\n\n## References\n\n1. **A** — https://x.com (1999)\n"
+        assert vm._no_year_hallucination(refs, "d", "report").passed
+        assert vm._no_year_hallucination(CLEAN, "d", "report").passed
+
+    def test_no_code_or_key_leak(self) -> None:
+        """#351 — fenced code blocks and API-key/token shapes (``sk-``, ``AIza``,
+        ``AKIA``, ``ghp_``/``gho_``/``github_pat_``, ``eyJ`` JWT, long hex >=32,
+        long base64 >=40) never reach a product."""
+        shapes = [
+            '```json\n{"api_key": "sk-abc123"}\n```\n',  # fenced code block
+            "sk-abc123\n",
+            "AIzaSyD1234567890abcdefghijklmnopqrstuv\n",
+            "AKIAIOSFODNN7EXAMPLE\n",
+            "ghp_abc123def456ghi789\n",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\n",  # JWT base64url header
+        ]
+        for i, sample in enumerate(shapes):
+            r = vm._no_code_or_key_leak(sample, "d", "report")
+            assert not r.passed, f"code/key shape #{i} escaped: {r.details!r}"
+            assert r.issue == "#351"
+            assert r.severity == "P0"
+        assert vm._no_code_or_key_leak(CLEAN, "d", "report").passed
+
+    def test_no_broken_reference(self) -> None:
+        """#351 — no empty ``[View Source]()``, no non-URL
+        ``[View Source](not a url)`` (missing http/https scheme), and no
+        References entry without a URL-bearing token.  Legit identifier
+        schemes: http/https/doi:/pmid:/arxiv:/isbn:."""
+        broken = [
+            "# T\n\n[View Source]()\n",
+            "# T\n\n[View Source](not a url)\n",
+            "# T\n\n## References\n\n1. **A** — (pubmed)\n",
+        ]
+        for i, sample in enumerate(broken):
+            r = vm._no_broken_reference(sample, "d", "report")
+            assert not r.passed, f"broken reference #{i} escaped: {r.details!r}"
+            assert r.issue == "#351"
+            assert r.severity == "P0"
+        legit = [
+            "# T\n\n[View Source](https://example.com/a)\n",
+            "# T\n\n[View Source](doi:10.1000/xyz123)\n",
+            "# T\n\n## References\n\n1. **A** — (pmid:30000001)\n",
+            "# T\n\n## References\n\n1. **A** — (arxiv:2301.00001)\n",
+            "# T\n\n## References\n\n1. **A** — (isbn:978-3-16-148410-0)\n",
+        ]
+        for i, sample in enumerate(legit):
+            r = vm._no_broken_reference(sample, "d", "report")
+            assert r.passed, f"legit reference #{i} flagged: {r.details!r}"
+        assert vm._no_broken_reference(CLEAN, "d", "report").passed
+
+    def test_no_external_error_text(self) -> None:
+        """#351 — whole-body scan for external-lib error text: ANSI escapes
+        ANYWHERE (not just the first 500 chars — the ``_no_error_leak``
+        header-only gap), 'Give Feedback / Get Help', 'BerriAI', and Python
+        tracebacks."""
+        # ANSI at character position >500 — escapes _no_error_leak's
+        # ``_ANSI.search(text[:500])`` header-only scan; the new whole-body
+        # assertion must catch it.
+        ansi_beyond_500 = ("plain body text " * 40) + "\x1b[1;31mred\x1b[0m\n"
+        r = vm._no_external_error_text(ansi_beyond_500, "d", "report")
+        assert not r.passed, r.details
+        assert r.issue == "#351"
+        assert r.severity == "P0"
+        # Mid-body litellm marker (whole-body, not header-only).
+        litellm_mid = (
+            "# T\n\nprose\n\nGive Feedback / Get Help: "
+            "https://github.com/BerriAI/litellm\n"
+        )
+        assert not vm._no_external_error_text(litellm_mid, "d", "report").passed
+        traceback = "# T\n\nTraceback (most recent call last):\n  File \"x\", line 1\n"
+        assert not vm._no_external_error_text(traceback, "d", "report").passed
+        assert vm._no_external_error_text(CLEAN, "d", "report").passed
 
 
 class TestMatrix:

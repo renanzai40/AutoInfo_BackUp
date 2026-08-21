@@ -1,0 +1,124 @@
+# Regression #351: validate --matrix hard security assertions.
+#
+# The matrix previously relied on manual paid re-review to catch the hard
+# security classes (year hallucination, code/API-key leak, broken references,
+# external-lib error text).  #351 codified them as 4 deterministic assertions
+# in ASSERTION_FUNCS so every matrix run checks them:
+#
+#   _no_year_hallucination   — future (> current year) / pre-1950 / bare
+#                              month-year "dead date" forms in product PROSE
+#                              (References section excluded).
+#   _no_code_or_key_leak     — fenced code blocks + sk-/AIza/AKIA/ghp_/eyJ
+#                              key shapes + long hex (>=32) / base64 (>=40).
+#   _no_broken_reference     — empty/scheme-less [View Source] targets and
+#                              References entries with no URL-bearing token
+#                              (http/https/doi:/pmid:/arxiv:/isbn: allowed).
+#   _no_external_error_text  — whole-body ANSI / litellm / traceback scan
+#                              (closes the _no_error_leak header-only gap).
+#
+# Deterministic (requires_env: []): exercises run_assertions directly on
+# defect + clean bodies — no LLM, no network.
+name: regression-security-assertions
+description: "Regression #351: year-hallucination / code-key-leak / broken-reference / external-error-text assertions fire on defect products and pass clean products"
+category: regression
+regression: true
+regression_issue: "#351"
+requires_env: []
+steps:
+  - name: "hard security assertions fire on defect products"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.validation_matrix import (
+          _no_year_hallucination, _no_code_or_key_leak,
+          _no_broken_reference, _no_external_error_text,
+      )
+
+      # Year hallucination: future year, pre-1950, bare month-year.
+      assert not _no_year_hallucination(
+          "# T\n\nIn 2031, adoption tripled\n", "d", "report"
+      ).passed
+      assert not _no_year_hallucination(
+          "# T\n\na 1947 patent\n", "d", "report"
+      ).passed
+      assert not _no_year_hallucination(
+          "# T\n\nJuly 2023 marked a turning point\n", "d", "report"
+      ).passed
+
+      # Code / key leak: fenced block, sk- key, JWT.
+      assert not _no_code_or_key_leak(
+          "```json\n{\"api_key\": \"sk-abc123\"}\n```\n", "d", "report"
+      ).passed
+      assert not _no_code_or_key_leak(
+          "sk-abc123", "d", "report"
+      ).passed
+      assert not _no_code_or_key_leak(
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9", "d", "report"
+      ).passed
+
+      # Broken reference: empty View Source, scheme-less, bare placeholder.
+      assert not _no_broken_reference(
+          "[View Source]()", "d", "report"
+      ).passed
+      assert not _no_broken_reference(
+          "[View Source](not a url)", "d", "report"
+      ).passed
+      assert not _no_broken_reference(
+          "## References\n\n1. **A** — (pubmed)\n", "d", "report"
+      ).passed
+
+      # External error text: ANSI beyond char 500, litellm marker.
+      ansi_far = ("plain body text " * 40) + "\x1b[1;31mred\x1b[0m\n"
+      assert not _no_external_error_text(ansi_far, "d", "report").passed
+      assert not _no_external_error_text(
+          "Give Feedback / Get Help: https://github.com/BerriAI/litellm",
+          "d", "report",
+      ).passed
+      print("SECURITY_ASSERTIONS_FIRE_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SECURITY_ASSERTIONS_FIRE_OK"]
+
+  - name: "clean product passes all security assertions"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.validation_matrix import (
+          _no_year_hallucination, _no_code_or_key_leak,
+          _no_broken_reference, _no_external_error_text,
+      )
+
+      CLEAN = """# AI Commercial Report
+
+      **Domain**: ai-commercial
+      **Sections**: 2
+
+      ## Summary
+
+      AI funding accelerated this week.
+
+      ## Key Takeaways
+
+      ### 1. Startup A raised $50M (Source: https://techcrunch.com/1)
+      Monitor developments.
+
+      ### 2. Startup B raised $30M (Source: https://techcrunch.com/2)
+      Watch consolidation.
+
+      ## References
+
+      1. **Startup A** — https://techcrunch.com/1 (techcrunch)
+      2. **Startup B** — https://techcrunch.com/2 (techcrunch)
+      """
+      assert _no_year_hallucination(CLEAN, "d", "report").passed
+      assert _no_code_or_key_leak(CLEAN, "d", "report").passed
+      assert _no_broken_reference(CLEAN, "d", "report").passed
+      assert _no_external_error_text(CLEAN, "d", "report").passed
+      print("SECURITY_ASSERTIONS_CLEAN_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SECURITY_ASSERTIONS_CLEAN_OK"]

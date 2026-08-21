@@ -3533,6 +3533,14 @@ def _call_llm_for_digest(
     Uses the same LiteLLM pattern as :class:`LLMExtractor` but with
     a custom summarization prompt.
     """
+    from autoinfo.output import fault_inject  # noqa: PLC0415
+
+    try:
+        fault_inject.maybe_fault("digest")
+    except Exception as exc:
+        logger.warning("FAULT_INJECT[digest]: %s", exc)
+        return {}
+
     if config is None:
         config_path = get_config_path()
         if config_path is not None:
@@ -3571,6 +3579,7 @@ def _call_llm_for_digest(
             break
 
         content: str = response.choices[0].message.content or ""
+        content = fault_inject.maybe_fault_content("digest", content)
         parsed = _parse_json_response(content)
         if parsed:
             return parsed
@@ -5676,6 +5685,22 @@ def _group_by_theme(
     if not entries:
         return []
 
+    from autoinfo.output import fault_inject  # noqa: PLC0415
+
+    try:
+        fault_inject.maybe_fault("group")
+    except Exception:
+        groups = _deterministic_grouping(entries, domain=domain)
+        if groups is not None:
+            return groups
+        return [
+            {
+                "theme": "General",
+                "description": "Overview of the tracked developments this period.",
+                "entries": list(entries),
+            }
+        ]
+
     batch_size = _GROUPING_BATCH_SIZE
     batches = [
         entries[i : i + batch_size] for i in range(0, len(entries), batch_size)
@@ -6479,6 +6504,20 @@ def _generate_executive_summary(
     Returns a dict ``{"executive_summary": str, "key_findings": list[str],
     "recommendations": list[str]}`` — never raises.
     """
+    from autoinfo.output import fault_inject  # noqa: PLC0415
+
+    try:
+        fault_inject.maybe_fault("summary")
+    except Exception:
+        fallback = _deterministic_synthesis_fallback(
+            entries, summary_prefix="This report covers"
+        )
+        return {
+            "executive_summary": fallback["executive_summary"],
+            "key_findings": fallback["key_findings"],
+            "recommendations": fallback["recommendations"],
+        }
+
     entries_detail = _build_report_entries_detail(entries, groupings)
     prompt = _build_report_synthesis_prompt(
         entries_detail,
@@ -6591,6 +6630,14 @@ def _call_llm_for_report_synthesis(prompt: str) -> str:
     Returns the raw Markdown text (possibly empty) on success, ``""`` on
     failure.
     """
+    from autoinfo.output import fault_inject  # noqa: PLC0415
+
+    try:
+        fault_inject.maybe_fault("report")
+    except Exception as exc:
+        logger.warning("FAULT_INJECT[report]: %s", exc)
+        return ""
+
     config_path = get_config_path()
     if config_path and config_path.is_file():
         try:
