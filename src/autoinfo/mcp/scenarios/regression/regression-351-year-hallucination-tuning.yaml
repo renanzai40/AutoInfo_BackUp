@@ -92,3 +92,33 @@ steps:
       success: true
       exit_code: 0
       stdout_has: ["YEAR_HALLUCINATION_BARE_PLAUSIBLE_OK"]
+
+  - name: "forward-looking future years pass (no 2027/2030 false positives)"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.validation_matrix import _no_year_hallucination
+
+      # The #351 V4 false-positive class from the real-product matrix:
+      # financial products legitimately project forward ("by 2030",
+      # "targeting 2027", "2025-2030 runway") — those must PASS.
+      for body in (
+          "# T\n\nRevenue is expected to double by 2030\n",
+          "# T\n\nThe firm is targeting 2027 for breakeven\n",
+          "# T\n\n2025-2030 runway is funded\n",
+          "# T\n\nThe plant opens by July 2027\n",
+      ):
+          assert _no_year_hallucination(body, "d", "report").passed, body
+      # A future year asserted as a completed fact still fails P0.
+      r = _no_year_hallucination("# T\n\nIn 2031, adoption tripled\n", "d", "report")
+      assert not r.passed and r.severity == "P0", r.details
+      # A distant-past year surfaces for human review (P1, not P0).
+      r = _no_year_hallucination("# T\n\nfounded in 1917\n", "d", "report")
+      assert not r.passed and r.severity == "P1", r.details
+      assert "human review" in r.details, r.details
+      print("YEAR_HALLUCINATION_FORWARD_LOOKING_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["YEAR_HALLUCINATION_FORWARD_LOOKING_OK"]

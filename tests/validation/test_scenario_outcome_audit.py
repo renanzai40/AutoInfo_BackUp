@@ -51,7 +51,7 @@ def test_all_116_scenarios_parsed(result: dict[str, Any]) -> None:
 
 
 def test_total_steps(result):
-    assert result["summary"]["total_steps"] == 444
+    assert result["summary"]["total_steps"] == 446
 
 
 def test_outcome_grading_ratio_high(result):

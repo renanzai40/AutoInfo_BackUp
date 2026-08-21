@@ -44,7 +44,6 @@ EXPECTED = {
             # #288 (2026-08-17): keyless finance news RSS feeds
             "CNBC Investing",
             "TheStreet",
-            "MarketWatch Markets (DJ)",
         ],
     },
     "tech-ai-developer": {
@@ -91,7 +90,6 @@ def _load_sources(domain: str) -> list[dict[str, Any]]:
             "Quandl/Nasdaq Data Link",
             "CNBC Investing",
             "TheStreet",
-            "MarketWatch Markets (DJ)",
         ],
     ),
     (

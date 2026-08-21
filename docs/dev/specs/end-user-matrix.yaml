@@ -1007,7 +1007,6 @@ required_sources:
   - {domain: financial-intelligence, source: Quandl/Nasdaq Data Link}
   - {domain: financial-intelligence, source: CNBC Investing}
   - {domain: financial-intelligence, source: TheStreet}
-  - {domain: financial-intelligence, source: MarketWatch Markets (DJ)}
   - {domain: tech-ai-developer, source: GitHub Trending}
   - {domain: tech-ai-developer, source: HackerNews API}
   - {domain: tech-ai-developer, source: Substack RSS (tech) — Pragmatic Engineer}

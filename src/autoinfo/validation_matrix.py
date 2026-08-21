@@ -318,6 +318,28 @@ _MONTH_YEAR_RE = re.compile(
 # URL-embedded 4-digit runs (e.g. "https://x.com/2023/01") are legitimate —
 # never fire the year checks on the path/query portion of a URL.
 _URL_RE = re.compile(r"https?://\S+")
+# #351 V4 — a FUTURE year is only a hallucination when it is asserted as a
+# completed fact.  Forward-looking projections ("Revenue to double by 2030",
+# "targeting 2027", "2025-2030 runway") are legitimate financial prose.
+# Projection markers searched on the line containing the year:
+_FORWARD_LOOKING_RE = re.compile(
+    r"\b(?:target(?:s|ed|ing)?|forecast(?:s|ed|ing)?|project(?:s|ed|ion|ions|ing)?|"
+    r"expect(?:s|ed|ing)?|plan(?:s|ned|ning)?|aim(?:s|ed|ing)?|outlook|guidance|"
+    r"goal(?:s)?|fiscal|trajectory|pipeline|runway|through|until|toward|towards|"
+    r"anticipated?|envisioned?)\b",
+    re.IGNORECASE,
+)
+# "by 2030" / "by the year 2027" / "by July 2027" — strong forward markers
+# (bare "by" as a preposition is too common to be one, so it must directly
+# precede a year, optionally via a month name).
+_BY_YEAR_RE = re.compile(
+    r"\bby\s+(?:the\s+)?(?:calendar\s+)?(?:year\s+)?"
+    r"(?:(?:January|February|March|April|May|June|July|August|September|"
+    r"October|November|December)\s+)?(?:18|19|20)\d{2}\b",
+    re.IGNORECASE,
+)
+# A year range "2025-2030" / "2027–2030" is inherently forward-looking.
+_YEAR_RANGE_RE = re.compile(r"\b(?:18|19|20)\d{2}\s*[-–]\s*(?:18|19|20)\d{2}\b")
 # Fenced code blocks are never acceptable in a delivered product.
 _FENCE_RE = re.compile(r"```[\s\S]*?```")
 # API-key / token / secret prefix shapes: sk- (OpenAI), AIza (Google),
@@ -582,36 +604,59 @@ def _current_year() -> int:
 
 
 def _no_year_hallucination(text: str, domain: str, product: str) -> AssertionResult:
-    """#351 — product prose carries no hallucinated/out-of-range years:
-    bare month-name+year forms (no day) whose YEAR is out of range (P0 for
-    future / pre-1950), future years (P0), and distant-past years < 1950
-    (P0).  A bare month-year with a plausible year (1950..current year) is
-    legitimate prose — e.g. "In March 2020, the market crashed" — and is
-    NOT flagged.  The References section (from the ``## References``
-    heading) is EXCLUDED — legitimate citations carry old years.
-    URL-embedded 4-digit runs never fire."""
+    """#351 — product prose carries no hallucinated years.  A year is a TRUE
+    hallucination only when it is implausible for the claim's context:
+      * a FUTURE year (or bare month-year) asserted as a completed fact — no
+        forward-looking marker (``by 2030`` / ``target`` / ``forecast`` /
+        ``projected`` / ``fiscal`` / a ``2025-2030`` range) on the same line —
+        fires P0;
+      * a DISTANT-PAST year (< 1950) fires P1 "human review": historical
+        references (e.g. ``founded in 1917``) are plausible in financial
+        products, so the report card surfaces them for a human to judge rather
+        than auto-failing them as P0.
+    Plausible prose years (1950..current year) and forward-looking projections
+    pass.  The References section (from the ``## References`` heading) is
+    EXCLUDED — legitimate citations carry old years.  URL-embedded 4-digit
+    runs never fire."""
     refs = _REFS_HEADING.search(text)
     body = text[:refs.start()] if refs else text
     body = _URL_RE.sub(" ", body)
     offending: list[str] = []
     for m in _MONTH_YEAR_RE.finditer(body):
         year = int(m.group("y"))
-        if year > _current_year():
+        if year > _current_year() and not _is_forward_looking(body, m):
             offending.append(f"future bare month-year {m.group(0)!r} ({year})")
         elif year < _MIN_PLAUSIBLE_YEAR:
-            offending.append(f"implausible past bare month-year {m.group(0)!r} ({year})")
+            offending.append(
+                f"distant-past bare month-year {m.group(0)!r} ({year}) — human review"
+            )
     for m in _YEAR_RE.finditer(body):
         year = int(m.group(0))
-        if year > _current_year():
+        if year > _current_year() and not _is_forward_looking(body, m):
             offending.append(f"future year {year}")
         elif year < _MIN_PLAUSIBLE_YEAR:
-            offending.append(f"implausible past year {year}")
+            offending.append(f"distant-past year {year} — human review")
     severe = any(o.startswith(("future", "implausible")) for o in offending)
     return AssertionResult(
         "_no_year_hallucination", not offending, "#351",
         "P0" if severe else "P1", domain, product,
         "; ".join(dict.fromkeys(offending)) if offending else "no year issues",
     )
+
+
+def _is_forward_looking(text: str, m: re.Match[str]) -> bool:
+    """True when the matched year sits in a forward-looking context: the line
+    carries a projection marker (``target`` / ``forecast`` / ``projected`` /
+    ``expected`` / ``fiscal`` / ``by 2030`` / …) or the year is part of a
+    year-range like ``2025-2030``."""
+    line_start = text.rfind("\n", 0, m.start()) + 1
+    line_end = text.find("\n", m.end())
+    if line_end == -1:
+        line_end = len(text)
+    line = text[line_start:line_end]
+    if _YEAR_RANGE_RE.search(line):
+        return True
+    return bool(_BY_YEAR_RE.search(line) or _FORWARD_LOOKING_RE.search(line))
 
 
 def _no_code_or_key_leak(text: str, domain: str, product: str) -> AssertionResult:

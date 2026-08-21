@@ -447,7 +447,7 @@ autoinfo agent-callback add|list|remove  # Agent push callbacks (MCP parity)
 |--------|---------|----------|--------|
 | **Medical Research** | PubMed (REST API), Semantic Scholar, arXiv, CrossRef, DBLP, OpenAlex, USPTO | 🔴 P0 | ✅ Implemented (7 curated sources) |
 | **AI Commercial Intelligence** | TechCrunch RSS, ProductHunt RSS, Crunchbase, 36kr | 🟡 P1 | ✅ Implemented (4 curated sources) |
-| **Financial/Business Intelligence** | Alpha Vantage, FRED, Finnhub, SEC EDGAR, Twelve Data, World Bank Data, Quandl/Nasdaq Data Link, CNBC Investing, TheStreet, MarketWatch Markets (DJ) | 🟡 P1 | ✅ Implemented (10 curated sources) |
+| **Financial/Business Intelligence** | Alpha Vantage, FRED, Finnhub, SEC EDGAR, Twelve Data, World Bank Data, Quandl/Nasdaq Data Link, CNBC Investing, TheStreet | 🟡 P1 | ✅ Implemented (9 curated sources) |
 | **Tech/AI/Developer** | GitHub Trending, HackerNews API, Substack RSS (tech), Stack Exchange, ProductHunt, Reddit, Spotify AI Podcasts, Bilibili | 🟡 P1 | ✅ Implemented (8 curated sources) |
 | **Language Learning** | Project Gutenberg, news-in-levels, commonlit | 🟢 P2 | ✅ Implemented (3 curated sources) |
 | **Online Video / OTT** | YouTube (mkbhd), Variety, Hollywood Reporter, Netflix Tech Blog, Apple Music, Pitchfork, Billboard | 🟡 P1 | ✅ Implemented (7 curated sources) |

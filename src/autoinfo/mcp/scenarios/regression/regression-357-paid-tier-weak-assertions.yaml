@@ -13,8 +13,14 @@
 #                               boilerplate (valuation bubble risk, market
 #                               risk, ...) and not placeholders.
 #   _analysis_not_mere_repeat — premium So-what does not merely restate the
-#                               takeaway heading (word-Jaccard > 0.85 on a
+#                               takeaway heading (word-Jaccard > 0.75 on a
 #                               short <120-char So-what).
+#
+# V4 (2026-08-22): a real-product matrix caught premium Actions rendering the
+# "_No follow-up actions suggested._" empty-state shell.  The deterministic
+# backfill (_fill_premium_takeaway_fields) now replaces empty/placeholder
+# slot values per-index — pinned by the "premium Action slot never renders
+# the empty-state placeholder" step below.
 #
 # Deterministic (requires_env: []): exercises run_assertions directly on
 # defect + clean premium-briefing bodies — no LLM, no network.
@@ -102,17 +108,17 @@ steps:
 
       ### 1. Startup A raises $50M Series B led by fund X (Source: https://techcrunch.com/1)
 
-      > **So what**: The round values Startup A at $1.2B post-money and shifts the competitive balance in vector-database tooling, pressuring incumbent vendors to cut prices.
+      > **So what**: The round values Startup A at $1.2B and pressures incumbents to cut prices.
 
-      **Risk / Opportunity:** FDA rejection of Candidate X — likelihood Low / impact High; mitigation: diversified pipeline.
+      **Risk / Opportunity:** FDA rejection of Candidate X — Low impact, diversify pipeline.
 
       **Actions:** Update the competitive market map quarterly after each funding round.
 
       ### 2. Startup B partners with Enterprise Co (Source: https://techcrunch.com/2)
 
-      > **So what**: The partnership gives Startup B distribution into 40 enterprise accounts and materially de-risks its near-term revenue plan.
+      > **So what**: The partnership gives Startup B 40 enterprise accounts, de-risking revenue.
 
-      **Risk / Opportunity:** Churn at Enterprise Co — likelihood Medium / impact Medium; mitigation: dual-vendor strategy.
+      **Risk / Opportunity:** Churn at Enterprise Co — Medium impact, dual-vendor plan.
 
       **Actions:** Run a customer-success check-in with the joint account team within 30 days.
 
@@ -134,3 +140,38 @@ steps:
       success: true
       exit_code: 0
       stdout_has: ["PAID_WEAK_ASSERTIONS_CLEAN_OK"]
+
+  - name: "premium Action slot never renders the empty-state placeholder (#357 V4)"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.output import _fill_premium_takeaway_fields
+
+      entries = [
+          {"title": "Startup A raises $50M", "source_url": "https://x.com/1",
+           "relevance_score": 90, "summary": "Series B led by fund X"},
+          {"title": "Startup B partners with Enterprise Co",
+           "source_url": "https://x.com/2", "relevance_score": 80,
+           "summary": "distribution deal"},
+      ]
+      # The V4 defect: the LLM emits "_No follow-up actions suggested._" /
+      # "_No implication captured for this takeaway._" as slot values.
+      impl, risks, actions = _fill_premium_takeaway_fields(
+          ["_No implication captured for this takeaway._", "Real implication here"],
+          None,
+          ["_No follow-up actions suggested._", ""],
+          entries, "ai-commercial",
+      )
+      assert len(impl) == len(actions) == len(risks) == 2
+      for slot in impl + actions:
+          assert "_No " not in slot, f"placeholder leaked: {slot!r}"
+          assert slot.strip(), "empty slot leaked"
+      assert "Track Startup A" in actions[0], actions
+      # A substantive LLM value is preserved, not clobbered.
+      assert impl[1] == "Real implication here", impl
+      print("PREMIUM_ACTION_FALLBACK_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["PREMIUM_ACTION_FALLBACK_OK"]

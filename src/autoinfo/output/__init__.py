@@ -4040,6 +4040,54 @@ def _deterministic_takeaway_fields(
     return implications, risks, action_required
 
 
+def _fill_premium_takeaway_fields(
+    implications: list[Any] | None,
+    risks: list[dict[str, Any]] | None,
+    action_required: list[str] | None,
+    entries: list[dict[str, Any]],
+    domain: str,
+) -> tuple[list[str], list[dict[str, Any]], list[str]]:
+    """#357 — the premium per-takeaway slots must never render empty or
+    ``_No ..._`` placeholder text.  A slot list that is missing/empty is
+    filled with the full deterministic fallback; a non-empty list has its
+    empty/placeholder-shaped elements replaced per-index.  The list length
+    the LLM produced is preserved (no padding) so product-analysis
+    persistence stays faithful to the raw synthesis."""
+    _impl, _risks, _actions = _deterministic_takeaway_fields(entries, domain)
+
+    def _usable(value: Any) -> bool:
+        if isinstance(value, dict):
+            return _usable(value.get("title"))
+        if not isinstance(value, str):
+            return False
+        stripped = value.strip()
+        return bool(stripped) and not _is_empty_placeholder(stripped)
+
+    def _fill(
+        values: list[Any] | None,
+        fallback: list[Any],
+        is_dict: bool = False,
+    ) -> list[Any]:
+        values = list(values) if values else []
+        if not values:
+            return [dict(v) for v in fallback] if is_dict else list(fallback)
+        if is_dict:
+            return [
+                dict(v) if isinstance(v, dict) and _usable(v) else dict(fallback[i])
+                for i, v in enumerate(values[: len(fallback)])
+            ]
+        return [
+            (str(v).strip() if _usable(v) else fallback[i])
+            for i, v in enumerate(values[: len(fallback)])
+        ]
+
+    return (
+        _fill(implications, _impl),
+        _fill(risks, _risks, is_dict=True),
+        _fill(action_required, _actions),
+    )
+
+
 def _normalize_digest_product_context(
     context: dict[str, Any], domain: str, product_family: str = "digest"
 ) -> dict[str, Any]:
@@ -4181,22 +4229,19 @@ def _normalize_digest_product_context(
     # --- Deterministic per-takeaway fields (issue #329) --------------------
     # premium-briefing's takeaway layer renders per-takeaway implication /
     # risk / action by index-aligning with key_findings.  When the LLM
-    # synthesis carries none (or fewer than the takeaways), the template's
-    # `{% else %}` empty-state renders `_No ..._` placeholders.  Derive them
-    # deterministically from the real entries so the premium product never
-    # ships 24 placeholder spots (same pattern as #316/#326 column sections).
-    if product_family == "premium-briefing" and entries_list and not (
-        flat.get("implications") and flat.get("risks") and flat.get("action_required")
-    ):
-        _impl, _risks, _actions = _deterministic_takeaway_fields(
-            entries_list, domain
+    # synthesis carries none (or fewer than the takeaways) OR slot values that
+    # are empty / `_No ..._` placeholder-shaped, the template's `{% else %}`
+    # empty-state renders `_No ..._` placeholders.  Backfill each slot
+    # per-index with the deterministic fallback derived from the real entries
+    # so the premium product never ships a hollow Action/Risk/So-what (same
+    # pattern as #316/#326 column sections; placeholder-element case #357).
+    if product_family == "premium-briefing" and entries_list:
+        flat["implications"], flat["risks"], flat["action_required"] = (
+            _fill_premium_takeaway_fields(
+                flat.get("implications"), flat.get("risks"),
+                flat.get("action_required"), entries_list, domain,
+            )
         )
-        if not flat.get("implications"):
-            flat["implications"] = _impl
-        if not flat.get("risks"):
-            flat["risks"] = _risks
-        if not flat.get("action_required"):
-            flat["action_required"] = _actions
 
     # --- Column deep-dive sections (issue #316) ---------------------------
     # The column template renders ``sections`` (list of {title, content,
@@ -5288,18 +5333,16 @@ def generate_report(
     # -- Deterministic per-takeaway fields (issue #329) ----------------------
     # premium-briefing's takeaway layer renders per-takeaway implication /
     # risk / action by index-aligning with key_findings.  When the LLM
-    # synthesis carries none (line 5053-5056 initializes them to []), the
-    # template's `{% else %}` empty-state renders `_No ..._` placeholders.
-    # Derive them deterministically from the ranked entries (same pattern as
-    # #316/#326 column sections and the KB fallback above), only for premium.
+    # synthesis carries none (line 5053-5056 initializes them to []) or slot
+    # values that are empty / `_No ..._` placeholder-shaped, the template's
+    # `{% else %}` empty-state renders `_No ..._` placeholders.  Backfill each
+    # slot per-index with the deterministic fallback derived from the ranked
+    # entries (same pattern as #316/#326 column sections and the KB fallback
+    # above), only for premium; placeholder-element case #357.
     if report_family == "premium-briefing":
-        _impl, _risks, _actions = _deterministic_takeaway_fields(entries, domain)
-        if not implications:
-            implications = _impl
-        if not risks:
-            risks = _risks
-        if not action_required:
-            action_required = _actions
+        implications, risks, action_required = _fill_premium_takeaway_fields(
+            implications, risks, action_required, entries, domain,
+        )
 
     # -- Build report data -------------------------------------------------
     # #325: every section item carries the derived source label.  When the

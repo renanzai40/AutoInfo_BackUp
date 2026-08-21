@@ -72,7 +72,6 @@ EXPECTED_PASS: dict[str, list[str]] = {
         "Quandl/Nasdaq Data Link",
         "CNBC Investing",
         "TheStreet",
-        "MarketWatch Markets (DJ)",
     ],
     "tech-ai-developer": [
         "Substack RSS (tech) — Pragmatic Engineer",
@@ -223,11 +222,11 @@ def test_source_dispatch_pass_fail() -> None:
             f"  Got:      {sorted(domain_fail_names)}"
         )
 
-        # 3. Grand totals: 62 pass, 0 fail (29 legacy incl. M3T30 Finnhub +
-        #    30 M3T24 + 3 #288 keyless RSS)
-        assert len(all_pass) == 62, f"Expected 62 PASS, got {len(all_pass)}"
+        # 3. Grand totals: 61 pass, 0 fail (29 legacy incl. M3T30 Finnhub +
+        #    30 M3T24 + 2 #288 keyless RSS; MarketWatch removed for #325)
+        assert len(all_pass) == 61, f"Expected 61 PASS, got {len(all_pass)}"
         assert len(all_fail) == 0, f"Expected 0 FAIL, got {len(all_fail)}"
-        assert total == 62, f"Expected 62 total sources, got {total}"
+        assert total == 61, f"Expected 61 total sources, got {total}"
 
 
 # ---------------------------------------------------------------------------

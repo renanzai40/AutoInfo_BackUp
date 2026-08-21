@@ -35,6 +35,7 @@ from unittest.mock import MagicMock, patch
 from autoinfo.output import (
     PRODUCT_TEMPLATES,
     ProductTemplate,
+    _fill_premium_takeaway_fields,
     _normalize_digest_product_context,
     generate_digest,
 )
@@ -347,6 +348,40 @@ class TestPremiumBriefingDigestPath:
         assert "AutoInfo Premium Briefing" in result
         # NOT the default digest.md.j2 layout
         assert "## Entries" not in result
+
+    def test_premium_action_slot_placeholder_backfilled(self) -> None:
+        """#357 V4 — empty / ``_No ..._`` placeholder slot values from the LLM
+        are backfilled per-index with the deterministic fallback, so the
+        premium Actions/Risk/So-what never render the empty-state shell."""
+        entries = [
+            {
+                "title": "Startup A raises $50M",
+                "source_url": "https://x.com/1",
+                "summary": "Series B led by fund X",
+                "relevance_score": 90.0,
+            },
+            {
+                "title": "Startup B partners with Enterprise Co",
+                "source_url": "https://x.com/2",
+                "summary": "distribution deal",
+                "relevance_score": 80.0,
+            },
+        ]
+        impl, risks, actions = _fill_premium_takeaway_fields(
+            ["_No implication captured for this takeaway._", "Real implication"],
+            None,
+            ["_No follow-up actions suggested._", ""],
+            entries,
+            "ai-commercial",
+        )
+        assert len(impl) == len(risks) == len(actions) == 2
+        for slot in impl + actions:
+            assert "_No " not in slot, f"placeholder leaked: {slot!r}"
+            assert slot.strip(), f"empty slot leaked: {slot!r}"
+        assert "Track Startup A" in actions[0], actions
+        # Substantive LLM values are preserved, not clobbered.
+        assert impl[1] == "Real implication", impl
+        assert risks[0]["title"] and "Uncertain trajectory" in risks[0]["title"]
 
     def test_enterprise_briefing_renders_flat_keys_non_empty(self) -> None:
         """The enterprise template reads the same flat contract on the digest path."""

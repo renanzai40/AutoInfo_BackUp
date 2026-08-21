@@ -213,34 +213,48 @@ class TestAssertionSet:
         assert vm._no_internal_leak(CLEAN, "ai-commercial", "report").passed
 
     def test_no_year_hallucination(self) -> None:
-        """#351 — hallucinated/out-of-range years in PRODUCT PROSE fail: future
-        years (> current year), distant-past years (< 1950), and bare
-        month-name+year "dead date" forms whose YEAR is out of range.  A bare
-        month-year with a plausible year (1950..current year) is legitimate
-        prose and must PASS (e.g. "In March 2020, the market crashed").  The
-        References section is EXCLUDED from scanning (legitimate citations
-        carry old years)."""
-        # Future month-year (P0).
+        """#351 — hallucinated years in PRODUCT PROSE fail: a FUTURE year or
+        bare month-year asserted as a completed fact (no forward-looking
+        marker on the line) fires P0; a DISTANT-PAST year (< 1950) fires P1
+        "human review" so plausible historical references surface for a human
+        to judge rather than auto-failing as P0.  Forward-looking projections
+        ("by 2030", "targeting 2027", "2025-2030") and plausible prose years
+        (1950..current year) PASS.  The References section is EXCLUDED."""
+        # Future month-year, no forward-looking marker (P0).
         future = "# T\n\nIn March 2031, adoption tripled\n"
         r = vm._no_year_hallucination(future, "d", "report")
         assert not r.passed, r.details
         assert r.issue == "#351"
         assert r.severity == "P0"
-        # Distant-past month-year, pre-1950 (P0).
+        # Distant-past month-year, pre-1950 (P1 human review, not P0).
         past = "# T\n\nfounded in June 1850, the firm collapsed\n"
         r = vm._no_year_hallucination(past, "d", "report")
         assert not r.passed, r.details
-        assert r.severity == "P0"
-        # Future year (P0).
+        assert r.severity == "P1"
+        assert "human review" in r.details
+        # Future year, no forward-looking marker (P0).
         future_plain = "# T\n\nIn 2031, adoption tripled\n"
         r = vm._no_year_hallucination(future_plain, "d", "report")
         assert not r.passed, r.details
         assert r.severity == "P0"
-        # Distant past, pre-1950 (P0).
+        # Distant past, pre-1950 (P1 human review, not P0).
         past_plain = "# T\n\na 1947 patent\n"
         r = vm._no_year_hallucination(past_plain, "d", "report")
         assert not r.passed, r.details
-        assert r.severity == "P0"
+        assert r.severity == "P1"
+        assert "human review" in r.details
+        # Forward-looking future years are NOT flagged (#351 V4) — the
+        # 2027/2030 false-positive class from the real-product matrix.
+        for sample in (
+            "# T\n\nRevenue is expected to double by 2030\n",
+            "# T\n\nThe firm is targeting 2027 for breakeven\n",
+            "# T\n\nThrough 2028, capex stays elevated\n",
+            "# T\n\nFiscal 2027 guidance was reaffirmed\n",
+            "# T\n\n2025-2030 runway is funded\n",
+            "# T\n\nThe plant opens by July 2027\n",
+        ):
+            r = vm._no_year_hallucination(sample, "d", "report")
+            assert r.passed, f"forward-looking year falsely flagged: {r.details!r}"
         # Plausible bare month-year prose is NOT flagged (#351 tuning) —
         # the false-positive class is gone.
         for sample in (
