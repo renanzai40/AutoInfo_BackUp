@@ -94,6 +94,11 @@ jobs:
             --pr-data .coverage.pr \
             --base-data .coverage.base \
             --base-sha "$BASE_SHA"
+      - name: Secret scan (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v7
         with:

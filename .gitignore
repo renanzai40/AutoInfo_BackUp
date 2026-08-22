@@ -47,6 +47,12 @@ autoinfo.db
 # Exports
 exports/
 
+# Secrets — never commit credential files or token-bearing URLs
+.git-credentials
+*.pem
+*.key
+*.p12
+
 # Runtime artifacts
 backups/
 logs/

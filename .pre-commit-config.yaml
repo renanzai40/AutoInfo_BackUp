@@ -32,3 +32,23 @@ repos:
       - id: detect-private-key
       - id: debug-statements
       - id: check-merge-conflict
+
+  # Secret scanning — blocks commits containing API keys / tokens / credentials.
+  # Uses gitleaks (Go binary, downloaded on first run). Covers ghp_/gho_/
+  # github_pat_, sk-, AIza, AKIA, eyJ, long hex/base64, and 150+ other rules.
+  # Keep in sync with CI: .github/workflows/coverage.yml also runs gitleaks.
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
+    hooks:
+      - id: gitleaks
+
+  # Lightweight fallback — catches credential URLs even if gitleaks is skipped.
+  # Runs a local grep for https://<token>@github.com patterns and ghp_ prefixes.
+  - repo: local
+    hooks:
+      - id: no-credential-url
+        name: no-credential-url (block https://token@github.com)
+        entry: 'bash -c ''git diff --cached --diff-filter=ACM --name-only | xargs grep -nE "https://[^/]*@github\.com|ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{30,}" 2>/dev/null && echo "ERROR: staged files contain credential URL or GitHub PAT" && exit 1 || exit 0'''
+        language: system
+        always_run: false
+        pass_filenames: false
