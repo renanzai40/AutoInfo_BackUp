@@ -14,7 +14,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | Metric | Value |
 |--------|-------|
 | Total files | 74 |
-| Total lines | 28769 |
+| Total lines | 28771 |
 | Active files | 60 |
 | Archived files | 14 |
 | Category — archive | 14 files / 7284 lines |
@@ -22,9 +22,9 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | Category — schemas | 4 files / 397 lines |
 | Category — skills | 3 files / 785 lines |
 | Category — adr | 9 files / 423 lines |
-| Category — specs | 12 files / 8787 lines |
+| Category — specs | 12 files / 8786 lines |
 | Category — validation-reports | 8 files / 2624 lines |
-| Category — docs/dev | 22 files / 8153 lines |
+| Category — docs/dev | 22 files / 8156 lines |
 | Category — docs/root | 1 files / 61 lines |
 
 ## Inventory
@@ -73,7 +73,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/research/综合报告-资讯付费与AI触达研究.md` | 702 | docs/dev | active | — |
 | `dev/specs/data-models.md` | 766 | specs | active | — |
 | `dev/specs/delivery.md` | 1268 | specs | active | — |
-| `dev/specs/end-user-matrix.yaml` | 1124 | specs | active | — |
+| `dev/specs/end-user-matrix.yaml` | 1123 | specs | active | — |
 | `dev/specs/expectations.md` | 1188 | specs | active | — |
 | `dev/specs/market-positioning.md` | 404 | specs | active | market-positioning |
 | `dev/specs/mcp-tools.md` | 85 | specs | active | — |
@@ -93,7 +93,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/validation-reports/evidence-2026-08-12/ac5-digest-weekly.md` | 144 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-report-standard.md` | 813 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-tutorial-student.md` | 501 | validation-reports | active | — |
-| `dev/validation-scenario-contract.md` | 779 | docs/dev | active | — |
+| `dev/validation-scenario-contract.md` | 782 | docs/dev | active | — |
 | `dev/workflow-charter.md` | 67 | docs/dev | active | workflow-charter |
 | `dev/七阶段AI开发流程-用CodingAgent交付成品的方法论.md` | 234 | docs/dev | active | methodology |
 | `glossary.md` | 61 | docs/root | active | glossary |

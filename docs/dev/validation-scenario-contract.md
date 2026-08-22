@@ -85,7 +85,7 @@ output-tutorial-presentation, output-video, processing), products-billing needs
 `STRIPE_API_KEY`, and sources-a6-keyed needs `FRED_API_KEY` + `FINNHUB_API_KEY`.
 After configuring keys, re-run those to GREEN (`passed`, never
 `unconfigured`). Observed example (47-scenario suite, 2026-08-05): **37 passed / 0 failed
-/ 10 unconfigured**; the suite has since grown to 112 (64 functional + 48 regression; §1.8) — the baseline shape (all
+/ 10 unconfigured**; the suite has since grown to 116 (65 functional + 51 regression; §1.8) — the baseline shape (all
 env-gated `unconfigured`, nothing failed) is unchanged.
 
 ---
@@ -301,10 +301,10 @@ the scenario library. It also prints a `Regression scenarios: N (issues: ...)` m
 every scenario in `scenarios/regression/` must carry `regression: true` and a
 `regression_issue`, and the audit lists any that don't.
 
-## 1.8 Scenario inventory (as of 2026-08-20)
+## 1.8 Scenario inventory (as of 2026-08-22)
 
-112 scenario files in `src/autoinfo/mcp/scenarios/` (64 functional flat in `scenarios/`
-+ 48 regression in `scenarios/regression/`):
+116 scenario files in `src/autoinfo/mcp/scenarios/` (65 functional flat in `scenarios/`
++ 51 regression in `scenarios/regression/`):
 
 - **System/Discovery**: system-health, discovery, meta-validation
 - **Errors**: error-boundary
@@ -347,7 +347,10 @@ every scenario in `scenarios/regression/` must carry `regression: true` and a
   regression-llm-key-resolution (#119), regression-period-enum (#126),
   regression-report-structure (#121), regression-source-301 (#135),
   regression-product-routing (#output-quality-mega; premium-briefing / magazine-digest
-  product routing + product-render differentiation). Each carries
+  product routing + product-render differentiation). #351/#357 wave additions:
+  regression-security-assertions (`_no_code_or_key_leak` gates key/token shapes),
+  regression-351-year-hallucination-tuning, regression-357-paid-tier-weak-assertions.
+  Each carries
   `regression: true` + `regression_issue`, is auto-loaded via recursive glob, and
   appears with a "(regression)" suffix in verdicts plus a `## Regression failures`
   report section.

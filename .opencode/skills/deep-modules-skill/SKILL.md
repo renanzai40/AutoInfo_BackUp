@@ -53,7 +53,7 @@ fix existing bad modules):
    issue/RFC → Kanban breakdown with blocking links (methodology stage 5: one
    issue = one verifiable commit).
 6. **Merge into the deep module.** Combine the cluster behind ONE small
-   interface. AutoInfo's interface truth: `docs/dev/specs/mcp-tools.md` (145
+   interface. AutoInfo's interface truth: `docs/dev/specs/mcp-tools.md` (146
    tools), `docs/dev/specs/data-models.md` (schemas), `AGENTS.md` Project
    Structure. Watch-list: `cli/` (28 groups mirroring MCP — deliberately thin
    adapter layer, keep thin *by design*), `collectors/` (30 handlers sharing a

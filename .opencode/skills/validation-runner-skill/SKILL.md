@@ -24,7 +24,7 @@ the loadable procedure — read the contract doc when authoring scenarios.
   auto-loads them).
 - **Acceptance run** → produce `docs/dev/validation-reports/acceptance-*.md`.
 
-## Scenario library (112 = 64 functional + 48 regression)
+## Scenario library (116 = 65 functional + 51 regression)
 
 Functional (`src/autoinfo/mcp/scenarios/*.yaml`): system-health, discovery,
 domain-management, source-management, topic-management, keyword-management,
@@ -41,7 +41,7 @@ webhooks-alerts, agent-callbacks, enduser-journey, enduser-lifecycle,
 enduser-preferences, products-billing, projects-config, cost-budget,
 data-privacy, data-lifecycle-e2e, llm-gated, llm-failure-recovery,
 observability, quality-gate-config, curated-priority-consumption,
-sources-coverage, sources-a6-keyed, sources-gap-closure, … (64 total — run `list_validation_scenarios()` for the live list).
+sources-coverage, sources-a6-keyed, sources-gap-closure, fault-injection, … (65 total — run `list_validation_scenarios()` for the live list).
 
 Regression (`src/autoinfo/mcp/scenarios/regression/`, `regression: true` key):
 collect-int-id (#104), llm-key-resolution (#119), period-enum (#126),
@@ -61,8 +61,14 @@ regression-references-numbering (#322), regression-source-label-rss (#323),
 regression-enterprise-skeleton (#314), regression-source-label-nondigest (#325),
 regression-sections-real-path (#326), regression-error-leak-header (#328),
 regression-premium-takeaway-placeholders (#329), regression-validation-matrix (#331),
-regression-collection-noise-guard (#332), regression-sec-real-title-guard (#332).
-(44 total — run `list_validation_scenarios()` for the live list).
+regression-collection-noise-guard (#332), regression-sec-real-title-guard (#332),
+regression-validation-batch-isolation (#335), regression-validation-diff-multidomain (#340),
+regression-validation-diff-reconciliation (#340), regression-validation-smart-skip (#348),
+regression-no-placeholder-analysis-layer (#334), regression-no-placeholder-magazine-tutorial (#342),
+regression-internal-log-leak (#338), regression-crossdomain-noise-filter-tutorial-presentation (#319),
+regression-source-label-all-surfaces (#325), regression-security-assertions (#351),
+regression-351-year-hallucination-tuning (#351), regression-357-paid-tier-weak-assertions (#357).
+(51 total — run `list_validation_scenarios()` for the live list).
 
 ## Execution discipline
 
