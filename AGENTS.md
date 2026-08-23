@@ -324,6 +324,8 @@ Operational invariants (full rules in Architecture Rules above and
 - `docs/dev/validation-scenario-contract.md` — Scenario authoring **and agent-tester execution** how-to (real MCP/CLI/REST calls, real artifacts); authoring + execution merged into one doc 2026-08-08 (former runbook archived at `docs/archive/agent-tester-validation.md`); graded against `acceptance-framework.md` (AC1-AC9)
 - `docs/adr/` — Architecture Decision Records: the *why* behind architecture rules (01-Raw sole entry, agent promotion without human gate, LLM fallback chain, reasoning-model JSON control, unified envelope, release-please version truth). Template: `docs/adr/TEMPLATE.md`.
 - `docs/glossary.md` — Project glossary (Ubiquitous Language): the authoritative definitions of KB pipeline, gates, user types, and agent/tooling terms.
+- `docs/dev/agent-era-doc-architecture.md` — Portable playbook: agent-era documentation architecture (generic, applies to any project).
+- `docs/dev/agent-era-doc-architecture-autoinfo.md` — AutoInfo-specific map of the doc architecture (what to keep/update, the maintenance loop, cleaned-items record).
 
 ## Community
 
