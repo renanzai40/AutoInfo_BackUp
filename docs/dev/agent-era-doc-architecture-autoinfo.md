@@ -13,7 +13,7 @@
 >
 > **Status:** Active — created 2026-08-23 during the doc-architecture slim wave
 > (AGENTS.md 489→334, 15 one-off scripts deleted, 7 docs archived, stale
-> numbers refreshed to 117 scenarios / 4345 tests).
+> numbers refreshed to 116 scenarios / 4345 tests).
 
 ---
 
@@ -79,7 +79,7 @@ types 29, collector handlers 30, output templates 8, REST port 8741, schemas 4.
 | **Deleted scripts** (15) | one-off 08-09..08-12 workburst: KB backfill, paygrade quality, matrix spec/tooling — zero refs in Makefile/CI/docs/tests; git history retains them |
 | **Archived docs** (7) | ac4-gap-key-acquisition, remaining-source-gap-verdicts, acceptance-run-20260816, enduser-capabilities-guide, agent-alerting (content merged into `specs/operations.md` §4.6), acceptance-2026-08-08, acceptance-2026-08-12 |
 | **Deleted .err noise** (8) | runtime error logs in `validation-reports/evidence-2026-08-12/` (kept 5 .md samples) |
-| **Refreshed numbers** | 68→117 scenarios, ~3728→~4345 tests across acceptance-framework, founder-expectations, cross-dimensional-catalog, best-practice-review, validation-scenario-contract |
+| **Refreshed numbers** | 68→116 scenarios, ~3728→~4345 tests across acceptance-framework, founder-expectations, cross-dimensional-catalog, best-practice-review, validation-scenario-contract |
 | **Slimmed AGENTS.md** | 489→334 lines (Status→README, tool catalog→README, patterns→mcp-usage-examples) |
 | **ADR index** | added missing ADR-0007 row |
 

@@ -1,7 +1,7 @@
 """Scenario outcome-audit: D-工-5 evidence for the best-practice review.
 
 Static audit of the validation scenario library in
-``src/autoinfo/mcp/scenarios/`` (65 functional + 52 regression) against the
+``src/autoinfo/mcp/scenarios/`` (65 functional + 51 regression) against the
 Anthropic-derived "grade the outcome, not the path" discipline (D-工-5 in
 ``docs/dev/best-practice-review.md``):
 
