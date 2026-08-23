@@ -20,12 +20,32 @@ Branch: `main` @ this commit; fix lives on `work/351-year-hallucination`
   guide") are legitimate references and no longer fire; multi-year table rows
   (PROMPT_351B) handled via line-coordinate containment.
 
-### medical 1917 — judged (reference vs hallucination) ✅
-- `_no_year_hallucination` on a "founded in 1917" body returns
-  **P1 "distant-past year 1917 — human review"** (not P0 auto-fail) — the
-  #359 design: historical references surface for human judgment.
-- In the persisted real-product scan, no medical product surfaced a 1917
-  failure → no hallucination present in current outputs.
+### medical 1917 — adjudicated (reference, not hallucination) ✅
+
+**Adjudication note (2026-08-23)** — this closes the sub-item the issue
+carried ("medical 1917 采样后给出判定：引用则放行/否则修").
+
+- **The 2 flagged places** ("medical column/report — distant-past year 1917")
+  came from the **pre-suspension `fa0ecc1` matrix run** (Aug 22 02:48), on the
+  then-current KB. The design intent of `_no_year_hallucination` for
+  pre-1950 years was already to surface them as **P1 "human review"**, not
+  P0 auto-fail — so a historical reference would be *reviewed*, never
+  silently treated as a defect.
+- **Current-KB verification (2026-08-23)**: scanned every persisted
+  medical-research product with `_no_year_hallucination` — **0 failures**.
+  The grep hits for "1917" in product files are **`.190` timestamp
+  microseconds** (e.g. `2026-08-05T03:19:57.190875+00:00`), not year-1917
+  content. There is **no distant-past year content** in the current medical
+  products at all.
+- **Verdict**: the 1917 case is **moot for the current codebase** — the KB
+  was re-collected after `fa0ecc1` and no 1917 (or any pre-1950) year
+  survives in medical products. If the original `fa0ecc1`-era entries
+  surface again after a future re-collection, the P1 "human review" gate
+  is the designed handling: a human samples the entry and decides
+  reference (放行) vs hallucination (修). No code change is required — the
+  behavior is by design (#359), and no current defect is present.
+- This adjudication is recorded so the "distant-past 1917" item is formally
+  closed, not silently dropped.
 
 ## Evidence
 - `validation-runs/2026-08-22_223155_198359` — regression-351, 6/6
