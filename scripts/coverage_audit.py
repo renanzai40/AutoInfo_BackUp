@@ -1,4 +1,4 @@
-"""Coverage audit: which of the 142 MCP tools are exercised by scenarios.
+"""Coverage audit: which of the 146 MCP tools are exercised by scenarios.
 
 Run from the project root: ``python3 scripts/coverage_audit.py``
 
