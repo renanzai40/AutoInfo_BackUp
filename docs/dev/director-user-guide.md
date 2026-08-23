@@ -544,7 +544,7 @@ A hard gate blocked the pipeline.
 
 The agent detects a pattern of failures.
 
-Following the agent-alerting pattern documented in `docs/dev/agent-alerting.md`:
+Following the agent-alerting pattern documented in `docs/dev/specs/operations.md` §4.6:
 
 > **Agent**: "Source 'PubMed API' (medical-research:pubmed) has failed 3 consecutive times with timeout errors. The last successful run was 2026-07-20. Would you like me to investigate or pause the source?"
 
@@ -752,5 +752,5 @@ These are not interruptions. The agent presents them as observations and asks fo
 - `docs/dev/specs/expectations.md` F40 -- End user portal, agent override constraints
 - `docs/dev/specs/expectations.md` F47 -- Data deletion and human-only purge
 - `docs/dev/specs/expectations.md` F53 -- Cross-collection merge trust boundary
-- `docs/dev/agent-alerting.md` -- Source health monitoring and escalation pattern
+- `docs/dev/specs/operations.md` §4.6 -- Source health monitoring and escalation pattern
 - `docs/skills/autoinfo-skill/SKILL.md` -- Agent's operating skill (for reference; this is for the agent, not for you)

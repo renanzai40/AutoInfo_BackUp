@@ -14,17 +14,17 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | Metric | Value |
 |--------|-------|
 | Total files | 75 |
-| Total lines | 28919 |
-| Active files | 61 |
-| Archived files | 14 |
-| Category — archive | 14 files / 7284 lines |
+| Total lines | 28961 |
+| Active files | 54 |
+| Archived files | 21 |
+| Category — archive | 21 files / 8304 lines |
 | Category — known-limitations | 1 files / 255 lines |
 | Category — schemas | 4 files / 397 lines |
 | Category — skills | 3 files / 785 lines |
 | Category — adr | 9 files / 424 lines |
-| Category — specs | 12 files / 8786 lines |
-| Category — validation-reports | 9 files / 2771 lines |
-| Category — docs/dev | 22 files / 8156 lines |
+| Category — specs | 12 files / 8828 lines |
+| Category — validation-reports | 7 files / 2492 lines |
+| Category — docs/dev | 17 files / 7415 lines |
 | Category — docs/root | 1 files / 61 lines |
 
 ## Inventory
@@ -40,6 +40,11 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `adr/0007-release-please-version-truth.md` | 39 | adr | active | adr |
 | `adr/README.md` | 53 | adr | active | adr-index |
 | `adr/TEMPLATE.md` | 32 | adr | active | adr |
+| `archive/ac4-gap-key-acquisition.md` | 81 | archive | archived | — |
+| `archive/acceptance-2026-08-08.md` | 166 | archive | archived | — |
+| `archive/acceptance-2026-08-12.md` | 113 | archive | archived | — |
+| `archive/acceptance-run-20260816.md` | 43 | archive | archived | — |
+| `archive/agent-alerting.md` | 129 | archive | archived | — |
 | `archive/agent-tester-validation-guide.md` | 1498 | archive | archived | — |
 | `archive/agent-tester-validation.md` | 663 | archive | archived | — |
 | `archive/autoinfo-validation-master-plan/LOOP-LOG.md` | 61 | archive | archived | — |
@@ -47,28 +52,25 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `archive/autoinfo-validation-master-plan/part-12-final-verdict.md` | 383 | archive | archived | — |
 | `archive/autoinfo-validation-master-plan/scenarios/enduser-deliverable.yaml` | 238 | archive | archived | — |
 | `archive/end-user-sla.md` | 126 | archive | archived | — |
+| `archive/enduser-capabilities-guide.md` | 372 | archive | archived | — |
 | `archive/epics-issue-97-coverage-verdict.md` | 109 | archive | archived | — |
 | `archive/founder-expectations-pre-split.md` | 2112 | archive | archived | — |
 | `archive/kb-pipeline-reference.md` | 249 | archive | archived | — |
 | `archive/launch-validation-framework.md` | 369 | archive | archived | — |
 | `archive/launch-validation-report.md` | 273 | archive | archived | — |
 | `archive/migration-v1.9.md` | 58 | archive | archived | — |
+| `archive/remaining-source-gap-verdicts.md` | 116 | archive | archived | verdicts |
 | `archive/reports/global-content-paid-research-report-trae.md` | 973 | archive | archived | — |
-| `dev/ac4-gap-key-acquisition.md` | 81 | docs/dev | active | — |
 | `dev/acceptance-framework.md` | 494 | docs/dev | active | — |
-| `dev/acceptance-run-20260816.md` | 43 | docs/dev | active | — |
-| `dev/agent-alerting.md` | 129 | docs/dev | active | — |
 | `dev/best-practice-review.md` | 388 | docs/dev | active | best-practice-review |
 | `dev/cli-mcp-rest-parity.md` | 466 | docs/dev | active | — |
 | `dev/cross-dimensional-catalog.md` | 982 | docs/dev | active | — |
 | `dev/director-user-guide.md` | 756 | docs/dev | active | — |
-| `dev/enduser-capabilities-guide.md` | 372 | docs/dev | active | — |
 | `dev/enduser-coverage-matrix.md` | 483 | docs/dev | active | — |
 | `dev/founder-expectations.md` | 471 | docs/dev | active | — |
 | `dev/mcp-usage-examples.md` | 324 | docs/dev | active | — |
 | `dev/new-domain-guide.md` | 935 | docs/dev | active | — |
 | `dev/plans/README.md` | 50 | docs/dev | active | plan-index |
-| `dev/remaining-source-gap-verdicts.md` | 116 | docs/dev | active | verdicts |
 | `dev/required-api-keys.md` | 144 | docs/dev | active | — |
 | `dev/research/综合报告-资讯付费与AI触达研究.md` | 702 | docs/dev | active | — |
 | `dev/specs/data-models.md` | 766 | specs | active | — |
@@ -78,7 +80,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/specs/market-positioning.md` | 404 | specs | active | market-positioning |
 | `dev/specs/mcp-tools.md` | 85 | specs | active | — |
 | `dev/specs/multi-tenancy-auth.md` | 770 | specs | active | — |
-| `dev/specs/operations.md` | 930 | specs | active | — |
+| `dev/specs/operations.md` | 972 | specs | active | — |
 | `dev/specs/ops-runbook.md` | 1040 | specs | active | — |
 | `dev/specs/pipeline.md` | 584 | specs | active | — |
 | `dev/specs/quality-gates.md` | 187 | specs | active | — |
@@ -86,8 +88,6 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/validation-governance.md` | 75 | docs/dev | active | — |
 | `dev/validation-loop-log.md` | 62 | docs/dev | active | — |
 | `dev/validation-reports/README.md` | 59 | validation-reports | active | — |
-| `dev/validation-reports/acceptance-2026-08-08.md` | 166 | validation-reports | active | — |
-| `dev/validation-reports/acceptance-2026-08-12.md` | 113 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/AC5-verdict.md` | 34 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-column.md` | 796 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-digest-weekly.md` | 144 | validation-reports | active | — |

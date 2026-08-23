@@ -231,7 +231,7 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 
 | ID | 差距 | 事实 | 处置 |
 |----|------|------|------|
-| D-债-1 | promote 授权边界文档自相矛盾 | `director-user-guide.md` §5.1/§10 与 `enduser-capabilities-guide.md` §3/§5 前后冲突(human-only vs agent-driven) | ✅ **已修复 2026-08-14**:统一为 agent 操作(`promote_kb_draft`,无人类门) |
+| D-债-1 | promote 授权边界文档自相矛盾 | `director-user-guide.md` §5.1/§10 与 `docs/archive/enduser-capabilities-guide.md`(归档前 §3/§5)前后冲突(human-only vs agent-driven) | ✅ **已修复 2026-08-14**:统一为 agent 操作(`promote_kb_draft`,无人类门) |
 | D-债-2 | master-plan 目录过期仍标 active | `autoinfo-validation-master-plan/` 4 文件数据停在 2026-07-31(141 工具/47 场景),与现行 146/68 冲突 | ✅ **已处置 2026-08-14**:git mv 至 `docs/archive/autoinfo-validation-master-plan/`,全部标注 superseded |
 | D-债-3 | `docs/agent-tester-validation-guide.md` 游离 | git untracked、不在 doc-inventory 的 66 文件清单 | ✅ **已处置 2026-08-14**:独有事实(§8.3 citation traps)并入 contract,文件入库并归档至 `docs/archive/` |
 | D-债-4 | validation-reports/README closure 状态落后 | B-01/B-02/R-01 已关闭但 README 标 open | ✅ **已修复 2026-08-14** |

@@ -593,6 +593,48 @@ class SystemHealth:
 | `get_metrics(metric_name, domain, since)` | Query Prometheus metrics |
 | `diagnose_system()` | Comprehensive system health check |
 
+### 4.6 Source Health Polling & Proactive Alerting
+
+> Merged from `docs/dev/agent-alerting.md` (archived 2026-08-23). The polling
+> pattern below is the *agent-driven* source health loop; config-based alert
+> rules (`add_alert_rule` / `get_alert_rules` / `remove_alert_rule` MCP tools)
+> remain the preferred mechanism for cost/budget/knowledge-lifecycle alerts
+> (§1.4, §2.6). AutoInfo deliberately does **not** push source-health alerts —
+> agents poll state on their own schedule: **agent polls, agent decides, agent
+> reports**.
+
+**Detection rule**: if `error_count >= 3` (3 consecutive failures, status
+`error`), flag to the user with specifics (error count, last error, source
+name), then propose investigate (`test_source`) or pause/remove.
+
+**Workflow**:
+1. `list_sources(domain)` to enumerate active sources for a domain
+2. `get_source_health(source_id)` per source (`domain:name` identifier, e.g.
+   `medical-research:pubmed`)
+3. Inspect `error_count` and `status` in the response
+4. If `error_count >= 3` or `status == "error"` → proactively notify the user
+5. User investigates via `test_source` or pauses/removes the failing source
+
+**`get_source_health` status meanings**:
+
+| Status | Condition |
+|--------|-----------|
+| `healthy` | Last run succeeded, < 3 consecutive failures |
+| `degraded` | Last run failed (< 3 consecutively) or slow response |
+| `error` | 3+ consecutive failures — needs attention |
+| `paused` | `_paused` marker file exists (user-disabled) |
+| `unknown` | No runs recorded yet |
+
+**Implementation notes for agents**:
+1. Poll before collect — avoids wasting resources on broken sources.
+2. Batch polling — `list_sources` once then iterate; no batch health endpoint.
+3. Status transitions — a source can return to `healthy` after a successful
+   run; re-check each cycle and unpause/announce recovery.
+4. Graceful degradation — `degraded` (1-2 failures) may still collect, but
+   note the degraded state in reporting.
+5. Human notification — alert only on `error` (3+ failures); `degraded` and
+   `paused` are informational for periodic status summaries.
+
 ---
 
 ## 5. Feature Flags
