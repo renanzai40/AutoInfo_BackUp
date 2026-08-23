@@ -122,3 +122,32 @@ steps:
       success: true
       exit_code: 0
       stdout_has: ["YEAR_HALLUCINATION_FORWARD_LOOKING_OK"]
+
+  - name: "title/guide publication-name future years pass (#351 V5)"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.validation_matrix import _no_year_hallucination
+
+      # The #351 V5 false-positive class: a publishing year used as part of a
+      # list/guide/ranking/publication NAME (e.g. "Princeton Review\x27s 2027
+      # Best Colleges guide", "The 2027 Best Colleges guide") is a legitimate
+      # reference, not a hallucination — it must NOT fire.
+      for body in (
+          "# T\n\nThe Princeton Review\x27s 2027 Best Colleges guide ranks the "
+          "top 10 colleges for financial aid.\n",
+          "# T\n\nThe 2027 Best Colleges guide is out now.\n",
+          "# T\n\nBloomberg\x27s 2027 outlook lists the key risks.\n",
+      ):
+          assert _no_year_hallucination(body, "financial-intelligence", "report").passed, body
+
+      # A bare future year asserted as a completed fact STILL fails (V5 must
+      # not weaken the P0 gate for factual claims).
+      r = _no_year_hallucination("# T\n\nIn 2031, adoption tripled\n", "financial-intelligence", "report")
+      assert not r.passed and r.severity == "P0", r.details
+      print("YEAR_HALLUCINATION_NAMED_YEAR_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["YEAR_HALLUCINATION_NAMED_YEAR_OK"]

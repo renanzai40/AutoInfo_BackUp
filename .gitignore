@@ -61,3 +61,7 @@ knowledge_graph_export.json
 autoinfo.db-wal
 autoinfo.db-shm
 validation-runs/
+
+# Local working dirs (not for git — handoff + generated products)
+out/
+handoff/
