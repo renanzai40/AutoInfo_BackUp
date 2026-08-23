@@ -50,3 +50,4 @@ if the decision changes, write a new ADR and mark the old one `Superseded by NNN
 | [0004](0004-reasoning-model-json-mode-thinking.md) | Reasoning models: never send `response_format`, disable thinking by default | Accepted |
 | [0005](0005-unified-success-error-envelope.md) | Unified `{success, data}` / `{success, error{code,message,actionable}}` envelope (v1.9) | Accepted |
 | [0006](0006-dev-process-workflow-charter.md) | Adopt the 7-stage agent-driven development workflow (2026-08-13) | Accepted |
+| [0007](0007-release-please-version-truth.md) | release-please owns version truth (2026-08-15) | Accepted |

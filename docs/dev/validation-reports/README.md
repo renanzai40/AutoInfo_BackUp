@@ -11,6 +11,7 @@ Versioned acceptance run reports per `docs/dev/acceptance-framework.md` (AC1-AC9
 | `validation-runs/latest.txt` | Pointer to the newest run directory |
 | `docs/dev/validation-reports/acceptance-<version>-<date>.md` | Executive acceptance run report generated from a run's `scenarios.json` |
 | `validation-deliveries/<date>/` | Delivery zips from `validation_delivery.py` (fixed archive location) |
+| `docs/dev/validation-reports/evidence-backup-issues-3-4.md` | Active closure evidence for backup issues #3/#4 (regression 351/325) |
 | `validation-runs/coverage/coverage-<date>.json` | Timestamped coverage audit output from `scripts/coverage_audit.py` |
 
 > Naming history: reports were previously `launch-validation-<version>.md` under the D1-D5 framework
@@ -38,20 +39,21 @@ python3 scripts/doc_inventory.py --check
 
 ## Durability
 
-`.omo/` remains gitignored, but `.omo/evidence/validation-runs/` and the
-repo-root `validation-runs/` directory are whitelisted in `.gitignore`, so
-run evidence and results are committed to git and survive clones/cleanups
-instead of being ephemeral local files.
+`.omo/` remains gitignored; the repo-root `validation-runs/` directory is
+**runtime state and is NOT git-tracked** (gitignored). Only the named audit
+evidence JSONs under `validation-runs/coverage/` (tool-desc, tool-similarity,
+error-message, llm-judge-calibration, scenario-outcome) are treated as
+semi-durable evidence — preserve them across cleanups. Run evidence worth
+keeping is promoted into `docs/dev/validation-reports/` (git-tracked), e.g.
+`evidence-backup-issues-3-4.md`.
 
 ## Closure status
 
-The 2026-08-08 first-run findings matrix is maintained in
-`docs/dev/validation-reports/acceptance-2026-08-08.md`. The KB-curation
-gap-closure wave (2026-08-08) closed B-03, B-04, B-05, B-06, B-07, B-08,
-the query_collected CWD trap, and the FRED_API_KEY documentation gap — see
-the "B-class Closure Status" section there. Per the second run
-(`docs/dev/validation-reports/acceptance-2026-08-12.md`), all 7 first-run
-FAIL blockers (B-01..B-07) and R-01 are now closed or adjudicated, and the
-overall verdict is PASS (sign-off candidate); remaining items are B3 final
-adjudication, AC5 sample human reading, and the non-blocking presentation
-observation (OBS-1).
+The 2026-08-08 first-run and 2026-08-12 second-run acceptance reports
+(`acceptance-2026-08-08.md`, `acceptance-2026-08-12.md`) are **archived**
+under `docs/archive/` (2026-08-23 doc-architecture wave) — historical run
+evidence per acceptance-framework §7.5. Summary of the closed state: the
+KB-curation gap-closure wave (2026-08-08) closed B-03..B-08 plus the
+query_collected CWD trap and FRED_API_KEY doc gap; the second run closed
+all 7 first-run FAIL blockers (B-01..B-07) and R-01, overall verdict PASS
+(sign-off candidate). Active closure evidence: `evidence-backup-issues-3-4.md`.

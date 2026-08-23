@@ -69,7 +69,7 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 |------|--------------|-------------|
 | **D1 基础代码最佳实践** | 代码写得好不好:模块设计、错误处理、命名、度量、AI 代码审查 | `deep-modules-skill`、方法论 §3.1、AC8/AC9、ruff+mypy |
 | **D2 面向 Agent 项目最佳实践** | 系统对 direct user(Agent)友好吗:工具设计、错误信封、长任务语义、可观测性 | `user-lifecycle-definition`、`mcp-tools`、ADR-0005、`mcp-usage-examples` |
-| **D3 Validation 与 agent-as-tester** | 验证体系本身符合业界吗:LLM-judge 校准、scenario 设计、agent-as-tester 先例、CI 质量门 | `acceptance-framework`、`validation-scenario-contract`、68 场景、2 次运行报告 |
+| **D3 Validation 与 agent-as-tester** | 验证体系本身符合业界吗:LLM-judge 校准、scenario 设计、agent-as-tester 先例、CI 质量门 | `acceptance-framework`、`validation-scenario-contract`、117 场景、2 次运行报告 |
 
 ---
 
@@ -118,7 +118,7 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 | 类型检查已主流化(86-88% 采用);mypy 仍主流,Rust 系检查器上升 | Meta Typed Python Survey 2024/2025 🔬 | ruff + mypy strict — 与主流一致 | ✅ 已满足 |
 | src layout 是事实默认(pytest/PyPA 官方推荐) | pytest goodpractices;pydevtools | `src/autoinfo/` — 已用 | ✅ 已满足 |
 | 覆盖率是探针不是裁决,不设全局门槛 | Fowler;Google | G0-G5 不用覆盖率做门 | ✅ 已满足(刻意不为) |
-| 测试断言行为而非实现细节;防 AI 生成"自我验证"测试 | deep-modules-skill;AI 评审共识 | ~3728 测试;测试质量(mutation 视角)未系统验证 | 🟡 部分 |
+| 测试断言行为而非实现细节;防 AI 生成"自我验证"测试 | deep-modules-skill;AI 评审共识 | ~4345 测试;测试质量(mutation 视角)未系统验证 | 🟡 部分 |
 
 ### D1-6 代码评审实践 🔬 / 📐
 
@@ -183,13 +183,13 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 
 ## §4 维度 3:Validation 与 agent-as-tester 最佳实践
 
-> 本地现状基线:agent-as-tester 是**最成熟的维度**——AC1-AC9 判据 + validation-scenario-contract 机制 + 68 场景(62 functional + 6 regression)+ 2 次实跑 + 诚实性机制(unconfigured/RED-GREEN/SUSPECT)。业界先例确认这不是孤例(Anthropic evals、τ-bench、AutoCover、SpecOps 都是同行)。
+> 本地现状基线:agent-as-tester 是**最成熟的维度**——AC1-AC9 判据 + validation-scenario-contract 机制 + 117 场景(65 functional + 52 regression)+ 2 次实跑 + 诚实性机制(unconfigured/RED-GREEN/SUSPECT)。业界先例确认这不是孤例(Anthropic evals、τ-bench、AutoCover、SpecOps 都是同行)。
 
 ### D3-1 agent-as-tester 业界先例确认 🔬
 
 | 业界主张 | 来源 | AutoInfo 对照 | 结论 |
 |---------|------|--------------|------|
-| scenario/task-based agent 验证是 2024-2026 标准形态:Anthropic evals、τ-bench(数据库终态比对 + pass^k)、AutoCover(Uber,5-agent + mutation 质量门)、SpecOps(4-agent,F1=0.89)、TestExplora(主动找 bug F2P 仅 16%) | Anthropic;τ-bench;ICSE 2026 | 68 场景 + agent-tester 执行 + LLM-judge + 验收报告 — **与业界前沿同形态** | ✅ 已满足(强项,可引为行业先例) |
+| scenario/task-based agent 验证是 2024-2026 标准形态:Anthropic evals、τ-bench(数据库终态比对 + pass^k)、AutoCover(Uber,5-agent + mutation 质量门)、SpecOps(4-agent,F1=0.89)、TestExplora(主动找 bug F2P 仅 16%) | Anthropic;τ-bench;ICSE 2026 | 117 场景 + agent-tester 执行 + LLM-judge + 验收报告 — **与业界前沿同形态** | ✅ 已满足(强项,可引为行业先例) |
 | **grade outcome,别 grade path**(过度断言工具调用顺序 → 测试过脆) | Anthropic "Demystifying evals" | 需核对:场景是否断言"必须调用 X 工具"(路径断言) | 🟡 部分 |
 | 隔离环境防共享状态/作弊(Claude 曾看 git history 取巧) | Anthropic | 场景隔离/环境重置机制需核对 | 🟡 部分 |
 | 0% pass@100 通常是坏任务而非坏 agent;grader bug 是回归源(CORE-Bench 42→95%) | Anthropic;aiarch.dev | 场景作者需读失败 transcript 区分"agent 错 vs grader 错" | 🟡 部分 |
@@ -203,14 +203,14 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 | **校准是信任前提**:golden set 50-100 例(必须含坏例)、目标 agreement 80-90s%、kappa 度量、定期重校准;未校准 judge "比没有更糟" | Airbnb EDD;Anthropic | 无校准证据记录 | ❌ 差距(事实缺口) |
 | 缓解:CoT 唯一全无害策略;rubric;escape hatch("可以答 Unknown");维度隔离,不用 God judge | Anthropic;LLM-judge 研究 | escape hatch/维度隔离未记录 | 🟡 部分 |
 | 确定性 grader 优先(code-based > LLM judge > human 校准);LLM 擅长比较/[分类] 而非开放生成 | OpenAI;Anthropic | G0 schema/G2 dedup 是 code-based ✅;G4/G5 主观维度 LLM ✅ 结构正确 | ✅ 已满足(结构正确) |
-| capability evals(从低 pass 测进步)vs regression evals(~100% 防回退);饱和后晋升 | Anthropic | 68 场景已分 functional + regression ✅;capability/regression 双套件显式化 + 饱和轮换机制未文档化 | 🟡 部分 |
+| capability evals(从低 pass 测进步)vs regression evals(~100% 防回退);饱和后晋升 | Anthropic | 117 场景已分 functional + regression ✅;capability/regression 双套件显式化 + 饱和轮换机制未文档化 | 🟡 部分 |
 
 ### D3-3 测试分层与 AI 时代调整 🔬 / 📐
 
 | 业界主张 | 来源 | AutoInfo 对照 | 结论 |
 |---------|------|--------------|------|
-| 金字塔是成本模型不是比率;AI 生成测试会系统性放错层级(写 15 分钟套件) | Fowler;Nick Perkins 2026 | 3728 pytest + 68 场景分层结构未显式文档化 | 🟡 部分 |
-| E2E 脆性实证:Google 0.5% 小 vs 14% 大 flaky;不可靠测试移出 CI gate | Google Testing Blog 🔬 | 68 场景是 large tests;flaky 处理机制(多跑统计/移出 gate)未文档化 | 🟡 部分 |
+| 金字塔是成本模型不是比率;AI 生成测试会系统性放错层级(写 15 分钟套件) | Fowler;Nick Perkins 2026 | 4345 pytest + 117 场景分层结构未显式文档化 | 🟡 部分 |
+| E2E 脆性实证:Google 0.5% 小 vs 14% 大 flaky;不可靠测试移出 CI gate | Google Testing Blog 🔬 | 117 场景是 large tests;flaky 处理机制(多跑统计/移出 gate)未文档化 | 🟡 部分 |
 | TDD 实证校准:收益来自节奏非顺序;测试先行不是银弹;ATDD 十年后单一来源理想未兑现 | TSE 2013;Karac 2018;Gojko Adzic 🔬 | RED→GREEN + regression flywheel ✅(节奏价值有实证支撑) | ✅ 已满足 |
 | 覆盖率是探针;mutation testing 是解药(Google 15M mutants;70% 真实 bug 与 mutant 耦合) | Fowler;Google 🔬 | 未用 mutation;G4 factual 自审是自证性 | 🟡 部分 |
 
@@ -241,13 +241,13 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 
 | ID | 差距 | 来源证据 | 工作量级 | ROI | 状态 |
 |----|------|---------|---------|-----|------|
-| D-工-1 | **146 工具描述/参数审计**(命名动词化、参数 ≤8、enum/default、description 含示例与"何时用") | AWS/RaftLabs/Anthropic — 共识度最高项;Anthropic 实测描述改进降 40% 任务时间 | 中(可脚本化半自动) | 极高 | ✅ **审计已落地** → `scripts/tool_desc_audit.py`(2026-08-14,146 工具,回归测试 7 例);剩余短描述/enum 差距转 backlog |
-| D-工-2 | **LLM-judge 校准证据**(golden set 50-100 例、kappa、多试次) | Airbnb EDD;arXiv 2025-2026 偏见研究 | 中 | 高(直接提升 G4/G5 可信度) | ✅ **已校准(真实运行)** → `scripts/llm_judge_calibration.py`(2026-08-14:8 例 seed golden set × 3 试次,accuracy 1.0 / kappa 1.0 / spread 0.0,证据 `validation-runs/coverage/llm-judge-calibration-2026-08-14.json`,回归测试 9 例);扩充至 50-100 例为后续 backlog |
+| D-工-1 | **146 工具描述/参数审计**(命名动词化、参数 ≤8、enum/default、description 含示例与"何时用") | AWS/RaftLabs/Anthropic — 共识度最高项;Anthropic 实测描述改进降 40% 任务时间 | 中(可脚本化半自动) | 极高 | ✅ **审计已落地** → `scripts/tool_desc_audit.py`(2026-08-14 落地,2026-08-23 重跑,146 工具,回归测试 7 例);剩余短描述/enum 差距转 backlog |
+| D-工-2 | **LLM-judge 校准证据**(golden set 50-100 例、kappa、多试次) | Airbnb EDD;arXiv 2025-2026 偏见研究 | 中 | 高(直接提升 G4/G5 可信度) | ✅ **已校准(真实运行)** → `scripts/llm_judge_calibration.py`(2026-08-14:8 例 seed golden set × 3 试次,accuracy 1.0 / kappa 1.0 / spread 0.0,证据 `validation-runs/coverage/llm-judge-calibration-2026-08-14.json`(未重跑——需 LLM key;D-工-2 证据保持 08-14 最新),回归测试 9 例);扩充至 50-100 例为后续 backlog |
 | D-工-3 | **AI 代码专项审查清单**(命名一致、幻觉包名、同义反复测试) | CodeRabbit;USENIX 2025 | 低(文档 + PR 模板) | 高 | ⏳ 待落地 |
-| D-工-4 | 错误信息一致性审计(28 ErrorCode 的 message 是否全含修复指引;429 Retry-After;堆栈泄漏) | OWASP;MCP spec | 低-中 | 高 | ✅ **已修复** → `scripts/error_message_audit.py`(2026-08-14:109 调用点,0 缺修复指引,**0 裸异常**——65 处 `_error_dict(exc)` 全部替换为 `_error_from_exc(exc, context)` 统一模板(context + 异常 + retry 指引),回归测试 9 例) |
-| D-工-5 | 场景路径断言审计(grade outcome 别 grade path)+ 隔离环境防作弊 | Anthropic | 低-中 | 中 | ✅ **审计已落地** → `scripts/scenario_outcome_audit.py`(2026-08-14,68 场景/326 步,96.3% outcome 断言,0 未门控 llm_assert/http,回归测试 9 例) |
+| D-工-4 | 错误信息一致性审计(28 ErrorCode 的 message 是否全含修复指引;429 Retry-After;堆栈泄漏) | OWASP;MCP spec | 低-中 | 高 | ✅ **已修复** → `scripts/error_message_audit.py`(2026-08-14 落地,2026-08-23 重跑,0 缺修复指引,**0 裸异常**——65 处 `_error_dict(exc)` 全部替换为 `_error_from_exc(exc, context)` 统一模板(context + 异常 + retry 指引),回归测试 9 例) |
+| D-工-5 | 场景路径断言审计(grade outcome 别 grade path)+ 隔离环境防作弊 | Anthropic | 低-中 | 中 | ✅ **审计已落地** → `scripts/scenario_outcome_audit.py`(2026-08-14 落地,2026-08-23 重跑:117 场景/450 步,outcome 断言 ≥95%,0 未门控 llm_assert/http,回归测试 9 例) |
 | D-工-6 | 幂等键显式语义 + 合作式取消 | MCP Tasks;Async workflows | 中 | 中 | ⏳ 待落地 |
-| D-工-7 | 工具相似度审计(35 类别 146 工具边界) | Anthropic;OpenAI | 中 | 中 | ✅ **已修复** → `scripts/tool_similarity_audit.py`(2026-08-14:146 工具,0 名称边界碰撞,**0 高描述重叠对**——10 个工具描述用独有词汇消歧,回归测试 7 例) |
+| D-工-7 | 工具相似度审计(35 类别 146 工具边界) | Anthropic;OpenAI | 中 | 中 | ✅ **已修复** → `scripts/tool_similarity_audit.py`(2026-08-14 落地,2026-08-23 重跑:146 工具,0 名称边界碰撞,**0 高描述重叠对**——10 个工具描述用独有词汇消歧,回归测试 7 例) |
 | D-工-8 | capability/regression 双套件 + 饱和轮换机制文档化 | Anthropic | 低 | 中 | ⏳ 待落地 |
 | D-工-9 | PR 模板强制"为什么+影响面+局限" | Kudrjavets 2022(446% 评审延迟解释) | 低 | 中 | ⏳ 待落地 |
 
@@ -266,7 +266,7 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 
 ### ✅ 做得好(业界前沿或对齐,引用可背书)
 
-1. **agent-as-tester validation 体系** — 与 Anthropic/τ-bench/AutoCover/SpecOps 同形态;68 场景真实面 + 诚实性机制 + 回归飞轮,是行业前沿而非孤例(D3-1)。
+1. **agent-as-tester validation 体系** — 与 Anthropic/τ-bench/AutoCover/SpecOps 同形态;117 场景真实面 + 诚实性机制 + 回归飞轮,是行业前沿而非孤例(D3-1)。
 2. **统一错误信封** — `{success, error:{code,message,actionable}}` + ADR-0005 以 agent 为理由;命中 MCP 双通道错误 + OWASP 四问模型(D2-2/D1-3)。
 3. **深模块 doctrine** — 项目化 Ousterhout 实践(7 步程序 + watch-list + 可测试性陷阱守卫),超过多数仓库的"风格文档"(D1-1)。
 4. **Poll-first + 持久 job + 幂等 dedup + 回归飞轮** — 全中 2026 新共识(D2-3/D2-4)。
@@ -281,8 +281,8 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 ### 🔧 需重构(有明确业界模式可对齐;审计证据均已落地,重构本身转 backlog)
 
 1. 工具命名空间化 + 描述消歧(35 类别 → 前缀分组 + 合并重叠)—— 边界审计已证实 0 名称碰撞;**8 高描述重叠对已消歧为 0**(2026-08-14,10 个工具描述独有词汇化,`scripts/tool_similarity_audit.py`,D2-1)。
-2. 场景从"路径断言"转向"outcome 断言"—— 已 96.3% 达标,残余 12 步无 success 键(`scripts/scenario_outcome_audit.py`,D3-1)。
-3. 错误处理审计(裸 except、log-and-throw、429 Retry-After)—— 109 调用点 0 缺修复指引;**65 处 `_error_dict(exc)` 裸异常泄漏已全部替换为 `_error_from_exc(exc, context)` 统一模板(0 裸异常,2026-08-14,`scripts/error_message_audit.py`,D1-3)**。
+2. 场景从"路径断言"转向"outcome 断言"—— 已 ≥95% 达标(2026-08-23 重跑 117 场景/450 步),残余 12 步无 success 键(`scripts/scenario_outcome_audit.py`,D3-1)。
+3. 错误处理审计(裸 except、log-and-throw、429 Retry-After)—— 0 缺修复指引;**65 处 `_error_dict(exc)` 裸异常泄漏已全部替换为 `_error_from_exc(exc, context)` 统一模板(0 裸异常,2026-08-14 落地,2026-08-23 重跑,`scripts/error_message_audit.py`,D1-3)**。
 
 ### 📈 需提升(渐进改进,非缺陷)
 
@@ -311,7 +311,7 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 | 触发 | 每 feature wave 结束(与 AC1-AC9 验收报告同步);或重大架构变更后 |
 | 动作 | ① 刷新 §9 来源(新增 2026-2027 共识);② 重跑可脚本化审计(D-工-1/4/5/7);③ 更新对照表结论;④ 生成"差异报告"(本次 vs 上次) |
 | 输出 | 本文档的修订 + 差距清单增删(§5) |
-| 自动化候选 | ✅ 工具描述审计 → `scripts/tool_desc_audit.py`(2026-08-14,146 工具,回归 7 例);✅ 错误信息审计 → `scripts/error_message_audit.py`(2026-08-14,109 调用点,回归 9 例);✅ 场景 outcome 审计 → `scripts/scenario_outcome_audit.py`(2026-08-14,68 场景/326 步,回归 9 例);✅ 工具相似度审计 → `scripts/tool_similarity_audit.py`(2026-08-14,146 工具,回归 7 例);✅ LLM-judge 校准 → `scripts/llm_judge_calibration.py`(2026-08-14,seed golden set + kappa,回归 9 例)。全部输出 `validation-runs/coverage/*-<date>.json` |
+| 自动化候选 | ✅ 工具描述审计 → `scripts/tool_desc_audit.py`(2026-08-14,146 工具,回归 7 例);✅ 错误信息审计 → `scripts/error_message_audit.py`(2026-08-14 落地,2026-08-23 重跑,回归 9 例);✅ 场景 outcome 审计 → `scripts/scenario_outcome_audit.py`(2026-08-14 落地,2026-08-23 重跑:117 场景/450 步,回归 9 例);✅ 工具相似度审计 → `scripts/tool_similarity_audit.py`(2026-08-14,146 工具,回归 7 例);✅ LLM-judge 校准 → `scripts/llm_judge_calibration.py`(2026-08-14,seed golden set + kappa,回归 9 例)。全部输出 `validation-runs/coverage/*-<date>.json` |
 | 与验收框架关系 | 本维度**不**设 FAIL/PASS 判据;差距项转为工程 backlog 由 wave 处理,最终状态仍由 AC1-AC9 判定 |
 
 ---
@@ -385,4 +385,4 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 
 ---
 
-**Status:** Baseline 2026-08-14。下次复跑:随下一 feature wave 验收报告。
+**Status:** Baseline 2026-08-14;§8 复跑执行于 **2026-08-23**(文档架构精简 wave)——刷新场景/测试/审计统计至 117/4345 及 08-23 重跑证据。下次复跑:随下一 feature wave 验收报告。
