@@ -61,6 +61,22 @@ logger = logging.getLogger(__name__)
 # projects whose runtime config predates the field still filter noise.
 _DEMO_DOMAINS_DIR = Path(__file__).resolve().parent.parent / "data" / "domains"
 
+# Generic theme labels that never name a meaningful report section (issue #9).
+# They come from auto-discovery keyword fragments (e.g. ``new``, ``year``,
+# ``user``, ``market``) whose normalized form is a bare generic word.  A group
+# whose normalized theme lands here is dropped in ``_merge_theme_groups`` and
+# its entries reassigned to the nearest surviving group or "Additional Topics".
+_GENERIC_THEME_LABELS: Final[frozenset[str]] = frozenset({
+    "new", "year", "the year", "user", "activity", "growth",
+    "apps", "market", "update", "summary",
+})
+
+# Theme synonym map (issue #9): canonical spelling -> the key every variant
+# normalizes to.  Applied in ``_normalize_theme_text`` BEFORE the near-dup
+# pass so synonym variants merge in the exact-name pass (e.g. ``Year`` and
+# ``The Year`` collapse onto one group before the blocklist runs).
+_THEME_SYNONYMS: Final[dict[str, str]] = {"year": "the year"}
+
 
 def _fire_agent_notification(event: str, output: Any, product_id: str) -> None:
     """Fire a fire-and-forget agent callback for a just-generated product.
@@ -552,6 +568,16 @@ def _resolve_effective_language(
        ai-commercial come out single-language without manual params).
     3. Otherwise ``""`` — no filtering (legacy behavior).
 
+    Seed fallback (issue #8): when a project config file EXISTS but its
+    domain block carries no ``default_language`` key at all (projects
+    initialized before the field existed — ``init`` only propagates it for
+    NEW domains), fall back to the demo-domain seed
+    ``src/autoinfo/data/domains/<domain>/sources.yaml`` so live surfaces
+    come out single-language immediately without a config migration.  An
+    explicitly declared (even empty) value always wins — empty means "no
+    filtering", backward compatible.  A project with NO config file at all
+    stays ``""`` (no filtering) — seeding never engages on a missing config.
+
     For a cross-domain product (*cross_domain* True) we never silently pick
     one domain's default across multiple domains: an explicit param wins,
     otherwise no filtering.
@@ -569,8 +595,48 @@ def _resolve_effective_language(
         return ""
     for d in config.domains:
         if d.name == domain:
-            return d.default_language or ""
-    return ""
+            if _config_declares_default_language(config_path, domain):
+                return d.default_language or ""
+            break
+    return _seed_domain_default_language(domain)
+
+
+def _config_declares_default_language(config_path: Path, domain: str) -> bool:
+    """True when the raw config YAML declares a ``default_language`` key for
+    *domain* (even an empty value).
+
+    The parsed :class:`DomainConfig` cannot distinguish "key present but
+    empty" from "key missing" — both parse to ``""`` — so the raw dict is
+    consulted for the seed-fallback decision (issue #8).
+    """
+    try:
+        raw = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
+    except Exception:
+        return False
+    for d in raw.get("domains", []):
+        if d.get("name") == domain:
+            return "default_language" in d
+    return False
+
+
+def _seed_domain_default_language(domain: str) -> str:
+    """Demo-domain seed fallback for ``default_language`` (issue #8).
+
+    Reads ``src/autoinfo/data/domains/<domain>/sources.yaml`` (the same seed
+    ``init`` uses) so existing projects whose runtime config predates the
+    field still come out single-language without a config migration.
+    Returns ``""`` when the seed file is absent or carries no
+    ``default_language``.
+    """
+    seed_path = _DEMO_DOMAINS_DIR / domain / "sources.yaml"
+    if not seed_path.is_file():
+        return ""
+    try:
+        with open(seed_path, encoding="utf-8") as f:
+            seed = yaml.safe_load(f) or {}
+    except Exception:
+        return ""
+    return str(seed.get("default_language") or "")
 
 
 def _get_domain_exclude_keywords(domain: str) -> list[str]:
@@ -6192,8 +6258,16 @@ def _normalize_text(value: str) -> str:
 
 
 def _normalize_theme_text(value: str) -> str:
-    """Normalize a theme name for exact-name merging across batches."""
-    return _normalize_text(str(value))
+    """Normalize a theme name for exact-name merging across batches.
+
+    Applies the ``_THEME_SYNONYMS`` map first (so synonym spellings collapse
+    onto one canonical key, e.g. ``Year``/``The Year``) and then the shared
+    punctuation/whitespace normalization.  Used for both the exact-name pass
+    and the Jaccard near-dup pass in :func:`_merge_theme_groups`, so synonym
+    variants merge BEFORE the generic-label blocklist runs.
+    """
+    text = _THEME_SYNONYMS.get(str(value).strip().lower(), str(value))
+    return _normalize_text(text)
 
 
 def _merge_theme_groups(
@@ -6280,7 +6354,73 @@ def _merge_theme_groups(
                 rest.append(other)
         final.append(group)
         pending = rest
-    return final
+
+    # -- Generic-label blocklist pass (issue #9) ----------------------------
+    # After the exact-name and near-dup passes, drop any group whose
+    # normalized theme is a bare generic word (``new`` / ``year`` /
+    # ``user`` / ... — produced by auto-discovery keyword fragments).  Each
+    # dropped group's entries are reassigned to the nearest surviving group
+    # (by Jaccard on normalized tokens) or to "Additional Topics", so no
+    # entry is ever lost.  "General" / "Additional Topics" are structural
+    # catch-alls and deliberately exempt.
+    survivors = [
+        g for g in final
+        if _normalize_theme_text(g["theme"]) not in _GENERIC_THEME_LABELS
+    ]
+    blocklisted = [
+        g for g in final
+        if _normalize_theme_text(g["theme"]) in _GENERIC_THEME_LABELS
+    ]
+    if not blocklisted:
+        return survivors
+
+    by_norm: dict[str, dict[str, Any]] = {}
+    for g in survivors:
+        nt = _normalize_theme_text(g["theme"])
+        by_norm.setdefault(nt, g)
+    survivor_pairs: list[tuple[set[str], dict[str, Any]]] = []
+    for g in survivors:
+        survivor_pairs.append((
+            set(_normalize_theme_text(g["theme"]).split()),
+            g,
+        ))
+
+    for g in blocklisted:
+        g_tokens = set(_normalize_theme_text(g["theme"]).split())
+        best: dict[str, Any] | None = None
+        best_score = 0.0
+        for tokens, candidate in survivor_pairs:
+            if not tokens:
+                continue
+            union = g_tokens | tokens
+            if not union:
+                continue
+            score = len(g_tokens & tokens) / len(union)
+            if score > best_score:
+                best_score = score
+                best = candidate
+        target = best if best_score >= 0.3 else None
+        if target is None:
+            target = next(
+                (c for c in survivors if c["theme"] == "Additional Topics"),
+                None,
+            )
+        if target is None:
+            survivors.append({
+                "theme": "Additional Topics",
+                "description": "Other notable developments across the tracked sources.",
+                "entries": [],
+            })
+            target = survivors[-1]
+        seen = {e.get("entry_id", "") for e in target["entries"] if e.get("entry_id")}
+        for e in g["entries"]:
+            eid = e.get("entry_id", "")
+            if eid and eid in seen:
+                continue
+            if eid:
+                seen.add(eid)
+            target["entries"].append(e)
+    return survivors
 
 
 def _ensure_all_entries_grouped(
