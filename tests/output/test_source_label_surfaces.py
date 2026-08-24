@@ -82,6 +82,7 @@ def _stale_entry() -> dict[str, Any]:
         "source_url": STALE_SOURCE_URL,
         "source_type": "rss",
         "source_platform": "rss",
+        "language": "en",
         "relevance_score": 90.0,
         "tags": "[]",
         "tier": "01-Raw",

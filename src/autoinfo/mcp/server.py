@@ -3036,6 +3036,7 @@ def _handle_generate_digest(
     max_items: int = 0,
     product: str = "",
     language: str = "",
+    ref_limit: int | None = None,
     persist: bool = False,
 ) -> dict[str, Any]:
     """Generate a digest of KB entries for *domain* over the given *period*.
@@ -3107,6 +3108,7 @@ def _handle_generate_digest(
             max_items=max_items,
             product_template=product_template,
             language=language,
+            ref_limit=ref_limit,
         )
         if format in ("json", "agent"):
             # Parse JSON string back to dict for structured MCP response
@@ -3178,6 +3180,7 @@ def _handle_generate_report(
     report_type: str = "standard",
     product: str = "",
     language: str = "",
+    ref_limit: int | None = None,
     persist: bool = False,
 ) -> dict[str, Any]:
     """Generate a structured report for *domain* over the given *period*.
@@ -3246,7 +3249,7 @@ def _handle_generate_report(
         # (column was persisted as report-markdown-* and never counted for
         # the column:markdown cell — issue #229).
         _persist_product = "column" if report_type == "column" else "report"
-        result = _generate_report(domain=domain, format=format, period=period, custom_instructions=custom_instructions, target_audience=target_audience, user_id=user_id, report_type=report_type, product_template=product_template, language=language)
+        result = _generate_report(domain=domain, format=format, period=period, custom_instructions=custom_instructions, target_audience=target_audience, user_id=user_id, report_type=report_type, product_template=product_template, language=language, ref_limit=ref_limit)
         if format in ("json", "agent"):
             import json as _json
 
@@ -9000,6 +9003,16 @@ async def list_tools() -> list[Tool]:
                         ),
                         "default": "",
                     },
+                    "ref_limit": {
+                        "type": "integer",
+                        "description": (
+                            "Optional maximum number of KB references to render "
+                            "(default: 60; issue #11). References are sorted by "
+                            "(has non-empty summary, relevance_score) and capped "
+                            "at this limit at the context-build site."
+                        ),
+                        "default": 60,
+                    },
                     "persist": {
                         "type": "boolean",
                         "description": "When true, write the generated artifact to outputs/<domain>/ and return its persisted_path in the envelope (default: false).",
@@ -9085,6 +9098,16 @@ async def list_tools() -> list[Tool]:
                             "included, so the report never mixes languages (issue #309)."
                         ),
                         "default": "",
+                    },
+                    "ref_limit": {
+                        "type": "integer",
+                        "description": (
+                            "Optional maximum number of KB references to render "
+                            "(default: 60; issue #11). References are sorted by "
+                            "(has non-empty summary, relevance_score) and capped "
+                            "at this limit at the context-build site."
+                        ),
+                        "default": 60,
                     },
                     "persist": {
                         "type": "boolean",

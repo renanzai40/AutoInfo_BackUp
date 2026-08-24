@@ -85,3 +85,9 @@ topics:
       - GPT
       - generative AI
       - machine learning
+      # Issue #9: curated English keywords for the deterministic grouping
+      # seed — merged into _load_keyword_topics so English-titled ai-commercial
+      # entries group under meaningful themes instead of generic labels.
+      - model release
+      - regulation
+      - benchmark

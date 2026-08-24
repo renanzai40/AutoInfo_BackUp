@@ -61,6 +61,22 @@ logger = logging.getLogger(__name__)
 # projects whose runtime config predates the field still filter noise.
 _DEMO_DOMAINS_DIR = Path(__file__).resolve().parent.parent / "data" / "domains"
 
+# Generic theme labels that never name a meaningful report section (issue #9).
+# They come from auto-discovery keyword fragments (e.g. ``new``, ``year``,
+# ``user``, ``market``) whose normalized form is a bare generic word.  A group
+# whose normalized theme lands here is dropped in ``_merge_theme_groups`` and
+# its entries reassigned to the nearest surviving group or "Additional Topics".
+_GENERIC_THEME_LABELS: Final[frozenset[str]] = frozenset({
+    "new", "year", "the year", "user", "activity", "growth",
+    "apps", "market", "update", "summary",
+})
+
+# Theme synonym map (issue #9): canonical spelling -> the key every variant
+# normalizes to.  Applied in ``_normalize_theme_text`` BEFORE the near-dup
+# pass so synonym variants merge in the exact-name pass (e.g. ``Year`` and
+# ``The Year`` collapse onto one group before the blocklist runs).
+_THEME_SYNONYMS: Final[dict[str, str]] = {"year": "the year"}
+
 
 def _fire_agent_notification(event: str, output: Any, product_id: str) -> None:
     """Fire a fire-and-forget agent callback for a just-generated product.
@@ -552,6 +568,16 @@ def _resolve_effective_language(
        ai-commercial come out single-language without manual params).
     3. Otherwise ``""`` — no filtering (legacy behavior).
 
+    Seed fallback (issue #8): when a project config file EXISTS but its
+    domain block carries no ``default_language`` key at all (projects
+    initialized before the field existed — ``init`` only propagates it for
+    NEW domains), fall back to the demo-domain seed
+    ``src/autoinfo/data/domains/<domain>/sources.yaml`` so live surfaces
+    come out single-language immediately without a config migration.  An
+    explicitly declared (even empty) value always wins — empty means "no
+    filtering", backward compatible.  A project with NO config file at all
+    stays ``""`` (no filtering) — seeding never engages on a missing config.
+
     For a cross-domain product (*cross_domain* True) we never silently pick
     one domain's default across multiple domains: an explicit param wins,
     otherwise no filtering.
@@ -569,8 +595,48 @@ def _resolve_effective_language(
         return ""
     for d in config.domains:
         if d.name == domain:
-            return d.default_language or ""
-    return ""
+            if _config_declares_default_language(config_path, domain):
+                return d.default_language or ""
+            break
+    return _seed_domain_default_language(domain)
+
+
+def _config_declares_default_language(config_path: Path, domain: str) -> bool:
+    """True when the raw config YAML declares a ``default_language`` key for
+    *domain* (even an empty value).
+
+    The parsed :class:`DomainConfig` cannot distinguish "key present but
+    empty" from "key missing" — both parse to ``""`` — so the raw dict is
+    consulted for the seed-fallback decision (issue #8).
+    """
+    try:
+        raw = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
+    except Exception:
+        return False
+    for d in raw.get("domains", []):
+        if d.get("name") == domain:
+            return "default_language" in d
+    return False
+
+
+def _seed_domain_default_language(domain: str) -> str:
+    """Demo-domain seed fallback for ``default_language`` (issue #8).
+
+    Reads ``src/autoinfo/data/domains/<domain>/sources.yaml`` (the same seed
+    ``init`` uses) so existing projects whose runtime config predates the
+    field still come out single-language without a config migration.
+    Returns ``""`` when the seed file is absent or carries no
+    ``default_language``.
+    """
+    seed_path = _DEMO_DOMAINS_DIR / domain / "sources.yaml"
+    if not seed_path.is_file():
+        return ""
+    try:
+        with open(seed_path, encoding="utf-8") as f:
+            seed = yaml.safe_load(f) or {}
+    except Exception:
+        return ""
+    return str(seed.get("default_language") or "")
 
 
 def _get_domain_exclude_keywords(domain: str) -> list[str]:
@@ -2936,6 +3002,61 @@ def _source_tier_badge_enabled() -> bool:
     return True
 
 
+def _output_config_ref_limit() -> int:
+    """Resolve ``output.ref_limit`` from config (default 60).
+
+    The CLI/MCP default path (no explicit ``ref_limit`` param) falls back
+    to the project config's ``output.ref_limit``, which defaults to 60
+    (issue #11 — references render uncapped).
+    """
+    try:
+        config_path = get_config_path()
+        if config_path is not None:
+            return int(load_config(config_path).output.ref_limit)
+    except Exception:
+        logger.debug(
+            "Failed to load output.ref_limit, defaulting to 60",
+            exc_info=True,
+        )
+    return 60
+
+
+def _sorted_ref_entries(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Return *entries* sorted by (has non-empty summary desc, relevance desc).
+
+    Issue #11: the references context list is capped at ``ref_limit``, so the
+    sort MUST run on the full ``entries`` list BEFORE the ref dicts are built
+    (ref dicts drop ``relevance_score``/``summary``).  Title-only entries
+    (empty summary — e.g. ProductHunt) de-prioritize below summary-bearing
+    ones; the deterministic tiebreak is ``relevance_score`` desc.
+    """
+    return sorted(
+        entries,
+        key=lambda e: (
+            bool(str(e.get("summary") or "").strip()),
+            float(e.get("relevance_score") or 0.0),
+        ),
+        reverse=True,
+    )
+
+
+def _cap_product_key_findings(
+    key_findings: list[Any], references: list[dict[str, Any]]
+) -> list[Any]:
+    """Cap *key_findings* to ``min(MAX_FINDINGS, len(references))``.
+
+    Issue #11 (decision a): the enterprise ``selected N of M`` label renders
+    ``selected {{ key_findings|length }} of {{ references|length }}``, and the
+    PRIMARY synthesis ``key_findings`` is LLM-produced and unbounded (only the
+    §2.4 re-prompt is bounded by ``_DEDICATED_PRODUCT_PROMPT_MAX_FINDINGS``).
+    When ``ref_limit`` drops BELOW the findings count the label would invert
+    (``selected 9 of 8``).  Cap the findings in the render context to
+    ``min(12, len(references))`` so the label can never invert.
+    """
+    cap = min(_DEDICATED_PRODUCT_PROMPT_MAX_FINDINGS, len(references))
+    return list(key_findings[:cap])
+
+
 def _promote_eligible_drafts(
     store: KBStore,
     domains: list[str],
@@ -4046,13 +4167,34 @@ def _fill_premium_takeaway_fields(
     action_required: list[str] | None,
     entries: list[dict[str, Any]],
     domain: str,
+    *,
+    weak: bool = False,
 ) -> tuple[list[str], list[dict[str, Any]], list[str]]:
     """#357 — the premium per-takeaway slots must never render empty or
     ``_No ..._`` placeholder text.  A slot list that is missing/empty is
     filled with the full deterministic fallback; a non-empty list has its
     empty/placeholder-shaped elements replaced per-index.  The list length
     the LLM produced is preserved (no padding) so product-analysis
-    persistence stays faithful to the raw synthesis."""
+    persistence stays faithful to the raw synthesis.
+
+    #10 — the opt-in *weak* predicate (default False keeps the ``_usable``
+    behavior) additionally replaces weak-but-non-empty action lines: a bare
+    verb phrase like ``"Track AI model releases"`` (no concrete object, no
+    timeframe/trigger) is flagged by :func:`autoinfo.validation_matrix._is_weak_analysis`
+    and swapped per-index for the KB-derived deterministic action, so the
+    premium render ships WHAT/WHEN-shaped actions even when the LLM falls
+    back to shallow phrasing.  Scope: PREMIUM-ONLY — the enterprise
+    ``action_required`` is a flat ``- [ ]`` checkbox list whose shape
+    ``_so_what_substantive`` requires, so enterprise callers never pass
+    ``weak=True`` (their lever is the prompt-side WHAT/WHEN constraint).
+
+    The validation_matrix import is FUNCTION-LOCAL because
+    ``validation_matrix`` imports ``from autoinfo.output import …`` at
+    function scope (lines 124/1044/1084 of that module) — a module-level
+    ``output → validation_matrix`` import would be a hard cycle.
+    """
+    from autoinfo.validation_matrix import _is_weak_analysis  # noqa: PLC0415
+
     _impl, _risks, _actions = _deterministic_takeaway_fields(entries, domain)
 
     def _usable(value: Any) -> bool:
@@ -4062,6 +4204,16 @@ def _fill_premium_takeaway_fields(
             return False
         stripped = value.strip()
         return bool(stripped) and not _is_empty_placeholder(stripped)
+
+    def _is_weak(value: Any) -> bool:
+        """Weak when unusable, or (with *weak* enabled) a weak-shaped action."""
+        if not _usable(value):
+            return True
+        if not weak:
+            return False
+        if isinstance(value, dict):
+            return _is_weak_analysis(str(value.get("title") or ""))
+        return _is_weak_analysis(str(value))
 
     def _fill(
         values: list[Any] | None,
@@ -4073,11 +4225,11 @@ def _fill_premium_takeaway_fields(
             return [dict(v) for v in fallback] if is_dict else list(fallback)
         if is_dict:
             return [
-                dict(v) if isinstance(v, dict) and _usable(v) else dict(fallback[i])
+                dict(v) if isinstance(v, dict) and not _is_weak(v) else dict(fallback[i])
                 for i, v in enumerate(values[: len(fallback)])
             ]
         return [
-            (str(v).strip() if _usable(v) else fallback[i])
+            (str(v).strip() if not _is_weak(v) else fallback[i])
             for i, v in enumerate(values[: len(fallback)])
         ]
 
@@ -4089,7 +4241,10 @@ def _fill_premium_takeaway_fields(
 
 
 def _normalize_digest_product_context(
-    context: dict[str, Any], domain: str, product_family: str = "digest"
+    context: dict[str, Any],
+    domain: str,
+    product_family: str = "digest",
+    ref_limit: int | None = None,
 ) -> dict[str, Any]:
     """Normalize the digest context to the flat §2.1 product-template shape.
 
@@ -4195,6 +4350,9 @@ def _normalize_digest_product_context(
     # --- References derived from entries (report-path item shape) ----------
     # #325: derive the specific source label for entries whose stored
     # source_platform is a generic placeholder (pre-#323 'rss' etc.).
+    # #11: cap at ref_limit, sorted by (has summary, relevance) desc — the
+    # sort MUST run on the entries BEFORE the ref dicts drop summary/relevance.
+    _ref_limit = ref_limit if ref_limit is not None else _output_config_ref_limit()
     _src_configs = _get_domain_source_configs(domain)
     flat["references"] = [
         {
@@ -4206,9 +4364,21 @@ def _normalize_digest_product_context(
             ),
             "domain": e.get("domain", domain),
         }
-        for e in entries_list
-        if isinstance(e, dict)
+        for e in _sorted_ref_entries(
+            [e for e in entries_list if isinstance(e, dict)]
+        )[:_ref_limit]
     ]
+
+    # --- Enterprise/premium key_findings cap (issue #11, decision a) ------
+    # The enterprise-briefing template renders the selection-scope label
+    # ``selected {{ key_findings|length }} of {{ references|length }}``.  Cap
+    # the findings to min(12, len(references)) for the premium/enterprise
+    # families so a ref_limit below the findings count can never invert the
+    # label (``selected 9 of 8``).
+    if product_family in ("premium-briefing", "enterprise-briefing"):
+        flat["key_findings"] = _cap_product_key_findings(
+            flat["key_findings"], flat["references"]
+        )
 
     # --- Product-specific fields (todo 7), flattened generically ----------
     # List-shaped fields flow through as-is; string-shaped editorial fields
@@ -4304,6 +4474,7 @@ def generate_digest(
     max_items: int = 0,
     domains: list[str] | None = None,
     language: str = "",
+    ref_limit: int | None = None,
 ) -> str | DeliveryOutput:
     """Generate a digest of KB entries for *domain* over the given *period*.
 
@@ -4368,6 +4539,13 @@ def generate_digest(
         only entries whose detected ``language`` matches are included, so a
         digest never mixes languages (issue #309).  Empty (default) includes
         all languages as before.
+    ref_limit:
+        Optional maximum number of KB references to include in the rendered
+        product.  Defaults to ``output.ref_limit`` from the project config
+        (60).  Applied at the digest product-context build
+        (:func:`_normalize_digest_product_context`), sorted by (has non-empty
+        summary desc, ``relevance_score`` desc) — identical to the report
+        path (issue #11).
 
     Returns
     -------
@@ -4725,7 +4903,7 @@ def generate_digest(
     elif product_template is not None:
         product_type = digest_family
         pt_context = _normalize_digest_product_context(
-            context, domain, product_family=digest_family
+            context, domain, product_family=digest_family, ref_limit=ref_limit,
         )
         rendered = product_template.render(product_type, variant, pt_context)
         rendered = _clean_skeleton_placeholders(rendered)
@@ -4909,6 +5087,7 @@ def generate_report(
     domains: list[str] | None = None,
     llm_config: Config | None = None,
     language: str = "",
+    ref_limit: int | None = None,
 ) -> str | DeliveryOutput:
     """Generate a structured report for the given *domain* (or *domains*).
 
@@ -4972,6 +5151,14 @@ def generate_report(
         A special cross-domain LLM prompt encourages synthesis across
         domains.  When ``None`` or has fewer than 2 entries, the existing
         single-domain behavior is used (backward compatible).
+    ref_limit:
+        Optional maximum number of KB references to include in the rendered
+        product.  Defaults to ``output.ref_limit`` from the project config
+        (60).  References are sorted by (has non-empty summary desc,
+        ``relevance_score`` desc) and capped at *ref_limit* at the
+        context-build site, so title-only entries (empty summary, e.g.
+        ProductHunt) de-prioritize.  All render formats (markdown/html/json/
+        agent/audio/epub/video) are capped uniformly (issue #11).
 
     Returns
     -------
@@ -5181,6 +5368,11 @@ def generate_report(
     # -- Build reference list from entries --------------------------------
     # #325: derive the specific source label for entries whose stored
     # source_platform is a generic placeholder (pre-#323 'rss' etc.).
+    # #11: cap the references at ref_limit (default output.ref_limit = 60).
+    # The sort MUST run on the FULL entries list BEFORE the ref dicts are
+    # built — the ref dicts drop relevance_score/summary, so capping on the
+    # ref dicts would silently lose the (has summary, relevance) ordering.
+    _ref_limit = ref_limit if ref_limit is not None else _output_config_ref_limit()
     _src_configs = _get_domain_source_configs(domain)
     references = [
         {
@@ -5192,7 +5384,7 @@ def generate_report(
             ),
             "domain": e.get("domain", domain),
         }
-        for e in entries
+        for e in _sorted_ref_entries(entries)[:_ref_limit]
     ]
 
     # -- Thematic grouping via LLM ----------------------------------------
@@ -5343,6 +5535,18 @@ def generate_report(
         implications, risks, action_required = _fill_premium_takeaway_fields(
             implications, risks, action_required, entries, domain,
         )
+
+    # -- Enterprise/premium key_findings cap (issue #11, decision a) --------
+    # The enterprise-briefing template renders the selection-scope label
+    # ``selected {{ key_findings|length }} of {{ references|length }}``.  The
+    # PRIMARY synthesis key_findings is LLM-unbounded (only the §2.4 re-prompt
+    # is bounded by _DEDICATED_PRODUCT_PROMPT_MAX_FINDINGS), so a ref_limit
+    # below the findings count would invert the label.  Cap the findings in
+    # the report data to min(12, len(references)) for the families that
+    # render the label (premium/enterprise), leaving the summary + findings
+    # count consistent.
+    if report_family in ("premium-briefing", "enterprise-briefing"):
+        key_findings = _cap_product_key_findings(key_findings, references)
 
     # -- Build report data -------------------------------------------------
     # #325: every section item carries the derived source label.  When the
@@ -6107,26 +6311,68 @@ def _keyword_group_entries(
 
 
 def _load_keyword_topics(domain: str) -> list[str]:
-    """Load non-deprecated topic keywords for *domain* from ``_keywords.yaml``."""
+    """Load non-deprecated topic keywords for *domain*.
+
+    Reads ``knowledge/<domain>/_keywords.yaml`` (auto-discovery keywords)
+    and MERGES the demo-domain seed ``src/autoinfo/data/domains/<domain>/
+    sources.yaml`` ``topics[*].keywords`` into the result (issue #9).
+
+    The merge is UNCONDITIONAL — not a fallback-when-empty: the runtime
+    keyword table can hold 80+ usable topics that still never match English
+    titles (auto-discovery noise — CJK tokens + ASCII n-gram fragments), so a
+    "fallback only when none usable" branch would silently no-op on exactly
+    the domains that need the curated English seed.  Seed keywords absent
+    from the runtime table are appended (deduped); entries that already exist
+    are not duplicated.
+    """
     if not domain:
         return []
+    topics: list[str] = []
     path = Path("knowledge") / domain / "_keywords.yaml"
-    if not path.is_file():
+    if path.is_file():
+        try:
+            raw: dict[str, Any] = yaml.safe_load(
+                path.read_text(encoding="utf-8")
+            ) or {}
+        except Exception as exc:
+            logger.warning("Failed to read keyword file %s: %s", path, exc)
+            raw = {}
+        kw_map: dict[str, Any] = raw.get("keywords", {}) or {}
+        for keyword, data in kw_map.items():
+            if isinstance(data, dict) and data.get("state") == "deprecated":
+                continue
+            topics.append(keyword)
+
+    seen = set(topics)
+    for seed_keyword in _seed_topic_keywords(domain):
+        if seed_keyword not in seen:
+            seen.add(seed_keyword)
+            topics.append(seed_keyword)
+    return topics
+
+
+def _seed_topic_keywords(domain: str) -> list[str]:
+    """Curated English topic keywords from the demo-domain seed (issue #9).
+
+    Reads ``topics[*].keywords`` from ``src/autoinfo/data/domains/<domain>/
+    sources.yaml`` — the same seed ``init`` uses to scaffold a domain.  An
+    absent/unreadable seed yields ``[]`` so the runtime keyword table alone
+    drives grouping.
+    """
+    seed_path = _DEMO_DOMAINS_DIR / domain / "sources.yaml"
+    if not seed_path.is_file():
         return []
     try:
-        raw: dict[str, Any] = yaml.safe_load(
-            path.read_text(encoding="utf-8")
-        ) or {}
-    except Exception as exc:
-        logger.warning("Failed to read keyword file %s: %s", path, exc)
+        with open(seed_path, encoding="utf-8") as f:
+            seed = yaml.safe_load(f) or {}
+    except Exception:
         return []
-    kw_map: dict[str, Any] = raw.get("keywords", {}) or {}
-    topics: list[str] = []
-    for keyword, data in kw_map.items():
-        if isinstance(data, dict) and data.get("state") == "deprecated":
-            continue
-        topics.append(keyword)
-    return topics
+    keywords: list[str] = []
+    for topic in seed.get("topics") or []:
+        for kw in (topic.get("keywords") or []):
+            if isinstance(kw, str) and kw.strip():
+                keywords.append(kw.strip())
+    return keywords
 
 
 def _match_keyword(
@@ -6150,8 +6396,16 @@ def _normalize_text(value: str) -> str:
 
 
 def _normalize_theme_text(value: str) -> str:
-    """Normalize a theme name for exact-name merging across batches."""
-    return _normalize_text(str(value))
+    """Normalize a theme name for exact-name merging across batches.
+
+    Applies the ``_THEME_SYNONYMS`` map first (so synonym spellings collapse
+    onto one canonical key, e.g. ``Year``/``The Year``) and then the shared
+    punctuation/whitespace normalization.  Used for both the exact-name pass
+    and the Jaccard near-dup pass in :func:`_merge_theme_groups`, so synonym
+    variants merge BEFORE the generic-label blocklist runs.
+    """
+    text = _THEME_SYNONYMS.get(str(value).strip().lower(), str(value))
+    return _normalize_text(text)
 
 
 def _merge_theme_groups(
@@ -6238,7 +6492,73 @@ def _merge_theme_groups(
                 rest.append(other)
         final.append(group)
         pending = rest
-    return final
+
+    # -- Generic-label blocklist pass (issue #9) ----------------------------
+    # After the exact-name and near-dup passes, drop any group whose
+    # normalized theme is a bare generic word (``new`` / ``year`` /
+    # ``user`` / ... — produced by auto-discovery keyword fragments).  Each
+    # dropped group's entries are reassigned to the nearest surviving group
+    # (by Jaccard on normalized tokens) or to "Additional Topics", so no
+    # entry is ever lost.  "General" / "Additional Topics" are structural
+    # catch-alls and deliberately exempt.
+    survivors = [
+        g for g in final
+        if _normalize_theme_text(g["theme"]) not in _GENERIC_THEME_LABELS
+    ]
+    blocklisted = [
+        g for g in final
+        if _normalize_theme_text(g["theme"]) in _GENERIC_THEME_LABELS
+    ]
+    if not blocklisted:
+        return survivors
+
+    by_norm: dict[str, dict[str, Any]] = {}
+    for g in survivors:
+        nt = _normalize_theme_text(g["theme"])
+        by_norm.setdefault(nt, g)
+    survivor_pairs: list[tuple[set[str], dict[str, Any]]] = []
+    for g in survivors:
+        survivor_pairs.append((
+            set(_normalize_theme_text(g["theme"]).split()),
+            g,
+        ))
+
+    for g in blocklisted:
+        g_tokens = set(_normalize_theme_text(g["theme"]).split())
+        best: dict[str, Any] | None = None
+        best_score = 0.0
+        for tokens, candidate in survivor_pairs:
+            if not tokens:
+                continue
+            union = g_tokens | tokens
+            if not union:
+                continue
+            score = len(g_tokens & tokens) / len(union)
+            if score > best_score:
+                best_score = score
+                best = candidate
+        target = best if best_score >= 0.3 else None
+        if target is None:
+            target = next(
+                (c for c in survivors if c["theme"] == "Additional Topics"),
+                None,
+            )
+        if target is None:
+            survivors.append({
+                "theme": "Additional Topics",
+                "description": "Other notable developments across the tracked sources.",
+                "entries": [],
+            })
+            target = survivors[-1]
+        seen = {e.get("entry_id", "") for e in target["entries"] if e.get("entry_id")}
+        for e in g["entries"]:
+            eid = e.get("entry_id", "")
+            if eid and eid in seen:
+                continue
+            if eid:
+                seen.add(eid)
+            target["entries"].append(e)
+    return survivors
 
 
 def _ensure_all_entries_grouped(
@@ -7642,7 +7962,16 @@ _REPORT_PRODUCT_BASE_SECTIONS = (
     "(index-aligned with Key Findings; each action MUST specify WHO does it, "
     "WHAT specifically, and a WHEN timeline — e.g. 'CMO: ship the Q3 pricing "
     "experiment to 10% of enterprise customers by 2026-09-15'. Never a bare "
-    "'conduct market analysis'.)\n\n"
+    "'conduct market analysis'.)\n"
+    "Each action MUST also name a concrete object (WHICH entity, product, "
+    "model, company, or metric the action targets) and a timeframe or trigger "
+    "(WHEN it happens — a date, a milestone, or a real-world trigger event). "
+    "A bare single-line verb like 'Track AI model releases', 'Monitor "
+    "developments', or 'Reassess the market' carries no object and no WHEN — "
+    "it is forbidden.  Prefer e.g. 'Track OpenAI GPT-5 benchmark results "
+    "against internal evaluation needs by 2026-09-30' or 'Monitor Stripe "
+    "latency SLO breaches; reassess the primary provider when p95 exceeds "
+    "800ms'.\n\n"
     "The Executive Summary's opening coverage sentence MUST name exactly the "
     "number of Key Findings you detail below — e.g. \"This briefing details N "
     "selected items from the period.\" Never state a coverage count larger "

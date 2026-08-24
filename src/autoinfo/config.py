@@ -446,10 +446,17 @@ class OutputConfig:
         ``[curated]`` / ``[fresh]`` badge per entry based on its
         ``source_tier`` (03-Wiki vs 02-Draft).  Disable via
         ``output.source_tier_badge: false`` in config.yaml.
+    ref_limit:
+        Maximum number of KB references rendered in a digest/report
+        (default 60, issue #11).  References are sorted by (has non-empty
+        summary desc, ``relevance_score`` desc) and capped at this limit at
+        the context-build site.  Override per call via the ``ref_limit``
+        parameter on ``generate_report`` / ``generate_digest``.
     """
 
     pdf_timeout: float = 120.0
     source_tier_badge: bool = True
+    ref_limit: int = 60
 
 
 @dataclass
@@ -857,6 +864,7 @@ default_language=str(d.get("default_language", "")),
         output=OutputConfig(
             pdf_timeout=float(output_raw.get("pdf_timeout", 120.0)),
             source_tier_badge=_as_bool(output_raw.get("source_tier_badge", True)),
+            ref_limit=int(output_raw.get("ref_limit", 60)),
         ),
     )
 
@@ -1092,6 +1100,11 @@ def config_to_dict(config: Config) -> dict[str, Any]:
     raw["multi_user"] = {
         "enabled": config.multi_user.enabled,
         "default_user_id": config.multi_user.default_user_id,
+    }
+    raw["output"] = {
+        "pdf_timeout": config.output.pdf_timeout,
+        "source_tier_badge": config.output.source_tier_badge,
+        "ref_limit": config.output.ref_limit,
     }
 
     # --- Serialize cost_rates ---

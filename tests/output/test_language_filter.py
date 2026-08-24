@@ -7,6 +7,7 @@ whose detected ``language`` doesn't match — no zh/en interleave.
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 from unittest.mock import MagicMock, patch
 
@@ -14,6 +15,7 @@ from autoinfo.output import (
     DeliveryOutput,
     _filter_entries_by_language,
     _normalize_lang,
+    _resolve_effective_language,
     generate_digest,
     generate_report,
 )
@@ -122,6 +124,42 @@ _ZHRISH_ENTRIES = [
 ]
 
 
+# ai-commercial today: 6 zh-cn + 1 vi entries, ZERO en (issue #8) — the "en"
+# seed filter drops every one of them.
+_ZH_ONLY_ENTRIES = [
+    {
+        "entry_id": "zh-002",
+        "title": "中文 AI 融资报道",
+        "domain": "ai-commercial",
+        "tier": "01-Raw",
+        "source_url": "https://36kr.com/zh/2",
+        "source_type": "web",
+        "source_platform": "web",
+        "language": "zh",
+        "collected_at": "2026-08-17",
+        "summary": "中文摘要内容",
+        "tags": "[]",
+        "quality_tier": 1,
+        "relevance_score": 82.0,
+    },
+    {
+        "entry_id": "vi-001",
+        "title": "Báo cáo AI thương mại",
+        "domain": "ai-commercial",
+        "tier": "01-Raw",
+        "source_url": "https://example.com/vi/1",
+        "source_type": "web",
+        "source_platform": "web",
+        "language": "vi",
+        "collected_at": "2026-08-17",
+        "summary": "Tóm tắt tiếng Việt",
+        "tags": "[]",
+        "quality_tier": 1,
+        "relevance_score": 78.0,
+    },
+]
+
+
 class TestDigestLanguageFilter:
     @patch("autoinfo.output.KBStore")
     @patch("autoinfo.output._call_llm_for_digest")
@@ -176,3 +214,164 @@ class TestReportLanguageFilter:
         ))
         assert "中文 IVF 突破" in body
         assert "English IVF breakthrough" not in body
+
+
+# ---------------------------------------------------------------------------
+# Seed fallback for _resolve_effective_language (issue #8)
+# ---------------------------------------------------------------------------
+# A project config that EXISTS and declares the ai-commercial domain WITHOUT
+# a ``default_language`` key must seed "en" (from the demo-domain sources.yaml
+# at line 8).  The seed fallback mirrors the #319 exclude_keywords pattern and
+# engages ONLY when a config file exists but the domain block lacks the key;
+# a project with NO config file stays ``""`` (no filtering, backward
+# compatible).
+
+
+def _write_tmp_config(tmp_path: Path, domain_block: str) -> Path:
+    cfg_path = tmp_path / "config.yaml"
+    cfg_path.write_text(f"domains:\n{domain_block}", encoding="utf-8")
+    return cfg_path
+
+
+class TestResolveEffectiveLanguageSeed:
+    # --- (a) DISCRIMINATING case: config-present, key-absent -> seed ---------
+    def test_config_present_key_absent_uses_seed(self, tmp_path: Path) -> None:
+        cfg_path = _write_tmp_config(
+            tmp_path, "  - name: ai-commercial\n    active: true\n"
+        )
+        with patch("autoinfo.output.get_config_path", return_value=cfg_path):
+            assert _resolve_effective_language("", "ai-commercial") == "en"
+
+    # --- (b) explicit-empty wins over the seed -------------------------------
+    def test_explicit_empty_language_wins_over_seed(self, tmp_path: Path) -> None:
+        cfg_path = _write_tmp_config(
+            tmp_path,
+            "  - name: ai-commercial\n    default_language: \"\"\n    active: true\n",
+        )
+        with patch("autoinfo.output.get_config_path", return_value=cfg_path):
+            assert _resolve_effective_language("", "ai-commercial") == ""
+
+    # --- (c) explicit zh wins ------------------------------------------------
+    def test_explicit_zh_wins(self, tmp_path: Path) -> None:
+        cfg_path = _write_tmp_config(
+            tmp_path,
+            "  - name: ai-commercial\n    default_language: zh\n    active: true\n",
+        )
+        with patch("autoinfo.output.get_config_path", return_value=cfg_path):
+            assert _resolve_effective_language("", "ai-commercial") == "zh"
+
+    # --- (d) cross-domain returns "" before any config/seed read -------------
+    def test_cross_domain_never_seeds(self, tmp_path: Path) -> None:
+        cfg_path = _write_tmp_config(
+            tmp_path, "  - name: ai-commercial\n    active: true\n"
+        )
+        with patch("autoinfo.output.get_config_path", return_value=cfg_path):
+            assert (
+                _resolve_effective_language("", "ai-commercial", cross_domain=True)
+                == ""
+            )
+
+    # --- (e) no config file at all -> "" (no seeding on a missing config) ----
+    def test_no_config_file_returns_empty(self) -> None:
+        with patch("autoinfo.output.get_config_path", return_value=None):
+            assert _resolve_effective_language("", "ai-commercial") == ""
+
+    # --- (f) unknown domain, config present, key absent -> no seed -----------
+    def test_unknown_domain_no_seed(self, tmp_path: Path) -> None:
+        cfg_path = _write_tmp_config(
+            tmp_path, "  - name: ai-commercial\n    active: true\n"
+        )
+        with patch("autoinfo.output.get_config_path", return_value=cfg_path):
+            assert _resolve_effective_language("", "unknown-domain") == ""
+
+
+# ---------------------------------------------------------------------------
+# ai-commercial empty-after-filter enforcement (issue #8)
+# ---------------------------------------------------------------------------
+# INTENDED enforcement decision: the ai-commercial domain on the current KB
+# (6 zh-cn + 1 vi entries, zero en) will come out EMPTY once the "en" seed
+# filter engages — this is single-language enforcement per the issue's own
+# acceptance, NOT a regression.  Two pinned behaviors:
+#   1. Unit: _filter_entries_by_language(zh_entries, "en") == [].
+#   2. Full-path generate_report with zero kept entries:
+#      - WITHOUT delivery_gate_configs (the CLI/MCP default): the
+#        ``if not entries`` branch returns the empty-shell STRING — the
+#        _apply_min_content_guard call sits inside the
+#        ``delivery_gate_configs is not None`` conditional, so it is skipped
+#        and the rendered empty shell is returned.
+#      - WITH delivery_gate_configs={"D1": {"action": "block"}}: the
+#        DeliveryOutput path runs _apply_min_content_guard, which sets
+#        delivery_blocked=True (0 usable entries for a PROCESSED product).
+# Both _group_by_theme and _generate_executive_summary are stubbed so no live
+# LLM call ever happens (the D1 gate is a deterministic completeness check and
+# the product judge is skipped once the min-content guard blocks, and fails
+# open without an LLM key anyway).
+
+
+class TestAiCommercialEmptyAfterFilter:
+    def test_zh_entries_filtered_by_en_seed_are_dropped(self) -> None:
+        zh_only_entries = [
+            {"language": "zh", "title": "中文条目"},
+            {"language": "zh-cn", "title": "另一中文条目"},
+            {"language": "vi", "title": "tiếng Việt"},
+        ]
+        assert _filter_entries_by_language(zh_only_entries, "en") == []
+
+    # --- Full-path blocked behavior (delivery_gate_configs passed) ----------
+    @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._group_by_theme")
+    @patch("autoinfo.output._generate_executive_summary")
+    def test_full_path_zero_kept_with_gates_blocks(
+        self, mock_synthesis: MagicMock, mock_group: MagicMock, mock_kb: MagicMock,
+        tmp_path: Path,
+    ) -> None:
+        # zh/vi-only KB (zero en) + a config file that EXISTS and declares
+        # ai-commercial WITHOUT a default_language key: the seed "en" filter
+        # drops every entry, so the empty-entries branch runs.  With gates
+        # passed, _apply_min_content_guard forces delivery_blocked=True.
+        cfg_path = _write_tmp_config(
+            tmp_path, "  - name: ai-commercial\n    active: true\n"
+        )
+        mock_kb.return_value = _digest_mock_store(_ZH_ONLY_ENTRIES)
+        mock_group.return_value = []
+        mock_synthesis.return_value = "Overview."
+        with patch("autoinfo.output.get_config_path", return_value=cfg_path):
+            result = generate_report(
+                domain="ai-commercial",
+                period="weekly",
+                format="markdown",
+                delivery_gate_configs={"D1": {"action": "block"}},
+            )
+        assert isinstance(result, DeliveryOutput)
+        assert result.delivery_blocked is True
+        assert any("min-content guard" in w for w in result.warnings)
+
+    # --- Full-path empty-shell behavior (no gates — CLI/MCP default) --------
+    @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._group_by_theme")
+    @patch("autoinfo.output._generate_executive_summary")
+    def test_full_path_zero_kept_no_gates_returns_empty_shell(
+        self, mock_synthesis: MagicMock, mock_group: MagicMock, mock_kb: MagicMock,
+        tmp_path: Path,
+    ) -> None:
+        # Same seed-en scenario, but WITHOUT delivery_gate_configs (the CLI/MCP
+        # default): the empty-entries branch returns the rendered empty-shell
+        # string — _apply_min_content_guard is only invoked when gates are
+        # passed (the guard call sits inside the ``delivery_gate_configs is
+        # not None`` conditional in generate_report).
+        cfg_path = _write_tmp_config(
+            tmp_path, "  - name: ai-commercial\n    active: true\n"
+        )
+        mock_kb.return_value = _digest_mock_store(_ZH_ONLY_ENTRIES)
+        mock_group.return_value = []
+        mock_synthesis.return_value = "Overview."
+        with patch("autoinfo.output.get_config_path", return_value=cfg_path):
+            body = generate_report(
+                domain="ai-commercial",
+                period="weekly",
+                format="markdown",
+            )
+        assert isinstance(body, str)
+        assert "This edition has no curated items yet." in body
+        assert "中文" not in body
+        assert "Overview." not in body
