@@ -340,6 +340,25 @@ _BY_YEAR_RE = re.compile(
 )
 # A year range "2025-2030" / "2027–2030" is inherently forward-looking.
 _YEAR_RANGE_RE = re.compile(r"\b(?:18|19|20)\d{2}\s*[-–]\s*(?:18|19|20)\d{2}\b")
+# #351 V5 — a FUTURE year is also legitimate when it stands as part of a
+# title / list / guide / ranking / survey / publication NAME ("The Princeton
+# Review's 2027 Best Colleges guide", "The 2027 Best Colleges guide", "the
+# 2027 report").  The year must sit inside a name-shaped run: an optional
+# possessive organization/publication name BEFORE the year ("Review's 2027")
+# and a recognized title noun right AFTER it.  Kept deliberately NARROW — the
+# name noun must directly follow the year, so bare factual claims ("In 2031,
+# adoption tripled") never match.
+_NAMED_YEAR_RE = re.compile(
+    r"\b(?:[A-Z][A-Za-z0-9&'.-]+\s+){0,2}"
+    r"(?:[A-Z][A-Za-z0-9&'.-]+(?:'s|’s)\s+)?"
+    r"(?:(?:January|February|March|April|May|June|July|August|September|"
+    r"October|November|December)\s+)?"
+    r"(?:18|19|20)\d{2}\s+"
+    r"(?:Best Colleges|Best Schools|Best Companies|Best Employers|"
+    r"Best Internships|guide|guides|survey|surveys|ranking|rankings|"
+    r"report|reports|list|lists|index|edition|directory|almanac)\b",
+    re.IGNORECASE,
+)
 # Fenced code blocks are never acceptable in a delivered product.
 _FENCE_RE = re.compile(r"```[\s\S]*?```")
 # API-key / token / secret prefix shapes: sk- (OpenAI), AIza (Google),
@@ -614,6 +633,10 @@ def _no_year_hallucination(text: str, domain: str, product: str) -> AssertionRes
         references (e.g. ``founded in 1917``) are plausible in financial
         products, so the report card surfaces them for a human to judge rather
         than auto-failing them as P0.
+    A future year that stands as part of a title/list/guide/ranking/
+    publication NAME (e.g. "The Princeton Review's 2027 Best Colleges guide",
+    "The 2027 Best Colleges guide") is a legitimate reference, not a
+    hallucination, and does NOT fire (#351 V5).
     Plausible prose years (1950..current year) and forward-looking projections
     pass.  The References section (from the ``## References`` heading) is
     EXCLUDED — legitimate citations carry old years.  URL-embedded 4-digit
@@ -624,7 +647,11 @@ def _no_year_hallucination(text: str, domain: str, product: str) -> AssertionRes
     offending: list[str] = []
     for m in _MONTH_YEAR_RE.finditer(body):
         year = int(m.group("y"))
-        if year > _current_year() and not _is_forward_looking(body, m):
+        if (
+            year > _current_year()
+            and not _is_forward_looking(body, m)
+            and not _is_named_year(body, m)
+        ):
             offending.append(f"future bare month-year {m.group(0)!r} ({year})")
         elif year < _MIN_PLAUSIBLE_YEAR:
             offending.append(
@@ -632,7 +659,11 @@ def _no_year_hallucination(text: str, domain: str, product: str) -> AssertionRes
             )
     for m in _YEAR_RE.finditer(body):
         year = int(m.group(0))
-        if year > _current_year() and not _is_forward_looking(body, m):
+        if (
+            year > _current_year()
+            and not _is_forward_looking(body, m)
+            and not _is_named_year(body, m)
+        ):
             offending.append(f"future year {year}")
         elif year < _MIN_PLAUSIBLE_YEAR:
             offending.append(f"distant-past year {year} — human review")
@@ -657,6 +688,25 @@ def _is_forward_looking(text: str, m: re.Match[str]) -> bool:
     if _YEAR_RANGE_RE.search(line):
         return True
     return bool(_BY_YEAR_RE.search(line) or _FORWARD_LOOKING_RE.search(line))
+
+
+def _is_named_year(text: str, m: re.Match[str]) -> bool:
+    """True when the matched (future) year sits inside a title/list/guide/
+    ranking/survey/publication NAME on the same line (see ``_NAMED_YEAR_RE``)
+    — e.g. "The Princeton Review's 2027 Best Colleges guide", "The 2027 Best
+    Colleges guide".  Such a publishing year is a legitimate reference, not a
+    hallucination."""
+    line_start = text.rfind("\n", 0, m.start()) + 1
+    line_end = text.find("\n", m.end())
+    if line_end == -1:
+        line_end = len(text)
+    line = text[line_start:line_end]
+    lo = m.start() - line_start
+    hi = m.end() - line_start
+    return any(
+        named.start() <= lo and hi <= named.end()
+        for named in _NAMED_YEAR_RE.finditer(line)
+    )
 
 
 def _no_code_or_key_leak(text: str, domain: str, product: str) -> AssertionResult:

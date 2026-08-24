@@ -4,8 +4,9 @@
 Locks the behavior of ``scripts/scenario_outcome_audit.py`` so the D-工-5
 evidence stays deterministic:
 
-1. All 116 scenarios (65 functional + 51 regression) are parsed with 446
-   steps.
+1. All 116 scenarios (65 functional + 51 regression) are parsed with 447
+   steps (446 + the #351 V5 step-5 append to
+   ``regression-351-year-hallucination-tuning``).
 2. **Outcome grading** — >= 95% of steps assert an explicit ``success``
    key (grade the outcome envelope, not the path).
 3. **Error-path depth** — every error step pins ``error_code``; the
@@ -51,7 +52,9 @@ def test_all_116_scenarios_parsed(result: dict[str, Any]) -> None:
 
 
 def test_total_steps(result):
-    assert result["summary"]["total_steps"] == 446
+    # 447 = 446 + the #351 V5 step-5 append
+    # (regression-351-year-hallucination-tuning.yaml, todo 7).
+    assert result["summary"]["total_steps"] == 447
 
 
 def test_outcome_grading_ratio_high(result):
