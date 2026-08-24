@@ -252,4 +252,37 @@ If a source is blocked, document it here with the blocking reason, any alternati
 
 ---
 
-*Last updated: 2026-07-31. This is a living document — sources change their API policies and pricing over time.*
+## Mainland-CN reachability pass (2026-08-24, issues #6/#7)
+
+Live 3-level probe (DNS → TCP:443 → HTTP) from a mainland-CN network
+(2026-08-24) over all 13 demo domains, using the collector's real bot UA
+(`AutoInfo/1.8`). Key insight: **browser-UA 403s are false positives** — the
+collector's bot UA gets 200 on microsoft-newsroom, wired, crunchbase-news,
+HN-firebaseio, SEC-EDGAR. The genuinely unreachable set is small and is now
+`enabled: false` in the domain configs, with verified-reachable replacements:
+
+| Domain | Disabled (reason) | Added replacement (verified entries) |
+|--------|-------------------|--------------------------------------|
+| financial-news | reuters-business (404), ft-alphaville (GFW), businesswire (0 entries), prnewswire (404), nvidia-newsroom (bozo) | WSJ RSS (40), MW RSS (10) |
+| general-news | google-news-rss / nyt / medium×3 / the-atlantic / time (GFW), mastodon / bluesky (GFW), gdelt (429) | france24 (23), NPR (10), Ars (20), Verge (10), Engadget (20), SpaceNews (19) |
+| tech-ai-developer | — | HN Algolia API (JSON), GitHub Blog (10) |
+| online-video | youtube-mkbhd (GFW), apple-music (dead 404) | Bilibili popular (JSON), TheWrap (10) |
+| gaming | polygon (conn-reset), yystv-via-google-news (GFW) | GameSpot (30), PC Gamer (50), Eurogamer (100) |
+| b2b | a16z (404) | SaaStr (10) |
+| online-education | edsurge (conn refused), class-central (403), khan-academy (bozo), dedao / ncpssd (rsshub.app GFW) | — (documented, no verified replacement) |
+| retail | ebrun-via-google-news (GFW) | — |
+| legal-compliance | iapp-privacy (404), law-com (404) | — |
+
+Key findings:
+- **主站被墙 ≠ RSS 不可达**: WSJ/MW main sites are GFW-blocked but their feed
+  domains (`feeds.content.dowjones.io`, `feeds.marketwatch.com`) are reachable —
+  swap the collection URL, not the source.
+- **反爬 ≠ 换源**: several 403s vanish when probing with the collector's actual
+  bot UA instead of a browser UA.
+- Disabled sources remain in the config (`enabled: false` + reason comment) so
+  keyed/geo-specific setups can re-enable them; `required_sources` in
+  `docs/dev/specs/end-user-matrix.yaml` tracks the 78 enabled sources.
+
+---
+
+*Last updated: 2026-08-24. This is a living document — sources change their API policies and pricing over time.*

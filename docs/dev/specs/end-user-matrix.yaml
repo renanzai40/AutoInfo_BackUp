@@ -987,17 +987,15 @@ llm_gated_products:
 # (89 sources across 13 domains). Closing a gap = run `collect` for that domain,
 # then re-render the matrix — no config change required.
 required_sources:
-  - {domain: medical-research, source: pubmed}
-  - {domain: medical-research, source: semantic-scholar}
-  - {domain: medical-research, source: arXiv}
-  - {domain: medical-research, source: CrossRef}
-  - {domain: medical-research, source: dblp}
-  - {domain: medical-research, source: openalex}
-  - {domain: medical-research, source: uspto}
   - {domain: ai-commercial, source: techcrunch}
   - {domain: ai-commercial, source: producthunt}
   - {domain: ai-commercial, source: Crunchbase}
   - {domain: ai-commercial, source: 36kr}
+  - {domain: b2b, source: producthunt}
+  - {domain: b2b, source: techcrunch}
+  - {domain: b2b, source: crunchbase-news}
+  - {domain: b2b, source: hackernews}
+  - {domain: b2b, source: saastr}
   - {domain: financial-intelligence, source: Alpha Vantage}
   - {domain: financial-intelligence, source: FRED}
   - {domain: financial-intelligence, source: Finnhub}
@@ -1007,77 +1005,66 @@ required_sources:
   - {domain: financial-intelligence, source: Quandl/Nasdaq Data Link}
   - {domain: financial-intelligence, source: CNBC Investing}
   - {domain: financial-intelligence, source: TheStreet}
+  - {domain: financial-intelligence, source: MarketWatch Markets (DJ)}
+  - {domain: financial-news, source: cnbc}
+  - {domain: financial-news, source: seeking-alpha}
+  - {domain: financial-news, source: microsoft-newsroom}
+  - {domain: financial-news, source: WSJ RSS}
+  - {domain: financial-news, source: MW RSS}
+  - {domain: gaming, source: ign-rss}
+  - {domain: gaming, source: gamesindustry-biz}
+  - {domain: gaming, source: gcores-rss}
+  - {domain: gaming, source: gamespot}
+  - {domain: gaming, source: pc-gamer}
+  - {domain: gaming, source: eurogamer}
+  - {domain: general-news, source: guardian-open-platform}
+  - {domain: general-news, source: ap-api}
+  - {domain: general-news, source: zhihu-daily}
+  - {domain: general-news, source: wechat2rss}
+  - {domain: general-news, source: wired}
+  - {domain: general-news, source: france24}
+  - {domain: general-news, source: npr-news}
+  - {domain: general-news, source: ars-technica}
+  - {domain: general-news, source: the-verge}
+  - {domain: general-news, source: engadget}
+  - {domain: general-news, source: spacenews}
+  - {domain: language-learning, source: project-gutenberg}
+  - {domain: language-learning, source: news-in-levels}
+  - {domain: language-learning, source: commonlit}
+  - {domain: legal-compliance, source: scotusblog}
+  - {domain: legal-compliance, source: oyez}
+  - {domain: legal-compliance, source: gdpr-eu}
+  - {domain: medical-research, source: pubmed}
+  - {domain: medical-research, source: semantic-scholar}
+  - {domain: medical-research, source: arXiv}
+  - {domain: medical-research, source: CrossRef}
+  - {domain: medical-research, source: dblp}
+  - {domain: medical-research, source: openalex}
+  - {domain: medical-research, source: uspto}
+  - {domain: online-education, source: coursera-blog}
+  - {domain: online-education, source: open-culture}
+  - {domain: online-education, source: coursera}
+  - {domain: online-education, source: wanfang}
+  - {domain: online-video, source: variety}
+  - {domain: online-video, source: hollywood-reporter}
+  - {domain: online-video, source: netflix-tech-blog}
+  - {domain: online-video, source: pitchfork}
+  - {domain: online-video, source: billboard}
+  - {domain: online-video, source: bilibili-popular}
+  - {domain: online-video, source: thewrap}
+  - {domain: retail, source: retail-dive}
+  - {domain: retail, source: modern-retail}
+  - {domain: retail, source: shopify-news}
+  - {domain: retail, source: digiday}
   - {domain: tech-ai-developer, source: GitHub Trending}
   - {domain: tech-ai-developer, source: HackerNews API}
   - {domain: tech-ai-developer, source: Substack RSS (tech) — Pragmatic Engineer}
   - {domain: tech-ai-developer, source: Stack Exchange}
   - {domain: tech-ai-developer, source: ProductHunt}
   - {domain: tech-ai-developer, source: Reddit}
-  - {domain: tech-ai-developer, source: Spotify AI Podcasts}
   - {domain: tech-ai-developer, source: Bilibili (B站)}
-  - {domain: language-learning, source: project-gutenberg}
-  - {domain: language-learning, source: news-in-levels}
-  - {domain: language-learning, source: commonlit}
-  - {domain: online-video, source: youtube-mkbhd}
-  - {domain: online-video, source: variety}
-  - {domain: online-video, source: hollywood-reporter}
-  - {domain: online-video, source: netflix-tech-blog}
-  - {domain: online-video, source: apple-music}
-  - {domain: online-video, source: pitchfork}
-  - {domain: online-video, source: billboard}
-  - {domain: financial-news, source: reuters-business}
-  - {domain: financial-news, source: cnbc}
-  - {domain: financial-news, source: ft-alphaville}
-  - {domain: financial-news, source: seeking-alpha}
-  - {domain: financial-news, source: businesswire-technology}
-  - {domain: financial-news, source: prnewswire-financial-services}
-  - {domain: financial-news, source: nvidia-newsroom}
-  - {domain: financial-news, source: microsoft-newsroom}
-  - {domain: online-education, source: coursera-blog}
-  - {domain: online-education, source: edsurge}
-  - {domain: online-education, source: class-central}
-  - {domain: online-education, source: khan-academy}
-  - {domain: online-education, source: open-culture}
-  - {domain: online-education, source: dedao}
-  - {domain: online-education, source: coursera}
-  - {domain: online-education, source: ncpssd}
-  - {domain: online-education, source: wanfang}
-  - {domain: legal-compliance, source: scotusblog}
-  - {domain: legal-compliance, source: iapp-privacy}
-  - {domain: legal-compliance, source: law-com}
-  - {domain: legal-compliance, source: oyez}
-  - {domain: legal-compliance, source: gdpr-eu}
-  - {domain: general-news, source: gdelt}
-  - {domain: general-news, source: guardian-open-platform}
-  - {domain: general-news, source: google-news-rss}
-  - {domain: general-news, source: nyt}
-  - {domain: general-news, source: ap-api}
-  - {domain: general-news, source: zhihu-daily}
-  - {domain: general-news, source: mastodon}
-  - {domain: general-news, source: bluesky}
-  - {domain: general-news, source: wechat2rss}
-  - {domain: general-news, source: medium-user}
-  - {domain: general-news, source: medium-publication}
-  - {domain: general-news, source: medium-tag}
-  - {domain: general-news, source: the-atlantic}
-  - {domain: general-news, source: wired}
-  - {domain: general-news, source: time-magazine}
-  - {domain: gaming, source: ign-rss}
-  - {domain: gaming, source: polygon-rss}
-  - {domain: gaming, source: gamesindustry-biz}
-  - {domain: gaming, source: gcores-rss}
-  - {domain: gaming, source: yystv-via-google-news}
-  - {domain: b2b, source: producthunt}
-  - {domain: b2b, source: techcrunch}
-  - {domain: b2b, source: crunchbase-news}
-  - {domain: b2b, source: a16z}
-  - {domain: b2b, source: hackernews}
-  - {domain: retail, source: retail-dive}
-  - {domain: retail, source: modern-retail}
-  - {domain: retail, source: ebrun-via-google-news}
-  - {domain: retail, source: shopify-news}
-  - {domain: retail, source: digiday}
-
+  - {domain: tech-ai-developer, source: HN Algolia API}
+  - {domain: tech-ai-developer, source: GitHub Blog}
 # Required KB-tier coverage: the data pipeline must reach each tier for
 # every configured demo domain (01-Raw / 02-Draft / 03-Wiki).
 # Closing a gap = run `process` for that domain, then re-render the matrix.

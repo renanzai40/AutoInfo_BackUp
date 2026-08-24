@@ -448,17 +448,17 @@ autoinfo agent-callback add|list|remove  # Agent push callbacks (MCP parity)
 |--------|---------|----------|--------|
 | **Medical Research** | PubMed (REST API), Semantic Scholar, arXiv, CrossRef, DBLP, OpenAlex, USPTO | 🔴 P0 | ✅ Implemented (7 curated sources) |
 | **AI Commercial Intelligence** | TechCrunch RSS, ProductHunt RSS, Crunchbase, 36kr | 🟡 P1 | ✅ Implemented (4 curated sources) |
-| **Financial/Business Intelligence** | Alpha Vantage, FRED, Finnhub, SEC EDGAR, Twelve Data, World Bank Data, Quandl/Nasdaq Data Link, CNBC Investing, TheStreet | 🟡 P1 | ✅ Implemented (9 curated sources) |
-| **Tech/AI/Developer** | GitHub Trending, HackerNews API, Substack RSS (tech), Stack Exchange, ProductHunt, Reddit, Spotify AI Podcasts, Bilibili | 🟡 P1 | ✅ Implemented (8 curated sources) |
+| **Financial/Business Intelligence** | Alpha Vantage, FRED, Finnhub, SEC EDGAR, Twelve Data, World Bank Data, Quandl/Nasdaq Data Link, CNBC Investing, TheStreet, MarketWatch Markets (DJ) | 🟡 P1 | ✅ Implemented (10 curated sources) |
+| **Tech/AI/Developer** | GitHub Trending, HackerNews API, Substack RSS (tech), Stack Exchange, ProductHunt, Reddit, Spotify AI Podcasts, Bilibili, HN Algolia API, GitHub Blog | 🟡 P1 | ✅ Implemented (10 curated sources) |
 | **Language Learning** | Project Gutenberg, news-in-levels, commonlit | 🟢 P2 | ✅ Implemented (3 curated sources) |
-| **Online Video / OTT** | YouTube (mkbhd), Variety, Hollywood Reporter, Netflix Tech Blog, Apple Music, Pitchfork, Billboard | 🟡 P1 | ✅ Implemented (7 curated sources) |
-| **Financial News** | Reuters Business, CNBC, FT Alphaville, Seeking Alpha, BusinessWire Tech, PRNewswire FinServ, NVIDIA Newsroom, Microsoft Newsroom | 🟡 P1 | ✅ Implemented (8 curated sources) |
-| **Online Education** | Coursera Blog, EdSurge, Class Central, Khan Academy, Open Culture, 得到 (dedao), Coursera, ncpssd, 万方 (Wanfang) | 🟢 P2 | ✅ Implemented (9 curated sources) |
-| **Legal Compliance** | SCOTUSblog, IAPP Privacy, Law.com, Oyez, GDPR.eu | 🟢 P2 | ✅ Implemented (5 curated sources) |
-| **General News** | GDELT, Guardian Open Platform, Google News RSS, NYT, AP API, Mastodon, Bluesky, 知乎日报, Medium RSS, magazine feeds (The Atlantic/Wired/Time) | 🟢 P2 | ✅ Implemented (15 curated sources) |
-| **Gaming** | IGN RSS, Polygon, GamesIndustry.biz, 机核网 gcores, 游研社 (via Google News) | 🟢 P2 | ✅ Implemented (5 curated sources) |
-| **B2B / Enterprise** | ProductHunt, TechCrunch, Crunchbase News, a16z, HackerNews | 🟢 P2 | ✅ Implemented (5 curated sources) |
-| **Retail / E-commerce** | Retail Dive, Modern Retail, 亿邦 (via Google News), Shopify News, Digiday | 🟢 P2 | ✅ Implemented (5 curated sources) |
+| **Online Video / OTT** | Variety, Hollywood Reporter, Netflix Tech Blog, Pitchfork, Billboard, Bilibili (popular), TheWrap | 🟡 P1 | ✅ Implemented (7 curated sources; YouTube/Apple Music GFW-blocked/dead, disabled) |
+| **Financial News** | CNBC, Seeking Alpha, Microsoft Newsroom, WSJ RSS, MW RSS | 🟡 P1 | ✅ Implemented (5 curated sources; 5 dead/GFW feeds disabled) |
+| **Online Education** | Coursera Blog, Open Culture, Coursera, 万方 (Wanfang) | 🟢 P2 | ✅ Implemented (4 curated sources; EdSurge/Class Central/Khan/dedao/ncpssd GFW-blocked/dead, disabled) |
+| **Legal Compliance** | SCOTUSblog, Oyez, GDPR.eu | 🟢 P2 | ✅ Implemented (3 curated sources; IAPP/Law.com 404, disabled) |
+| **General News** | Guardian Open Platform, AP API, 知乎日报, Wired, France24, NPR, Ars Technica, The Verge, Engadget, SpaceNews | 🟢 P2 | ✅ Implemented (10 curated sources; GDELT/Google News/NYT/Medium/Atlantic/Time/Mastodon/Bluesky GFW-blocked or throttled, disabled) |
+| **Gaming** | IGN RSS, GamesIndustry.biz, 机核网 gcores, GameSpot, PC Gamer, Eurogamer | 🟢 P2 | ✅ Implemented (6 curated sources; Polygon/游研社-via-GoogleNews disabled) |
+| **B2B / Enterprise** | ProductHunt, TechCrunch, Crunchbase News, HackerNews, SaaStr | 🟢 P2 | ✅ Implemented (5 curated sources; a16z feed 404, disabled) |
+| **Retail / E-commerce** | Retail Dive, Modern Retail, Shopify News, Digiday | 🟢 P2 | ✅ Implemented (4 curated sources; 亿邦-via-GoogleNews disabled) |
 
 ## Development
 

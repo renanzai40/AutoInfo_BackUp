@@ -18,6 +18,10 @@ All notable changes to the AutoInfo project will be documented in this file.
 
 ## [Unreleased]
 
+### Bug Fixes
+
+* **collectors:** mainland-CN source reachability pass — replace GFW-blocked/anti-scraped/dead demo-domain sources with verified-reachable alternatives (WSJ RSS + MW RSS feed domains for financial-news, France24/NPR/Ars/Verge/Engadget/SpaceNews for general-news, HN Algolia + GitHub Blog for tech, Bilibili popular + TheWrap for video, GameSpot/PC Gamer/Eurogamer for gaming, SaaStr for b2b, MarketWatch Markets (DJ) for financial-intelligence); 29 dead/GFW feeds disabled with reasons (backup-repo issues #6/#7)
+
 ### Features
 
 * **output:** magazine-digest editorial intro + personality/deep-dive feature — the magazine synthesis prompt requests `editorial_intro` + `feature_story` fields and `magazine-digest.md.j2` renders "## Editor's Note" + "## The Feature" sections when the LLM synthesis carries them ([#313](https://github.com/1StepMore/AutoInfo/issues/313))

@@ -13,17 +13,17 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 
 | Metric | Value |
 |--------|-------|
-| Total files | 77 |
-| Total lines | 29335 |
-| Active files | 56 |
-| Archived files | 21 |
-| Category — archive | 21 files / 8304 lines |
-| Category — known-limitations | 1 files / 255 lines |
+| Total files | 84 |
+| Total lines | 29643 |
+| Active files | 57 |
+| Archived files | 27 |
+| Category — archive | 27 files / 8627 lines |
+| Category — known-limitations | 1 files / 288 lines |
 | Category — schemas | 4 files / 397 lines |
 | Category — skills | 3 files / 785 lines |
 | Category — adr | 9 files / 424 lines |
-| Category — specs | 12 files / 8828 lines |
-| Category — validation-reports | 7 files / 2492 lines |
+| Category — specs | 12 files / 8815 lines |
+| Category — validation-reports | 8 files / 2457 lines |
 | Category — docs/dev | 19 files / 7789 lines |
 | Category — docs/root | 1 files / 61 lines |
 
@@ -51,10 +51,16 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `archive/autoinfo-validation-master-plan/part-02-cli-depth-results-q10-q18.md` | 172 | archive | archived | — |
 | `archive/autoinfo-validation-master-plan/part-12-final-verdict.md` | 383 | archive | archived | — |
 | `archive/autoinfo-validation-master-plan/scenarios/enduser-deliverable.yaml` | 238 | archive | archived | — |
+| `archive/demo-package-audit-20260817.md` | 67 | archive | archived | — |
+| `archive/demo-package-prerequisites-20260817.md` | 41 | archive | archived | — |
+| `archive/demo-package-retrospective-20260817.md` | 98 | archive | archived | — |
+| `archive/demo-package-root-cause-20260817.md` | 85 | archive | archived | — |
 | `archive/end-user-sla.md` | 126 | archive | archived | — |
 | `archive/enduser-capabilities-guide.md` | 372 | archive | archived | — |
 | `archive/epics-issue-97-coverage-verdict.md` | 109 | archive | archived | — |
 | `archive/founder-expectations-pre-split.md` | 2112 | archive | archived | — |
+| `archive/issue-kw-seed.md` | 18 | archive | archived | — |
+| `archive/issue-source-gaps.md` | 14 | archive | archived | — |
 | `archive/kb-pipeline-reference.md` | 249 | archive | archived | — |
 | `archive/launch-validation-framework.md` | 369 | archive | archived | — |
 | `archive/launch-validation-report.md` | 273 | archive | archived | — |
@@ -77,7 +83,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/research/综合报告-资讯付费与AI触达研究.md` | 702 | docs/dev | active | — |
 | `dev/specs/data-models.md` | 766 | specs | active | — |
 | `dev/specs/delivery.md` | 1268 | specs | active | — |
-| `dev/specs/end-user-matrix.yaml` | 1123 | specs | active | — |
+| `dev/specs/end-user-matrix.yaml` | 1110 | specs | active | — |
 | `dev/specs/expectations.md` | 1188 | specs | active | — |
 | `dev/specs/market-positioning.md` | 404 | specs | active | market-positioning |
 | `dev/specs/mcp-tools.md` | 85 | specs | active | — |
@@ -90,17 +96,18 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/validation-governance.md` | 75 | docs/dev | active | — |
 | `dev/validation-loop-log.md` | 62 | docs/dev | active | — |
 | `dev/validation-reports/README.md` | 59 | validation-reports | active | — |
+| `dev/validation-reports/close-backup-issue-3.md` | 51 | validation-reports | active | — |
+| `dev/validation-reports/close-backup-issue-4.md` | 59 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/AC5-verdict.md` | 34 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-column.md` | 796 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-digest-weekly.md` | 144 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-report-standard.md` | 813 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-tutorial-student.md` | 501 | validation-reports | active | — |
-| `dev/validation-reports/evidence-backup-issues-3-4.md` | 145 | validation-reports | active | — |
 | `dev/validation-scenario-contract.md` | 782 | docs/dev | active | — |
 | `dev/workflow-charter.md` | 67 | docs/dev | active | workflow-charter |
 | `dev/七阶段AI开发流程-用CodingAgent交付成品的方法论.md` | 234 | docs/dev | active | methodology |
 | `glossary.md` | 61 | docs/root | active | glossary |
-| `known-limitations/blocked-sources.md` | 255 | known-limitations | active | — |
+| `known-limitations/blocked-sources.md` | 288 | known-limitations | active | — |
 | `schemas/knowledge-base-export-v1.json` | 72 | schemas | active | — |
 | `schemas/knowledge-digest-v1.json` | 154 | schemas | active | — |
 | `schemas/knowledge-presentation-v1.json` | 72 | schemas | active | — |
