@@ -57,3 +57,29 @@ The full-matrix LLM regeneration (re-collect → regenerate → validate) was
 blocked by the previous LLM key's monthly usage limit; the closure rests on
 deterministic regression + persisted real-product assertion evidence, which
 fully satisfies the "financial future-2027 不再误报" criterion.
+
+## Merge note — #351 V5 fix landed on backup main
+
+The #351 V5 fix (previously "lives on `work/351-year-hallucination`", see the
+branch line at the top of this record) was **merged into backup `main`** via
+PR `fix/backup-main-issues-8-11` (2026-08-25). The fix now lives on backup
+`main` alongside the #8-#11 fixes — no longer stranded on the feature branch.
+
+What the merge carried:
+
+- **`src/autoinfo/validation_matrix.py`** — the V5 named-year exemption:
+  `_NAMED_YEAR_RE` (narrow name-shaped regex) + `_is_named_year`
+  (line-scoped containment) wired into both the month-year and bare-year
+  loops in `_no_year_hallucination`. P0/P1 gates preserved: bare future
+  facts ("In 2031, adoption tripled") still fail P0; pre-1950 years
+  ("founded in 1917") still surface P1 "human review".
+- **Unit test** — `tests/validation/test_no_year_hallucination_v5_named_year.py`
+  (6 tests: named-year guide/publication-name passes, bare future fact +
+  bare future month-year still P0-fail, pre-1950 still P1).
+- **Regression scenario** — step 5 appended to
+  `regression-351-year-hallucination-tuning.yaml` (asserting the Princeton
+  Review 2027 guide passes, "In 2031, adoption tripled" fails P0, pre-1950
+  fails P1); the 4 pre-V5 steps are untouched.
+
+The scenario file's V5 step and this note are part of the same
+`fix/backup-main-issues-8-11` PR that carries the #8-#11 fixes.
