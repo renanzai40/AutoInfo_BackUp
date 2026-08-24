@@ -17,7 +17,7 @@ sources:
     type: rss
     url: https://iapp.org/news/rss
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: HTTP 404 (verified 2026-08-24); keep for keyed/geo setups
     tos_classification: open
     rate_limit: 10
     fetch_depth: abstract
@@ -26,7 +26,7 @@ sources:
     type: rss
     url: https://www.law.com/feed/
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: HTTP 404 (verified 2026-08-24); keep for keyed/geo setups
     tos_classification: open
     rate_limit: 10
     fetch_depth: abstract

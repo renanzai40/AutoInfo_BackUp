@@ -2,6 +2,9 @@
 # Tracks global breaking news, world events, politics, and top headlines
 # Source inventory: 5 BASE (gdelt/guardian-open-platform/google-news-rss/nyt/ap-api)
 # + 10 batch additions (zhihu-daily/mastodon/bluesky/wechat2rss/medium-*/magazines).
+# 2026-08-24 (#6/#7): mainland-CN reachability pass — GFW-blocked/dead feeds
+# disabled (google-news-rss/nyt/medium-*/the-atlantic/time/mastodon/bluesky/gdelt),
+# replaced with verified-reachable feeds (france24/NPR/Ars/Verge/Engadget/SpaceNews).
 name: general-news
 description: "General news intelligence — global headlines, world events, politics, breaking news"
 
@@ -10,7 +13,7 @@ sources:
     type: gdelt
     url: https://api.gdeltproject.org/api/v2/doc/doc
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: HTTP 429 upstream throttle even after cooldown (verified 2026-08-24)
     tos_classification: open
     rate_limit: 1
     fetch_depth: abstract  # GDELT DOC 2.0 returns headline-level data only
@@ -44,7 +47,7 @@ sources:
     type: rss
     url: https://news.google.com/rss
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: GFW-blocked on mainland CN — TCP connect timeout (verified 2026-08-24)
     tos_classification: open
     rate_limit: 10
     fetch_depth: abstract
@@ -53,7 +56,7 @@ sources:
     type: nyt
     url: https://api.nytimes.com/svc/search/v2/articlesearch.json
     quality_tier: 1
-    enabled: true
+    enabled: false  # 2026-08: GFW-blocked on mainland CN — TCP connect timeout (verified 2026-08-24); key-gated API, keep config for keyed setups
     tos_classification: licensed
     requires_key: true
     rate_limit: 10  # free tier: 10 requests/minute
@@ -94,7 +97,7 @@ sources:
     type: api
     url: https://mastodon.social/api/v1/timelines/public
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: GFW-blocked on mainland CN — TCP connect timeout (verified 2026-08-24)
     tos_classification: open
     rate_limit: 1  # mastodon.social public API: ~300 req/5min (1 req/s sustained)
     fetch_depth: abstract
@@ -110,7 +113,7 @@ sources:
     type: api
     url: https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: GFW-blocked on mainland CN — TCP connect timeout (verified 2026-08-24)
     tos_classification: open
     rate_limit: 10
     fetch_depth: abstract
@@ -143,7 +146,7 @@ sources:
     type: rss
     url: https://medium.com/feed/@user  # replace @user with a target Medium username
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: GFW-blocked on mainland CN — TCP connect timeout (verified 2026-08-24)
     tos_classification: open
     rate_limit: 10
     fetch_depth: abstract
@@ -152,7 +155,7 @@ sources:
     type: rss
     url: https://medium.com/feed/@towardsdatascience  # publication profile feed (swap slug as needed)
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: GFW-blocked on mainland CN — TCP connect timeout (verified 2026-08-24)
     tos_classification: open
     rate_limit: 10
     fetch_depth: abstract
@@ -161,7 +164,7 @@ sources:
     type: rss
     url: https://medium.com/feed/tag/artificial-intelligence  # topic tag feed (swap tag slug as needed)
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: GFW-blocked on mainland CN — TCP connect timeout (verified 2026-08-24)
     tos_classification: open
     rate_limit: 10
     fetch_depth: abstract
@@ -172,7 +175,7 @@ sources:
     type: rss
     url: https://www.theatlantic.com/feed/all/
     quality_tier: 1
-    enabled: true
+    enabled: false  # 2026-08: GFW-blocked on mainland CN — connect refused / network unreachable (verified 2026-08-24)
     tos_classification: open
     rate_limit: 10
     fetch_depth: abstract
@@ -189,6 +192,63 @@ sources:
   - name: time-magazine
     type: rss
     url: https://time.com/feed/
+    quality_tier: 1
+    enabled: false  # 2026-08: GFW-blocked on mainland CN — TCP connect timeout (verified 2026-08-24)
+    tos_classification: open
+    rate_limit: 10
+    fetch_depth: abstract
+
+  # ---- 2026-08-24 (#6/#7): mainland-CN verified-reachable replacements ----
+  # All six verified live (feedparser entries > 0, bot-UA HTTP < 400) on
+  # mainland-CN network 2026-08-24.
+  - name: france24
+    type: rss
+    url: https://www.france24.com/en/rss
+    quality_tier: 1
+    enabled: true
+    tos_classification: open
+    rate_limit: 10
+    fetch_depth: abstract
+
+  - name: npr-news
+    type: rss
+    url: https://feeds.npr.org/1001/rss.xml
+    quality_tier: 1
+    enabled: true
+    tos_classification: open
+    rate_limit: 10
+    fetch_depth: abstract
+
+  - name: ars-technica
+    type: rss
+    url: https://feeds.arstechnica.com/arstechnica/index
+    quality_tier: 1
+    enabled: true
+    tos_classification: open
+    rate_limit: 10
+    fetch_depth: abstract
+
+  - name: the-verge
+    type: rss
+    url: https://www.theverge.com/rss/index.xml
+    quality_tier: 1
+    enabled: true
+    tos_classification: open
+    rate_limit: 10
+    fetch_depth: abstract
+
+  - name: engadget
+    type: rss
+    url: https://www.engadget.com/rss.xml
+    quality_tier: 1
+    enabled: true
+    tos_classification: open
+    rate_limit: 10
+    fetch_depth: abstract
+
+  - name: spacenews
+    type: rss
+    url: https://spacenews.com/feed/
     quality_tier: 1
     enabled: true
     tos_classification: open

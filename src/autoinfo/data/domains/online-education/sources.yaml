@@ -17,7 +17,7 @@ sources:
     type: rss
     url: https://www.edsurge.com/feed
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: connection refused on mainland CN (verified 2026-08-24)
     rate_limit: 10
     fetch_depth: abstract
     tos_classification: open
@@ -26,7 +26,7 @@ sources:
     type: rss
     url: https://www.classcentral.com/report/feed/
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: HTTP 403 (verified 2026-08-24)
     rate_limit: 10
     fetch_depth: abstract
     tos_classification: open
@@ -35,7 +35,7 @@ sources:
     type: rss
     url: https://www.khanacademy.org/about/blog/feed
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: RSS parse error (bozo) (verified 2026-08-24)
     rate_limit: 10
     fetch_depth: abstract
     tos_classification: open
@@ -55,7 +55,7 @@ sources:
     type: rss
     url: https://rsshub.app/dedao/articles
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: GFW-blocked (rsshub.app) — TCP connect timeout (verified 2026-08-24)
     rate_limit: 10
     fetch_depth: abstract
     tos_classification: open
@@ -132,7 +132,7 @@ sources:
     type: rss  # via RSSHub community route — avoids the native API's POST/header complexity
     url: https://rsshub.app/ncpssd/newlist
     quality_tier: 1  # 国家哲学社会科学文献中心 — primary Chinese social-science database
-    enabled: true
+    enabled: false  # 2026-08: GFW-blocked (rsshub.app) — TCP connect timeout (verified 2026-08-24)
     rate_limit: 10
     fetch_depth: abstract
     tos_classification: open

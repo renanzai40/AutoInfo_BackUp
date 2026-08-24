@@ -135,6 +135,20 @@ sources:
     access: free
     rate_limit: 30  # requests per minute
 
+  # #288 keyless finance RSS (2026-08-17) + #6/#7 (2026-08-24): MarketWatch main
+  # site is GFW-blocked but the feed domain (feeds.marketwatch.com) is reachable
+  # (verified 2026-08-24, 10 entries parsed). Name matches regression-financial-sources.
+  - name: MarketWatch Markets (DJ)
+    type: rss
+    url: https://feeds.marketwatch.com/marketwatch/topstories/
+    quality_tier: 1
+    enabled: true
+    tos_classification: open
+    fetch_depth: abstract
+    frequency: hourly
+    access: free
+    rate_limit: 30  # requests per minute
+
 topics:
   - name: "Market Trends"
     keywords:

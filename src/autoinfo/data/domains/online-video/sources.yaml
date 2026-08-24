@@ -8,7 +8,7 @@ sources:
     type: rss
     url: https://www.youtube.com/feeds/videos.xml?channel_id=UC0vBXGSyV14uvJ4hECDOl0Q
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: GFW-blocked on mainland CN — TCP connect timeout (verified 2026-08-24)
     tos_classification: open
     rate_limit: 10
     fetch_depth: abstract
@@ -50,7 +50,7 @@ sources:
     type: api
     url: https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: Apple retired the RSS API — 404 on all variants (verified 2026-08-24)
     tos_classification: open
     rate_limit: 10
     fetch_depth: abstract
@@ -74,6 +74,27 @@ sources:
   - name: billboard
     type: rss
     url: https://www.billboard.com/feed/
+    quality_tier: 2
+    enabled: true
+    tos_classification: open
+    rate_limit: 10
+    fetch_depth: abstract
+
+  # ---- 2026-08-24 (#6/#7): mainland-CN verified-reachable replacements ----
+  - name: bilibili-popular
+    type: bilibili
+    url: https://api.bilibili.com/x/web-interface/popular
+    quality_tier: 2
+    enabled: true
+    tos_classification: open
+    rate_limit: 5
+    fetch_depth: abstract
+    settings:
+      query: ""
+
+  - name: thewrap
+    type: rss
+    url: https://www.thewrap.com/feed/
     quality_tier: 2
     enabled: true
     tos_classification: open

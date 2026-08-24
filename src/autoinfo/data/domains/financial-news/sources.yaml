@@ -8,7 +8,7 @@ sources:
     type: rss
     url: https://www.reutersagency.com/feed/?taxonomy=best-sectors&post_type=best&best-sectors=business
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: HTTP 404 — upstream feed retired (verified 2026-08-24 mainland-CN probe)
     tos_classification: open
     rate_limit: 10
     fetch_depth: abstract
@@ -26,7 +26,7 @@ sources:
     type: rss
     url: https://ftalphaville.ft.com/feed
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: GFW-blocked on mainland CN — TCP connect timeout (verified 2026-08-24)
     tos_classification: open
     rate_limit: 10
     fetch_depth: abstract
@@ -44,7 +44,7 @@ sources:
     type: rss
     url: https://feed.businesswire.com/mrss/home/?rss=industry/technology
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: feed returns zero entries (verified 2026-08-24)
     tos_classification: open
     rate_limit: 10
     fetch_depth: abstract
@@ -53,7 +53,7 @@ sources:
     type: rss
     url: https://www.prnewswire.com/rss/financial-services/
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: HTTP 404 (verified 2026-08-24)
     tos_classification: open
     rate_limit: 10
     fetch_depth: abstract
@@ -62,7 +62,7 @@ sources:
     type: rss
     url: https://nvidianews.nvidia.com/rss
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: RSS parse error (bozo) (verified 2026-08-24)
     tos_classification: open
     rate_limit: 10
     fetch_depth: abstract
@@ -71,6 +71,28 @@ sources:
     type: rss
     url: https://news.microsoft.com/source/feed/
     quality_tier: 2
+    enabled: true
+    tos_classification: open
+    rate_limit: 10
+    fetch_depth: abstract
+
+  # ---- 2026-08-24 (#6/#7): mainland-CN reachable replacements ----
+  # WSJ/MW main sites are GFW-blocked but their RSS feed domains are reachable
+  # (feeds.content.dowjones.io / feeds.marketwatch.com — verified 2026-08-24,
+  # 40/10 entries parsed).
+  - name: WSJ RSS
+    type: rss
+    url: https://feeds.content.dowjones.io/public/rss/RSSWSJD
+    quality_tier: 1
+    enabled: true
+    tos_classification: open
+    rate_limit: 10
+    fetch_depth: abstract
+
+  - name: MW RSS
+    type: rss
+    url: https://feeds.marketwatch.com/marketwatch/topstories/
+    quality_tier: 1
     enabled: true
     tos_classification: open
     rate_limit: 10

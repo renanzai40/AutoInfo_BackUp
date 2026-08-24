@@ -78,13 +78,10 @@ sources:
     type: rss
     url: https://a16z.com/feed/
     quality_tier: 2
-    enabled: true
+    enabled: false  # 2026-08: HTTP 404 — WP feed endpoint retired (verified 2026-08-24); JS-rendered site, no stable feed
     tos_classification: open
     rate_limit: 10
     fetch_depth: abstract
-    # NOTE: a16z.com is JS-rendered; the WordPress feed endpoint is
-    # intermittently unavailable (404). Kept per plan D15; may need a
-    # fallback aggregator feed if it stays down.
 
   - name: hackernews
     type: hackernews
@@ -97,6 +94,29 @@ sources:
     settings:
       rate_limit: 10
       timeout: 30
+
+  # ---- 2026-08-24 (#6/#7): mainland-CN verified-reachable replacement ----
+  - name: saastr
+    type: rss
+    url: https://www.saastr.com/feed/
+    quality_tier: 2
+    enabled: true
+    tos_classification: open
+    rate_limit: 10
+    fetch_depth: abstract
+    extract_fields:
+      - name: title
+        type: string
+        description: "B2B / SaaS news headline"
+        required: true
+      - name: company
+        type: string
+        description: "Company mentioned in the article"
+        required: false
+      - name: publish_date
+        type: string
+        description: "Original publication date and time"
+        required: false
 
 topics:
   - name: "Startup Funding"
