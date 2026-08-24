@@ -552,16 +552,6 @@ def _resolve_effective_language(
        ai-commercial come out single-language without manual params).
     3. Otherwise ``""`` — no filtering (legacy behavior).
 
-    Seed fallback (issue #8): when a project config file EXISTS but its
-    domain block carries no ``default_language`` key at all (projects
-    initialized before the field existed — ``init`` only propagates it for
-    NEW domains), fall back to the demo-domain seed
-    ``src/autoinfo/data/domains/<domain>/sources.yaml`` so live surfaces
-    come out single-language immediately without a config migration.  An
-    explicitly declared (even empty) value always wins — empty means "no
-    filtering", backward compatible.  A project with NO config file at all
-    stays ``""`` (no filtering) — seeding never engages on a missing config.
-
     For a cross-domain product (*cross_domain* True) we never silently pick
     one domain's default across multiple domains: an explicit param wins,
     otherwise no filtering.
@@ -579,48 +569,8 @@ def _resolve_effective_language(
         return ""
     for d in config.domains:
         if d.name == domain:
-            if _config_declares_default_language(config_path, domain):
-                return d.default_language or ""
-            break
-    return _seed_domain_default_language(domain)
-
-
-def _config_declares_default_language(config_path: Path, domain: str) -> bool:
-    """True when the raw config YAML declares a ``default_language`` key for
-    *domain* (even an empty value).
-
-    The parsed :class:`DomainConfig` cannot distinguish "key present but
-    empty" from "key missing" — both parse to ``""`` — so the raw dict is
-    consulted for the seed-fallback decision (issue #8).
-    """
-    try:
-        raw = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
-    except Exception:
-        return False
-    for d in raw.get("domains", []):
-        if d.get("name") == domain:
-            return "default_language" in d
-    return False
-
-
-def _seed_domain_default_language(domain: str) -> str:
-    """Demo-domain seed fallback for ``default_language`` (issue #8).
-
-    Reads ``src/autoinfo/data/domains/<domain>/sources.yaml`` (the same seed
-    ``init`` uses) so existing projects whose runtime config predates the
-    field still come out single-language without a config migration.
-    Returns ``""`` when the seed file is absent or carries no
-    ``default_language``.
-    """
-    seed_path = _DEMO_DOMAINS_DIR / domain / "sources.yaml"
-    if not seed_path.is_file():
-        return ""
-    try:
-        with open(seed_path, encoding="utf-8") as f:
-            seed = yaml.safe_load(f) or {}
-    except Exception:
-        return ""
-    return str(seed.get("default_language") or "")
+            return d.default_language or ""
+    return ""
 
 
 def _get_domain_exclude_keywords(domain: str) -> list[str]:
@@ -6157,26 +6107,68 @@ def _keyword_group_entries(
 
 
 def _load_keyword_topics(domain: str) -> list[str]:
-    """Load non-deprecated topic keywords for *domain* from ``_keywords.yaml``."""
+    """Load non-deprecated topic keywords for *domain*.
+
+    Reads ``knowledge/<domain>/_keywords.yaml`` (auto-discovery keywords)
+    and MERGES the demo-domain seed ``src/autoinfo/data/domains/<domain>/
+    sources.yaml`` ``topics[*].keywords`` into the result (issue #9).
+
+    The merge is UNCONDITIONAL — not a fallback-when-empty: the runtime
+    keyword table can hold 80+ usable topics that still never match English
+    titles (auto-discovery noise — CJK tokens + ASCII n-gram fragments), so a
+    "fallback only when none usable" branch would silently no-op on exactly
+    the domains that need the curated English seed.  Seed keywords absent
+    from the runtime table are appended (deduped); entries that already exist
+    are not duplicated.
+    """
     if not domain:
         return []
+    topics: list[str] = []
     path = Path("knowledge") / domain / "_keywords.yaml"
-    if not path.is_file():
+    if path.is_file():
+        try:
+            raw: dict[str, Any] = yaml.safe_load(
+                path.read_text(encoding="utf-8")
+            ) or {}
+        except Exception as exc:
+            logger.warning("Failed to read keyword file %s: %s", path, exc)
+            raw = {}
+        kw_map: dict[str, Any] = raw.get("keywords", {}) or {}
+        for keyword, data in kw_map.items():
+            if isinstance(data, dict) and data.get("state") == "deprecated":
+                continue
+            topics.append(keyword)
+
+    seen = set(topics)
+    for seed_keyword in _seed_topic_keywords(domain):
+        if seed_keyword not in seen:
+            seen.add(seed_keyword)
+            topics.append(seed_keyword)
+    return topics
+
+
+def _seed_topic_keywords(domain: str) -> list[str]:
+    """Curated English topic keywords from the demo-domain seed (issue #9).
+
+    Reads ``topics[*].keywords`` from ``src/autoinfo/data/domains/<domain>/
+    sources.yaml`` — the same seed ``init`` uses to scaffold a domain.  An
+    absent/unreadable seed yields ``[]`` so the runtime keyword table alone
+    drives grouping.
+    """
+    seed_path = _DEMO_DOMAINS_DIR / domain / "sources.yaml"
+    if not seed_path.is_file():
         return []
     try:
-        raw: dict[str, Any] = yaml.safe_load(
-            path.read_text(encoding="utf-8")
-        ) or {}
-    except Exception as exc:
-        logger.warning("Failed to read keyword file %s: %s", path, exc)
+        with open(seed_path, encoding="utf-8") as f:
+            seed = yaml.safe_load(f) or {}
+    except Exception:
         return []
-    kw_map: dict[str, Any] = raw.get("keywords", {}) or {}
-    topics: list[str] = []
-    for keyword, data in kw_map.items():
-        if isinstance(data, dict) and data.get("state") == "deprecated":
-            continue
-        topics.append(keyword)
-    return topics
+    keywords: list[str] = []
+    for topic in seed.get("topics") or []:
+        for kw in (topic.get("keywords") or []):
+            if isinstance(kw, str) and kw.strip():
+                keywords.append(kw.strip())
+    return keywords
 
 
 def _match_keyword(
