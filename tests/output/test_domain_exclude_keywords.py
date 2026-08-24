@@ -102,6 +102,9 @@ def _entry(
         "title": title,
         "summary": summary,
         "domain": domain,
+        # Required by the #8 seed fallback (ai-commercial default_language: en)
+        # + #309 language filter: untagged entries are dropped before synthesis.
+        "language": "en",
         "tier": "01-Raw",
         "source_url": f"https://example.com/{entry_id}",
         "source_type": "rss",

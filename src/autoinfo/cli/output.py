@@ -115,6 +115,14 @@ def digest(
         "--max-items",
         help="Maximum number of KB entries to include (default: 0 = built-in limit of 200)",
     ),
+    ref_limit: int | None = typer.Option(
+        None,
+        "--ref-limit",
+        help=(
+            "Maximum number of KB references to render "
+            "(default: output.ref_limit = 60)"
+        ),
+    ),
     persist: bool = typer.Option(
         False,
         "--persist",
@@ -142,6 +150,8 @@ def digest(
             "user_id": user_id,
             "max_items": max_items,
         }
+        if ref_limit is not None:
+            kwargs["ref_limit"] = ref_limit
         if product_template is not None:
             kwargs["product_template"] = product_template
         result = generate_digest(**kwargs)
@@ -220,6 +230,14 @@ def report(
         "--user-id",
         help="End-user ID for content-preference filtering (default: all tiers)",
     ),
+    ref_limit: int | None = typer.Option(
+        None,
+        "--ref-limit",
+        help=(
+            "Maximum number of KB references to render "
+            "(default: output.ref_limit = 60)"
+        ),
+    ),
 ) -> None:
     """Generate a structured report with themed sections and executive summary.
 
@@ -247,6 +265,8 @@ def report(
             "report_type": report_type,
             "user_id": user_id,
         }
+        if ref_limit is not None:
+            kwargs["ref_limit"] = ref_limit
         if product_template is not None:
             kwargs["product_template"] = product_template
         if len(domains) >= 2:

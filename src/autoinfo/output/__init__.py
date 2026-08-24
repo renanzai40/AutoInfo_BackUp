@@ -3002,6 +3002,61 @@ def _source_tier_badge_enabled() -> bool:
     return True
 
 
+def _output_config_ref_limit() -> int:
+    """Resolve ``output.ref_limit`` from config (default 60).
+
+    The CLI/MCP default path (no explicit ``ref_limit`` param) falls back
+    to the project config's ``output.ref_limit``, which defaults to 60
+    (issue #11 — references render uncapped).
+    """
+    try:
+        config_path = get_config_path()
+        if config_path is not None:
+            return int(load_config(config_path).output.ref_limit)
+    except Exception:
+        logger.debug(
+            "Failed to load output.ref_limit, defaulting to 60",
+            exc_info=True,
+        )
+    return 60
+
+
+def _sorted_ref_entries(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Return *entries* sorted by (has non-empty summary desc, relevance desc).
+
+    Issue #11: the references context list is capped at ``ref_limit``, so the
+    sort MUST run on the full ``entries`` list BEFORE the ref dicts are built
+    (ref dicts drop ``relevance_score``/``summary``).  Title-only entries
+    (empty summary — e.g. ProductHunt) de-prioritize below summary-bearing
+    ones; the deterministic tiebreak is ``relevance_score`` desc.
+    """
+    return sorted(
+        entries,
+        key=lambda e: (
+            bool(str(e.get("summary") or "").strip()),
+            float(e.get("relevance_score") or 0.0),
+        ),
+        reverse=True,
+    )
+
+
+def _cap_product_key_findings(
+    key_findings: list[Any], references: list[dict[str, Any]]
+) -> list[Any]:
+    """Cap *key_findings* to ``min(MAX_FINDINGS, len(references))``.
+
+    Issue #11 (decision a): the enterprise ``selected N of M`` label renders
+    ``selected {{ key_findings|length }} of {{ references|length }}``, and the
+    PRIMARY synthesis ``key_findings`` is LLM-produced and unbounded (only the
+    §2.4 re-prompt is bounded by ``_DEDICATED_PRODUCT_PROMPT_MAX_FINDINGS``).
+    When ``ref_limit`` drops BELOW the findings count the label would invert
+    (``selected 9 of 8``).  Cap the findings in the render context to
+    ``min(12, len(references))`` so the label can never invert.
+    """
+    cap = min(_DEDICATED_PRODUCT_PROMPT_MAX_FINDINGS, len(references))
+    return list(key_findings[:cap])
+
+
 def _promote_eligible_drafts(
     store: KBStore,
     domains: list[str],
@@ -4295,6 +4350,9 @@ def _normalize_digest_product_context(
     # --- References derived from entries (report-path item shape) ----------
     # #325: derive the specific source label for entries whose stored
     # source_platform is a generic placeholder (pre-#323 'rss' etc.).
+    # #11: cap at ref_limit, sorted by (has summary, relevance) desc — the
+    # sort MUST run on the entries BEFORE the ref dicts drop summary/relevance.
+    _ref_limit = ref_limit if ref_limit is not None else _output_config_ref_limit()
     _src_configs = _get_domain_source_configs(domain)
     flat["references"] = [
         {
@@ -4306,9 +4364,21 @@ def _normalize_digest_product_context(
             ),
             "domain": e.get("domain", domain),
         }
-        for e in entries_list
-        if isinstance(e, dict)
+        for e in _sorted_ref_entries(
+            [e for e in entries_list if isinstance(e, dict)]
+        )[:_ref_limit]
     ]
+
+    # --- Enterprise/premium key_findings cap (issue #11, decision a) ------
+    # The enterprise-briefing template renders the selection-scope label
+    # ``selected {{ key_findings|length }} of {{ references|length }}``.  Cap
+    # the findings to min(12, len(references)) for the premium/enterprise
+    # families so a ref_limit below the findings count can never invert the
+    # label (``selected 9 of 8``).
+    if product_family in ("premium-briefing", "enterprise-briefing"):
+        flat["key_findings"] = _cap_product_key_findings(
+            flat["key_findings"], flat["references"]
+        )
 
     # --- Product-specific fields (todo 7), flattened generically ----------
     # List-shaped fields flow through as-is; string-shaped editorial fields
@@ -4404,6 +4474,7 @@ def generate_digest(
     max_items: int = 0,
     domains: list[str] | None = None,
     language: str = "",
+    ref_limit: int | None = None,
 ) -> str | DeliveryOutput:
     """Generate a digest of KB entries for *domain* over the given *period*.
 
@@ -4468,6 +4539,13 @@ def generate_digest(
         only entries whose detected ``language`` matches are included, so a
         digest never mixes languages (issue #309).  Empty (default) includes
         all languages as before.
+    ref_limit:
+        Optional maximum number of KB references to include in the rendered
+        product.  Defaults to ``output.ref_limit`` from the project config
+        (60).  Applied at the digest product-context build
+        (:func:`_normalize_digest_product_context`), sorted by (has non-empty
+        summary desc, ``relevance_score`` desc) — identical to the report
+        path (issue #11).
 
     Returns
     -------
@@ -4825,7 +4903,7 @@ def generate_digest(
     elif product_template is not None:
         product_type = digest_family
         pt_context = _normalize_digest_product_context(
-            context, domain, product_family=digest_family
+            context, domain, product_family=digest_family, ref_limit=ref_limit,
         )
         rendered = product_template.render(product_type, variant, pt_context)
         rendered = _clean_skeleton_placeholders(rendered)
@@ -5009,6 +5087,7 @@ def generate_report(
     domains: list[str] | None = None,
     llm_config: Config | None = None,
     language: str = "",
+    ref_limit: int | None = None,
 ) -> str | DeliveryOutput:
     """Generate a structured report for the given *domain* (or *domains*).
 
@@ -5072,6 +5151,14 @@ def generate_report(
         A special cross-domain LLM prompt encourages synthesis across
         domains.  When ``None`` or has fewer than 2 entries, the existing
         single-domain behavior is used (backward compatible).
+    ref_limit:
+        Optional maximum number of KB references to include in the rendered
+        product.  Defaults to ``output.ref_limit`` from the project config
+        (60).  References are sorted by (has non-empty summary desc,
+        ``relevance_score`` desc) and capped at *ref_limit* at the
+        context-build site, so title-only entries (empty summary, e.g.
+        ProductHunt) de-prioritize.  All render formats (markdown/html/json/
+        agent/audio/epub/video) are capped uniformly (issue #11).
 
     Returns
     -------
@@ -5281,6 +5368,11 @@ def generate_report(
     # -- Build reference list from entries --------------------------------
     # #325: derive the specific source label for entries whose stored
     # source_platform is a generic placeholder (pre-#323 'rss' etc.).
+    # #11: cap the references at ref_limit (default output.ref_limit = 60).
+    # The sort MUST run on the FULL entries list BEFORE the ref dicts are
+    # built — the ref dicts drop relevance_score/summary, so capping on the
+    # ref dicts would silently lose the (has summary, relevance) ordering.
+    _ref_limit = ref_limit if ref_limit is not None else _output_config_ref_limit()
     _src_configs = _get_domain_source_configs(domain)
     references = [
         {
@@ -5292,7 +5384,7 @@ def generate_report(
             ),
             "domain": e.get("domain", domain),
         }
-        for e in entries
+        for e in _sorted_ref_entries(entries)[:_ref_limit]
     ]
 
     # -- Thematic grouping via LLM ----------------------------------------
@@ -5443,6 +5535,18 @@ def generate_report(
         implications, risks, action_required = _fill_premium_takeaway_fields(
             implications, risks, action_required, entries, domain,
         )
+
+    # -- Enterprise/premium key_findings cap (issue #11, decision a) --------
+    # The enterprise-briefing template renders the selection-scope label
+    # ``selected {{ key_findings|length }} of {{ references|length }}``.  The
+    # PRIMARY synthesis key_findings is LLM-unbounded (only the §2.4 re-prompt
+    # is bounded by _DEDICATED_PRODUCT_PROMPT_MAX_FINDINGS), so a ref_limit
+    # below the findings count would invert the label.  Cap the findings in
+    # the report data to min(12, len(references)) for the families that
+    # render the label (premium/enterprise), leaving the summary + findings
+    # count consistent.
+    if report_family in ("premium-briefing", "enterprise-briefing"):
+        key_findings = _cap_product_key_findings(key_findings, references)
 
     # -- Build report data -------------------------------------------------
     # #325: every section item carries the derived source label.  When the
