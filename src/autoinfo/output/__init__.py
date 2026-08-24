@@ -4112,13 +4112,34 @@ def _fill_premium_takeaway_fields(
     action_required: list[str] | None,
     entries: list[dict[str, Any]],
     domain: str,
+    *,
+    weak: bool = False,
 ) -> tuple[list[str], list[dict[str, Any]], list[str]]:
     """#357 — the premium per-takeaway slots must never render empty or
     ``_No ..._`` placeholder text.  A slot list that is missing/empty is
     filled with the full deterministic fallback; a non-empty list has its
     empty/placeholder-shaped elements replaced per-index.  The list length
     the LLM produced is preserved (no padding) so product-analysis
-    persistence stays faithful to the raw synthesis."""
+    persistence stays faithful to the raw synthesis.
+
+    #10 — the opt-in *weak* predicate (default False keeps the ``_usable``
+    behavior) additionally replaces weak-but-non-empty action lines: a bare
+    verb phrase like ``"Track AI model releases"`` (no concrete object, no
+    timeframe/trigger) is flagged by :func:`autoinfo.validation_matrix._is_weak_analysis`
+    and swapped per-index for the KB-derived deterministic action, so the
+    premium render ships WHAT/WHEN-shaped actions even when the LLM falls
+    back to shallow phrasing.  Scope: PREMIUM-ONLY — the enterprise
+    ``action_required`` is a flat ``- [ ]`` checkbox list whose shape
+    ``_so_what_substantive`` requires, so enterprise callers never pass
+    ``weak=True`` (their lever is the prompt-side WHAT/WHEN constraint).
+
+    The validation_matrix import is FUNCTION-LOCAL because
+    ``validation_matrix`` imports ``from autoinfo.output import …`` at
+    function scope (lines 124/1044/1084 of that module) — a module-level
+    ``output → validation_matrix`` import would be a hard cycle.
+    """
+    from autoinfo.validation_matrix import _is_weak_analysis  # noqa: PLC0415
+
     _impl, _risks, _actions = _deterministic_takeaway_fields(entries, domain)
 
     def _usable(value: Any) -> bool:
@@ -4128,6 +4149,16 @@ def _fill_premium_takeaway_fields(
             return False
         stripped = value.strip()
         return bool(stripped) and not _is_empty_placeholder(stripped)
+
+    def _is_weak(value: Any) -> bool:
+        """Weak when unusable, or (with *weak* enabled) a weak-shaped action."""
+        if not _usable(value):
+            return True
+        if not weak:
+            return False
+        if isinstance(value, dict):
+            return _is_weak_analysis(str(value.get("title") or ""))
+        return _is_weak_analysis(str(value))
 
     def _fill(
         values: list[Any] | None,
@@ -4139,11 +4170,11 @@ def _fill_premium_takeaway_fields(
             return [dict(v) for v in fallback] if is_dict else list(fallback)
         if is_dict:
             return [
-                dict(v) if isinstance(v, dict) and _usable(v) else dict(fallback[i])
+                dict(v) if isinstance(v, dict) and not _is_weak(v) else dict(fallback[i])
                 for i, v in enumerate(values[: len(fallback)])
             ]
         return [
-            (str(v).strip() if _usable(v) else fallback[i])
+            (str(v).strip() if not _is_weak(v) else fallback[i])
             for i, v in enumerate(values[: len(fallback)])
         ]
 
@@ -4155,7 +4186,10 @@ def _fill_premium_takeaway_fields(
 
 
 def _normalize_digest_product_context(
-    context: dict[str, Any], domain: str, product_family: str = "digest"
+    context: dict[str, Any],
+    domain: str,
+    product_family: str = "digest",
+    ref_limit: int | None = None,
 ) -> dict[str, Any]:
     """Normalize the digest context to the flat §2.1 product-template shape.
 
@@ -7824,7 +7858,16 @@ _REPORT_PRODUCT_BASE_SECTIONS = (
     "(index-aligned with Key Findings; each action MUST specify WHO does it, "
     "WHAT specifically, and a WHEN timeline — e.g. 'CMO: ship the Q3 pricing "
     "experiment to 10% of enterprise customers by 2026-09-15'. Never a bare "
-    "'conduct market analysis'.)\n\n"
+    "'conduct market analysis'.)\n"
+    "Each action MUST also name a concrete object (WHICH entity, product, "
+    "model, company, or metric the action targets) and a timeframe or trigger "
+    "(WHEN it happens — a date, a milestone, or a real-world trigger event). "
+    "A bare single-line verb like 'Track AI model releases', 'Monitor "
+    "developments', or 'Reassess the market' carries no object and no WHEN — "
+    "it is forbidden.  Prefer e.g. 'Track OpenAI GPT-5 benchmark results "
+    "against internal evaluation needs by 2026-09-30' or 'Monitor Stripe "
+    "latency SLO breaches; reassess the primary provider when p95 exceeds "
+    "800ms'.\n\n"
     "The Executive Summary's opening coverage sentence MUST name exactly the "
     "number of Key Findings you detail below — e.g. \"This briefing details N "
     "selected items from the period.\" Never state a coverage count larger "
