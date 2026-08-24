@@ -20,6 +20,8 @@ from unittest.mock import ANY, MagicMock, patch
 from typer.testing import CliRunner
 
 from autoinfo.cli.collect import app
+from autoinfo.collect import _resolve_sources
+from autoinfo.config import SourceConfig
 
 
 def _mock_result(**overrides: object) -> dict[str, object]:
@@ -150,3 +152,45 @@ class TestCollectUnknownSource:
             dry_run=False,
             progress_cb=ANY,
         )
+
+
+class TestResolveSourcesDisabled:
+    """``enabled: false`` sources must be excluded from collection (issues #6/#7).
+
+    Before the fix, ``_resolve_sources`` returned every configured source
+    regardless of ``enabled``, so a ``enabled: false`` source was still
+    fetched (and failed with GFW/404 errors) during ``collect``.  The demo
+    domains now carry many disabled sources — collection must skip them.
+    """
+
+    def _src(self, name: str, enabled: bool = True) -> SourceConfig:
+        return SourceConfig(
+            name=name,
+            type="rss",
+            url=f"https://{name}.example.com",
+            settings={"enabled": enabled},
+        )
+
+    def test_disabled_source_excluded_when_no_request(self) -> None:
+        """With no ``--source``, only enabled sources are returned."""
+        srcs = [
+            self._src("enabled-a"),
+            self._src("disabled-b", enabled=False),
+            self._src("enabled-c"),
+        ]
+        resolved, unknown = _resolve_sources(srcs, None)
+        assert unknown == []
+        assert [s.name for s in resolved] == ["enabled-a", "enabled-c"]
+
+    def test_disabled_source_excluded_even_when_requested(self) -> None:
+        """A disabled source is dropped even if explicitly requested."""
+        srcs = [self._src("enabled-a"), self._src("disabled-b", enabled=False)]
+        resolved, unknown = _resolve_sources(srcs, ["disabled-b"])
+        assert [s.name for s in resolved] == []
+        assert unknown == []
+
+    def test_all_disabled_raises_no_active_sources(self) -> None:
+        """When every source is disabled, resolution yields nothing."""
+        srcs = [self._src("disabled-a", enabled=False), self._src("disabled-b", enabled=False)]
+        resolved, _ = _resolve_sources(srcs, None)
+        assert resolved == []

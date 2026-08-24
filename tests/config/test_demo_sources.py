@@ -44,6 +44,8 @@ EXPECTED = {
             # #288 (2026-08-17): keyless finance news RSS feeds
             "CNBC Investing",
             "TheStreet",
+            # #6/#7 (2026-08-24): MW feed domain reachable on mainland CN
+            "MarketWatch Markets (DJ)",
         ],
     },
     "tech-ai-developer": {
@@ -55,6 +57,9 @@ EXPECTED = {
             "Reddit",
             "Spotify AI Podcasts",
             "Bilibili (B站)",
+            # #6/#7 (2026-08-24): HN Algolia API + GitHub Blog reachable on mainland CN
+            "HN Algolia API",
+            "GitHub Blog",
         ],
     },
 }
@@ -90,6 +95,7 @@ def _load_sources(domain: str) -> list[dict[str, Any]]:
             "Quandl/Nasdaq Data Link",
             "CNBC Investing",
             "TheStreet",
+            "MarketWatch Markets (DJ)",
         ],
     ),
     (
@@ -102,6 +108,8 @@ def _load_sources(domain: str) -> list[dict[str, Any]]:
             "Reddit",
             "Spotify AI Podcasts",
             "Bilibili (B站)",
+            "HN Algolia API",
+            "GitHub Blog",
         ],
     ),
 ])

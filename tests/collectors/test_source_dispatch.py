@@ -72,6 +72,7 @@ EXPECTED_PASS: dict[str, list[str]] = {
         "Quandl/Nasdaq Data Link",
         "CNBC Investing",
         "TheStreet",
+        "MarketWatch Markets (DJ)",  # #6/#7 (2026-08-24): MW feed domain reachable
     ],
     "tech-ai-developer": [
         "Substack RSS (tech) — Pragmatic Engineer",
@@ -82,9 +83,13 @@ EXPECTED_PASS: dict[str, list[str]] = {
         "Reddit",
         "Spotify AI Podcasts",
         "Bilibili (B站)",
+        "HN Algolia API",  # #6/#7 (2026-08-24): reachable on mainland CN
+        "GitHub Blog",  # #6/#7 (2026-08-24): reachable on mainland CN
     ],
     "language-learning": ["project-gutenberg", "news-in-levels", "commonlit"],
-    # M3T24 demo domains (D12/D14/D15/D16) — all sources dispatch cleanly
+    # M3T24 demo domains (D12/D14/D15/D16) — all sources dispatch cleanly.
+    # #6/#7 (2026-08-24): GFW-blocked/dead feeds disabled but still present and
+    # dispatchable; verified-reachable replacements added.
     "general-news": [
         "gdelt",
         "guardian-open-platform",
@@ -101,6 +106,12 @@ EXPECTED_PASS: dict[str, list[str]] = {
         "the-atlantic",
         "wired",
         "time-magazine",
+        "france24",
+        "npr-news",
+        "ars-technica",
+        "the-verge",
+        "engadget",
+        "spacenews",
     ],
     "gaming": [
         "ign-rss",
@@ -108,8 +119,11 @@ EXPECTED_PASS: dict[str, list[str]] = {
         "gamesindustry-biz",
         "gcores-rss",
         "yystv-via-google-news",
+        "gamespot",
+        "pc-gamer",
+        "eurogamer",
     ],
-    "b2b": ["producthunt", "techcrunch", "crunchbase-news", "a16z", "hackernews"],
+    "b2b": ["producthunt", "techcrunch", "crunchbase-news", "a16z", "hackernews", "saastr"],
     "retail": ["retail-dive", "modern-retail", "ebrun-via-google-news", "shopify-news", "digiday"],
 }
 
@@ -222,11 +236,12 @@ def test_source_dispatch_pass_fail() -> None:
             f"  Got:      {sorted(domain_fail_names)}"
         )
 
-        # 3. Grand totals: 61 pass, 0 fail (29 legacy incl. M3T30 Finnhub +
-        #    30 M3T24 + 2 #288 keyless RSS; MarketWatch removed for #325)
-        assert len(all_pass) == 61, f"Expected 61 PASS, got {len(all_pass)}"
+        # 3. Grand totals: 74 pass, 0 fail (29 legacy incl. M3T30 Finnhub +
+        #    30 M3T24 + 2 #288 keyless RSS + 13 #6/#7 replacements; MarketWatch
+        #    restored as MW RSS feed domain for #6/#7)
+        assert len(all_pass) == 74, f"Expected 74 PASS, got {len(all_pass)}"
         assert len(all_fail) == 0, f"Expected 0 FAIL, got {len(all_fail)}"
-        assert total == 61, f"Expected 61 total sources, got {total}"
+        assert total == 74, f"Expected 74 total sources, got {total}"
 
 
 # ---------------------------------------------------------------------------

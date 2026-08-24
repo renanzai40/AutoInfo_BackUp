@@ -56,11 +56,28 @@ plog = get_pipeline_logger("collect")
 # guard silently misses 8-K/10-K at collection time (#332-B).
 _DOMAIN_NOISE_KEYWORDS: dict[str, tuple[str, ...]] = {
     "ai-commercial": (
-        "贝达药业", "华能", "株冶", "平安好医生", "DURAVYU",
-        "SEC 8-K", "SEC 8K", "8-K", "10-K", "10-Q", "10Q", "财报", "年度报告",
+        "贝达药业",
+        "华能",
+        "株冶",
+        "平安好医生",
+        "DURAVYU",
+        "SEC 8-K",
+        "SEC 8K",
+        "8-K",
+        "10-K",
+        "10-Q",
+        "10Q",
+        "财报",
+        "年度报告",
     ),
     "financial-intelligence": (
-        "SEC 8-K", "SEC 8K", "8-K", "10-K", "10-Q", "10Q", "8-K filing",
+        "SEC 8-K",
+        "SEC 8K",
+        "8-K",
+        "10-K",
+        "10-Q",
+        "10Q",
+        "8-K filing",
     ),
 }
 
@@ -140,9 +157,7 @@ def run_collection(
     # -- Load configuration ------------------------------------------------
     config_path = get_config_path()
     if config_path is None:
-        raise FileNotFoundError(
-            "No configuration found. Run 'autoinfo init' first."
-        )
+        raise FileNotFoundError("No configuration found. Run 'autoinfo init' first.")
     config = load_config(config_path)
 
     domain_config = _find_domain(config, domain)
@@ -233,9 +248,7 @@ def run_collection(
                     )
                 check_source_alerts(domain, missing)
         except Exception:
-            logger.exception(
-                "Source credential check failed for domain '%s'", domain
-            )
+            logger.exception("Source credential check failed for domain '%s'", domain)
 
     return {
         "collection_id": collection_id,
@@ -277,12 +290,17 @@ def _resolve_sources(
     source names that are not present in *all_sources* — they are never
     silently dropped (issue #296).  When *requested* is ``None``/empty,
     *unknown* is empty and all sources are returned.
+
+    ``enabled: false`` sources are always excluded, whether requested by
+    name or collected as part of the default set (issues #6/#7 — disabled
+    feeds must not be fetched).
     """
+    active = [s for s in all_sources if bool(s.settings.get("enabled", True))]
     if not requested:
-        return list(all_sources), []
+        return active, []
 
     requested_set = set(requested)
-    resolved = [s for s in all_sources if s.name in requested_set]
+    resolved = [s for s in active if s.name in requested_set]
     known_names = {s.name for s in all_sources}
     unknown = [name for name in requested if name not in known_names]
     return resolved, unknown
@@ -326,11 +344,13 @@ def _resolve_topic_keywords(domain_config: Any, topic: str) -> list[str]:
 # is the relevance signal — so filtering them drops real items (the #177
 # over-filtering regression).  Classification mirrors the name-based
 # dispatch in ``_build_handler``.
-CROSS_DISCIPLINARY_SOURCE_TYPES: frozenset[str] = frozenset({
-    "openalex",
-    "dblp",
-    "web",
-})
+CROSS_DISCIPLINARY_SOURCE_TYPES: frozenset[str] = frozenset(
+    {
+        "openalex",
+        "dblp",
+        "web",
+    }
+)
 # Generic ``api`` handlers whose NAME marks a cross-disciplinary platform.
 # (Deep-imported alongside ``_build_handler``: Semantic Scholar, CrossRef.)
 CROSS_DISCIPLINARY_API_NAME_MARKERS: tuple[str, ...] = ("semantic", "crossref")
@@ -377,10 +397,7 @@ def _keyword_matches(keyword: str, text: str) -> bool:
     words = _WORD_RE.findall(keyword.lower())
     if not words:
         return False
-    return all(
-        re.search(rf"(?<![a-z0-9]){re.escape(w)}", text) is not None
-        for w in words
-    )
+    return all(re.search(rf"(?<![a-z0-9]){re.escape(w)}", text) is not None for w in words)
 
 
 def _matches_keywords(
@@ -613,10 +630,7 @@ def _collect_from_source(
     # BEFORE they enter the raw cache, so no downstream product can pick them up.
     if domain in _DOMAIN_NOISE_KEYWORDS:
         pre = len(new_items)
-        new_items = [
-            item for item in new_items
-            if not _item_matches_domain_noise(item, domain)
-        ]
+        new_items = [item for item in new_items if not _item_matches_domain_noise(item, domain)]
         dropped_noise = pre - len(new_items)
         if dropped_noise:
             plog.info(
@@ -654,8 +668,11 @@ def _collect_from_source(
         if new_items_collector is not None:
             new_items_collector.extend(new_items)
         _log_run(
-            domain, source_config.name, collection_id,
-            items_found, items_new,
+            domain,
+            source_config.name,
+            collection_id,
+            items_found,
+            items_new,
             status="success",
             duration_s=elapsed,
             trace_ids=trace_ids,
@@ -1049,7 +1066,10 @@ def _fetch_items(
         return [handler.to_item(item) for item in items]
 
     # -- HuggingFace / Kaggle handler path -----------------------------------
-    if hasattr(handler, "fetch") and getattr(handler, "source_type", "") in ("huggingface", "kaggle"):  # noqa: E501
+    if hasattr(handler, "fetch") and getattr(handler, "source_type", "") in (
+        "huggingface",
+        "kaggle",
+    ):  # noqa: E501
         search_query = topic if topic else ""
         items = handler.fetch(query=search_query, limit=limit)
         return [handler.to_item(item) for item in items]
