@@ -552,6 +552,16 @@ def _resolve_effective_language(
        ai-commercial come out single-language without manual params).
     3. Otherwise ``""`` — no filtering (legacy behavior).
 
+    Seed fallback (issue #8): when a project config file EXISTS but its
+    domain block carries no ``default_language`` key at all (projects
+    initialized before the field existed — ``init`` only propagates it for
+    NEW domains), fall back to the demo-domain seed
+    ``src/autoinfo/data/domains/<domain>/sources.yaml`` so live surfaces
+    come out single-language immediately without a config migration.  An
+    explicitly declared (even empty) value always wins — empty means "no
+    filtering", backward compatible.  A project with NO config file at all
+    stays ``""`` (no filtering) — seeding never engages on a missing config.
+
     For a cross-domain product (*cross_domain* True) we never silently pick
     one domain's default across multiple domains: an explicit param wins,
     otherwise no filtering.
@@ -569,8 +579,48 @@ def _resolve_effective_language(
         return ""
     for d in config.domains:
         if d.name == domain:
-            return d.default_language or ""
-    return ""
+            if _config_declares_default_language(config_path, domain):
+                return d.default_language or ""
+            break
+    return _seed_domain_default_language(domain)
+
+
+def _config_declares_default_language(config_path: Path, domain: str) -> bool:
+    """True when the raw config YAML declares a ``default_language`` key for
+    *domain* (even an empty value).
+
+    The parsed :class:`DomainConfig` cannot distinguish "key present but
+    empty" from "key missing" — both parse to ``""`` — so the raw dict is
+    consulted for the seed-fallback decision (issue #8).
+    """
+    try:
+        raw = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
+    except Exception:
+        return False
+    for d in raw.get("domains", []):
+        if d.get("name") == domain:
+            return "default_language" in d
+    return False
+
+
+def _seed_domain_default_language(domain: str) -> str:
+    """Demo-domain seed fallback for ``default_language`` (issue #8).
+
+    Reads ``src/autoinfo/data/domains/<domain>/sources.yaml`` (the same seed
+    ``init`` uses) so existing projects whose runtime config predates the
+    field still come out single-language without a config migration.
+    Returns ``""`` when the seed file is absent or carries no
+    ``default_language``.
+    """
+    seed_path = _DEMO_DOMAINS_DIR / domain / "sources.yaml"
+    if not seed_path.is_file():
+        return ""
+    try:
+        with open(seed_path, encoding="utf-8") as f:
+            seed = yaml.safe_load(f) or {}
+    except Exception:
+        return ""
+    return str(seed.get("default_language") or "")
 
 
 def _get_domain_exclude_keywords(domain: str) -> list[str]:
