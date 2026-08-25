@@ -210,3 +210,14 @@ class TestLocalizeProduct:
                 target_lang="zh",
                 out_dir=str(tmp_path),
             )
+
+    def test_non_str_translated_body_keeps_original(self, tmp_path: Path) -> None:
+        """A list-shaped translated_body (LLM array) must not crash the pipeline."""
+        from autoinfo.output.localize import _translate_segment_text
+
+        with patch(
+            "autoinfo.output.localize.localize_content",
+            return_value={"translated_body": ["one", "two"], "success": True},
+        ):
+            out = _translate_segment_text("Keep this sentence", "en", "zh", "medical-research")
+        assert out == "Keep this sentence"

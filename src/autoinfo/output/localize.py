@@ -151,6 +151,14 @@ def _translate_segment_text(
         domain=domain,
     )
     translated = (result or {}).get("translated_body") or ""
+    if not isinstance(translated, str):
+        # localize_content may return a non-string body (e.g. the LLM
+        # answered with a JSON array); treat it as a failed translation.
+        logger.warning(
+            "localize_content returned non-str body (%s) for segment: %.60s",
+            type(translated).__name__, text[:60],
+        )
+        return text
     if not translated.strip():
         logger.warning("localize_content returned empty translation for segment: %.60s", text[:60])
         return text
