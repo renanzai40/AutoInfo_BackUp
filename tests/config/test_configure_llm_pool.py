@@ -445,12 +445,12 @@ def test_api_key_env_round_trip(config_dir: Path, monkeypatch: pytest.MonkeyPatc
 def test_judgment_tasks_constant_unchanged() -> None:
     """Guard: the release-pinned judgment set is exactly the three names.
 
-    ``JUDGMENT_MODEL`` is re-pinned to the NVIDIA free-tier Llama Nemotron
-    Super (``openai/nvidia/llama-3.3-nemotron-super-49b-v1``,
-    litellm-qualified) for the backup-repo issue run — the previous bare
-    ``deepseek-v4-flash`` value was unsupported on the Command Code
-    provider endpoint, and the opencode.ai gateway key it used is
-    quota-exhausted.  Judgment stays on the stable free primary.
+    ``JUDGMENT_MODEL`` is re-pinned to the Agnes free-tier Flash model
+    (``openai/agnes-2.5-flash``, litellm-qualified) for the backup-repo
+    issue run — measured 2.7s/call vs 20-75s for the NVIDIA alternatives,
+    and the free tier bills $0.  The prior bare ``deepseek-v4-flash`` value
+    was unsupported on the Command Code provider endpoint, and its
+    opencode.ai gateway key is quota-exhausted.
     """
     assert JUDGMENT_TASKS == frozenset({"g4_factual", "g5_translation", "llm_judge"})
-    assert JUDGMENT_MODEL == "openai/nvidia/llama-3.3-nemotron-super-49b-v1"
+    assert JUDGMENT_MODEL == "openai/agnes-2.5-flash"

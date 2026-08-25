@@ -121,7 +121,7 @@ SOFT_GATE_ACTIONS: frozenset[str] = frozenset({"retry", "flag", "skip", "archive
 # (provider/model) because judgment call sites hand JUDGMENT_MODEL to
 # litellm verbatim — a bare id containing a slash would be mis-parsed by
 # litellm as a provider name.
-JUDGMENT_MODEL = "openai/nvidia/llama-3.3-nemotron-super-49b-v1"
+JUDGMENT_MODEL = "openai/agnes-2.5-flash"
 
 # Task names whose model ALWAYS resolves to :data:`JUDGMENT_MODEL`, regardless
 # of any ``llm.tasks[<name>].model`` runtime drift.
