@@ -7216,6 +7216,10 @@ def _llm_json_extract(
     Uses :class:`LLMExtractor` under the hood by wrapping the prompt in
     a minimal ``Item``.  Returns the value of *field* from the parsed
     JSON response, or ``None`` on failure.
+
+    Free-provider resilience: the extraction path returns an EMPTY result
+    (not an exception) on transient parse failure; retry once before
+    giving up, mirroring the two-attempt pattern of ``_report_llm_call``.
     """
     from autoinfo.models import Item  # noqa: PLC0415
 
@@ -7228,7 +7232,11 @@ def _llm_json_extract(
         content=prompt,
     )
     result = extractor.extract(dummy, schema=[field])
-    return result.custom_fields.get(field)
+    value = result.custom_fields.get(field) if result else None
+    if value is None:
+        result = extractor.extract(dummy, schema=[field])
+        value = result.custom_fields.get(field) if result else None
+    return value
 
 
 def _report_data_to_dict(
