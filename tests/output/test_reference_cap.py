@@ -360,8 +360,8 @@ class TestEnterpriseSelectedLabel:
             product_template=_registry_template("enterprise-briefing"),
             ref_limit=8,
         ))
-        assert "精选 8 条详述" in out
-        assert "selected 8 of 8" in out
+        assert "selected 8 of 8 key findings" in out
+        assert "8 source references listed" in out
         assert "selected 9 of 8" not in out
 
     def test_digest_path_ref_limit_8_with_9_findings_renders_selected_8_of_8(
@@ -392,8 +392,8 @@ class TestEnterpriseSelectedLabel:
         out = _registry_template("enterprise-briefing").render(
             "enterprise-briefing", "md", flat
         )
-        assert "精选 8 条详述" in out
-        assert "selected 8 of 8" in out
+        assert "selected 8 of 8 key findings" in out
+        assert "8 source references listed" in out
         assert "selected 9 of 8" not in out
 
     def test_key_findings_cap_never_exceeds_references_for_k_le_12(self) -> None:

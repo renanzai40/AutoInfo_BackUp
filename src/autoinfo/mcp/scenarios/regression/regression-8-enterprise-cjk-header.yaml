@@ -1,0 +1,105 @@
+# Regression #8 residual: the enterprise-briefing scope label must be
+# single-language (no CJK template leak) and must not over-claim a
+# per-finding expansion.
+#
+# History: enterprise-briefing.md.j2 rendered a hardcoded Chinese header
+# `> **Scope**: 精选 N 条详述 · selected N of M items detailed below.` — a
+# template-level i18n leak (CJK chars in an otherwise English template) and
+# a wording mismatch: the scope claimed "N of M items detailed below" while
+# the References section is a flat numbered list (not a per-finding
+# expansion of all M items).
+#
+# Fix (template-only): the scope line now reads
+# `> **Scope**: selected N of M key findings · M source references listed.`
+# — single-language, and the "listed" wording matches the flat References
+# section exactly.
+#
+# Deterministic (requires_env: []): the KBStore and LLM seams are patched
+# in the subprocess (same pattern as regression-9-generic-theme-blocklist
+# / regression-enterprise-coverage.yaml), the enterprise-briefing registry
+# ProductTemplate renders from a hermetic flat context (report path
+# _report_data_to_dict) with 3 key findings + 60 references, and the body
+# is asserted free of CJK with scope counts matching the rendered sections.
+name: regression-8-enterprise-cjk-header
+description: "Regression #8 residual: enterprise-briefing scope label has no CJK leak and selected-N-of-M counts match the rendered Key Findings / References sections"
+category: regression
+regression: true
+regression_issue: "#8"
+requires_env: []
+steps:
+  - name: "enterprise-briefing scope label is single-language and count-consistent"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, re, shutil, tempfile
+      from pathlib import Path
+      from typing import Any, cast
+      from autoinfo.output import PRODUCT_TEMPLATES, ReportData, _report_data_to_dict
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      rd = ReportData(
+          title="medical-research \u2014 Enterprise Briefing",
+          generated_at="2026-08-19 00:00 UTC",
+          domain="medical-research",
+          executive_summary="This briefing selects the key developments of the period.",
+          key_findings=cast(
+              list[dict[str, Any]],
+              [{"text": f"Finding number {i}"} for i in range(1, 4)],
+          ),
+          references=[
+              {
+                  "title": f"Reference {i}",
+                  "source_url": f"https://example.com/ref-{i}",
+                  "source_type": "api",
+                  "source_platform": "pubmed",
+                  "domain": "medical-research",
+              }
+              for i in range(1, 61)
+          ],
+      )
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-8-enterprise-cjk-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          out = tmpl("enterprise-briefing").render(
+              "enterprise-briefing", "md", _report_data_to_dict(rd)
+          )
+          assert isinstance(out, str), type(out)
+          # No CJK characters anywhere in the rendered body.
+          cjk = re.findall(r"[\u4e00-\u9fff]", out)
+          assert not cjk, f"CJK leaked into enterprise-briefing body: {cjk}"
+          # The scope line renders the single-language wording.
+          scope_m = re.search(r"> \*\*Scope\*\*: (.+)$", out, re.MULTILINE)
+          assert scope_m, "scope line missing from render"
+          count_m = re.search(r"selected (\d+) of (\d+)", scope_m.group(1))
+          assert count_m, f"selected N of M missing from scope line: {scope_m.group(1)!r}"
+          n, m = int(count_m.group(1)), int(count_m.group(2))
+          # N matches the rendered Key Findings bullets.
+          findings_m = re.search(
+              r"## Key Findings\n(.*?)(?:\n## |\Z)", out, re.DOTALL
+          )
+          assert findings_m, "Key Findings section missing"
+          rendered_findings = len(re.findall(r"-\s+\S", findings_m.group(1)))
+          assert n == rendered_findings, (
+              f"scope N={n} but Key Findings renders {rendered_findings} bullets"
+          )
+          # M matches the rendered References.
+          refs_m = re.search(r"## References\n(.*?)(?:\n---|\Z)", out, re.DOTALL)
+          assert refs_m, "References section missing"
+          rendered_refs = len(re.findall(r"^\d+\. ", refs_m.group(1), re.MULTILINE))
+          assert m == rendered_refs, (
+              f"scope M={m} but References renders {rendered_refs} entries"
+          )
+          assert m == 60 and n == 3, f"unexpected counts: selected {n} of {m}"
+          print("ENTERPRISE_SCOPE_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["ENTERPRISE_SCOPE_OK"]
