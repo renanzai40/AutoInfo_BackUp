@@ -202,7 +202,13 @@ def _qa_segment(
         )
         if not pipeline:
             return 0.0
-        score = pipeline.get("composite_score")
+        # Faithfulness is the authoritative back-translation dimension; the
+        # composite mixes in unmeasured dimensions (terminology/style/
+        # readability) at ~25% each, dragging a perfect 90-faithful pair to
+        # ~36 — unusable as a gate threshold.
+        score = pipeline.get("faithfulness")
+        if score is None:
+            score = pipeline.get("composite_score")
         if score is None:
             score = pipeline.get("quality_score")
         return float(score or 0.0)

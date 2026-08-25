@@ -211,17 +211,29 @@ class TestLocalizeProduct:
                 out_dir=str(tmp_path),
             )
 
-    def test_qa_gate_reads_composite_score(self, tmp_path: Path) -> None:
-        """The pipeline's composite_score key drives the gate (not quality_score)."""
+    def test_qa_gate_reads_faithfulness_priority(self, tmp_path: Path) -> None:
+        """Faithfulness drives the gate; composite only when absent."""
         from autoinfo.output.localize import _qa_segment
 
         with (
             patch(
                 "autoinfo.output.localize.run_back_translation_pipeline",
-                return_value={"composite_score": 88.0, "success": True},
+                return_value={"faithfulness": 92.0, "composite_score": 36.0},
             ),
-            patch("autoinfo.output.localize.localize_content",
-                  return_value={"translated_body": "TR"}),
+        ):
+            result = _qa_segment("Hello", "TR", "en", "zh")
+        assert result["passed"] is True
+        assert result["score"] == 92.0
+
+    def test_qa_gate_composite_fallback(self, tmp_path: Path) -> None:
+        """Composite is used only when faithfulness is absent."""
+        from autoinfo.output.localize import _qa_segment
+
+        with (
+            patch(
+                "autoinfo.output.localize.run_back_translation_pipeline",
+                return_value={"composite_score": 88.0},
+            ),
         ):
             result = _qa_segment("Hello", "TR", "en", "zh")
         assert result["passed"] is True
