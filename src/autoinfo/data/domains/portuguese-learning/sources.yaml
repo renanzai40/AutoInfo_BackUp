@@ -1,0 +1,36 @@
+# AutoInfo domain: portuguese-learning
+name: portuguese-learning
+description: Portuguese language immersion — news in Portuguese for learning
+default_language: pt
+exclude_keywords:
+- english
+- español
+- français
+- brasileiro politics only
+sources:
+- name: observador
+  type: rss
+  url: https://observador.pt/feed/
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 60
+  enabled: true
+topics:
+- name: News & Politics
+  keywords:
+  - notícias
+  - política
+  - governo
+  - eleições
+- name: Economy & Technology
+  keywords:
+  - economia
+  - tecnologia
+  - empresas
+- name: Culture & Sports
+  keywords:
+  - cultura
+  - desporto
+  - cinema
+  - música

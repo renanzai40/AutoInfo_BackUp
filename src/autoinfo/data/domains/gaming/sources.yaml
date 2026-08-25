@@ -1,190 +1,199 @@
-# AutoInfo demo domain: Gaming
-# Tracks video game industry news, reviews, game releases, and industry trends
 name: gaming
-description: "Gaming industry intelligence — video games, releases, industry news, game culture"
-
+description: Gaming industry intelligence — video games, releases, industry news,
+  game culture
 sources:
-  - name: ign-rss
-    type: rss
-    url: https://feeds.ign.com/ign/all
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-    extract_fields:
-      - name: title
-        type: string
-        description: "Game news headline"
-        required: true
-      - name: game_title
-        type: string
-        description: "Name of the game the article is about (if any)"
-        required: false
-      - name: publish_date
-        type: string
-        description: "Original publication date and time"
-        required: false
-
-  - name: polygon-rss
-    type: rss
-    url: https://www.polygon.com/rss/index.xml
-    quality_tier: 2
-    enabled: false  # 2026-08: server disconnected on mainland CN (verified 2026-08-24)
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-    extract_fields:
-      - name: title
-        type: string
-        description: "Game news headline"
-        required: true
-      - name: game_title
-        type: string
-        description: "Name of the game the article is about (if any)"
-        required: false
-      - name: publish_date
-        type: string
-        description: "Original publication date and time"
-        required: false
-
-  - name: gamesindustry-biz
-    type: rss
-    url: https://www.gamesindustry.biz/feed/news
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-    extract_fields:
-      - name: title
-        type: string
-        description: "Industry news headline"
-        required: true
-      - name: company
-        type: string
-        description: "Game company or studio mentioned"
-        required: false
-      - name: publish_date
-        type: string
-        description: "Original publication date and time"
-        required: false
-
-  - name: gcores-rss
-    type: rss
-    url: https://www.gcores.com/rss
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-    settings:
-      rate_limit_per_second: 1
-
-  - name: yystv-via-google-news
-    type: rss
-    url: "https://news.google.com/rss/search?q=site:yystv.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans"
-    quality_tier: 3
-    enabled: false  # 2026-08: GFW-blocked (Google News RSS) — TCP connect timeout (verified 2026-08-24)
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-
-  # ---- 2026-08-24 (#6/#7): mainland-CN verified-reachable replacements ----
-  - name: gamespot
-    type: rss
-    url: https://www.gamespot.com/feeds/news/
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-    extract_fields:
-      - name: title
-        type: string
-        description: "Game news headline"
-        required: true
-      - name: game_title
-        type: string
-        description: "Name of the game the article is about (if any)"
-        required: false
-      - name: publish_date
-        type: string
-        description: "Original publication date and time"
-        required: false
-
-  - name: pc-gamer
-    type: rss
-    url: https://www.pcgamer.com/rss/
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-    extract_fields:
-      - name: title
-        type: string
-        description: "Game news headline"
-        required: true
-      - name: game_title
-        type: string
-        description: "Name of the game the article is about (if any)"
-        required: false
-      - name: publish_date
-        type: string
-        description: "Original publication date and time"
-        required: false
-
-  - name: eurogamer
-    type: rss
-    url: https://www.eurogamer.net/feed
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-    extract_fields:
-      - name: title
-        type: string
-        description: "Game news headline"
-        required: true
-      - name: game_title
-        type: string
-        description: "Name of the game the article is about (if any)"
-        required: false
-      - name: publish_date
-        type: string
-        description: "Original publication date and time"
-        required: false
-
+- name: ign-rss
+  type: rss
+  url: https://feeds.ign.com/ign/all
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+  extract_fields:
+  - name: title
+    type: string
+    description: Game news headline
+    required: true
+  - name: game_title
+    type: string
+    description: Name of the game the article is about (if any)
+    required: false
+  - name: publish_date
+    type: string
+    description: Original publication date and time
+    required: false
+- name: polygon-rss
+  type: rss
+  url: https://www.polygon.com/rss/index.xml
+  quality_tier: 2
+  enabled: false
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+  extract_fields:
+  - name: title
+    type: string
+    description: Game news headline
+    required: true
+  - name: game_title
+    type: string
+    description: Name of the game the article is about (if any)
+    required: false
+  - name: publish_date
+    type: string
+    description: Original publication date and time
+    required: false
+- name: gamesindustry-biz
+  type: rss
+  url: https://www.gamesindustry.biz/feed/news
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+  extract_fields:
+  - name: title
+    type: string
+    description: Industry news headline
+    required: true
+  - name: company
+    type: string
+    description: Game company or studio mentioned
+    required: false
+  - name: publish_date
+    type: string
+    description: Original publication date and time
+    required: false
+- name: gcores-rss
+  type: rss
+  url: https://www.gcores.com/rss
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+  settings:
+    rate_limit_per_second: 1
+- name: yystv-via-google-news
+  type: rss
+  url: https://news.google.com/rss/search?q=site:yystv.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans
+  quality_tier: 3
+  enabled: false
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+- name: gamespot
+  type: rss
+  url: https://www.gamespot.com/feeds/news/
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+  extract_fields:
+  - name: title
+    type: string
+    description: Game news headline
+    required: true
+  - name: game_title
+    type: string
+    description: Name of the game the article is about (if any)
+    required: false
+  - name: publish_date
+    type: string
+    description: Original publication date and time
+    required: false
+- name: pc-gamer
+  type: rss
+  url: https://www.pcgamer.com/rss/
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+  extract_fields:
+  - name: title
+    type: string
+    description: Game news headline
+    required: true
+  - name: game_title
+    type: string
+    description: Name of the game the article is about (if any)
+    required: false
+  - name: publish_date
+    type: string
+    description: Original publication date and time
+    required: false
+- name: eurogamer
+  type: rss
+  url: https://www.eurogamer.net/feed
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+  extract_fields:
+  - name: title
+    type: string
+    description: Game news headline
+    required: true
+  - name: game_title
+    type: string
+    description: Name of the game the article is about (if any)
+    required: false
+  - name: publish_date
+    type: string
+    description: Original publication date and time
+    required: false
+- name: rock-paper-shotgun
+  type: rss
+  url: https://www.rockpapershotgun.com/feed
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 30
+  enabled: true
+- name: gematsu
+  type: rss
+  url: https://www.gematsu.com/feed
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 30
+  enabled: true
 topics:
-  - name: "Game Releases"
-    keywords:
-      - game release
-      - launch
-      - new game
-      - gameplay
-      - demo
-      - beta
-      - early access
-      - Steam
-
-  - name: "Industry News"
-    keywords:
-      - video game industry
-      - studio
-      - publisher
-      - acquisition
-      - layoffs
-      - esports
-      - game development
-      - revenue
-
-  - name: "Game Reviews"
-    keywords:
-      - review
-      - score
-      - rating
-      - verdict
-      - best games
-      - game of the year
+- name: Game Releases
+  keywords:
+  - game release
+  - launch
+  - new game
+  - gameplay
+  - demo
+  - beta
+  - early access
+  - Steam
+- name: Industry News
+  keywords:
+  - video game industry
+  - studio
+  - publisher
+  - acquisition
+  - layoffs
+  - esports
+  - game development
+  - revenue
+- name: Game Reviews
+  keywords:
+  - review
+  - score
+  - rating
+  - verdict
+  - best games
+  - game of the year
+default_language: en
+exclude_keywords:
+- console hardware review
+- benchmark scores
+- non-gaming entertainment
+- movie trailers

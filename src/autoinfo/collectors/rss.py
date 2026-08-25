@@ -25,8 +25,14 @@ _RSS_FETCH_TIMEOUT = 30  # seconds
 
 # Identifying user agent — sent both on the httpx fetch and to feedparser.
 # Bare ``python-httpx/*`` UAs are UA-blocked by some feeds (e.g. CNBC)
-# while a named agent string is accepted (#288).
-_RSS_USER_AGENT = "AutoInfo/1.8 (autoinfo@example.com)"
+# while a named agent string is accepted (#288). Browser-shaped UA since
+# 2026-08-25: card-verified feeds like retailwire.com 403 bare/named agent
+# strings but serve a browser UA (backup-repo #24 run); the trailing
+# AutoInfo token keeps the request identifiable for ToS compliance.
+_RSS_USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 AutoInfo/1.9"
+)
 
 logger = logging.getLogger(__name__)
 

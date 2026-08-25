@@ -1,176 +1,182 @@
-# AutoInfo demo domain: Online Video/OTT
-# Tracks streaming industry news, content strategy, market analysis, and video technology innovation
 name: online-video
-description: "Online video and OTT intelligence — streaming platforms, content strategy, market trends, video tech innovation"
-
+description: Online video and OTT intelligence — streaming platforms, content strategy,
+  market trends, video tech innovation
 sources:
-  - name: youtube-mkbhd
-    type: rss
-    url: https://www.youtube.com/feeds/videos.xml?channel_id=UC0vBXGSyV14uvJ4hECDOl0Q
-    quality_tier: 2
-    enabled: false  # 2026-08: GFW-blocked on mainland CN — TCP connect timeout (verified 2026-08-24)
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
+- name: youtube-mkbhd
+  type: rss
+  url: https://www.youtube.com/feeds/videos.xml?channel_id=UC0vBXGSyV14uvJ4hECDOl0Q
+  quality_tier: 2
+  enabled: false
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+  field_mapping:
+    id: video_id
+    title: title
+    content: summary
+    source_url: link
+    published_date: published
+- name: variety
+  type: rss
+  url: https://variety.com/feed/
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+- name: hollywood-reporter
+  type: rss
+  url: https://www.hollywoodreporter.com/feed/
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+- name: netflix-tech-blog
+  type: rss
+  url: https://netflixtechblog.com/feed
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+- name: apple-music
+  type: api
+  url: https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json
+  quality_tier: 2
+  enabled: false
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+  settings:
+    json_path: $.feed.results
     field_mapping:
-      id: video_id
-      title: title
-      content: summary
-      source_url: link
-      published_date: published
-
-  - name: variety
-    type: rss
-    url: https://variety.com/feed/
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-
-  - name: hollywood-reporter
-    type: rss
-    url: https://www.hollywoodreporter.com/feed/
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-
-  - name: netflix-tech-blog
-    type: rss
-    url: https://netflixtechblog.com/feed
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-
-  - name: apple-music
-    type: api
-    url: https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json
-    quality_tier: 2
-    enabled: false  # 2026-08: Apple retired the RSS API — 404 on all variants (verified 2026-08-24)
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-    settings:
-      json_path: "$.feed.results"
-      field_mapping:
-        id: id
-        title: "artistName + name"
-        source_url: url
-        content: content
-
-  - name: pitchfork
-    type: rss
-    url: https://pitchfork.com/feed/feed-news/rss
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-
-  - name: billboard
-    type: rss
-    url: https://www.billboard.com/feed/
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-
-  # ---- 2026-08-24 (#6/#7): mainland-CN verified-reachable replacements ----
-  - name: bilibili-popular
-    type: bilibili
-    url: https://api.bilibili.com/x/web-interface/popular
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 5
-    fetch_depth: abstract
-    settings:
-      query: ""
-
-  - name: thewrap
-    type: rss
-    url: https://www.thewrap.com/feed/
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-
+      id: id
+      title: artistName + name
+      source_url: url
+      content: content
+- name: pitchfork
+  type: rss
+  url: https://pitchfork.com/feed/feed-news/rss
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+- name: billboard
+  type: rss
+  url: https://www.billboard.com/feed/
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+- name: bilibili-popular
+  type: bilibili
+  url: https://api.bilibili.com/x/web-interface/popular
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 5
+  fetch_depth: abstract
+  settings:
+    query: ''
+- name: thewrap
+  type: rss
+  url: https://www.thewrap.com/feed/
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+- name: the-verge
+  type: rss
+  url: https://www.theverge.com/rss/index.xml
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 30
+  enabled: true
+- name: comingsoon
+  type: rss
+  url: https://www.comingsoon.net/feed
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 30
+  enabled: true
 topics:
-  - name: "Streaming Platforms"
-    keywords:
-      - Netflix
-      - Disney+
-      - HBO Max
-      - streaming
-      - OTT
-      - Amazon Prime Video
-      - Hulu
-      - Peacock
-      - Paramount+
-      - Apple TV+
-
-  - name: "Content Strategy"
-    keywords:
-      - content strategy
-      - original content
-      - production
-      - licensing
-      - programming
-      - content acquisition
-      - content deal
-      - IP development
-      - content library
-
-  - name: "Market Analysis"
-    keywords:
-      - market share
-      - subscribers
-      - revenue
-      - cord-cutting
-      - market analysis
-      - streaming wars
-      - viewer behavior
-      - ad-supported
-      - AVOD
-      - SVOD
-
-  - name: "Tech Innovation"
-    keywords:
-      - streaming technology
-      - encoding
-      - CDN
-      - AI
-      - recommendation engine
-      - 4K
-      - HDR
-      - video compression
-      - adaptive bitrate
-      - low latency
-
+- name: Streaming Platforms
+  keywords:
+  - Netflix
+  - Disney+
+  - HBO Max
+  - streaming
+  - OTT
+  - Amazon Prime Video
+  - Hulu
+  - Peacock
+  - Paramount+
+  - Apple TV+
+- name: Content Strategy
+  keywords:
+  - content strategy
+  - original content
+  - production
+  - licensing
+  - programming
+  - content acquisition
+  - content deal
+  - IP development
+  - content library
+- name: Market Analysis
+  keywords:
+  - market share
+  - subscribers
+  - revenue
+  - cord-cutting
+  - market analysis
+  - streaming wars
+  - viewer behavior
+  - ad-supported
+  - AVOD
+  - SVOD
+- name: Tech Innovation
+  keywords:
+  - streaming technology
+  - encoding
+  - CDN
+  - AI
+  - recommendation engine
+  - 4K
+  - HDR
+  - video compression
+  - adaptive bitrate
+  - low latency
 extract_fields:
-  - name: title
-    type: string
-    description: "Video or article title"
-    required: true
-  - name: channel
-    type: string
-    description: "Publisher, channel, or production company responsible for the content"
-    required: false
-  - name: views
-    type: string
-    description: "View count or audience reach metrics if available"
-    required: false
-  - name: publish_date
-    type: string
-    description: "Original publication or air date"
-    required: false
-  - name: category
-    type: string
-    description: "Content category or genre (e.g., drama, documentary, tech review, industry news)"
-    required: false
+- name: title
+  type: string
+  description: Video or article title
+  required: true
+- name: channel
+  type: string
+  description: Publisher, channel, or production company responsible for the content
+  required: false
+- name: views
+  type: string
+  description: View count or audience reach metrics if available
+  required: false
+- name: publish_date
+  type: string
+  description: Original publication or air date
+  required: false
+- name: category
+  type: string
+  description: Content category or genre (e.g., drama, documentary, tech review, industry
+    news)
+  required: false
+default_language: en
+exclude_keywords:
+- pure gaming
+- consumer electronics peripherals
+- smartphone spec

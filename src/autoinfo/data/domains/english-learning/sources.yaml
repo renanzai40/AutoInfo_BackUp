@@ -1,0 +1,45 @@
+# AutoInfo domain: english-learning
+name: english-learning
+description: English language immersion — English learning content and news
+default_language: en
+exclude_keywords:
+- advertisement
+- sponsored
+- marketing
+- gambling
+sources:
+- name: duolingo-blog
+  type: rss
+  url: https://blog.duolingo.com/rss/
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 30
+  enabled: true
+- name: npr-news
+  type: rss
+  url: https://feeds.npr.org/1001/rss.xml
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 60
+  enabled: true
+topics:
+- name: Current Events
+  keywords:
+  - current events
+  - news
+  - world
+  - daily
+- name: Science, Tech & Business
+  keywords:
+  - science
+  - technology
+  - business
+  - innovation
+- name: Culture & Society
+  keywords:
+  - culture
+  - society
+  - education
+  - lifestyle

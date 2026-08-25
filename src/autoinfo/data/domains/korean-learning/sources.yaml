@@ -1,0 +1,47 @@
+# AutoInfo domain: korean-learning
+name: korean-learning
+description: Korean language immersion — news in Korean for learning
+default_language: ko
+exclude_keywords:
+- english
+- 日本語
+- 중국어
+- crypto hype
+sources:
+- name: hankyoreh
+  type: rss
+  url: https://www.hani.co.kr/rss/
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 60
+  enabled: true
+- name: talktomeinkorean
+  type: rss
+  url: https://talktomeinkorean.com/feed/
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 30
+  enabled: true
+topics:
+- name: News & Politics
+  keywords:
+  - 뉴스
+  - 정치
+  - 정부
+  - 국회
+  - 선거
+- name: Entertainment & Fashion
+  keywords:
+  - 연예
+  - 패션
+  - 문화
+  - 영화
+  - 연예인
+- name: Economy & Technology
+  keywords:
+  - 경제
+  - 기술
+  - 기업
+  - 주식

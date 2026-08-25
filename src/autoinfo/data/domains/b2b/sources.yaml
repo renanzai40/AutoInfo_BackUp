@@ -1,151 +1,163 @@
-# AutoInfo demo domain: B2B / Startup & VC Intelligence
-# Tracks startup funding, venture capital, enterprise SaaS, and B2B technology
 name: b2b
-description: "B2B & startup intelligence — venture capital, startup funding, enterprise SaaS, B2B tech"
-
+description: B2B & startup intelligence — venture capital, startup funding, enterprise
+  SaaS, B2B tech
 sources:
-  - name: producthunt
-    type: rss
-    url: https://www.producthunt.com/feed
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
+- name: producthunt
+  type: rss
+  url: https://www.producthunt.com/feed
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+  extract_fields:
+  - name: title
+    type: string
+    description: Product or launch headline
+    required: true
+  - name: product_name
+    type: string
+    description: Name of the launched product
+    required: false
+  - name: category
+    type: string
+    description: Product category (e.g., SaaS, AI, DevTools)
+    required: false
+- name: techcrunch
+  type: rss
+  url: https://techcrunch.com/feed/
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+  extract_fields:
+  - name: title
+    type: string
+    description: Startup or tech news headline
+    required: true
+  - name: startup_name
+    type: string
+    description: Startup company mentioned
+    required: false
+  - name: funding_amount
+    type: string
+    description: Funding round amount if mentioned (e.g., '$50M Series B')
+    required: false
+  - name: publish_date
+    type: string
+    description: Original publication date and time
+    required: false
+- name: crunchbase-news
+  type: rss
+  url: https://news.crunchbase.com/feed/
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+  extract_fields:
+  - name: title
+    type: string
+    description: Funding or company news headline
+    required: true
+  - name: company
+    type: string
+    description: Company mentioned in the article
+    required: false
+  - name: funding_amount
+    type: string
+    description: Funding round amount if mentioned
+    required: false
+- name: a16z
+  type: rss
+  url: https://a16z.com/feed/
+  quality_tier: 2
+  enabled: false
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+- name: hackernews
+  type: hackernews
+  url: https://hacker-news.firebaseio.com/v0
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+  settings:
     rate_limit: 10
-    fetch_depth: abstract
-    extract_fields:
-      - name: title
-        type: string
-        description: "Product or launch headline"
-        required: true
-      - name: product_name
-        type: string
-        description: "Name of the launched product"
-        required: false
-      - name: category
-        type: string
-        description: "Product category (e.g., SaaS, AI, DevTools)"
-        required: false
-
-  - name: techcrunch
-    type: rss
-    url: https://techcrunch.com/feed/
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-    extract_fields:
-      - name: title
-        type: string
-        description: "Startup or tech news headline"
-        required: true
-      - name: startup_name
-        type: string
-        description: "Startup company mentioned"
-        required: false
-      - name: funding_amount
-        type: string
-        description: "Funding round amount if mentioned (e.g., '$50M Series B')"
-        required: false
-      - name: publish_date
-        type: string
-        description: "Original publication date and time"
-        required: false
-
-  - name: crunchbase-news
-    type: rss
-    url: https://news.crunchbase.com/feed/
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-    extract_fields:
-      - name: title
-        type: string
-        description: "Funding or company news headline"
-        required: true
-      - name: company
-        type: string
-        description: "Company mentioned in the article"
-        required: false
-      - name: funding_amount
-        type: string
-        description: "Funding round amount if mentioned"
-        required: false
-
-  - name: a16z
-    type: rss
-    url: https://a16z.com/feed/
-    quality_tier: 2
-    enabled: false  # 2026-08: HTTP 404 — WP feed endpoint retired (verified 2026-08-24); JS-rendered site, no stable feed
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-
-  - name: hackernews
-    type: hackernews
-    url: https://hacker-news.firebaseio.com/v0
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-    settings:
-      rate_limit: 10
-      timeout: 30
-
-  # ---- 2026-08-24 (#6/#7): mainland-CN verified-reachable replacement ----
-  - name: saastr
-    type: rss
-    url: https://www.saastr.com/feed/
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-    extract_fields:
-      - name: title
-        type: string
-        description: "B2B / SaaS news headline"
-        required: true
-      - name: company
-        type: string
-        description: "Company mentioned in the article"
-        required: false
-      - name: publish_date
-        type: string
-        description: "Original publication date and time"
-        required: false
-
+    timeout: 30
+- name: saastr
+  type: rss
+  url: https://www.saastr.com/feed/
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+  extract_fields:
+  - name: title
+    type: string
+    description: B2B / SaaS news headline
+    required: true
+  - name: company
+    type: string
+    description: Company mentioned in the article
+    required: false
+  - name: publish_date
+    type: string
+    description: Original publication date and time
+    required: false
+- name: b2b-news-network
+  type: rss
+  url: https://b2bnn.com/feed/
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 30
+  enabled: true
+- name: marTech
+  type: rss
+  url: https://martech.org/feed/
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 30
+  enabled: true
 topics:
-  - name: "Startup Funding"
-    keywords:
-      - startup funding
-      - venture capital
-      - seed round
-      - series A
-      - series B
-      - unicorn
-      - fundraising
-      - investment
-
-  - name: "Enterprise SaaS"
-    keywords:
-      - SaaS
-      - enterprise software
-      - B2B
-      - cloud
-      - CRM
-      - ERP
-      - productivity
-      - DevOps
-
-  - name: "Tech Trends"
-    keywords:
-      - AI
-      - machine learning
-      - developer tools
-      - open source
-      - platform
-      - technology trends
+- name: Startup Funding
+  keywords:
+  - startup funding
+  - venture capital
+  - seed round
+  - series A
+  - series B
+  - unicorn
+  - fundraising
+  - investment
+- name: Enterprise SaaS
+  keywords:
+  - SaaS
+  - enterprise software
+  - B2B
+  - cloud
+  - CRM
+  - ERP
+  - productivity
+  - DevOps
+- name: Tech Trends
+  keywords:
+  - AI
+  - machine learning
+  - developer tools
+  - open source
+  - platform
+  - technology trends
+default_language: en
+exclude_keywords:
+- 2C consumer
+- consumer products
+- B2C
+- personal gadgets
+- fast food
