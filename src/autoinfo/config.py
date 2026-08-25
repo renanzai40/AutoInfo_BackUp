@@ -114,7 +114,14 @@ SOFT_GATE_ACTIONS: frozenset[str] = frozenset({"retry", "flag", "skip", "archive
 # (translation accuracy) and llm_judge (translation QA gate 5) call sites.
 # The value is chosen per release; changing it is a release-level decision,
 # never a runtime one — judgment calls must NOT drift with task config.
-JUDGMENT_MODEL = "deepseek-v4-flash"
+# 2026-08-25 re-pin: NVIDIA free-tier Llama Nemotron Super 49B
+# (backup-repo #19-#38 run) — the prior bare deepseek-v4-flash value was
+# unsupported on the Command Code provider endpoint, and its opencode.ai
+# gateway key is quota-exhausted.  The value is litellm-qualified
+# (provider/model) because judgment call sites hand JUDGMENT_MODEL to
+# litellm verbatim — a bare id containing a slash would be mis-parsed by
+# litellm as a provider name.
+JUDGMENT_MODEL = "openai/nvidia/llama-3.3-nemotron-super-49b-v1"
 
 # Task names whose model ALWAYS resolves to :data:`JUDGMENT_MODEL`, regardless
 # of any ``llm.tasks[<name>].model`` runtime drift.
