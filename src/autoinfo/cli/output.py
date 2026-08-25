@@ -91,6 +91,7 @@ def localize(
             source_lang=source_lang,
             out_dir=out_dir,
             max_items=max_items,
+            include_stale=include_stale,
         )
     except ValueError as exc:
         typer.echo(f"Error: {exc}", err=True)

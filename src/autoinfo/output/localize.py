@@ -243,7 +243,8 @@ def _resolve_source_language(domain: str, source_lang: str) -> str:
 
 
 def _generate_product_text(
-    domain: str, product: str, period: str, max_items: int = 0
+    domain: str, product: str, period: str, max_items: int = 0,
+    include_stale: bool = False,
 ) -> tuple[str, str]:
     """Generate the product markdown; return (markdown, generator-name)."""
     for row in PRODUCT_TEMPLATES:
@@ -264,6 +265,8 @@ def _generate_product_text(
         }
         if max_items:
             kwargs["max_items"] = max_items
+        if include_stale:
+            kwargs["include_stale"] = True
         result = generate_digest(**kwargs)
         return str(result), "generate_digest"
     if product in _REPORT_FAMILY:
@@ -287,6 +290,7 @@ def localize_product(
     qa_sample_rate: float = 0.2,
     qa_min_samples: int = 5,
     max_items: int = 0,
+    include_stale: bool = False,
 ) -> dict[str, Any]:
     """Localize a generated product into ``target_lang`` (issue #38).
 
@@ -302,7 +306,9 @@ def localize_product(
         raise ValueError("target_lang is required (e.g. --target-lang zh)")
     effective_source = _resolve_source_language(domain, source_lang)
 
-    markdown, _ = _generate_product_text(domain, product, period, max_items=max_items)
+    markdown, _ = _generate_product_text(
+        domain, product, period, max_items=max_items, include_stale=include_stale
+    )
 
     segments = _segment_markdown(markdown)
     translatable_idx = [

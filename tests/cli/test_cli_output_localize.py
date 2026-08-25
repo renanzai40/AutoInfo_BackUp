@@ -51,6 +51,7 @@ def test_localize_command_writes_language_file(
         source_lang="",
         out_dir="outputs/localized",
         max_items=0,
+        include_stale=False,
     )
     assert "digest-zh.md" in result.output
     assert "qa=passed" in result.output
