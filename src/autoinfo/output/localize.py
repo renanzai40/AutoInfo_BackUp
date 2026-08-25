@@ -250,11 +250,18 @@ def localize_product(
     target_lang: str = "",
     source_lang: str = "",
     out_dir: str | Path | None = None,
+    qa_sample_rate: float = 0.2,
+    qa_min_samples: int = 5,
 ) -> dict[str, Any]:
     """Localize a generated product into ``target_lang`` (issue #38).
 
     Returns a result dict with ``file_path``, ``language``, ``domain``,
     ``product`` and ``qa`` (gate/avg_score/refined_count/failed_count).
+
+    Back-translation QA runs on a deterministic stride sample of the
+    translated segments (``qa_sample_rate``, minimum ``qa_min_samples``)
+    — the gate semantics are identical (any sampled failure degrades the
+    gate) while the LLM cost stays bounded for large products.
     """
     if not target_lang:
         raise ValueError("target_lang is required (e.g. --target-lang zh)")
@@ -263,19 +270,28 @@ def localize_product(
     markdown, _ = _generate_product_text(domain, product, period)
 
     segments = _segment_markdown(markdown)
+    translatable_idx = [
+        i for i, seg in enumerate(segments) if seg["kind"] not in PROTECTED_KINDS
+    ]
+    sample_size = max(qa_min_samples, round(len(translatable_idx) * qa_sample_rate))
+    stride = max(1, -(-len(translatable_idx) // sample_size))
+    sampled_idx = set(translatable_idx[::stride])
+
     qa_scores: list[float] = []
     refined_count = 0
     failed_count = 0
-    for seg in segments:
+    for i, seg in enumerate(segments):
         if seg["kind"] in PROTECTED_KINDS:
             continue
         translated = _translate_segment_text(seg["text"], effective_source, target_lang, domain)
-        qa = _qa_segment(seg["text"], translated, effective_source, target_lang)
-        seg["text"] = qa["text"]
+        seg["text"] = translated
         seg["translated"] = True
-        qa_scores.append(qa["score"])
-        refined_count += 1 if qa["refined"] else 0
-        failed_count += 0 if qa["passed"] else 1
+        if i in sampled_idx:
+            qa = _qa_segment(seg["text"], translated, effective_source, target_lang)
+            seg["text"] = qa["text"]
+            qa_scores.append(qa["score"])
+            refined_count += 1 if qa["refined"] else 0
+            failed_count += 0 if qa["passed"] else 1
 
     localized_md = _reassemble_markdown(segments)
 
@@ -299,7 +315,9 @@ def localize_product(
             "avg_score": avg_score,
             "refined_count": refined_count,
             "failed_count": failed_count,
-            "total_segments": len(qa_scores),
+            "sampled_segments": len(qa_scores),
+            "total_segments": len(translatable_idx),
+            "sample_rate": qa_sample_rate,
         },
     }
 
