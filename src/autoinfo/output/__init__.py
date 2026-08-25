@@ -7079,6 +7079,23 @@ def _call_llm_for_report_synthesis(prompt: str) -> str:
     return content.strip()
 
 
+_GLUED_BULLET_SEP = re.compile(r"(?<=\))- ?")
+
+
+def _split_glued_bullets(text: str) -> list[str]:
+    """Split a bullet body that carries glue-glued follow-on bullets (issue #14).
+
+    The LLM sometimes returns Key Findings bullets joined inline without
+    newlines — ``- a (Source: u)- b (Source: u)- c`` — so the whole run is
+    seen by ``is_bullet`` as ONE item.  A ``)`` immediately before a ``-`` is
+    the glue boundary (a ``(Source: URL)`` citation suffix followed by the
+    next bullet marker), and each split part preserves its own ``(Source: u)``
+    suffix.  Legitimate prose where ``)`` is *not* followed by ``-`` is never
+    split.
+    """
+    return [part for part in _GLUED_BULLET_SEP.split(text) if part]
+
+
 def _parse_report_markdown(
     content: str, require_exec_summary: bool = True
 ) -> dict[str, Any]:
@@ -7130,9 +7147,10 @@ def _parse_report_markdown(
                 summary_lines.append(stripped)
         elif current_section in ("key findings", "findings", "main findings"):
             if is_bullet(stripped):
-                item = bullet_text(stripped)
-                if item:
-                    result["key_findings"].append(item)
+                for item in _split_glued_bullets(bullet_text(stripped)):
+                    item = item.strip()
+                    if item:
+                        result["key_findings"].append(item)
         elif current_section in ("recommendations", "next steps", "action items"):
             if is_bullet(stripped):
                 item = bullet_text(stripped)
