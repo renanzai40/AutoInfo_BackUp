@@ -1,0 +1,158 @@
+# Regression (#17): the column product must never copy its inputs verbatim.
+#
+# History: `column.md.j2` shipped three value-drain defects —
+#   1. `## What Changed This Week` rendered the ENTIRE `references` list
+#      (60 title+URL lines, byte-identical to the References listing) —
+#      zero increment, 60 rows.
+#   2. `## Implications & Outlook` rendered
+#      `{% for section in sections %}- **{{ section.title }}** — {{ section.content }}`
+#      — copying each Deep Dive section's content verbatim (duplicating the
+#      Deep Dive section above it).
+#   3. `## Reader Takeaways` was hardcoded meta boilerplate
+#      ("1. Revisit the Deep Dive sections… 2. Track the What Changed This
+#      Week list… 3. Follow the referenced sources…") — no substantive
+#      takeaways.
+#
+# Fix (template-only): What Changed is a capped delta (≤ 8 refs, deduped
+# against Deep Dive entry titles, top-8 fallback when everything is covered);
+# Implications renders per-section so-what phrasing (synthesis `implications`
+# index-aligned, else a "watch for follow-up developments" line — never
+# `section.content`); Reader Takeaways derives from `action_required` →
+# `recommendations` → section-title-derived items — never the 3 meta lines.
+#
+# Deterministic (requires_env: []): the KBStore and LLM seams are patched in
+# the subprocess (same pattern as regression-9-generic-theme-blocklist.yaml).
+# 60 references + 8 sections with distinct content + 3 action_required items
+# are supplied via a stubbed synthesis; `generate_report(report_type="column")`
+# renders the column product hermetically.  Runs inside an ABSOLUTE temp cwd
+# (tempfile.mkdtemp, try/finally cleanup).
+name: regression-17-column-value-drain
+description: "Regression #17: column product renders a capped What Changed delta (never the full reference dump), per-section Implications so-what phrasing (never verbatim section content), and substantive Reader Takeaways (never the 3 hardcoded meta lines)"
+category: regression
+regression: true
+regression_issue: "#17"
+requires_env: []
+steps:
+  - name: "hermetic column report renders capped delta + substantive takeaways"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_report
+
+      ENTRIES = [
+          {"entry_id": f"e{i:03d}", "title": f"Reference item {i}",
+           "summary": f"Summary of reference item {i}.",
+           "source_url": f"https://example.com/r/{i}", "source_type": "api",
+           "source_platform": "pubmed", "relevance_score": 90.0 - i,
+           "tier": "01-Raw", "collected_at": "2026-08-01T10:00:00Z"}
+          for i in range(1, 61)
+      ]
+
+      SECTIONS = [
+          {"title": f"Deep dive section {i}",
+           "content": (f"Section {i} unique analysis: time-lapse imaging "
+                       f"improved IVF live birth rates by {8 + i} percentage "
+                       "points in the 2026 prospective cohort.")}
+          for i in range(1, 9)
+      ]
+
+      ACTION_REQUIRED = [
+          "Replicate the time-lapse cohort at a second center.",
+          "Update the lab embryo-grading protocol.",
+          "Schedule a follow-up review after the extended cohort data lands.",
+      ]
+
+      COLUMN_TEMPLATE = next(
+          row["template"] for row in PRODUCT_TEMPLATES if row["name"] == "column"
+      )
+
+      def summary():
+          return {
+              "executive_summary": "Weekly column on IVF time-lapse imaging.",
+              "key_findings": [],
+              "recommendations": [],
+              "implications": [
+                  f"So-what implication for section {i}: watch for follow-up "
+                  "replications and extended cohorts."
+                  for i in range(1, 9)
+              ],
+              "action_required": ACTION_REQUIRED,
+              "sections": SECTIONS,
+          }
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-17-column-value-drain-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._group_by_theme") as group_mock, \
+               patch("autoinfo.output._generate_executive_summary",
+                     return_value=summary()):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              group_mock.return_value = [
+                  {"theme": f"Deep dive section {i}",
+                   "description": SECTIONS[i - 1]["content"],
+                   "entries": [ENTRIES[i - 1]]}
+                  for i in range(1, 9)
+              ]
+              out = generate_report(domain="medical-research",
+                                    period="weekly", format="markdown",
+                                    report_type="column",
+                                    product_template=COLUMN_TEMPLATE)
+          assert isinstance(out, str), type(out)
+
+          # -- Defect 1: What Changed is a capped delta, not the 60-row dump --
+          changed = out.split("## Implications & Outlook")[0]
+          changed_block = changed.split("## What Changed This Week")[1]
+          import re as _re
+          bullets = _re.findall(r"- \*\*(.+?)\*\*", changed_block)
+          assert len(bullets) <= 8, (
+              f"What Changed lists {len(bullets)} bullets (must be <= 8)"
+          )
+          full_dump_titles = sum(
+              1 for b in bullets if _re.fullmatch(r"Reference item \d+", b or "")
+          )
+          assert full_dump_titles <= 8, (
+              f"What Changed still dumps {full_dump_titles} reference titles"
+          )
+
+          # -- Defect 2: Implications is so-what phrasing, never section copy --
+          implications_block = out.split("## Implications & Outlook")[1]
+          implications_block = implications_block.split("## Reader Takeaways")[0]
+          for i in range(1, 9):
+              assert f"Section {i} unique analysis" not in implications_block, (
+                  f"Implications copies Deep Dive section {i} content verbatim"
+              )
+          assert "watch for follow-up replications" in implications_block, (
+              "Implications missing the synthesis so-what phrasing"
+          )
+
+          # -- Defect 3: Takeaways are substantive, never the 3 meta lines --
+          takeaways = out.split("## Reader Takeaways")[1]
+          assert "Revisit the Deep Dive sections" not in takeaways, (
+              "Reader Takeaways still carries the hardcoded meta line 1"
+          )
+          assert "Track the What Changed This Week list" not in takeaways, (
+              "Reader Takeaways still carries the hardcoded meta line 2"
+          )
+          assert "Follow the referenced sources" not in takeaways, (
+              "Reader Takeaways still carries the hardcoded meta line 3"
+          )
+          for action in ACTION_REQUIRED:
+              assert action in takeaways, (
+                  f"Reader Takeaways missing action_required item: {action}"
+              )
+          print("COLUMN_VALUE_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["COLUMN_VALUE_OK"]

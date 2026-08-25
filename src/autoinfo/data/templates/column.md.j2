@@ -38,27 +38,52 @@ _No deep-dive sections available for this column._
 
 ## What Changed This Week
 
+Top developments this week (full source list in References):
+
+{% set ns = namespace(shown=0) %}
+{% set seen_titles = sections | selectattr("entries") | map(attribute="entries") | map("map", attribute="title") | map("join", "|") | join("|") | lower %}
+{% set selected = [] %}
 {% for ref in references %}
-- **{{ ref.title }}**{{ (" — " ~ ref.source_url) if ref.source_url else "" }}{{ (" (" ~ ref.source_label | default(ref.source_platform, "") | platform_name ~ ")") if (ref.source_platform or ref.source_label) else "" }}
+{% if ns.shown < 8 and (ref.title | lower) not in seen_titles %}
+{% set _ = selected.append(ref) %}
+{% set ns.shown = ns.shown + 1 %}
+{% endif %}
 {% else %}
 _No developments this week._
+{% endfor %}
+{% if not selected and references %}
+{% set selected = references[:8] %}
+{% endif %}
+{% for ref in selected %}
+- **{{ ref.title }}**{{ (" — " ~ ref.source_url) if ref.source_url else "" }}{{ (" (" ~ ref.source_label | default(ref.source_platform, "") | platform_name ~ ")") if (ref.source_platform or ref.source_label) else "" }}
 {% endfor %}
 
 ---
 
 ## Implications & Outlook
 
-{% for section in sections %}
-- **{{ section.title }}** — {{ section.content }}
+{% for sec in sections %}
+{% set _impl = implications[loop.index0] if (implications and implications[loop.index0] is defined and implications[loop.index0]) else ("Covered in the Deep Dive (" ~ (sec.entries|length) ~ " item(s)); watch for follow-up developments next period.") %}
+- **{{ sec.title }}** — {{ _impl }}
 {% else %}
 _No outlook sections available._
 {% endfor %}
 
 ## Reader Takeaways
 
-1. Revisit the Deep Dive sections for the full analysis.
-2. Track the What Changed This Week list for week-over-week signals.
-3. Follow the referenced sources for primary evidence.
+{% if action_required %}
+{% for a in action_required %}
+{{ loop.index }}. {{ a }}
+{% endfor %}
+{% elif recommendations %}
+{% for r in recommendations %}
+{{ loop.index }}. {{ r }}
+{% endfor %}
+{% else %}
+{% for sec in sections %}
+{{ loop.index }}. Review the {{ sec.title }} section for the underlying developments.
+{% endfor %}
+{% endif %}
 
 {% if appendices %}
 ---
