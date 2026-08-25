@@ -239,7 +239,12 @@ class TestNormalizeDigestProductContext:
         assert flat["recommendations"] == []
 
     def test_references_carry_five_key_item_shape(self) -> None:
-        """References derive from entries with exactly the report-path shape."""
+        """References derive from entries with exactly the report-path shape.
+
+        Issue #11 residual: a ``description`` one-liner was added so
+        title-only entries never render bare names — summary-bearing entries
+        carry their own summary as the description.
+        """
         flat = _normalize_digest_product_context(self._context(), "medical-research")
         assert flat["references"] == [
             {
@@ -248,6 +253,9 @@ class TestNormalizeDigestProductContext:
                 "source_type": "api",
                 "source_platform": "pubmed",
                 "domain": "medical-research",
+                "description": (
+                    "Time-lapse imaging improves live birth rates in IVF."
+                ),
             },
             {
                 "title": "AI-driven embryo selection: a systematic review",
@@ -255,6 +263,9 @@ class TestNormalizeDigestProductContext:
                 "source_type": "api",
                 "source_platform": "pubmed",
                 "domain": "medical-research",
+                "description": (
+                    "AI models show promise but lack prospective validation."
+                ),
             },
         ]
         for ref in flat["references"]:
@@ -264,6 +275,7 @@ class TestNormalizeDigestProductContext:
                 "source_type",
                 "source_platform",
                 "domain",
+                "description",
             }
 
     def test_references_domain_defaults_to_digest_domain(self) -> None:

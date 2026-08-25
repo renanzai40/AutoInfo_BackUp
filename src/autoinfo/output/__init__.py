@@ -4362,20 +4362,25 @@ def _normalize_digest_product_context(
     # sort MUST run on the entries BEFORE the ref dicts drop summary/relevance.
     _ref_limit = ref_limit if ref_limit is not None else _output_config_ref_limit()
     _src_configs = _get_domain_source_configs(domain)
-    flat["references"] = [
-        {
+    flat["references"] = []
+    for e in _sorted_ref_entries(
+        [e for e in entries_list if isinstance(e, dict)]
+    )[:_ref_limit]:
+        _label = _derive_source_label(
+            e, e.get("domain", domain), source_configs=_src_configs,
+        )
+        flat["references"].append({
             "title": e.get("title", ""),
             "source_url": e.get("source_url", ""),
             "source_type": e.get("source_type", ""),
-            "source_platform": _derive_source_label(
-                e, e.get("domain", domain), source_configs=_src_configs,
-            ),
+            "source_platform": _label,
             "domain": e.get("domain", domain),
-        }
-        for e in _sorted_ref_entries(
-            [e for e in entries_list if isinstance(e, dict)]
-        )[:_ref_limit]
-    ]
+            "description": (
+                str(e.get("summary") or "").strip()
+                or str(e.get("content") or "")[:120].strip()
+                or f"{_label} item"
+            ),
+        })
 
     # --- Enterprise/premium key_findings cap (issue #11, decision a) ------
     # The enterprise-briefing template renders the selection-scope label
@@ -5382,18 +5387,23 @@ def generate_report(
     # ref dicts would silently lose the (has summary, relevance) ordering.
     _ref_limit = ref_limit if ref_limit is not None else _output_config_ref_limit()
     _src_configs = _get_domain_source_configs(domain)
-    references = [
-        {
+    references = []
+    for e in _sorted_ref_entries(entries)[:_ref_limit]:
+        _label = _derive_source_label(
+            e, e.get("domain", domain), source_configs=_src_configs,
+        )
+        references.append({
             "title": e.get("title", ""),
             "source_url": e.get("source_url", ""),
             "source_type": e.get("source_type", ""),
-            "source_platform": _derive_source_label(
-                e, e.get("domain", domain), source_configs=_src_configs,
-            ),
+            "source_platform": _label,
             "domain": e.get("domain", domain),
-        }
-        for e in _sorted_ref_entries(entries)[:_ref_limit]
-    ]
+            "description": (
+                str(e.get("summary") or "").strip()
+                or str(e.get("content") or "")[:120].strip()
+                or f"{_label} item"
+            ),
+        })
 
     # -- Thematic grouping via LLM ----------------------------------------
     extractor = LLMExtractor()
