@@ -71,6 +71,11 @@ def localize(
         "--max-items",
         help="Maximum number of KB entries for the generated digest (0 = default)",
     ),
+    include_stale: bool = typer.Option(
+        False,
+        "--include-stale",
+        help="Include stale entries (below the domain freshness threshold)",
+    ),
 ) -> None:
     """Localize a generated product into a target language (issue #38).
 
