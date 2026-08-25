@@ -83,15 +83,78 @@ sources:
     enabled: true
     fallback_rss: https://www.uspto.gov/feeds/patent_application.xml
 
+default_language: en
+
+exclude_keywords:
+  # Domain-noise blacklist (issue #19): filter out-of-domain / weakly-related
+  # signals from product generation — pure psychology/pediatrics general
+  # articles and generic biology overviews unrelated to medical research.
+  - pediatrics
+  - pediatric care
+  - child development
+  - parenting
+  - school psychology
+  - counseling
+  - psychotherapy
+  - ecology
+  - zoology
+  - plant biology
+  - marine biology
+  - evolutionary biology
+
 topics:
-  - name: "IVF breakthroughs"
+  - name: "IVF & Assisted Reproduction"
     keywords:
       - IVF
-      - embryo
+      - embryo transfer
       - implantation
       - in vitro fertilization
-  - name: "Neuroplasticity"
+      - assisted reproduction
+      - ART
+  - name: "Endometrium & Ovarian Reserve"
+    keywords:
+      - endometriosis
+      - endometrium
+      - ovarian reserve
+      - AMH
+      - anti-Müllerian hormone
+      - follicle
+      - ovulation
+      - intralipid
+  - name: "Male Infertility"
+    keywords:
+      - male infertility
+      - sperm
+      - semen
+      - azoospermia
+      - testosterone
+      - spermatogenesis
+  - name: "Embryology & Pregnancy Outcomes"
+    keywords:
+      - embryo
+      - oocyte
+      - vitrification
+      - blastocyst
+      - pregnancy outcome
+      - miscarriage
+      - live birth rate
+      - euploidy
+  - name: "Neuroplasticity & Cognition"
     keywords:
       - neuroplasticity
       - synaptic plasticity
       - long-term potentiation
+      - cognitive function
+      - memory
+      - learning
+      - neurogenesis
+  - name: "Neuropsychiatry & Neurology"
+    keywords:
+      - neurodegeneration
+      - dementia
+      - Alzheimer
+      - Parkinson
+      - stroke
+      - depression
+      - anxiety
+      - brain stimulation
