@@ -254,3 +254,110 @@ def test_normalize_theme_text_merges_synonyms() -> None:
     from autoinfo.output import _normalize_theme_text
 
     assert _normalize_theme_text("Year") == _normalize_theme_text("The Year")
+
+
+# ---------------------------------------------------------------------------
+# Issue #9 (reopened 2026-08-25) — the generic-label blocklist must hold on
+# EVERY caller of `_keyword_group_entries`, not just the `_merge_theme_groups`
+# path the LLM-grouping flow reaches.  The deterministic-fallback callers
+# (fault-inject path in `_group_by_theme`, `_deterministic_column_sections`)
+# bypass `_merge_theme_groups`, so a runtime keyword table carrying generic
+# noise words (`new` / `year` / `user` / `growth` / `apps` / `activity`)
+# leaked bare generic section headings into real products.  The fix sanitizes
+# at the `_keyword_group_entries` boundary itself.
+# ---------------------------------------------------------------------------
+
+
+_GENERIC_NOISE_TOPICS = [
+    "new", "year", "the year", "user", "activity", "growth", "apps",
+    "market", "AI startup", "funding", "LLM", "GPT",
+]
+
+
+def test_keyword_grouping_blocklists_generic_noise_keywords() -> None:
+    """A runtime keyword table carrying generic noise words must not produce
+    bare generic themes: `new` / `year` / `user` / `growth` / `apps` /
+    `activity` entries fold into Additional Topics, only meaningful themes
+    survive, and every entry is preserved."""
+    from unittest.mock import patch
+
+    from autoinfo.output import _keyword_group_entries
+
+    entries = [
+        _kw_entry("e1", "new AI startup launches"),
+        _kw_entry("e2", "the year in AI funding"),
+        _kw_entry("e3", "user growth metrics for AI apps"),
+        _kw_entry("e4", "GPT-5 model release"),
+    ]
+    with patch(
+        "autoinfo.output._load_keyword_topics",
+        return_value=_GENERIC_NOISE_TOPICS,
+    ):
+        groups = _keyword_group_entries(entries, domain="ai-commercial")
+
+    assert groups is not None, "meaningful keyword themes must still group"
+    themes = [g["theme"] for g in groups]
+    assert not any(
+        t.lower() in {"new", "year", "the year", "user", "activity",
+                      "growth", "apps", "market"}
+        for t in themes
+    ), f"generic noise labels leaked through _keyword_group_entries: {themes}"
+    preserved = {e["entry_id"] for g in groups for e in g["entries"]}
+    assert preserved == {"e1", "e2", "e3", "e4"}, (
+        "every entry must survive the blocklist fold: "
+        f"{preserved}"
+    )
+
+
+def test_keyword_grouping_all_generic_returns_none() -> None:
+    """When every matched keyword is generic noise, `_keyword_group_entries`
+    returns `None` so the caller's source-type / domain fallback engages
+    instead of collapsing all entries into a single catch-all group."""
+    from unittest.mock import patch
+
+    from autoinfo.output import _keyword_group_entries
+
+    entries = [
+        _kw_entry("e1", "new year"),
+        _kw_entry("e2", "user activity"),
+    ]
+    with patch(
+        "autoinfo.output._load_keyword_topics",
+        return_value=_GENERIC_NOISE_TOPICS,
+    ):
+        groups = _keyword_group_entries(entries, domain="ai-commercial")
+
+    assert groups is None, (
+        "all-generic keyword match must fall back (None), not collapse "
+        f"into a catch-all: {groups}"
+    )
+
+
+def test_group_by_theme_fault_inject_path_blocklists_generic() -> None:
+    """The fault-inject fallback in `_group_by_theme` (deterministic
+    grouping) must sanitize generic themes the same way the LLM path does."""
+    from unittest.mock import MagicMock, patch
+
+    from autoinfo.output import _group_by_theme
+
+    entries = [
+        _kw_entry("e1", "new AI startup launches"),
+        _kw_entry("e2", "the year in AI funding"),
+        _kw_entry("e3", "user growth metrics for AI apps"),
+        _kw_entry("e4", "GPT-5 model release"),
+    ]
+    with patch(
+        "autoinfo.output._load_keyword_topics",
+        return_value=_GENERIC_NOISE_TOPICS,
+    ), patch(
+        "autoinfo.output.fault_inject.maybe_fault",
+        side_effect=ConnectionError("fault"),
+    ):
+        groups = _group_by_theme(MagicMock(), entries, domain="ai-commercial")
+
+    themes = [g["theme"] for g in groups]
+    assert not any(
+        t.lower() in {"new", "year", "the year", "user", "activity",
+                      "growth", "apps", "market"}
+        for t in themes
+    ), f"fault-inject fallback leaked generic themes: {themes}"

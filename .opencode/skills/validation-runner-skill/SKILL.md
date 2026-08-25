@@ -24,7 +24,7 @@ the loadable procedure — read the contract doc when authoring scenarios.
   auto-loads them).
 - **Acceptance run** → produce `docs/dev/validation-reports/acceptance-*.md`.
 
-## Scenario library (116 = 65 functional + 51 regression)
+## Scenario library (117 = 65 functional + 52 regression)
 
 Functional (`src/autoinfo/mcp/scenarios/*.yaml`): system-health, discovery,
 domain-management, source-management, topic-management, keyword-management,
@@ -66,9 +66,10 @@ regression-validation-batch-isolation (#335), regression-validation-diff-multido
 regression-validation-diff-reconciliation (#340), regression-validation-smart-skip (#348),
 regression-no-placeholder-analysis-layer (#334), regression-no-placeholder-magazine-tutorial (#342),
 regression-internal-log-leak (#338), regression-crossdomain-noise-filter-tutorial-presentation (#319),
-regression-source-label-all-surfaces (#325), regression-security-assertions (#351),
-regression-351-year-hallucination-tuning (#351), regression-357-paid-tier-weak-assertions (#357).
-(51 total — run `list_validation_scenarios()` for the live list).
+ regression-source-label-all-surfaces (#325), regression-security-assertions (#351),
+ regression-351-year-hallucination-tuning (#351), regression-357-paid-tier-weak-assertions (#357),
+ regression-9-generic-theme-blocklist (#9).
+(52 total — run `list_validation_scenarios()` for the live list).
 
 ## Execution discipline
 

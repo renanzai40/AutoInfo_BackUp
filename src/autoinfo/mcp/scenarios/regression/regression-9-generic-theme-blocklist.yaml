@@ -1,0 +1,113 @@
+# Regression (#9, reopened 2026-08-25): report `## Sections` must never
+# contain bare generic theme headings (`### New` / `### Year` / `### User` /
+# `### Growth` / `### Apps` / `### Activity`) — including on the
+# deterministic-keyword path.
+#
+# History: the first #9 fix landed `_GENERIC_THEME_LABELS` + synonym merge
+# in `_merge_theme_groups` only.  The LLM-grouping flow routes through that
+# function, but the deterministic-fallback callers of `_keyword_group_entries`
+# (the fault-inject path in `_group_by_theme`, `_deterministic_column_sections`
+# on the digest path) returned keyword groups WITHOUT the blocklist pass, so a
+# runtime keyword table carrying generic noise words (auto-discovery
+# fragments like `new` / `year` / `user` / `growth` / `apps` / `activity`)
+# leaked bare generic `###` headings into real ai-commercial reports.
+# Hermetic unit tests passed because they exercised `_merge_theme_groups`
+# directly — the real product never hit it.
+#
+# Fix: `_keyword_group_entries` now sanitizes its own result through
+# `_merge_theme_groups` (single source of truth for the blocklist + synonym +
+# near-dup passes) and returns `None` when every matched keyword theme is
+# generic/structural, so the caller's source-type / domain fallback engages.
+#
+# Deterministic (requires_env: []): the KBStore and LLM seams are patched in
+# the subprocess (same pattern as regression-report-theme-titles.yaml), the
+# grouping fault-injection (`AUTOINFO_FAULT_INJECT=group:fail`) forces
+# `_group_by_theme` to take its deterministic-keyword fallback branch, and
+# `_load_keyword_topics` is patched to a keyword table that includes the
+# generic noise words.  Runs inside an ABSOLUTE temp cwd
+# (tempfile.mkdtemp, try/finally cleanup).
+name: regression-9-generic-theme-blocklist
+description: "Regression #9 (reopened): report Sections never carry generic theme headings (New/Year/User/Growth/Apps/Activity) on the deterministic-keyword path"
+category: regression
+regression: true
+regression_issue: "#9"
+requires_env: []
+steps:
+  - name: "ai-commercial report via deterministic-keyword path renders no generic theme headings"
+    kind: cli
+    command: |-
+      AUTOINFO_FAULT_INJECT=group:fail python3 -c '
+      import json, os, re, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import generate_report
+
+      ENTRIES = [
+          {"entry_id": "e1", "title": "new AI startup launches Series A",
+           "summary": "A new AI startup closed a Series A round.",
+           "source_url": "https://example.com/e1", "source_type": "api",
+           "source_platform": "techcrunch", "relevance_score": 92.0,
+           "tier": "01-Raw", "collected_at": "2026-08-01T10:00:00Z"},
+          {"entry_id": "e2", "title": "the year in AI funding",
+           "summary": "Review of AI funding activity this year.",
+           "source_url": "https://example.com/e2", "source_type": "api",
+           "source_platform": "techcrunch", "relevance_score": 88.0,
+           "tier": "01-Raw", "collected_at": "2026-08-02T10:00:00Z"},
+          {"entry_id": "e3", "title": "user growth metrics for AI apps",
+           "summary": "User growth and app activity trends.",
+           "source_url": "https://example.com/e3", "source_type": "api",
+           "source_platform": "producthunt", "relevance_score": 85.0,
+           "tier": "01-Raw", "collected_at": "2026-08-03T10:00:00Z"},
+          {"entry_id": "e4", "title": "GPT-5 model release",
+           "summary": "OpenAI released GPT-5 with new benchmarks.",
+           "source_url": "https://example.com/e4", "source_type": "api",
+           "source_platform": "techcrunch", "relevance_score": 90.0,
+           "tier": "01-Raw", "collected_at": "2026-08-04T10:00:00Z"},
+      ]
+
+      NOISE_TOPICS = [
+          "new", "year", "the year", "user", "activity", "growth", "apps",
+          "market", "AI startup", "funding", "LLM", "GPT",
+      ]
+
+      def summary():
+          return {"executive_summary": "AI funding and model releases moved this week.",
+                  "key_findings": [], "recommendations": []}
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-9-generic-theme-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._load_keyword_topics",
+                     return_value=NOISE_TOPICS), \
+               patch("autoinfo.output._generate_executive_summary",
+                     return_value=summary()):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              # AUTOINFO_FAULT_INJECT=group:fail forces _group_by_theme to
+              # take the deterministic fallback branch (the exact path that
+              # leaked generic themes pre-fix).
+              out = generate_report(domain="ai-commercial", period="weekly",
+                                    format="markdown", report_type="standard")
+          assert isinstance(out, str), type(out)
+          headings = re.findall(r"^### (.+)$", out, re.MULTILINE)
+          assert len(headings) >= 1, f"no ### section headings: {headings}"
+          generic = {"new", "year", "the year", "user", "activity", "growth",
+                     "apps", "market"}
+          leaked = [h for h in headings if h.strip().lower() in generic]
+          assert not leaked, f"generic theme headings leaked: {leaked}"
+          # Every entry must still appear (folded into meaningful groups or
+          # Additional Topics), never dropped.
+          assert "GPT-5 model release" in out, "meaningful theme entry missing"
+          assert out.count("GPT-5 model release") >= 1, "entry lost from report"
+          print("GENERIC_THEME_BLOCKLIST_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["GENERIC_THEME_BLOCKLIST_OK"]

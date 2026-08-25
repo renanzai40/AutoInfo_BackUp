@@ -77,6 +77,14 @@ _GENERIC_THEME_LABELS: Final[frozenset[str]] = frozenset({
 # ``The Year`` collapse onto one group before the blocklist runs).
 _THEME_SYNONYMS: Final[dict[str, str]] = {"year": "the year"}
 
+# Structural catch-all themes the report/product templates render as their
+# own sections.  Exempt from the generic-label blocklist (they are not
+# keyword-derived noise) and excluded when deciding whether a keyword
+# grouping found any meaningful theme at all.
+_STRUCTURAL_THEME_LABELS: Final[frozenset[str]] = frozenset({
+    "general", "additional topics",
+})
+
 
 def _fire_agent_notification(event: str, output: Any, product_id: str) -> None:
     """Fire a fire-and-forget agent callback for a just-generated product.
@@ -5939,7 +5947,11 @@ def _group_by_theme(
     except Exception:
         groups = _deterministic_grouping(entries, domain=domain)
         if groups is not None:
-            return groups
+            # Issue #9 (reopened): the deterministic fallback may carry
+            # keyword-derived generic themes — run the same blocklist/synonym
+            # pass the LLM-grouping path uses so the fault-inject path cannot
+            # leak ``### New`` / ``### Year`` labels either.
+            return _merge_theme_groups(groups)
         return [
             {
                 "theme": "General",
@@ -6253,6 +6265,19 @@ def _keyword_group_entries(
     contains.  Returns a list of groups, or ``None`` when fewer than two
     distinct keyword topics are detectable so the caller can fall back to
     source-type / domain grouping.
+
+    Issue #9 (reopened 2026-08-25): the generic-theme-label blocklist
+    (``_GENERIC_THEME_LABELS``) historically lived ONLY in
+    :func:`_merge_theme_groups`, which the deterministic-fallback callers of
+    this function bypass (the fault-inject path in :func:`_group_by_theme`
+    and :func:`_deterministic_column_sections` on the digest path).  The
+    keyword classifier can therefore produce bare generic themes
+    (``### New`` / ``### Year`` / ``### User`` ...) from auto-discovery
+    noise keywords.  Sanitize at THIS boundary by running the result
+    through :func:`_merge_theme_groups` before returning, so no caller can
+    surface a generic theme; groups whose normalized theme is a bare
+    generic word are dropped and their entries folded into the nearest
+    surviving group or ``Additional Topics`` (no entry is ever lost).
     """
     from collections import defaultdict
 
@@ -6307,7 +6332,22 @@ def _keyword_group_entries(
             "description": "Other notable developments across the tracked sources.",
             "entries": unmatched,
         })
-    return result
+
+    # Issue #9 (reopened): the generic-label blocklist must hold on EVERY
+    # caller of this function, not just the ``_merge_theme_groups`` path the
+    # LLM-grouping flow reaches.  Reuse the single source of truth for the
+    # blocklist + synonym + near-dup passes.  The ``None`` contract is
+    # preserved: when every keyword theme is generic (blocklist-stripped) or
+    # structural (catch-all only), the classifier found no meaningful topic —
+    # return ``None`` so the caller's source-type / domain fallback engages.
+    sanitized = _merge_theme_groups(result)
+    meaningful = [
+        g for g in sanitized
+        if _normalize_theme_text(g["theme"]) not in _STRUCTURAL_THEME_LABELS
+    ]
+    if not meaningful:
+        return None
+    return sanitized
 
 
 def _load_keyword_topics(domain: str) -> list[str]:
