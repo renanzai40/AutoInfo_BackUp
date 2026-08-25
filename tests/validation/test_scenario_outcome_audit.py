@@ -48,17 +48,18 @@ def result(outcome_audit):
 
 
 def test_all_116_scenarios_parsed(result: dict[str, Any]) -> None:
-    # 117 = 116 + the #9-reopened regression scenario
-    # (regression-9-generic-theme-blocklist.yaml).
-    assert result["summary"]["total_scenarios"] == 117
-    assert result["summary"]["regression_scenarios"] == 52
+    # 124 = 117 + 6 scenarios from the #8-#18 output-fix wave
+    # (regression-9-generic-theme-blocklist, regression-14-*, #16, #17, #18)
+    # + the #15 presentation language/provenance regression scenario
+    # (regression-15-presentation-language-provenance.yaml).
+    assert result["summary"]["total_scenarios"] == 124
+    assert result["summary"]["regression_scenarios"] == 59
 
 
 def test_total_steps(result):
-    # 448 = 446 + the #351 V5 step-5 append
-    # (regression-351-year-hallucination-tuning.yaml, todo 7) + the #9
-    # regression scenario step (regression-9-generic-theme-blocklist.yaml).
-    assert result["summary"]["total_steps"] == 448
+    # 455 = 448 + 6 steps from the #8-#18 output-fix wave + the #15
+    # regression scenario step (regression-15-presentation-language-provenance.yaml).
+    assert result["summary"]["total_steps"] == 455
 
 
 def test_outcome_grading_ratio_high(result):

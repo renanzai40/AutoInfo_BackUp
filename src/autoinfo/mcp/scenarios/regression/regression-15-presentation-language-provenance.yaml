@@ -1,0 +1,116 @@
+# Regression (#15): presentation must never re-inject #8 Chinese financial
+# noise (沪指 / 创业板 / A股 / 浙江数据集团) and every KB-derived slide must
+# carry its entry's source_url.
+#
+# History: the real ai-commercial presentation (batch ai-verify-20260825)
+# leaked A-share market slides ("Market Signals: A-Share Indices and Sector
+# Movements", "Zhejiang Data Group: China's Data Infrastructure Bet") with
+# ZERO http(s) source URLs (audit noSrc=21).  The digest family in the same
+# batch was clean — only presentation leaked.  Root cause:
+#  1. generate_presentation never applied the effective-language filter that
+#     digest/report apply (issue #309/#317), so zh finance entries flowed into
+#     topic_entries and the KB-derived fallback slides.
+#  2. _fallback_slides_from_entries built slide dicts with no source_url, so
+#     even the deterministic path shipped 0 provenance.
+#
+# Fix: generate_presentation now resolves the effective language (explicit
+# param wins, else the domain default_language) and drops non-matching
+# entries before topic filtering / LLM synthesis / fallback; the fallback
+# slides carry source_url; the markdown template renders "(Source: <url>)"
+# under each slide; the LLM prompt asks for per-bullet source citations.
+#
+# Deterministic (requires_env: []): the KBStore and _call_llm_for_presentation
+# seams are patched in the subprocess (same pattern as
+# regression-9-generic-theme-blocklist.yaml); the LLM returns {"slides": []}
+# forcing the KB-derived fallback — the strongest leak surface.  Runs inside
+# an ABSOLUTE temp cwd (tempfile.mkdtemp, try/finally cleanup) with a config
+# declaring ai-commercial default_language: en.
+name: regression-15-presentation-language-provenance
+description: "Regression #15: presentation filters zh finance noise by effective language and every KB-derived slide carries (Source: <url>)"
+category: regression
+regression: true
+regression_issue: "#15"
+requires_env: []
+steps:
+  - name: "ai-commercial presentation fallback renders no zh finance noise and carries source provenance"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, re, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      import yaml
+      from autoinfo.output import generate_presentation
+
+      ENTRIES = [
+          {"entry_id": "zh-001", "title": "沪指早盘走低 创业板翻红",
+           "summary": "AI概念股带动A股市场早盘波动 沪指小幅下跌 创业板翻红 锂矿稀土黄金股走强",
+           "source_url": "https://finance.example.com/zh/1", "source_type": "web",
+           "source_platform": "web", "language": "zh", "tier": "01-Raw",
+           "collected_at": "2026-08-25", "tags": "[]", "quality_tier": 1,
+           "relevance_score": 80.0},
+          {"entry_id": "zh-002", "title": "浙江数据集团：中国数据基础设施布局",
+           "summary": "AI数据基础设施 注册资本20亿元 数据要素市场布局",
+           "source_url": "https://finance.example.com/zh/2", "source_type": "web",
+           "source_platform": "web", "language": "zh", "tier": "01-Raw",
+           "collected_at": "2026-08-25", "tags": "[]", "quality_tier": 1,
+           "relevance_score": 75.0},
+          {"entry_id": "en-001", "title": "AI startup funding roundup",
+           "summary": "AI startups raised record funding this week across seed and Series A rounds.",
+           "source_url": "https://techcrunch.com/en/1", "source_type": "web",
+           "source_platform": "web", "language": "en", "tier": "01-Raw",
+           "collected_at": "2026-08-25", "tags": "[]", "quality_tier": 1,
+           "relevance_score": 90.0},
+          {"entry_id": "en-002", "title": "Generative AI product launch",
+           "summary": "A new generative AI product launched with enterprise adoption momentum.",
+           "source_url": "https://techcrunch.com/en/2", "source_type": "web",
+           "source_platform": "web", "language": "en", "tier": "01-Raw",
+           "collected_at": "2026-08-25", "tags": "[]", "quality_tier": 1,
+           "relevance_score": 88.0},
+      ]
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-15-presentation-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True)
+          cfg = {
+              "project": {"name": "test"},
+              "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+              "domains": [
+                  {"name": "ai-commercial", "active": True,
+                   "default_language": "en",
+                   "sources": [{"name": "techcrunch", "type": "rss",
+                                "url": "https://techcrunch.com/feed/"}],
+                   "topics": []},
+              ],
+          }
+          (cfg_dir / "config.yaml").write_text(
+              yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False),
+              encoding="utf-8",
+          )
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_presentation",
+                     return_value={"title": "AI", "description": "", "slides": []}):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              # Empty LLM slides force the KB-derived fallback — the exact
+              # path that leaked zh finance noise pre-fix.
+              out = generate_presentation(domain="ai-commercial", topic="AI",
+                                          format="markdown", allow_empty=True)
+          assert isinstance(out, str), type(out)
+          for term in ("沪指", "创业板", "A股", "浙江数据集团"):
+              assert term not in out, f"zh finance noise leaked: {term!r}"
+          assert "(Source: http" in out, "no source provenance marker in output"
+          assert "https://techcrunch.com/en/1" in out, "en source_url missing"
+          print("PRESENTATION_FILTER_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["PRESENTATION_FILTER_OK"]

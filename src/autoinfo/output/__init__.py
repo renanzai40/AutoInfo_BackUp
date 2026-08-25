@@ -8735,6 +8735,7 @@ def generate_presentation(
     allow_empty: bool = False,
     delivery_gate_configs: dict[str, dict[str, Any]] | _DeliveryGatesBypass | None = None,
     llm_config: Config | None = None,
+    language: str = "",
 ) -> str | DeliveryOutput:
     """Generate a slide-based presentation for *topic* within *domain*.
 
@@ -8835,6 +8836,18 @@ def generate_presentation(
     # synthesis / KB-derived slides.
     entries = _filter_entries_by_domain_exclusions(entries, domain)
 
+    # --- Language filter (issue #309 / #317 / #15) ---------------------------
+    # Mirror digest/report: when a user requests a specific language (or a
+    # domain declares a default_language), drop entries in other languages so
+    # a presentation is internally consistent (no zh/en interleave).  Without
+    # this, the #8 Chinese financial noise (沪指/创业板/A股) leaked into
+    # ai-commercial presentations via topic_entries and the KB-derived
+    # fallback slides.  An explicit param wins; otherwise the domain default
+    # fills in.
+    effective_language = _resolve_effective_language(language, domain)
+    if effective_language:
+        entries = _filter_entries_by_language(entries, effective_language)
+
     # Filter entries by topic relevance (title/summary contains topic terms)
     topic_terms = topic.lower().split()
     topic_entries = [
@@ -8878,7 +8891,9 @@ def generate_presentation(
         '      - "notes": speaker notes (string, optional — may be null)\n\n'
         f"KB Entries:\n{entry_summaries}\n\n"
         "Return all fields in a single JSON object. Adapt depth and terminology "
-        f"specifically for a {target_audience} audience."
+        f"specifically for a {target_audience} audience.\n"
+        'When a claim comes from a specific KB entry, end that bullet with '
+        '" (Source: <the entry URL>)".'
     )
 
     if custom_instructions:
@@ -9032,6 +9047,7 @@ def _fallback_slides_from_entries(
                 "content": summary[:600],
                 "bullets": bullets,
                 "notes": "Prepared from knowledge base sources.",
+                "source_url": str(e.get("source_url") or "").strip(),
             }
         )
         if len(slides) >= slide_count:
