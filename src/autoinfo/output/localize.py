@@ -174,7 +174,23 @@ def _qa_segment(
     """Back-translation QA gate for one segment; refine once on failure.
 
     Returns ``{"score": float, "refined": bool, "passed": bool, "text": str}``.
+
+    The back-translation model pool is pinned to the config PRIMARY model:
+    ``back_translate`` picks ``pool[1]`` as the back model, and with free
+    providers dropping in/out (ox-alpha retired, Zhipu quota-capped on
+    2026-08-25) a dead ``pool[1]`` silently zeroed every QA score.  A
+    single-model pool degrades the back-translation to the same-model mode
+    (documented in translation_qa.back_translate) but keeps the gate live.
     """
+    from autoinfo.config import get_config_path, load_config  # noqa: PLC0415
+
+    pool: list[str] = []
+    try:
+        config = load_config(get_config_path())
+        resolved = config.llm.resolve_model() or "openrouter/deepseek/deepseek-chat"
+        pool = [resolved]
+    except Exception:
+        pool = ["openrouter/deepseek/deepseek-chat"]
 
     def _score(trans: str) -> float:
         pipeline = run_back_translation_pipeline(
@@ -182,10 +198,14 @@ def _qa_segment(
             translated_text=trans,
             source_lang=source_lang,
             target_lang=target_lang,
+            model_pool=pool,
         )
         if not pipeline:
             return 0.0
-        return float(pipeline.get("quality_score") or 0.0)
+        score = pipeline.get("composite_score")
+        if score is None:
+            score = pipeline.get("quality_score")
+        return float(score or 0.0)
 
     score = _score(translated_text)
     if score >= _QA_THRESHOLD:

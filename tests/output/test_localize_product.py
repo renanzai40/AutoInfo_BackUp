@@ -211,6 +211,22 @@ class TestLocalizeProduct:
                 out_dir=str(tmp_path),
             )
 
+    def test_qa_gate_reads_composite_score(self, tmp_path: Path) -> None:
+        """The pipeline's composite_score key drives the gate (not quality_score)."""
+        from autoinfo.output.localize import _qa_segment
+
+        with (
+            patch(
+                "autoinfo.output.localize.run_back_translation_pipeline",
+                return_value={"composite_score": 88.0, "success": True},
+            ),
+            patch("autoinfo.output.localize.localize_content",
+                  return_value={"translated_body": "TR"}),
+        ):
+            result = _qa_segment("Hello", "TR", "en", "zh")
+        assert result["passed"] is True
+        assert result["score"] == 88.0
+
     def test_non_str_translated_body_keeps_original(self, tmp_path: Path) -> None:
         """A list-shaped translated_body (LLM array) must not crash the pipeline."""
         from autoinfo.output.localize import _translate_segment_text
