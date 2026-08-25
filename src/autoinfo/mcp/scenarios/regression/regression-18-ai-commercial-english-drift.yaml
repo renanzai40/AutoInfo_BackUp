@@ -1,0 +1,108 @@
+# Regression #18: ai-commercial must filter ENGLISH topic drift entries.
+#
+# Real ai-commercial products mixed in non-AI-consumer English entries:
+# Peacock streaming price hike (streaming), Fairphone repairable smartphone
+# (consumer hardware), Einride 500 Tesla electric trucks (EV/fleet), Plask
+# Apple-Watch dive-depth app (unrelated app), Grounded truck custom mods,
+# Neko Health body-scan clinic.  The #319 exclude_keywords blacklist only
+# carried Chinese financial terms (贝达药业/华能/财报/...), so every English
+# drift entry passed the filter and leaked into generated reports.
+#
+# Fix: the ai-commercial demo seed sources.yaml exclude_keywords now also
+# declares the drift entities + their broad categories.  Matching is a
+# casefold substring over title/summary/tags (#319), so lowercase tokens
+# cover Peacock/FAIRPHONE/...  Legitimate AI-commercial entries (e.g. "OpenAI
+# releases new AI model for startups") must still pass through.
+#
+# Deterministic (requires_env: []): the KBStore and LLM seams are patched in
+# the subprocess (same pattern as regression-crossdomain-noise-filter.yaml /
+# tests/output/test_domain_exclude_keywords.py).  A temp project config
+# WITHOUT the exclude_keywords key is written into an ABSOLUTE temp cwd
+# (tempfile.mkdtemp, try/finally cleanup) so get_config_path() resolves it
+# and the #319 seed fallback is exercised — the mechanism that makes the
+# seed edit effective for live projects without a config migration.
+name: regression-18-ai-commercial-english-drift
+description: "Regression #18: ai-commercial reports exclude English topic-drift entries (Peacock/Fairphone/Einride/Plask/Grounded) while keeping legit AI entries"
+category: regression
+regression: true
+regression_issue: "#18"
+requires_env: []
+steps:
+  - name: "ai-commercial report drops English drift entries but keeps legit AI content"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      import yaml
+      from autoinfo.output import generate_report
+
+      def entry(eid, title, summary):
+          return {"entry_id": eid, "title": title, "summary": summary,
+                  "domain": "ai-commercial", "tier": "01-Raw",
+                  "source_url": f"https://example.com/{eid}",
+                  "source_type": "rss", "source_platform": "techcrunch",
+                  "relevance_score": 85.0, "tags": "[]",
+                  "language": "en", "collected_at": "2026-08-17"}
+
+      DRIFT_ENTRIES = [
+          entry("drift-peacock", "Peacock streaming expands to new markets",
+                "Streaming service hikes prices."),
+          entry("drift-fairphone", "Fairphone smartphone launches in US",
+                "Repairable consumer hardware."),
+          entry("drift-einride", "Einride orders 500 Tesla electric trucks",
+                "EV fleet expansion."),
+          entry("drift-plask", "Plask dive app for Apple Watch",
+                "Dive-depth tracking for swimmers."),
+          entry("drift-grounded", "Grounded raises $5M for truck mods",
+                "Custom game mod studio funding."),
+      ]
+      LEGIT_ENTRIES = [
+          entry("ai-1", "OpenAI releases new AI model for startups",
+                "New foundation model API for builders."),
+          entry("ai-2", "Anthropic launches enterprise AI assistant",
+                "Enterprise LLM product launch."),
+      ]
+      ENTRIES = DRIFT_ENTRIES + LEGIT_ENTRIES
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-18-ai-drift-"))
+      old = os.getcwd()
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True)
+          # Config WITHOUT the exclude_keywords key (the pre-#319 live shape):
+          # the demo-seed fallback is the mechanism under test.
+          cfg = {"project": {"name": "test"},
+                 "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+                 "domains": [{"name": "ai-commercial", "active": True,
+                              "sources": [{"name": "techcrunch", "type": "rss",
+                                           "url": "https://techcrunch.com/feed/"}],
+                              "topics": []}]}
+          (cfg_dir / "config.yaml").write_text(
+              yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False),
+              encoding="utf-8")
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._group_by_theme", return_value=[]), \
+               patch("autoinfo.output._generate_executive_summary",
+                     return_value="Overview."):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_report(domain="ai-commercial", period="weekly",
+                                    format="markdown")
+          assert isinstance(out, str), type(out)
+          for name in ("Peacock", "Fairphone", "Einride", "Plask", "Grounded"):
+              assert name not in out, f"English drift entry leaked: {name}"
+          assert "OpenAI releases new AI model for startups" in out, "legit AI entry dropped"
+          assert "Anthropic launches enterprise AI assistant" in out, "legit AI entry dropped"
+          print("AI_COMMERCIAL_ENGLISH_DRIFT_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["AI_COMMERCIAL_ENGLISH_DRIFT_OK"]
