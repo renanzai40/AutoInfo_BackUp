@@ -727,7 +727,9 @@ class G3RelevanceScoring:
 
     When litellm is unavailable or *gate_config.retries* is ``0`` / ``None``,
     the gate falls back to lexical keyword overlap scoring (backward
-    compatible with v1.x).  No keywords → score=100 (always pass).
+    compatible with v1.x).  No keywords → score=0, flagged (no relevance
+    signal — issue #16; the pre-fix placeholder ``score=100 (always pass)``
+    flattened every keywordless topic's Relevance to 100 in products).
 
     Supports both single-language keywords (``list[str]``) and multi-language
     keywords (``dict[str, list[str]]``).
@@ -813,16 +815,20 @@ class G3RelevanceScoring:
         else:
             keywords = list(topic_keywords)
 
-        # ---- No keywords → always pass ----------------------------------
+        # ---- No keywords → degrade to 0 (issue #16) ------------------------
+        # No keywords means nothing to match against.  The old ``score=100
+        # (always pass)`` placeholder stored ``100.0/100`` in the KB for every
+        # keywordless topic, flattening digest/magazine Relevance to 100.
         if not keywords:
             return QualityResult(
                 gate_name="G3-RelevanceScoring",
-                passed=True,
-                score=100.0,
+                passed=False,
+                score=0.0,
+                flagged=True,
                 details={
                     "hidden": False,
                     "action": action,
-                    "reason": "no keywords to match against",
+                    "reason": "no keywords to match against — degraded to 0",
                     "multi_language": isinstance(topic_keywords, dict),
                     "scoring_method": "none",
                 },
@@ -1028,7 +1034,8 @@ class G3RelevanceScoring:
         Returns 0-100 with a spread that lets the threshold actually cut.
         """
         if not keywords:
-            return 100
+            # Issue #16: no keywords → no relevance signal (previously 100).
+            return 0
         low = text.lower()
         title, _, body = low.partition("\n")
         title_low = title.strip()
