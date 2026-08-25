@@ -44,6 +44,62 @@ def _resolve_product_template(product: str) -> ProductTemplate | None:
     raise typer.Exit(code=1)
 
 
+@app.command(name="localize")
+def localize(
+    domain: str = typer.Option(..., "--domain", help="Domain to localize a product for"),
+    product: str = typer.Option(
+        "digest",
+        "--product",
+        help="Product template name (digest/report/column/premium-briefing/enterprise-briefing/magazine-digest)",
+    ),
+    period: str = typer.Option(
+        "weekly", "--period", help="Product period (daily, weekly, monthly)"
+    ),
+    target_lang: str = typer.Option(
+        ..., "--target-lang", help="Target language code (e.g. zh, fr, ja)"
+    ),
+    source_lang: str = typer.Option(
+        "",
+        "--source-lang",
+        help="Source language code (default: domain default_language, else en)",
+    ),
+    out_dir: str = typer.Option(
+        "outputs/localized", "--out-dir", help="Base output directory for localized products"
+    ),
+) -> None:
+    """Localize a generated product into a target language (issue #38).
+
+    Generates the product, translates title/headings/summaries/takeaways
+    into ``--target-lang`` via localize_content, gates each segment through
+    back-translation QA (refining once on failure), and writes
+    ``<out-dir>/<target-lang>/<product>-<target-lang>.md`` plus a manifest
+    entry recording the language.
+    """
+    from autoinfo.output.localize import localize_product
+
+    try:
+        result = localize_product(
+            domain=domain,
+            product=product,
+            period=period,
+            target_lang=target_lang,
+            source_lang=source_lang,
+            out_dir=out_dir,
+        )
+    except ValueError as exc:
+        typer.echo(f"Error: {exc}", err=True)
+        raise typer.Exit(code=1) from exc
+    except Exception as exc:
+        typer.echo(f"Error: {exc}", err=True)
+        raise typer.Exit(code=1) from exc
+    qa = result["qa"]
+    typer.echo(
+        f"Localized {domain}/{product} -> {target_lang}: {result['file_path']} "
+        f"(qa={qa['gate']}, avg={qa['avg_score']}, refined={qa['refined_count']}, "
+        f"failed={qa['failed_count']})"
+    )
+
+
 @app.command(name="list-templates")
 def list_templates(
     domain: str = typer.Option(
