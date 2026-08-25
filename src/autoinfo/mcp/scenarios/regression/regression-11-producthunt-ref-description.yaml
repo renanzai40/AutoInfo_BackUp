@@ -1,0 +1,97 @@
+# Regression (#11): title-only ProductHunt references must render a
+# description fallback — never the bare title+platform line.
+#
+# ProductHunt RSS items are frequently title-only (empty summary), so the
+# report References section rendered bare lines like
+# ``1. **OpenLogi** (producthunt)`` with zero context.  The ref builders
+# (digest ``_normalize_digest_product_context`` + report ``generate_report``)
+# now carry a ``description`` key resolved as
+# ``summary → content[:120] → '<derived source label> item'``, and the
+# report / premium-briefing / enterprise-briefing templates render it after
+# the source_url fragment (em-dash + description, skipped when it equals the
+# title).
+#
+# Deterministic (requires_env: []): the KBStore, grouping, synthesis, and
+# empty-entry-filter seams are patched in the subprocess (same pattern as
+# regression-9-generic-theme-blocklist.yaml).  The title-only OpenLogi entry
+# survives the empty-entry filter via the identity patch so the reference
+# rendering contract is exercised end-to-end.  Runs inside an ABSOLUTE temp
+# cwd (tempfile.mkdtemp, try/finally cleanup).
+name: regression-11-producthunt-ref-description
+description: "Regression #11: title-only ProductHunt references render a description fallback, never a bare title+platform line"
+category: regression
+regression: true
+regression_issue: "#11"
+requires_env: []
+steps:
+  - name: "b2b report renders non-bare ProductHunt reference with description fallback"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import generate_report
+
+      OPENLOGI = {
+          "entry_id": "e-openlogi",
+          "title": "OpenLogi",
+          "summary": "",
+          "source_url": "https://www.producthunt.com/posts/openlogi",
+          "source_type": "rss",
+          "source_platform": "producthunt",
+          "domain": "b2b",
+          "relevance_score": 80.0,
+          "tier": "01-Raw",
+          "collected_at": "2026-08-25T10:00:00Z",
+      }
+      LEGIT = {
+          "entry_id": "e-ai-copilot",
+          "title": "AI copilot for sales teams",
+          "summary": "A real description here.",
+          "source_url": "https://www.producthunt.com/posts/ai-copilot",
+          "source_type": "rss",
+          "source_platform": "producthunt",
+          "domain": "b2b",
+          "relevance_score": 90.0,
+          "tier": "01-Raw",
+          "collected_at": "2026-08-25T10:00:00Z",
+      }
+
+      def summary():
+          return {"executive_summary": "B2B launches this week.",
+                  "key_findings": [], "recommendations": []}
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-11-producthunt-ref-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._group_by_theme", return_value=[]), \
+               patch("autoinfo.output._generate_executive_summary",
+                     return_value=summary()), \
+               patch("autoinfo.output._filter_product_entries",
+                     side_effect=lambda es: list(es)):
+              kb = MagicMock()
+              kb.list_entries.return_value = [OPENLOGI, LEGIT]
+              kb_cls.return_value = kb
+              out = generate_report(domain="b2b", period="weekly",
+                                    format="markdown", report_type="standard")
+          assert isinstance(out, str), type(out)
+          refs = out.split("## References", 1)[1]
+          openlogi_line = next(
+              line for line in refs.splitlines() if "OpenLogi" in line
+          )
+          # Non-bare: the fallback description ("producthunt item") renders.
+          assert "producthunt item" in openlogi_line, openlogi_line
+          # The legit entry renders its own summary as description.
+          assert "A real description here." in refs, refs
+          print("PRODUCTHUNT_REF_DESC_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["PRODUCTHUNT_REF_DESC_OK"]

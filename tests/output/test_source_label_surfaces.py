@@ -29,6 +29,7 @@ from autoinfo.output import (
     DeliveryOutput,
     ReportData,
     ReportSection,
+    _normalize_digest_product_context,
     _report_data_to_dict,
     generate_digest,
     generate_report,
@@ -377,6 +378,82 @@ class TestSourceLabelSurfaces:
             assert entry["source_platform"] == STALE_SOURCE_NAME, (
                 f"section entry rendered raw platform {entry['source_platform']!r}"
             )
+
+    def test_title_only_entry_reference_not_bare(
+        self, stale_config: Any
+    ) -> None:
+        """A title-only ProductHunt reference (empty summary, e.g. OpenLogi)
+        must render a description fallback — never the bare title+platform
+        line.  RED today: the ref builders carry no ``description`` key, so
+        the References line renders ``**OpenLogi** (producthunt)`` with no
+        context.  After the fix the builders carry
+        ``summary → content[:120] → '<label> item'`` and the templates render
+        it after the source_url fragment.
+        """
+        openlogi = {
+            "entry_id": "e-openlogi",
+            "title": "OpenLogi",
+            "summary": "",
+            "source_url": "https://www.producthunt.com/posts/openlogi",
+            "source_type": "rss",
+            "source_platform": "producthunt",
+            "domain": "b2b",
+            "relevance_score": 80.0,
+            "tier": "01-Raw",
+            "collected_at": "2026-08-25T10:00:00Z",
+        }
+        summary_entry = {
+            "entry_id": "e-ai-copilot",
+            "title": "AI copilot for sales teams",
+            "summary": "A real description here.",
+            "source_url": "https://www.producthunt.com/posts/ai-copilot",
+            "source_type": "rss",
+            "source_platform": "producthunt",
+            "domain": "b2b",
+            "relevance_score": 90.0,
+            "tier": "01-Raw",
+            "collected_at": "2026-08-25T10:00:00Z",
+        }
+        entries = [openlogi, summary_entry]
+
+        # (a) digest ref builder: title-only entry falls back to "<label> item".
+        flat = _normalize_digest_product_context(
+            {
+                "title": "b2b \u2014 Report",
+                "domain": "b2b",
+                "generated_at": "2026-08-25 00:00 UTC",
+                "entries": entries,
+                "llm_synthesis": _SYNTH,
+            },
+            domain="b2b",
+        )
+        refs = {r["title"]: r for r in flat["references"]}
+        assert refs["OpenLogi"]["description"], (
+            "title-only ref must carry a non-empty description"
+        )
+
+        # (b)+(c) rendered report References; the empty-entry filter is
+        # patched to identity (orthogonal to this rendering contract).
+        with patch("autoinfo.output.KBStore") as kb_cls, \
+             patch("autoinfo.output._group_by_theme", return_value=[]), \
+             patch("autoinfo.output._generate_executive_summary",
+                   return_value=_SYNTH), \
+             patch("autoinfo.output._filter_product_entries",
+                   side_effect=lambda es: list(es)):
+            kb = MagicMock()
+            kb.list_entries.return_value = entries
+            kb_cls.return_value = kb
+            out = _as_text(generate_report(
+                domain="b2b", period="weekly", format="markdown"
+            ))
+        refs_section = out.split("## References", 1)[1]
+        openlogi_line = next(
+            line for line in refs_section.splitlines() if "OpenLogi" in line
+        )
+        # (b) not the bare form: the fallback description renders.
+        assert "producthunt item" in openlogi_line, openlogi_line
+        # (c) the summary-bearing entry renders its own summary as description.
+        assert "A real description here." in refs_section
 
 
 # ---------------------------------------------------------------------------

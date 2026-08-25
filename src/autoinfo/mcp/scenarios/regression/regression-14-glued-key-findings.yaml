@@ -1,0 +1,73 @@
+# Regression (#14, P1): Key Findings must never collapse to ONE giant bullet.
+#
+# Symptom: real digest/report/enterprise products render Key Findings as a
+# single huge single-line bullet — all sub-items + sources joined by `)- `
+# with embedded `- ` markers on the same line (report L9 = 2352 chars with
+# 116 `-` markers; enterprise L8 = 1855 chars).  Trends/Recommendations
+# render fine (newline-separated).
+#
+# Root cause: `_parse_report_markdown` (autoinfo/output/__init__.py) — the
+# LLM sometimes returns Key Findings bullets GLUED on one line:
+# `- a (Source: u)- b (Source: u)- c`.  The `is_bullet` helper only matches
+# a bullet at LINE START, so the glued run is treated as ONE item with
+# embedded `)- ` separators.  Templates loop the parsed list correctly —
+# they are NOT the bug.
+#
+# Fix: `_split_glued_bullets` splits bullet_text on `(?<=\))- ?` boundaries
+# (a `)` immediately before `-` is the glue boundary — legitimate prose
+# where `)` is not followed by `-` is preserved), applied ONLY in the
+# key_findings branch.
+#
+# Deterministic (requires_env: []): patches at the parse seam — calls
+# `_parse_report_markdown` directly in the subprocess with the exact
+# glued-markdown evidence and asserts 3 distinct findings with no `)- `
+# separator (mirrors the hermetic pattern of regression-9, no LLM, no KB).
+# Runs inside an ABSOLUTE temp cwd (tempfile.mkdtemp, try/finally cleanup).
+name: regression-14-glued-key-findings
+description: "Regression #14 (P1): glued Key Findings bullets (- a (Source: u)- b) split into distinct items, never one giant bullet"
+category: regression
+regression: true
+regression_issue: "#14"
+requires_env: []
+steps:
+  - name: "parsed Key Findings never collapse to a single glued bullet"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from autoinfo.output import _parse_report_markdown
+
+      GLUED_MD = """## Executive Summary
+      AI funding and model releases moved this week.
+
+      ## Key Findings
+      - AI Regulation and Safety: rogue-model oversight tightened (Source: https://example.com/rogue)- Venture Capital and Funding: Series A rounds accelerate (Source: https://example.com/vc)- Legal and Regulatory Actions: antitrust review opens (Source: https://example.com/legal)
+
+      ## Recommendations
+      - Monitor regulatory shifts
+      - Track funding rounds
+      """
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-14-glued-kf-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          parsed = _parse_report_markdown(GLUED_MD)
+          findings = parsed.get("key_findings", [])
+          assert len(findings) == 3, (
+              f"glued Key Findings not split: {len(findings)} item(s): {findings!r}"
+          )
+          assert len(set(findings)) == 3, f"duplicate findings after split: {findings!r}"
+          for item in findings:
+              assert ")- " not in item, f"glued separator inside item: {item!r}"
+              assert not item.endswith(")-"), f"item ends with glue: {item!r}"
+          print("GLUED_KF_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["GLUED_KF_OK"]

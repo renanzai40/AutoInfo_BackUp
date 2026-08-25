@@ -13,14 +13,16 @@ Fix has two parts (both asserted here):
    ``_REPORT_PRODUCT_BASE_SECTIONS``) MUST instruct the model to name
    exactly the number of Key Findings it writes, never a larger count.
 2. Render-level determinism: the enterprise-briefing template labels the
-   selection scope deterministically — ``精选 N 条详述 · selected N of M
-   items`` — so even a stale summary claim is visibly scoped, on BOTH
+   selection scope deterministically — ``selected N of M key findings · M
+   source references listed`` (single-language, no CJK template leak, #8
+   residual) — so even a stale summary claim is visibly scoped, on BOTH
    flat-context paths (report ``_report_data_to_dict`` and digest
    ``_normalize_digest_product_context``).
 """
 
 from __future__ import annotations
 
+import re
 from typing import Any, cast
 
 from autoinfo.output import (
@@ -135,13 +137,13 @@ class TestEnterpriseTemplateScopeLabel:
     """The template deterministically labels the selection scope."""
 
     def test_enterprise_template_annotates_selected_count(self) -> None:
-        """Report path: 9 findings + 20 references render ``精选 9 条详述``."""
+        """Report path: 9 findings + 20 references render the scope label."""
         flat = _report_data_to_dict(_make_report_data(9, 20))
         out = _registry_template("enterprise-briefing").render(
             "enterprise-briefing", "md", flat
         )
-        assert "精选 9 条详述" in out
-        assert "selected 9 of 20 items detailed below" in out
+        assert "selected 9 of 20 key findings" in out
+        assert "20 source references listed" in out
         # The deterministic label sits between the summary and the findings.
         assert out.index("> **Scope**:") < out.index("## Key Findings")
 
@@ -153,8 +155,8 @@ class TestEnterpriseTemplateScopeLabel:
         out = _registry_template("enterprise-briefing").render(
             "enterprise-briefing", "md", flat
         )
-        assert "精选 9 条详述" in out
-        assert "selected 9 of 20 items detailed below" in out
+        assert "selected 9 of 20 key findings" in out
+        assert "20 source references listed" in out
 
     def test_scope_label_absent_when_no_findings(self) -> None:
         """No key findings -> no scope label (empty-state unchanged)."""
@@ -164,3 +166,49 @@ class TestEnterpriseTemplateScopeLabel:
         )
         assert "精选" not in out
         assert "**Scope**" not in out
+
+
+class TestScopeLabelSingleLanguageNoCjk:
+    """Issue #8 residual: the enterprise scope label must be single-language
+    (no CJK template leak) and must not over-claim a per-finding expansion
+    (the References section is a flat list, not a per-finding detail block)."""
+
+    def test_scope_label_single_language_no_cjk(self) -> None:
+        """A hermetic enterprise-briefing render (3 findings + 60 references)
+        contains NO CJK characters anywhere in the body."""
+        flat = _report_data_to_dict(_make_report_data(3, 60))
+        out = _registry_template("enterprise-briefing").render(
+            "enterprise-briefing", "md", flat
+        )
+        assert not re.search(r"[\u4e00-\u9fff]", out), (
+            f"CJK characters leaked into the enterprise-briefing body:\n{out}"
+        )
+
+    def test_scope_label_counts_match_references(self) -> None:
+        """The scope label's ``selected N`` equals the rendered Key Findings
+        bullets and ``of M`` equals the rendered References — no "items
+        detailed below" claim the flat References list cannot support."""
+        flat = _report_data_to_dict(_make_report_data(3, 60))
+        out = _registry_template("enterprise-briefing").render(
+            "enterprise-briefing", "md", flat
+        )
+        scope_m = re.search(r"> \*\*Scope\*\*: (.+)$", out, re.MULTILINE)
+        assert scope_m, f"scope line missing from render:\n{out}"
+        scope_line = scope_m.group(1)
+        count_m = re.search(r"selected (\d+) of (\d+)", scope_line)
+        assert count_m, f"selected N of M counts missing from scope line:\n{scope_line}"
+        n, m = int(count_m.group(1)), int(count_m.group(2))
+        findings_m = re.search(
+            r"## Key Findings\n(.*?)(?:\n## |\Z)", out, re.DOTALL
+        )
+        assert findings_m, f"Key Findings section missing:\n{out}"
+        rendered_findings = len(re.findall(r"-\s+\S", findings_m.group(1)))
+        assert n == rendered_findings, (
+            f"scope N={n} but Key Findings renders {rendered_findings} bullets"
+        )
+        refs_m = re.search(r"## References\n(.*?)(?:\n---|\Z)", out, re.DOTALL)
+        assert refs_m, f"References section missing:\n{out}"
+        rendered_refs = len(re.findall(r"^\d+\. ", refs_m.group(1), re.MULTILINE))
+        assert m == rendered_refs, (
+            f"scope M={m} but References renders {rendered_refs} entries"
+        )

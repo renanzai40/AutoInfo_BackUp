@@ -818,3 +818,88 @@ def _get_llm_extractor_class() -> type[LLMExtractor]:
     from autoinfo.llm import LLMExtractor
 
     return LLMExtractor
+
+
+# ===================================================================
+# Glued Key Findings parsing (issue #14)
+# ===================================================================
+
+
+def _parse_report_markdown(content: str) -> dict[str, Any]:
+    """Call the module-level report parser directly (issue #14)."""
+    from autoinfo.output import _parse_report_markdown
+
+    return _parse_report_markdown(content)
+
+
+GLUED_KF_MD = """\
+## Executive Summary
+AI funding and model releases moved this week.
+
+## Key Findings
+""" + (
+    "- AI Regulation and Safety: rogue-model oversight tightened "
+    "(Source: https://example.com/rogue)"
+    "- Venture Capital and Funding: Series A rounds accelerate "
+    "(Source: https://example.com/vc)"
+    "- Legal and Regulatory Actions: antitrust review opens "
+    "(Source: https://example.com/legal)"
+) + """
+
+## Recommendations
+- Monitor regulatory shifts
+- Track funding rounds
+"""
+
+
+class TestGluedKeyFindings:
+    """Issue #14: the LLM sometimes glues Key Findings bullets onto one line
+    (`- a (Source: u)- b (Source: u)- c`); the parser must split them into
+    distinct items instead of returning ONE giant bullet."""
+
+    def test_glued_key_findings_split_into_multiple_items(self) -> None:
+        parsed = _parse_report_markdown(GLUED_KF_MD)
+
+        assert len(parsed["key_findings"]) == 3
+        assert parsed["key_findings"] == [
+            "AI Regulation and Safety: rogue-model oversight tightened "
+            "(Source: https://example.com/rogue)",
+            "Venture Capital and Funding: Series A rounds accelerate "
+            "(Source: https://example.com/vc)",
+            "Legal and Regulatory Actions: antitrust review opens "
+            "(Source: https://example.com/legal)",
+        ]
+        assert len(set(parsed["key_findings"])) == 3
+        assert all(")- " not in item for item in parsed["key_findings"])
+
+    def test_parsed_kf_items_never_contain_glued_separator(self) -> None:
+        head = "## Executive Summary\nCoverage summary.\n\n"
+        glued_inputs = [
+            (
+                head
+                + "## Key Findings\n"
+                "- A: outcome one (Source: https://example.com/a)"
+                "- B: outcome two (Source: https://example.com/b)"
+            ),
+            (
+                head
+                + "## Key Findings\n"
+                "- first finding with a trailing close paren) and more text "
+                "(Source: https://example.com/x)- second finding "
+                "(Source: https://example.com/y)"
+            ),
+            (
+                head
+                + "## Key Findings\n"
+                "- 1. first (Source: https://example.com/1)- 2. second "
+                "(Source: https://example.com/2)- 3. third "
+                "(Source: https://example.com/3)"
+            ),
+        ]
+        for md in glued_inputs:
+            items = _parse_report_markdown(md)["key_findings"]
+            assert items, f"expected at least one item for: {md!r}"
+            assert len(items) >= 2, f"glued run not split: {items!r}"
+            for item in items:
+                assert ")- " not in item, f"glued separator inside item: {item!r}"
+                assert not item.endswith(")-"), f"item ends with glue: {item!r}"

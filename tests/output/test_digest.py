@@ -418,6 +418,46 @@ class TestGenerateDigest:
         monthly = generate_digest(domain="medical-research", period="monthly")
         assert "Monthly Digest" in cast(str, monthly)
 
+    @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._call_llm_for_digest")
+    def test_digest_renders_real_tags(
+        self, mock_llm: MagicMock, mock_kb: MagicMock
+    ) -> None:
+        """Issue #16: a digest entry with real tags renders them (never ``—``),
+        and its relevance_score renders as a real value (never ``—``)."""
+        mock_llm.return_value = _SAMPLE_LLM_SYNTHESIS
+        entries = [
+            {
+                "entry_id": "tagged-001",
+                "title": "AI startup raises Series A",
+                "domain": "medical-research",
+                "tier": "01-Raw",
+                "source_url": "https://example.com/tagged-001",
+                "source_type": "api",
+                "source_platform": "pubmed",
+                "collected_at": (date.today() - timedelta(days=1)).isoformat(),
+                "summary": "A startup closed a funding round.",
+                "tags": '["ai", "funding"]',
+                "quality_tier": 1,
+                "relevance_score": 70.0,
+                "dedup_status": "unique",
+                "file_path": "",
+            },
+        ]
+        mock_store = MagicMock()
+        mock_store.list_entries.return_value = entries
+        mock_kb.return_value = mock_store
+
+        result = generate_digest(
+            domain="medical-research", period="weekly", format="markdown"
+        )
+        body = cast(str, result)
+        assert "**Tags** |" in body
+        assert "**Tags** | —" not in body
+        assert "ai" in body
+        assert "funding" in body
+        assert "| 70.0/100" in body
+
 
 # ---------------------------------------------------------------------------
 # Tests: MCP handler

@@ -12,6 +12,7 @@ synthesis.
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 from unittest.mock import MagicMock, patch
 
@@ -22,6 +23,7 @@ from autoinfo.output import (
     DeliveryOutput,
     _filter_entries_by_domain_exclusions,
     _get_domain_exclude_keywords,
+    _seed_domain_exclude_keywords,
     generate_digest,
     generate_presentation,
     generate_report,
@@ -41,6 +43,43 @@ _FULL_AI_NOISE_SET = [
 # collection guard allowlists 8-K/10-K/10-Q, but products have no
 # exclude_keywords filter, so stale SEC entries dilute financial digests.
 _SEC_FORM_TERMS = ["8-K", "10-K", "10-Q", "10Q"]
+
+# Issue #18: real ai-commercial products mix in non-AI-consumer English
+# entries — Peacock streaming price hike (streaming), Fairphone repairable
+# smartphone (consumer hardware), Einride 500 Tesla electric trucks (EV/fleet),
+# Plask Apple-Watch dive-depth app (unrelated app), Grounded truck custom mods,
+# Neko Health body-scan clinic.  These are ENGLISH topic drift (not the #8
+# Chinese financial noise).  The seed excludes only Chinese terms today, so
+# every one of these passes straight through product generation.
+_ENGLISH_DRIFT_TERMS = [
+    "peacock",
+    "streaming service",
+    "streaming",
+    "fairphone",
+    "smartphone",
+    "einride",
+    "electric truck",
+    "truck",
+    "plask",
+    "dive app",
+    "dive",
+    "grounded",
+    "game mod",
+    "body scan",
+    "clinic",
+]
+
+# Path to the demo-domain seed the loader falls back to when the runtime
+# config does not declare exclude_keywords (#319/#18).
+_AI_COMMERCIAL_SEED_PATH = (
+    Path(__file__).resolve().parent.parent.parent
+    / "src"
+    / "autoinfo"
+    / "data"
+    / "domains"
+    / "ai-commercial"
+    / "sources.yaml"
+)
 
 
 def _as_text(result: str | DeliveryOutput) -> str:
@@ -194,6 +233,127 @@ class TestFilterEntriesByDomainExclusions:
         ):
             kept = _filter_entries_by_domain_exclusions(entries, "ai-commercial")
         assert [e["entry_id"] for e in kept] == ["e1", "e2"]
+
+
+# ---------------------------------------------------------------------------
+# Issue #18: English topic drift for ai-commercial
+# ---------------------------------------------------------------------------
+
+
+class TestEnglishDriftExclusions:
+    _DRIFT_ENTRIES = [
+        _entry("drift-peacock", "Peacock streaming expands to new markets"),
+        _entry("drift-fairphone", "Fairphone smartphone launches in US"),
+        _entry("drift-einride", "Einride orders 500 Tesla electric trucks"),
+        _entry("drift-plask", "Plask dive app for Apple Watch"),
+        _entry("drift-grounded", "Grounded raises $5M for truck mods"),
+    ]
+    _LEGIT_AI_ENTRIES = [
+        _entry("ai-1", "OpenAI releases new AI model for startups"),
+        _entry("ai-2", "Anthropic launches enterprise AI assistant"),
+    ]
+
+    def test_english_drift_terms_blocked(self) -> None:
+        """RED today: the seed excludes only Chinese financial terms, so the
+        5 English-drift entries survive the filter."""
+        entries = [
+            *self._DRIFT_ENTRIES,
+            *self._LEGIT_AI_ENTRIES,
+        ]
+        with patch(
+            "autoinfo.output._get_domain_exclude_keywords",
+            return_value=_ENGLISH_DRIFT_TERMS,
+        ):
+            kept = _filter_entries_by_domain_exclusions(entries, "ai-commercial")
+        assert [e["entry_id"] for e in kept] == ["ai-1", "ai-2"]
+
+    def test_non_matching_english_ai_entries_pass_through(self) -> None:
+        with patch(
+            "autoinfo.output._get_domain_exclude_keywords",
+            return_value=_ENGLISH_DRIFT_TERMS,
+        ):
+            kept = _filter_entries_by_domain_exclusions(
+                self._LEGIT_AI_ENTRIES, "ai-commercial"
+            )
+        assert kept == self._LEGIT_AI_ENTRIES
+
+    def test_ai_commercial_seed_has_english_drift_terms(self) -> None:
+        """RED today: the ai-commercial seed exclude_keywords covers only the
+        #319 Chinese financial terms — none of the #18 English drift terms."""
+        seed = yaml.safe_load(_AI_COMMERCIAL_SEED_PATH.read_text(encoding="utf-8"))
+        got = list(seed.get("exclude_keywords") or [])
+        for term in _ENGLISH_DRIFT_TERMS:
+            assert term in got, (
+                f"ai-commercial seed exclude_keywords missing English drift "
+                f"term {term!r}; got {got!r}"
+            )
+
+    def test_seed_fallback_returns_english_drift_terms(
+        self, tmp_path: Any, monkeypatch: Any
+    ) -> None:
+        """The live seed-fallback path (#319) must hand the #18 terms to the
+        filter — the loader reads the demo-domain seed directly, so editing
+        sources.yaml is effective without a config migration."""
+        _write_config(tmp_path, [])
+        monkeypatch.chdir(tmp_path)
+        (tmp_path / ".autoinfo" / "config.yaml").unlink()
+        got = _seed_domain_exclude_keywords("ai-commercial")
+        for term in _ENGLISH_DRIFT_TERMS:
+            assert term in got, (
+                f"seed fallback exclude_keywords missing {term!r}; got {got!r}"
+            )
+
+    @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._group_by_theme")
+    @patch("autoinfo.output._generate_executive_summary")
+    def test_report_excludes_english_drift_entries(
+        self,
+        mock_synthesis: MagicMock,
+        mock_group: MagicMock,
+        mock_kb: MagicMock,
+        tmp_path: Any,
+        monkeypatch: Any,
+    ) -> None:
+        """RED today: with the runtime config lacking the exclude_keywords key
+        (the pre-#319 live shape), the seed fallback has no English terms, so
+        Peacock/Fairphone/Einride/Plask/Grounded flow straight into the
+        rendered report body."""
+        cfg_dir = tmp_path / ".autoinfo"
+        cfg_dir.mkdir(parents=True, exist_ok=True)
+        cfg = {
+            "project": {"name": "test"},
+            "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+            "domains": [
+                {
+                    "name": "ai-commercial",
+                    "active": True,
+                    "sources": [
+                        {
+                            "name": "techcrunch",
+                            "type": "rss",
+                            "url": "https://techcrunch.com/feed/",
+                        }
+                    ],
+                    "topics": [],
+                }
+            ],
+        }
+        (cfg_dir / "config.yaml").write_text(
+            yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False), encoding="utf-8"
+        )
+        monkeypatch.chdir(tmp_path)
+        mock_kb.return_value = _digest_mock_store(
+            [*self._DRIFT_ENTRIES, *self._LEGIT_AI_ENTRIES]
+        )
+        mock_group.return_value = []
+        mock_synthesis.return_value = "Overview."
+        body = _as_text(generate_report(
+            domain="ai-commercial", period="weekly", format="markdown"
+        ))
+        for title in ("Peacock", "Fairphone", "Einride", "Plask", "Grounded"):
+            assert title not in body, f"English drift entry leaked: {title!r}"
+        assert "OpenAI releases new AI model for startups" in body
+        assert "Anthropic launches enterprise AI assistant" in body
 
 
 # ---------------------------------------------------------------------------

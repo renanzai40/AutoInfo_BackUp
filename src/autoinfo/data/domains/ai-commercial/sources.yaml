@@ -16,7 +16,18 @@ default_language: en
 # cross-domain collection.  Deliberately NOT broad medical terms like 医药/临床
 # trial, which legitimately appear in AI-commercial content (e.g. "AI drug
 # discovery", "AI clinical trials").
+#
+# Issue #18: real ai-commercial products also mixed in non-AI-consumer
+# ENGLISH entries — Peacock streaming price hike (streaming), Fairphone
+# repairable smartphone (consumer hardware), Einride 500 Tesla electric trucks
+# (EV/fleet), Plask Apple-Watch dive-depth app (unrelated app), Grounded truck
+# custom mods, Neko Health body-scan clinic.  The terms below block those
+# drift entities + their broad categories.  Matching is a casefold substring
+# over title/summary/tags, so lowercase tokens cover Peacock/FAIRPHONE/...
+# Deliberately NOT generic AI-legitimate terms (AI, startup, funding, model,
+# app alone), which legitimately appear in AI-commercial content.
 exclude_keywords:
+  # Issue #319: Chinese financial/regulatory noise
   - 贝达药业
   - DURAVYU
   - 华能
@@ -26,6 +37,22 @@ exclude_keywords:
   - 10-Q
   - 财报
   - 年报
+  # Issue #18: English non-AI-consumer topic drift
+  - peacock
+  - streaming service
+  - streaming
+  - fairphone
+  - smartphone
+  - einride
+  - electric truck
+  - truck
+  - plask
+  - dive app
+  - dive
+  - grounded
+  - game mod
+  - body scan
+  - clinic
 
 sources:
   - name: techcrunch

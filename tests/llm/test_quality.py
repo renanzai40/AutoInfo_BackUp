@@ -515,13 +515,20 @@ class TestG3RelevanceScoring:
         assert result.flagged is True
         assert result.details["hidden"] is True
 
-    def test_empty_keywords_returns_full_score(self, sample_item: Item) -> None:
+    def test_empty_keywords_degrades_to_zero(self, sample_item: Item) -> None:
+        """Issue #16: no keywords means no relevance signal — the score must
+        degrade to 0 (flagged), never a placeholder 100/always-pass.  The old
+        ``score=100 (always pass)`` behavior stored ``100.0/100`` in the KB
+        for every entry whose topic carried no keywords, which rendered every
+        digest/magazine Relevance as ``100.0/100`` with no discriminative
+        power."""
         g3 = G3RelevanceScoring()
         result = g3.check(sample_item, topic_keywords=[])
 
-        assert result.score == 100.0
-        assert result.passed is True
-        assert result.flagged is False
+        assert result.score == 0.0
+        assert result.passed is False
+        assert result.flagged is True
+        assert "no keywords" in result.details["reason"]
 
     def test_below_threshold_flagged_hidden(self, sample_item: Item) -> None:
         g3 = G3RelevanceScoring()
@@ -772,7 +779,7 @@ class TestG3RelevanceScoringLLM:
         assert len(passed_content) <= g3._MAX_CONTENT_CHARS + 200
 
     def test_no_keywords_short_circuits_llm(self, sample_item: Item) -> None:
-        """Empty keywords → score=100, no LLM call made."""
+        """Empty keywords → degraded score 0, no LLM call made (issue #16)."""
         g3 = G3RelevanceScoring(model="test/test")
         g3.llm_call = MagicMock(side_effect=AssertionError("should not be called"))
         result = g3.check(
@@ -780,7 +787,9 @@ class TestG3RelevanceScoringLLM:
             topic_keywords=[],
             gate_config=self._gate_config(),
         )
-        assert result.score == 100.0
+        assert result.score == 0.0
+        assert result.passed is False
+        assert result.flagged is True
         g3.llm_call.assert_not_called()
 
     def test_multi_language_keywords(self, sample_item: Item) -> None:
@@ -834,8 +843,11 @@ class TestRunQualityGates:
         assert len(results) >= 4
         # G0 should pass for valid sample_item
         assert results["G0-SchemaIntegrity"].passed is True
-        # G3 with empty keywords = score 100
-        assert results["G3-RelevanceScoring"].score == 100.0
+        # G3 with empty keywords degrades to 0 (issue #16)
+        g3 = results["G3-RelevanceScoring"]
+        assert g3.score == 0.0
+        assert g3.passed is False
+        assert g3.flagged is True
 
     def test_context_none_defaults(self, sample_item: Item) -> None:
         """Orchestrator should not crash when context is None."""

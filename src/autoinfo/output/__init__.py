@@ -4362,20 +4362,25 @@ def _normalize_digest_product_context(
     # sort MUST run on the entries BEFORE the ref dicts drop summary/relevance.
     _ref_limit = ref_limit if ref_limit is not None else _output_config_ref_limit()
     _src_configs = _get_domain_source_configs(domain)
-    flat["references"] = [
-        {
+    flat["references"] = []
+    for e in _sorted_ref_entries(
+        [e for e in entries_list if isinstance(e, dict)]
+    )[:_ref_limit]:
+        _label = _derive_source_label(
+            e, e.get("domain", domain), source_configs=_src_configs,
+        )
+        flat["references"].append({
             "title": e.get("title", ""),
             "source_url": e.get("source_url", ""),
             "source_type": e.get("source_type", ""),
-            "source_platform": _derive_source_label(
-                e, e.get("domain", domain), source_configs=_src_configs,
-            ),
+            "source_platform": _label,
             "domain": e.get("domain", domain),
-        }
-        for e in _sorted_ref_entries(
-            [e for e in entries_list if isinstance(e, dict)]
-        )[:_ref_limit]
-    ]
+            "description": (
+                str(e.get("summary") or "").strip()
+                or str(e.get("content") or "")[:120].strip()
+                or f"{_label} item"
+            ),
+        })
 
     # --- Enterprise/premium key_findings cap (issue #11, decision a) ------
     # The enterprise-briefing template renders the selection-scope label
@@ -5382,18 +5387,23 @@ def generate_report(
     # ref dicts would silently lose the (has summary, relevance) ordering.
     _ref_limit = ref_limit if ref_limit is not None else _output_config_ref_limit()
     _src_configs = _get_domain_source_configs(domain)
-    references = [
-        {
+    references = []
+    for e in _sorted_ref_entries(entries)[:_ref_limit]:
+        _label = _derive_source_label(
+            e, e.get("domain", domain), source_configs=_src_configs,
+        )
+        references.append({
             "title": e.get("title", ""),
             "source_url": e.get("source_url", ""),
             "source_type": e.get("source_type", ""),
-            "source_platform": _derive_source_label(
-                e, e.get("domain", domain), source_configs=_src_configs,
-            ),
+            "source_platform": _label,
             "domain": e.get("domain", domain),
-        }
-        for e in _sorted_ref_entries(entries)[:_ref_limit]
-    ]
+            "description": (
+                str(e.get("summary") or "").strip()
+                or str(e.get("content") or "")[:120].strip()
+                or f"{_label} item"
+            ),
+        })
 
     # -- Thematic grouping via LLM ----------------------------------------
     extractor = LLMExtractor()
@@ -7079,6 +7089,23 @@ def _call_llm_for_report_synthesis(prompt: str) -> str:
     return content.strip()
 
 
+_GLUED_BULLET_SEP = re.compile(r"(?<=\))- ?")
+
+
+def _split_glued_bullets(text: str) -> list[str]:
+    """Split a bullet body that carries glue-glued follow-on bullets (issue #14).
+
+    The LLM sometimes returns Key Findings bullets joined inline without
+    newlines — ``- a (Source: u)- b (Source: u)- c`` — so the whole run is
+    seen by ``is_bullet`` as ONE item.  A ``)`` immediately before a ``-`` is
+    the glue boundary (a ``(Source: URL)`` citation suffix followed by the
+    next bullet marker), and each split part preserves its own ``(Source: u)``
+    suffix.  Legitimate prose where ``)`` is *not* followed by ``-`` is never
+    split.
+    """
+    return [part for part in _GLUED_BULLET_SEP.split(text) if part]
+
+
 def _parse_report_markdown(
     content: str, require_exec_summary: bool = True
 ) -> dict[str, Any]:
@@ -7130,9 +7157,10 @@ def _parse_report_markdown(
                 summary_lines.append(stripped)
         elif current_section in ("key findings", "findings", "main findings"):
             if is_bullet(stripped):
-                item = bullet_text(stripped)
-                if item:
-                    result["key_findings"].append(item)
+                for item in _split_glued_bullets(bullet_text(stripped)):
+                    item = item.strip()
+                    if item:
+                        result["key_findings"].append(item)
         elif current_section in ("recommendations", "next steps", "action items"):
             if is_bullet(stripped):
                 item = bullet_text(stripped)
@@ -8707,6 +8735,7 @@ def generate_presentation(
     allow_empty: bool = False,
     delivery_gate_configs: dict[str, dict[str, Any]] | _DeliveryGatesBypass | None = None,
     llm_config: Config | None = None,
+    language: str = "",
 ) -> str | DeliveryOutput:
     """Generate a slide-based presentation for *topic* within *domain*.
 
@@ -8807,6 +8836,18 @@ def generate_presentation(
     # synthesis / KB-derived slides.
     entries = _filter_entries_by_domain_exclusions(entries, domain)
 
+    # --- Language filter (issue #309 / #317 / #15) ---------------------------
+    # Mirror digest/report: when a user requests a specific language (or a
+    # domain declares a default_language), drop entries in other languages so
+    # a presentation is internally consistent (no zh/en interleave).  Without
+    # this, the #8 Chinese financial noise (沪指/创业板/A股) leaked into
+    # ai-commercial presentations via topic_entries and the KB-derived
+    # fallback slides.  An explicit param wins; otherwise the domain default
+    # fills in.
+    effective_language = _resolve_effective_language(language, domain)
+    if effective_language:
+        entries = _filter_entries_by_language(entries, effective_language)
+
     # Filter entries by topic relevance (title/summary contains topic terms)
     topic_terms = topic.lower().split()
     topic_entries = [
@@ -8850,7 +8891,9 @@ def generate_presentation(
         '      - "notes": speaker notes (string, optional — may be null)\n\n'
         f"KB Entries:\n{entry_summaries}\n\n"
         "Return all fields in a single JSON object. Adapt depth and terminology "
-        f"specifically for a {target_audience} audience."
+        f"specifically for a {target_audience} audience.\n"
+        'When a claim comes from a specific KB entry, end that bullet with '
+        '" (Source: <the entry URL>)".'
     )
 
     if custom_instructions:
@@ -9004,6 +9047,7 @@ def _fallback_slides_from_entries(
                 "content": summary[:600],
                 "bullets": bullets,
                 "notes": "Prepared from knowledge base sources.",
+                "source_url": str(e.get("source_url") or "").strip(),
             }
         )
         if len(slides) >= slide_count:
