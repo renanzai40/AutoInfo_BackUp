@@ -551,6 +551,37 @@ class TestLanguageDetection:
         result = detect_language("Hi")
         assert result == "unknown"
 
+    def test_detect_korean_script(self) -> None:
+        """Hangul text is detected as ``ko`` WITHOUT langdetect (which
+        systematically misclassifies Hangul as ``en`` — backup-repo #35)."""
+        from autoinfo.process import detect_language
+
+        text = "삼육대 이용우 교수팀, VR 물리치료 교육 효과 과학적 입증 연구 발표"
+        with patch("langdetect.detect_langs") as mock_dl:
+            result = detect_language(text)
+        mock_dl.assert_not_called()
+        assert result == "ko"
+
+    def test_detect_russian_cyrillic_script(self) -> None:
+        """Cyrillic text is detected as ``ru`` without langdetect."""
+        from autoinfo.process import detect_language
+
+        text = "Чистая прибыль банков США во втором квартале увеличилась на двадцать восемь процентов"
+        with patch("langdetect.detect_langs") as mock_dl:
+            result = detect_language(text)
+        mock_dl.assert_not_called()
+        assert result == "ru"
+
+    def test_detect_devanagari_script(self) -> None:
+        """Devanagari text is detected as ``hi`` without langdetect."""
+        from autoinfo.process import detect_language
+
+        text = "भारत ने किराना हिल्स पर किया था हमला पूर्व सीडीएस ने बताया विवरण"
+        with patch("langdetect.detect_langs") as mock_dl:
+            result = detect_language(text)
+        mock_dl.assert_not_called()
+        assert result == "hi"
+
 
 # ===================================================================
 # Test: CLI wiring
