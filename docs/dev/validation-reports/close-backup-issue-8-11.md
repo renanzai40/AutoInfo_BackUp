@@ -322,3 +322,71 @@ Known pre-existing failure documented in `close-backup-issue-6-7.md`
 does not recur here; `test_video_integration` (WSL Chrome render) and
 `test_coverage_matrix` (fails on unchanged HEAD) are the only
 pre-existing environment failures in the suites above.
+
+---
+
+## Follow-up: #9 reopened (2026-08-25) — blocklist on the keyword path
+
+### Why it was reopened
+
+Issue #9 was closed by PR #12's `Fixes #9`, then **reopened** (2026-08-25,
+`stateReason: REOPENED`) with real-product re-validation evidence (branch
+`fix/validate-ai-real-20260825`, batch `ai-real-20260825`): the merged fix
+placed `_GENERIC_THEME_LABELS` + synonym merge **only inside
+`_merge_theme_groups`**.  The LLM-grouping flow routes through that function,
+but the deterministic-fallback callers of `_keyword_group_entries` do NOT:
+
+- the fault-inject branch in `_group_by_theme` returns
+  `_deterministic_grouping(...)` directly (no `_merge_theme_groups` pass);
+- `_deterministic_column_sections` (digest/product-template path) also calls
+  `_deterministic_grouping` directly.
+
+A runtime `_keywords.yaml` carrying generic auto-discovery noise words
+(`new` / `year` / `user` / `growth` / `apps` / `activity` / `market`) made
+`_keyword_group_entries` emit bare generic themes whose entries never passed
+the blocklist — real ai-commercial reports again rendered `### New` /
+`### Growth` / `### Apps` / `### Activity` / `### Year` / `### User`, each
+reading "Key developments and analysis on <Label>."  Hermetic unit tests
+passed because they exercised `_merge_theme_groups` directly, never the real
+report path.
+
+### What was changed (fix branch `fix/backup-issue-9-reopen`)
+
+All in `src/autoinfo/output/__init__.py`:
+
+1. **Sanitize at the `_keyword_group_entries` boundary** — the function now
+   runs its own result through `_merge_theme_groups` before returning, so
+   every caller (LLM path AND deterministic fallbacks) is covered by the
+   single source of truth for the blocklist + synonym + near-dup passes.
+   The `None` contract is preserved: when every matched keyword theme is
+   generic (blocklist-stripped) or structural (catch-all only), the
+   classifier found no meaningful topic and returns `None` so the caller's
+   source-type / domain fallback engages instead of collapsing all entries
+   into one catch-all group.
+2. **`_STRUCTURAL_THEME_LABELS` constant** — `General` / `Additional Topics`
+   are structural catch-alls (exempt from the blocklist, excluded from the
+   "found a meaningful theme" decision).
+3. **Fault-inject path consistency** — the `_group_by_theme` fault-inject
+   branch now routes `_deterministic_grouping(...)` through
+   `_merge_theme_groups` too, so no path can leak generic themes.
+
+### Acceptance evidence
+
+- `tests/output/test_theme_semantic_titles.py` — 3 new tests
+  (`test_keyword_grouping_blocklists_generic_noise_keywords`,
+  `test_keyword_grouping_all_generic_returns_none`,
+  `test_group_by_theme_fault_inject_path_blocklists_generic`).  RED on the
+  pre-fix tree: `generic theme headings leaked` / `The Year`, `Growth`
+  surfaced; GREEN on the fixed tree.  11 passed.
+- `tests/output` focused suite (theme/grouping/language/action/reference):
+  **84 passed**.
+- Full `tests/output` + `tests/validation`: **603 passed, 10 skipped**; the
+  only failure `test_video_integration` is the documented pre-existing WSL
+  Chrome env failure (fails identically on clean HEAD).
+- `ruff check` + `mypy` clean on changed files.
+- New regression scenario
+  `src/autoinfo/mcp/scenarios/regression/regression-9-generic-theme-blocklist.yaml`
+  (`AUTOINFO_FAULT_INJECT=group:fail` + patched `_load_keyword_topics` with
+  generic noise words): **RED pre-fix** (`generic theme headings leaked:
+  ['The Year', 'Activity', 'New']`), **GREEN post-fix**.  Scenario counts
+  bumped 116 → 117 (65 functional + 52 regression), steps 447 → 448.

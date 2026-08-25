@@ -13,9 +13,9 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 
 | Metric | Value |
 |--------|-------|
-| Total files | 84 |
-| Total lines | 29643 |
-| Active files | 57 |
+| Total files | 86 |
+| Total lines | 30136 |
+| Active files | 59 |
 | Archived files | 27 |
 | Category — archive | 27 files / 8627 lines |
 | Category — known-limitations | 1 files / 288 lines |
@@ -23,7 +23,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | Category — skills | 3 files / 785 lines |
 | Category — adr | 9 files / 424 lines |
 | Category — specs | 12 files / 8815 lines |
-| Category — validation-reports | 8 files / 2457 lines |
+| Category — validation-reports | 10 files / 2950 lines |
 | Category — docs/dev | 19 files / 7789 lines |
 | Category — docs/root | 1 files / 61 lines |
 
@@ -97,7 +97,9 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/validation-loop-log.md` | 62 | docs/dev | active | — |
 | `dev/validation-reports/README.md` | 59 | validation-reports | active | — |
 | `dev/validation-reports/close-backup-issue-3.md` | 51 | validation-reports | active | — |
-| `dev/validation-reports/close-backup-issue-4.md` | 59 | validation-reports | active | — |
+| `dev/validation-reports/close-backup-issue-4.md` | 85 | validation-reports | active | — |
+| `dev/validation-reports/close-backup-issue-6-7.md` | 75 | validation-reports | active | closure-evidence |
+| `dev/validation-reports/close-backup-issue-8-11.md` | 392 | validation-reports | active | closure-evidence |
 | `dev/validation-reports/evidence-2026-08-12/AC5-verdict.md` | 34 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-column.md` | 796 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-digest-weekly.md` | 144 | validation-reports | active | — |

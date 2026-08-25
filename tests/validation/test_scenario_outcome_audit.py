@@ -4,9 +4,10 @@
 Locks the behavior of ``scripts/scenario_outcome_audit.py`` so the D-工-5
 evidence stays deterministic:
 
-1. All 116 scenarios (65 functional + 51 regression) are parsed with 447
+1. All 117 scenarios (65 functional + 52 regression) are parsed with 448
    steps (446 + the #351 V5 step-5 append to
-   ``regression-351-year-hallucination-tuning``).
+   ``regression-351-year-hallucination-tuning`` + the #9-reopened
+   ``regression-9-generic-theme-blocklist`` scenario).
 2. **Outcome grading** — >= 95% of steps assert an explicit ``success``
    key (grade the outcome envelope, not the path).
 3. **Error-path depth** — every error step pins ``error_code``; the
@@ -47,14 +48,17 @@ def result(outcome_audit):
 
 
 def test_all_116_scenarios_parsed(result: dict[str, Any]) -> None:
-    assert result["summary"]["total_scenarios"] == 116
-    assert result["summary"]["regression_scenarios"] == 51
+    # 117 = 116 + the #9-reopened regression scenario
+    # (regression-9-generic-theme-blocklist.yaml).
+    assert result["summary"]["total_scenarios"] == 117
+    assert result["summary"]["regression_scenarios"] == 52
 
 
 def test_total_steps(result):
-    # 447 = 446 + the #351 V5 step-5 append
-    # (regression-351-year-hallucination-tuning.yaml, todo 7).
-    assert result["summary"]["total_steps"] == 447
+    # 448 = 446 + the #351 V5 step-5 append
+    # (regression-351-year-hallucination-tuning.yaml, todo 7) + the #9
+    # regression scenario step (regression-9-generic-theme-blocklist.yaml).
+    assert result["summary"]["total_steps"] == 448
 
 
 def test_outcome_grading_ratio_high(result):
