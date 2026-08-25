@@ -66,6 +66,11 @@ def localize(
     out_dir: str = typer.Option(
         "outputs/localized", "--out-dir", help="Base output directory for localized products"
     ),
+    max_items: int = typer.Option(
+        0,
+        "--max-items",
+        help="Maximum number of KB entries for the generated digest (0 = default)",
+    ),
 ) -> None:
     """Localize a generated product into a target language (issue #38).
 
@@ -85,6 +90,7 @@ def localize(
             target_lang=target_lang,
             source_lang=source_lang,
             out_dir=out_dir,
+            max_items=max_items,
         )
     except ValueError as exc:
         typer.echo(f"Error: {exc}", err=True)

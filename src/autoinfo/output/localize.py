@@ -214,7 +214,9 @@ def _resolve_source_language(domain: str, source_lang: str) -> str:
     return "en"
 
 
-def _generate_product_text(domain: str, product: str, period: str) -> tuple[str, str]:
+def _generate_product_text(
+    domain: str, product: str, period: str, max_items: int = 0
+) -> tuple[str, str]:
     """Generate the product markdown; return (markdown, generator-name)."""
     for row in PRODUCT_TEMPLATES:
         if row["name"] == product:
@@ -228,9 +230,13 @@ def _generate_product_text(domain: str, product: str, period: str) -> tuple[str,
             f"All registry products: {valid}"
         )
     if product in _DIGEST_FAMILY:
-        result = generate_digest(
-            domain=domain, period=period, format="markdown", product_template=template
-        )
+        kwargs: dict[str, Any] = {
+            "domain": domain, "period": period, "format": "markdown",
+            "product_template": template,
+        }
+        if max_items:
+            kwargs["max_items"] = max_items
+        result = generate_digest(**kwargs)
         return str(result), "generate_digest"
     if product in _REPORT_FAMILY:
         result = generate_report(
@@ -252,6 +258,7 @@ def localize_product(
     out_dir: str | Path | None = None,
     qa_sample_rate: float = 0.2,
     qa_min_samples: int = 5,
+    max_items: int = 0,
 ) -> dict[str, Any]:
     """Localize a generated product into ``target_lang`` (issue #38).
 
@@ -267,7 +274,7 @@ def localize_product(
         raise ValueError("target_lang is required (e.g. --target-lang zh)")
     effective_source = _resolve_source_language(domain, source_lang)
 
-    markdown, _ = _generate_product_text(domain, product, period)
+    markdown, _ = _generate_product_text(domain, product, period, max_items=max_items)
 
     segments = _segment_markdown(markdown)
     translatable_idx = [
