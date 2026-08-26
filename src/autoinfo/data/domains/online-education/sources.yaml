@@ -1,282 +1,274 @@
-# AutoInfo demo domain: Online Education / Knowledge Payment
-# Tracks online learning platforms, EdTech trends, MOOCs, skill development, and certifications
 name: online-education
-description: "Online education and knowledge payment — EdTech, MOOCs, skill development, certifications"
-
+description: Online education and knowledge payment — EdTech, MOOCs, skill development,
+  certifications
 sources:
-  - name: coursera-blog
-    type: rss
-    url: https://blog.coursera.org/feed/
-    quality_tier: 2
-    enabled: true
-    rate_limit: 10
-    fetch_depth: abstract
-    tos_classification: open
-
-  - name: edsurge
-    type: rss
-    url: https://www.edsurge.com/feed
-    quality_tier: 2
-    enabled: false  # 2026-08: connection refused on mainland CN (verified 2026-08-24)
-    rate_limit: 10
-    fetch_depth: abstract
-    tos_classification: open
-
-  - name: class-central
-    type: rss
-    url: https://www.classcentral.com/report/feed/
-    quality_tier: 2
-    enabled: false  # 2026-08: HTTP 403 (verified 2026-08-24)
-    rate_limit: 10
-    fetch_depth: abstract
-    tos_classification: open
-
-  - name: khan-academy
-    type: rss
-    url: https://www.khanacademy.org/about/blog/feed
-    quality_tier: 2
-    enabled: false  # 2026-08: RSS parse error (bozo) (verified 2026-08-24)
-    rate_limit: 10
-    fetch_depth: abstract
-    tos_classification: open
-
-  - name: open-culture
-    type: rss
-    url: https://www.openculture.com/feed
-    quality_tier: 2
-    enabled: true
-    rate_limit: 10
-    fetch_depth: abstract
-    tos_classification: open
-
-  # ---- A19/A26/A27 additions: 得到/Coursera/ncpssd/万方 ----
-
-  - name: dedao
-    type: rss
-    url: https://rsshub.app/dedao/articles
-    quality_tier: 2
-    enabled: false  # 2026-08: GFW-blocked (rsshub.app) — TCP connect timeout (verified 2026-08-24)
-    rate_limit: 10
-    fetch_depth: abstract
-    tos_classification: open
-    # 得到 (Dedao) articles via the RSSHub community route — uptime depends on
-    # the public RSSHub instance (rsshub.app).
-    extract_fields:
-      - name: title
-        type: string
-        description: "Article title"
-        required: true
-      - name: author
-        type: string
-        description: "Article author"
-        required: false
-      - name: publish_date
-        type: string
-        description: "Publication date"
-        required: false
-      - name: summary
-        type: string
-        description: "Brief article summary"
-        required: false
-
-  - name: coursera
-    type: api  # generic HTTP JSON API (HttpApiHandler) — 'http_api' is not a valid source type
-    url: https://api.coursera.org/api/courses.v1
-    quality_tier: 1
-    enabled: true
-    rate_limit: 5
-    fetch_depth: abstract
-    tos_classification: open
-    settings:
-      page_param: start   # offset-style pagination (start=0,20,40,...)
-      page_size_param: limit
-      page_size: 20
-      max_pages: 5
-      json_path: elements
-      field_mapping:
-        id: id
-        name: name
-        title: name
-        slug: slug
-        content: description
-        # source_url: courses.v1 has no URL field — canonical page is
-        # https://www.coursera.org/learn/{slug}; http_api has no URL-template
-        # support, so source_url falls back to the API endpoint.
-    extract_fields:
-      - name: course_title
-        type: string
-        description: "Title of the course or program mentioned"
-        required: true
-      - name: provider
-        type: string
-        description: "Platform or institution providing the course (e.g. Coursera, edX, Khan Academy)"
-        required: true
-      - name: difficulty
-        type: string
-        description: "Difficulty level: beginner, intermediate, advanced, or all-levels"
-        required: false
-      - name: duration
-        type: string
-        description: "Estimated duration to complete (e.g. 4 weeks, 3 months, self-paced)"
-        required: false
-      - name: topics
-        type: array
-        description: "List of subject areas covered by the course"
-        required: false
-      - name: rating
-        type: string
-        description: "User or community rating if available (e.g. 4.5/5)"
-        required: false
-
-  - name: ncpssd
-    type: rss  # via RSSHub community route — avoids the native API's POST/header complexity
-    url: https://rsshub.app/ncpssd/newlist
-    quality_tier: 1  # 国家哲学社会科学文献中心 — primary Chinese social-science database
-    enabled: false  # 2026-08: GFW-blocked (rsshub.app) — TCP connect timeout (verified 2026-08-24)
-    rate_limit: 10
-    fetch_depth: abstract
-    tos_classification: open
-    extract_fields:
-      - name: title
-        type: string
-        description: "Article or thesis title"
-        required: true
-      - name: authors
-        type: array
-        description: "Author names of the article"
-        required: false
-      - name: year
-        type: string
-        description: "Publication year"
-        required: false
-      - name: abstract
-        type: string
-        description: "Article abstract"
-        required: false
-
-  - name: wanfang
-    type: api  # generic HTTP JSON API (HttpApiHandler) — 'http_api' is not a valid source type
-    url: https://api.wanfangdata.com.cn/openwanfang/getQuery
-    quality_tier: 1  # 万方数据 — top-tier Chinese scholarly literature database
-    enabled: true
-    requires_key: true
-    rate_limit: 5
-    fetch_depth: abstract
-    tos_classification: licensed
-    # 万方 metadata endpoint is POST-only; http_api transport is GET-hardcoded
-    # (http_api.py:191) — collection blocked until a POST transport extension lands
-    # (flagged separate scope); config is auth-ready (static X-Ca-AppKey+APPCODE
-    # headers verified — M3T31 OUTCOME A; no HMAC signing required).
-    settings:
-      method: POST        # INERT until http_api gains POST transport (http_api.py:191 is httpx.get)
-      auth_mode: none     # static headers only — prevents Bearer clobbering if AUTOINFO_HTTP_API_KEY is set
-      headers:
-        X-Ca-AppKey: ${WANFANG_APP_KEY}
-        Authorization: "APPCODE ${WANFANG_APP_CODE}"
-        Content-Type: application/json
-      json_path: documents
-      json_body:          # INERT until http_api gains JSON-body support (transport extension)
-        collections:
-          - OpenPeriodical
-          - OpenThesis
-        query: "{query}"
-        rows: 20
-        start: 0
-      page_size: 20
-      max_pages: 3
-      field_mapping:
-        id: Id
-        title: Title
-        content: Abstract
-        source_url: ThirdPartyUrl
-        authors: Creator
-        year: PublishYear
-    extract_fields:
-      - name: title
-        type: string
-        description: "Article or thesis title"
-        required: true
-      - name: authors
-        type: array
-        description: "Author names"
-        required: false
-      - name: year
-        type: string
-        description: "Publication year"
-        required: false
-      - name: abstract
-        type: string
-        description: "Article abstract"
-        required: false
-      - name: source
-        type: string
-        description: "Journal or publication source"
-        required: false
-
-topics:
-  - name: "Online Learning"
-    keywords:
-      - online learning
-      - e-learning
-      - distance education
-      - virtual classroom
-      - remote learning
-      - digital learning
-  - name: "EdTech"
-    keywords:
-      - edtech
-      - education technology
-      - learning platform
-      - adaptive learning
-      - personalized learning
-      - learning management system
-  - name: "MOOC"
-    keywords:
-      - MOOC
-      - massive open online course
-      - Coursera
-      - edX
-      - Udacity
-      - open courseware
-  - name: "Skill Development"
-    keywords:
-      - skill development
-      - upskilling
-      - reskilling
-      - professional development
-      - lifelong learning
-      - vocational training
-  - name: "Certification"
-    keywords:
-      - certification
-      - credential
-      - micro-credential
-      - digital badge
-      - professional certificate
-      - nanodegree
-
-extract_fields:
+- name: coursera-blog
+  type: rss
+  url: https://blog.coursera.org/feed/
+  quality_tier: 2
+  enabled: true
+  rate_limit: 10
+  fetch_depth: abstract
+  tos_classification: open
+- name: edsurge
+  type: rss
+  url: https://www.edsurge.com/feed
+  quality_tier: 2
+  enabled: false
+  rate_limit: 10
+  fetch_depth: abstract
+  tos_classification: open
+- name: class-central
+  type: rss
+  url: https://www.classcentral.com/report/feed/
+  quality_tier: 2
+  enabled: false
+  rate_limit: 10
+  fetch_depth: abstract
+  tos_classification: open
+- name: khan-academy
+  type: rss
+  url: https://www.khanacademy.org/about/blog/feed
+  quality_tier: 2
+  enabled: false
+  rate_limit: 10
+  fetch_depth: abstract
+  tos_classification: open
+- name: open-culture
+  type: rss
+  url: https://www.openculture.com/feed
+  quality_tier: 2
+  enabled: true
+  rate_limit: 10
+  fetch_depth: abstract
+  tos_classification: open
+- name: dedao
+  type: rss
+  url: https://rsshub.app/dedao/articles
+  quality_tier: 2
+  enabled: false
+  rate_limit: 10
+  fetch_depth: abstract
+  tos_classification: open
+  extract_fields:
+  - name: title
+    type: string
+    description: Article title
+    required: true
+  - name: author
+    type: string
+    description: Article author
+    required: false
+  - name: publish_date
+    type: string
+    description: Publication date
+    required: false
+  - name: summary
+    type: string
+    description: Brief article summary
+    required: false
+- name: coursera
+  type: api
+  url: https://api.coursera.org/api/courses.v1
+  quality_tier: 1
+  enabled: true
+  rate_limit: 5
+  fetch_depth: abstract
+  tos_classification: open
+  settings:
+    page_param: start
+    page_size_param: limit
+    page_size: 20
+    max_pages: 5
+    json_path: elements
+    field_mapping:
+      id: id
+      name: name
+      title: name
+      slug: slug
+      content: description
+  extract_fields:
   - name: course_title
     type: string
-    description: "Title of the course or program mentioned"
+    description: Title of the course or program mentioned
     required: true
   - name: provider
     type: string
-    description: "Platform or institution providing the course (e.g. Coursera, edX, Khan Academy)"
+    description: Platform or institution providing the course (e.g. Coursera, edX,
+      Khan Academy)
     required: true
   - name: difficulty
     type: string
-    description: "Difficulty level: beginner, intermediate, advanced, or all-levels"
+    description: 'Difficulty level: beginner, intermediate, advanced, or all-levels'
     required: false
   - name: duration
     type: string
-    description: "Estimated duration to complete (e.g. 4 weeks, 3 months, self-paced)"
+    description: Estimated duration to complete (e.g. 4 weeks, 3 months, self-paced)
     required: false
   - name: topics
     type: array
-    description: "List of subject areas covered by the course"
+    description: List of subject areas covered by the course
     required: false
   - name: rating
     type: string
-    description: "User or community rating if available (e.g. 4.5/5)"
+    description: User or community rating if available (e.g. 4.5/5)
     required: false
+- name: ncpssd
+  type: rss
+  url: https://rsshub.app/ncpssd/newlist
+  quality_tier: 1
+  enabled: false
+  rate_limit: 10
+  fetch_depth: abstract
+  tos_classification: open
+  extract_fields:
+  - name: title
+    type: string
+    description: Article or thesis title
+    required: true
+  - name: authors
+    type: array
+    description: Author names of the article
+    required: false
+  - name: year
+    type: string
+    description: Publication year
+    required: false
+  - name: abstract
+    type: string
+    description: Article abstract
+    required: false
+- name: wanfang
+  type: api
+  url: https://api.wanfangdata.com.cn/openwanfang/getQuery
+  quality_tier: 1
+  enabled: true
+  requires_key: true
+  rate_limit: 5
+  fetch_depth: abstract
+  tos_classification: licensed
+  settings:
+    method: POST
+    auth_mode: none
+    headers:
+      X-Ca-AppKey: ${WANFANG_APP_KEY}
+      Authorization: APPCODE ${WANFANG_APP_CODE}
+      Content-Type: application/json
+    json_path: documents
+    json_body:
+      collections:
+      - OpenPeriodical
+      - OpenThesis
+      query: '{query}'
+      rows: 20
+      start: 0
+    page_size: 20
+    max_pages: 3
+    field_mapping:
+      id: Id
+      title: Title
+      content: Abstract
+      source_url: ThirdPartyUrl
+      authors: Creator
+      year: PublishYear
+  extract_fields:
+  - name: title
+    type: string
+    description: Article or thesis title
+    required: true
+  - name: authors
+    type: array
+    description: Author names
+    required: false
+  - name: year
+    type: string
+    description: Publication year
+    required: false
+  - name: abstract
+    type: string
+    description: Article abstract
+    required: false
+  - name: source
+    type: string
+    description: Journal or publication source
+    required: false
+- name: inside-higher-ed
+  type: rss
+  url: https://www.insidehighered.com/rss.xml
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 30
+  enabled: true
+topics:
+- name: Online Learning
+  keywords:
+  - online learning
+  - e-learning
+  - distance education
+  - virtual classroom
+  - remote learning
+  - digital learning
+- name: EdTech
+  keywords:
+  - edtech
+  - education technology
+  - learning platform
+  - adaptive learning
+  - personalized learning
+  - learning management system
+- name: MOOC
+  keywords:
+  - MOOC
+  - massive open online course
+  - Coursera
+  - edX
+  - Udacity
+  - open courseware
+- name: Skill Development
+  keywords:
+  - skill development
+  - upskilling
+  - reskilling
+  - professional development
+  - lifelong learning
+  - vocational training
+- name: Certification
+  keywords:
+  - certification
+  - credential
+  - micro-credential
+  - digital badge
+  - professional certificate
+  - nanodegree
+extract_fields:
+- name: course_title
+  type: string
+  description: Title of the course or program mentioned
+  required: true
+- name: provider
+  type: string
+  description: Platform or institution providing the course (e.g. Coursera, edX, Khan
+    Academy)
+  required: true
+- name: difficulty
+  type: string
+  description: 'Difficulty level: beginner, intermediate, advanced, or all-levels'
+  required: false
+- name: duration
+  type: string
+  description: Estimated duration to complete (e.g. 4 weeks, 3 months, self-paced)
+  required: false
+- name: topics
+  type: array
+  description: List of subject areas covered by the course
+  required: false
+- name: rating
+  type: string
+  description: User or community rating if available (e.g. 4.5/5)
+  required: false
+default_language: en
+exclude_keywords:
+- campus gossip
+- obscure academic paper
+- local student union

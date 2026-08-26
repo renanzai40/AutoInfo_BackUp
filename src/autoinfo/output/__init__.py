@@ -3698,7 +3698,7 @@ def _call_llm_for_digest(
                     {"role": "user", "content": prompt},
                 ],
                 json_mode=config.llm.json_mode and not config.llm.reasoning_model,
-                max_tokens=4000,
+                max_tokens=8000,
                 temperature=0.1,
                 api_key=config.llm.api_key or None,
                 base_url=config.llm.base_url or None,
@@ -4698,12 +4698,15 @@ def generate_digest(
                     e["domain"] = d
             entries.extend(domain_entries)
         entries = entries[:query_limit]
+        period_was_empty = False
     else:
-        entries = store.list_entries(
+        period_entries = store.list_entries(
             domain=domain,
             date_from=date_from,
             limit=query_limit,
         )
+        period_was_empty = not period_entries
+        entries = period_entries
         # Data-staleness fallback: when no entry falls inside the period
         # window (e.g. collectors last ran weeks ago), the digest would be
         # an empty shell — unacceptable for a paying end user.  Relax the
@@ -4752,7 +4755,24 @@ def generate_digest(
         language, domain, cross_domain=is_cross_domain_digest
     )
     if effective_language:
-        entries = _filter_entries_by_language(entries, effective_language)
+        filtered_entries = _filter_entries_by_language(entries, effective_language)
+        if not filtered_entries and entries and not period_was_empty and not is_cross_domain_digest:
+            # The period window held entries in OTHER languages while the
+            # domain's default-language corpus is fully out-of-window (e.g. a
+            # zh domain whose people.cn corpus is dated months ago + fresh en
+            # in-window).  Relax the DATE window (keep the language filter) so
+            # the digest is never an empty shell (backup-repo #28 evidence).
+            logger.info(
+                "No '%s'-language entries in the '%s' window for domain '%s' "
+                "- relaxing the date window, keeping the language filter",
+                effective_language, period, domain,
+            )
+            relaxed = store.list_entries(domain=domain, limit=query_limit)
+            if relaxed:
+                filtered_entries = _filter_entries_by_language(
+                    relaxed, effective_language
+                )
+        entries = filtered_entries
 
     # --- Per-domain exclude_keywords filter (issue #319) ---------------------
     # Cross-domain noise guard: drop entries whose title/summary/tags match a
@@ -7077,7 +7097,7 @@ def _call_llm_for_report_synthesis(prompt: str) -> str:
                 {"role": "user", "content": prompt},
             ],
             json_mode=False,
-            max_tokens=4000,
+            max_tokens=8000,
             temperature=0.1,
             api_key=config.llm.api_key or None,
             base_url=config.llm.base_url or None,
@@ -7216,6 +7236,10 @@ def _llm_json_extract(
     Uses :class:`LLMExtractor` under the hood by wrapping the prompt in
     a minimal ``Item``.  Returns the value of *field* from the parsed
     JSON response, or ``None`` on failure.
+
+    Free-provider resilience: the extraction path returns an EMPTY result
+    (not an exception) on transient parse failure; retry once before
+    giving up, mirroring the two-attempt pattern of ``_report_llm_call``.
     """
     from autoinfo.models import Item  # noqa: PLC0415
 
@@ -7228,7 +7252,11 @@ def _llm_json_extract(
         content=prompt,
     )
     result = extractor.extract(dummy, schema=[field])
-    return result.custom_fields.get(field)
+    value = result.custom_fields.get(field) if result else None
+    if value is None:
+        result = extractor.extract(dummy, schema=[field])
+        value = result.custom_fields.get(field) if result else None
+    return value
 
 
 def _report_data_to_dict(
@@ -7683,7 +7711,7 @@ def _call_llm_for_translation(
                 {"role": "user", "content": user_prompt},
             ],
             json_mode=config.llm.json_mode and not config.llm.reasoning_model,
-            max_tokens=4000,
+            max_tokens=8000,
             temperature=0.1,
             api_key=config.llm.api_key or None,
             base_url=config.llm.base_url or None,
@@ -8252,6 +8280,28 @@ def generate_tutorial(
 
     # -- Build template context -------------------------------------------
     generated_at = datetime.now(timezone.utc).isoformat()
+
+    def _coerce_exercise(item: Any) -> dict[str, str]:
+        """Normalize one exercise entry to the ``{title, description}`` shape.
+
+        LLM results occasionally carry plain strings (or scalars) instead of
+        objects; rendering those through ``{{ exercise.title }}`` leaks
+        Jinja's method-object repr into the product (backup-repo #22-#37
+        matrix `_no_placeholder` P0 on gaming tutorial).
+        """
+        if isinstance(item, dict):
+            return {
+                "title": str(item.get("title") or item.get("question") or ""),
+                "description": str(item.get("description") or ""),
+            }
+        return {"title": str(item), "description": ""}
+
+    exercises_raw = llm_result.get("exercises", [])
+    if isinstance(exercises_raw, list):
+        exercises = [_coerce_exercise(item) for item in exercises_raw]
+    else:
+        exercises = []
+
     context = {
         "title": llm_result.get("title", f"{domain} — Tutorial"),
         "domain": domain,
@@ -8261,7 +8311,7 @@ def generate_tutorial(
         "prerequisites": llm_result.get("prerequisites", "None"),
         "objectives": llm_result.get("objectives", []),
         "content": llm_result.get("content", []),
-        "exercises": llm_result.get("exercises", []),
+        "exercises": exercises,
         "summary": llm_result.get("summary", ""),
         "further_reading": llm_result.get("further_reading", []),
         "generated_at": generated_at,
@@ -8405,7 +8455,7 @@ def _call_llm_for_tutorial(prompt: str) -> dict[str, Any]:
                 {"role": "user", "content": prompt},
             ],
             json_mode=config.llm.json_mode and not config.llm.reasoning_model,
-            max_tokens=4000,
+            max_tokens=8000,
             temperature=0.1,
             api_key=config.llm.api_key or None,
             base_url=config.llm.base_url or None,
@@ -9082,7 +9132,7 @@ def _call_llm_for_presentation(prompt: str, slide_count: int) -> dict[str, Any]:
                 {"role": "user", "content": prompt},
             ],
             json_mode=config.llm.json_mode and not config.llm.reasoning_model,
-            max_tokens=4000,
+            max_tokens=8000,
             temperature=0.1,
             api_key=config.llm.api_key or None,
             base_url=config.llm.base_url or None,
@@ -10162,7 +10212,7 @@ def simplify_text(
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
             ],
-            max_tokens=4000,
+            max_tokens=8000,
             temperature=0.3,
             api_key=api_key or None,
             base_url=base_url or None,

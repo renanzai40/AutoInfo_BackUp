@@ -11,12 +11,51 @@ description: "Financial and business intelligence — market data, economic indi
 # (collect.py _DOMAIN_NOISE_KEYWORDS); this seed filter also protects against
 # stale pre-fix KB entries and re-processed caches.
 exclude_keywords:
+  # SEC-filing dilution filter (#332): SEC EDGAR 8-K/10-K/10-Q items are
+  # metadata-only filings (form + company + date) whose titles and summaries
+  # carry the bare form id.  Excluding them from product input keeps the
+  # financial digest/report focused on substantive analysis instead of a list
+  # of filing notices.  The collection-time guard already drops NEW SEC items
+  # (collect.py _DOMAIN_NOISE_KEYWORDS); this seed filter also protects against
+  # stale pre-fix KB entries and re-processed caches.
   - 8-K
   - 10-K
   - 10-Q
   - 10Q
   - SEC 8-K
   - 8-K filing
+  - 10-K filing
+  - 10-Q filing
+  - SEC filing
+  - SEC EDGAR
+  - Form 8-K
+  # Commodities / housing macro spam (issue #20): macro series that spam the
+  # KB (crude/gold price ticks, mortgage-rate roundups) are out-of-domain for
+  # financial-intelligence products focused on equities/corporates/policy.
+  - crude oil prices
+  - oil price
+  - gold price
+  - commodity prices
+  - mortgage rates
+  - housing market
+  - home prices
+  - real estate market
+  - housing starts
+  # Deal clickbait (issue #20): generic "3 stocks to buy" / hype headlines
+  # without substantive analysis dilute product information density.
+  - stocks to buy
+  - stocks to watch
+  - buy now
+  - hot stocks
+  - market recap
+
+# Effective-source set (issue #20): production runs on the 3 keyless RSS feed
+# sources (CNBC Investing / TheStreet / MarketWatch Markets) + SEC EDGAR
+# (free, ToS-compliant UA) + World Bank Data.  The API-key sources below
+# (Alpha Vantage/FRED/Finnhub/Twelve Data/Quandl) stay configured as the demo
+# template but are requires_key: true; without env keys they surface as
+# SourceFailure at collect and are excluded from the effective set.
+default_language: en
 
 sources:
   - name: Alpha Vantage
@@ -150,27 +189,57 @@ sources:
     rate_limit: 30  # requests per minute
 
 topics:
-  - name: "Market Trends"
+  - name: "Listed Companies & Earnings"
     keywords:
-      - stock market
-      - S&P 500
-      - market trends
-      - equities
-      - trading
-      - market analysis
-  - name: "Economic Indicators"
+      - earnings
+      - quarterly results
+      - revenue guidance
+      - stock price
+      - share buyback
+      - dividend
+      - IPO
+      - ticker
+  - name: "M&A & Financing"
+    keywords:
+      - merger
+      - acquisition
+      - M&A
+      - takeover
+      - funding round
+      - private equity
+      - venture capital
+      - SPAC
+      - deal announcement
+  - name: "Macro & Policy"
     keywords:
       - GDP
       - inflation
-      - unemployment
       - federal reserve
+      - interest rate
+      - monetary policy
+      - fiscal policy
       - economic data
       - consumer price index
-  - name: "Corporate Filings"
+      - payrolls
+  - name: "Regulation & Compliance"
     keywords:
-      - SEC filing
-      - 10-K
-      - 10-Q
-      - earnings report
-      - financial disclosure
-      - quarterly results
+      - SEC
+      - regulatory action
+      - compliance
+      - antitrust
+      - banking regulation
+      - capital requirements
+      - enforcement
+      - disclosure
+      - governance
+  - name: "Market Structure"
+    keywords:
+      - market index
+      - S&P 500
+      - Nasdaq
+      - volatility
+      - equity flows
+      - market liquidity
+      - derivatives
+      - trading volume
+      - market breadth

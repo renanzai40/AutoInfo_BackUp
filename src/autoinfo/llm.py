@@ -433,7 +433,7 @@ class LLMExtractor:
                 {"role": "user", "content": user_prompt},
             ],
             base_url=self._base_url,
-            max_tokens=2000,
+            max_tokens=4000,
             temperature=0.1,
             json_mode=self._should_use_json_mode(),
             reasoning_model=self._reasoning_model,

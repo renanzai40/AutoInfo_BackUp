@@ -249,7 +249,9 @@ class TestJudgmentDriftGuardrail:
                 config=config,
             )
 
-        assert _captured_model(mock_litellm) == f"openai/{JUDGMENT_MODEL}"
+        # JUDGMENT_MODEL is litellm-qualified (e.g. openai/stealth/ox-alpha),
+        # so the boundary captures it verbatim — no double prefix.
+        assert _captured_model(mock_litellm) == JUDGMENT_MODEL
 
 
 class TestDefaultsPreserved:

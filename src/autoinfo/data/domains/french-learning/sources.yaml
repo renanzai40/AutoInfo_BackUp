@@ -1,0 +1,46 @@
+# AutoInfo domain: french-learning
+name: french-learning
+description: French language immersion — news in French for learning
+default_language: fr
+exclude_keywords:
+- english
+- arabic
+- deutsch
+- español
+- italiano
+sources:
+- name: france24-fr
+  type: rss
+  url: https://www.france24.com/fr/rss
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 30
+  enabled: true
+- name: le-figaro
+  type: rss
+  url: https://www.lefigaro.fr/rss/figaro_actualites.xml
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 30
+  enabled: true
+topics:
+- name: News & Politics
+  keywords:
+  - actualité
+  - politique
+  - gouvernement
+  - élections
+- name: Economy & Technology
+  keywords:
+  - économie
+  - technologie
+  - entreprises
+  - innovation
+- name: Culture & Society
+  keywords:
+  - culture
+  - société
+  - littérature
+  - art

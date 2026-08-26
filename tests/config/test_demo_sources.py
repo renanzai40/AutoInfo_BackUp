@@ -60,6 +60,14 @@ EXPECTED = {
             # #6/#7 (2026-08-24): HN Algolia API + GitHub Blog reachable on mainland CN
             "HN Algolia API",
             "GitHub Blog",
+            # #27 (2026-08-25): card-verified feeds (verified-reachable sources)
+            "hnrss",
+            "ars-technica",
+            "techcrunch-ai",
+            "infoq-cn",
+            "lobsters",
+            "juejin",
+            "qbitai",
         ],
     },
 }
@@ -110,6 +118,14 @@ def _load_sources(domain: str) -> list[dict[str, Any]]:
             "Bilibili (B站)",
             "HN Algolia API",
             "GitHub Blog",
+            # #27 (2026-08-25): card-verified feeds (verified-reachable sources)
+            "hnrss",
+            "ars-technica",
+            "techcrunch-ai",
+            "infoq-cn",
+            "lobsters",
+            "juejin",
+            "qbitai",
         ],
     ),
 ])

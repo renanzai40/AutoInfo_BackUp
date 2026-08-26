@@ -192,10 +192,102 @@ class TestDigestLanguageFilter:
         }
         mock_kb_store.return_value = _digest_mock_store(_ZHRISH_ENTRIES)
         body = _as_text(generate_digest(
-            domain="medical-research", period="weekly", format="markdown"
+            domain="language-learning", period="weekly", format="markdown"
         ))
         assert "中文 IVF 突破" in body
         assert "English IVF breakthrough" in body
+
+
+class TestDigestLanguageWindowFallback:
+    """A domain whose default-language corpus is fully out-of-window while
+    the period window holds entries in other languages must relax the DATE
+    window (keeping the language filter) instead of rendering an empty shell
+    (backup-repo #28 evidence run: general-news zh corpus dated 2025-06,
+    fresh en in-window)."""
+
+    def _entry(self, eid: str, lang: str, title: str, collected_at: str) -> dict[str, Any]:
+        return {
+            "entry_id": eid,
+            "title": title,
+            "domain": "general-news",
+            "tier": "01-Raw",
+            "source_url": f"https://example.com/{eid}",
+            "source_type": "rss",
+            "source_platform": "rss",
+            "language": lang,
+            "collected_at": collected_at,
+            "summary": f"summary-{eid}",
+            "tags": "[]",
+            "quality_tier": 1,
+            "relevance_score": 80.0,
+        }
+
+    @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._call_llm_for_digest")
+    def test_zh_filter_emptied_by_window_relaxes_date_keeps_language(
+        self, mock_llm: MagicMock, mock_kb_store: MagicMock
+    ) -> None:
+        """In-window en entries + out-of-window zh corpus on a zh domain.
+
+        The period query returns the en entries (blocking the existing
+        no-window fallback), the zh filter empties them — the digest must
+        relax the date window and render the zh corpus, never an empty shell.
+        """
+        mock_llm.return_value = {
+            "executive_summary": "Synthesis.",
+            "key_findings": [],
+            "recommendations": [],
+        }
+        en_in_window = self._entry("en-1", "en", "English world news", "2026-08-25T00:00:00+00:00")
+        zh_out_of_window = self._entry("zh-1", "zh", "中文综合新闻", "2025-06-05T00:00:00+00:00")
+
+        store = MagicMock()
+
+        def _list_entries(**kwargs: Any) -> list[dict[str, Any]]:
+            if "date_from" in kwargs:
+                return [en_in_window]
+            return [zh_out_of_window]
+
+        store.list_entries.side_effect = _list_entries
+        mock_kb_store.return_value = store
+
+        body = _as_text(generate_digest(
+            domain="general-news", period="weekly", format="markdown",
+            language="zh", include_stale=True,
+        ))
+        assert "中文综合新闻" in body, "out-of-window zh entry must render via the relaxed window"
+        assert "English world news" not in body, "language filter must stay active"
+
+    @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._call_llm_for_digest")
+    def test_period_empty_fallback_still_respects_language(
+        self, mock_llm: MagicMock, mock_kb_store: MagicMock
+    ) -> None:
+        """The pre-existing no-window fallback keeps filtering by language too."""
+        mock_llm.return_value = {
+            "executive_summary": "Synthesis.",
+            "key_findings": [],
+            "recommendations": [],
+        }
+        en_entry = self._entry("en-2", "en", "English other", "2026-08-25T00:00:00+00:00")
+        zh_entry = self._entry("zh-2", "zh", "中文另一条", "2025-06-05T00:00:00+00:00")
+
+        store = MagicMock()
+
+        def _list_entries(**kwargs: Any) -> list[dict[str, Any]]:
+            if "date_from" in kwargs:
+                return []
+            return [en_entry, zh_entry]
+
+        store.list_entries.side_effect = _list_entries
+        mock_kb_store.return_value = store
+
+        body = _as_text(generate_digest(
+            domain="general-news", period="weekly", format="markdown",
+            language="zh", include_stale=True,
+        ))
+        assert "中文另一条" in body
+        assert "English other" not in body
 
 
 class TestReportLanguageFilter:

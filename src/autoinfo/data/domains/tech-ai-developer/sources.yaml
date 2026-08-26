@@ -1,153 +1,204 @@
-# AutoInfo demo domain: Tech/AI/Developer
-# Tracks trending open-source projects, developer news, tech community discussions, and product launches
 name: tech-ai-developer
-description: "Tech, AI, and developer intelligence — trending repos, developer news, community discussions"
-
+description: Tech, AI, and developer intelligence — trending repos, developer news,
+  community discussions
 sources:
-  - name: GitHub Trending
-    type: api
-    url: https://api.github.com/search/repositories
-    quality_tier: 1
-    frequency: daily
-    access: free
-    rate_limit: 10  # requests per minute (unauthenticated: 10)
-    query_param: q
-    params:
-      sort: stars
-      order: desc
-    json_path: items
+- name: GitHub Trending
+  type: api
+  url: https://api.github.com/search/repositories
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 10
+  query_param: q
+  params:
+    sort: stars
+    order: desc
+  json_path: items
+  field_mapping:
+    id: id
+    title: full_name
+    content: description
+    source_url: html_url
+- name: HackerNews API
+  type: hackernews
+  url: https://hacker-news.firebasedatabase.app/v0
+  quality_tier: 2
+  frequency: hourly
+  access: free
+  rate_limit: 100
+- name: Substack RSS (tech) — Pragmatic Engineer
+  type: rss
+  url: https://newsletter.pragmaticengineer.com/feed
+  quality_tier: 2
+  enabled: true
+  rate_limit: 10
+- name: Stack Exchange
+  type: api
+  url: https://api.stackexchange.com/2.3/questions?order=desc&sort=activity&site=stackoverflow&pagesize=10
+  quality_tier: 2
+  frequency: hourly
+  access: free
+  rate_limit: 300
+  json_path: items
+  field_mapping:
+    id: question_id
+    title: title
+    content: title
+    source_url: link
+- name: ProductHunt
+  type: api
+  url: https://api.producthunt.com/v2/api/graphql
+  quality_tier: 2
+  frequency: daily
+  access: api_key
+  requires_key: true
+  rate_limit: 10
+- name: Reddit
+  type: reddit
+  url: https://oauth.reddit.com
+  quality_tier: 2
+  frequency: hourly
+  access: api_key
+  requires_key: true
+  rate_limit: 100
+  enabled: true
+  settings:
+    subreddits:
+    - MachineLearning
+    - artificial
+    - programming
+    - datascience
+- name: Spotify AI Podcasts
+  type: spotify
+  url: https://api.spotify.com/v1
+  quality_tier: 3
+  frequency: daily
+  access: api_key
+  requires_key: true
+  rate_limit: 3
+  enabled: false
+  settings:
+    show_id: ''
+    market: US
+- name: Bilibili (B站)
+  type: bilibili
+  url: https://api.bilibili.com/x/web-interface/search/all/v2
+  quality_tier: 3
+  frequency: daily
+  access: free
+  requires_app_review: true
+  rate_limit: 5
+  enabled: true
+  settings:
+    query: AI 大模型
+- name: HN Algolia API
+  type: api
+  url: https://hn.algolia.com/api/v1/search_by_date?tags=story&hitsPerPage=20
+  quality_tier: 2
+  frequency: hourly
+  access: free
+  rate_limit: 10
+  enabled: true
+  settings:
+    json_path: hits
     field_mapping:
-      id: id
-      title: full_name
-      content: description
-      source_url: html_url
-
-  - name: HackerNews API
-    type: hackernews
-    url: https://hacker-news.firebasedatabase.app/v0
-    quality_tier: 2
-    frequency: hourly
-    access: free
-    rate_limit: 100
-
-  - name: Substack RSS (tech) — Pragmatic Engineer
-    type: rss
-    url: https://newsletter.pragmaticengineer.com/feed
-    quality_tier: 2
-    enabled: true
-    rate_limit: 10
-
-  - name: Stack Exchange
-    type: api
-    url: https://api.stackexchange.com/2.3/questions?order=desc&sort=activity&site=stackoverflow&pagesize=10
-    quality_tier: 2
-    frequency: hourly
-    access: free
-    rate_limit: 300  # requests per day
-    json_path: items
-    field_mapping: {id: question_id, title: title, content: title, source_url: link}
-
-  - name: ProductHunt
-    type: api
-    url: https://api.producthunt.com/v2/api/graphql
-    quality_tier: 2
-    frequency: daily
-    access: api_key
-    requires_key: true
-    rate_limit: 10
-
-  - name: Reddit
-    type: reddit
-    url: https://oauth.reddit.com
-    quality_tier: 2
-    frequency: hourly
-    access: api_key
-    requires_key: true
-    rate_limit: 100
-    enabled: true
-    settings:
-      subreddits:
-        - MachineLearning
-        - artificial
-        - programming
-        - datascience
-
-  - name: Spotify AI Podcasts
-    type: spotify
-    url: https://api.spotify.com/v1
-    quality_tier: 3
-    frequency: daily
-    access: api_key
-    requires_key: true
-    rate_limit: 3
-    enabled: false
-    settings:
-      show_id: ""
-      market: US
-
-  - name: Bilibili (B站)
-    type: bilibili
-    url: https://api.bilibili.com/x/web-interface/search/all/v2
-    quality_tier: 3
-    frequency: daily
-    access: free
-    requires_app_review: true
-    rate_limit: 5
-    enabled: true
-    settings:
-      query: "AI 大模型"
-
-  # ---- 2026-08-24 (#6/#7): mainland-CN verified-reachable replacements ----
-  # HackerNews firebaseio API DNS-fails on mainland CN; Algolia's HN API and
-  # the GitHub Blog RSS are both reachable (verified 2026-08-24).
-  - name: HN Algolia API
-    type: api
-    url: https://hn.algolia.com/api/v1/search_by_date?tags=story&hitsPerPage=20
-    quality_tier: 2
-    frequency: hourly
-    access: free
-    rate_limit: 10
-    enabled: true
-    settings:
-      json_path: hits
-      field_mapping:
-        id: objectID
-        title: title
-        content: story_text
-        source_url: url
-        published_date: created_at
-
-  - name: GitHub Blog
-    type: rss
-    url: https://github.blog/feed/
-    quality_tier: 2
-    frequency: daily
-    access: free
-    rate_limit: 10
-    enabled: true
-
+      id: objectID
+      title: title
+      content: story_text
+      source_url: url
+      published_date: created_at
+- name: GitHub Blog
+  type: rss
+  url: https://github.blog/feed/
+  quality_tier: 2
+  frequency: daily
+  access: free
+  rate_limit: 10
+  enabled: true
+- name: hnrss
+  type: rss
+  url: https://hnrss.org/newest
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 30
+  enabled: true
+- name: ars-technica
+  type: rss
+  url: https://feeds.arstechnica.com/arstechnica/index
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 30
+  enabled: true
+- name: techcrunch-ai
+  type: rss
+  url: https://techcrunch.com/category/artificial-intelligence/feed/
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 30
+  enabled: true
+- name: infoq-cn
+  type: rss
+  url: https://www.infoq.cn/feed
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 30
+  enabled: true
+- name: lobsters
+  type: rss
+  url: https://lobste.rs/rss
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 30
+  enabled: true
+- name: juejin
+  type: rss
+  url: https://juejin.cn/rss
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 30
+  enabled: true
+- name: qbitai
+  type: rss
+  url: https://www.qbitai.com/feed
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 30
+  enabled: true
 topics:
-  - name: "AI/ML Development"
-    keywords:
-      - artificial intelligence
-      - machine learning
-      - deep learning
-      - neural network
-      - AI tools
-      - LLM
-  - name: "Developer Tools"
-    keywords:
-      - developer tools
-      - framework
-      - open source
-      - github
-      - IDE
-      - devops
-  - name: "Tech Industry News"
-    keywords:
-      - technology news
-      - startup
-      - product launch
-      - funding
-      - software engineering
-      - tech community
+- name: AI/ML Development
+  keywords:
+  - artificial intelligence
+  - machine learning
+  - deep learning
+  - neural network
+  - AI tools
+  - LLM
+- name: Developer Tools
+  keywords:
+  - developer tools
+  - framework
+  - open source
+  - github
+  - IDE
+  - devops
+- name: Tech Industry News
+  keywords:
+  - technology news
+  - startup
+  - product launch
+  - funding
+  - software engineering
+  - tech community
+default_language: en
+exclude_keywords:
+- consumer gadget
+- smartphone launch
+- celebrity
+- entertainment

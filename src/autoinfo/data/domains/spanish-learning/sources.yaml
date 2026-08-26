@@ -1,0 +1,38 @@
+# AutoInfo domain: spanish-learning
+name: spanish-learning
+description: Spanish language immersion — news in Spanish for learning
+default_language: es
+exclude_keywords:
+- english
+- français
+- deutsch
+- português
+- català
+sources:
+- name: 20minutos
+  type: rss
+  url: https://www.20minutos.es/rss/
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 60
+  enabled: true
+topics:
+- name: News & Current Affairs
+  keywords:
+  - noticias
+  - actualidad
+  - política
+  - España
+- name: Technology & Economy
+  keywords:
+  - tecnología
+  - economía
+  - empresas
+  - ciencia
+- name: Culture & Sports
+  keywords:
+  - cultura
+  - deporte
+  - cine
+  - música

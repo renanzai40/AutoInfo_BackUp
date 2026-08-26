@@ -1,0 +1,38 @@
+# AutoInfo domain: italian-learning
+name: italian-learning
+description: Italian language immersion — news in Italian for learning
+default_language: it
+exclude_keywords:
+- english
+- français
+- deutsch
+- español
+sources:
+- name: corriere
+  type: rss
+  url: https://xml.corriereobjects.it/rss/homepage.xml
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 60
+  enabled: true
+topics:
+- name: News & Politics
+  keywords:
+  - notizie
+  - politica
+  - governo
+  - elezioni
+- name: Economy & Technology
+  keywords:
+  - economia
+  - tecnologia
+  - aziende
+  - borsa
+- name: Culture & Lifestyle
+  keywords:
+  - cultura
+  - vita
+  - arte
+  - cucina
+  - cinema

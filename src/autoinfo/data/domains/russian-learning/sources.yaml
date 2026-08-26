@@ -1,0 +1,57 @@
+# AutoInfo domain: russian-learning
+name: russian-learning
+description: Russian language immersion — news in Russian for learning
+default_language: ru
+exclude_keywords:
+- non-Russian
+- english-language
+- ukrainian politics
+- sports betting
+sources:
+- name: tass
+  type: rss
+  url: https://tass.ru/rss/v2.xml
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 60
+  enabled: true
+- name: rt-news
+  type: rss
+  url: https://www.rt.com/rss/
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 60
+  enabled: true
+- name: interfax
+  type: rss
+  url: https://www.interfax.ru/rss.asp
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 60
+  enabled: true
+topics:
+- name: Politics & World News
+  keywords:
+  - politics
+  - world
+  - government
+  - Kremlin
+  - parliament
+  - elections
+- name: Science, Tech & Economy
+  keywords:
+  - science
+  - technology
+  - economy
+  - business
+  - innovation
+- name: Culture & Society
+  keywords:
+  - culture
+  - society
+  - literature
+  - arts
+  - education

@@ -217,8 +217,37 @@ def _progress_enabled() -> bool:
 # ---------------------------------------------------------------------------
 
 
+def _detect_script(text: str) -> str:
+    """Detect language from Unicode script blocks (deterministic, no deps).
+
+    langdetect systematically misclassifies some scripts (Hangul → ``en``),
+    which corrupts the ``language`` metadata that drives the default_language
+    product filter (backup-repo #35).  Script detection is checked FIRST;
+    langdetect handles everything else.
+    """
+    if any("\uac00" <= ch <= "\ud7af" for ch in text):
+        return "ko"
+    if any("\u3040" <= ch <= "\u30ff" for ch in text):
+        return "ja"
+    if any("\u0900" <= ch <= "\u097f" for ch in text):
+        return "hi"
+    if any("\u0400" <= ch <= "\u04ff" for ch in text):
+        return "ru"
+    if any("\u0370" <= ch <= "\u03ff" for ch in text):
+        return "el"
+    if any("\u0e00" <= ch <= "\u0e7f" for ch in text):
+        return "th"
+    if any("\u0600" <= ch <= "\u06ff" for ch in text):
+        return "ar"
+    if any("\u0590" <= ch <= "\u05ff" for ch in text):
+        return "he"
+    if any("\u4e00" <= ch <= "\u9fff" for ch in text):
+        return "zh"
+    return ""
+
+
 def detect_language(text: str) -> str:
-    """Auto-detect the language of *text* using ``langdetect``.
+    """Auto-detect the language of *text* — script-first, then ``langdetect``.
 
     Returns a language code (e.g. ``"en"``, ``"zh-cn"``) when confidence
     is ≥ 0.8 and text has ≥ 20 characters.  Returns ``"unknown"`` for
@@ -230,6 +259,9 @@ def detect_language(text: str) -> str:
     """
     if len(text.strip()) < 20:
         return "unknown"
+    script = _detect_script(text)
+    if script:
+        return script
     try:
         from langdetect import LangDetectException as _LDE  # noqa: N814
         from langdetect import detect_langs

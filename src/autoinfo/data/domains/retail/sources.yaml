@@ -1,119 +1,122 @@
-# AutoInfo demo domain: Retail & E-commerce
-# Tracks retail industry news, e-commerce trends, DTC brands, and retail technology
-# NOTE: Retail Dive root /rss/ 403s — use /feeds/news/ instead.
 name: retail
-description: "Retail & e-commerce intelligence — retail news, e-commerce, DTC brands, retail tech"
-
+description: Retail & e-commerce intelligence — retail news, e-commerce, DTC brands,
+  retail tech
 sources:
-  - name: retail-dive
-    type: rss
-    url: https://www.retaildive.com/feeds/news/
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-    extract_fields:
-      - name: title
-        type: string
-        description: "Retail news headline"
-        required: true
-      - name: company
-        type: string
-        description: "Retail company mentioned"
-        required: false
-      - name: publish_date
-        type: string
-        description: "Original publication date and time"
-        required: false
-
-  - name: modern-retail
-    type: rss
-    url: https://www.modernretail.co/feed/
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-    extract_fields:
-      - name: title
-        type: string
-        description: "Retail news headline"
-        required: true
-      - name: company
-        type: string
-        description: "Retail or e-commerce company mentioned"
-        required: false
-      - name: publish_date
-        type: string
-        description: "Original publication date and time"
-        required: false
-
-  - name: ebrun-via-google-news
-    type: rss
-    url: "https://news.google.com/rss/search?q=site:ebrun.com&hl=zh-CN&gl=CN&ceid=CN:zh-Hans"
-    quality_tier: 3
-    enabled: false  # 2026-08: GFW-blocked (Google News RSS) — TCP connect timeout (verified 2026-08-24)
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-
-  - name: shopify-news
-    type: rss
-    url: https://www.shopify.com/news/feed
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-    # NOTE: Shopify blog /blog/rss is dead; /news/feed (official Shopify
-    # news/press feed) is the live RSS endpoint.
-
-  - name: digiday
-    type: rss
-    url: https://digiday.com/feed/
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-    extract_fields:
-      - name: title
-        type: string
-        description: "Retail media / digital commerce headline"
-        required: true
-      - name: publish_date
-        type: string
-        description: "Original publication date and time"
-        required: false
-
+- name: retail-dive
+  type: rss
+  url: https://www.retaildive.com/feeds/news/
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+  extract_fields:
+  - name: title
+    type: string
+    description: Retail news headline
+    required: true
+  - name: company
+    type: string
+    description: Retail company mentioned
+    required: false
+  - name: publish_date
+    type: string
+    description: Original publication date and time
+    required: false
+- name: modern-retail
+  type: rss
+  url: https://www.modernretail.co/feed/
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+  extract_fields:
+  - name: title
+    type: string
+    description: Retail news headline
+    required: true
+  - name: company
+    type: string
+    description: Retail or e-commerce company mentioned
+    required: false
+  - name: publish_date
+    type: string
+    description: Original publication date and time
+    required: false
+- name: ebrun-via-google-news
+  type: rss
+  url: https://news.google.com/rss/search?q=site:ebrun.com&hl=zh-CN&gl=CN&ceid=CN:zh-Hans
+  quality_tier: 3
+  enabled: false
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+- name: shopify-news
+  type: rss
+  url: https://www.shopify.com/news/feed
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+- name: digiday
+  type: rss
+  url: https://digiday.com/feed/
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+  extract_fields:
+  - name: title
+    type: string
+    description: Retail media / digital commerce headline
+    required: true
+  - name: publish_date
+    type: string
+    description: Original publication date and time
+    required: false
+- name: retailwire
+  type: rss
+  url: https://www.retailwire.com/feed
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 30
+  enabled: true
 topics:
-  - name: "E-commerce"
-    keywords:
-      - e-commerce
-      - online retail
-      - marketplace
-      - Amazon
-      - checkout
-      - shopping
-      - direct-to-consumer
-
-  - name: "Retail Technology"
-    keywords:
-      - retail technology
-      - point of sale
-      - inventory
-      - supply chain
-      - omnichannel
-      - retail media
-      - AI retail
-
-  - name: "Retail Industry"
-    keywords:
-      - retail sales
-      - store openings
-      - retail earnings
-      - consumer spending
-      - retail trends
-      - brick and mortar
-      - retail chains
+- name: E-commerce
+  keywords:
+  - e-commerce
+  - online retail
+  - marketplace
+  - Amazon
+  - checkout
+  - shopping
+  - direct-to-consumer
+- name: Retail Technology
+  keywords:
+  - retail technology
+  - point of sale
+  - inventory
+  - supply chain
+  - omnichannel
+  - retail media
+  - AI retail
+- name: Retail Industry
+  keywords:
+  - retail sales
+  - store openings
+  - retail earnings
+  - consumer spending
+  - retail trends
+  - brick and mortar
+  - retail chains
+default_language: en
+exclude_keywords:
+- local promotion
+- weekly ad
+- store coupon
+- macro bearish
+- housing market

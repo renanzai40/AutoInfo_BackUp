@@ -1,0 +1,37 @@
+# AutoInfo domain: hindi-learning
+name: hindi-learning
+description: Hindi language immersion — news in Hindi for learning
+default_language: hi
+exclude_keywords:
+- english news
+- cricket betting
+- horoscope
+sources:
+- name: aaj-tak
+  type: rss
+  url: https://www.aajtak.in/rss
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 60
+  enabled: true
+topics:
+- name: News & Politics
+  keywords:
+  - समाचार
+  - politics
+  - government
+  - elections
+  - भारत
+- name: Economy & Technology
+  keywords:
+  - अर्थव्यवस्था
+  - tech
+  - business
+  - कंपनियां
+- name: Culture & Entertainment
+  keywords:
+  - संस्कृति
+  - मनोरंजन
+  - बॉलीवुड
+  - sports

@@ -1,129 +1,145 @@
-# AutoInfo demo domain: Legal/Compliance
-# Tracks legal news, regulations, court rulings, and compliance developments
 name: legal-compliance
-description: "Legal and compliance intelligence — court rulings, privacy regulations, corporate law, IP & technology law, regulatory compliance"
-
+description: Legal and compliance intelligence — court rulings, privacy regulations,
+  corporate law, IP & technology law, regulatory compliance
 sources:
-  - name: scotusblog
-    type: rss
-    url: https://www.scotusblog.com/feed/
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-
-  - name: iapp-privacy
-    type: rss
-    url: https://iapp.org/news/rss
-    quality_tier: 2
-    enabled: false  # 2026-08: HTTP 404 (verified 2026-08-24); keep for keyed/geo setups
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-
-  - name: law-com
-    type: rss
-    url: https://www.law.com/feed/
-    quality_tier: 2
-    enabled: false  # 2026-08: HTTP 404 (verified 2026-08-24); keep for keyed/geo setups
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-
-  - name: oyez
-    type: rss
-    url: https://www.oyez.org/feed
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-
-  - name: gdpr-eu
-    type: rss
-    url: https://gdpr.eu/feed/
-    quality_tier: 2
-    enabled: true
-    tos_classification: open
-    rate_limit: 10
-    fetch_depth: abstract
-
+- name: scotusblog
+  type: rss
+  url: https://www.scotusblog.com/feed/
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+- name: iapp-privacy
+  type: rss
+  url: https://iapp.org/news/rss
+  quality_tier: 2
+  enabled: false
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+- name: law-com
+  type: rss
+  url: https://www.law.com/feed/
+  quality_tier: 2
+  enabled: false
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+- name: oyez
+  type: rss
+  url: https://www.oyez.org/feed
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+- name: gdpr-eu
+  type: rss
+  url: https://gdpr.eu/feed/
+  quality_tier: 2
+  enabled: true
+  tos_classification: open
+  rate_limit: 10
+  fetch_depth: abstract
+- name: court-gov
+  type: web
+  url: https://www.court.gov.cn/rss.html
+  quality_tier: 2
+  frequency: daily
+  access: free
+  rate_limit: 10
+  enabled: true
+  fetch_depth: fulltext
+  tos_classification: open
+- name: thepaper-legal
+  type: web
+  url: https://www.thepaper.cn/rss.html
+  quality_tier: 2
+  frequency: daily
+  access: free
+  rate_limit: 10
+  enabled: true
+  fetch_depth: fulltext
+  tos_classification: open
 topics:
-  - name: "Privacy & Data Protection"
-    keywords:
-      - privacy
-      - data protection
-      - GDPR
-      - CCPA
-      - personal data
-      - data breach
-      - consent
-      - data privacy
-      - right to be forgotten
-      - data subject rights
-
-  - name: "Corporate Law"
-    keywords:
-      - corporate law
-      - securities
-      - mergers and acquisitions
-      - corporate governance
-      - shareholder rights
-      - fiduciary duty
-      - securities fraud
-      - SEC
-      - corporate compliance
-      - antitrust
-
-  - name: "IP & Technology"
-    keywords:
-      - intellectual property
-      - patent
-      - trademark
-      - copyright
-      - trade secret
-      - DMCA
-      - fair use
-      - patent infringement
-      - licensing
-      - technology law
-
-  - name: "Regulatory Compliance"
-    keywords:
-      - regulatory compliance
-      - regulation
-      - administrative law
-      - agency rulemaking
-      - enforcement
-      - compliance
-      - regulatory reform
-      - financial regulation
-      - environmental regulation
-      - healthcare regulation
-
+- name: Privacy & Data Protection
+  keywords:
+  - privacy
+  - data protection
+  - GDPR
+  - CCPA
+  - personal data
+  - data breach
+  - consent
+  - data privacy
+  - right to be forgotten
+  - data subject rights
+- name: Corporate Law
+  keywords:
+  - corporate law
+  - securities
+  - mergers and acquisitions
+  - corporate governance
+  - shareholder rights
+  - fiduciary duty
+  - securities fraud
+  - SEC
+  - corporate compliance
+  - antitrust
+- name: IP & Technology
+  keywords:
+  - intellectual property
+  - patent
+  - trademark
+  - copyright
+  - trade secret
+  - DMCA
+  - fair use
+  - patent infringement
+  - licensing
+  - technology law
+- name: Regulatory Compliance
+  keywords:
+  - regulatory compliance
+  - regulation
+  - administrative law
+  - agency rulemaking
+  - enforcement
+  - compliance
+  - regulatory reform
+  - financial regulation
+  - environmental regulation
+  - healthcare regulation
 extract_fields:
-  - name: case_title
-    type: string
-    description: "Title or name of the legal case, ruling, or regulatory action"
-    required: true
-  - name: court
-    type: string
-    description: "Court or regulatory body that issued the ruling (e.g., Supreme Court, SEC, FTC)"
-    required: false
-  - name: jurisdiction
-    type: string
-    description: "Jurisdiction of the ruling (e.g., US federal, EU, UK, state-level)"
-    required: false
-  - name: ruling_date
-    type: string
-    description: "Date of the ruling, decision, or enforcement action"
-    required: false
-  - name: practice_area
-    type: string
-    description: "Legal practice area (e.g., privacy, corporate, IP, regulatory)"
-    required: false
-  - name: summary
-    type: string
-    description: "Brief summary of the case, ruling, or regulatory development and its implications"
-    required: true
+- name: case_title
+  type: string
+  description: Title or name of the legal case, ruling, or regulatory action
+  required: true
+- name: court
+  type: string
+  description: Court or regulatory body that issued the ruling (e.g., Supreme Court,
+    SEC, FTC)
+  required: false
+- name: jurisdiction
+  type: string
+  description: Jurisdiction of the ruling (e.g., US federal, EU, UK, state-level)
+  required: false
+- name: ruling_date
+  type: string
+  description: Date of the ruling, decision, or enforcement action
+  required: false
+- name: practice_area
+  type: string
+  description: Legal practice area (e.g., privacy, corporate, IP, regulatory)
+  required: false
+- name: summary
+  type: string
+  description: Brief summary of the case, ruling, or regulatory development and its
+    implications
+  required: true
+default_language: zh
+exclude_keywords:
+- celebrity trial gossip
+- local trivial case
+- human interest court story
