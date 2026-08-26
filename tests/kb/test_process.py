@@ -26,7 +26,6 @@ from autoinfo.models import ExtractionResult, Item, KBEntry
 from autoinfo.process import ProcessResult, load_cached_items, run_processing
 from autoinfo.quality import QualityResult
 
-
 # ===================================================================
 # Fixtures
 # ===================================================================
@@ -556,7 +555,8 @@ class TestLanguageDetection:
         systematically misclassifies Hangul as ``en`` — backup-repo #35)."""
         from autoinfo.process import detect_language
 
-        text = "삼육대 이용우 교수팀, VR 물리치료 교육 효과 과학적 입증 연구 발표"
+        text = ("삼육대 이용우 교수팀, VR 물리치료 교육 효과 과학적 입증"
+              " 연구 발표")
         with patch("langdetect.detect_langs") as mock_dl:
             result = detect_language(text)
         mock_dl.assert_not_called()
@@ -566,7 +566,8 @@ class TestLanguageDetection:
         """Cyrillic text is detected as ``ru`` without langdetect."""
         from autoinfo.process import detect_language
 
-        text = "Чистая прибыль банков США во втором квартале увеличилась на двадцать восемь процентов"
+        text = ("Чистая прибыль банков США во втором квартале увеличилась"
+              " на двадцать восемь процентов")
         with patch("langdetect.detect_langs") as mock_dl:
             result = detect_language(text)
         mock_dl.assert_not_called()
@@ -576,7 +577,8 @@ class TestLanguageDetection:
         """Devanagari text is detected as ``hi`` without langdetect."""
         from autoinfo.process import detect_language
 
-        text = "भारत ने किराना हिल्स पर किया था हमला पूर्व सीडीएस ने बताया विवरण"
+        text = ("भारत ने किराना हिल्स पर किया था हमला पूर्व सीडीएस"
+              " ने बताया विवरण")
         with patch("langdetect.detect_langs") as mock_dl:
             result = detect_language(text)
         mock_dl.assert_not_called()

@@ -137,9 +137,12 @@ class TestResolveEffectiveLanguage:
         assert _resolve_effective_language("", "ai-commercial") == "en"
 
     def test_empty_when_no_default(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-        _write_config(tmp_path, [_plain_domain("medical-research")])
+        # language-learning's demo seed declares NO default_language, so the
+        # seed fallback finds nothing and the result stays "" (medical-research
+        # has gained a seed default_language: en since the #19 fine-tune).
+        _write_config(tmp_path, [_plain_domain("language-learning")])
         monkeypatch.chdir(tmp_path)
-        assert _resolve_effective_language("", "medical-research") == ""
+        assert _resolve_effective_language("", "language-learning") == ""
 
     def test_empty_when_cross_domain(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
         _write_config(
@@ -245,8 +248,13 @@ class TestDigestDomainDefault:
         self, mock_llm: MagicMock, mock_kb: MagicMock,
         tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
     ) -> None:
-        """A domain with no default keeps both languages (legacy)."""
-        _write_config(tmp_path, [_plain_domain("medical-research")])
+        """A domain with no default keeps both languages (legacy).
+
+        Uses language-learning (a demo domain whose seed declares no
+        default_language) — medical-research gained a seed default_language
+        in the #19 fine-tune, so the language filter would engage.
+        """
+        _write_config(tmp_path, [_plain_domain("language-learning")])
         monkeypatch.chdir(tmp_path)
         mock_llm.return_value = {
             "executive_summary": "Synthesis.",
@@ -254,11 +262,11 @@ class TestDigestDomainDefault:
             "recommendations": [],
         }
         entries = [
-            {**e, "domain": "medical-research"} for e in _MIXED_ENTRIES
+            {**e, "domain": "language-learning"} for e in _MIXED_ENTRIES
         ]
         mock_kb.return_value = _digest_mock_store(entries)
         body = _as_text(generate_digest(
-            domain="medical-research", period="weekly", format="markdown"
+            domain="language-learning", period="weekly", format="markdown"
         ))
         assert "English AI funding round" in body
         assert "中文 AI 融资动态" in body

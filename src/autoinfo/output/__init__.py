@@ -4698,12 +4698,15 @@ def generate_digest(
                     e["domain"] = d
             entries.extend(domain_entries)
         entries = entries[:query_limit]
+        period_was_empty = False
     else:
-        entries = store.list_entries(
+        period_entries = store.list_entries(
             domain=domain,
             date_from=date_from,
             limit=query_limit,
         )
+        period_was_empty = not period_entries
+        entries = period_entries
         # Data-staleness fallback: when no entry falls inside the period
         # window (e.g. collectors last ran weeks ago), the digest would be
         # an empty shell — unacceptable for a paying end user.  Relax the
@@ -4752,7 +4755,24 @@ def generate_digest(
         language, domain, cross_domain=is_cross_domain_digest
     )
     if effective_language:
-        entries = _filter_entries_by_language(entries, effective_language)
+        filtered_entries = _filter_entries_by_language(entries, effective_language)
+        if not filtered_entries and entries and not period_was_empty and not is_cross_domain_digest:
+            # The period window held entries in OTHER languages while the
+            # domain's default-language corpus is fully out-of-window (e.g. a
+            # zh domain whose people.cn corpus is dated months ago + fresh en
+            # in-window).  Relax the DATE window (keep the language filter) so
+            # the digest is never an empty shell (backup-repo #28 evidence).
+            logger.info(
+                "No '%s'-language entries in the '%s' window for domain '%s' "
+                "- relaxing the date window, keeping the language filter",
+                effective_language, period, domain,
+            )
+            relaxed = store.list_entries(domain=domain, limit=query_limit)
+            if relaxed:
+                filtered_entries = _filter_entries_by_language(
+                    relaxed, effective_language
+                )
+        entries = filtered_entries
 
     # --- Per-domain exclude_keywords filter (issue #319) ---------------------
     # Cross-domain noise guard: drop entries whose title/summary/tags match a
