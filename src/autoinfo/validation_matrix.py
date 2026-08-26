@@ -287,6 +287,19 @@ _NO_ENTRIES_PLACEHOLDER = re.compile(
     re.IGNORECASE,
 )
 _SKELETON_ECHO = re.compile(r"<[a-z][a-z0-9 _-]+>", re.IGNORECASE)
+# #41 FP-4 — real HTML element tags (e.g. <figure>/<div>/<img> leaked from raw
+# rich-text source content, rendered as images) are legitimate, NOT template
+# placeholders.  Only a skeleton echo shaped like a *template* slot
+# ("<finding 1>", "<takeaway>") stays flagged.
+_HTML_TAG_NAMES = frozenset({
+    "div", "figure", "img", "figcaption", "span", "p", "a", "br", "hr",
+    "ul", "ol", "li", "table", "tr", "td", "th", "thead", "tbody",
+    "section", "article", "header", "footer", "nav", "main", "aside",
+    "h1", "h2", "h3", "h4", "h5", "h6", "em", "strong", "b", "i", "u",
+    "small", "blockquote", "pre", "code", "video", "audio", "source",
+    "picture", "button", "input", "iframe", "style", "script", "svg",
+    "form", "textarea", "select", "option", "label", "meta", "link",
+})
 _LIST_MARKER = re.compile(r"^[-*•]?\s*(?:\[\s*[ xX]\s*\])?\s*")
 # #338 — internal keyword-search/counting lines must never reach the product:
 # keyword-group descriptions, "entry(ies) not matched/covered" catch-alls,
@@ -318,15 +331,21 @@ _MONTH_YEAR_RE = re.compile(
 # URL-embedded 4-digit runs (e.g. "https://x.com/2023/01") are legitimate —
 # never fire the year checks on the path/query portion of a URL.
 _URL_RE = re.compile(r"https?://\S+")
-# #351 V4 — a FUTURE year is only a hallucination when it is asserted as a
-# completed fact.  Forward-looking projections ("Revenue to double by 2030",
-# "targeting 2027", "2025-2030 runway") are legitimate financial prose.
-# Projection markers searched on the line containing the year:
+# #351 V4 + #41 — a FUTURE year is only a hallucination when it is asserted as
+# a completed fact.  Forward-looking projections ("Revenue to double by 2030",
+# "targeting 2027", "2025-2030 runway") are legitimate financial prose, and
+# news/entertainment release markers ("set to arrive in early 2027", "Witcher 4
+# targeting release in 2028", "delayed to March 4, 2027", "pushed to 2027") are
+# legitimate forward announcements.  Projection markers searched on the line
+# containing the year:
 _FORWARD_LOOKING_RE = re.compile(
     r"\b(?:target(?:s|ed|ing)?|forecast(?:s|ed|ing)?|project(?:s|ed|ion|ions|ing)?|"
     r"expect(?:s|ed|ing)?|plan(?:s|ned|ning)?|aim(?:s|ed|ing)?|outlook|guidance|"
     r"goal(?:s)?|fiscal|trajectory|pipeline|runway|through|until|toward|towards|"
-    r"anticipated?|envisioned?)\b",
+    r"anticipated?|envisioned?|arrive(?:s|d)?|release(?:s|d)?|launch(?:es|ed)?|"
+    r"start(?:s|ed|ing)?|begin(?:s|ning)?|bring(?:s)?|debut(?:s|ed)?|slated?|"
+    r"premiere(?:s|d)?|due(?:\s+to)?|targeting|delay(?:s|ed)?|push(?:es|ed)?|"
+    r"upcoming|could|strateg(?:y|ies)?)\b",
     re.IGNORECASE,
 )
 # "by 2030" / "by the year 2027" / "by July 2027" — strong forward markers
@@ -338,16 +357,28 @@ _BY_YEAR_RE = re.compile(
     r"October|November|December)\s+)?(?:18|19|20)\d{2}\b",
     re.IGNORECASE,
 )
-# A year range "2025-2030" / "2027–2030" is inherently forward-looking.
-_YEAR_RANGE_RE = re.compile(r"\b(?:18|19|20)\d{2}\s*[-–]\s*(?:18|19|20)\d{2}\b")
-# #351 V5 — a FUTURE year is also legitimate when it stands as part of a
-# title / list / guide / ranking / survey / publication NAME ("The Princeton
-# Review's 2027 Best Colleges guide", "The 2027 Best Colleges guide", "the
-# 2027 report").  The year must sit inside a name-shaped run: an optional
-# possessive organization/publication name BEFORE the year ("Review's 2027")
-# and a recognized title noun right AFTER it.  Kept deliberately NARROW — the
-# name noun must directly follow the year, so bare factual claims ("In 2031,
-# adoption tripled") never match.
+# A year range "2025-2030" / "2027–2030" / short form "2026-27" is inherently
+# forward-looking.
+_YEAR_RANGE_RE = re.compile(
+    r"\b(?:18|19|20)\d{2}\s*[-–]\s*(?:18|19|20)?\d{2}\b"
+)
+# "set to arrive in early 2027" / "set to premiere" — a strong forward marker.
+_SET_TO_RE = re.compile(r"\bset\s+to\b", re.IGNORECASE)
+# "end of new PlayStation discs from 2028" / "from 2027 the route opens" —
+# a state/transition beginning at a future year is forward-looking.
+_FROM_YEAR_RE = re.compile(r"\bfrom\s+(?:the\s+)?(?:18|19|20)\d{2}\b")
+# "plan for 2027" / "strategy for the 2027 season" / "centering on economic
+# issues for 2027" — planning/positioning toward a future year.
+_FOR_YEAR_RE = re.compile(r"\bfor\s+(?:the\s+)?(?:18|19|20)\d{2}\b")
+# #351 V5 + #41 — a FUTURE year is also legitimate when it stands as part of a
+# title / list / guide / ranking / survey / publication / event NAME ("The
+# Princeton Review's 2027 Best Colleges guide", "The 2027 Best Colleges guide",
+# "the 2027 report", "the 2027 edition").  The year must sit inside a
+# name-shaped run: an optional possessive organization/publication name BEFORE
+# the year ("Review's 2027") and a recognized title noun right AFTER it (with
+# up to 2 modifier/adjective words between, so "2027 French presidential
+# election" matches).  Kept deliberately NARROW — bare factual claims ("In
+# 2031, adoption tripled") never match.
 _NAMED_YEAR_RE = re.compile(
     r"\b(?:[A-Z][A-Za-z0-9&'.-]+\s+){0,2}"
     r"(?:[A-Z][A-Za-z0-9&'.-]+(?:'s|’s)\s+)?"
@@ -356,9 +387,42 @@ _NAMED_YEAR_RE = re.compile(
     r"(?:18|19|20)\d{2}\s+"
     r"(?:Best Colleges|Best Schools|Best Companies|Best Employers|"
     r"Best Internships|guide|guides|survey|surveys|ranking|rankings|"
-    r"report|reports|list|lists|index|edition|directory|almanac)\b",
+    r"report|reports|list|lists|index|edition|directory|almanac|"
+    r"election|event|return|season|festival|tournament|tournaments|"
+    r"championship|championships|conference|convention|summit|expo)\b",
     re.IGNORECASE,
 )
+# A future-year election noun phrase ("2027 French presidential election",
+# "2028 election", "for the 2028 election cycle") — the election is a named,
+# scheduled future event, not a hallucinated completed date.  The year must
+# directly begin the noun phrase; "In 2031, adoption tripled" has no election
+# noun and never matches.
+_ELECTION_YEAR_RE = re.compile(
+    r"\b(?:18|19|20)\d{2}\s+(?:(?:[A-Za-z][A-Za-z0-9&'’.-]+\s+){0,3}election\b)",
+    re.IGNORECASE,
+)
+# #41 — game/franchise/product/series NAME years.  A year that is an integral
+# part of a proper-noun title run ("Metro 2039", "Harvest Moon 2027",
+# "Présidentielle 2027", "The Witcher 4 (2028)") is a name token, not a
+# calendar-date claim.  Each alternative keeps the year INSIDE the title run so
+# the year is clearly a brand/series part: the year directly follows 1-4 name
+# words (letters of any script, so French/Devanagari titles match) optionally a
+# part number, or sits parenthesized after a numbered franchise.  A bare
+# factual claim ("In 2027, sales tripled") never matches — a single leading
+# function word ("in"/"the"/"by"/"for"/...) is rejected by the
+# ``_FUNCTION_YEAR_WORDS`` guard in ``_is_named_year``.
+_FRANCHISE_YEAR_RE = re.compile(
+    r"\b(?:[^\W\d_][^\W_]*[\s-]+){1,3}"
+    r"(?:[0-9]{1,3}[\s-]+)?(?:18|19|20)\d{2}\b"
+    r"|\b(?:[^\W\d_][^\W_]*[\s-]+){1,4}"
+    r"[0-9]{1,3}\s*\(\s*(?:18|19|20)\d{2}\s*\)"
+)
+_FUNCTION_YEAR_WORDS = frozenset({
+    "in", "on", "at", "by", "for", "from", "since", "after", "before",
+    "during", "until", "the", "a", "an", "as", "of", "to", "with",
+    "into", "over", "under", "within",
+})
+
 # Fenced code blocks are never acceptable in a delivered product.
 _FENCE_RE = re.compile(r"```[\s\S]*?```")
 # API-key / token / secret prefix shapes: sk- (OpenAI), AIza (Google),
@@ -464,6 +528,15 @@ def _source_labels_specific(text: str, domain: str, product: str) -> AssertionRe
     sit BEFORE the References heading and previously escaped detection.
     """
     body = text
+    # The product metadata table carries an HONEST entry-type annotation
+    # ``| **Type** | rss |`` and a specific ``| **Source** | <name> |`` label.
+    # Remove the Type-row value so a bare TYPE label ("rss") is not mistaken
+    # for an unresolved generic source label (#41 FP-3) — while a generic
+    # source label that is neither a feed name nor a Type row still flags.
+    _TYPE_ROW = re.compile(
+        r"^\s*\|?\s*\*\*Type\*\*\s*\|[^|\n]*\|?\s*$", re.MULTILINE
+    )
+    body = _TYPE_ROW.sub("", body)
     matches = _RSS_LABEL.findall(body)
     return AssertionResult(
         "_source_labels_specific", not matches, "#325", "P1", domain, product,
@@ -479,6 +552,8 @@ def _collect_placeholder_tokens(text: str) -> list[str]:
     /``To be determined`` used as a whole table cell or list item — #334),
     (c) the deterministic ``No knowledge base entries were available.``
     fallback message, and (d) residual LLM skeleton echoes (``<finding 1>``).
+    Real HTML element tags (``<figure>``/``<div>``/``<img>``) leaked from
+    rich-text source content are NOT placeholders (#41 FP-4).
     """
     found: list[str] = list(dict.fromkeys(_PLACEHOLDER.findall(text)))
     for line in text.splitlines():
@@ -493,6 +568,9 @@ def _collect_placeholder_tokens(text: str) -> list[str]:
     for m in _NO_ENTRIES_PLACEHOLDER.finditer(text):
         found.append(m.group(0))
     for m in _SKELETON_ECHO.finditer(text):
+        tag = m.group(0).lstrip("<").rstrip(">").split(" ", 1)[0].strip().lower()
+        if tag in _HTML_TAG_NAMES:
+            continue
         found.append(m.group(0))
     return list(dict.fromkeys(found))
 
@@ -627,16 +705,18 @@ def _no_year_hallucination(text: str, domain: str, product: str) -> AssertionRes
     hallucination only when it is implausible for the claim's context:
       * a FUTURE year (or bare month-year) asserted as a completed fact — no
         forward-looking marker (``by 2030`` / ``target`` / ``forecast`` /
-        ``projected`` / ``fiscal`` / a ``2025-2030`` range) on the same line —
-        fires P0;
-      * a DISTANT-PAST year (< 1950) fires P1 "human review": historical
-        references (e.g. ``founded in 1917``) are plausible in financial
-        products, so the report card surfaces them for a human to judge rather
-        than auto-failing them as P0.
+        ``projected`` / ``fiscal`` / ``set to`` / ``delayed to`` / a
+        ``2025-2030`` range) on the same line — fires P0;
+      * a DISTANT-PAST year (< 1950) is surfaced as a P1 ``human review``
+        failure: historical references (e.g. ``founded in 1917``) are plausible
+        in some products, so they still ``fail`` but at P1 so a human can
+        judge — they are NOT future-year hallucinations (#351).
     A future year that stands as part of a title/list/guide/ranking/
-    publication NAME (e.g. "The Princeton Review's 2027 Best Colleges guide",
-    "The 2027 Best Colleges guide") is a legitimate reference, not a
-    hallucination, and does NOT fire (#351 V5).
+    publication NAME, an election/event name, or a game/franchise/product/
+    series title (e.g. "The Princeton Review's 2027 Best Colleges guide", "the
+    2027 French presidential election", "Metro 2039", "Présidentielle 2027")
+    is a legitimate reference, not a hallucination, and does NOT fire (#351
+    V5, #41).
     Plausible prose years (1950..current year) and forward-looking projections
     pass.  The References section (from the ``## References`` heading) is
     EXCLUDED — legitimate citations carry old years.  URL-embedded 4-digit
@@ -678,8 +758,9 @@ def _no_year_hallucination(text: str, domain: str, product: str) -> AssertionRes
 def _is_forward_looking(text: str, m: re.Match[str]) -> bool:
     """True when the matched year sits in a forward-looking context: the line
     carries a projection marker (``target`` / ``forecast`` / ``projected`` /
-    ``expected`` / ``fiscal`` / ``by 2030`` / …) or the year is part of a
-    year-range like ``2025-2030``."""
+    ``expected`` / ``fiscal`` / ``by 2030`` / ``set to`` / ``delayed to`` /
+    ``from 2028`` / …) or the year is part of a year-range like
+    ``2025-2030``."""
     line_start = text.rfind("\n", 0, m.start()) + 1
     line_end = text.find("\n", m.end())
     if line_end == -1:
@@ -687,15 +768,25 @@ def _is_forward_looking(text: str, m: re.Match[str]) -> bool:
     line = text[line_start:line_end]
     if _YEAR_RANGE_RE.search(line):
         return True
-    return bool(_BY_YEAR_RE.search(line) or _FORWARD_LOOKING_RE.search(line))
+    return bool(
+        _BY_YEAR_RE.search(line)
+        or _FORWARD_LOOKING_RE.search(line)
+        or _SET_TO_RE.search(line)
+        or _FROM_YEAR_RE.search(line)
+        or _FOR_YEAR_RE.search(line)
+    )
 
 
 def _is_named_year(text: str, m: re.Match[str]) -> bool:
     """True when the matched (future) year sits inside a title/list/guide/
-    ranking/survey/publication NAME on the same line (see ``_NAMED_YEAR_RE``)
-    — e.g. "The Princeton Review's 2027 Best Colleges guide", "The 2027 Best
-    Colleges guide".  Such a publishing year is a legitimate reference, not a
-    hallucination."""
+    ranking/survey/publication NAME, an election/event name, or a
+    game/franchise/product/series NAME on the same line (see
+    ``_NAMED_YEAR_RE`` / ``_ELECTION_YEAR_RE`` / ``_FRANCHISE_YEAR_RE``) — e.g.
+    "The Princeton Review's 2027 Best Colleges guide", "The 2027 Best Colleges
+    guide", "the 2027 French presidential election", "Metro 2039",
+    "Présidentielle 2027", "The Witcher 4 (2028)".  A future year that is part
+    of a heading/table title line (an article title) is also a title reference,
+    not a hallucination (#41).  Such a name year is legitimate, never fires."""
     line_start = text.rfind("\n", 0, m.start()) + 1
     line_end = text.find("\n", m.end())
     if line_end == -1:
@@ -703,10 +794,46 @@ def _is_named_year(text: str, m: re.Match[str]) -> bool:
     line = text[line_start:line_end]
     lo = m.start() - line_start
     hi = m.end() - line_start
-    return any(
-        named.start() <= lo and hi <= named.end()
-        for named in _NAMED_YEAR_RE.finditer(line)
-    )
+    for named in _NAMED_YEAR_RE.finditer(line):
+        if named.start() <= lo and hi <= named.end():
+            return True
+    for named in _ELECTION_YEAR_RE.finditer(line):
+        if named.start() <= lo and hi <= named.end():
+            return True
+    for named in _FRANCHISE_YEAR_RE.finditer(line):
+        span = line[named.start():named.end()]
+        if not (named.start() <= lo and hi <= named.end()):
+            continue
+        # A franchise/title run must contain at least one real name word —
+        # "In 2027, sales tripled" (caption word + year only) is NOT a title.
+        year_pos = span.rfind(str(m.group(0)))
+        words_before = span[:year_pos].replace("-", " ").split()
+        if words_before and any(w.lower() not in _FUNCTION_YEAR_WORDS for w in words_before):
+            return True
+    # Heading lines and leading table title cells carry article/publication
+    # TITLES — a year embedded there is a title token, not a calendar claim.
+    if _is_title_context(line, lo, hi):
+        return True
+    return False
+
+
+def _is_title_context(line: str, lo: int, hi: int) -> bool:
+    """True when the year position (``lo``..``hi`` on a 0-based line) falls in
+    a title surface: a markdown heading line, or the leading title cell of a
+    markdown table row.  In these products headings and title cells are the
+    source article titles, so a year there is a NAME part (e.g. the hindi
+    heading "अल-नीनो ने तोड़े पुराने रिकॉर्ड, 2027 में पड़ेगी और भयानक गर्मी")
+    rather than a bare completed-fact claim."""
+    stripped = line.lstrip()
+    if stripped.startswith("#"):
+        return True
+    if line.strip().startswith("|"):
+        # Markdown table row: a year inside the leading (title) cell is a
+        # title reference.  The title cell is the section before the 2nd '|',
+        # so cap loosely at the first half of the row — summary cells (with
+        # prose year claims further on) still behave like prose.
+        return hi <= max(2, len(line) // 2)
+    return False
 
 
 def _no_code_or_key_leak(text: str, domain: str, product: str) -> AssertionResult:
@@ -716,11 +843,16 @@ def _no_code_or_key_leak(text: str, domain: str, product: str) -> AssertionResul
     bad: list[str] = []
     if _FENCE_RE.search(text):
         bad.append("fenced code block")
-    for m in _KEY_SHAPES_RE.finditer(text):
+    # Strip full URLs (scheme + path + query) BEFORE the hex/base64/key-shape
+    # scans: a long URL path is a legitimate reference, not a credential-shaped
+    # run (#41 FP-2).  Key-shape prefixes (sk-/AIza/...) can still match inside
+    # query strings, which is the intended catch.
+    body = _URL_RE.sub(" ", text)
+    for m in _KEY_SHAPES_RE.finditer(body):
         bad.append(f"{m.group(0)[:20]}...")
-    for m in _LONG_HEX_RE.finditer(text):
+    for m in _LONG_HEX_RE.finditer(body):
         bad.append(f"long hex run ({len(m.group(0))} chars)")
-    for m in _LONG_B64_RE.finditer(text):
+    for m in _LONG_B64_RE.finditer(body):
         bad.append(f"long base64 run ({len(m.group(0))} chars)")
     return AssertionResult(
         "_no_code_or_key_leak", not bad, "#351", "P0", domain, product,
