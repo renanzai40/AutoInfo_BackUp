@@ -40,6 +40,7 @@ from autoinfo.output import (
 _SAMPLE_ENTRIES: list[dict[str, Any]] = [
     {
         "entry_id": "entry-001",
+        "language": "en",
         "title": "The Quiet AI Revolution in Newsrooms",
         "summary": "Newsrooms are quietly adopting AI tools for copy editing.",
         "source_url": "https://www.theatlantic.com/tech/archive/2026/07/ai-newsrooms/",
@@ -52,6 +53,7 @@ _SAMPLE_ENTRIES: list[dict[str, Any]] = [
     },
     {
         "entry_id": "entry-002",
+        "language": "en",
         "title": "Why Wired Readers Trust Slow Journalism",
         "summary": "Long-form reporting builds trust in an age of speed.",
         "source_url": "https://www.wired.com/story/slow-journalism-trust/",
@@ -182,6 +184,8 @@ class TestDigestPathTutorialFill:
             period="weekly",
             format="markdown",
             product_template=_tutorial_template(),
+            language="en",  # explicit param: general-news gained a seed
+            # default_language=zh (#28), which would filter the en fixtures.
         )
 
         assert isinstance(result, str)
@@ -253,3 +257,43 @@ class TestGenerateTutorialNoPlaceholder:
         assert "No knowledge base entr" not in result
         assert "_No " not in result
         _assert_no_placeholder(result, "general-news", "tutorial")
+
+
+class TestGenerateTutorialStringExercises:
+    """LLM results whose ``exercises`` list carries plain strings (instead of
+    dicts) must render the string as the exercise title — never Jinja's
+    ``<built-in method title of str object>`` leak (backup-repo #22-#37
+    matrix `_no_placeholder` P0 on gaming tutorial)."""
+
+    @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._call_llm_for_tutorial")
+    def test_string_exercises_render_as_titles(
+        self, mock_llm: MagicMock, mock_kb: MagicMock
+    ) -> None:
+        mock_llm.return_value = {
+            "title": "gaming — Tutorial",
+            "duration": "30 minutes",
+            "prerequisites": "None",
+            "objectives": ["Learn about game releases"],
+            "content": [{"heading": "Game releases", "body": "Body text"}],
+            "exercises": [
+                "What is the key finding in 'GTA 6 legal updates'?",
+                {"title": "Dict exercise", "description": "dict desc"},
+                42,
+            ],
+            "summary": "Summary text",
+            "further_reading": [],
+        }
+        mock_store = MagicMock()
+        mock_store.list_entries.return_value = _SAMPLE_ENTRIES
+        mock_kb.return_value = mock_store
+
+        result = generate_tutorial(domain="gaming", format="markdown")
+
+        assert isinstance(result, str)
+        assert "built-in method" not in result, (
+            f"Jinja method-object leaked into tutorial render:\n{result[:1500]}"
+        )
+        # string exercises render their content as the exercise title
+        assert "What is the key finding" in result
+        _assert_no_placeholder(result, "gaming", "tutorial")

@@ -8280,6 +8280,28 @@ def generate_tutorial(
 
     # -- Build template context -------------------------------------------
     generated_at = datetime.now(timezone.utc).isoformat()
+
+    def _coerce_exercise(item: Any) -> dict[str, str]:
+        """Normalize one exercise entry to the ``{title, description}`` shape.
+
+        LLM results occasionally carry plain strings (or scalars) instead of
+        objects; rendering those through ``{{ exercise.title }}`` leaks
+        Jinja's method-object repr into the product (backup-repo #22-#37
+        matrix `_no_placeholder` P0 on gaming tutorial).
+        """
+        if isinstance(item, dict):
+            return {
+                "title": str(item.get("title") or item.get("question") or ""),
+                "description": str(item.get("description") or ""),
+            }
+        return {"title": str(item), "description": ""}
+
+    exercises_raw = llm_result.get("exercises", [])
+    if isinstance(exercises_raw, list):
+        exercises = [_coerce_exercise(item) for item in exercises_raw]
+    else:
+        exercises = []
+
     context = {
         "title": llm_result.get("title", f"{domain} — Tutorial"),
         "domain": domain,
@@ -8289,7 +8311,7 @@ def generate_tutorial(
         "prerequisites": llm_result.get("prerequisites", "None"),
         "objectives": llm_result.get("objectives", []),
         "content": llm_result.get("content", []),
-        "exercises": llm_result.get("exercises", []),
+        "exercises": exercises,
         "summary": llm_result.get("summary", ""),
         "further_reading": llm_result.get("further_reading", []),
         "generated_at": generated_at,
