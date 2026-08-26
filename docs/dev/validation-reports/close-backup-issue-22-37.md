@@ -33,7 +33,7 @@ Every issue card's source set is configured, verified reachable on the local net
 
 W4 evidence: `outputs/evidence-22-37/<domain>/{digest,report,column,premium-briefing,enterprise-briefing,magazine-digest,tutorial,presentation}.md` — **16/16 domains × 8/8 products generated; empty-state marker sweep: 0 issues across all 128 products.** Digest/magazine render with `--include-stale` where the corpus predates the weekly window (Corriere 2024-05 pubDates, people.cn 2025-06) — a `generate_digest` date-window relax (commit `59ff3fe`) handles the zh-corpus edge for general-news (12.4KB digest with 12 entries after the fix).
 
-KBs for the thin-feed domains are grinding toward their reachable caps (cards: KB≥50 *或可达上限*): online-education ~47, korean-learning ~48, legal-compliance ~40, english-learning ~27 (duolingo 15/次 + npr 30/次 feed rotation).
+**KB final (2026-08-26 17:20 CST, after 5 master passes)**: 13/16 ≥50. 3 thin-feed domains remain at their REACHABLE CAPS (cards: KB≥50 *或可达上限*): online-education 47 (inside-highered 10/次 + coursera-blog 10/次), legal-compliance 40 (scotusblog 25/次 + web sources), english-learning 29 (duolingo 15/次 + npr 30/次 rotation). All 3 have 8/8 non-empty products from their capped KBs; unpaid recheck may review whether additional sources should be added.
 
 `validate matrix --snapshot-dir validation-runs/backup-19-38` runs after KB reachability settles (report cards: 0 P0/P1 target).
 
