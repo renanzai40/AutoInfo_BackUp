@@ -18,22 +18,24 @@ Every issue card's source set is configured, verified reachable on the local net
 | gaming | #23 | 190 | ✅ | ✅ 8/8 |
 | retail | #24 | 54 | ✅ | ✅ 8/8 |
 | online-video | #25 | 168 | ✅ | ✅ 8/8 |
-| online-education | #26 | grinding | ⏳ | pending |
+| online-education | #26 | grinding | ⏳ | ✅ 8/8 |
 | tech-ai-developer | #27 | 101 | ✅ | ✅ 8/8 |
 | general-news | #28 | 108 | ✅ | ✅ 8/8 |
-| legal-compliance | #29 | grinding | ⏳ | pending |
+| legal-compliance | #29 | grinding | ⏳ | ✅ 8/8 |
 | russian-learning | #30 | 53 | ✅ | ✅ 8/8 |
 | spanish-learning | #31 | 193 | ✅ | ✅ 8/8 |
 | hindi-learning | #32 | 53 | ✅ | ✅ 8/8 |
 | italian-learning | #33 | 69 | ✅ | ✅ 8/8 |
 | french-learning | #34 | 54 | ✅ | ✅ 8/8 |
-| korean-learning | #35 | grinding | ⏳ | pending |
+| korean-learning | #35 | grinding | ⏳ | ✅ 8/8 |
 | portuguese-learning | #36 | 90 | ✅ | ✅ 8/8 |
-| english-learning | #37 | grinding | ⏳ | pending |
+| english-learning | #37 | grinding | ⏳ | ✅ 8/8 |
 
-W4 evidence: `outputs/evidence-22-37/<domain>/{digest,report,column,premium-briefing,enterprise-briefing,magazine-digest,tutorial,presentation}.md` — all 8 product types non-empty (empty-state marker sweep: 0 issues across all generated products). Digest/magazine render with `--include-stale` where the corpus predates the weekly window (Corriere 2024-05 pubDates, people.cn 2025-06) — a `generate_digest` date-window relax (commit `59ff3fe`) handles the zh corpus edge for general-news.
+W4 evidence: `outputs/evidence-22-37/<domain>/{digest,report,column,premium-briefing,enterprise-briefing,magazine-digest,tutorial,presentation}.md` — **16/16 domains × 8/8 products generated; empty-state marker sweep: 0 issues across all 128 products.** Digest/magazine render with `--include-stale` where the corpus predates the weekly window (Corriere 2024-05 pubDates, people.cn 2025-06) — a `generate_digest` date-window relax (commit `59ff3fe`) handles the zh-corpus edge for general-news (12.4KB digest with 12 entries after the fix).
 
-`validate matrix --snapshot-dir validation-runs/backup-19-38` runs in progress for the completed domains (report cards: 0 P0/P1 target).
+KBs for the thin-feed domains are grinding toward their reachable caps (cards: KB≥50 *或可达上限*): online-education ~47, korean-learning ~48, legal-compliance ~40, english-learning ~27 (duolingo 15/次 + npr 30/次 feed rotation).
+
+`validate matrix --snapshot-dir validation-runs/backup-19-38` runs after KB reachability settles (report cards: 0 P0/P1 target).
 
 ## Infra note (provider switches, 2026-08-25/26)
 
