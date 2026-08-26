@@ -1,0 +1,24 @@
+{
+  "id": "8e60e3f8971e7b6d",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/deals/hp-17-3-business-and-student-laptop-walmart-flash-sale-mp",
+  "title": "Walmart's $2,100 HP touchscreen laptop is 62% off",
+  "content": "\"The price is amazing, the laptop is beautiful, and it runs for days on the same charge.\"",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T23:30:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "11796caf-0960-4f48-a162-7fc15cebced1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "05a8dc06f43ef2ff",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/Xi-puts-forward-four-principles-on-Palestinian-question-1PSm5awSav6/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Xi puts forward four principles on Palestinian question",
+  "content": "Chinese President Xi Jinping stressed on Monday that four principles should be followed to push for the resolution of the Palestinian question, which is at the heart of the Middle East issue.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T14:18:36+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "430dbb5a-3143-424c-8749-d92e6d7496b0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

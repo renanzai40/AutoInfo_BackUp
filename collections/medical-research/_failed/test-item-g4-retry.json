@@ -1,0 +1,38 @@
+{
+  "item_id": "test-item-g4-retry",
+  "source_url": "https://example.com/article",
+  "retries": [
+    {
+      "attempt": 1,
+      "model": "test/test-model",
+      "contradiction": true,
+      "explanation": "First check: contradiction found.",
+      "timestamp": "2026-08-26T04:11:45.495449+00:00"
+    },
+    {
+      "attempt": 2,
+      "model": "test/model-two",
+      "contradiction": true,
+      "explanation": "Second check: still contradictory.",
+      "timestamp": "2026-08-26T04:11:45.495474+00:00"
+    },
+    {
+      "attempt": 3,
+      "model": "test/model-three",
+      "contradiction": true,
+      "explanation": "Third check: still contradicts.",
+      "timestamp": "2026-08-26T04:11:45.495490+00:00"
+    }
+  ],
+  "final_error": null,
+  "item_snapshot": {
+    "id": "test-item-g4-retry",
+    "source_name": "pubmed",
+    "source_type": "api",
+    "source_url": "https://example.com/article",
+    "title": "Test article about IVF outcomes",
+    "domain": "medical-research",
+    "language": "en",
+    "collected_at": "2026-07-20T10:00:00Z"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "20713d53d5b81264",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/set-up-a-separate-work-profile-on-your-android-phone/",
+  "title": "Set Up a Separate Work Profile on Your Android Phone",
+  "content": "It is possible to achieve your desired work-life balance on your smartphone. Just set up separate accounts using this built-in Android feature.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-22T11:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8fca9b30-54e4-4454-af1d-14efcd13d0c9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,1457 @@
+{
+  "schema_version": 2,
+  "tool": "autoinfo validate --matrix",
+  "generated_at": "2026-08-26T09:43:43Z",
+  "commit": "24bf897",
+  "batch_id": "24bf897-20260826-174343",
+  "products": [
+    {
+      "domain": "retail",
+      "product": "digest",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "digest",
+          "details": "first line='# Weekly Magazine Digest — retail'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "digest",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "digest",
+          "details": "no References section"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "digest",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "digest",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "digest",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "digest",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "digest",
+          "details": "not a report/column product"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "retail",
+          "product": "digest",
+          "details": "no Sections metadata"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "digest",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "digest",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "digest",
+          "details": "21777 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "digest",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "digest",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "digest",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "digest",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "digest",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "digest",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "digest",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    },
+    {
+      "domain": "retail",
+      "product": "report",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "report",
+          "details": "first line='# retail — Report'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "report",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "report",
+          "details": "numbers=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55]"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "report",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": false,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "report",
+          "details": "placeholders=<figure>, <div>"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "report",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "report",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "report",
+          "details": "Sections=30"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "retail",
+          "product": "report",
+          "details": "metadata=30 actual=30"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "report",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "report",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "report",
+          "details": "52194 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "report",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "report",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "report",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "report",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "report",
+          "details": "substantive analysis present"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "report",
+          "details": "no generic risk labels"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "report",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    },
+    {
+      "domain": "retail",
+      "product": "column",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "column",
+          "details": "first line='# retail — Column'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "column",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "column",
+          "details": "no References section"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "column",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "column",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "column",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "column",
+          "details": "subsections=28"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "column",
+          "details": "Sections=28"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "retail",
+          "product": "column",
+          "details": "metadata=28 actual=28"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "column",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "column",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "column",
+          "details": "27586 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "column",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "column",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "column",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "column",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "column",
+          "details": "substantive analysis present"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "column",
+          "details": "no generic risk labels"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "column",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    },
+    {
+      "domain": "retail",
+      "product": "premium-briefing",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "premium-briefing",
+          "details": "first line='# retail — Premium Briefing'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "premium-briefing",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "premium-briefing",
+          "details": "numbers=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55]"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "premium-briefing",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "premium-briefing",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "premium-briefing",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "premium-briefing",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "premium-briefing",
+          "details": "not a report/column product"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "retail",
+          "product": "premium-briefing",
+          "details": "no Sections metadata"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "premium-briefing",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "premium-briefing",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "premium-briefing",
+          "details": "32040 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "premium-briefing",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "premium-briefing",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "premium-briefing",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "premium-briefing",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "premium-briefing",
+          "details": "substantive analysis present"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "premium-briefing",
+          "details": "no generic risk labels"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "premium-briefing",
+          "details": "analysis adds beyond heading"
+        }
+      ]
+    },
+    {
+      "domain": "retail",
+      "product": "enterprise-briefing",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "enterprise-briefing",
+          "details": "first line='# retail — Enterprise Briefing'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "enterprise-briefing",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "enterprise-briefing",
+          "details": "numbers=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55]"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "enterprise-briefing",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "enterprise-briefing",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "enterprise-briefing",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "enterprise-briefing",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "enterprise-briefing",
+          "details": "not a report/column product"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "retail",
+          "product": "enterprise-briefing",
+          "details": "no Sections metadata"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "enterprise-briefing",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "enterprise-briefing",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "enterprise-briefing",
+          "details": "30741 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "enterprise-briefing",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "enterprise-briefing",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "enterprise-briefing",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "enterprise-briefing",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "enterprise-briefing",
+          "details": "substantive analysis present"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "enterprise-briefing",
+          "details": "no generic risk labels"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "enterprise-briefing",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    },
+    {
+      "domain": "retail",
+      "product": "magazine-digest",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "magazine-digest",
+          "details": "first line='# Weekly Magazine Digest — retail'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "magazine-digest",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "magazine-digest",
+          "details": "no References section"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "magazine-digest",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "magazine-digest",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "magazine-digest",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "magazine-digest",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "magazine-digest",
+          "details": "not a report/column product"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "retail",
+          "product": "magazine-digest",
+          "details": "no Sections metadata"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "magazine-digest",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "magazine-digest",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "magazine-digest",
+          "details": "21777 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "magazine-digest",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "magazine-digest",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "magazine-digest",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "magazine-digest",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "magazine-digest",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "magazine-digest",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "magazine-digest",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    },
+    {
+      "domain": "retail",
+      "product": "tutorial",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "tutorial",
+          "details": "first line='# Exploring Modern Retail: Trends, Challenges, and Innovatio'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "tutorial",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "tutorial",
+          "details": "no References section"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "tutorial",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "tutorial",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "tutorial",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "tutorial",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "tutorial",
+          "details": "not a report/column product"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "retail",
+          "product": "tutorial",
+          "details": "no Sections metadata"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "tutorial",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "tutorial",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "tutorial",
+          "details": "10990 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "tutorial",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "tutorial",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "tutorial",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "tutorial",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "tutorial",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "tutorial",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "tutorial",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    },
+    {
+      "domain": "retail",
+      "product": "presentation",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "presentation",
+          "details": "first line='# Retail & E-Commerce Weekly: Strategic Insights and Implica'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "presentation",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "presentation",
+          "details": "no References section"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "presentation",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "presentation",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "presentation",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "presentation",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "presentation",
+          "details": "not a report/column product"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "retail",
+          "product": "presentation",
+          "details": "no Sections metadata"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "presentation",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "presentation",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "presentation",
+          "details": "7077 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "presentation",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "presentation",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "presentation",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "retail",
+          "product": "presentation",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "presentation",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "presentation",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "retail",
+          "product": "presentation",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "batch_id": "24bf897-20260826-174343",
+    "domains": [
+      "retail"
+    ],
+    "products": [
+      "digest",
+      "report",
+      "column",
+      "premium-briefing",
+      "enterprise-briefing",
+      "magazine-digest",
+      "tutorial",
+      "presentation"
+    ],
+    "total_products": 8,
+    "total_asserts": 152,
+    "failures": 1,
+    "failing_assertions": 1,
+    "missing_products": 0,
+    "error_products": 0,
+    "skipped_products": [],
+    "raw_counts": {}
+  }
+}

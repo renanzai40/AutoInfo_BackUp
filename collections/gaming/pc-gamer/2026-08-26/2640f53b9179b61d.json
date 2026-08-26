@@ -1,0 +1,24 @@
+{
+  "id": "2640f53b9179b61d",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/games/grand-theft-auto/i-attempted-to-become-a-professional-driver-in-a-gta-5-where-every-car-had-no-friction/",
+  "title": "I attempted to become a professional driver in a GTA 5 where every car had no friction",
+  "content": "Gotta make ends meet somehow.",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-25T17:00:00+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3d84596b-87fa-42bb-b8f6-1c8f08e8b696",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

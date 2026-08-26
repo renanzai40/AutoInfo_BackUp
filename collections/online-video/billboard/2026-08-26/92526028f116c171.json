@@ -1,0 +1,24 @@
+{
+  "id": "92526028f116c171",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/music/pop/amy-winehouse-20th-anniversary-back-to-black-demos-b-sides-1236323791/",
+  "title": "Amy Winehouse ‘Back to Black’ 20th Anniversary Edition to Feature Unreleased Demos, Rare B-Sides, Full 2007 Concert",
+  "content": "The 3LP/3CD sets will also feature alternate cover art and new liner notes by producers Mark Ronson and Salaam Remi.",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T15:01:43+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7040fa0a-2a94-43f5-848c-e1a1302931b2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

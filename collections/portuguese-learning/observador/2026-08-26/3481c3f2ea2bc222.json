@@ -1,0 +1,24 @@
+{
+  "id": "3481c3f2ea2bc222",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/pizza-sandes-de-pastrami-ou-asiatico-recreio-o-novo-centro-gastronomico-em-miraflores/",
+  "title": "Recreio: Miraflores tem um novo hub gastronómico",
+  "content": "Para dinamizar o espaço e atrair ainda mais público, a ideia é iniciar com uma programação semanal. A partir do dia 7 de setembro arrancam as noites de quiz, sempre às segundas-feiras. Já às terças e sextas-feiras, estão previstas sessões de happy hour das 16h às 20h, com DJ ou música ao vivo.",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T17:34:17+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ca8141fd-baeb-4a4b-8093-751e7047622d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

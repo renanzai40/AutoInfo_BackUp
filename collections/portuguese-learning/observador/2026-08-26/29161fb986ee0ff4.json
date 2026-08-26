@@ -1,0 +1,24 @@
+{
+  "id": "29161fb986ee0ff4",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/navio-gilberto-mariano-reparado-ate-ao-final-da-semana-avisa-atlanticoline/",
+  "title": "Gilberto Mariano reparado até final da semana, avisa empresa",
+  "content": "A empresa lamenta os transtornos causados pela situação, reafirmando o seu compromisso em minimizar os impactos para os passageiros e em retomar a operação regular com a maior brevidade possível",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T22:50:13+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "936311aa-a254-490d-963f-e2e854b3ccbb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

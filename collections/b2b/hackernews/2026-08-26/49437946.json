@@ -1,0 +1,37 @@
+{
+  "id": "49437946",
+  "source_name": "hackernews",
+  "source_type": "hackernews",
+  "source_url": "https://news.ycombinator.com/item?id=49437946",
+  "title": "Firefox 157 will include JPEG XL by default on all platforms",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "hackernews",
+  "collected_at": "2026-08-25T19:12:23.929834+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "by": "yboris",
+    "descendants": 7,
+    "id": 49437946,
+    "kids": [
+      49438749,
+      49438509,
+      49438172,
+      49438777
+    ],
+    "score": 61,
+    "time": 1787680523,
+    "title": "Firefox 157 will include JPEG XL by default on all platforms",
+    "type": "story",
+    "url": "https://groups.google.com/a/mozilla.org/g/dev-platform/c/3YMV4MS34KA?pli=1"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "51aeab16-701c-498d-8fca-67d7be2fd087",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

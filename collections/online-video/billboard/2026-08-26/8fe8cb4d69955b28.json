@@ -1,0 +1,24 @@
+{
+  "id": "8fe8cb4d69955b28",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/music/music-news/lady-gaga-fiance-polansky-biotech-startup-1236323749/",
+  "title": "Lady Gaga’s Fiancé Michael Polansky Has a Biotech Startup Involving AI & Living Skin",
+  "content": "Outer Biosciences is also using AI to predict the next gen of skin-disease treatments by sourcing skin that would typically be discarded after surgery.",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T16:39:05+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b19c61fc-33c1-4d05-adec-880d0d9345f7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

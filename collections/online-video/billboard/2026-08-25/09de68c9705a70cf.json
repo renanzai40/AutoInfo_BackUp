@@ -1,0 +1,24 @@
+{
+  "id": "09de68c9705a70cf",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/music/latin/pablo-alboran-global-tour-km0-us-2027-dates-1236323811/",
+  "title": "Pablo Alborán To Bring ‘Global Tour KM0’ to the U.S. in 2027: Check Out the Dates",
+  "content": "The announcement comes as the artist recovers from \"severe pneumonia\" that led him to cancel a recent concert in Spain.",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T15:13:06+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "dc11f34f-64b9-4aa7-b300-eea7f6e7a4a9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

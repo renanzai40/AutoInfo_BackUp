@@ -1,0 +1,601 @@
+keywords:
+  coursera:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.387568+00:00'
+    updated_at: '2026-08-26T09:20:26.671130+00:00'
+    source: auto-discovery:coursera-blog
+  udemy:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.419192+00:00'
+    updated_at: '2026-08-26T09:18:48.751101+00:00'
+    source: auto-discovery:coursera-blog
+  ai-powered experiences:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.441342+00:00'
+    updated_at: '2026-08-26T09:07:06.459346+00:00'
+    source: auto-discovery:rss
+  combination:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.461978+00:00'
+    updated_at: '2026-08-26T09:07:05.999508+00:00'
+    source: auto-discovery:rss
+  aims:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.477247+00:00'
+    updated_at: '2026-08-26T09:32:11.477488+00:00'
+    source: auto-discovery:inside-higher-ed
+  accelerate:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.494960+00:00'
+    updated_at: '2026-08-26T05:41:11.271721+00:00'
+    source: auto-discovery:rss
+  innovation.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.509900+00:00'
+    updated_at: '2026-08-26T09:46:50.533436+00:00'
+    source: auto-discovery:open-culture
+  the combination:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.525105+00:00'
+    updated_at: '2026-08-26T00:39:35.785828+00:00'
+    source: auto-discovery:rss
+  combination coursera:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.542609+00:00'
+    updated_at: '2026-08-26T09:07:06.044897+00:00'
+    source: auto-discovery:rss
+  coursera and:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.562555+00:00'
+    updated_at: '2026-08-26T09:16:09.021747+00:00'
+    source: auto-discovery:coursera-blog
+  and udemy:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.577885+00:00'
+    updated_at: '2026-08-26T09:16:09.067415+00:00'
+    source: auto-discovery:coursera-blog
+  udemy aims:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.596485+00:00'
+    updated_at: '2026-08-10T06:08:28.596485+00:00'
+    source: auto-discovery:rss
+  aims accelerate:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.614427+00:00'
+    updated_at: '2026-08-26T05:41:11.338843+00:00'
+    source: auto-discovery:rss
+  accelerate innovation.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.634988+00:00'
+    updated_at: '2026-08-10T06:08:28.634988+00:00'
+    source: auto-discovery:rss
+  the combination coursera:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.654080+00:00'
+    updated_at: '2026-08-26T00:39:36.097481+00:00'
+    source: auto-discovery:rss
+  combination coursera and:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.677994+00:00'
+    updated_at: '2026-08-26T09:07:06.182706+00:00'
+    source: auto-discovery:rss
+  coursera and udemy:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.709042+00:00'
+    updated_at: '2026-08-26T09:16:09.114782+00:00'
+    source: auto-discovery:coursera-blog
+  and udemy aims:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.750512+00:00'
+    updated_at: '2026-08-10T06:08:28.750512+00:00'
+    source: auto-discovery:rss
+  udemy aims accelerate:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.797677+00:00'
+    updated_at: '2026-08-10T06:08:28.797677+00:00'
+    source: auto-discovery:rss
+  aims accelerate innovation.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.812501+00:00'
+    updated_at: '2026-08-10T06:08:28.812501+00:00'
+    source: auto-discovery:rss
+  new:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.832143+00:00'
+    updated_at: '2026-08-26T09:33:17.066867+00:00'
+    source: auto-discovery:rss
+  ai-powered:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.852107+00:00'
+    updated_at: '2026-08-26T09:14:12.170914+00:00'
+    source: auto-discovery:coursera-blog
+  experiences:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.895570+00:00'
+    updated_at: '2026-08-26T09:30:40.039310+00:00'
+    source: auto-discovery:inside-higher-ed
+  introduced.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.947302+00:00'
+    updated_at: '2026-08-10T06:08:28.947302+00:00'
+    source: auto-discovery:rss
+  new ai-powered:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.969296+00:00'
+    updated_at: '2026-08-26T09:07:06.413492+00:00'
+    source: auto-discovery:rss
+  experiences are:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:28.994862+00:00'
+    updated_at: '2026-08-26T09:16:09.260099+00:00'
+    source: auto-discovery:coursera-blog
+  being introduced.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.080040+00:00'
+    updated_at: '2026-08-10T06:08:29.080040+00:00'
+    source: auto-discovery:rss
+  new ai-powered experiences:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.154933+00:00'
+    updated_at: '2026-08-26T09:07:06.551379+00:00'
+    source: auto-discovery:rss
+  ai-powered experiences are:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.185298+00:00'
+    updated_at: '2026-08-26T09:07:06.597355+00:00'
+    source: auto-discovery:rss
+  experiences are being:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.258372+00:00'
+    updated_at: '2026-08-26T09:16:09.306184+00:00'
+    source: auto-discovery:coursera-blog
+  are being introduced.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.281990+00:00'
+    updated_at: '2026-08-10T06:08:29.281990+00:00'
+    source: auto-discovery:rss
+  accessibility:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.304044+00:00'
+    updated_at: '2026-08-26T09:45:38.943793+00:00'
+    source: auto-discovery:open-culture
+  enhancements:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.326907+00:00'
+    updated_at: '2026-08-26T09:16:09.398274+00:00'
+    source: auto-discovery:coursera-blog
+  enterprise:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.350896+00:00'
+    updated_at: '2026-08-26T09:16:09.490371+00:00'
+    source: auto-discovery:coursera-blog
+  tools:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.435456+00:00'
+    updated_at: '2026-08-26T09:16:09.537380+00:00'
+    source: auto-discovery:coursera-blog
+  priorities.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.485743+00:00'
+    updated_at: '2026-08-10T06:08:29.485743+00:00'
+    source: auto-discovery:rss
+  accessibility enhancements:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.549525+00:00'
+    updated_at: '2026-08-26T09:16:09.443839+00:00'
+    source: auto-discovery:coursera-blog
+  enhancements and:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.574458+00:00'
+    updated_at: '2026-08-26T00:41:22.507482+00:00'
+    source: auto-discovery:coursera-blog
+  and enterprise:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.600555+00:00'
+    updated_at: '2026-08-26T07:26:48.446518+00:00'
+    source: auto-discovery:coursera-blog
+  enterprise tools:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.652464+00:00'
+    updated_at: '2026-08-26T09:16:09.628281+00:00'
+    source: auto-discovery:coursera-blog
+  tools are:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.717502+00:00'
+    updated_at: '2026-08-26T09:16:09.674705+00:00'
+    source: auto-discovery:coursera-blog
+  are priorities.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.748892+00:00'
+    updated_at: '2026-08-10T06:08:29.748892+00:00'
+    source: auto-discovery:rss
+  accessibility enhancements and:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.781445+00:00'
+    updated_at: '2026-08-26T00:41:22.638674+00:00'
+    source: auto-discovery:coursera-blog
+  enhancements and enterprise:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.815129+00:00'
+    updated_at: '2026-08-26T00:41:22.683817+00:00'
+    source: auto-discovery:coursera-blog
+  and enterprise tools:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.848885+00:00'
+    updated_at: '2026-08-26T00:42:15.991963+00:00'
+    source: auto-discovery:coursera-blog
+  enterprise tools are:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.883307+00:00'
+    updated_at: '2026-08-26T09:16:09.720196+00:00'
+    source: auto-discovery:coursera-blog
+  tools are priorities.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.917615+00:00'
+    updated_at: '2026-08-10T06:08:29.917615+00:00'
+    source: auto-discovery:rss
+  goal:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.948732+00:00'
+    updated_at: '2026-08-26T09:07:06.986400+00:00'
+    source: auto-discovery:rss
+  deliver:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:29.983270+00:00'
+    updated_at: '2026-08-26T00:41:56.942887+00:00'
+    source: auto-discovery:coursera-blog
+  value:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.016854+00:00'
+    updated_at: '2026-08-26T09:31:19.203504+00:00'
+    source: auto-discovery:inside-higher-ed
+  learners,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.048120+00:00'
+    updated_at: '2026-08-26T09:07:07.139576+00:00'
+    source: auto-discovery:rss
+  partners,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.079089+00:00'
+    updated_at: '2026-08-26T09:07:07.186259+00:00'
+    source: auto-discovery:rss
+  customers.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.109903+00:00'
+    updated_at: '2026-08-26T09:16:09.582888+00:00'
+    source: auto-discovery:coursera-blog
+  the goal:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.140517+00:00'
+    updated_at: '2026-08-26T09:07:07.232586+00:00'
+    source: auto-discovery:rss
+  goal deliver:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.171392+00:00'
+    updated_at: '2026-08-10T06:08:30.171392+00:00'
+    source: auto-discovery:rss
+  deliver more:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.202797+00:00'
+    updated_at: '2026-08-10T06:08:30.202797+00:00'
+    source: auto-discovery:rss
+  more value:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.235438+00:00'
+    updated_at: '2026-08-26T09:07:07.277919+00:00'
+    source: auto-discovery:rss
+  value for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.268501+00:00'
+    updated_at: '2026-08-26T09:31:19.345131+00:00'
+    source: auto-discovery:inside-higher-ed
+  for learners,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.301810+00:00'
+    updated_at: '2026-08-26T07:25:01.477780+00:00'
+    source: auto-discovery:rss
+  learners, partners,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.333533+00:00'
+    updated_at: '2026-08-26T09:07:07.322685+00:00'
+    source: auto-discovery:rss
+  partners, and:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.369454+00:00'
+    updated_at: '2026-08-26T09:07:07.369795+00:00'
+    source: auto-discovery:rss
+  and customers.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.403078+00:00'
+    updated_at: '2026-08-26T07:26:49.063757+00:00'
+    source: auto-discovery:coursera-blog
+  the goal deliver:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.436280+00:00'
+    updated_at: '2026-08-10T06:08:30.436280+00:00'
+    source: auto-discovery:rss
+  goal deliver more:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.472038+00:00'
+    updated_at: '2026-08-10T06:08:30.472038+00:00'
+    source: auto-discovery:rss
+  deliver more value:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.509472+00:00'
+    updated_at: '2026-08-10T06:08:30.509472+00:00'
+    source: auto-discovery:rss
+  more value for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.547579+00:00'
+    updated_at: '2026-08-26T03:42:17.041901+00:00'
+    source: auto-discovery:rss
+  value for learners,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.584454+00:00'
+    updated_at: '2026-08-26T05:39:59.869155+00:00'
+    source: auto-discovery:rss
+  for learners, partners,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.625645+00:00'
+    updated_at: '2026-08-26T07:25:01.672642+00:00'
+    source: auto-discovery:rss
+  learners, partners, and:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.666823+00:00'
+    updated_at: '2026-08-26T09:07:07.415342+00:00'
+    source: auto-discovery:rss
+  partners, and customers.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.704662+00:00'
+    updated_at: '2026-08-26T05:43:43.407810+00:00'
+    source: auto-discovery:coursera-blog
+  graduate education:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.805113+00:00'
+    updated_at: '2026-08-26T09:20:25.892752+00:00'
+    source: auto-discovery:coursera-blog
+  affordability by design:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.845281+00:00'
+    updated_at: '2026-08-26T09:20:25.997325+00:00'
+    source: auto-discovery:coursera-blog
+  federal borrowing rules:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.893479+00:00'
+    updated_at: '2026-08-26T09:20:25.945491+00:00'
+    source: auto-discovery:coursera-blog
+  federal:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:30.942861+00:00'
+    updated_at: '2026-08-26T09:21:43.807329+00:00'
+    source: auto-discovery:inside-higher-ed
+  borrowing:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:31.017982+00:00'
+    updated_at: '2026-08-26T09:13:48.798664+00:00'
+    source: auto-discovery:rss
+  rules:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:31.085203+00:00'
+    updated_at: '2026-08-26T09:20:26.095957+00:00'
+    source: auto-discovery:coursera-blog
+  graduate:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:31.140228+00:00'
+    updated_at: '2026-08-26T09:20:26.150602+00:00'
+    source: auto-discovery:coursera-blog
+  education:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:31.199591+00:00'
+    updated_at: '2026-08-26T09:32:06.073033+00:00'
+    source: auto-discovery:inside-higher-ed
+  changing.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:31.283978+00:00'
+    updated_at: '2026-08-26T07:24:35.030598+00:00'
+    source: auto-discovery:rss
+  federal borrowing:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:31.340904+00:00'
+    updated_at: '2026-08-26T09:13:48.981525+00:00'
+    source: auto-discovery:rss
+  borrowing rules:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:31.395321+00:00'
+    updated_at: '2026-08-26T09:13:49.027390+00:00'
+    source: auto-discovery:rss
+  rules for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:31.520515+00:00'
+    updated_at: '2026-08-26T09:20:26.252858+00:00'
+    source: auto-discovery:coursera-blog
+  for graduate:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:31.604230+00:00'
+    updated_at: '2026-08-26T09:20:26.302824+00:00'
+    source: auto-discovery:coursera-blog
+  education are:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:31.653045+00:00'
+    updated_at: '2026-08-26T09:20:26.352974+00:00'
+    source: auto-discovery:coursera-blog
+  are changing.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:31.702940+00:00'
+    updated_at: '2026-08-26T07:24:35.276914+00:00'
+    source: auto-discovery:rss
+  borrowing rules for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:31.756397+00:00'
+    updated_at: '2026-08-26T09:13:49.172213+00:00'
+    source: auto-discovery:rss
+  rules for graduate:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:31.801345+00:00'
+    updated_at: '2026-08-26T09:20:26.405237+00:00'
+    source: auto-discovery:coursera-blog
+  for graduate education:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:31.849081+00:00'
+    updated_at: '2026-08-26T09:20:26.456506+00:00'
+    source: auto-discovery:coursera-blog
+  graduate education are:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:31.897286+00:00'
+    updated_at: '2026-08-26T09:20:26.506458+00:00'
+    source: auto-discovery:coursera-blog
+  education are changing.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:31.960087+00:00'
+    updated_at: '2026-08-26T03:48:45.450104+00:00'
+    source: auto-discovery:coursera-blog
+  affordability:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.033047+00:00'
+    updated_at: '2026-08-26T09:20:26.560327+00:00'
+    source: auto-discovery:coursera-blog
+  designed:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.083569+00:00'
+    updated_at: '2026-08-26T09:25:08.852671+00:00'
+    source: auto-discovery:inside-higher-ed
+  programs,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.135551+00:00'
+    updated_at: '2026-08-10T06:08:32.135551+00:00'
+    source: auto-discovery:rss
+  reflected:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.185309+00:00'
+    updated_at: '2026-08-10T06:08:32.185309+00:00'
+    source: auto-discovery:rss
+  price.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.239332+00:00'
+    updated_at: '2026-08-26T09:13:49.362026+00:00'
+    source: auto-discovery:rss
+  affordability should:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.293061+00:00'
+    updated_at: '2026-08-10T06:08:32.293061+00:00'
+    source: auto-discovery:rss
+  should designed:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.345901+00:00'
+    updated_at: '2026-08-26T05:44:05.065889+00:00'
+    source: auto-discovery:rss
+  designed into:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.400789+00:00'
+    updated_at: '2026-08-10T06:08:32.400789+00:00'
+    source: auto-discovery:rss
+  into graduate:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.454327+00:00'
+    updated_at: '2026-08-10T06:08:32.454327+00:00'
+    source: auto-discovery:rss
+  graduate programs,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.511041+00:00'
+    updated_at: '2026-08-10T06:08:32.511041+00:00'
+    source: auto-discovery:rss

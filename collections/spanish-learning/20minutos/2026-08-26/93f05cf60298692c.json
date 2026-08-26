@@ -1,0 +1,24 @@
+{
+  "id": "93f05cf60298692c",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/baleares/muere-una-mujer-piscina-una-vivienda-urbanizacion-binixica_7029168_0.html",
+  "title": "Muere una mujer en la piscina de una vivienda de la urbanización de Binixica",
+  "content": "La Policía Nacional investiga las causas del fallecimiento después de que los sanitarios intentaran reanimarla durante más de media hora.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T13:42:22+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f003e9b9-5828-4454-92a4-c7ced8f8e4ac",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

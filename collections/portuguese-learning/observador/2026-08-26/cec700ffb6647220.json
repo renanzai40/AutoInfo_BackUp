@@ -1,0 +1,24 @@
+{
+  "id": "cec700ffb6647220",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/carros-modernos-possuem-equipamentos-caros-que-poucos-condutores-usam-ou-apreciam/",
+  "title": "Carros modernos possuem equipamentos caros que poucos usam",
+  "content": "Nem soluções como a muito útil travagem de emergência merece grande compreensão e preferência dos condutores",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T23:46:14+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7cd94c0f-a69a-4041-ae0e-49bf64cf04c5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

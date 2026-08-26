@@ -1,0 +1,24 @@
+{
+  "id": "f068746574f62d4e",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/Chinese-vice-president-meets-Kuwaiti-FM-1PRXHf4a5Uc/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Chinese vice president meets Kuwaiti FM",
+  "content": "Chinese Vice President Han Zheng met with Kuwaiti Foreign Minister Sheikh Jarrah Jaber Al-Ahmad Al-Sabah on Monday in Beijing.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T09:05:14+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "44e47820-a026-45f4-afe1-e00632cf5486",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

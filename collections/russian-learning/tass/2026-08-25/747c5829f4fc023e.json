@@ -1,0 +1,24 @@
+{
+  "id": "747c5829f4fc023e",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/armiya-i-opk/28043921",
+  "title": "ВС РФ в порту Южный поразили два сухогруза, доставившие на Украину военные грузы",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T18:16:52+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2e066ee2-ed9e-4ac1-9b48-0ffc145a161d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

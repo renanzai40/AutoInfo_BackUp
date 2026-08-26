@@ -1,0 +1,24 @@
+{
+  "id": "abcb933e46734a56",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/vid%C3%A9o/20260825-iran-la-t%C3%AAte-de-barron-trump-mise-%C3%A0-prix-dans-une-vid%C3%A9o-de-propagande",
+  "title": "Iran : la tête de Barron Trump mise à prix dans une vidéo de propagande",
+  "content": "🇮🇷 📺Dans une vidéo de propagande diffusée à la télévision d’État, l’Iran s’en prend à #Barron #Trump, le fils du président américain, et évoque une récompense de 10 millions de dollars pour sa mort.🇺🇸 Une nouvelle escalade dans les menaces visant la famille Trump, régulièrement ciblée par la République islamique.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T15:40:03+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5d4f4796-955f-4b1e-b28a-7c29080d6f14",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

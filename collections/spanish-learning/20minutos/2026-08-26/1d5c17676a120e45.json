@@ -1,0 +1,24 @@
+{
+  "id": "1d5c17676a120e45",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gastronomia/productos/conservar-huevos-verano-evitar-intoxicaciones_5160263_0.html",
+  "title": "Cómo se pueden conservar los huevos en verano para evitar intoxicaciones",
+  "content": "El huevo es uno de los alimentos con los que más cuidado debemos tener en cualquier época del año, aunque en verano estas medidas de precaución cobran especial importancia, ya que las altas temperaturas en huevos mal conservados pueden provocar Salmonella.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2023-07-31T12:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a1803c49-260d-4b35-af71-e1c76d4490a7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

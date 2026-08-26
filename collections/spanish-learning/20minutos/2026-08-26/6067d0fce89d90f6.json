@@ -1,0 +1,24 @@
+{
+  "id": "6067d0fce89d90f6",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/tecnologia/moviles-dispositivos/nuevo-mac-studio-apple-lleva-ia-rendimiento-profesional-limite-chips-m5-max-m5-ultra_7029293_0.html",
+  "title": "El nuevo Mac Studio de Apple lleva la IA y el rendimiento profesional al límite con los chips M5 Max y M5 Ultra",
+  "content": "Apple presenta el nuevo Mac Studio con chips M5 Max y M5 Ultra, diseñado con más potencia para inteligencia artificial y uso profesional.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T18:08:44+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2f4ef00b-aebd-4dc7-9735-cfb10fa30103",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

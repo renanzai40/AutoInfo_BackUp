@@ -1,0 +1,24 @@
+{
+  "id": "5967e87b930a439e",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/programas/noticiario/as-noticias-das-20h-2035/",
+  "title": "20h. Morreu Dolly Parton. A lendária cantora tinha 80 anos",
+  "content": "Óbito foi confirmado pelo sobrinho num vídeo publicado na conta de Instagram da cantora norte-americana. Ainda, suspeito do atropelamento na Rua da Oura começa a ser ouvido amanhã em tribunal.",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T20:11:59+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f6301b8e-aaf6-4494-bdf6-785878f96741",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

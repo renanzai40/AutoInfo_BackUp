@@ -1,0 +1,24 @@
+{
+  "id": "1e058708cd08bd6d",
+  "source_name": "coursera-blog",
+  "source_type": "rss",
+  "source_url": "https://blog.coursera.org/coursera-connector-for-claude/",
+  "title": "Skill Building in the Flow of Work: Coursera Connector for Claude",
+  "content": "<p>Today, we're excited to announce the Coursera Connector for Claude, a new integration that brings trusted learning directly into the flow of work.</p>\n<p>The post <a href=\"https://blog.coursera.org/coursera-connector-for-claude/\">Skill Building in the Flow of Work: Coursera Connector for Claude</a> appeared first on <a href=\"https://blog.coursera.org\">Coursera Blog</a>.</p>",
+  "content_type": "text",
+  "source_platform": "coursera-blog",
+  "collected_at": "2026-06-17T16:01:00+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://blog.coursera.org/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f10e7a19-1c84-419e-8925-2c5a3e1aaff3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

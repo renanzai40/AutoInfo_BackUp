@@ -1,0 +1,24 @@
+{
+  "id": "6620ba5b706a5880",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/proisshestviya/28044265",
+  "title": "Жительница Горловки ДНР погибла из-за удара ВСУ",
+  "content": "Мэр города Иван Приходько выразил соболезнования родным и близким",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T21:28:08+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a645eef0-3f4c-4581-b0e1-a12e0b53fdbd",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

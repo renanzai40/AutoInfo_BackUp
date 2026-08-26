@@ -1,0 +1,24 @@
+{
+  "id": "eb637789b2a7045f",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/pj-detem-homem-no-aeroporto-de-lisboa-com-34-kg-de-cocaina-trazida-da-america-do-sul/",
+  "title": "PJ detém homem com 3 kg de cocaína no aeroporto de Lisboa",
+  "content": "O detido será presente a juiz de instrução para primeiro interrogatório e conhecimento das medidas de coação",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T18:43:25+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "eaa45613-6290-4503-b0eb-e66210505f63",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

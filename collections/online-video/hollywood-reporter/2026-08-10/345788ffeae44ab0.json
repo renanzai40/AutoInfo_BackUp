@@ -1,0 +1,22 @@
+{
+  "id": "345788ffeae44ab0",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/lifestyle/lifestyle-news/aubrey-plaza-christopher-abbott-baby-girl-1236669891/",
+  "title": "Aubrey Plaza and Christopher Abbott Are Parents to a Baby Daughter",
+  "content": "This marks the first child for the couple.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-10T04:13:32+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a2293b43-f96d-4a9a-94a8-cbaa4240ade8"
+}

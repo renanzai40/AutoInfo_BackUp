@@ -1,0 +1,24 @@
+{
+  "id": "db47c8a7bd047183",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/automotive/tariffs-just-pushed-hyundai-deeper-into-america",
+  "title": "Tariffs just pushed Hyundai deeper into America",
+  "content": "The CEO set a target no US assembly plant has ever reached.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-22T15:17:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a6a12e6e-7996-43ff-bd71-f66dce2d10e3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

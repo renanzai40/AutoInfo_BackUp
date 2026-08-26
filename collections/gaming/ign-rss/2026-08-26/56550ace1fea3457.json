@@ -1,0 +1,24 @@
+{
+  "id": "56550ace1fea3457",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/exclusive-baldurs-gate-3-astarion-excerpt-narrated-by-neil-newbon-himself",
+  "title": "EXCLUSIVE: Baldur's Gate 3: Astarion Excerpt, Narrated by Neil Newbon Himself",
+  "content": "IGN has an exclusive excerpt of Baldur’s Gate 3: Astarion, including narration by Astarion actor Neil Newbon himself.",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T09:50:36+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a911d476-6fc1-4e81-879a-1cdd43524ef8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

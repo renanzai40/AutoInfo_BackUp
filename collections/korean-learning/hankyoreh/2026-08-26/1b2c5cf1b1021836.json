@@ -1,0 +1,24 @@
+{
+  "id": "1b2c5cf1b1021836",
+  "source_name": "hankyoreh",
+  "source_type": "rss",
+  "source_url": "https://www.hani.co.kr/arti/politics/politics_general/1274673.html",
+  "title": "김민석 “이진숙 ‘여자 전두환’ 호칭 좋아하시나…‘여자 히틀러’만 시비”",
+  "content": "<table border=\"0px\" cellpadding=\"0px\" cellspacing=\"0px\" width=\"107px\"><tr><td bgcolor=\"#DDDDDD\" style=\"padding: 1px;\"><table border=\"0px\" cellpadding=\"0px\" cellspacing=\"0px\" height=\"84px\" width=\"105px\"><tr><td align=\"center\" bgcolor=\"#FFFFFF\" style=\"padding: 3px;\"><img border=\"0\" src=\"https://flexible.img.hani.co.kr/flexible/normal/300/180/imgdb/child/2026/0826/53_17877083161021_861787708277056.webp\" /></td></tr></table></td><td nowrap=\"nowrap\" width=\"13px\"></td></tr></table>",
+  "content_type": "text",
+  "source_platform": "hankyoreh",
+  "collected_at": "",
+  "language": "",
+  "domain": "korean-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.hani.co.kr/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e87bce39-4563-457f-a992-b5f4594cc1ec",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

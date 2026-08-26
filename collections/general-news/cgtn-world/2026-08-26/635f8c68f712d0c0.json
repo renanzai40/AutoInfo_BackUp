@@ -1,0 +1,24 @@
+{
+  "id": "635f8c68f712d0c0",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-22/Activists-urge-Japan-to-confront-1923-earthquake-massacre--1POHjCMUjwQ/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Activists urge Japan to confront 1923 earthquake massacre",
+  "content": "A press conference marking the 103rd anniversary of the massacre following the 1923 Great Kanto Earthquake was held in Tokyo on Friday, with participants calling for Japan to confront its history and avoid repeating the mistakes of the past.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-22T10:50:21+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "52b3e5c7-3122-4be7-9a20-4a82be5983cc",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

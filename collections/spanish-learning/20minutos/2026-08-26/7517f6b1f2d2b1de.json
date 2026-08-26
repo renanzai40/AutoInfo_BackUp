@@ -1,0 +1,24 @@
+{
+  "id": "7517f6b1f2d2b1de",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/mujer/moda/amante-viajes-comprar-bolsos-comodos-resistentes-caben-muchas-cosas_7016137_0.html",
+  "title": "Todo amante de los viajes tiene que comprar alguno de estos bolsos porque son cómodos, resistentes y en ellos caben muchas cosas",
+  "content": "Si te vas de viaje, recuerda incluir en el equipaje un bolso con las siguientes características.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T05:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "17cbb83f-bbdd-4739-88a9-80084b4eaccd",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

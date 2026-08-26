@@ -1,0 +1,24 @@
+{
+  "id": "26e90094578b5520",
+  "source_name": "infoq-cn",
+  "source_type": "rss",
+  "source_url": "https://www.infoq.cn/article/xIctLq7L5cK9dIrVVCvd?utm_source=rss&utm_medium=article",
+  "title": "Cloudflare 将 CI 管道转变为 TypeScript 工作流",
+  "content": "<div align=\"right\"><a href=\"https://www.infoq.cn/article/xIctLq7L5cK9dIrVVCvd?utm_source=rss&amp;utm_medium=article\">点击查看原文></a></div>",
+  "content_type": "text",
+  "source_platform": "infoq-cn",
+  "collected_at": "2026-08-25T12:12:00+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.infoq.cn/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d93d8ee2-3228-47f6-bb09-e5a6a207be72",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

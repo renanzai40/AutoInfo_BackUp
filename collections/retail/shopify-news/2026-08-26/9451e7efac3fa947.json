@@ -1,0 +1,24 @@
+{
+  "id": "9451e7efac3fa947",
+  "source_name": "shopify-news",
+  "source_type": "rss",
+  "source_url": "https://shopify.com/news/shopify-announces-third-quarter-2023-financial-results",
+  "title": "Shopify Announces Third-Quarter 2023 Financial Results",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "shopify-news",
+  "collected_at": "2023-11-02T11:00:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.shopify.com/news/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "421a3c31-7293-4227-8c02-2abc7299d0f7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "b17e34418013a152",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/lifestyle/lifestyle-news/eater-off-menu-los-angeles-tickets-1236679937/",
+  "title": "Eater Bringing Tentpole Event Off Menu to Los Angeles (Exclusive)",
+  "content": "The Sept. 19 event, taking place at the iconic Tam O’Shanter restaurant, will feature dishes from Holbox, Pasjoli, and Gregory Gourdet.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T15:00:00+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1ea8cda9-8bae-4f57-9f62-3309a4f67db6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

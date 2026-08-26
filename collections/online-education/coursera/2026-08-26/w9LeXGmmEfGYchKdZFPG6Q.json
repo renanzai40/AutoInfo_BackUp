@@ -1,0 +1,27 @@
+{
+  "id": "w9LeXGmmEfGYchKdZFPG6Q",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Sensation, Perception, and Consciousness",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "w9LeXGmmEfGYchKdZFPG6Q",
+    "slug": "sensation-perception-and-consciousness",
+    "name": "Sensation, Perception, and Consciousness"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "63e05190-81f5-4b83-b7a8-6e615ad6a0d0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

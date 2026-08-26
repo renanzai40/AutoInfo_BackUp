@@ -1,0 +1,24 @@
+{
+  "id": "6e041b7038deb9e6",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/music/latin/ryan-castro-sende-the-last-dance-expanded-tour-interview-1236321396/",
+  "title": "Inside Ryan Castro’s Expanded U.S. Arena Tour: ‘My Show Is an Unforgettable Party’",
+  "content": "The artist and key team members share insight into Sendé: The Last Dance.",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T15:00:00+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d6372cb1-c387-44de-91d8-e927439ec5e6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

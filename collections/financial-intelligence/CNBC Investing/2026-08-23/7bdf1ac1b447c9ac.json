@@ -1,0 +1,24 @@
+{
+  "id": "7bdf1ac1b447c9ac",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/22/rising-yields-rattled-the-market-but-were-sticking-with-our-favorite-ai-and-retail-stocks.html",
+  "title": "Rising yields rattled the market, but we’re sticking with our favorite AI and retail stocks",
+  "content": "Stocks took their cue from the bond market this week.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-22T15:08:54+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ef9b417e-817d-4de9-b94c-f0da06756484",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

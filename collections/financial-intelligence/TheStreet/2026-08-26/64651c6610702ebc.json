@@ -1,0 +1,24 @@
+{
+  "id": "64651c6610702ebc",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/investing/stocks/bmo-sets-broadcom-avgo-stock-target-to-455-outperform",
+  "title": "BMO sees writing on the wall for Broadcom stock after earnings",
+  "content": "BMO's Harsh Kumar just ranked Broadcom second only to Nvidia in AI chips.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T23:17:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ec6982d8-328b-4005-8e1c-acea8beababd",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

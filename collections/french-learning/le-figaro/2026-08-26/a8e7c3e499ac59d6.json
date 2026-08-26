@@ -1,0 +1,24 @@
+{
+  "id": "a8e7c3e499ac59d6",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/musique/dolly-parton-reine-de-la-country-est-morte-a-l-age-de-80-ans-20260825",
+  "title": "Dolly Parton, reine de la musique country, est morte à l’âge de 80 ans",
+  "content": "DISPARITION - Auteure-compositrice et interprète de Jolene ou de 9 to 5, Dolly Parton a remporté 11 Grammy Awards et écoulé plus de 100 millions de disques au cours de ses 60 ans de carrière.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T22:26:38+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6b7940af-47dd-4dee-aa5c-cc8799728ef9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,53 @@
+---
+title: Do consumers know their GDPR data privacy rights?
+domain: legal-compliance
+tier: 01-Raw
+entry_id: legal-compliance-general-do-consumers-know-their-gdpr-data-privacy-rights
+source_url: https://gdpr.eu/consumers-gdpr-data-privacy-rights/
+source_type: rss
+source_platform: rss
+collected_at: '2019-06-20T15:44:28+00:00'
+summary: The article discusses the EU's General Data Protection Regulation (GDPR), which requires businesses to ensure consumers
+  can exercise their data privacy rights, but individuals must first be aware of these rights. It emphasizes that consumer
+  knowledge is crucial for effective GDPR compliance and privacy protection.
+tags: []
+quality_tier: 2
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 70.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 99673c3e-2ecb-4b78-a577-b0a49930f8a3
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<p>In addition to data protection, the EU’s General Data Protection Regulation requires businesses to ensure consumers can exercise their data privacy rights. But first, individuals must know these rights.</p>
+<p>The post <a href="https://gdpr.eu/consumers-gdpr-data-privacy-rights/">Do consumers know their GDPR data privacy rights?</a> appeared first on <a href="https://gdpr.eu">GDPR.eu</a>.</p>
+
+## Summary
+The article discusses the EU's General Data Protection Regulation (GDPR), which requires businesses to ensure consumers can exercise their data privacy rights, but individuals must first be aware of these rights. It emphasizes that consumer knowledge is crucial for effective GDPR compliance and privacy protection.
+
+## Key Points
+- GDPR mandates businesses to enable consumers to exercise data privacy rights.
+- Consumer awareness of GDPR rights is a prerequisite for exercising them.
+- The article is published on GDPR.eu, suggesting it provides authoritative information on the topic.
+
+
+## Entities
+- **GDPR** (concept, relevance=)
+- **EU** (org, relevance=)
+- **consumers** (concept, relevance=)
+- **GDPR.eu** (org, relevance=)
+- **data privacy rights** (concept, relevance=)

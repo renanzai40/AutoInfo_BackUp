@@ -1,0 +1,24 @@
+{
+  "id": "1d15450341f6b9c0",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/ceo-da-volkswagen-quer-cortar-mais-50-000-postos-de-trabalho-e-fechar-fabricas-trabalhadores-protestam-em-wolfsburg/",
+  "title": "Volkswagen: 100.000 empregos em risco e fábricas para fechar",
+  "content": "\"Precisamos de reduzir a complexidade, simplificar as nossas estruturas de forma coerente e reduzir os custos\", afirmou Oliver Blume durante uma reunião com os trabalhadores na sede do grupo, em Wolfsburg",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T16:39:26+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "430097b4-ad23-4567-915d-05b61906b17e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

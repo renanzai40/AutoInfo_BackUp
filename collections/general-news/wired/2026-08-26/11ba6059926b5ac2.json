@@ -1,0 +1,24 @@
+{
+  "id": "11ba6059926b5ac2",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/nasa-cancels-its-rescue-mission-for-the-aging-swift-telescope/",
+  "title": "NASA Cancels Its Rescue Mission for the Aging Swift Telescope",
+  "content": "The LINK probe was supposed to use robotic arms to capture Swift and lift it into a safe orbit. Problems with its control system forced NASA to call off the attempt.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-22T09:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ffda878c-db89-46b2-b5fc-b67ef7dec468",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "576f8787ba27972f",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/mezhdunarodnaya-panorama/28044419",
+  "title": "Channels узнал о расширении сотрудничества США и Нигерии в области безопасности",
+  "content": "Американские военные начали обучать нигерийских коллег специализированным навыкам, отметил телеканал",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T23:47:59+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "beb9d02c-a433-4de5-a607-a69636e077dd",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

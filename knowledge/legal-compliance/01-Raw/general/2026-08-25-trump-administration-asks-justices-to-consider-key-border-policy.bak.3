@@ -1,0 +1,64 @@
+---
+title: Trump administration asks justices to consider key border policy
+domain: legal-compliance
+tier: 01-Raw
+entry_id: legal-compliance-general-trump-administration-asks-justices-to-consider-key-border-policy
+source_url: https://www.scotusblog.com/2026/08/trump-administration-asks-justices-to-consider-key-border-policy/
+source_type: rss
+source_platform: scotusblog
+collected_at: '2026-08-25T19:39:00+00:00'
+summary: The Trump administration has petitioned the Supreme Court to review a D.C. Circuit Court ruling that blocks a policy
+  denying asylum to immigrants who cross the U.S.-Mexico border illegally. The policy, based on a presidential proclamation
+  declaring a border invasion, bypasses normal immigration procedures, but lower courts found it violates federal law. The
+  administration argues it is essential for national security and controlling border chaos.
+tags: []
+quality_tier: 2
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 70.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 51866a51-755b-4d07-912c-bdda3c2f6a30
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<p>The Trump administration on Monday <a href="https://www.supremecourt.gov/DocketPDF/26/26-239/419860/20260824104858426_Mullin_v_RAICES_petition_final.pdf">asked the Supreme Court to review</a> a ruling by a federal appeals court in Washington, D.C., that bars the federal government from removing immigrants who crossed the U.S.-Mexico border illegally without giving them a chance to seek asylum. U.S. Solicitor General D. John Sauer told the justices that the decision by the U.S. Court of Appeals for the District of Columbia Circuit “threatens to dismantle” what Department of Homeland Security Secretary Markwayne Mullin “describes as an ‘indispensable’ tool for controlling the border.”</p><p>The dispute centers on <a href="https://www.presidency.ucsb.edu/documents/proclamation-10888-guaranteeing-the-states-protection-against-invasion">a proclamation</a> that President Donald Trump issued shortly after his inauguration for a second term. The proclamation indicates that because “[t]he sheer number” of noncitizens “entering the United States has overwhelmed the system” and “prevents the Federal Government from obtaining operational control of the border,” “the current situation at the southern border qualifies as an invasion.” The proclamation instructs immigration officials to quickly remove immigrants who cross the border illegally without providing them with the process or protections to which they would normally be entitled – including the right to seek asylum.</p><p>A group of immigrants and three immigrants’ rights groups went to federal court, where they argued that the proclamation (as well as guidance issued to implement it) violate federal immigration law.</p><p>In <a href="https://immigrantjustice.org/wp-content/uploads/2025/07/ORDER-RAICES-v-Noem_2025-07-02.pdf">a 128-page opinion</a>, U.S. District Judge Randolph Moss blocked the Trump administration from imposing the restrictions on removal and asylum. He “recognize[d] that the Executive Branch faces enormous challenges in preventing and deterring unlawful entry into the United States and in adjudicating the overwhelming backlog of asylum claims of those who have entered the country.” But neither the Constitution nor federal immigration law, Moss ruled, allow the president “to adopt an alternative immigration system.”</p><p>On April 24, <a href="https://cdn.sanity.io/files/pito4za5/production/d3981b1bc0c39906d901d884990a7ee115a0d197.pdf#page=44">the D.C. Circuit upheld</a> Moss’ ruling. Judge J. Michelle Childs explained that the “text, structure, and history” of federal immigration law “make clear that,” although Congress may have given the president the power to temporarily block immigrants without proper documentation from entering the country, it did not give Trump the “expansive removal authority” that he claims in the proclamation. Both the proclamation and the agency guidance, Chiles concluded, therefore violate federal law insofar as they bypass the normal deportation process “and cast aside federal laws affording individuals the right to apply and be considered for asylum or withholding of removal,” which is a more limited form of protection from deportation than asylum.</p><p>Sauer told the court on Monday that before the president’s proclamation went into effect, the U.S.-Mexico border “had become overwhelmed by an ungovernable influx of millions of aliens, creating chaotic conditions that criminal and terrorist organizations exploited to threaten our national security.” The restrictions imposed in the proclamation, Sauer said, have been “[t]he most important and effective pieces of the President’s response” to that influx. Although the D.C. Circuit’s decision is currently on hold, allowing the government to maintain the asylum restrictions, Sauer warned that “all of the progress” that the government has made “risks evaporating if the ruling below is allowed to take effect.”</p><p>Sauer pointed to the Supreme Court’s 2018 decision in <a href="https://www.law.cornell.edu/supct/pdf/17-965.pdf"><em>Trump v. Hawaii</em></a>, in which the justices upheld the Trump administration’s “travel ban,” a 2017 executive order that restricted immigration to the United States by citizens of eight countries, most (but not all) of which are predominantly Muslim. In that case, Sauer emphasized, the justices agreed “to review a lower-court decision curtailing the President’s power to control the flow of aliens into the country. The same result is warranted here.” Indeed, Sauer added, “[t]his case is even more important” than the travel ban case.</p><p>The Supreme Court should also step in, Sauer continued, because the lower courts allowed the case to move forward as a class action that would, if the challengers prevail, benefit “an astoundingly broad class” of plaintiffs, including noncitizens “who are currently overseas and have no imminent plans to enter the United States (much less enter illegally).” By approving an “effectively universal class” of plaintiffs, Sauer argued, the lower courts made “a transparent end-run around” last year’s ruling in <a href="https://www.scotusblog.com/cases/trump-v-casa/"><em>Trump v. CASA</em></a>, in which the Supreme Court held that federal courts do not have the power to issue so-called “universal” or “nationwide” injunctions, which prohibit the government from enforcing a law or policy anywhere in the country.</p><p>The challengers’ response to the government’s petition for review is due on Sept. 23.</p>
+
+## Summary
+The Trump administration has petitioned the Supreme Court to review a D.C. Circuit Court ruling that blocks a policy denying asylum to immigrants who cross the U.S.-Mexico border illegally. The policy, based on a presidential proclamation declaring a border invasion, bypasses normal immigration procedures, but lower courts found it violates federal law. The administration argues it is essential for national security and controlling border chaos.
+
+## Key Points
+- The Trump administration is appealing a D.C. Circuit ruling that bars the removal of immigrants without granting them a chance to seek asylum.
+- The dispute centers on a presidential proclamation declaring a border 'invasion' and instructing quick removal without standard legal protections.
+- Lower courts, including a district judge and the D.C. Circuit, ruled that the proclamation violates federal immigration law by bypassing asylum processes.
+- The administration claims the restrictions are critical for national security and managing an overwhelming influx at the border.
+- The case involves legal precedents like Trump v. Hawaii and raises issues about class action lawsuits and nationwide injunctions.
+
+
+## Entities
+- **Trump** (person, relevance=)
+- **D. John Sauer** (person, relevance=)
+- **Markwayne Mullin** (person, relevance=)
+- **Randolph Moss** (person, relevance=)
+- **J. Michelle Childs** (person, relevance=)
+- **Supreme Court** (org, relevance=)
+- **U.S. Court of Appeals for the District of Columbia Circuit** (org, relevance=)
+- **Department of Homeland Security** (org, relevance=)
+- **asylum** (concept, relevance=)
+- **border policy** (concept, relevance=)
+- **immigration law** (concept, relevance=)
+- **invasion** (concept, relevance=)
+- **removal** (procedure, relevance=)
+- **asylum seeking** (procedure, relevance=)

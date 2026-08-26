@@ -1,0 +1,24 @@
+{
+  "id": "d713d25e8ca73eff",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/theluxonomist/lujo/gucci-bamboo-bolso-que-nacio-pobreza-posguerra-hoy-es-un-simbolo-lujo_7014573_0.html",
+  "title": "Gucci Bamboo: el bolso que nació de la pobreza de posguerra y hoy es un símbolo de lujo",
+  "content": "Este icónico bolso de Gucci salió a la venta en 1947 y su principal atractivo era la caña de bambú que funcionaba de asa",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T07:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7be7ef87-1041-44a5-870a-8587d9abc35c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

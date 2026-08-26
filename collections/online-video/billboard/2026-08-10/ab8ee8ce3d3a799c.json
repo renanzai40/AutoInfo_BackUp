@@ -1,0 +1,22 @@
+{
+  "id": "ab8ee8ce3d3a799c",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/music/concerts/clementine-douglas-debut-australian-headline-tour-1236312396/",
+  "title": "Clementine Douglas Announces Debut Australian Headline Shows",
+  "content": "Earlier this year, Douglas made her Madison Square Garden debut alongside Dom Dolla.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-10T04:25:24+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c5b20461-f6b8-43f2-8f51-39544d3a5d43"
+}

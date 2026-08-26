@@ -1,0 +1,50 @@
+{
+  "id": 78546199,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/78546199/calculate-symbolic-limit-in-sympy-error-message",
+  "title": "Calculate symbolic limit in sympy error message",
+  "content": "Calculate symbolic limit in sympy error message",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-25T15:17:44.244583+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "python",
+      "anaconda",
+      "sympy",
+      "limit"
+    ],
+    "owner": {
+      "account_id": 14510223,
+      "reputation": 41,
+      "user_id": 20428108,
+      "user_type": "registered",
+      "profile_image": "https://www.gravatar.com/avatar/b7b5900e5956a1a7ea7778d6854d61b6?s=256&d=identicon&r=PG&f=y&so-version=2",
+      "display_name": "hello447",
+      "link": "https://stackoverflow.com/users/20428108/hello447"
+    },
+    "is_answered": true,
+    "view_count": 105,
+    "accepted_answer_id": 78548460,
+    "answer_count": 1,
+    "score": 0,
+    "last_activity_date": 1787670213,
+    "creation_date": 1716926248,
+    "last_edit_date": 1787670213,
+    "question_id": 78546199,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/78546199/calculate-symbolic-limit-in-sympy-error-message",
+    "title": "Calculate symbolic limit in sympy error message"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ba0d5a70-2490-4b2d-9ac6-30f5dc1ca3ff",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

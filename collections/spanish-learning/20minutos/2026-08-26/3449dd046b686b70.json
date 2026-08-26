@@ -1,0 +1,24 @@
+{
+  "id": "3449dd046b686b70",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/diccionario-instrucciones-para-entender-que-es-mirada-gen-z-stare-mala-educacion-groseria-pose-ironia_7028781_0.html",
+  "title": "Diccionario para entender qué es la mirada 'Gen Z stare': ¿mala educación, grosería, pose, ironía...?",
+  "content": "La mirada fija e inexpresiva, identificada como un rasgo de la Generación Z, ha desencadenado una oleada de dudas, vídeos y memes en redes sociales.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T07:44:22+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "eaf458cb-6822-47ac-bcee-133306e6a988",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,52 @@
+---
+title: Mondlane vai a julgamento por incitamento ao terrorismo
+domain: portuguese-learning
+tier: 01-Raw
+entry_id: portuguese-learning-general-mondlane-vai-a-julgamento-por-incitamento-ao-terrorismo
+source_url: https://observador.pt/2026/08/25/mondlane-notificado-para-ser-julgado-por-desobediencia-e-terrorismo-em-mocambique/
+source_type: rss
+source_platform: observador
+collected_at: '2026-08-25T18:16:18+01:00'
+summary: Venâncio Mondlane, a member of the Council of State, is scheduled to stand trial for incitement to terrorism. Due
+  to his position, he has immunity, which means the Supreme Court will oversee the case.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: pt
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: c65be321-5286-4127-8028-ef69aceb7340
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+Venâncio Mondlane tomou posse, há um ano, como membro do Conselho de Estado, condição que lhe confere imunidade e determina que seja julgado pelo Tribunal Supremo
+
+## Summary
+Venâncio Mondlane, a member of the Council of State, is scheduled to stand trial for incitement to terrorism. Due to his position, he has immunity, which means the Supreme Court will oversee the case.
+
+## Key Points
+- Mondlane is accused of incitement to terrorism.
+- He holds a position in the Council of State, which grants him legal immunity.
+- The trial will be conducted by the Supreme Court because of his immunity status.
+- He took office a year ago, marking the timeline relevant to the charges.
+
+
+## Entities
+- **Venâncio Mondlane** (person, relevance=)
+- **Conselho de Estado** (org, relevance=)
+- **Tribunal Supremo** (org, relevance=)
+- **incitamento ao terrorismo** (concept, relevance=)
+- **imunidade** (concept, relevance=)

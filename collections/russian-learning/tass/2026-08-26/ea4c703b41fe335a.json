@@ -1,0 +1,24 @@
+{
+  "id": "ea4c703b41fe335a",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/ekonomika/28044343",
+  "title": "В аэропорту Калуги ввели ограничения",
+  "content": "Об этом заявили в Росавиации",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T22:32:20+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f3453a30-1b6d-4916-a22f-58b30556eb36",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

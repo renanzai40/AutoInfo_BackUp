@@ -1,0 +1,24 @@
+{
+  "id": "4c2188b2ccacb812",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/25/dicks-sporting-goods-worst-day-ever-jim-cramer-advice.html",
+  "title": "Dick’s Sporting Goods just had its worst day ever. Here's Jim Cramer's advice on the stock now",
+  "content": "CNBC’s Jim Cramer said investors shouldn’t give up on Dick’s after its record 30% plunge.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-25T22:47:37+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6fa51b18-6e9c-485a-a017-3cb1fcdea85c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "0e550c8543454ee3",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/obschestvo/28043893",
+  "title": "В ЛНР до 2027 года расселят более 1,1 тыс. человек из аварийного жилья",
+  "content": "Меру поддержит Фонд развития территорий",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T18:17:05+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c1571347-9b5d-46c5-a426-0e0066d71a91",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

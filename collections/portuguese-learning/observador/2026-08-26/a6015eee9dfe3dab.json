@@ -1,0 +1,24 @@
+{
+  "id": "a6015eee9dfe3dab",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/construcao-do-novo-mercado-de-viana-do-castelo-retomada-a-1-de-setembro/",
+  "title": "Obras no novo mercado de Viana do Castelo voltam em setembro",
+  "content": "A \"intervenção arqueológica promoveu escavações, que revelou estruturas não religiosas do antigo Convento de São Bento, fundado no século XVI, nas várias fases de ocupação do espaço -- dormitórios, enfermarias, áreas técnicas\"",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T19:19:16+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "67576943-ac43-4724-975a-7a89f2d10999",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

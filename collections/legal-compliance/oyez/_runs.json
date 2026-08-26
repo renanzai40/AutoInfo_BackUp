@@ -1,0 +1,114 @@
+[
+  {
+    "collection_id": "col-20260810T044925-c4d8610b",
+    "timestamp": "2026-08-10T04:49:36.020764+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.oyez.org/feed (bozo): <unknown>:2:0: syntax error",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.oyez.org/feed (bozo): <unknown>:2:0: syntax error"
+      }
+    ],
+    "duration_ms": 1540.0
+  },
+  {
+    "collection_id": "col-20260810T055858-5f172c11",
+    "timestamp": "2026-08-10T05:59:11.119483+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.oyez.org/feed (bozo): <unknown>:2:0: syntax error",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.oyez.org/feed (bozo): <unknown>:2:0: syntax error"
+      }
+    ],
+    "duration_ms": 3384.0
+  },
+  {
+    "collection_id": "col-20260815T182025-53092144",
+    "timestamp": "2026-08-15T18:20:34.518827+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.oyez.org/feed (bozo): <unknown>:2:0: syntax error",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.oyez.org/feed (bozo): <unknown>:2:0: syntax error"
+      }
+    ],
+    "duration_ms": 1117.0
+  },
+  {
+    "collection_id": "col-20260815T183621-4ab0cc8d",
+    "timestamp": "2026-08-15T18:36:23.209864+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.oyez.org/feed (bozo): <unknown>:2:0: syntax error",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.oyez.org/feed (bozo): <unknown>:2:0: syntax error"
+      }
+    ],
+    "duration_ms": 1726.0
+  },
+  {
+    "collection_id": "col-20260825T152205-3d85719c",
+    "timestamp": "2026-08-25T15:22:29.632745+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.oyez.org/feed (bozo): <unknown>:2:0: syntax error",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.oyez.org/feed (bozo): <unknown>:2:0: syntax error"
+      }
+    ],
+    "duration_ms": 3244.0
+  },
+  {
+    "collection_id": "col-20260825T153341-1aa1225e",
+    "timestamp": "2026-08-25T15:33:54.344374+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.oyez.org/feed (bozo): <unknown>:2:0: syntax error",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.oyez.org/feed (bozo): <unknown>:2:0: syntax error"
+      }
+    ],
+    "duration_ms": 1302.0
+  },
+  {
+    "collection_id": "col-20260825T154943-e759e288",
+    "timestamp": "2026-08-25T15:49:54.776980+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.oyez.org/feed (bozo): <unknown>:2:0: syntax error",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.oyez.org/feed (bozo): <unknown>:2:0: syntax error"
+      }
+    ],
+    "duration_ms": 1288.0
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "id": "baa7a8d41f802cd3",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/kultura/28044231",
+  "title": "В Москве в \"Острове мечты\" на День города выступит Полина Гагарина",
+  "content": "В пяти тематических зонах пройдут акробатические и экстремальные шоу, театральные постановки, музыкальные перформансы, интерактивы с артистами и уличные выступления",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T21:00:58+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "723869ce-2985-4318-94c3-734264a18b40",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

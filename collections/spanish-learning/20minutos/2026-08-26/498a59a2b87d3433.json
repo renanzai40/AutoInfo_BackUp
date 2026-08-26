@@ -1,0 +1,24 @@
+{
+  "id": "498a59a2b87d3433",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/comunidad-valenciana/valencia/asi-cambiara-jardin-turia-17-millones-para-renovar-caminos-jardines-fuentes-estanques_7026238_0.html",
+  "title": "Así cambiará el Jardín del Turia: 17 millones para renovar caminos, jardines, fuentes...",
+  "content": "La actuación transformará los tramos entre el Pont de les Flors y el Pont de l’Àngel Custodi, incluido el jardín diseñado por Ricardo Bofill, cuyo trazado original se conservará",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T10:01:08+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f38479f3-5722-483b-9fc6-e3685133dcf4",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

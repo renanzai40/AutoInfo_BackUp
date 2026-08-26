@@ -1,0 +1,24 @@
+{
+  "id": "d54fdeb99639ba79",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/Xi-congratulates-Alamgir-on-assuming-Bangladeshi-presidency-1PScsfcJONy/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Xi congratulates Alamgir on assuming Bangladeshi presidency",
+  "content": "Chinese President Xi Jinping on Monday extended congratulations to Mirza Fakhrul Islam Alamgir on assuming the office as president of Bangladesh.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T11:32:03+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d7de1880-7138-4e4b-91b6-1747446c4d45",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

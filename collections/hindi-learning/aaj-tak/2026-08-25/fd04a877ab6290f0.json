@@ -1,0 +1,24 @@
+{
+  "id": "fd04a877ab6290f0",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/west-bengal/story/bengal-mother-child-milk-row-cm-suvendu-adhikari-mamata-banerjee-agnimitra-paul-ntcppl-dskc-2629881-2026-08-25?utm_source=rssfeed",
+  "title": "ममता, मंत्री, बच्चे का दूध गर्म करती मां... बंगाल की घटना पर सियासत कैसी?",
+  "content": "कोलकाता की पार्क स्ट्रीट पर फुटपाथ से लोगों को हटाने के अभियान के दौरान मंत्री अग्निमित्रा पॉल विवादों में घिर गईं. एक वीडियो में उन्हें एक महिला से बहस करते हुए देखा गया, जो अपने बच्चे के लिए दूध गर्म कर रही थी. इस घटना की आलोचना हुई और बाद में पॉल ने कहा कि वह इस स्थिति को अलग तरह से संभाल सकती थीं.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T19:52:14+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "470cb4d2-7b7d-484d-9985-1b37982c11da",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

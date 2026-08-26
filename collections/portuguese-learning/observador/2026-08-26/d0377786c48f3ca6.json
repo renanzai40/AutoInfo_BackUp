@@ -1,0 +1,24 @@
+{
+  "id": "d0377786c48f3ca6",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/banco-de-fomento-angola-torna-se-primeiro-banco-angolano-com-correspondencia-com-o-norte-americano-citibank/",
+  "title": "BFA é o primeiro banco angolano no Citibank",
+  "content": "Segundo o BFA, \"este marco reforça a ambição do banco de assumir um papel cada vez mais relevante na ligação entre a economia angolana e os principais centros financeiros internacionais\"",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T22:42:08+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "52c79fe5-37d9-490b-acd5-dea643d701e7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

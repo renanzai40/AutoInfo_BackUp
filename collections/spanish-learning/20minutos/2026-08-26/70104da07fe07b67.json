@@ -1,0 +1,24 @@
+{
+  "id": "70104da07fe07b67",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/motor/primer-ferrari-electrico-alcanza-un-record-40-millones-dolares-una-subasta_7026642_0.html",
+  "title": "El primer Ferrari eléctrico alcanza un récord de 40 millones de dólares en una subasta",
+  "content": "El Ferrari Luce es el vehículo nuevo por el que más se ha pagado en una subasta",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-17T19:42:55+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "21ca5c8d-4fa2-4f1a-a47b-56245c9d701f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "e0f590600917ad2c",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/movies/movie-news/andrew-garfield-sam-altman-ai-1236680618/",
+  "title": "Andrew Garfield Gets Candid on Playing Sam Altman: “Damage to the Soul of Humanity”",
+  "content": "The actor speaks out on playing the OpenAI CEO, says Altman must have \"a certain ability to dissociate.\"",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T14:42:13+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4c6642e9-15ee-45b3-95ce-f914faa5eb2b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

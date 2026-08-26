@@ -1,0 +1,24 @@
+{
+  "id": "153e6d97e019e567",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/business/news/story/upi-expands-global-footprint-to-11-countries-greece-and-maldives-new-joiner-dpmx-smsr-rpti-2629328-2026-08-25?utm_source=rssfeed",
+  "title": "UPI हुआ ग्लोबल... अब 11 देशों में ऑपरेशनल, ग्रीस-मालदीव नए नाम",
+  "content": "भारत का UPI अब सिर्फ डोमेस्टिक डिजिटल पेमेंट का जरिया नहीं रहा, बल्कि दुनियाभर में अपनी पहचान बना रहा है. जुलाई 2026 में UPI ने ₹29.87 लाख करोड़ के ट्रांजैक्शन प्रोसेस किए, जबकि इसकी अंतरराष्ट्रीय पहुंच 11 देशों तक हो गई है. ग्रीस और मालदीव इसके सबसे नए पड़ाव हैं.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T09:06:07+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f689e56f-6879-4150-9ad3-84c707c04ad4",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

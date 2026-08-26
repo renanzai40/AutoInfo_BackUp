@@ -1,0 +1,24 @@
+{
+  "id": "58a5bed7e85c3133",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/animaleros/tadeo-un-cachorro-abandonado-ourense-busca-un-hogar-tras-conquistar-cientos-usuarios-redes-necesita-empezar-cero_7029099_0.html",
+  "title": "Tadeo, un cachorro abandonado en Ourense, busca hogar tras conquistar a cientos en redes sociales",
+  "content": "La protectora de animales Arume se ha hecho cargo de su cuidado y trata de encontrarle una familia responsable que lo adopte.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T12:19:44+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2a393399-7109-4a52-9994-abf7feb7f14c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

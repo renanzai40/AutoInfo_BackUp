@@ -1,0 +1,24 @@
+{
+  "id": "5748b9996a8c1c54",
+  "source_name": "producthunt",
+  "source_type": "rss",
+  "source_url": "https://www.producthunt.com/products/postaway-space",
+  "title": "Postaway.space",
+  "content": "<p>\n            A little piece of the past, sent your way.\n          </p>\n          <p>\n            <a href=\"https://www.producthunt.com/products/postaway-space?utm_campaign=producthunt-atom-posts-feed&amp;utm_medium=rss-feed&amp;utm_source=producthunt-atom-posts-feed\">Discussion</a>\n            |\n            <a href=\"https://www.producthunt.com/r/p/1230617?app_id=339\">Link</a>\n          </p>",
+  "content_type": "text",
+  "source_platform": "producthunt",
+  "collected_at": "2026-08-24T01:46:53-07:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.producthunt.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5e93157a-8403-4ad5-a1f2-272f347ec920",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

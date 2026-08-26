@@ -1,0 +1,24 @@
+{
+  "id": "6d2421f801e4378d",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/real-estate/zillow-warns-americans-on-mortgage-rates-housing-market",
+  "title": "Zillow warns Americans on mortgage rates, housing market",
+  "content": "The real estate technology company cautions Americans about one major consideration when saving to buy a home.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-22T18:44:33+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "84a85acd-51d2-4d57-a018-5b957c10d8b7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

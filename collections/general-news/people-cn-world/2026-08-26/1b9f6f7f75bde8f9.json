@@ -1,0 +1,24 @@
+{
+  "id": "1b9f6f7f75bde8f9",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0605/c1002-40494361.html",
+  "title": "金民锡被提名为韩国国务总理",
+  "content": "<p>　　新华社首尔6月4日电（记者陆睿　黄昕欣）韩国总统李在明4日提名共同民主党最高委员会委员金民锡为国务总理。</p> <p>　　李在明当天在首尔龙山总统府公布新一届政府人事安排。他表示，金民锡兼具丰富的议政活动经验、民生政策推动力、国际视野和促进团结的政治能力，是能够引领国民克服危机和恢复民生经济的合适人选。</p> <p>　　金民锡1964年出生于首尔，四次当选国会议员，曾任共同民主党政策委员长等职。</p> <p>　　李在明当天还提名李钟奭为国家情报院院长、姜勋植为总统秘书室室长、魏圣洛为国家安保室室长。</p> <p>　　按程序，所有内阁提名人选均需接受国会听证。除国务总理外，无论国会通过与否，获提名者都可最终获得任命。</p> <p>　　韩国中央选举管理委员会4日上午召开全体会议，正式确认李在明当选第21届韩国总统。4日上午11时许，李在明在国会正式宣誓就职。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-05T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4006cadd-26ba-4308-bd05-7f47a3ce24a6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

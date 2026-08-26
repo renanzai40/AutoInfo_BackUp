@@ -1,0 +1,24 @@
+{
+  "id": "52cb6dcf84450a7d",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/avengers-endgame-re-release-reveals-new-iron-man-and-infinity-gauntlet-popcorn-buckets-tickets-on-sale-now",
+  "title": "Avengers: Endgame Re-Release Reveals New Iron Man and Infinity Gauntlet Popcorn Buckets, Tickets On Sale Now",
+  "content": "The upcoming re-release of Avengers: Endgame will coincide with the debut of two flashy new popcorn buckets.",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T17:19:50+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3433d17c-fc3f-47bd-abf6-c84ef28b08a6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

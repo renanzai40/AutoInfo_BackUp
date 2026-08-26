@@ -1,0 +1,24 @@
+{
+  "id": "26b16d67e3c670ef",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/musique/mort-de-dolly-parton-donald-trump-fait-mettre-les-drapeaux-en-berne-et-regrette-une-vraie-perte-pour-des-millions-de-personnes-20260825",
+  "title": "Mort de Dolly Parton : Donald Trump fait mettre les drapeaux en berne, émotion unanime dans une Amérique divisée",
+  "content": "Après la mort de la figure emblématique de la country, de nombreuses personnalités saluent la mémoire de la chanteuse, à l’image de Bill Clinton, Mick Jagger, Julia Roberts, Jeff Bezos ou encore Tim Cook.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T23:46:43+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c499b938-eec0-4477-b966-0822ca92643b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

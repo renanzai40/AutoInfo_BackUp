@@ -1,0 +1,24 @@
+{
+  "id": "67c2ed8fffecd26f",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/investing/stocks/spacex-nvidia-starmind-ai1-orbital-data-center",
+  "title": "SpaceX just gave Nvidia investors a new reason to watch",
+  "content": "Something Elon Musk said on SpaceX's earnings call about Nvidia is still being priced into both stocks.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T23:03:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4cc69cac-a188-4c51-b41b-9e08f8e082bf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

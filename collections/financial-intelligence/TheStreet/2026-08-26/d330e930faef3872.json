@@ -1,0 +1,24 @@
+{
+  "id": "d330e930faef3872",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/deals/beranmey-halloween-slippers-walmart-flash-sale-mp",
+  "title": "Walmart's ultra-cozy $26 slippers are 52% off in 19 fall-themed patterns",
+  "content": "\"I literally wear them every day, everywhere!\"",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T09:00:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "acdbf193-e2d3-461d-a16c-429577113d1d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "db232c49678e0a30",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/mezhdunarodnaya-panorama/28044245",
+  "title": "SANA: лидер сирийских курдов объявил о роспуске вооруженных формирований",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T21:19:56+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ccafb650-add8-4b8d-a71f-a7acb2ff2bdf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

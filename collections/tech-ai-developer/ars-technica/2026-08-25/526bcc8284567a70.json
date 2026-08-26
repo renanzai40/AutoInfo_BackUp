@@ -1,0 +1,24 @@
+{
+  "id": "526bcc8284567a70",
+  "source_name": "ars-technica",
+  "source_type": "rss",
+  "source_url": "https://arstechnica.com/gadgets/2026/08/energy-hungry-ai-data-centers-spur-new-power-transformer-technology/",
+  "title": "Data centers become \"killer application\" for new power transformer tech",
+  "content": "Solid-state transformers could also benefit EV charging and, someday, households.",
+  "content_type": "text",
+  "source_platform": "ars-technica",
+  "collected_at": "2026-08-24T21:32:16+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.arstechnica.com/arstechnica/index"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d67692c7-d968-4e57-b8bf-87d88341b65c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

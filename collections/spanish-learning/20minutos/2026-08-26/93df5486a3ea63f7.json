@@ -1,0 +1,24 @@
+{
+  "id": "93df5486a3ea63f7",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/lainformacion/empresas/coricelli-pez-chico-italiano-aspira-comerse-gigante-espanol-deoleo_7028728_0.html",
+  "title": "Coricelli, el pez \"chico\" italiano que aspira a 'comerse' al gigante español Deoleo",
+  "content": "La compañía familiar italiana, fundada en 1939 y dirigida ahora por la tercera generación, ingresó el año pasado alrededor de 400 millones de euros y va a por todas con DEOLEO por la que ofrece hasta 500 millones",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T05:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a831969b-1d01-422b-9bb3-9d61a166e62e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

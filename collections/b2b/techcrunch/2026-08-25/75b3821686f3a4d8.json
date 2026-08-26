@@ -1,0 +1,24 @@
+{
+  "id": "75b3821686f3a4d8",
+  "source_name": "techcrunch",
+  "source_type": "rss",
+  "source_url": "https://techcrunch.com/2026/08/25/pacific-fusion-next-fusion-machine-could-clear-key-hurdle-to-commercial-power/",
+  "title": "Pacific Fusion’s next fusion machine could clear a key hurdle to commercial power",
+  "content": "Fusion startup Pacific Fusion broke ground on a demonstration facility in New Mexico that it says will generate enough energy to power itself.",
+  "content_type": "text",
+  "source_platform": "techcrunch",
+  "collected_at": "2026-08-25T15:30:00+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://techcrunch.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1674f7d5-ced3-4ae6-b495-e365709e83ec",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

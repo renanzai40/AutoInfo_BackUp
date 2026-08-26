@@ -1,0 +1,24 @@
+{
+  "id": "4f94f69d753424e2",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/castilla-la-mancha/cuenca/un-hombre-muere-arrollado-por-su-propio-coche-que-no-tenia-puesto-freno-mano_7029007_0.html",
+  "title": "Muere en Cuenca arrollado por su propio coche, que no tenía el freno de mano",
+  "content": "Los bomberos de Tarancón (Cuenca) sacaron el cuerpo de debajo del vehículo y el médico de urgencias solo pudo certificar el fallecimiento.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T08:56:34+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e340eb02-10b3-44c9-8ef6-e467a78b1668",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

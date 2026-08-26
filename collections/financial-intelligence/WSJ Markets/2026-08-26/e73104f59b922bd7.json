@@ -1,0 +1,24 @@
+{
+  "id": "e73104f59b922bd7",
+  "source_name": "WSJ Markets",
+  "source_type": "rss",
+  "source_url": "https://www.wsj.com/articles/what-will-it-take-for-home-buyers-to-start-asking-for-a-disaster-discount-c662cb96?mod=rss_markets_main",
+  "title": "What Will It Take for Home Buyers to Start Asking for a Disaster Discount?",
+  "content": "The real costs of owning a house in neighborhoods that are vulnerable to flooding and wildfires are becoming clearer.",
+  "content_type": "text",
+  "source_platform": "WSJ Markets",
+  "collected_at": "2025-01-26T06:00:00-05:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c43e523a-8e4d-4acb-a1b1-7902059ca45c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

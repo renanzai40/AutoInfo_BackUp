@@ -1,0 +1,24 @@
+{
+  "id": "d066e8d6796fbf13",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/latest-news/disney-d23-damaro-franchises-gaming-ai-investment",
+  "title": "Disney's new CEO announces his biggest bets",
+  "content": "Disney is cutting costs while pouring billions into different quarters.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T10:33:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8a646b76-3a99-4f9c-8eef-1dae517c4353",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "afb7bd20ede7dc40",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/sport/28043929",
+  "title": "Ларионов высказался о новом правиле остановки шайбы рукой",
+  "content": "С предстоящего сезона игрокам Фонбет - Континентальной хоккейной лиги будет запрещено во время матчей зажимать шайбу в перчатке, они смогут играть по шайбе только открытой ладонью",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T18:19:19+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "af22695a-6f39-419b-b6a2-fbb4673079ef",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "c18b43cc5668be38",
+  "source_name": "the-verge",
+  "source_type": "rss",
+  "source_url": "https://www.theverge.com/ai-artificial-intelligence/984290/openai-jalapeno-ai-chip-benchmarks",
+  "title": "OpenAI says its Jalapeño chip can power faster AI responses than the competition",
+  "content": "OpenAI says its new AI chip, Jalape&#241;o, completes tasks more efficiently and returns responses faster than other AI systems, according to a blog post published on Tuesday. During a briefing with reporters, OpenAI hardware vice president Richard Ho said Jalape&#241;o offers the \"best of both worlds\" with lower latency and higher throughput, as AI systems [&#8230;]",
+  "content_type": "text",
+  "source_platform": "the-verge",
+  "collected_at": "2026-08-25T10:00:00-04:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.theverge.com/rss/index.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "234e6902-97cf-4e30-a114-f62432a54e39",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

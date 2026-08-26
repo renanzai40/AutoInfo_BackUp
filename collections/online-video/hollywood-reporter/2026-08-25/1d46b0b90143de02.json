@@ -1,0 +1,24 @@
+{
+  "id": "1d46b0b90143de02",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/tv/tv-news/bas-book-exclusive-clip-toronto-film-festival-1236680651/",
+  "title": "‘Ba’s Book’ Unveils a Father’s Secrets Over Vietnam War, Revolutionary Iran (Exclusive Clip)",
+  "content": "Ashley Duong has created an inventive hybrid film inspired by a memoir that fluidly moves between re-enactments and verite documentary styles. The film is headed to a world premiere at TIFF.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T15:51:20+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "44391aac-4c43-4001-bbc9-66929aacfa2f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

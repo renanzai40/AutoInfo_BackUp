@@ -1,0 +1,24 @@
+{
+  "id": "de036452602ca5df",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/ciencia/unicas-gafas-debes-utilizar-ver-eclipse-solar-12-agosto-espana_7011125_0.html",
+  "title": "Las únicas gafas que debes utilizar para ver el eclipse solar del 12 agosto en España para evitar daños y quemaduras",
+  "content": "El uso de este accesorio es obligatorio durante el fenómeno astronómico para evitar daños y quemaduras en los ojos.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-07-06T15:58:32+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4f68192e-4d34-442c-b0c1-189efc57283e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,27 @@
+{
+  "id": "FD-WXg4rEfG3cBJgovGgNQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Microsoft Fabric Analytics Engineer: DP-600 Exam Prep",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "FD-WXg4rEfG3cBJgovGgNQ",
+    "slug": "microsoft-fabric-analytics-engineer-dp-600-exam-prep",
+    "name": "Microsoft Fabric Analytics Engineer: DP-600 Exam Prep"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a5a5cd31-22c6-417c-a18a-062d1444cae4",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

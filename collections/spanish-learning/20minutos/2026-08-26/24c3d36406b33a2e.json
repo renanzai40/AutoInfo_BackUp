@@ -1,0 +1,24 @@
+{
+  "id": "24c3d36406b33a2e",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/lainformacion/economia-y-finanzas/marc-vidal-inversor-nacionalidades-marchando-espana-pais-dinero-cunde-mejor_7013307_0.html",
+  "title": "Marc Vidal, inversor: \"Dos nacionalidades se están marchando de España porque en su país el dinero cunde mejor\"",
+  "content": "\"Se habla mucho de los que vienen, pero de los que se van no se habla tanto, y esto tiene su factura\", ha señalado el analista.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-07-11T08:05:04+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ca9d23c2-343d-4d01-816a-560a3a57a5e7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

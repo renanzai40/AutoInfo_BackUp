@@ -1,0 +1,24 @@
+{
+  "id": "82f76ed6c7762eb0",
+  "source_name": "b2b-news-network",
+  "source_type": "rss",
+  "source_url": "https://www.b2bnn.com/2026/08/how-e-commerce-is-changing-b2b-purchasing-for-industrial-parts/",
+  "title": "How E-Commerce Is Changing B2B Purchasing for Industrial Parts",
+  "content": "Source: Pexels If you’ve ever ordered something online in under two minutes and then waited three days for a package that felt way too small for the price, you already understand part of the appeal of e-commerce. In B2B, especially for industrial parts, the shift is even bigger. You’re not just buying convenience. You’re buying [&#8230;]",
+  "content_type": "text",
+  "source_platform": "b2b-news-network",
+  "collected_at": "2026-08-24T09:01:45+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://b2bnn.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d59b61a1-c462-401f-8b13-0c6662203a7a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

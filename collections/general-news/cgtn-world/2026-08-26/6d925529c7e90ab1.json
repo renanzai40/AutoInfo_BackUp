@@ -1,0 +1,24 @@
+{
+  "id": "6d925529c7e90ab1",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-25/Israeli-fire-kills-two-young-children-in-Gaza-medics-say-1PT8RGV9iLe/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Israeli fire kills two young children in Gaza, medics say",
+  "content": "Israeli air strikes and gunfire killed two young children and at least two other Palestinians in the Gaza Strip on Monday, health officials in the territory said.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-25T01:51:27+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "fd2e0e54-944b-482d-9412-9ca05b6abfb0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

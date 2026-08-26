@@ -1,0 +1,27 @@
+{
+  "id": "5uXCfFu2EeSU0SIACxCMgg",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Bioinformatic Methods I",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "5uXCfFu2EeSU0SIACxCMgg",
+    "slug": "bioinformatics-methods-1",
+    "name": "Bioinformatic Methods I"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "97adfd0b-dad0-4eed-b3f5-089e4c0c740b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "65a070756b72714f",
+  "source_name": "digiday",
+  "source_type": "rss",
+  "source_url": "https://digiday.com/media/for-brands-the-creator-ambassador-is-becoming-a-creator-executive/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss",
+  "title": "For brands, the creator ambassador is becoming a creator executive",
+  "content": "The new creator partnership brings them into the C-Suite and seeks input and strategy, like Blenders and Jordan \"The Stallion\" Howlett.",
+  "content_type": "text",
+  "source_platform": "digiday",
+  "collected_at": "2026-08-21T04:01:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://digiday.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bee0570b-1fdd-4159-b0e8-d28db80c46a8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

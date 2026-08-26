@@ -1,0 +1,24 @@
+{
+  "id": "ec78b5732f1ec58a",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/movies/movie-news/virginie-efira-tao-okamoto-awards-campaign-all-of-a-sudden-1236680696/",
+  "title": "Awards Categories Set for Cannes-Winning ‘All of a Sudden’ Actresses Virginie Efira and Tao Okamoto (Exclusive)",
+  "content": "Neon, which will release Ryusuke Hamaguchi's French-language film in the U.S., will push Efira, who plays the director of a Paris nursing home in the film, for best actress, and Okamoto, who plays a terminally-ill Japanese playwright, for best supporting actress.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T16:11:01+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "86db3e15-ef03-4db1-b996-8526d9e1b392",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

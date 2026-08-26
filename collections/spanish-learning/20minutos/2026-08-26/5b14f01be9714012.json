@@ -1,0 +1,24 @@
+{
+  "id": "5b14f01be9714012",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/cinemania/criticas/critica-tadeo-jones-lampara-maravillosa-divertida-arqueologo-supera-mimo_7020272_3.html",
+  "title": "Crítica de 'Tadeo Jones y la lámpara maravillosa': la divertida cuarta aventura del arqueólogo se supera",
+  "content": "Tadeo Jones se enfrenta a su misión más loca: cuidar de su bebé. Pero su amigo Momia, celoso, utiliza una lámpara mágica para enviarlos al pasado.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T17:46:46+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bf0d4327-eaf1-4e85-8c58-09e90751f610",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

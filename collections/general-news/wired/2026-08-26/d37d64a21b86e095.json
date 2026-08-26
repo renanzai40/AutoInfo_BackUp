@@ -1,0 +1,24 @@
+{
+  "id": "d37d64a21b86e095",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/us-recorded-first-measles-deaths-2026/",
+  "title": "The US Just Recorded Its First 2 Measles Deaths This Year",
+  "content": "The fatalities come amid declining vaccination rates and calls from President Donald Trump to split up the MMR vaccine.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-25T18:17:07+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "540ff679-c6ad-4844-9f62-9524fe08975d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

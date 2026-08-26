@@ -1,0 +1,24 @@
+{
+  "id": "d690d3a4a58215a7",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/motor/actualidad/austria-limita-velocidad-vehiculos-combustion-100-kmh-autopista-pero-deja-que-electricos-circulen-130-kmh_7024526_0.html",
+  "title": "Austria limita la velocidad de los vehículos de combustión a 100 km/h, pero deja que los eléctricos circulen a 130",
+  "content": "Con las emisiones de los vehículos propulsados por combustibles fósiles como excusa, los límites de las vías de alta capacidad pueden variar para los distintos tipos de automóviles.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-20T10:33:52+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "961f3741-152b-4e60-8323-9a81b0f0aeeb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

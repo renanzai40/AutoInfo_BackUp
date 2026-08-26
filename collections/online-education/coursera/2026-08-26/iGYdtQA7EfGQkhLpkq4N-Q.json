@@ -1,0 +1,27 @@
+{
+  "id": "iGYdtQA7EfGQkhLpkq4N-Q",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Unlock Multimodal Search",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "iGYdtQA7EfGQkhLpkq4N-Q",
+    "slug": "unlock-multimodal-search",
+    "name": "Unlock Multimodal Search"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8b591438-5291-497b-8c8f-a9e541065e4b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

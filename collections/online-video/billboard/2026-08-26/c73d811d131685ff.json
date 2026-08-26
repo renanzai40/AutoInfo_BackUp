@@ -1,0 +1,24 @@
+{
+  "id": "c73d811d131685ff",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/music/latin/shakira-burna-boy-dai-dai-sony-music-latin-exec-interview-1236323773/",
+  "title": "Shakira & Burna Boy’s ‘Dai Dai’ Continues Its Global Charts Reign: Here’s How the Song Took Over",
+  "content": "Sony Music U.S. Latin’s GM Esteban Geller talks about the song’s continued success, even one month after the end of the World Cup.",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T15:37:08+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "fa30aefd-9524-4ac9-9f09-464a6ed2e0bf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

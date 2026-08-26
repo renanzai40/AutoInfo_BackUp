@@ -1,0 +1,601 @@
+keywords:
+  toti:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.123664+00:00'
+    updated_at: '2026-08-25T22:39:00.096372+00:00'
+    source: auto-discovery:corriere
+  spinelli:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.130091+00:00'
+    updated_at: '2026-08-25T22:37:32.883484+00:00'
+    source: auto-discovery:corriere
+  liguria:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.139042+00:00'
+    updated_at: '2026-08-25T22:38:59.998792+00:00'
+    source: auto-discovery:corriere
+  yacht meeting:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.148017+00:00'
+    updated_at: '2026-08-25T18:57:02.852646+00:00'
+    source: auto-discovery:corriere
+  meeting:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.157291+00:00'
+    updated_at: '2026-08-25T22:42:43.999583+00:00'
+    source: auto-discovery:corriere
+  between:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.167650+00:00'
+    updated_at: '2026-08-25T22:42:43.956480+00:00'
+    source: auto-discovery:corriere
+  governor:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.177799+00:00'
+    updated_at: '2026-08-25T22:39:00.048876+00:00'
+    source: auto-discovery:corriere
+  entrepreneur:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.188118+00:00'
+    updated_at: '2026-08-25T18:57:03.037057+00:00'
+    source: auto-discovery:corriere
+  yacht:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.201139+00:00'
+    updated_at: '2026-08-25T22:37:32.980185+00:00'
+    source: auto-discovery:corriere
+  pre-elections:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.212746+00:00'
+    updated_at: '2026-08-25T18:57:03.131905+00:00'
+    source: auto-discovery:corriere
+  meeting between:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.225191+00:00'
+    updated_at: '2026-08-25T18:57:03.180830+00:00'
+    source: auto-discovery:corriere
+  between liguria:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.237410+00:00'
+    updated_at: '2026-08-25T18:57:03.280985+00:00'
+    source: auto-discovery:corriere
+  liguria governor:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.250982+00:00'
+    updated_at: '2026-08-25T18:57:03.328814+00:00'
+    source: auto-discovery:corriere
+  governor toti:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.263703+00:00'
+    updated_at: '2026-08-25T22:31:13.892412+00:00'
+    source: auto-discovery:corriere
+  toti and:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.276259+00:00'
+    updated_at: '2026-08-25T22:37:33.114508+00:00'
+    source: auto-discovery:corriere
+  and entrepreneur:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.289630+00:00'
+    updated_at: '2026-08-25T18:57:03.524225+00:00'
+    source: auto-discovery:corriere
+  entrepreneur spinelli:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.303383+00:00'
+    updated_at: '2026-08-25T18:57:03.569908+00:00'
+    source: auto-discovery:corriere
+  spinelli yacht:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.318341+00:00'
+    updated_at: '2026-08-25T22:31:13.934992+00:00'
+    source: auto-discovery:corriere
+  yacht pre-elections:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.333513+00:00'
+    updated_at: '2026-08-25T18:57:03.662273+00:00'
+    source: auto-discovery:corriere
+  meeting between liguria:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.348818+00:00'
+    updated_at: '2026-08-25T18:57:03.708310+00:00'
+    source: auto-discovery:corriere
+  between liguria governor:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.363832+00:00'
+    updated_at: '2026-08-25T18:57:03.753301+00:00'
+    source: auto-discovery:corriere
+  liguria governor toti:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.379162+00:00'
+    updated_at: '2026-08-25T18:57:03.802213+00:00'
+    source: auto-discovery:corriere
+  governor toti and:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.395301+00:00'
+    updated_at: '2026-08-25T18:57:03.848773+00:00'
+    source: auto-discovery:corriere
+  toti and entrepreneur:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.412082+00:00'
+    updated_at: '2026-08-25T18:57:03.902171+00:00'
+    source: auto-discovery:corriere
+  and entrepreneur spinelli:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.428479+00:00'
+    updated_at: '2026-08-25T18:57:03.952076+00:00'
+    source: auto-discovery:corriere
+  entrepreneur spinelli yacht:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.446313+00:00'
+    updated_at: '2026-08-25T18:57:03.998614+00:00'
+    source: auto-discovery:corriere
+  spinelli yacht pre-elections:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.464106+00:00'
+    updated_at: '2026-08-25T18:57:04.046969+00:00'
+    source: auto-discovery:corriere
+  toti's:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.481389+00:00'
+    updated_at: '2026-08-25T18:57:04.095312+00:00'
+    source: auto-discovery:corriere
+  request:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.499611+00:00'
+    updated_at: '2026-08-25T22:38:11.205334+00:00'
+    source: auto-discovery:corriere
+  unspecified:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.519098+00:00'
+    updated_at: '2026-08-25T18:57:04.187454+00:00'
+    source: auto-discovery:corriere
+  '''robe''':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.538437+00:00'
+    updated_at: '2026-08-25T18:57:04.233964+00:00'
+    source: auto-discovery:corriere
+  (potential:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.558173+00:00'
+    updated_at: '2026-08-25T18:23:53.558173+00:00'
+    source: auto-discovery:corriere
+  translation/error:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.578555+00:00'
+    updated_at: '2026-08-25T18:23:53.578555+00:00'
+    source: auto-discovery:corriere
+  issue):
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.599356+00:00'
+    updated_at: '2026-08-25T18:23:53.599356+00:00'
+    source: auto-discovery:corriere
+  toti's request:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.619693+00:00'
+    updated_at: '2026-08-25T18:57:04.280754+00:00'
+    source: auto-discovery:corriere
+  request for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.640357+00:00'
+    updated_at: '2026-08-25T18:57:04.328448+00:00'
+    source: auto-discovery:corriere
+  for unspecified:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.662106+00:00'
+    updated_at: '2026-08-25T18:57:04.373274+00:00'
+    source: auto-discovery:corriere
+  unspecified 'robe':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.684100+00:00'
+    updated_at: '2026-08-25T18:57:04.421010+00:00'
+    source: auto-discovery:corriere
+  '''robe'' (potential':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.705122+00:00'
+    updated_at: '2026-08-25T18:23:53.705122+00:00'
+    source: auto-discovery:corriere
+  (potential translation/error:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.727709+00:00'
+    updated_at: '2026-08-25T18:23:53.727709+00:00'
+    source: auto-discovery:corriere
+  translation/error issue):
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.750685+00:00'
+    updated_at: '2026-08-25T18:23:53.750685+00:00'
+    source: auto-discovery:corriere
+  toti's request for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.774474+00:00'
+    updated_at: '2026-08-25T18:57:04.468199+00:00'
+    source: auto-discovery:corriere
+  request for unspecified:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.797564+00:00'
+    updated_at: '2026-08-25T18:57:04.519503+00:00'
+    source: auto-discovery:corriere
+  for unspecified 'robe':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.859923+00:00'
+    updated_at: '2026-08-25T18:57:04.565175+00:00'
+    source: auto-discovery:corriere
+  unspecified 'robe' (potential:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.883950+00:00'
+    updated_at: '2026-08-25T18:23:53.883950+00:00'
+    source: auto-discovery:corriere
+  '''robe'' (potential translation/error':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.908086+00:00'
+    updated_at: '2026-08-25T18:23:53.908086+00:00'
+    source: auto-discovery:corriere
+  (potential translation/error issue):
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.933974+00:00'
+    updated_at: '2026-08-25T18:23:53.933974+00:00'
+    source: auto-discovery:corriere
+  spinelli's:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.960336+00:00'
+    updated_at: '2026-08-25T18:57:04.612953+00:00'
+    source: auto-discovery:corriere
+  comment:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:53.986292+00:00'
+    updated_at: '2026-08-25T18:23:53.986292+00:00'
+    source: auto-discovery:corriere
+  feeling:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.014118+00:00'
+    updated_at: '2026-08-25T18:57:26.226019+00:00'
+    source: auto-discovery:corriere
+  untouchable:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.041170+00:00'
+    updated_at: '2026-08-25T18:53:58.295961+00:00'
+    source: auto-discovery:corriere
+  spinelli's comment:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.068197+00:00'
+    updated_at: '2026-08-25T18:23:54.068197+00:00'
+    source: auto-discovery:corriere
+  comment being:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.098555+00:00'
+    updated_at: '2026-08-25T18:23:54.098555+00:00'
+    source: auto-discovery:corriere
+  and feeling:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.126024+00:00'
+    updated_at: '2026-08-25T18:23:54.126024+00:00'
+    source: auto-discovery:corriere
+  feeling untouchable:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.153753+00:00'
+    updated_at: '2026-08-25T18:23:54.153753+00:00'
+    source: auto-discovery:corriere
+  spinelli's comment being:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.182593+00:00'
+    updated_at: '2026-08-25T18:23:54.182593+00:00'
+    source: auto-discovery:corriere
+  comment being and:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.212972+00:00'
+    updated_at: '2026-08-25T18:23:54.212972+00:00'
+    source: auto-discovery:corriere
+  being and feeling:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.242410+00:00'
+    updated_at: '2026-08-25T18:23:54.242410+00:00'
+    source: auto-discovery:corriere
+  and feeling untouchable:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.272522+00:00'
+    updated_at: '2026-08-25T18:23:54.272522+00:00'
+    source: auto-discovery:corriere
+  clear:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.309014+00:00'
+    updated_at: '2026-08-25T18:23:54.309014+00:00'
+    source: auto-discovery:corriere
+  connection:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.341605+00:00'
+    updated_at: '2026-08-25T22:41:51.527045+00:00'
+    source: auto-discovery:corriere
+  medical:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.424603+00:00'
+    updated_at: '2026-08-25T22:37:44.197991+00:00'
+    source: auto-discovery:corriere
+  research:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.456032+00:00'
+    updated_at: '2026-08-25T22:31:20.611494+00:00'
+    source: auto-discovery:corriere
+  significant:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.487736+00:00'
+    updated_at: '2026-08-25T22:36:40.862645+00:00'
+    source: auto-discovery:corriere
+  public:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.519221+00:00'
+    updated_at: '2026-08-25T22:42:43.913525+00:00'
+    source: auto-discovery:corriere
+  impact:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.551921+00:00'
+    updated_at: '2026-08-25T22:41:49.346179+00:00'
+    source: auto-discovery:corriere
+  beyond:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.585667+00:00'
+    updated_at: '2026-08-25T18:26:32.287478+00:00'
+    source: auto-discovery:corriere
+  political:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.618350+00:00'
+    updated_at: '2026-08-25T22:41:15.494825+00:00'
+    source: auto-discovery:corriere
+  intrigue:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.652171+00:00'
+    updated_at: '2026-08-25T18:23:54.652171+00:00'
+    source: auto-discovery:corriere
+  clear connection:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.686067+00:00'
+    updated_at: '2026-08-25T18:23:54.686067+00:00'
+    source: auto-discovery:corriere
+  connection medical:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.721940+00:00'
+    updated_at: '2026-08-25T18:23:54.721940+00:00'
+    source: auto-discovery:corriere
+  medical research:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.756941+00:00'
+    updated_at: '2026-08-25T18:23:54.756941+00:00'
+    source: auto-discovery:corriere
+  research significant:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.792339+00:00'
+    updated_at: '2026-08-25T18:23:54.792339+00:00'
+    source: auto-discovery:corriere
+  significant public:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.829812+00:00'
+    updated_at: '2026-08-25T18:23:54.829812+00:00'
+    source: auto-discovery:corriere
+  public impact:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.866589+00:00'
+    updated_at: '2026-08-25T18:23:54.866589+00:00'
+    source: auto-discovery:corriere
+  impact beyond:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.903361+00:00'
+    updated_at: '2026-08-25T18:23:54.903361+00:00'
+    source: auto-discovery:corriere
+  beyond political:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.942366+00:00'
+    updated_at: '2026-08-25T18:23:54.942366+00:00'
+    source: auto-discovery:corriere
+  political intrigue:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:54.980528+00:00'
+    updated_at: '2026-08-25T18:23:54.980528+00:00'
+    source: auto-discovery:corriere
+  clear connection medical:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:55.024066+00:00'
+    updated_at: '2026-08-25T18:23:55.024066+00:00'
+    source: auto-discovery:corriere
+  connection medical research:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:55.062575+00:00'
+    updated_at: '2026-08-25T18:23:55.062575+00:00'
+    source: auto-discovery:corriere
+  medical research significant:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:55.104612+00:00'
+    updated_at: '2026-08-25T18:23:55.104612+00:00'
+    source: auto-discovery:corriere
+  research significant public:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:55.144428+00:00'
+    updated_at: '2026-08-25T18:23:55.144428+00:00'
+    source: auto-discovery:corriere
+  significant public impact:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:55.183639+00:00'
+    updated_at: '2026-08-25T18:23:55.183639+00:00'
+    source: auto-discovery:corriere
+  public impact beyond:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:55.223991+00:00'
+    updated_at: '2026-08-25T18:23:55.223991+00:00'
+    source: auto-discovery:corriere
+  impact beyond political:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:55.263576+00:00'
+    updated_at: '2026-08-25T18:23:55.263576+00:00'
+    source: auto-discovery:corriere
+  beyond political intrigue:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:23:55.303100+00:00'
+    updated_at: '2026-08-25T18:23:55.303100+00:00'
+    source: auto-discovery:corriere
+  bucci:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:24:00.074749+00:00'
+    updated_at: '2026-08-25T22:33:18.001864+00:00'
+    source: auto-discovery:corriere
+  genova:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:24:00.123597+00:00'
+    updated_at: '2026-08-25T22:33:17.905042+00:00'
+    source: auto-discovery:corriere
+  morandi bridge:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:24:00.220171+00:00'
+    updated_at: '2026-08-25T22:32:42.948231+00:00'
+    source: auto-discovery:corriere
+  prosecutors (pm):
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:24:00.264793+00:00'
+    updated_at: '2026-08-25T18:55:10.560139+00:00'
+    source: auto-discovery:corriere
+  mayor:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:24:00.306741+00:00'
+    updated_at: '2026-08-25T22:40:30.615041+00:00'
+    source: auto-discovery:corriere
+  complains:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:24:00.351203+00:00'
+    updated_at: '2026-08-25T18:24:00.351203+00:00'
+    source: auto-discovery:corriere
+  constant:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:24:00.394736+00:00'
+    updated_at: '2026-08-25T18:25:21.273653+00:00'
+    source: auto-discovery:corriere
+  conflicts:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:24:00.438782+00:00'
+    updated_at: '2026-08-25T18:25:21.319402+00:00'
+    source: auto-discovery:corriere
+  port:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:24:00.483169+00:00'
+    updated_at: '2026-08-25T22:32:42.857923+00:00'
+    source: auto-discovery:corriere
+  areas:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:24:00.527028+00:00'
+    updated_at: '2026-08-25T18:55:10.514075+00:00'
+    source: auto-discovery:corriere
+  mayor bucci:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:24:00.572331+00:00'
+    updated_at: '2026-08-25T22:31:13.188520+00:00'
+    source: auto-discovery:corriere
+  bucci complains:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:24:00.616094+00:00'
+    updated_at: '2026-08-25T18:24:00.616094+00:00'
+    source: auto-discovery:corriere
+  complains about:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:24:00.661298+00:00'
+    updated_at: '2026-08-25T18:24:00.661298+00:00'
+    source: auto-discovery:corriere
+  about constant:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T18:24:00.705732+00:00'
+    updated_at: '2026-08-25T18:24:00.705732+00:00'
+    source: auto-discovery:corriere

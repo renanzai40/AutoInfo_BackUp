@@ -1,0 +1,1057 @@
+# Weekly Digest — tech-ai-developer
+
+**Domain**: tech-ai-developer  
+**Period**: Weekly (2026-08-19 – 2026-08-26)  
+**Generated**: 2026-08-26T04:15:55.544184+00:00  
+**Total entries**: 60
+
+---
+
+## Executive Summary
+
+Recent developments underscore AI's expanding role in technology, from new benchmarks and hardware innovations to significant impacts on employment and software engineering. Developer communities continue to face persistent challenges with tool configurations and version compatibility, while market trends reflect both growth and scrutiny in AI-driven ventures. Educational and societal issues, such as declining reading skills and burnout, also surface in this period.
+
+### Key Findings
+
+- **AI Advancements and Adoption**: AI models like Meta's Muse topping benchmarks and OpenAI's Jalapeño chip for fast inference demonstrate rapid progress in AI capabilities and infrastructure. (Source: https://alexjacobs08.github.io/poople-bench/ and https://techcrunch.com/2026/08/25/openais-jalapeno-chip-is-built-for-fast-inference-at-scale-benchmarks-show/)- **Developer Pain Points**: Common errors in frameworks such as RabbitMQ, Expo SDK, and Django highlight ongoing issues with version management and configuration, requiring troubleshooting steps for reliable operations. (Source: https://stackoverflow.com/questions/34721178/pika-blockingconnection-rabbitmq-connection-closed and https://stackoverflow.com/questions/79984093/install-expo-moduleslatest-cannot-find-a-compatible-expo-sdk-for-react-native-0)- **AI's Labor Market Impact**: A Stanford study indicates AI is disproportionately affecting entry-level jobs, with a 19% employment decrease for young workers in AI-impacted fields, emphasizing the need for workforce adaptation. (Source: https://arstechnica.com/ai/2026/08/ai-is-hitting-entry-level-jobs-hardest-stanford-study-finds/)- **Market Volatility in AI**: Unitree's 45% post-IPO plunge and the SEC probe into the Situational Awareness AI hedge fund reveal risks and regulatory scrutiny in AI-driven markets. (Source: https://seekingalpha.com/news/4636470-unitrees-45-post-ipo-plunge-raises-concerns-over-chinas-robotics-bubble and https://techcrunch.com/2026/08/24/situational-awareness-star-ai-hedge-fund-that-nearly-imploded-now-being-probed-by-the-sec/)- **Custom AI Tool Development**: Companies like Ramp are building in-house coding agents (e.g., Inspect) to gain competitive advantages, while OpenAI focuses on AI agents and user experience. (Source: https://newsletter.pragmaticengineer.com/p/why-ramp-built-inspect and https://techcrunch.com/2026/08/25/the-world-seems-to-be-ready-an-interview-with-openai-head-of-product-thibault-sottiaux/)
+### Trends & Patterns
+
+- AI integration into software development, hardware, and workflows is accelerating, with new benchmarks, chips, and agents emerging across the industry.
+- Developer ecosystems are consistently facing issues with tool configuration, version compatibility, and automation, often requiring manual interventions and troubleshooting.
+- There is a growing emphasis on AI ethics and standards, as seen in discussions about engineering constitutions for AI agents and the need for responsible development.
+- Market trends show high volatility in AI investments, with rapid advancements alongside financial risks and regulatory challenges.
+
+### Recommendations
+
+- Developers should implement robust testing and validation for dependencies and versions in projects involving frameworks like Expo, Django, and RabbitMQ to prevent common errors.
+- Organizations should proactively prepare for AI's impact on jobs by investing in reskilling programs and adapting workflows to AI-augmented processes.
+- AI researchers and companies should prioritize establishing ethical guidelines and standards to ensure safe and responsible AI deployment, addressing concerns like hallucinations and bias.
+
+---
+
+## Entries
+
+### 1. Pika BlockingConnection &amp; RabbitMQ : connection closed
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-26T00:53:25.798577+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article addresses a connection closed error when using Pika's BlockingConnection with RabbitMQ, highlighting potential issues in messaging system configuration or stability. It suggests troubleshooting steps for maintaining reliable connections.
+
+
+[View Source](https://stackoverflow.com/questions/34721178/pika-blockingconnection-rabbitmq-connection-closed)
+
+---
+
+### 2. Azure dev ops push Authentication failed [source tree on mac]
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-26T00:53:25.798577+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article describes an authentication failure when attempting to push changes to Azure DevOps using SourceTree on a Mac. It highlights a common technical issue in software development related to version control and credential management.
+
+
+[View Source](https://stackoverflow.com/questions/60259820/azure-dev-ops-push-authentication-failed-source-tree-on-mac)
+
+---
+
+### 3. Install-expo-modules@latest cannot find a compatible Expo SDK for React Native 0.86.0
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-26T00:53:25.798577+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article reports an error encountered when attempting to install Expo modules using the latest version, stating that no compatible Expo SDK can be found for React Native 0.86.0. This indicates a version compatibility issue between the Expo SDK and the specified React Native version, preventing successful installation.
+
+
+[View Source](https://stackoverflow.com/questions/79984093/install-expo-moduleslatest-cannot-find-a-compatible-expo-sdk-for-react-native-0)
+
+---
+
+### 4. How to extract valid Python code from .ipynb cells
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-26T00:53:25.798577+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: This article discusses methods to extract valid Python code from Jupyter notebook (.ipynb) cells. It likely covers parsing techniques and tools to retrieve executable code, aiding in code sharing and automation workflows.
+
+
+[View Source](https://stackoverflow.com/questions/79997840/how-to-extract-valid-python-code-from-ipynb-cells)
+
+---
+
+### 5. django.db.utils.NotSupportedError: MariaDB 10.11 or later is required (found 10.6.22)
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-26T00:53:25.798577+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article presents an error message from a Django application indicating that MariaDB 10.11 or later is required, but the system has MariaDB 10.6.22 installed. This highlights a version incompatibility issue that may prevent the application from functioning properly.
+
+
+[View Source](https://stackoverflow.com/questions/79998083/django-db-utils-notsupportederror-mariadb-10-11-or-later-is-required-found-10)
+
+---
+
+### 6. Django Channels redis.exceptions.TimeoutError: Timeout reading from 127.0.0.1:6379
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-26T00:53:25.798577+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article reports a Django Channels timeout error when attempting to connect to a Redis server at localhost (127.0.0.1) on the default port 6379. This typically indicates a connectivity issue where the Redis server is either not running, not configured correctly, or unreachable within the expected time.
+
+
+[View Source](https://stackoverflow.com/questions/79998186/django-channels-redis-exceptions-timeouterror-timeout-reading-from-127-0-0-163)
+
+---
+
+### 7. Excel scroll bar stuck with 2500 extra empty rows even after deleting rows. Recreating the sheet is NOT an option
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-26T00:53:25.798577+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article describes an Excel issue where the scroll bar is stuck with 2500 extra empty rows even after deleting them, and recreating the sheet is not a feasible solution. It likely explores methods to fix this persistent problem without sheet recreation.
+
+
+[View Source](https://stackoverflow.com/questions/79998234/excel-scroll-bar-stuck-with-2500-extra-empty-rows-even-after-deleting-rows-recr)
+
+---
+
+### 8. Testing email sending with mutiny retry, Mocking instance missing in the next retries
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-25T16:04:55.317906+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article discusses a testing issue with email sending functionality that uses Mutiny for retrying. The problem is that the mocking instance is not available in subsequent retry attempts, indicating a potential flaw in the retry mechanism or testing setup.
+
+
+[View Source](https://stackoverflow.com/questions/79997995/testing-email-sending-with-mutiny-retry-mocking-instance-missing-in-the-next-re)
+
+---
+
+### 9. Fix the aspect ratio of the components of a JTextPane
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-25T16:04:55.317906+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article addresses the issue of fixing the aspect ratio of components within a JTextPane, a Java Swing GUI element. It likely provides methods or guidelines to adjust proportions for better visual consistency in applications.
+
+
+[View Source](https://stackoverflow.com/questions/79998111/fix-the-aspect-ratio-of-the-components-of-a-jtextpane)
+
+---
+
+### 10. New bootloader lets you take the "Meta" out of the original Meta Quest
+
+| Field | Value |
+|-------|-------|
+| **Source** | ars-technica |
+| **Type** | rss |
+| **Collected** | 2026-08-25T16:04:37+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: A new bootloader has been developed for the original Meta Quest VR headset, enabling users to bypass Meta's control via a privilege escalation attack. This grants full control over the device and freedom from Meta's servers and applications.
+
+
+[View Source](https://arstechnica.com/gaming/2026/08/new-bootloader-lets-you-take-the-meta-out-of-the-original-meta-quest/)
+
+---
+
+### 11. Reading &quot;WHO_AM_I&quot; register in MPU6050 issue
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-25T15:58:38.586501+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: This article discusses a technical issue with reading the WHO_AM_I register in the MPU6050 sensor. The WHO_AM_I register is used for device identification, and reading problems can prevent proper configuration and communication. Such issues are common in embedded systems and may require troubleshooting in firmware or hardware.
+
+
+[View Source](https://stackoverflow.com/questions/79998140/reading-who-am-i-register-in-mpu6050-issue)
+
+---
+
+### 12. How to group column properly in html like in the image
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-25T15:58:38.586501+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: This article provides guidance on how to properly group columns in HTML to achieve a structured layout, possibly using techniques like tables or CSS. It references an image for visual context and aims to help with web development design.
+
+
+[View Source](https://stackoverflow.com/questions/79998141/how-to-group-column-properly-in-html-like-in-the-image)
+
+---
+
+### 13. How to learn total amount of articles in LivingsDocs CMS?
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-25T15:58:38.586501+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: This article is a query on how to find the total number of articles in the LivingsDocs CMS. It does not provide any specific instructions or details, merely posing the question.
+
+
+[View Source](https://stackoverflow.com/questions/79998138/how-to-learn-total-amount-of-articles-in-livingsdocs-cms)
+
+---
+
+### 14. Hall of Hallucinated Citations in Published Papers
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:57:41+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article addresses the problem of hallucinated citations in published research papers, which are fabricated or non-existent references that can compromise academic integrity. It is presented by Veruscite, a platform dedicated to identifying and exposing such citations to improve research quality.
+
+
+[View Source](https://veruscite.com/hallucinations)
+
+---
+
+### 15. PgDog vs. RDS Proxy
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:56:04+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: This article compares PgDog and RDS Proxy, which are database proxy services, evaluating their features and use cases. It likely discusses performance, cost, and integration aspects to help users choose between them. The comparison focuses on database management solutions.
+
+
+[View Source](https://pgdog.dev/blog/pgdog-vs-rds-proxy)
+
+---
+
+### 16. Developer Hiring and the Market for Lemons
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:55:12+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: This article explores developer hiring challenges by applying the market for lemons economic theory, which addresses information asymmetry in job markets. It likely discusses how this theory relates to the quality assessment of developers and hiring practices.
+
+
+[View Source](https://danluu.com/hiring-lemons/)
+
+---
+
+### 17. Webbynode Bang for Buck: Hetzner CPX22 at $23, Still a Bargain?
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:55:11+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article evaluates the Hetzner CPX22 hosting service priced at $23, assessing whether it remains a good value in the current market. It likely reviews performance and features to determine if the deal is still cost-effective.
+
+
+[View Source](https://webbynode.com/articles/bang-for-buck-3-hetzner-cpx22-nuremberg)
+
+---
+
+### 18. Weird Websites
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:55:02+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article titled 'Weird Websites' appears to present a collection or list of unusual websites, with links provided to a webpage and a Hacker News discussion. However, the given content lacks detailed information, focusing instead on metadata such as URLs, points, and comments. No specific findings or descriptions of the websites are included.
+
+
+[View Source](https://webernaut.com/weird-websites)
+
+---
+
+### 19. How to Load an .aspx page in Div with jQuery in asp.net?
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-25T15:45:11.611974+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: This article provides guidance on using jQuery to dynamically load an ASP.NET .aspx page into a div element. It likely covers techniques for partial page updates to enhance web application interactivity without full page reloads.
+
+
+[View Source](https://stackoverflow.com/questions/22778415/how-to-load-an-aspx-page-in-div-with-jquery-in-asp-net)
+
+---
+
+### 20. Mikro Orm with nestjs does not load entities automatically
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-25T15:45:11.611974+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: This article describes a technical issue where MikroORM does not automatically load entities when used with NestJS, a common configuration problem in software development. It implies that users may need to manually configure entities to ensure proper functionality.
+
+
+[View Source](https://stackoverflow.com/questions/74168466/mikro-orm-with-nestjs-does-not-load-entities-automatically)
+
+---
+
+### 21. Alternative ways to convert `DateTime?` to `DateTime` in c#
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-25T15:45:11.611974+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: This article discusses various methods in C# programming to convert a nullable DateTime (DateTime?) to a non-nullable DateTime. It covers different techniques for handling null values safely and provides practical examples for developers.
+
+
+[View Source](https://stackoverflow.com/questions/79997832/alternative-ways-to-convert-datetime-to-datetime-in-c)
+
+---
+
+### 22. Launching V<Benchmark> by Megaton to Measure Video AI Performance
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:37:50+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Megaton has launched V<Benchmark>, a new benchmark designed to measure the performance of video AI technologies. This initiative aims to standardize evaluation in the field of video AI.
+
+
+[View Source](https://megaton.ai/v-benchmark)
+
+---
+
+### 23. The Missed Opportunity for Interactive Book Content
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:36:34+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article titled 'The Missed Opportunity for Interactive Book Content' explores the underutilized potential of interactive elements in book publishing. It suggests that incorporating digital interactivity could significantly enhance reader engagement and learning experiences.
+
+
+[View Source](https://zoia.org/posts/the-missing-opportunity-for-interactive-book-content/)
+
+---
+
+### 24. Meta's Muse Tops Poople Bench
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:36:11+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Meta's Muse model has achieved the top performance on the Poople Bench benchmark, as indicated by the article title. The content references a GitHub page for details and a Hacker News discussion, suggesting a recent development in AI model evaluation with minimal engagement.
+
+
+[View Source](https://alexjacobs08.github.io/poople-bench/)
+
+---
+
+### 25. Why Kids Can't Read Anymore [video]
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:35:43+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: This video discusses the declining reading proficiency among children, exploring reasons behind this issue. It likely covers factors such as educational methods, technological influences, and societal changes affecting literacy.
+
+
+[View Source](https://www.youtube.com/watch?v=tj7ckn8WhEM)
+
+---
+
+### 26. Show HN: Gibson ADK and Security Runtime
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:35:18+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article presents Gibson ADK and Security Runtime, a tool developed by a DevSecOps and offensive security expert for securely deploying AI agents in production. It features permission-based access controls, isolated execution via Firecracker microVMs, append-only logging, and knowledge graphs for persistent memory. The creator is seeking advice on commercialization strategies, such as open sourcing, platform development, or focusing on offensive security tools.
+
+
+[View Source](https://www.zeroroot.ai)
+
+---
+
+### 27. Why does Python get a red carpet to vSphere while Java gets a CAPTCHA and a shrug?
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-25T15:28:07.504011+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article discusses why Python has better integration and support with VMware vSphere compared to Java. It suggests that Python is more readily accessible for scripting and automation, while Java faces challenges such as CAPTCHA-like barriers in vSphere environments.
+
+
+[View Source](https://stackoverflow.com/questions/79816825/why-does-python-get-a-red-carpet-to-vsphere-while-java-gets-a-captcha-and-a-shru)
+
+---
+
+### 28. How do I escape an SQL Server database name that contains brackets []?
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-25T15:28:07.504011+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: This article addresses how to escape brackets in SQL Server database names to handle special characters correctly and avoid SQL syntax errors. It provides guidance on using escape sequences or alternative quoting methods for proper database name handling.
+
+
+[View Source](https://stackoverflow.com/questions/79997140/how-do-i-escape-an-sql-server-database-name-that-contains-brackets)
+
+---
+
+### 29. How do I pass a function with variable as an argument
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-25T15:28:07.504011+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article poses a question about how to pass a function with a variable as an argument, likely in a programming context. It does not provide detailed content or answers beyond the query itself.
+
+
+[View Source](https://stackoverflow.com/questions/79866970/how-do-i-pass-a-function-with-variable-as-an-argument)
+
+---
+
+### 30. Warnock: Harnessing GPU Geometry Amplification for Vector Graphics
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:26:45+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: This article introduces the Warnock method for optimizing vector graphics rendering by leveraging GPU geometry amplification techniques. It discusses how GPU resources can be harnessed to enhance processing efficiency and quality in graphics applications.
+
+
+[View Source](https://dl.acm.org/doi/pdf/10.1145/3820012)
+
+---
+
+### 31. What if AI coding agents had an engineering constitution?
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:26:30+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article explores the concept of establishing an engineering constitution for AI coding agents, potentially to guide their ethical and safe development. It may discuss the need for standardized principles in AI software engineering.
+
+
+[View Source](https://github.com/NAEOS-foundation/naeos)
+
+---
+
+### 32. Argo Events – The Event-Driven Workflow Automation Framework
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:26:20+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Argo Events is an open-source event-driven workflow automation framework designed for Kubernetes environments. It allows users to trigger and manage workflows based on external events, enhancing automation in cloud-native and DevOps processes.
+
+
+[View Source](https://argoproj.github.io/argo-events/)
+
+---
+
+### 33. Unitree's 45% post-IPO plunge raises concerns over China's robotics bubble
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:23:51+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Unitree, a robotics company, saw its stock price plunge 45% after its initial public offering, raising concerns about a potential bubble in China's robotics industry. This event highlights issues of overvaluation and market instability in the technology sector.
+
+
+[View Source](https://seekingalpha.com/news/4636470-unitrees-45-post-ipo-plunge-raises-concerns-over-chinas-robotics-bubble)
+
+---
+
+### 34. How much of HN is AI?
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:23:41+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: This article investigates the prevalence of artificial intelligence content on Hacker News, likely presenting data or analysis on AI topics within the tech community. The post has minimal engagement on Hacker News, with only 4 points and no comments.
+
+
+[View Source](https://blog.coredump.cx/p/how-much-of-hn-is-ai)
+
+---
+
+### 35. Why Ramp built its own in-house coding agent, Inspect
+
+| Field | Value |
+|-------|-------|
+| **Source** | Substack RSS (tech) — Pragmatic Engineer |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:20:23+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Ramp, a fintech company, built its own in-house coding agent named Inspect instead of using existing solutions from AI labs, gaining a competitive advantage. This article provides an in-depth look at their decision-making process and how Inspect has outperformed other coding agents.
+
+
+[View Source](https://newsletter.pragmaticengineer.com/p/why-ramp-built-inspect)
+
+---
+
+### 36. how to integrate an android .aar library file into a flutter project
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-25T15:17:44.244583+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: This article provides a step-by-step guide on integrating an Android .aar library file into a Flutter project. It explains the process of adding the .aar file, configuring Gradle, and using platform channels to enable native Android functionality in Flutter apps.
+
+
+[View Source](https://stackoverflow.com/questions/73661034/how-to-integrate-an-android-aar-library-file-into-a-flutter-project)
+
+---
+
+### 37. Parameter estimation with nls for a function with integrate
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-25T15:17:44.244583+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: This article discusses parameter estimation using nonlinear least squares (nls) for functions that include integration. It likely covers methods to handle integral functions in optimization models and their applications in statistical analysis.
+
+
+[View Source](https://stackoverflow.com/questions/78658871/parameter-estimation-with-nls-for-a-function-with-integrate)
+
+---
+
+### 38. Should I populate the foreign key value manually, or let SQL Server do it automatically?
+
+| Field | Value |
+|-------|-------|
+| **Source** | Stack Exchange |
+| **Type** | api |
+| **Collected** | 2026-08-25T15:17:44.244583+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: This article explores the choice between manually populating foreign key values and allowing SQL Server to manage them automatically. It discusses the trade-offs in terms of database integrity, performance, and maintenance.
+
+
+[View Source](https://stackoverflow.com/questions/79998123/should-i-populate-the-foreign-key-value-manually-or-let-sql-server-do-it-automa)
+
+---
+
+### 39. Time complexity of operations on Python's built-in types
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:15:08+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article describes the time complexity of various operations in Python's built-in data structures, such as lists, dictionaries, and sets, to help developers understand and optimize code performance.
+
+
+[View Source](https://docs.python.org/3.16/library/time-complexity.html)
+
+---
+
+### 40. Show HN: Systemg compares to other process managers
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:15:05+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article compares Systemg, a process manager, with other process managers in terms of features and performance. It discusses how Systemg stacks up against existing tools. The summary is inferred from the title as the full article content is not provided.
+
+
+[View Source](https://www.sysg.dev/blog/2026-08-21/how-systemg-compares)
+
+---
+
+### 41. Situational Awareness: The Decade Ahead
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:13:49+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: This article discusses the evolution of situational awareness over the next decade, focusing on advancements in AI and technology. It likely explores how these developments will influence decision-making and applications in various domains.
+
+
+[View Source](https://situational-awareness.ai/)
+
+---
+
+### 42. Show HN: Keenable – A different web search API for AI agents
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:12:52+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Keenable is a web search API designed for AI agents, offering a 100B+ page index with low latency and cost. The company has open-sourced its benchmarking suite NEEDLE and provides a SQL-like interface for structured data extraction.
+
+
+[View Source](https://keenable.ai/)
+
+---
+
+### 43. Show HN: Hunch – a macOS AI assistant that uses your Mac in the background
+
+| Field | Value |
+|-------|-------|
+| **Source** | hnrss |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:12:30+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Hunch is a new macOS AI assistant that operates in the background, leveraging the Mac's processing power to assist users without disruption. It is showcased on Hacker News, suggesting it is a novel tech tool. The assistant aims to provide seamless support by utilizing system resources efficiently.
+
+
+[View Source](https://www.tryhunch.ca)
+
+---
+
+### 44. AI won’t replace radiologists, but it will dramatically change their jobs
+
+| Field | Value |
+|-------|-------|
+| **Source** | ars-technica |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:10:03+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article highlights that a pioneering AI scientist's prediction about computers replacing radiologists has not occurred. Instead, AI is expected to dramatically transform the roles of radiologists, focusing on augmentation rather than full replacement.
+
+
+[View Source](https://arstechnica.com/health/2026/08/ai-wont-replace-radiologists-but-it-will-dramatically-change-their-jobs/)
+
+---
+
+### 45. Gamma acquires Accel-backed design startup Lica
+
+| Field | Value |
+|-------|-------|
+| **Source** | techcrunch-ai |
+| **Type** | rss |
+| **Collected** | 2026-08-25T15:00:00+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Gamma has acquired the Accel-backed design startup Lica. The co-founders of Lica will join Gamma's new research team.
+
+
+[View Source](https://techcrunch.com/2026/08/25/gamma-acquires-accel-backed-design-startup-lica/)
+
+---
+
+### 46. OpenAI’s Jalapeño chip is built for fast inference at scale, benchmarks show
+
+| Field | Value |
+|-------|-------|
+| **Source** | techcrunch-ai |
+| **Type** | rss |
+| **Collected** | 2026-08-25T14:22:04+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: OpenAI has developed the Jalapeño chip, a new technology designed for fast inference at scale. Benchmark tests reveal it outperforms current state-of-the-art chips in terms of tokens per user and throughput per kilowatt.
+
+
+[View Source](https://techcrunch.com/2026/08/25/openais-jalapeno-chip-is-built-for-fast-inference-at-scale-benchmarks-show/)
+
+---
+
+### 47. Apple's new desktop computers are designed specifically for local AI development
+
+| Field | Value |
+|-------|-------|
+| **Source** | ars-technica |
+| **Type** | rss |
+| **Collected** | 2026-08-25T13:00:11+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Apple has released new desktop computers specifically designed for local AI development. This update acknowledges the common practice among users of daisy-chaining Macs to enhance AI capabilities.
+
+
+[View Source](https://arstechnica.com/apple/2026/08/with-new-mac-studio-and-mac-mini-apple-leans-hard-into-local-ai-inference/)
+
+---
+
+### 48. Accel-backed Keenable is indexing the web for AI agents
+
+| Field | Value |
+|-------|-------|
+| **Source** | techcrunch-ai |
+| **Type** | rss |
+| **Collected** | 2026-08-25T13:00:00+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Keenable, a startup backed by Accel, has exited stealth mode with $26 million in seed funding to build a vast web search index for AI agents. This initiative aims to enhance AI agents' capabilities by providing comprehensive web data.
+
+
+[View Source](https://techcrunch.com/2026/08/25/accel-backed-keenable-is-indexing-the-web-for-ai-agents/)
+
+---
+
+### 49. ‘The world seems to be ready’: An interview with OpenAI head of product Thibault Sottiaux
+
+| Field | Value |
+|-------|-------|
+| **Source** | techcrunch-ai |
+| **Type** | rss |
+| **Collected** | 2026-08-25T12:00:00+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article features an interview with Thibault Sottiaux, head of product at OpenAI, where he discusses the company's approach to AI agents, user experience (UX) design, and his role reporting to co-founder Greg Brockman. It highlights OpenAI's readiness for future developments in AI products.
+
+
+[View Source](https://techcrunch.com/2026/08/25/the-world-seems-to-be-ready-an-interview-with-openai-head-of-product-thibault-sottiaux/)
+
+---
+
+### 50. An interactive introduction to the spanning tree protocol
+
+| Field | Value |
+|-------|-------|
+| **Source** | lobsters |
+| **Type** | rss |
+| **Collected** | 2026-08-25T07:06:16-05:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: This article provides an interactive introduction to the spanning tree protocol (STP), a networking technology used to prevent loops in Ethernet networks. It likely covers the basics of STP and its implementation through an engaging format.
+
+
+[View Source](https://vincent.bernat.ch/en/blog/2026-spanning-tree)
+
+---
+
+### 51. MNT Station - A modular, open hardware desktop computer and server
+
+| Field | Value |
+|-------|-------|
+| **Source** | lobsters |
+| **Type** | rss |
+| **Collected** | 2026-08-25T06:16:01-05:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The MNT Station is a modular, open hardware desktop computer and server designed for flexibility and user customization. It emphasizes open-source principles to provide an alternative to proprietary hardware systems.
+
+
+[View Source](https://www.crowdsupply.com/mnt-research/mnt-station)
+
+---
+
+### 52. Migrating from Codeberg Pages to an OpenBSD VPS
+
+| Field | Value |
+|-------|-------|
+| **Source** | lobsters |
+| **Type** | rss |
+| **Collected** | 2026-08-25T05:42:16-05:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article details the process of migrating a website or service from Codeberg Pages, a static site hosting platform, to an OpenBSD Virtual Private Server (VPS). It likely covers the motivations, technical steps, and benefits of switching to a self-hosted OpenBSD environment for improved control and security.
+
+
+[View Source](https://nemin.hu/vps/index.html)
+
+---
+
+### 53. Situational Awareness, star AI hedge fund that nearly imploded, now being probed by the SEC
+
+| Field | Value |
+|-------|-------|
+| **Source** | techcrunch-ai |
+| **Type** | rss |
+| **Collected** | 2026-08-25T00:23:12+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Situational Awareness, an AI hedge fund that was once the talk of Wall Street, nearly collapsed and is now under SEC investigation with federal subpoenas. This rapid downfall highlights the risks and regulatory scrutiny in AI-driven finance.
+
+
+[View Source](https://techcrunch.com/2026/08/24/situational-awareness-star-ai-hedge-fund-that-nearly-imploded-now-being-probed-by-the-sec/)
+
+---
+
+### 54. AI is hitting entry-level jobs hardest, Stanford study finds
+
+| Field | Value |
+|-------|-------|
+| **Source** | ars-technica |
+| **Type** | rss |
+| **Collected** | 2026-08-24T21:45:53+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: A Stanford study reveals that AI is disproportionately affecting entry-level jobs, with a 19% decrease in employment for young workers in AI-impacted fields compared to more AI-resistant occupations. This highlights a significant impact on early-career professionals in sectors vulnerable to automation.
+
+
+[View Source](https://arstechnica.com/ai/2026/08/ai-is-hitting-entry-level-jobs-hardest-stanford-study-finds/)
+
+---
+
+### 55. Data centers become "killer application" for new power transformer tech
+
+| Field | Value |
+|-------|-------|
+| **Source** | ars-technica |
+| **Type** | rss |
+| **Collected** | 2026-08-24T21:32:16+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Solid-state transformers are emerging as a key application in data centers, offering potential benefits for electric vehicle charging and future household use.
+
+
+[View Source](https://arstechnica.com/gadgets/2026/08/energy-hungry-ai-data-centers-spur-new-power-transformer-technology/)
+
+---
+
+### 56. RFK Jr. may upend how vaccine recommendations are categorized
+
+| Field | Value |
+|-------|-------|
+| **Source** | ars-technica |
+| **Type** | rss |
+| **Collected** | 2026-08-24T21:04:48+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Robert F. Kennedy Jr. is considering changes to the current three-category system for vaccine recommendations without providing a reason. This potential alteration could impact how vaccines are categorized and recommended in medical research and public health.
+
+
+[View Source](https://arstechnica.com/health/2026/08/rfk-jr-may-upend-how-vaccine-recommendations-are-categorized/)
+
+---
+
+### 57. Intent to Ship: JPEG XL
+
+| Field | Value |
+|-------|-------|
+| **Source** | lobsters |
+| **Type** | rss |
+| **Collected** | 2026-08-24T11:25:08-05:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article announces the intent to ship the JPEG XL image format, signaling its readiness for implementation. This represents a significant development in image compression technology.
+
+
+[View Source](https://hacks.mozilla.org/2026/08/intent-to-ship-jpeg-xl/)
+
+---
+
+### 58. I cannot survive from burnout
+
+| Field | Value |
+|-------|-------|
+| **Source** | lobsters |
+| **Type** | rss |
+| **Collected** | 2026-08-24T11:04:45-05:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The author describes their struggle with burnout over the past two years, which has led to divorce, relocation, and persistent financial debt. Despite efforts to improve discipline, they remain unable to maintain client work, only dedicating 5-6 hours per week, and are seeking practical advice to overcome what might be habitual burnout.
+
+
+[View Source](https://lobste.rs/s/0typpq/i_cannot_survive_from_burnout)
+
+---
+
+### 59. The Pulse: We need to talk about migrations with AI
+
+| Field | Value |
+|-------|-------|
+| **Source** | Substack RSS (tech) — Pragmatic Engineer |
+| **Type** | rss |
+| **Collected** | 2026-08-20T17:53:01+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article discusses how AI is accelerating software migrations, exemplified by Asana completing a testing framework migration in two weeks instead of years. It also suggests that AI startups could disrupt the relevance of traditional advisory firms like Gartner.
+
+
+[View Source](https://newsletter.pragmaticengineer.com/p/the-pulse-we-need-to-talk-about-migrations)
+
+---
+
+### 60. From Chrome DevTools to AI Engineering, with Addy Osmani
+
+| Field | Value |
+|-------|-------|
+| **Source** | Substack RSS (tech) — Pragmatic Engineer |
+| **Type** | rss |
+| **Collected** | 2026-08-19T16:53:57+00:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Addy Osmani shares insights from his 14-year tenure at Google, emphasizing how AI agents are revolutionizing software engineering, altering developer workflows, and demanding new competencies from engineers.
+
+
+[View Source](https://newsletter.pragmaticengineer.com/p/from-chrome-devtools-to-ai-engineering)
+
+---
+
+
+---
+
+*AutoInfo Digest · tech-ai-developer · 2026-08-26T04:15:55.544184+00:00*

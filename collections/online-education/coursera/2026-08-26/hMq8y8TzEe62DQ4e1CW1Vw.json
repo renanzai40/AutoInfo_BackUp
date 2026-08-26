@@ -1,0 +1,27 @@
+{
+  "id": "hMq8y8TzEe62DQ4e1CW1Vw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "From prototyping to validating business models",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "hMq8y8TzEe62DQ4e1CW1Vw",
+    "slug": "from-prototyping-to-validating-business-models",
+    "name": "From prototyping to validating business models"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "950cf302-0ff5-49e0-803e-c66ccbb8ac8b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

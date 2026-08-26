@@ -1,0 +1,24 @@
+{
+  "id": "599c5f715395a47c",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/programas/noticiario/19h-mne-acusa-ventura-de-demagogia-lider-do-chega-ja-reagiu/",
+  "title": "19h.MNE acusa Ventura de demagogia. Líder do Chega já reagiu",
+  "content": "André Ventura lamenta que o PSD esteja mais preocupado com ataques políticos do que com a resolução dos problemas do país. Ainda, 10 dos 16 feridos no atropelamento na Rua da Oura já tiveram alta.",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T21:07:25+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a717b408-b76e-4f50-9942-9672938dcacf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

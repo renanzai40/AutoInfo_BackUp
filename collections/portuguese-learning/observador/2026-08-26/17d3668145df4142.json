@@ -1,0 +1,24 @@
+{
+  "id": "17d3668145df4142",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/uniao-europeia-regista-no-2-o-trimestre-deste-ano-o-primeiro-defice-comercial-desde-2023/",
+  "title": "UE. Primeiro défice comercial desde 2023 no 2.º trimestre",
+  "content": "Tanto as exportações como as importações vinham a diminuir desde o segundo trimestre de 2025 na UE, segundo o Eurostat",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T23:28:06+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3cddfe90-4d5e-4998-bbdc-17a57aa41c66",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

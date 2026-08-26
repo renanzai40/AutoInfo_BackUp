@@ -1,0 +1,24 @@
+{
+  "id": "8103cb74e5f74d2d",
+  "source_name": "b2b-news-network",
+  "source_type": "rss",
+  "source_url": "https://www.b2bnn.com/2026/08/how-businesses-can-reduce-risk-when-managing-a-growing-workforce-across-locations/",
+  "title": "How Businesses Can Reduce Risk When Managing a Growing Workforce Across Locations",
+  "content": "As an entrepreneur who manages teams in four different countries on three different continents, coordinating sales and delivery can be a challenge! Growth rarely looks like one straight line on a chart, whether a business is expanding across US states, into new APAC markets, or opening its first office in Asia. It looks more like [&#8230;]",
+  "content_type": "text",
+  "source_platform": "b2b-news-network",
+  "collected_at": "2026-08-25T12:00:30+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://b2bnn.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "93e1b706-8ed2-4d4e-990d-b4bd6e48ef60",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

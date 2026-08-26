@@ -1,0 +1,24 @@
+{
+  "id": "db46e1655be5bf5f",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/22/longevity-doctor-daily-habits-healthy-aging.html",
+  "title": "How a physician with a 1 a.m. bedtime optimizes his health: I try to 'tick all the longevity boxes that I can'",
+  "content": "Dr. Ronald Primas, a longevity physician, offers concierge services like developing personalized health plans for clients. Here are his own wellness practices.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-22T13:05:01+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d6c303b9-6331-4680-b7f1-34189bfad666",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

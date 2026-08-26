@@ -1,0 +1,24 @@
+{
+  "id": "f482ccd53c11e214",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/nacional/sin-signos-violencia-restos-alcohol-todas-las-incognitas-por-muerte-dos-amigos-plena-calle-veguellina-orbigo_7028750_0.html",
+  "title": "Sin signos de violencia, restos de alcohol... Todas las incógnitas tras la muerte de dos amigos en la calle en Veguellina de Órbigo",
+  "content": "El hallazgo de dos cadáveres en plena calle ha generado un laberinto de incógnitas que las autoridades esperan despejar con las autopsias.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T05:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "14d769ec-5b4d-4646-95ef-0e8c2251f73b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

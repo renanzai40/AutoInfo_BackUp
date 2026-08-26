@@ -1,0 +1,24 @@
+{
+  "id": "11e4f29f2672b910",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/cantabria/enorme-piscina-olas-surfistas-abrira-pueblo-cantabria-menos-500-habitantes_7029132_0.html",
+  "title": "La enorme piscina de olas para surfistas que abrirá en un pueblo de Cantabria de menos de 500 habitantes",
+  "content": "La tecnología de este proyecto, que se ubicará en la localidad de Villaverde de Pontones, permite generar 1.000 olas a la hora.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T14:29:20+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "02f7b5bf-bbad-41d7-962f-e58ddc98fb16",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

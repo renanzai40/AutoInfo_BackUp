@@ -1,0 +1,53 @@
+---
+title: European leaders pledge new support as Ukraine marks Independence Day
+domain: general-news
+tier: 01-Raw
+entry_id: general-news-general-european-leaders-pledge-new-support-as-ukraine-marks-independence-day
+source_url: https://news.cgtn.com/news/2026-08-24/European-leaders-pledge-new-support-as-Ukraine-marks-Independence-Day-1PS4arW7LB6/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World
+source_type: rss
+source_platform: cgtn-world
+collected_at: '2026-08-24T09:34:42+00:00'
+summary: Ukraine celebrates its Independence Day as European leaders gather in Kyiv to announce new military and financial
+  support packages. This underscores continued European backing for Ukraine amid the ongoing conflict with Russia.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 74f0646b-2498-46ed-b72c-7c9c6080f2ec
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+Ukraine marks its Independence Day on Monday as European leaders gathered in Kyiv and announced new military and financial support packages, underscoring continued backing for the country amid the ongoing conflict with Russia.
+
+## Summary
+Ukraine celebrates its Independence Day as European leaders gather in Kyiv to announce new military and financial support packages. This underscores continued European backing for Ukraine amid the ongoing conflict with Russia.
+
+## Key Points
+- Ukraine marks its Independence Day on Monday
+- European leaders convene in Kyiv to demonstrate support
+- New military and financial aid packages are pledged
+- This highlights sustained European backing during the Russia-Ukraine conflict
+
+
+## Entities
+- **Ukraine** (org, relevance=)
+- **European leaders** (person, relevance=)
+- **Kyiv** (concept, relevance=)
+- **Russia** (org, relevance=)
+- **Independence Day** (concept, relevance=)
+- **military and financial support packages** (concept, relevance=)

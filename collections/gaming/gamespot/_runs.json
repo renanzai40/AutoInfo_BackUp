@@ -1,0 +1,83 @@
+[
+  {
+    "collection_id": "col-20260825T155635-d7b00979",
+    "timestamp": "2026-08-25T15:57:17.438578+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch timed out for https://www.gamespot.com/feeds/news/: _ssl.c:1063: The handshake operation timed out",
+        "source_failed": true,
+        "reason": "RSS fetch timed out for https://www.gamespot.com/feeds/news/: _ssl.c:1063: The handshake operation timed out"
+      }
+    ],
+    "duration_ms": 32345.0
+  },
+  {
+    "collection_id": "col-20260825T160430-83732206",
+    "timestamp": "2026-08-25T16:04:44.072843+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 2292.0,
+    "trace_ids": [
+      "b202828c-f3dc-48a5-acf7-bdd25c72aa86",
+      "16f66ab2-4de7-4cac-93ef-5a60d5b84cae",
+      "0c1fa782-2749-4142-985b-8796ea9e17bf",
+      "c4419de6-ceab-45ad-a523-b97a8c0f390e",
+      "6a6ee48d-12cd-4987-94d3-775846d8ff3d"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T162230-1cd8a981",
+    "timestamp": "2026-08-25T16:23:22.231070+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch timed out for https://www.gamespot.com/feeds/news/: _ssl.c:1063: The handshake operation timed out",
+        "source_failed": true,
+        "reason": "RSS fetch timed out for https://www.gamespot.com/feeds/news/: _ssl.c:1063: The handshake operation timed out"
+      }
+    ],
+    "duration_ms": 37687.0
+  },
+  {
+    "collection_id": "col-20260825T181032-ed134190",
+    "timestamp": "2026-08-25T18:10:44.265096+00:00",
+    "status": "success",
+    "items_found": 20,
+    "items_new": 20,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 1126.0,
+    "trace_ids": [
+      "b75bc212-e14c-4806-aa19-07f84134eee0",
+      "6616eeed-50ed-46d9-85fa-c893c63ca5ff",
+      "da348d38-dd21-4fb3-beb3-ced14b5d05ec",
+      "2327255c-b2c7-4baf-8ec1-e07f4a84fbb8",
+      "e17f0de0-829c-4a1d-990a-ee5ffc99ba9c",
+      "e94556c2-e9c2-49ec-be5c-6b138e99624d",
+      "9859da76-ec8e-48ee-bc46-0afc365b8c4f",
+      "a56ec3d7-7f60-4380-87ab-2910ec1b6671",
+      "c364b2cc-3220-413a-bed8-ef2b133a6809",
+      "73a2d558-ea27-431a-8eac-2a57f970b7b8",
+      "8de59d45-a922-4953-90ae-c7abea7eff71",
+      "93061800-567a-42a3-a973-4f56fc8eb987",
+      "5ab9536e-09e8-4f96-93e1-a3cf8c1ba71a",
+      "edcc1011-7e37-4bfc-8ceb-860d63a5067b",
+      "4ff00300-3827-4226-adb3-3bbbc4beda03",
+      "c4575f53-72bd-4024-a1bb-18400fcd827b",
+      "29fe01ac-071b-46e7-8b2e-04d72aed99f8",
+      "9db9775b-f923-4796-b802-ddd76586a2be",
+      "81243c4f-0a23-4521-b572-2f8205e8d390",
+      "361b82b7-aeef-43d2-89bf-8aed75457a91"
+    ]
+  }
+]

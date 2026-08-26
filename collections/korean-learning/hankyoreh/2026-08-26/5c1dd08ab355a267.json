@@ -1,0 +1,24 @@
+{
+  "id": "5c1dd08ab355a267",
+  "source_name": "hankyoreh",
+  "source_type": "rss",
+  "source_url": "https://www.hani.co.kr/arti/society/society_general/1274628.html",
+  "title": "경찰 수심위 “김병기 사건 1개월 이내 신속 처리”…경찰에 권고",
+  "content": "<table border=\"0px\" cellpadding=\"0px\" cellspacing=\"0px\" width=\"107px\"><tr><td bgcolor=\"#DDDDDD\" style=\"padding: 1px;\"><table border=\"0px\" cellpadding=\"0px\" cellspacing=\"0px\" height=\"84px\" width=\"105px\"><tr><td align=\"center\" bgcolor=\"#FFFFFF\" style=\"padding: 3px;\"><img border=\"0\" src=\"https://flexible.img.hani.co.kr/flexible/normal/300/180/imgdb/child/2026/0825/53_17876552995601_20260825503496.webp\" /></td></tr></table></td><td nowrap=\"nowrap\" width=\"13px\"></td></tr></table>",
+  "content_type": "text",
+  "source_platform": "hankyoreh",
+  "collected_at": "",
+  "language": "",
+  "domain": "korean-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.hani.co.kr/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1a041ea9-130c-419f-8577-f9b0f622ae10",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

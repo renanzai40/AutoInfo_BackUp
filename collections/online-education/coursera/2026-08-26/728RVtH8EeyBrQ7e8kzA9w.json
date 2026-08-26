@@ -1,0 +1,27 @@
+{
+  "id": "728RVtH8EeyBrQ7e8kzA9w",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Crea diseños de marca para tu pequeña empresa con Canva",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "728RVtH8EeyBrQ7e8kzA9w",
+    "slug": "crea-disenos-marca-pequena-empresa-canva",
+    "name": "Crea diseños de marca para tu pequeña empresa con Canva"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0649489b-9448-460e-8184-fbe394f6f3ed",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

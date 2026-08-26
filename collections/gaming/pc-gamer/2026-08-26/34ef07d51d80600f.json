@@ -1,0 +1,24 @@
+{
+  "id": "34ef07d51d80600f",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/games/sim/how-to-fish-pufferfish/",
+  "title": "How to Fish: Strategies for beating the Pufferfish",
+  "content": "It's not just you, the Pufferfish boss is a major spike in difficulty.",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-25T01:09:14+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "97ce157f-01b3-4570-b197-b4f461606f34",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

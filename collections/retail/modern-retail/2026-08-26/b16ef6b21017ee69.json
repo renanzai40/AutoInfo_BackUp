@@ -1,0 +1,24 @@
+{
+  "id": "b16ef6b21017ee69",
+  "source_name": "modern-retail",
+  "source_type": "rss",
+  "source_url": "https://www.modernretail.co/operations/why-more-celebrity-led-brands-are-shutting-down/?utm_campaign=modernretaildis&utm_medium=rss&utm_source=general-rss",
+  "title": "Why more celebrity-led brands are shutting down",
+  "content": "The latest celebrity brands to shut down are Messi's Mas+ and Alex Cooper's Unwell, proving that major buzz fades quickly in the saturated celebrity-led CPG space.",
+  "content_type": "text",
+  "source_platform": "modern-retail",
+  "collected_at": "2026-08-25T04:00:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.modernretail.co/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "319d50fc-35eb-4e2e-94d6-4c0d13b4c5d9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

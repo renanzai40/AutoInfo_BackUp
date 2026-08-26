@@ -1,0 +1,24 @@
+{
+  "id": "677132e0eec40298",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-22/Japan-s-right-wing-turns-AI-into-a-new-tool-of-historical-revisionism-1POJCkdR9de/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Japan's right wing turns AI into a new tool of historical revisionism",
+  "content": "Japan's right wing turns AI into a new tool of historical revisionism",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-22T11:17:41+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "efa56dc0-e39f-47f0-a3f7-825bdb41c7dc",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

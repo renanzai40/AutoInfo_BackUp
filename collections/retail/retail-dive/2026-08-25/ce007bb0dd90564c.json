@@ -1,0 +1,24 @@
+{
+  "id": "ce007bb0dd90564c",
+  "source_name": "retail-dive",
+  "source_type": "rss",
+  "source_url": "https://www.retaildive.com/news/walmart-expands-30-minutes-or-less-delivery/828570/",
+  "title": "Walmart expands 30-minutes-or-less delivery as speed woos shoppers",
+  "content": "<figure><div><img src=\"https://imgproxy.divecdn.com/ou7ed8BjQXPcocZEQJGAfHSIW2DOt1a0E9v-WyGUUsc/g:ce/rs:fill:1600:900:1/Z3M6Ly9kaXZlc2l0ZS1zdG9yYWdlL2RpdmVpbWFnZS9XYWxtYXJ0X0dlcm1hbnRvd25fTWFyeWxhbmRfMDYwOTI1LTEuSlBH.webp\" /></div></figure><p>Despite added charges for faster fulfillment, customers are flocking to the retailer's roster of quick delivery options, executives said.</p>",
+  "content_type": "text",
+  "source_platform": "retail-dive",
+  "collected_at": "2026-08-24T12:20:00-04:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.retaildive.com/feeds/news/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "35f02c64-e383-4323-96c8-f4df566bde28",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

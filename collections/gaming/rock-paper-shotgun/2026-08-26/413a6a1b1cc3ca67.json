@@ -1,0 +1,24 @@
+{
+  "id": "413a6a1b1cc3ca67",
+  "source_name": "rock-paper-shotgun",
+  "source_type": "rss",
+  "source_url": "https://www.rockpapershotgun.com/nvidia-dlss-45-ray-reconstruction-out-now-ups-shadow-quality-and-more-accurately-illuminates-trash-bags",
+  "title": "Nvidia DLSS 4.5 Ray Reconstruction, out now, ups shadow quality and more accurately illuminates trash bags",
+  "content": "<img src=\"https://assetsio.gnwcdn.com/nvidia-dlss-4-5-ray-reconstruction-announced-01.jpg?width=690&amp;quality=85&amp;format=jpg&amp;auto=webp\" /> <p>Today, August 25th, Nvidia have released Ray Reconstruction for DLSS 4.5, with the aim of more swankily rendering ray-traced/<a href=\"https://www.rockpapershotgun.com/nvidia-dlss-4-explained\">path-traced</a> shadows and lighting than was possible with <a href=\"https://www.rockpapershotgun.com/dlss-35-ray-reconstruction-successfully-makes-cyberpunk-2077-very-very-slightly-prettier\">previous Ray Reconstruction versions</a>.</p>\n <p><a href=\"https://www.rockpapershotgun.com/nvidia-dlss-45-ray-reconstruction-out-now-ups-shadow-quality-and-more-accurately-illuminates-trash-bags\">Read more</a></p>",
+  "content_type": "text",
+  "source_platform": "rock-paper-shotgun",
+  "collected_at": "2026-08-25T15:30:00+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.rockpapershotgun.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a7d27c32-1b9c-4099-8177-2e0667a6daae",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

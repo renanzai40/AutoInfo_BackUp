@@ -1,0 +1,24 @@
+{
+  "id": "e73bd9e141d4e041",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/games/action/my-fomo-over-the-duskbloods-not-coming-to-pc-evaporated-once-i-actually-played-it/",
+  "title": "My FOMO over The Duskbloods not coming to PC evaporated once I actually played it",
+  "content": "The vampire PvPvE game is a confusing mess that isn't going to be for everyone.",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-24T22:11:22+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f5cce45d-b992-41b7-9f46-02fa5f4b8842",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "337e38e95ec73cff",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/criminalidade-geral-subiu-109-no-porto-e-29-em-lisboa-setubal-foi-a-excecao-com-queda-de-74/",
+  "title": "Crime sobe no Porto e Lisboa, mas cai em Setúbal",
+  "content": "A PSP afirmou estar atenta aos casos que têm causado maior alarme social",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T19:19:00+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "23d157ac-e678-4f61-a839-f019a681aeda",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

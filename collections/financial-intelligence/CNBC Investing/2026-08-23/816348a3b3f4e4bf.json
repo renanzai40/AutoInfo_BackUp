@@ -1,0 +1,24 @@
+{
+  "id": "816348a3b3f4e4bf",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/22/airbnb-fee-change-frustrates-hosts-what-to-know-before-listing.html",
+  "title": "Airbnb's new fee change frustrates hosts—what to know before renting out your home",
+  "content": "A new Airbnb fee change is one of many costs and considerations that can affect whether running a short-term rental makes money.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-22T14:00:01+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5642b2a4-ac64-4e8c-97c3-ee89ec05cc88",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

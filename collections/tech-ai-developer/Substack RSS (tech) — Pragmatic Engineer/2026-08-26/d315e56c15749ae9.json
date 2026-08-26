@@ -1,0 +1,24 @@
+{
+  "id": "d315e56c15749ae9",
+  "source_name": "Substack RSS (tech) — Pragmatic Engineer",
+  "source_type": "rss",
+  "source_url": "https://newsletter.pragmaticengineer.com/p/the-pulse-we-need-to-talk-about-migrations",
+  "title": "The Pulse: We need to talk about migrations with AI",
+  "content": "Asana completed a testing framework migration in two weeks, that they would have delayed for years more, and they&#8217;re not alone. Also: AI startups could make Gartner much less relevant, and more",
+  "content_type": "text",
+  "source_platform": "Substack RSS (tech) — Pragmatic Engineer",
+  "collected_at": "2026-08-20T17:53:01+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://newsletter.pragmaticengineer.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "38fe669d-be1e-4bc7-b2e9-f8bbd2648002",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

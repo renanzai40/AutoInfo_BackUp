@@ -1,0 +1,24 @@
+{
+  "id": "14893339599b2b00",
+  "source_name": "scotusblog",
+  "source_type": "rss",
+  "source_url": "https://www.scotusblog.com/2026/08/ballroom-dispute-now-fully-briefed/",
+  "title": "Ballroom dispute now fully briefed",
+  "content": "Plus, a group of Florida Republicans brings their Census Bureau challenge to SCOTUS.",
+  "content_type": "text",
+  "source_platform": "scotusblog",
+  "collected_at": "2026-08-20T13:00:00+00:00",
+  "language": "",
+  "domain": "legal-compliance",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.scotusblog.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3aee4989-4d1b-41be-83b2-5c76d12fcbe1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "834744fe451efa58",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/programas/noticiario/17h-mne-garante-que-a-oposicao-nao-e-capaz-de-oferecer-bons-lideres-ao-pais/",
+  "title": "17h. MNE garante que a oposição não é capaz de oferecer b...",
+  "content": "Paulo Rangel atira a demagogia ao Chega e o sentimentalismo ao Partido Socialista. Ainda, dezasseis pessoas ficaram feridas na última noite depois de um atropelamento em Albufeira.",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T17:24:47+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8d3035d5-f851-4812-8668-d945d4c531c3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

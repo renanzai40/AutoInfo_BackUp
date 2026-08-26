@@ -1,0 +1,24 @@
+{
+  "id": "b41c408fb15733aa",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/Liang-Wang-win-China-s-only-gold-France-makes-history-at-BWF-Worlds-1PRzXg0gL6g/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Liang, Wang win China's only gold, France makes history at BWF Worlds",
+  "content": "Liang, Wang win China's only gold, France makes history at BWF Worlds",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T07:21:04+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a31367fd-0c57-46c8-aa5d-a16962e6b42c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "1af3ac3e85d4b9d0",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/obschestvo/28044439",
+  "title": "Дом 1941 года постройки на Большой Дорогомиловской в Москве отремонтируют",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-26T00:03:55+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5e98cd52-c745-456c-ac9c-87bfde4e2cd1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "f81f8def0f2167c0",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/mujer/moda/paula-echevarria-primark-firman-nueva-coleccion-uniforme-otono-devorar-libros-looks_7029163_0.html",
+  "title": "Paula Echevarría y Primark firman en su nueva colección el uniforme para devorar libros",
+  "content": "Leer vuelve a estar de moda y Paula Echevarría lo lleva escrito, literalmente, en su colección Otoño/Invierno 2026/27 con Primark.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T14:25:58+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7ae72f41-d212-44b3-a9b4-c7330c800122",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

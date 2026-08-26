@@ -1,0 +1,24 @@
+{
+  "id": "35b9a0f2ba375518",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/motori/news/24_aprile_30/boom-targhe-polacche-motorini-auto-servono-ad-aggirare-assicurazioni-caso-d2847b4c-063f-11ef-91be-f25bc9d4d523.shtml",
+  "title": "Boom di targhe polacche su motorini e auto: servono ad aggirare le assicurazioni. Il caso",
+  "content": "<p><img alt=\"Boom di targhe polacche su motorini e auto: servono ad aggirare le assicurazioni. Il caso\" src=\"https://images2.corriereobjects.it/methode_image/2024/04/29/Motori/Foto%20Motori%20-%20Trattate/Cattura-kOgC-U34702142748320fCC-656x492@Corriere-Web-Sezioni.JPG\" title=\"Boom di targhe polacche su motorini e auto: servono ad aggirare le assicurazioni. Il caso\" /><p>Sono sempre di più i veicoli che circolano con targhe straniere: un trucco per abbattere i costi dell’assicurazione, ma che può avere  gravi conseguenze </p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-06T11:25:26+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a3852a9d-0227-4ed1-8e8f-f0f4ba64df35",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

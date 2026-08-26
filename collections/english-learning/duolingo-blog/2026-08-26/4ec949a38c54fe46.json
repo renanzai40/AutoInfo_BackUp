@@ -1,0 +1,24 @@
+{
+  "id": "4ec949a38c54fe46",
+  "source_name": "duolingo-blog",
+  "source_type": "rss",
+  "source_url": "https://blog.duolingo.com/chess-game-review/",
+  "title": "Introducing Chess Game Review: Learn from every match",
+  "content": "Transform your chess blunders into learning opportunities!",
+  "content_type": "text",
+  "source_platform": "duolingo-blog",
+  "collected_at": "2026-08-11T12:00:14+00:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://blog.duolingo.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6446a6cc-52b5-4e98-b15b-53b5e138195a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

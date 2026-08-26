@@ -1,0 +1,24 @@
+{
+  "id": "6f68947a517dce1a",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gonzoo/servicio-inteligencia-exterior-alemania-busca-reclutar-gamers-para-combatir-ciberataques_7029264_0.html",
+  "title": "El servicio de inteligencia de Alemania busca 'gamers' para combatir ciberataques",
+  "content": "El organismo acudirá al evento de videojuegos Gamescom 2026.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T17:23:24+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0f297871-57b7-4bd9-97bb-1364b6b3cbde",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "9b91e2e648295dfe",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0604/c1002-40493855.html",
+  "title": "首届阿联酋农业会议暨展览会闭幕",
+  "content": "<p style=\"text-indent: 2em;\">人民网讯 据阿联酋通讯社报道，由阿联酋气候变化与环境部主办的首届阿联酋农业会议暨展览会近日在阿布扎比艾因阿德尼克中心闭幕。为期四天的活动吸引超过1万名观众参与。活动成果丰硕，签署多项发展农业部门和支持本土作物的战略协议和倡议。</p> <p style=\"text-indent: 2em;\">据了解，本次展览共有109名该国农民参与，其中包括33名养蜂人和蜂蜜生产者，展示了来自国内农场的优质产品和本土作物，包括各类蔬菜、水果、蜂蜜及农产品等。为支持和赋能本国农民，活动主办方专门组织了超过10场专业工作坊，为农民提供最新知识和技术技能。此外，展览期间，共举办了35场讨论会和9场主旨演讲，67名专家学者参与会议活动，为农业部门发展和机制更新提供意见建议。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-04T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ea0f4a23-c415-4451-a980-d7745e6477a9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

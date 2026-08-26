@@ -1,0 +1,24 @@
+{
+  "id": "8a73eeecaf9d35eb",
+  "source_name": "hankyoreh",
+  "source_type": "rss",
+  "source_url": "https://www.hani.co.kr/arti/society/society_general/1274750.html",
+  "title": "‘3.4억 문항 거래’ 현우진 무죄…1심 “부적절하다고 모두 형사 처벌 못 해”",
+  "content": "<table border=\"0px\" cellpadding=\"0px\" cellspacing=\"0px\" width=\"107px\"><tr><td bgcolor=\"#DDDDDD\" style=\"padding: 1px;\"><table border=\"0px\" cellpadding=\"0px\" cellspacing=\"0px\" height=\"84px\" width=\"105px\"><tr><td align=\"center\" bgcolor=\"#FFFFFF\" style=\"padding: 3px;\"><img border=\"0\" src=\"https://flexible.img.hani.co.kr/flexible/normal/300/180/imgdb/child/2026/0826/53_17877233333108_5517671741269527.webp\" /></td></tr></table></td><td nowrap=\"nowrap\" width=\"13px\"></td></tr></table>",
+  "content_type": "text",
+  "source_platform": "hankyoreh",
+  "collected_at": "",
+  "language": "",
+  "domain": "korean-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.hani.co.kr/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7ffe8bf4-08da-4ca6-a2be-167a22598feb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

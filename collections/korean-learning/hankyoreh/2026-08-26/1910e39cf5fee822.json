@@ -1,0 +1,24 @@
+{
+  "id": "1910e39cf5fee822",
+  "source_name": "hankyoreh",
+  "source_type": "rss",
+  "source_url": "https://www.hani.co.kr/arti/politics/politics_general/1274741.html",
+  "title": "[속보] 국회, ‘이진숙 제명 촉구 결의안’ 의결…국힘 최소 2명 찬성",
+  "content": "<table border=\"0px\" cellpadding=\"0px\" cellspacing=\"0px\" width=\"107px\"><tr><td bgcolor=\"#DDDDDD\" style=\"padding: 1px;\"><table border=\"0px\" cellpadding=\"0px\" cellspacing=\"0px\" height=\"84px\" width=\"105px\"><tr><td align=\"center\" bgcolor=\"#FFFFFF\" style=\"padding: 3px;\"><img border=\"0\" src=\"https://flexible.img.hani.co.kr/flexible/normal/300/180/imgdb/child/2026/0819/53_17870989257514_20260816501559.webp\" /></td></tr></table></td><td nowrap=\"nowrap\" width=\"13px\"></td></tr></table>",
+  "content_type": "text",
+  "source_platform": "hankyoreh",
+  "collected_at": "",
+  "language": "",
+  "domain": "korean-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.hani.co.kr/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "cfabf796-d3b6-4721-bc40-eac68dd4acf8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

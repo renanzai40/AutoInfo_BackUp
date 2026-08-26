@@ -1,0 +1,27 @@
+{
+  "id": "OK4S2mhbEfCCGA7lN4veKQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "SPSS: Apply & Interpret Logistic Regression Models",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-25T15:16:58.380067+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "OK4S2mhbEfCCGA7lN4veKQ",
+    "slug": "spss-apply-interpret-logistic-regression-models",
+    "name": "SPSS: Apply & Interpret Logistic Regression Models"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a2883cfc-3ab6-43c7-b589-ac67aeb0ed71",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

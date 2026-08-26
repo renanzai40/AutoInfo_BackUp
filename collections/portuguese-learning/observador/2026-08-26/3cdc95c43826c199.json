@@ -1,0 +1,24 @@
+{
+  "id": "3cdc95c43826c199",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/herdeiro-do-grupo-da-rayban-abandona-cargos-executivos-no-meio-de-uma-guerra-familiar-pelo-controlo-da-essilorluxottica/",
+  "title": "Herdeiro da Luxottica sai da Ray-Ban em guerra familiar",
+  "content": "Leonardo Maria Del Vecchio, um dos filhos do fundador da Luxottica, é presidente da Ray Ban e CSO do grupo",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T15:19:31+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "675ce303-1e92-4b89-9e7e-2fb568b9d79a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "aa751282ad330026",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/music/music-news/ai-generated-music-billboard-transparency-1236323619/",
+  "title": "Billboard Affirms Commitment to Transparency Around AI-Generated Music",
+  "content": "<em>Billboard</em> is optimistic about new tools that will tag and identify AI-created songs, including Luminate's proprietary AI detection program.",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T14:15:00+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ba13a17f-2f6e-4020-a793-4aeeb4d1e111",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

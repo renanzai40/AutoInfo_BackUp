@@ -1,0 +1,24 @@
+{
+  "id": "9a1399f0fb21d94e",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/25/hhs-fda-leadership-roles-technology-drugs.html",
+  "title": "HHS plans new FDA deputy commissioner roles for technology and drugs, sources say",
+  "content": "HHS plans to name two deputy commissioners for technology and drugs, said two sources familiar with the matter.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-25T17:00:01+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6ddfb436-f65c-426f-8460-e686c22c3887",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

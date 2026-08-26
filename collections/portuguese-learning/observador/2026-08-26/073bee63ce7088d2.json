@@ -1,0 +1,24 @@
+{
+  "id": "073bee63ce7088d2",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/especiais/novos-investidores-eram-importantes-para-dar-proximo-passo-paulo-lopo-explica-venda-do-estrela-e-admite-que-ja-teve-imensas-abordagens/",
+  "title": "\"Novos investidores eram importantes para dar próximo passo\"",
+  "content": "Paulo Lopo adquiriu a SAD do Estrela da Amadora em 2020 por 72 mil euros",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T19:46:41+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2553d641-248b-42e4-9e1b-39b516450aa0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

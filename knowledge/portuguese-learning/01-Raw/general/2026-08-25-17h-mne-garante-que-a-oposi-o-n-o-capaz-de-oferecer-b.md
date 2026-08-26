@@ -1,0 +1,52 @@
+---
+title: 17h. MNE garante que a oposição não é capaz de oferecer b...
+domain: portuguese-learning
+tier: 01-Raw
+entry_id: portuguese-learning-general-17h-mne-garante-que-a-oposi-o-n-o-capaz-de-oferecer-b
+source_url: https://observador.pt/programas/noticiario/17h-mne-garante-que-a-oposicao-nao-e-capaz-de-oferecer-bons-lideres-ao-pais/
+source_type: rss
+source_platform: observador
+collected_at: '2026-08-25T17:24:47+01:00'
+summary: Paulo Rangel criticizes Chega for demagoguery and the Socialist Party for sentimentality. Separately, a car accident
+  in Albufeira resulted in sixteen injuries last night.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: pt
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 8d3035d5-f851-4812-8668-d945d4c531c3
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+Paulo Rangel atira a demagogia ao Chega e o sentimentalismo ao Partido Socialista. Ainda, dezasseis pessoas ficaram feridas na última noite depois de um atropelamento em Albufeira.
+
+## Summary
+Paulo Rangel criticizes Chega for demagoguery and the Socialist Party for sentimentality. Separately, a car accident in Albufeira resulted in sixteen injuries last night.
+
+## Key Points
+- Paulo Rangel criticizes Chega for demagoguery.
+- Paulo Rangel criticizes the Socialist Party for sentimentality.
+- A car accident occurred in Albufeira.
+- Sixteen people were injured in the accident last night.
+
+
+## Entities
+- **Paulo Rangel** (person, relevance=)
+- **Chega** (org, relevance=)
+- **Partido Socialista** (org, relevance=)
+- **demagoguery** (concept, relevance=)
+- **sentimentality** (concept, relevance=)

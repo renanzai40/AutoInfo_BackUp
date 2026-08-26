@@ -1,0 +1,24 @@
+{
+  "id": "adbe63b2b49fabf1",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/nacional/gobierno-completa-normalizacion-con-siria-con-nombramiento-primer-embajador-desde-2012_7029345_0.html",
+  "title": "España completa la normalización con Siria con el nombramiento del primer embajador desde 2012",
+  "content": "Designa al hasta ahora enviado especial para el país, nombrado después de que Al Shara derrocara al régimen de Al Assad en 2024.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T21:46:03+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3ab307fe-9752-4d67-9194-1769e1e29907",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

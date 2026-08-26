@@ -1,0 +1,282 @@
+---
+title: User Research
+domain: korean-learning
+tier: 01-Raw
+entry_id: korean-learning-general-user-research
+source_url: https://talktomeinkorean.com/ux-research/
+source_type: rss
+source_platform: talktomeinkorean
+collected_at: '2023-05-30T06:25:43+00:00'
+summary: The Talk To Me In Korean team is conducting in-person user research interviews to gather feedback on their website's
+  learning experience. Participants are invited to a 45-minute interview near Hongik University Station, with a cash reward
+  of 30,000 KRW. Audio and screen recordings will be used solely for research purposes.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: ko
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: b9d1ce8b-1e18-402d-a931-e3a9c496d0f3
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<p>
+</p>
+
+<p><br />
+	<div class="gap-element clearfix" id="gap-1989146774" style="display: block; height: auto;">
+		
+
+	</div>
+	<br />
+<div class="row align-bottom" id="row-759117740"><br />
+
+	<div class="col medium-6 small-12 large-6" id="col-224034535">
+				<div class="col-inner">
+			
+			<br />
+	<div class="img has-hover x md-x lg-x y md-y lg-y" id="image_993453131">
+						<div>		<div class="img-inner dark">
+			<img alt="" class="attachment-large size-large" height="562" src="https://cdn.talktomeinkorean.com/wp-content/uploads/2023/05/31082435/23053001-1500x827.png" width="1020" />						
+					</div>
+		</div>						
+
+	</div>
+	<br />
+		</div>
+				
+
+	</div>
+
+	<br />
+
+	<div class="col hide-for-small medium-1 small-12 large-1" id="col-378219006">
+				<div class="col-inner">
+			
+			<br />
+	<div class="gap-element clearfix" id="gap-1577568056" style="display: block; height: auto;">
+		
+
+	</div>
+	<br />
+		</div>
+					</div>
+
+	<br />
+
+	<div class="col medium-5 small-12 large-5" id="col-199908210">
+				<div class="col-inner">
+			
+			</p>
+<h2><strong>안녕하세요! <br /></strong><strong>This is the TTMIK team.</strong></h2>
+<p><span style="font-weight: 400;">We’d love to hear about your overall learning experience on our website through an in-person interview.</span></p>
+<p>	<div class="gap-element clearfix hide-for-small" id="gap-962843946" style="display: block; height: auto;">
+		
+
+	</div>
+	<br />
+		</div>
+				
+
+	</div>
+
+	<br />
+
+
+</div><br />
+	<section class="section interview-detail-box" id="section_1737076894">
+		<div class="bg section-bg fill bg-fill  bg-loaded">
+
+			
+			
+			
+	<div class="is-border" style="border-radius: 10px; border-width: 0px 0px 0px 0px;">
+	</div>
+
+		</div>
+
+		
+
+		<div class="section-content relative">
+			<br />
+<div class="row" id="row-1770028531"><br />
+
+	<div class="col medium-6 small-12 large-6" id="col-1567979142">
+				<div class="col-inner">
+			
+			</p>
+<h3><span style="font-weight: 400;"><strong>Interview Details</strong>&nbsp;</span></h3>
+<ul>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Duration: About 45 minutes&nbsp;</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Location: In a meeting room near Hongik University Station (Subway Line 2)&nbsp;</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Date: You can choose the date in the survey form. (The available time slot for the interviews will be constantly updated.)</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Reward: 30,000 won (KRW) in cash</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Language: English/Korean (your choice) </span></li>
+</ul>
+<p>		</div>
+				
+
+	</div>
+
+	<br />
+
+	<div class="col hide-for-small medium-2 small-12 large-2" id="col-329685191">
+				<div class="col-inner">
+			
+			<br />
+	<div class="gap-element clearfix" id="gap-1616883240" style="display: block; height: auto;">
+		
+
+	</div>
+	<br />
+		</div>
+				
+
+	</div>
+
+	<br />
+
+	<div class="col medium-4 small-12 large-4" id="col-1707625400">
+				<div class="col-inner">
+			
+			<br />
+	<div class="img has-hover x md-x lg-x y md-y lg-y" id="image_1953481990">
+						<div>		<div class="img-inner dark">
+			<img alt="" class="attachment-large size-large" height="693" src="https://cdn.talktomeinkorean.com/wp-content/uploads/2023/05/31082444/23053003-1500x1019.png" width="1020" />						
+					</div>
+		</div>						
+
+	</div>
+	<br />
+		</div>
+				
+
+	</div>
+
+	<br />
+</div><br />
+		</div>
+
+		
+
+	</section>
+	<br />
+<div class="row" id="row-1119011662"><br />
+
+	<div class="col small-12 large-12" id="col-1396763850">
+				<div class="col-inner">
+			
+			<br />
+<div class="row" id="row-1059234040"><br />
+
+	<div class="col small-12 large-12" id="col-1196096007">
+				<div class="col-inner">
+			
+			</p>
+<p><strong>Please keep in mind that:&nbsp;</strong></p>
+<ul>
+<li style="font-weight: 400;"><span style="font-weight: 400;">The interview audio will be recorded, but there will be no video recording of the interviewee.</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">This audio recording will be used for user research purposes only and will not be shared with the public.</span></li>
+<li style="font-weight: 400;">During the interview, you will be asked to navigate the website, and the laptop/mobile device&nbsp;screen will be recorded.</li>
+</ul>
+<p><span style="font-weight: 400;">We will give a reward to show our appreciation for your time and valuable opinion, and it will be given right after the interview.<br /></span><span style="font-weight: 400;">Please click on the button below to fill out the form. If you are selected for the interview, we will notify you via email.<br /></span><span style="font-weight: 400;">We look forward to meeting you in person. Thank you!&nbsp;</span></p>
+<p>		</div>
+				
+
+	</div>
+
+	<br />
+</div><br />
+<div class="row align-equal align-center" id="row-1989107251"><br />
+
+	<div class="col hide-for-small medium-4 small-12 large-4" id="col-7450381">
+				<div class="col-inner">
+			
+			<br />
+	<div class="gap-element clearfix" id="gap-114510051" style="display: block; height: auto;">
+		
+
+	</div>
+	<br />
+		</div>
+					</div>
+
+	<br />
+
+	<div class="col medium-3 small-10 large-3" id="col-813903804">
+				<div class="col-inner text-center">
+			
+			<br />
+	<div class="img has-hover x md-x lg-x y md-y lg-y" id="image_236605532">
+		<a class="" href="https://forms.gle/uRfoFDhSt3KFFU8H7" rel="noopener" target="_blank">				<div>		<div class="img-inner dark">
+			<img alt="" class="attachment-large size-large" height="140" src="https://cdn.talktomeinkorean.com/wp-content/uploads/2023/05/31082501/Text-Buttons-1.png" width="526" />						
+					</div>
+		</div>				</a>		
+
+	</div>
+	<br />
+		</div>
+				
+
+	</div>
+
+	<br />
+
+	<div class="col hide-for-small medium-4 small-12 large-4" id="col-1613983592">
+				<div class="col-inner">
+			
+			<br />
+	<div class="gap-element clearfix" id="gap-141040523" style="display: block; height: auto;">
+		
+
+	</div>
+	<br />
+	<div class="gap-element clearfix" id="gap-954250907" style="display: block; height: auto;">
+		
+
+	</div>
+	<br />
+		</div>
+					</div>
+
+	<br />
+
+
+</div><br />
+		</div>
+				
+
+	</div>
+
+	<br />
+</div></p>
+
+## Summary
+The Talk To Me In Korean team is conducting in-person user research interviews to gather feedback on their website's learning experience. Participants are invited to a 45-minute interview near Hongik University Station, with a cash reward of 30,000 KRW. Audio and screen recordings will be used solely for research purposes.
+
+## Key Points
+- TTMIK is seeking user feedback through in-person interviews for their language learning website.
+- Interviews last 45 minutes and are held near Hongik University Station in Seoul.
+- Participants receive a 30,000 KRW cash reward immediately after the interview.
+- Audio and screen recordings are made for research only and not shared publicly.
+- Users can apply via a Google Form and will be notified if selected.
+
+
+## Entities
+- **Talk To Me In Korean** (org, relevance=)
+- **User Research** (concept, relevance=)
+- **Interview** (procedure, relevance=)
+- **Google Form** (technology, relevance=)

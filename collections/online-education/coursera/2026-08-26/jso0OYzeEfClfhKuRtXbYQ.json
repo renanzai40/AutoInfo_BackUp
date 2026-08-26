@@ -1,0 +1,27 @@
+{
+  "id": "jso0OYzeEfClfhKuRtXbYQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "The Zero Trust Framework",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "jso0OYzeEfClfhKuRtXbYQ",
+    "slug": "pearson-the-zero-trust-framework-video-course-o5esi",
+    "name": "The Zero Trust Framework"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9048d75d-54b1-4747-9444-fd30d4e1a09d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

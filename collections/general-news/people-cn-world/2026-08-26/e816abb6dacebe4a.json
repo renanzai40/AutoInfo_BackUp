@@ -1,0 +1,24 @@
+{
+  "id": "e816abb6dacebe4a",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0604/c1002-40493517.html",
+  "title": "伊朗总统：伊朗欢迎谈判但拒绝霸凌",
+  "content": "<p>　　新华社德黑兰6月3日电（记者陈霄 沙达提）伊朗总统佩泽希齐扬3日针对伊朗与美国间接会谈表示，伊朗欢迎谈判，但谈判不能基于霸凌或单方面的要求。</p> <p>　　据伊朗总统网站发布的消息，佩泽希齐扬当天在接受新西兰驻伊朗大使递交国书时表示，就正在举行的伊美间接会谈而言，任何方面都不应采取霸凌政策。他重申，伊朗一直明确表示不会寻求核武器，并始终通过合作来证明这一立场。</p> <p>　　佩泽希齐扬说，“地区某一政权在强国支持下犯下罪行，随后又试图将他人描绘成对地区安全与和平的威胁以实现自身要求，这种行为完全不可接受”。他还表示，某些国家试图阻碍他国的发展道路，同时利用自身发展对他国施压，“这不公平、不合理、不可接受”。</p> <p>　　在阿曼斡旋下，美国和伊朗自今年4月以来已举行五轮间接会谈，取得一定进展，但双方在若干核心问题上分歧依然突出。美方坚持伊朗应全面停止所有级别的铀浓缩活动，而伊方强调适度开展铀浓缩活动是其和平利用核能权利的一部分，拒绝“零浓缩”要求。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-04T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "35179156-7fa5-4bd1-b90f-0d9ff5bc1fe2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

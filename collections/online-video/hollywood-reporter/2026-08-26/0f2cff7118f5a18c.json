@@ -1,0 +1,24 @@
+{
+  "id": "0f2cff7118f5a18c",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/business/business-news/leonard-morpurgo-dead-rogers-cowan-universal-columbia-1236680751/",
+  "title": "Leonard Morpurgo, Veteran Hollywood Publicist, Dies at 93",
+  "content": "The London native worked at Rogers &#38; Cowan, Universal Studios, Columbia Pictures, CBS Theatrical Films and Lorimar Pictures.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T16:29:35+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "041ad152-9157-4f5e-b63a-e199927d0546",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

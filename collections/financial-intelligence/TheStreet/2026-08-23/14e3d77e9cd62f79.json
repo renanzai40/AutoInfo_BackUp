@@ -1,0 +1,24 @@
+{
+  "id": "14e3d77e9cd62f79",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/deals/geryst-military-smartwatch-walmart-flash-sale",
+  "title": "Walmart's $200 military smartwatch with a handy flashlight and 'unbelievable battery' is now $27",
+  "content": "\"I've used it at the gym, and it tracks my calorie burn perfectly.\"",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-22T20:03:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "141e3907-cf3e-4109-ba7a-8e572049c834",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

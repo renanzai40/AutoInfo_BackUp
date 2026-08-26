@@ -1,0 +1,24 @@
+{
+  "id": "c520a86449f3d3f0",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://newsaf.cgtn.com/news/2026-08-22/10-killed-multiple-injured-in-Chad-intercommunal-clashes-1POHEDWtGkE/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "10 killed, multiple injured in Chad intercommunal clashes",
+  "content": "At least 10 people were killed and over 10 others injured in intercommunal clashes in Chad's Batha Province, local media and witnesses said Friday.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-22T11:06:20+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1744484d-dbb1-42ff-b5ca-b37bc8ebfc4f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

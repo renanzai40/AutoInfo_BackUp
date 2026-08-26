@@ -1,0 +1,24 @@
+{
+  "id": "0780e911463b18fa",
+  "source_name": "techcrunch-ai",
+  "source_type": "rss",
+  "source_url": "https://techcrunch.com/2026/08/25/openais-jalapeno-chip-is-built-for-fast-inference-at-scale-benchmarks-show/",
+  "title": "OpenAI’s Jalapeño chip is built for fast inference at scale, benchmarks show",
+  "content": "Tested on SemiAnalysis’ InferenceX benchmark, Jalapeño registered both more tokens per user and more throughput per kilowatt than the currently available state-of-the art.",
+  "content_type": "text",
+  "source_platform": "techcrunch-ai",
+  "collected_at": "2026-08-25T14:22:04+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://techcrunch.com/category/artificial-intelligence/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a1922f33-e64b-4f08-89a5-ff8508b72363",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

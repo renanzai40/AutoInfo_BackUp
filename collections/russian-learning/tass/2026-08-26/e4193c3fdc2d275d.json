@@ -1,0 +1,24 @@
+{
+  "id": "e4193c3fdc2d275d",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/proisshestviya/28044295",
+  "title": "В Моздокском районе Северной Осетии частично пропали свет и газ из-за ветра",
+  "content": "Работы по восстановлению перенесли на утро",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T22:02:38+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7a6caa52-ce05-4637-b8b5-0ba290a9e29c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

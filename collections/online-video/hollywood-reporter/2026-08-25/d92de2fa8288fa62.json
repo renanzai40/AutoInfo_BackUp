@@ -1,0 +1,24 @@
+{
+  "id": "d92de2fa8288fa62",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/business/business-news/paramount-settlement-deal-economics-1236679631/",
+  "title": "Everyone Wants a Paramount Settlement. First, Look Under the Hood",
+  "content": "The acquisition's financing depends on savings that the protections everyone wants would prohibit. That's a difficult problem to solve.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T14:38:36+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f14c4e76-6be6-4dfc-8d8e-00bc4b70db19",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

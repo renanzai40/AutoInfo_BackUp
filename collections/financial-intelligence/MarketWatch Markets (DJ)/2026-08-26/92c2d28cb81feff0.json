@@ -1,0 +1,24 @@
+{
+  "id": "92c2d28cb81feff0",
+  "source_name": "MarketWatch Markets (DJ)",
+  "source_type": "rss",
+  "source_url": "https://www.marketwatch.com/story/5-cheap-u-s-cities-to-retire-in-if-you-can-deal-with-this-one-thing-fbda5d1a?mod=mw_rss_topstories",
+  "title": "5 cheap U.S. cities to retire in — if you can deal with this one thing",
+  "content": "You don’t have to leave the country to find an affordable place that matches your retirement vision.",
+  "content_type": "text",
+  "source_platform": "MarketWatch Markets (DJ)",
+  "collected_at": "2026-08-26T01:35:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.marketwatch.com/marketwatch/topstories/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1a556500-98ec-43e9-98e1-aca633d624ae",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

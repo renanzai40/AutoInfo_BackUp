@@ -1,0 +1,24 @@
+{
+  "id": "0107d50970c86a6a",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/colate-vallejo-nagera-no-se-rinde-vuelve-juzgado-para-obtener-custodia-hijo-que-tuvo-con-paulina-rubio_7029329_0.html",
+  "title": "Colate Vallejo-Nágera no se rinde: vuelve al juzgado para obtener la custodia del hijo que tuvo con Paulina Rubio",
+  "content": "Su hijo, de 16 años, quiere vivir con él, pero la jueza americana ha decidido que debe hacerlo con la cantante.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T20:39:27+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5e781542-bd8c-472b-8446-b26bee88d203",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

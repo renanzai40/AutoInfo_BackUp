@@ -1,0 +1,24 @@
+{
+  "id": "18a94636bc1eba55",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/Top-political-advisor-urges-contributions-to-China-s-modernization-1PRYJEGWgow/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Top political advisor urges contributions to China's modernization",
+  "content": "China's top political advisor Wang Huning on Monday urged members of the Chinese People's Political Consultative Conference (CPPCC) to contribute ideas and efforts to advance the modernization of agriculture and rural areas and urban development.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T09:27:03+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "47243fc1-4e6a-4b8f-ac45-bb89cb26c5ff",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

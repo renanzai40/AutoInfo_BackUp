@@ -1,0 +1,24 @@
+{
+  "id": "3cf5d83f5a2af271",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/ekonomika/28044255",
+  "title": "В Астраханской области снизят отпуск топлива до 30 л в руки",
+  "content": "Это увеличит время работы заправок и количество заправленных машин в день, отметил глава региона Игорь Бабушкин",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T21:45:55+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d00a302f-b391-4657-9e7d-656ec0e7399b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

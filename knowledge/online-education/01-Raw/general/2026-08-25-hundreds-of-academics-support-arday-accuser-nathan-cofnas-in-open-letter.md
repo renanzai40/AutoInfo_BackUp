@@ -1,0 +1,69 @@
+---
+title: Hundreds of Academics Support Arday Accuser Nathan Cofnas in Open Letter
+domain: online-education
+tier: 01-Raw
+entry_id: online-education-general-hundreds-of-academics-support-arday-accuser-nathan-cofnas-in-open-letter
+source_url: https://www.insidehighered.com/news/quick-takes/2026/08/25/hundreds-academics-support-nathan-cofnas-open-letter
+source_type: rss
+source_platform: inside-higher-ed
+collected_at: '2026-08-25T07:00:00+00:00'
+summary: An open letter signed by hundreds of academics supports Nathan Cofnas, who is accusing an individual named Arday.
+  The article by Emma Whitford details this academic backing in a dispute, with Ghent University possibly involved as indicated
+  by the image.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: fd4c657c-426b-40e6-9ec3-118ebadf9f06
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<span>Hundreds of Academics Support Arday Accuser Nathan Cofnas in Open Letter</span>
+
+            <div class="field field--name-field-featured-image field--type-entity-reference field--label-hidden field__item">  <img alt="Ghent University" height="483" src="https://www.insidehighered.com/sites/default/files/2026-08/GettyImages-1823970486.jpg" width="724" />
+
+</div>
+      
+<span><span>Emma Whitford</span></span>
+
+<span><time datetime="2026-08-25T03:00:00-04:00" title="Tuesday, August 25, 2026 - 03:00 AM">Tue, 08/25/2026 - 03:00 AM</time>
+</span>
+
+  <div class="field field--name-field-authors field--type-entity-reference field--label-inline clearfix">
+    <div class="field__label">Byline(s)</div>
+          <div class="field__items">
+              <div class="field__item"><a href="https://www.insidehighered.com/author/emma-whitford" hreflang="en">Emma Whitford</a></div>
+              </div>
+      </div>
+
+## Summary
+An open letter signed by hundreds of academics supports Nathan Cofnas, who is accusing an individual named Arday. The article by Emma Whitford details this academic backing in a dispute, with Ghent University possibly involved as indicated by the image.
+
+## Key Points
+- Hundreds of academics have publicly supported Nathan Cofnas through an open letter.
+- Nathan Cofnas is making accusations against an individual referred to as Arday.
+- The open letter highlights widespread academic solidarity in the situation.
+- The dispute may involve ethical or institutional issues within academia.
+
+
+## Entities
+- **Nathan Cofnas** (person, relevance=)
+- **Arday** (person, relevance=)
+- **Emma Whitford** (person, relevance=)
+- **Ghent University** (org, relevance=)
+- **open letter** (concept, relevance=)

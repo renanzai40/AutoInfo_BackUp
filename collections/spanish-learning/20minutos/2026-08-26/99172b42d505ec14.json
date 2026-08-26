@@ -1,0 +1,24 @@
+{
+  "id": "99172b42d505ec14",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gastronomia/recetas/revuelto-huevos-repollo-zanahoria-bacon-receta-barata-perfecta-cenar-sin-complicaciones_7025044_0.html",
+  "title": "Revuelto de huevos con repollo, zanahoria y bacon, una receta muy barata",
+  "content": "También es una idea perfecta para consumir más verduras.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T07:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4d00c846-823a-4624-8946-3ac9e98255e0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

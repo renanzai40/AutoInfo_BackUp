@@ -1,0 +1,24 @@
+{
+  "id": "5c67fec4216f9080",
+  "source_name": "juejin",
+  "source_type": "rss",
+  "source_url": "https://juejin.cn/post/7677803387145338889",
+  "title": "掘金风格后端数据库设计实战：从用户表到分布式架构，一文搞定",
+  "content": "掘金风格后端数据库设计实战：从用户表到分布式架构，一文搞定 一、业务概览：我们需要几张表？ 一个典型的 UGC 社区（类似掘金），核心功能包括：用户注册登录、发布文章、点赞、收藏、评论、关注、标签、文",
+  "content_type": "text",
+  "source_platform": "juejin",
+  "collected_at": "2026-08-25T13:44:06+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://juejin.cn/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "50748fb6-3f07-4633-ade2-511ec24f39f3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

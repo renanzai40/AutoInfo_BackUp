@@ -1,0 +1,24 @@
+{
+  "id": "7f0cce3ed3d1e2a0",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/programas/noticiario/18h-estrela-da-amadora-vende-90-da-sad-a-grupo-alemao/",
+  "title": "18h. Estrela da Amadora vende 90% da SAD a grupo alemão",
+  "content": "Presidente da SAD considera que os \"três grandes\" já esgotaram a capacidade de crescimento dentro de Portugal. Ainda, 10 dos 16 feridos em atropelamento em Albufeira já tiveram alta hospitalar.",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T18:39:23+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3d3a0ccf-53e6-430c-9345-b8e4a833e9ea",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

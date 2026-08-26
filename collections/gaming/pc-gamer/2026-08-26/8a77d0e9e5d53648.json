@@ -1,0 +1,24 @@
+{
+  "id": "8a77d0e9e5d53648",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/games/sim/how-to-fish-spider-crab/",
+  "title": "How to Fish: Strategies for beating the Spider Crab",
+  "content": "You can't bring a gun to this knife fight.",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-25T00:58:50+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "efd36c58-ca51-47c3-939d-1adb32d5148f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

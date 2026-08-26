@@ -1,0 +1,24 @@
+{
+  "id": "e83a6555c7598cb0",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-22/Israel-s-E1-settlement-plan-sparks-global-backlash-1POjNwaj0yY/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Israel's E1 settlement plan sparks global backlash",
+  "content": "Israel's plan to advance settlement construction in the E1 area of the occupied West Bank has drawn widespread international criticism, with Palestinian leaders warning that the project could undermine prospects for a future Palestinian state.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-22T03:29:08+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b417c5f7-1bbb-45a2-aa11-fc510eca55ce",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

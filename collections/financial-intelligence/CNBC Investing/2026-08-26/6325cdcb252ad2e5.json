@@ -1,0 +1,24 @@
+{
+  "id": "6325cdcb252ad2e5",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/25/waymo-robotaxi-germany-2027.html",
+  "title": "Waymo to launch driverless rides in Germany in 2027, entering third market outside U.S.",
+  "content": "Waymo has been the biggest robotaxi player in the U.S., and has announced plans to enter the U.K., Japan and now Germany.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-25T21:47:29+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "19921481-c074-48bf-9117-375bdfe66e10",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

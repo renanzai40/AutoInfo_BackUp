@@ -1,0 +1,24 @@
+{
+  "id": "60a0a953ac14c1ae",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/review/saily-ultra-esim/",
+  "title": "Saily Ultra eSIM Premum Plan Review: Packed With Perks",
+  "content": "For uninterrupted service as you country-hop, the Saily Ultra eSIM works well and comes with plentiful perks. It’s pricey though.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-22T13:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c0f3bb02-2ff6-4c05-8283-763e8944c7a1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

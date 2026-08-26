@@ -1,0 +1,24 @@
+{
+  "id": "31e400a6979497bd",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/cook/news/cards/i-migliori-pinot-nero-italiani-ecco-classifica-primi-cinque/i-5-migliori-pinot-nero_principale.shtml",
+  "title": "I migliori Pinot Nero italiani: ecco la classifica dei primi cinque",
+  "content": "<p><img alt=\"I migliori Pinot Nero italiani: ecco la classifica dei primi cinque\" src=\"https://images2.corriereobjects.it/methode_image/2024/05/07/Cucina/Foto%20Cucina%20-%20Trattate/vini-autunnali-cf-cropped-32-0-795-599-k5hH--590x445@Corriere-Web-Sezioni-kQy-U32401655374334i6D-526x284@Corriere-Web-Sezioni-ksHD-U3480153753457Kq-656x492@Corriere-Web-Sezioni.jpg\" title=\"I migliori Pinot Nero italiani: ecco la classifica dei primi cinque\" /><p>Il concorso nazionale del Pinot Nero, tra i più nobili vitigni a bacca rossa a livello mondiale, ha stabilito la classifica dei migliori italiani dell’annata 2021</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-11T22:00:20+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f10e7d8a-05cb-4c01-a8d3-d7a6d74bf814",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

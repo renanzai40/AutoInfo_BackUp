@@ -1,0 +1,52 @@
+---
+title: Гендиректор компании "Туладрон" арестован по делу о мошенничестве
+domain: russian-learning
+tier: 01-Raw
+entry_id: russian-learning-general-
+source_url: https://www.interfax.ru/russia/1111206
+source_type: rss
+source_platform: interfax
+collected_at: '2026-08-25T17:40:00+03:00'
+summary: The general director of 'TulaDrone' has been arrested for committing large-scale fraud. The arrest was ordered by
+  the Central District Court of Tula, and the news was reported by the court's press service.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: unique
+source_score: 90.0
+language: ru
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 73a832db-03e2-45b9-9023-aa9eae40c195
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: false
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+Центральный районный суд Тулы арестовал гендиректора АНО "НПЦ БАС" "ТулаДрон", обвиняемого в совершении мошенничества в особо крупном размере, сообщила объединенная пресс-служба судов Тульской области.
+
+## Summary
+The general director of 'TulaDrone' has been arrested for committing large-scale fraud. The arrest was ordered by the Central District Court of Tula, and the news was reported by the court's press service.
+
+## Key Points
+- General director of TulaDrone arrested
+- Accused of large-scale fraud
+- Arrest made by Central District Court of Tula
+- Information reported by Tula region courts' press service
+
+
+## Entities
+- **ТулаДрон** (org, relevance=)
+- **АНО 'НПЦ БАС'** (org, relevance=)
+- **Центральный районный суд Тулы** (org, relevance=)
+- **объединенная пресс-служба судов Тульской области** (org, relevance=)
+- **мошенничество** (concept, relevance=)

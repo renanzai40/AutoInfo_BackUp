@@ -1,0 +1,24 @@
+{
+  "id": "7dd55a2129224783",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gonzoo/piscinas-abandonadas-que-no-pueden-dar-peor-rollo-parecen-un-escenario-pesadilla_7025593_1.html",
+  "title": "Las piscinas abandonadas que no pueden dar peor rollo y parecen un escenario de una película de terror",
+  "content": "Cuando pensamos en una piscina, normalmente nos viene a la cabeza un sitio lleno de gente y con agua en el que poder refrescarse, especialmente en los meses más cálidos del año. Sin embargo, las recogidas en esta galería no cumplen con esa descripción. Al contrario, se trata de lugares abandonados que dan muy mal rollo y que parecen sacados de una pesadilla.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T04:39:01+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "02bf0d5d-7286-4577-a46b-9f194734431f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

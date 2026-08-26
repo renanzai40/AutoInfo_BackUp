@@ -1,0 +1,24 @@
+{
+  "id": "380b2d7bf721fe4b",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/cinemania/series/black-mirror-gentlemen-casa-guinness-netflix-renovaciones_7028843_0.html",
+  "title": "'Black Mirror 8', 'The Gentlemen' temporada 3, 'La casa Guinness' temporada 2: renovación masiva de series en Netflix",
+  "content": "Confirmadas las nuevas temporadas de algunas de las producciones más exitosas de la plataforma de streaming en las islas británicas.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T10:05:03+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1d8060fb-ec46-46a2-b8e7-d8c51d166b42",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

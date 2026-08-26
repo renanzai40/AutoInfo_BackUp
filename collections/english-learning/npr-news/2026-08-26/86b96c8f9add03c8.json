@@ -1,0 +1,24 @@
+{
+  "id": "86b96c8f9add03c8",
+  "source_name": "npr-news",
+  "source_type": "rss",
+  "source_url": "https://www.npr.org/2026/08/26/nx-s1-5944787/50-kidnapped-haiti-gang-attack-47-dead",
+  "title": "More than 50 kidnapped as violent gang attack in Haiti leaves 47 dead",
+  "content": "It is believed to be one of the largest mass kidnappings in Haiti in recent years, and one gang leader is threatening to kill the hostages if authorities kill any gang members as they try to secure the community nestled in the hills above Port-au-Prince.",
+  "content_type": "text",
+  "source_platform": "npr-news",
+  "collected_at": "2026-08-26T01:45:34-04:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.npr.org/1001/rss.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "fe4113a1-0622-42db-81e3-82828c11db64",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

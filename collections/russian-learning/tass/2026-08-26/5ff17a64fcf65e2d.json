@@ -1,0 +1,24 @@
+{
+  "id": "5ff17a64fcf65e2d",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/kosmos/28044225",
+  "title": "SpaceX начнет строительство нового космодрома для Starship в Луизиане",
+  "content": "Начало строительства космодрома намечено на 2027 год",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T20:48:44+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4e4d42de-e98e-4004-a7cb-5a3f84e25be8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

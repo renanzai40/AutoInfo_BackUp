@@ -1,0 +1,24 @@
+{
+  "id": "6a501049e4ba1829",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/los-reyes-felipe-letizia-recibiran-presidente-francia-macron-su-mujer-primera-visita-oficial-temporada_7029201_0.html",
+  "title": "Los reyes Felipe y Letizia recibirán a Macron y su mujer en la primera visita oficial de la temporada",
+  "content": "El matrimonio tiene previsto viajar a España, respondiendo a la invitación de los monarcas, previsiblemente del 17 al 19 de septiembre, aunque la fecha no está cerrada.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T14:56:31+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "44703c3f-59b2-4fa9-a348-40932c503253",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

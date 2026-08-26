@@ -1,0 +1,24 @@
+{
+  "id": "a661ff7c91c30eee",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/ofertas-descuentos/sorprende-con-los-cascos-super-mario-que-se-conectan-tablet-consola-incluyen-estuche_7028548_0.html",
+  "title": "Sorprende con los cascos de Super Mario que se conectan a la tablet o consola e incluyen estuche",
+  "content": "Estos auriculares inalámbricos son perfectos para los fans de Mario que busquen escucharlo todo en cualquier parte y al más puro estilo Nintendo.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T18:30:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6fc284f5-753d-4292-acf6-a3e5cc9a45e6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

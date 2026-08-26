@@ -1,0 +1,24 @@
+{
+  "id": "3bd74e3a26417d9d",
+  "source_name": "hnrss",
+  "source_type": "rss",
+  "source_url": "https://webernaut.com/weird-websites",
+  "title": "Weird Websites",
+  "content": "<p>Article URL: <a href=\"https://webernaut.com/weird-websites\">https://webernaut.com/weird-websites</a></p>\n<p>Comments URL: <a href=\"https://news.ycombinator.com/item?id=49436220\">https://news.ycombinator.com/item?id=49436220</a></p>\n<p>Points: 1</p>\n<p># Comments: 0</p>",
+  "content_type": "text",
+  "source_platform": "hnrss",
+  "collected_at": "2026-08-25T15:55:02+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://hnrss.org/newest"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "44cb600c-7f67-4f47-89c0-a80eabe89648",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

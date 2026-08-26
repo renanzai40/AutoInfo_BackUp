@@ -1,0 +1,24 @@
+{
+  "id": "17db5aa48048be89",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/US-vows-economic-D-Day-as-Iran-threatens-to-halt-Gulf-oil-exports-1PRAVYAsym4/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "US vows 'economic D-Day' as Iran threatens to halt Gulf oil exports",
+  "content": "The US threatened Iran with what it called \"the greatest financial offensive ever marshalled\" as it prepared to ​roll out economic sanctions on Monday that target Iran's trade partners.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T03:59:52+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bc175ed1-0df9-4bbc-9ef8-ee158d092b24",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

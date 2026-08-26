@@ -1,0 +1,24 @@
+{
+  "id": "b63e0d7d22df3974",
+  "source_name": "rt-news",
+  "source_type": "rss",
+  "source_url": "https://www.rt.com/russia/644622-zakharova-wadephul-clear-affont/?utm_source=rss&utm_medium=rss&utm_campaign=RSS",
+  "title": "Russia responds to German claims of ‘affront’",
+  "content": "<img align=\"left\" alt=\"Preview\" src=\"https://mf.b37mrtl.ru/files/2026.08/thumbnail/6a8d812b20302766d42e48d0.jpg\" style=\"margin-right: 10px;\" /> Russian diplomat Maria Zakharova has mocked claims that Germany was insulted by military action during its foreign minister’s visit to Kiev <br /><a href=\"https://www.rt.com/russia/644622-zakharova-wadephul-clear-affont/?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=RSS\">Read Full Article at RT.com</a>",
+  "content_type": "text",
+  "source_platform": "rt-news",
+  "collected_at": "2026-08-25T10:26:37+00:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.rt.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "898f6dc7-9c6c-48ab-9d7c-9f1c3816c19b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

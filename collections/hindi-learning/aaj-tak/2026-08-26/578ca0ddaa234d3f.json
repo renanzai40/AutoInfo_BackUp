@@ -1,0 +1,24 @@
+{
+  "id": "578ca0ddaa234d3f",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/india/news/story/pm-modi-pragati-meeting-projects-agriculture-ai-cyber-fraud-digital-arrest-ntc-amkr-dskc-2630005-2026-08-26?utm_source=rssfeed",
+  "title": "PM मोदी की &#039;प्रगति&#039; बैठक, 30 हजार करोड़ के प्रोजेक्ट पर मंथन",
+  "content": "प्रधानमंत्री मोदी ने प्रगति की 53वीं बैठक में कई अहम मुद्दों की समीक्षा की. बैठक में रेलवे, सड़क और ऊर्जा क्षेत्रों से जुड़ी 6 प्रमुख बुनियादी ढांचागत परियोजनाओं समेत साइबर धोखाधड़ी के मामलों की समीक्षा की गई.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-26T01:41:02+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f543432f-281f-4c9f-9a62-d489c6fea96d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

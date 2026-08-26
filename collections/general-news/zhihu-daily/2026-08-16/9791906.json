@@ -1,0 +1,31 @@
+{
+  "id": 9791906,
+  "source_name": "zhihu-daily",
+  "source_type": "api",
+  "source_url": "https://daily.zhihu.com/story/9791906",
+  "title": "如果给一只雄蜂幼虫一直喂食蜂王浆，这只雄蜂发育成成虫后会怎么样？",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "zhihu-daily",
+  "collected_at": "2026-08-15T18:57:45.089039+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "image_hue": "0xb2804b",
+    "title": "如果给一只雄蜂幼虫一直喂食蜂王浆，这只雄蜂发育成成虫后会怎么样？",
+    "url": "https://daily.zhihu.com/story/9791906",
+    "hint": "奔奔马 · 4 分钟阅读",
+    "ga_prefix": "081507",
+    "images": [
+      "https://picx.zhimg.com/v2-414738f11aa20fbc9b126b6f31116d2e.jpg?source=8673f162"
+    ],
+    "type": 0,
+    "id": 9791906
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "eafe8f01-a1ca-42c7-adf4-1de0507cddf3"
+}

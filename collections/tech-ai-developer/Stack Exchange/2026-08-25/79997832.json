@@ -1,0 +1,49 @@
+{
+  "id": 79997832,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/79997832/alternative-ways-to-convert-datetime-to-datetime-in-c",
+  "title": "Alternative ways to convert `DateTime?` to `DateTime` in c#",
+  "content": "Alternative ways to convert `DateTime?` to `DateTime` in c#",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-25T15:45:11.611974+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "c#",
+      "datetime",
+      "nullable"
+    ],
+    "owner": {
+      "account_id": 29812813,
+      "reputation": 47,
+      "user_id": 22847822,
+      "user_type": "registered",
+      "profile_image": "https://lh3.googleusercontent.com/a/ACg8ocJvlD7VpvYipqO1wXUB_BOqTXEC18XWrXnpkbnq6212clA=k-s256",
+      "display_name": "Alex",
+      "link": "https://stackoverflow.com/users/22847822/alex"
+    },
+    "is_answered": false,
+    "view_count": 138,
+    "closed_date": 1787598026,
+    "answer_count": 1,
+    "score": -6,
+    "last_activity_date": 1787671739,
+    "creation_date": 1787585925,
+    "last_edit_date": 1787593025,
+    "question_id": 79997832,
+    "link": "https://stackoverflow.com/questions/79997832/alternative-ways-to-convert-datetime-to-datetime-in-c",
+    "closed_reason": "Duplicate",
+    "title": "Alternative ways to convert `DateTime?` to `DateTime` in c#"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9894129f-1e1d-4754-9f7c-f31a34b0c5e6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

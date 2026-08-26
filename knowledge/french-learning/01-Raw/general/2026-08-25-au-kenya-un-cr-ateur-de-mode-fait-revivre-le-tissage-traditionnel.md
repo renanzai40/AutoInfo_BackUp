@@ -1,0 +1,53 @@
+---
+title: Au Kenya, un créateur de mode fait revivre le tissage traditionnel
+domain: french-learning
+tier: 01-Raw
+entry_id: french-learning-general-au-kenya-un-cr-ateur-de-mode-fait-revivre-le-tissage-traditionnel
+source_url: https://www.france24.com/fr/vid%C3%A9o/20260825-au-kenya-un-cr%C3%A9ateur-de-mode-fait-revivre-le-tissage-traditionnel
+source_type: rss
+source_platform: france24-fr
+collected_at: '2026-08-25T15:37:48+00:00'
+summary: A young fashion designer in Kenya is using handmade clothing to differentiate his brand. He exclusively uses manual
+  looms to revive and preserve traditional weaving techniques that are threatened by industrialization.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: fr
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: bdc0c6ef-7fe2-4520-9a48-9a3b4bc2a53b
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+Au Kenya, un jeune créateur de mode mise sur des vêtements entièrement réalisés à la main pour se démarquer. Il utilise exclusivement des métiers à tisser manuels afin de préserver et de remettre au goût du jour des savoir-faire traditionnels menacés par l'industrialisation. Récit de Laurent Berstecher.
+
+## Summary
+A young fashion designer in Kenya is using handmade clothing to differentiate his brand. He exclusively uses manual looms to revive and preserve traditional weaving techniques that are threatened by industrialization.
+
+## Key Points
+- The article features a young Kenyan fashion designer focusing on traditional weaving.
+- He uses entirely handmade clothing with manual looms.
+- The goal is to preserve and revive traditional know-how endangered by industrialization.
+- The story is reported by Laurent Berstecher.
+
+
+## Entities
+- **Young fashion designer** (person, relevance=)
+- **Kenya** (org, relevance=)
+- **Traditional weaving** (concept, relevance=)
+- **Manual looms** (technology, relevance=)
+- **Industrialization** (concept, relevance=)
+- **Laurent Berstecher** (person, relevance=)

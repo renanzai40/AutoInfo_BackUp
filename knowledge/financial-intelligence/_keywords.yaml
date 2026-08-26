@@ -1,0 +1,601 @@
+keywords:
+  apple inc.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.178836+00:00'
+    updated_at: '2026-08-26T02:18:05.758473+00:00'
+    source: auto-discovery:SEC EDGAR
+  form 10-q:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.184989+00:00'
+    updated_at: '2026-08-23T02:18:44.111756+00:00'
+    source: auto-discovery:SEC EDGAR
+  sec:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.197081+00:00'
+    updated_at: '2026-08-26T02:18:05.847126+00:00'
+    source: auto-discovery:SEC EDGAR
+  apple:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.208932+00:00'
+    updated_at: '2026-08-26T02:25:21.140493+00:00'
+    source: auto-discovery:TheStreet
+  inc.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.240950+00:00'
+    updated_at: '2026-08-26T02:18:06.079763+00:00'
+    source: auto-discovery:SEC EDGAR
+  submitted:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.293121+00:00'
+    updated_at: '2026-08-23T02:18:44.259437+00:00'
+    source: auto-discovery:SEC EDGAR
+  quarterly:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.303301+00:00'
+    updated_at: '2026-08-26T02:17:57.711955+00:00'
+    source: auto-discovery:SEC EDGAR
+  report:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.316859+00:00'
+    updated_at: '2026-08-26T02:24:17.505634+00:00'
+    source: auto-discovery:TheStreet
+  (form:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.333252+00:00'
+    updated_at: '2026-08-23T02:16:23.811212+00:00'
+    source: auto-discovery:SEC EDGAR
+  10-q):
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.371448+00:00'
+    updated_at: '2026-08-23T02:16:23.859942+00:00'
+    source: auto-discovery:SEC EDGAR
+  period:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.424777+00:00'
+    updated_at: '2026-08-26T02:30:51.080570+00:00'
+    source: auto-discovery:WSJ Markets
+  ending:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.441879+00:00'
+    updated_at: '2026-08-26T02:17:58.032046+00:00'
+    source: auto-discovery:SEC EDGAR
+  march:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.458600+00:00'
+    updated_at: '2026-08-26T02:17:26.237620+00:00'
+    source: auto-discovery:SEC EDGAR
+  inc. submitted:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.475637+00:00'
+    updated_at: '2026-08-23T02:18:44.555318+00:00'
+    source: auto-discovery:SEC EDGAR
+  submitted quarterly:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.491400+00:00'
+    updated_at: '2026-08-23T02:16:23.997463+00:00'
+    source: auto-discovery:SEC EDGAR
+  quarterly report:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.507312+00:00'
+    updated_at: '2026-08-23T02:18:44.658546+00:00'
+    source: auto-discovery:SEC EDGAR
+  report (form:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.530075+00:00'
+    updated_at: '2026-08-23T02:16:24.092330+00:00'
+    source: auto-discovery:SEC EDGAR
+  (form 10-q):
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.548506+00:00'
+    updated_at: '2026-08-23T02:16:24.140905+00:00'
+    source: auto-discovery:SEC EDGAR
+  10-q) for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.566141+00:00'
+    updated_at: '2026-08-15T19:21:50.566141+00:00'
+    source: auto-discovery:SEC EDGAR
+  the period:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.582771+00:00'
+    updated_at: '2026-08-15T19:21:50.582771+00:00'
+    source: auto-discovery:SEC EDGAR
+  period ending:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.603027+00:00'
+    updated_at: '2026-08-23T02:18:35.583922+00:00'
+    source: auto-discovery:SEC EDGAR
+  ending march:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.625081+00:00'
+    updated_at: '2026-08-15T19:21:50.625081+00:00'
+    source: auto-discovery:SEC EDGAR
+  apple inc. submitted:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.645395+00:00'
+    updated_at: '2026-08-23T02:18:44.756244+00:00'
+    source: auto-discovery:SEC EDGAR
+  inc. submitted quarterly:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.667248+00:00'
+    updated_at: '2026-08-23T02:16:24.396315+00:00'
+    source: auto-discovery:SEC EDGAR
+  submitted quarterly report:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.694563+00:00'
+    updated_at: '2026-08-23T02:16:24.443510+00:00'
+    source: auto-discovery:SEC EDGAR
+  quarterly report (form:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.720394+00:00'
+    updated_at: '2026-08-23T02:16:24.490770+00:00'
+    source: auto-discovery:SEC EDGAR
+  report (form 10-q):
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.789052+00:00'
+    updated_at: '2026-08-23T02:16:24.537424+00:00'
+    source: auto-discovery:SEC EDGAR
+  (form 10-q) for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.818694+00:00'
+    updated_at: '2026-08-15T19:21:50.818694+00:00'
+    source: auto-discovery:SEC EDGAR
+  10-q) for the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.841013+00:00'
+    updated_at: '2026-08-15T19:21:50.841013+00:00'
+    source: auto-discovery:SEC EDGAR
+  for the period:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.892809+00:00'
+    updated_at: '2026-08-15T19:21:50.892809+00:00'
+    source: auto-discovery:SEC EDGAR
+  the period ending:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.952464+00:00'
+    updated_at: '2026-08-15T19:21:50.952464+00:00'
+    source: auto-discovery:SEC EDGAR
+  period ending march:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:50.975161+00:00'
+    updated_at: '2026-08-15T19:21:50.975161+00:00'
+    source: auto-discovery:SEC EDGAR
+  filing:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.001286+00:00'
+    updated_at: '2026-08-26T02:18:05.890965+00:00'
+    source: auto-discovery:SEC EDGAR
+  made:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.026927+00:00'
+    updated_at: '2026-08-26T02:29:10.025349+00:00'
+    source: auto-discovery:TheStreet
+  ticker:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.080911+00:00'
+    updated_at: '2026-08-26T02:18:06.124293+00:00'
+    source: auto-discovery:SEC EDGAR
+  symbol:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.139235+00:00'
+    updated_at: '2026-08-26T02:18:06.169097+00:00'
+    source: auto-discovery:SEC EDGAR
+  aapl.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.164008+00:00'
+    updated_at: '2026-08-26T02:18:06.212152+00:00'
+    source: auto-discovery:SEC EDGAR
+  the filing:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.189312+00:00'
+    updated_at: '2026-08-26T02:18:05.988522+00:00'
+    source: auto-discovery:SEC EDGAR
+  filing was:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.217244+00:00'
+    updated_at: '2026-08-15T19:21:51.217244+00:00'
+    source: auto-discovery:SEC EDGAR
+  was made:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.246934+00:00'
+    updated_at: '2026-08-23T02:20:58.074881+00:00'
+    source: auto-discovery:TheStreet
+  made may:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.274042+00:00'
+    updated_at: '2026-08-15T19:21:51.274042+00:00'
+    source: auto-discovery:SEC EDGAR
+  the sec:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.305191+00:00'
+    updated_at: '2026-08-26T02:17:57.057811+00:00'
+    source: auto-discovery:SEC EDGAR
+  sec under:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.338830+00:00'
+    updated_at: '2026-08-15T19:21:51.338830+00:00'
+    source: auto-discovery:SEC EDGAR
+  under ticker:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.370704+00:00'
+    updated_at: '2026-08-23T02:16:25.092384+00:00'
+    source: auto-discovery:SEC EDGAR
+  ticker symbol:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.400530+00:00'
+    updated_at: '2026-08-26T02:18:06.256637+00:00'
+    source: auto-discovery:SEC EDGAR
+  symbol aapl.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.432656+00:00'
+    updated_at: '2026-08-26T02:18:06.302106+00:00'
+    source: auto-discovery:SEC EDGAR
+  the filing was:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.462348+00:00'
+    updated_at: '2026-08-15T19:21:51.462348+00:00'
+    source: auto-discovery:SEC EDGAR
+  filing was made:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.496243+00:00'
+    updated_at: '2026-08-15T19:21:51.496243+00:00'
+    source: auto-discovery:SEC EDGAR
+  was made may:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.531357+00:00'
+    updated_at: '2026-08-15T19:21:51.531357+00:00'
+    source: auto-discovery:SEC EDGAR
+  with the sec:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.567362+00:00'
+    updated_at: '2026-08-26T02:17:57.102817+00:00'
+    source: auto-discovery:SEC EDGAR
+  the sec under:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.598713+00:00'
+    updated_at: '2026-08-15T19:21:51.598713+00:00'
+    source: auto-discovery:SEC EDGAR
+  sec under ticker:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.637757+00:00'
+    updated_at: '2026-08-15T19:21:51.637757+00:00'
+    source: auto-discovery:SEC EDGAR
+  under ticker symbol:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.673914+00:00'
+    updated_at: '2026-08-23T02:16:25.185271+00:00'
+    source: auto-discovery:SEC EDGAR
+  ticker symbol aapl.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.710218+00:00'
+    updated_at: '2026-08-26T02:18:06.348470+00:00'
+    source: auto-discovery:SEC EDGAR
+  available:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.749658+00:00'
+    updated_at: '2026-08-26T02:27:56.984553+00:00'
+    source: auto-discovery:TheStreet
+  via:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.783435+00:00'
+    updated_at: '2026-08-26T02:17:58.348995+00:00'
+    source: auto-discovery:SEC EDGAR
+  edgar:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.818919+00:00'
+    updated_at: '2026-08-26T02:17:58.394558+00:00'
+    source: auto-discovery:SEC EDGAR
+  accession:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.858595+00:00'
+    updated_at: '2026-08-26T02:18:06.481597+00:00'
+    source: auto-discovery:SEC EDGAR
+  number:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.900758+00:00'
+    updated_at: '2026-08-26T02:18:06.526215+00:00'
+    source: auto-discovery:SEC EDGAR
+  the report:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.943036+00:00'
+    updated_at: '2026-08-26T02:24:17.585055+00:00'
+    source: auto-discovery:TheStreet
+  report available:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:51.984821+00:00'
+    updated_at: '2026-08-15T19:21:51.984821+00:00'
+    source: auto-discovery:SEC EDGAR
+  available via:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.027945+00:00'
+    updated_at: '2026-08-15T19:21:52.027945+00:00'
+    source: auto-discovery:SEC EDGAR
+  via sec:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.069340+00:00'
+    updated_at: '2026-08-23T02:18:51.275052+00:00'
+    source: auto-discovery:SEC EDGAR
+  sec edgar:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.114544+00:00'
+    updated_at: '2026-08-23T02:18:50.524164+00:00'
+    source: auto-discovery:SEC EDGAR
+  edgar under:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.161691+00:00'
+    updated_at: '2026-08-23T02:18:51.321637+00:00'
+    source: auto-discovery:SEC EDGAR
+  under accession:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.199892+00:00'
+    updated_at: '2026-08-23T02:18:51.369247+00:00'
+    source: auto-discovery:SEC EDGAR
+  accession number:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.243036+00:00'
+    updated_at: '2026-08-26T02:18:06.570702+00:00'
+    source: auto-discovery:SEC EDGAR
+  the report available:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.284054+00:00'
+    updated_at: '2026-08-15T19:21:52.284054+00:00'
+    source: auto-discovery:SEC EDGAR
+  report available via:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.385776+00:00'
+    updated_at: '2026-08-15T19:21:52.385776+00:00'
+    source: auto-discovery:SEC EDGAR
+  available via sec:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.429711+00:00'
+    updated_at: '2026-08-15T19:21:52.429711+00:00'
+    source: auto-discovery:SEC EDGAR
+  via sec edgar:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.471135+00:00'
+    updated_at: '2026-08-23T02:18:51.463824+00:00'
+    source: auto-discovery:SEC EDGAR
+  sec edgar under:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.511714+00:00'
+    updated_at: '2026-08-23T02:18:51.509326+00:00'
+    source: auto-discovery:SEC EDGAR
+  edgar under accession:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.565514+00:00'
+    updated_at: '2026-08-23T02:18:51.553619+00:00'
+    source: auto-discovery:SEC EDGAR
+  under accession number:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.613649+00:00'
+    updated_at: '2026-08-23T02:18:51.600267+00:00'
+    source: auto-discovery:SEC EDGAR
+  regulatory:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.664047+00:00'
+    updated_at: '2026-08-26T02:29:01.341243+00:00'
+    source: auto-discovery:TheStreet
+  financial:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.709684+00:00'
+    updated_at: '2026-08-26T02:35:38.836966+00:00'
+    source: auto-discovery:WSJ Markets
+  disclosure,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.758391+00:00'
+    updated_at: '2026-08-15T19:21:52.758391+00:00'
+    source: auto-discovery:SEC EDGAR
+  medical:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.811776+00:00'
+    updated_at: '2026-08-26T02:29:27.218978+00:00'
+    source: auto-discovery:TheStreet
+  scientific:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.866036+00:00'
+    updated_at: '2026-08-15T19:21:52.866036+00:00'
+    source: auto-discovery:SEC EDGAR
+  publication.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.915990+00:00'
+    updated_at: '2026-08-15T19:21:52.915990+00:00'
+    source: auto-discovery:SEC EDGAR
+  this regulatory:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:52.961914+00:00'
+    updated_at: '2026-08-15T19:21:52.961914+00:00'
+    source: auto-discovery:SEC EDGAR
+  regulatory financial:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:53.019896+00:00'
+    updated_at: '2026-08-15T19:21:53.019896+00:00'
+    source: auto-discovery:SEC EDGAR
+  financial disclosure,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:53.075972+00:00'
+    updated_at: '2026-08-15T19:21:53.075972+00:00'
+    source: auto-discovery:SEC EDGAR
+  disclosure, not:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:53.202954+00:00'
+    updated_at: '2026-08-15T19:21:53.202954+00:00'
+    source: auto-discovery:SEC EDGAR
+  not medical:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:53.261299+00:00'
+    updated_at: '2026-08-15T19:21:53.261299+00:00'
+    source: auto-discovery:SEC EDGAR
+  medical scientific:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:53.323696+00:00'
+    updated_at: '2026-08-15T19:21:53.323696+00:00'
+    source: auto-discovery:SEC EDGAR
+  scientific publication.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:53.379116+00:00'
+    updated_at: '2026-08-15T19:21:53.379116+00:00'
+    source: auto-discovery:SEC EDGAR
+  this regulatory financial:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:53.449288+00:00'
+    updated_at: '2026-08-15T19:21:53.449288+00:00'
+    source: auto-discovery:SEC EDGAR
+  regulatory financial disclosure,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:53.512697+00:00'
+    updated_at: '2026-08-15T19:21:53.512697+00:00'
+    source: auto-discovery:SEC EDGAR
+  financial disclosure, not:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:53.576993+00:00'
+    updated_at: '2026-08-15T19:21:53.576993+00:00'
+    source: auto-discovery:SEC EDGAR
+  disclosure, not medical:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:53.644022+00:00'
+    updated_at: '2026-08-15T19:21:53.644022+00:00'
+    source: auto-discovery:SEC EDGAR
+  not medical scientific:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:53.709145+00:00'
+    updated_at: '2026-08-15T19:21:53.709145+00:00'
+    source: auto-discovery:SEC EDGAR
+  medical scientific publication.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:53.781814+00:00'
+    updated_at: '2026-08-15T19:21:53.781814+00:00'
+    source: auto-discovery:SEC EDGAR
+  form 8-k:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:53.957055+00:00'
+    updated_at: '2026-08-23T02:18:50.477909+00:00'
+    source: auto-discovery:SEC EDGAR
+  form:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:54.270012+00:00'
+    updated_at: '2026-08-26T02:18:02.798486+00:00'
+    source: auto-discovery:SEC EDGAR
+  8-k:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:54.336064+00:00'
+    updated_at: '2026-08-26T02:18:05.803771+00:00'
+    source: auto-discovery:SEC EDGAR
+  july:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:54.463820+00:00'
+    updated_at: '2026-08-26T02:18:06.392723+00:00'
+    source: auto-discovery:SEC EDGAR
+  submitted form:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:54.593273+00:00'
+    updated_at: '2026-08-23T02:18:44.604669+00:00'
+    source: auto-discovery:SEC EDGAR
+  8-k filing:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:54.659380+00:00'
+    updated_at: '2026-08-23T02:16:05.505111+00:00'
+    source: auto-discovery:SEC EDGAR
+  filing the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:54.721877+00:00'
+    updated_at: '2026-08-23T02:18:35.144636+00:00'
+    source: auto-discovery:SEC EDGAR

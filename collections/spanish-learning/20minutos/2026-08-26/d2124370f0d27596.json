@@ -1,0 +1,24 @@
+{
+  "id": "d2124370f0d27596",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/motor/actualidad/quieren-conductores-automaticos-conducir-coches-cambio-manual-una-hora-practicas_7025364_0.html",
+  "title": "Quieren que conductores de coches automáticos puedan llevar los de cambio manual tras una hora de prácticas",
+  "content": "Una propuesta del Real Automóvil Club británico (RAC) para el Reino Unido simplificaría enormemente el paso del automático al manual para los conductores con esta tipología de carnet.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-24T07:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "dfcb92dd-58dc-420a-b570-396c69735a1c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

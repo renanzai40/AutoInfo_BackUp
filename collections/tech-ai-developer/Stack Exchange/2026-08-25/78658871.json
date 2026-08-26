@@ -1,0 +1,48 @@
+{
+  "id": 78658871,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/78658871/parameter-estimation-with-nls-for-a-function-with-integrate",
+  "title": "Parameter estimation with nls for a function with integrate",
+  "content": "Parameter estimation with nls for a function with integrate",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-25T15:17:44.244583+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "r",
+      "numerical-integration",
+      "nls"
+    ],
+    "owner": {
+      "account_id": 4264553,
+      "reputation": 21,
+      "user_id": 11145762,
+      "user_type": "registered",
+      "profile_image": "https://www.gravatar.com/avatar/fb45f9db4e2582c873ef8d477f5c2076?s=256&d=identicon&r=PG&f=y&so-version=2",
+      "display_name": "Murali",
+      "link": "https://stackoverflow.com/users/11145762/murali"
+    },
+    "is_answered": false,
+    "view_count": 86,
+    "answer_count": 1,
+    "score": 0,
+    "last_activity_date": 1787670155,
+    "creation_date": 1719150859,
+    "last_edit_date": 1787670155,
+    "question_id": 78658871,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/78658871/parameter-estimation-with-nls-for-a-function-with-integrate",
+    "title": "Parameter estimation with nls for a function with integrate"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "458a7ea2-d24a-4986-be53-605396900cdf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

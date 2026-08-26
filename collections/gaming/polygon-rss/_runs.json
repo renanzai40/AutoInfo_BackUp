@@ -1,0 +1,114 @@
+[
+  {
+    "collection_id": "col-20260812T180828-a26a8e63",
+    "timestamp": "2026-08-12T18:08:31.191989+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.polygon.com/rss/index.xml: Remote end closed connection without response",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.polygon.com/rss/index.xml: Remote end closed connection without response"
+      }
+    ],
+    "duration_ms": 910.0
+  },
+  {
+    "collection_id": "col-20260815T181608-874eb172",
+    "timestamp": "2026-08-15T18:16:12.445964+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.polygon.com/rss/index.xml: Server disconnected without sending a response.",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.polygon.com/rss/index.xml: Server disconnected without sending a response."
+      }
+    ],
+    "duration_ms": 968.0
+  },
+  {
+    "collection_id": "col-20260815T183306-a2ded5b6",
+    "timestamp": "2026-08-15T18:33:07.600739+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.polygon.com/rss/index.xml: Server disconnected without sending a response.",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.polygon.com/rss/index.xml: Server disconnected without sending a response."
+      }
+    ],
+    "duration_ms": 1424.0
+  },
+  {
+    "collection_id": "col-20260815T202610-3d0908c4",
+    "timestamp": "2026-08-15T20:26:12.512893+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.polygon.com/rss/index.xml: Server disconnected without sending a response.",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.polygon.com/rss/index.xml: Server disconnected without sending a response."
+      }
+    ],
+    "duration_ms": 1531.0
+  },
+  {
+    "collection_id": "col-20260825T151345-2b4be2c9",
+    "timestamp": "2026-08-25T15:13:50.285548+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.polygon.com/rss/index.xml: Server disconnected without sending a response.",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.polygon.com/rss/index.xml: Server disconnected without sending a response."
+      }
+    ],
+    "duration_ms": 860.0
+  },
+  {
+    "collection_id": "col-20260825T153504-30ca5f42",
+    "timestamp": "2026-08-25T15:35:08.774188+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.polygon.com/rss/index.xml: Server disconnected without sending a response.",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.polygon.com/rss/index.xml: Server disconnected without sending a response."
+      }
+    ],
+    "duration_ms": 940.0
+  },
+  {
+    "collection_id": "col-20260825T154134-094ea8eb",
+    "timestamp": "2026-08-25T15:41:38.664917+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.polygon.com/rss/index.xml: Server disconnected without sending a response.",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.polygon.com/rss/index.xml: Server disconnected without sending a response."
+      }
+    ],
+    "duration_ms": 1227.0
+  }
+]

@@ -1,0 +1,55 @@
+---
+title: Trump informs Lisa Cook that he is “considering” her removal
+domain: legal-compliance
+tier: 01-Raw
+entry_id: legal-compliance-general-trump-informs-lisa-cook-that-he-is-considering-her-removal
+source_url: https://www.scotusblog.com/2026/08/trump-informs-lisa-cook-that-he-is-considering-her-removal/
+source_type: rss
+source_platform: rss
+collected_at: '2026-08-07T20:44:00+00:00'
+summary: President Donald Trump is considering removing Federal Reserve Governor Lisa Cook due to allegations of mortgage
+  fraud. The Supreme Court has previously blocked such attempts, emphasizing the need for Fed independence. Cook's lawyers
+  are contesting the move, stating the allegations are baseless and politically motivated.
+tags: []
+quality_tier: 2
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 70.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 39b66fc4-a390-4da7-bba2-bd61caad7a61
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<p>President Donald Trump has renewed his effort to fire Lisa Cook, a member of the Federal Reserve’s Board of Governors. The Supreme Court on June 29 <a href="https://www.supremecourt.gov/opinions/25pdf/25a312_5468.pdf">temporarily thwarted</a> Trump’s initial effort to remove Cook, emphasizing the need for the Federal Reserve to remain free of political influence. In a <a href="https://d3i6fh83elv35t.cloudfront.net/static/2026/08/Cook-Letter-Scan.pdf">letter dated Aug. 5</a>, White House Deputy Chief of Staff Dan Scavino notified Cook that Trump was “considering” whether to remove her from the Board of Governors. Scavino gave Cook 21 days to respond to the White House’s allegations that she committed mortgage fraud in 2021, before she joined the Fed, by listing two different homes – a condo in Georgia and a house in Michigan – as her primary residence on mortgage applications, making her eligible for more favorable terms.</p><p>Cook has strongly disputed the mortgage fraud allegations, and <a href="https://www.nytimes.com/2025/09/13/business/lisa-cook-mortgage-fed-trump.html">other financial records appear to undermine</a> the Trump administration’s claims.</p><p>Scavino’s letter cited the court’s decision in <a href="https://www.scotusblog.com/cases/trump-v-cook/"><em>Trump v. Cook</em></a>, in which the majority ruled that “Cook was entitled to notice and some opportunity to respond prior to her termination.” The opinion by Chief Justice John Roberts stressed that Cook would not necessarily be “entitled to an audience with the President or a full-blown judicial trial.” Instead, Roberts wrote, “[a]ll that is required is ‘the right to support [her] allegations by argument however brief, and, if need be, by proof, however informal,’ before a final decision is made.”</p><p>Noting that the August 2025 criminal referral by William Pulte, the head of the Federal Housing Finance Agency, and his letter “set forth the allegations,” Scavino told Cook that “[t]his is your opportunity to respond. You may provide any evidence or other supporting documentation you wish to be considered, and you may provide any argument that you wish to be considered to the President through the Director of Presidential Personnel no later than August 26, 2026.”</p><p>Cook’s lawyers, Abbe Lowell and Norm Eisen, confirmed that she received Scavino’s letter on Friday. In a statement to SCOTUSblog, they contended that the allegations against Cook are “as baseless now as they were a year ago when President Trump tried to remove Governor Cook to interfere with the independence of the Federal Reserve. No matter what President Trump tries to do next, this much is clear under the facts and Supreme Court precedent — there is no valid cause for removing Governor Cook. As we did before, we will challenge this latest pretext and preserve her position and the historic role of the Fed.&quot;</p>
+
+## Summary
+President Donald Trump is considering removing Federal Reserve Governor Lisa Cook due to allegations of mortgage fraud. The Supreme Court has previously blocked such attempts, emphasizing the need for Fed independence. Cook's lawyers are contesting the move, stating the allegations are baseless and politically motivated.
+
+## Key Points
+- Trump's renewed effort to remove Lisa Cook from the Federal Reserve Board of Governors.
+- The Supreme Court temporarily halted the removal to protect Fed independence from political influence.
+- The White House has sent a letter giving Cook a chance to respond to mortgage fraud allegations from 2021.
+- Cook and her lawyers dispute the allegations, with records suggesting they may be unfounded.
+- The case raises legal questions about federal appointments and institutional autonomy.
+
+
+## Entities
+- **Donald Trump** (person, relevance=)
+- **Lisa Cook** (person, relevance=)
+- **Federal Reserve** (org, relevance=)
+- **Supreme Court** (org, relevance=)
+- **Dan Scavino** (person, relevance=)
+- **mortgage fraud** (concept, relevance=)

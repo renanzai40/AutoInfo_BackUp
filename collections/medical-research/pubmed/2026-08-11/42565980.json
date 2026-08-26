@@ -1,0 +1,74 @@
+{
+  "id": "42565980",
+  "source_name": "pubmed",
+  "source_type": "api",
+  "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42565980&retmode=xml",
+  "title": "Improving ARTs: Microfluidics as a Tool for Sperm Selection.",
+  "content": "Sperm selection is a critical step in assisted reproductive technology (ART), as sperm quality directly influences embryo quality. In vivo, the female reproductive tract imposes several physical and physiological barriers that favors only the most optimal spermatozoa reaching the fertilization site. Such barriers are absent in in vitro fertilization (IVF) and intracytoplasmic sperm injection (ICSI) treatments, which has driven the continuous development of strategies for sperm selection. This review provides a comprehensive overview of physiological sperm selection within the female reproductive tract and examines the sperm selection methods currently available for ARTs. The review outlines the limitations of conventional sperm selection methods, swim-up (SU) and density gradient centrifugation (DGC), presents advanced approaches developed specifically for ICSI, and underscores cutting-edge microfluidic technologies for sperm selection. Microfluidic devices provide a controlled environment and are designed to mimic the physiological conditions encountered by spermatozoa within the female reproductive tract, enabling sperm selection based on specific biological properties such as motility, thermotaxis, chemotaxis, and rheotaxis. This review summarizes numerous studies on different microfluidic devices capable of selecting higher-quality sperm, and highlights the need of rigorous multicenter studies to evaluate their efficacy in clinical terms. Future perspectives for microfluidic platforms are also reviewed, evidencing the potential of these technologies to help address the increasing prevalence of male infertility.",
+  "content_type": "text",
+  "source_platform": "pubmed",
+  "collected_at": "2026 Aug 07",
+  "language": "",
+  "domain": "medical-research",
+  "topic_tags": [
+    "ART",
+    "male infertility",
+    "microfluidics",
+    "sperm selection"
+  ],
+  "quality_tier": 1,
+  "raw_data": {
+    "pmid": "42565980",
+    "pmc_id": "",
+    "authors": [
+      {
+        "lastname": "Pérez-Gómez",
+        "firstname": "A",
+        "initials": "A"
+      },
+      {
+        "lastname": "Urriés",
+        "firstname": "A",
+        "initials": "A"
+      },
+      {
+        "lastname": "de Pablo",
+        "firstname": "J L",
+        "initials": "JL"
+      },
+      {
+        "lastname": "Serrano-Ramón",
+        "firstname": "L",
+        "initials": "L"
+      },
+      {
+        "lastname": "Sanchez",
+        "firstname": "S",
+        "initials": "S"
+      },
+      {
+        "lastname": "Herrer",
+        "firstname": "R",
+        "initials": "R"
+      },
+      {
+        "lastname": "Morrell",
+        "firstname": "J M",
+        "initials": "JM"
+      },
+      {
+        "lastname": "Malo",
+        "firstname": "C",
+        "initials": "C"
+      }
+    ],
+    "journal": "Andrology",
+    "pub_date": "2026 Aug 07",
+    "doi": "10.1111/andr.70314",
+    "mesh_terms": []
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7fe81689-1d86-4f6b-9285-3229bb2d50bf"
+}

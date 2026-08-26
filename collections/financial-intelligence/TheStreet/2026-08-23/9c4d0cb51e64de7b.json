@@ -1,0 +1,24 @@
+{
+  "id": "9c4d0cb51e64de7b",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/retail/raleys-supermarket-chain-closes-stores-lays-off-employees",
+  "title": "91-year-old supermarket chain closes stores, lays off employees",
+  "content": "The grocery chain will close several underperforming stores when leases expire.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-22T20:17:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e11f640f-f397-4ef4-9d4a-7446df681814",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "69f6c2a95380f9e7",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/capaces/europa-autoriza-una-protesis-retina-que-permite-volver-leer-distinguir-objetos-personas-con-degeneracion-macular_7028972_0.html",
+  "title": "Europa autoriza una prótesis que permite volver a leer o distinguir objetos a personas con degeneración macular",
+  "content": "PRIMA, que así se llama el sistema, combina un diminuto implante fotovoltaico colocado bajo la retina con unas gafas equipadas con cámara y un procesador externo",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T08:10:51+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "fb5e9cf3-4ebe-4127-9c2a-88a41a8561fa",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

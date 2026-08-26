@@ -1,0 +1,24 @@
+{
+  "id": "3a4e2e652f32dc8e",
+  "source_name": "rt-news",
+  "source_type": "rss",
+  "source_url": "https://www.rt.com/news/644614-gaza-recovery-israeli-strikes/?utm_source=rss&utm_medium=rss&utm_campaign=RSS",
+  "title": "Thousands remain buried beneath Gaza ruins – local journalist to RT (VIDEO)",
+  "content": "<img align=\"left\" alt=\"Preview\" src=\"https://mf.b37mrtl.ru/files/2026.08/thumbnail/6a8d7ca985f540724b022ad7.png\" style=\"margin-right: 10px;\" /> Gaza rescuers are still searching for thousands of Palestinians buried beneath buildings destroyed in Israeli strikes early in the war <br /><a href=\"https://www.rt.com/news/644614-gaza-recovery-israeli-strikes/?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=RSS\">Read Full Article at RT.com</a>",
+  "content_type": "text",
+  "source_platform": "rt-news",
+  "collected_at": "2026-08-25T12:04:46+00:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.rt.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "88067817-8793-4f3a-a495-b03a84aa1242",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

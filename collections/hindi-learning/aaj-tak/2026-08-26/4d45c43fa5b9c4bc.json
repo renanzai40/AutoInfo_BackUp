@@ -1,0 +1,24 @@
+{
+  "id": "4d45c43fa5b9c4bc",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/technology/tech-news/story/amazon-flipkart-new-order-cancellation-rules-seller-penalty-customer-impact-india-ttecm-dskc-2629917-2026-08-25?utm_source=rssfeed",
+  "title": "Amazon-Flipkart पर कैंसिलेशन रूल बदल गए हैं, फायदा या नुकसान?",
+  "content": "Amazon और Flipkart से खरीदारी करते हैं तो आपके लिए ये खबर जरूरी है. दरअसल कंपनी ने कैंसिलेशन के नियम बदले हैं. सेलर अगर खुद से आपका ऑर्डर कैंसिल करता है तो उन्हें पेनाल्टी देनी होगी. इसके अलावा पुराने नियमों में भी कुछ बदलाव हुए हैं.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T20:57:44+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "cccbcf81-f3f7-410d-abe3-f2c1f76e000f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

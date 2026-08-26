@@ -1,0 +1,24 @@
+{
+  "id": "a0657f3a182315b8",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/rangel-diz-que-carneiro-e-ventura-sao-incapazes-de-liderar-o-pais-em-caso-de-guerra-ataca-o-ps-delicodoce-e-o-chega-mentiroso/",
+  "title": "Rangel: Carneiro e Ventura incapazes de liderar o país",
+  "content": "O ministro dos Negócios Estrangeiros diz que só a AD, com a sua moderação pode governar o País, já que o PS é sinónimo de \"laxismo\" e \"deixa-andar-a-ver-se dá\" e Chega de \"demagogia e mentira\".",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T16:19:17+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "31a35594-5a7a-4eff-aaa3-bdada0d43dc9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

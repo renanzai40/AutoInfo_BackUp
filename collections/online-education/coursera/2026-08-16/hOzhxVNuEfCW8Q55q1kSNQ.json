@@ -1,0 +1,25 @@
+{
+  "id": "hOzhxVNuEfCW8Q55q1kSNQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "CompTIA Cybersecurity Analyst (CySA+) CS0-003: Unit 2",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-15T18:57:52.556920+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "hOzhxVNuEfCW8Q55q1kSNQ",
+    "slug": "pearson-comptia-cybersecurity-analyst-cysa-cs0-003-video-course-2-jt58z",
+    "name": "CompTIA Cybersecurity Analyst (CySA+) CS0-003: Unit 2"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "be41a90b-c117-459e-bd5b-639036090386"
+}

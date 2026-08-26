@@ -1,0 +1,24 @@
+{
+  "id": "d8f6c850b05ef134",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/religion/rashiphal/video/kanya-rashifal-26-august-2026-virgo-daily-horoscope-today-2629614-2026-08-26?utm_source=rssfeed",
+  "title": "कन्या राशि",
+  "content": "हर काम सावधानी से करने का दिन है, लोगों से उलझने से बचें, अपने काम पर ध्यान देना होगा, अपने खर्चों को कंट्रोल करें, परिवार को और वक्त देना होगा, व्याप...",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-26T02:06:02+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7d6cd8ae-fac7-4486-99be-88b4df50bd86",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

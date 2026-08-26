@@ -1,0 +1,24 @@
+{
+  "id": "b0e8849636dee9a6",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/viajes/actualidad/25-nuevos-bienes-declarados-patrimonio-humanidad-unesco-2026_7029070_0.html",
+  "title": "Los 25 nuevos bienes declarados Patrimonio de la Humanidad por la Unesco",
+  "content": "Desde teatros de arquitectura europea en el Amazonas hasta edificios modernistas en la capital de Uzbekistán, pasando por la montaña más alta de Grecia.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T12:48:44+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9b2f9351-1064-461f-b833-7548791c3229",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "365af912c68c95da",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/sports/cricket/story/india-vs-sri-lanka-2nd-test-live-cricket-score-ind-vs-sl-day-3-test-match-tspok-dskc-2629383-2026-08-25?utm_source=rssfeed",
+  "title": "दूसरे टेस्ट के तीसरे दिन का खेल खत्म, श्रीलंका का संघर्ष जारी",
+  "content": "IND vs SL 2nd Test, Day 3 Highlights: भारत और श्रीलंका के बीच दूसरे टेस्ट के तीसरे दिन बारिश के कारण खेल को निर्धारित समय से पहले ही रोकना पड़ा. भारतीय टीम ने अपनी स्थिति मजबूत कर ली है.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T09:18:26+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b4ab35c4-ad2d-44c2-b91c-81ec0d72438e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

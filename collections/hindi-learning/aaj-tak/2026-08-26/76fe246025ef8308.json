@@ -1,0 +1,24 @@
+{
+  "id": "76fe246025ef8308",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/education/news/story/iit-delhi-students-reject-administration-response-protest-to-continue-over-rishikesh-kumar-death-ngix-rpti-2629715-2026-08-25?utm_source=rssfeed",
+  "title": "IIT दिल्ली सुसाइड केस में नया मोड़, प्रशासन के जवाब से खुश नहीं छात्र",
+  "content": "IIT दिल्ली में 31 वर्षीय एमएससी फिजिक्स छात्र ऋषिकेश कुमार के सुसाइड केस में नया मोड़ आया है. 1 करोड़ का मुआवजा, बाहरी समिति की जांच और डीन के इस्तीफे की मांग लगातार बनी हुई है लेकिन छात्रों ने प्रशासन के जवाब को “अपर्याप्त और टालमटोल वाला” बताते हुए मांगों के पूरा न होने तक प्रदर्शन जारी रखना की बात कही है.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T15:57:41+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "dd11065e-9af6-412a-9218-ee6387cebc77",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

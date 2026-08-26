@@ -1,0 +1,24 @@
+{
+  "id": "90ee9c1584745411",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/movies/movie-news/2026-hamptons-film-fest-phil-lord-chris-miller-awards-1236680880/",
+  "title": "Hamptons Film Fest Sets ‘I Play Rocky’ for Opening Night, Will Honor Phil Lord and Chris Miller (Exclusive)",
+  "content": "The 2026 edition of the annual Long Island event, set to run from Oct. 2-12, has revealed more of this year's lineup and honorees including 'Club Kid' director Jordan Firstman and 'Misty Green' star Rosalind Eleazar.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T18:00:48+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "41756781-0c51-45ab-89dc-d8cf0cbe1b95",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

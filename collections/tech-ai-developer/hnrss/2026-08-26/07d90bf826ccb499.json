@@ -1,0 +1,24 @@
+{
+  "id": "07d90bf826ccb499",
+  "source_name": "hnrss",
+  "source_type": "rss",
+  "source_url": "https://danluu.com/hiring-lemons/",
+  "title": "Developer Hiring and the Market for Lemons",
+  "content": "<p>Article URL: <a href=\"https://danluu.com/hiring-lemons/\">https://danluu.com/hiring-lemons/</a></p>\n<p>Comments URL: <a href=\"https://news.ycombinator.com/item?id=49436225\">https://news.ycombinator.com/item?id=49436225</a></p>\n<p>Points: 1</p>\n<p># Comments: 0</p>",
+  "content_type": "text",
+  "source_platform": "hnrss",
+  "collected_at": "2026-08-25T15:55:12+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://hnrss.org/newest"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8aa58e97-7ece-4932-be77-3274c8dffcfd",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

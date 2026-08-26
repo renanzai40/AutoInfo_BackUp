@@ -1,0 +1,24 @@
+{
+  "id": "2c4801dcd21427c7",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/transistors-changed-everything-heres-how-they-work/",
+  "title": "Transistors Changed Everything. Here’s How They Work",
+  "content": "How a tiny little electronic switch sparked the computer revolution.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-23T11:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "202828e8-e4f0-4922-b3bf-ca38391911cf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

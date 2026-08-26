@@ -1,0 +1,24 @@
+{
+  "id": "8caaa5a439e1466b",
+  "source_name": "modern-retail",
+  "source_type": "rss",
+  "source_url": "https://www.modernretail.co/operations/dicks-sporting-goods-says-its-still-early-in-the-foot-locker-turnaround-as-it-cites-footwear-challenges/?utm_campaign=modernretaildis&utm_medium=rss&utm_source=general-rss",
+  "title": "Dick’s Sporting Goods says it’s ‘still early in the Foot Locker turnaround’ as it cites footwear challenges",
+  "content": "Dick's Sporting Goods says it remains bullish on its Foot Locker business, even as it lowered its yearly guidance for the segment, citing \"challenging conditions\" in the athletic footwear market.",
+  "content_type": "text",
+  "source_platform": "modern-retail",
+  "collected_at": "2026-08-25T17:14:03+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.modernretail.co/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e8a46430-8ef3-499f-8b56-dfb5d3117914",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

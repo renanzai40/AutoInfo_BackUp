@@ -1,0 +1,24 @@
+{
+  "id": "306050960c77aec8",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/kosmos/28044321",
+  "title": "Астронавты NASA и ЕКА завершили выход в открытый космос",
+  "content": "В ходе миссии, длившейся 6 часов 30 минут, Анил Менон и Софи Адено установили новую антенну для связи орбитальной станции с Центром управления полетами NASA в Хьюстоне",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T22:18:17+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3c87443e-f56d-40c2-a39e-daffd699d6c8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

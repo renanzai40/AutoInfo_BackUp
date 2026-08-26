@@ -1,0 +1,24 @@
+{
+  "id": "03a077457aaceadc",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/elections/presidentielles/presidentielle-2027-tirailles-entre-raphael-glucksmann-et-jean-luc-melenchon-les-verts-au-bord-de-l-implosion-20260825",
+  "title": "Présidentielle 2027 : tiraillés entre Raphaël Glucksmann et Jean-Luc Mélenchon, les Verts au bord de l’implosion",
+  "content": "RÉCIT - Les Écologistes de Marine Tondelier sont pris en étau entre les partisans d’une alliance avec la social-démocratie, emmenés par Yannick Jadot, et ceux qui défendent un rapprochement avec les Insoumis, comme Sandrine Rousseau.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T17:30:00+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e6de94a4-d6d0-44ee-b809-e11fe1e61fd3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

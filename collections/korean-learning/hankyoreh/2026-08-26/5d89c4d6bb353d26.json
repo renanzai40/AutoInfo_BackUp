@@ -1,0 +1,24 @@
+{
+  "id": "5d89c4d6bb353d26",
+  "source_name": "hankyoreh",
+  "source_type": "rss",
+  "source_url": "https://www.hani.co.kr/arti/area/capital/1274686.html",
+  "title": "경기도, 공유차 ‘원격운전’으로 보낸다…판교서 국내 첫 시범",
+  "content": "<table border=\"0px\" cellpadding=\"0px\" cellspacing=\"0px\" width=\"107px\"><tr><td bgcolor=\"#DDDDDD\" style=\"padding: 1px;\"><table border=\"0px\" cellpadding=\"0px\" cellspacing=\"0px\" height=\"84px\" width=\"105px\"><tr><td align=\"center\" bgcolor=\"#FFFFFF\" style=\"padding: 3px;\"><img border=\"0\" src=\"https://flexible.img.hani.co.kr/flexible/normal/300/180/imgdb/child/2026/0826/53_17877119940378_20260826501328.webp\" /></td></tr></table></td><td nowrap=\"nowrap\" width=\"13px\"></td></tr></table>",
+  "content_type": "text",
+  "source_platform": "hankyoreh",
+  "collected_at": "",
+  "language": "",
+  "domain": "korean-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.hani.co.kr/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5ca4f47e-ad04-44ba-8cca-bace3e9c643a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

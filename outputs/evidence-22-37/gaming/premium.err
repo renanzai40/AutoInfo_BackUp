@@ -1,0 +1,30 @@
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions and entries for grouping gaming-related knowledge base items into themes, including game announcements, hardware releases, and cultural events. It requi
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This collection presents various gaming-related entries covering concerns over game releases, leaked footage of cancelled projects, gaming merchandise and hardware updates, industry cont
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article outlines a task to categorize gaming news entries into thematic groups, covering new game releases, legal issues, industry partnerships, and upcoming events. It details speci
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article outlines a task to categorize gaming knowledge base entries into 3-5 semantic themes, covering topics such as game releases, legal actions, business partnerships, and indust
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions for categorizing gaming knowledge base entries into 3-5 distinct themes with short semantic titles. It emphasizes avoiding generic names and ensuring e
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping gaming-related knowledge base entries into 3-5 themes with concise, semantic titles. It emphasizes unique theme names and avoiding generic 
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article presents a collection of gaming industry news items and outlines a task to group them into thematic categories. The entries cover recent events such as game development clos
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions for grouping eight gaming-related knowledge base entries into 3–5 themes with semantic titles. It lists entries covering game releases, studio movement
+LLM returned only 1 theme group(s), retrying with stricter prompt
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article presents a task to categorize various gaming industry news entries into 3-5 semantic themes. It covers topics such as game development cancellations, event showcases, market 
+Strict retry returned only 1 group(s), falling back to deterministic grouping
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping a set of gaming knowledge base entries into 3–5 themes with semantic titles. It includes guidelines for theme creation and covers various g
+Failed to parse LLM response as JSON: {
+  "groups": [
+    {
+      "theme": "Studio and Staff Changes",
+      "entry_ids": ["gaming-general-cd-projekt-confirms-layoffs-on-the-witcher-multiplayer-spinoff-issues-statement", "gaming-general-c

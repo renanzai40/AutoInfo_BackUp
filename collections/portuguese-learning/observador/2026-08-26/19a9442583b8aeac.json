@@ -1,0 +1,24 @@
+{
+  "id": "19a9442583b8aeac",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/comprar-comboios-com-o-nosso-dinheiro-e-entregar-aos-privados-pcp-ataca-governo-na-ferrovia/",
+  "title": "Governo acusado de usar dinheiro público em negócio privado",
+  "content": "O líder do PCP falava à margem da apresentação do livro \"Dossier: Desastre na Ferrovia - 35 anos de Liberalização\"",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T21:00:55+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "662b3ee3-5f7b-46a9-be57-157ba9e3aa32",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

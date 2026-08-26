@@ -1,0 +1,24 @@
+{
+  "id": "00ab349ece19c7f7",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/tv/tv-news/mindy-kaling-not-suitable-for-work-cast-react-cancellation-1236680652/",
+  "title": "Mindy Kaling and ‘Not Suitable for Work’ Cast React to Cancellation: “I Loved Making This Show”",
+  "content": "Avantika and Jack Martin are thanking viewers after the news that their 'Friends'-esque series — Kaling's first sole creator credit since 'The Mindy Project' — has not been renewed for a second season at Hulu.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T15:32:24+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "36976ff8-3fb7-408b-b7d7-4fb9a6a62b1a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

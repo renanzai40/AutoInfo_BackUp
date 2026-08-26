@@ -1,0 +1,24 @@
+{
+  "id": "06ee3f40ba80c7cc",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://video.corriere.it/video-virali/lince-rossa-si-intrufola-giardino-resort/2d56333e-0ee3-11ef-aec7-630484bff6fc",
+  "title": "Una lince rossa si intrufola nel giardino del resort",
+  "content": "<p><img alt=\"Una lince rossa si intrufola nel giardino del resort\" src=\"https://images2.corriereobjects.it/methode_image/Video/2024/05/10/Interni/Foto%20Interni%20-%20Trattate/una_lince_rossa_si_intrufola_nel_giardino_del_resort_656_ori_crop_MASTER__0x0.jpg\" title=\"Una lince rossa si intrufola nel giardino del resort\" /><p>È successo a Naples, in Florida, negli USA</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-12T22:14:12+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b585b3bf-715d-4acb-a6a3-0a3b6fea9ab9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "collection_id": "col-20260820T060957-38f63c9a",
+    "timestamp": "2026-08-20T06:09:59.485155+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://query1.finance.yahoo.com/v8/finance/chart (source: Yahoo Finance): Client error '429 Too Many Requests' for url 'https://query1.finance.yahoo.com/v8/finance/chart'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://query1.finance.yahoo.com/v8/finance/chart (source: Yahoo Finance): Client error '429 Too Many Requests' for url 'https://query1.finance.yahoo.com/v8/finance/chart'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429"
+      }
+    ],
+    "duration_ms": 1661.0
+  },
+  {
+    "collection_id": "col-20260823T020951-033c44cd",
+    "timestamp": "2026-08-23T02:09:52.915672+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://query1.finance.yahoo.com/v8/finance/chart (source: Yahoo Finance): Client error '429 Too Many Requests' for url 'https://query1.finance.yahoo.com/v8/finance/chart'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://query1.finance.yahoo.com/v8/finance/chart (source: Yahoo Finance): Client error '429 Too Many Requests' for url 'https://query1.finance.yahoo.com/v8/finance/chart'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429"
+      }
+    ],
+    "duration_ms": 1105.0
+  },
+  {
+    "collection_id": "col-20260823T021409-94af2957",
+    "timestamp": "2026-08-23T02:14:12.165012+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://query1.finance.yahoo.com/v8/finance/chart (source: Yahoo Finance): Client error '429 Too Many Requests' for url 'https://query1.finance.yahoo.com/v8/finance/chart'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://query1.finance.yahoo.com/v8/finance/chart (source: Yahoo Finance): Client error '429 Too Many Requests' for url 'https://query1.finance.yahoo.com/v8/finance/chart'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429"
+      }
+    ],
+    "duration_ms": 2663.0
+  },
+  {
+    "collection_id": "col-20260824T052446-be67ff92",
+    "timestamp": "2026-08-24T05:24:57.689663+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://query1.finance.yahoo.com/v8/finance/chart (source: Yahoo Finance): Client error '429 Too Many Requests' for url 'https://query1.finance.yahoo.com/v8/finance/chart'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://query1.finance.yahoo.com/v8/finance/chart (source: Yahoo Finance): Client error '429 Too Many Requests' for url 'https://query1.finance.yahoo.com/v8/finance/chart'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429"
+      }
+    ],
+    "duration_ms": 10651.0
+  },
+  {
+    "collection_id": "col-20260825T153815-124f1c06",
+    "timestamp": "2026-08-25T15:38:50.048457+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://query1.finance.yahoo.com/v8/finance/chart (source: Yahoo Finance): Client error '429 Too Many Requests' for url 'https://query1.finance.yahoo.com/v8/finance/chart'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://query1.finance.yahoo.com/v8/finance/chart (source: Yahoo Finance): Client error '429 Too Many Requests' for url 'https://query1.finance.yahoo.com/v8/finance/chart'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429"
+      }
+    ],
+    "duration_ms": 33770.0
+  }
+]

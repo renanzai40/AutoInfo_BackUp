@@ -1,0 +1,24 @@
+{
+  "id": "8cbeb85afed3c919",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/cinemania/series/miniserie-espanola-netflix-atrapa-ladron-hitchcock-javier-olivares-ministerio-tiempo_7027967_0.html",
+  "title": "La miniserie española que arrasa en Netflix: un clásico de Hitchcock adaptado por el creador de 'El Ministerio del Tiempo'",
+  "content": "Netflix recupera 'Atrapa a un ladrón', la miniserie española de Javier Olivares que adapta el clásico de Alfred Hitchcock y se ha colado entre las más vistas de la plataforma.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T09:29:03+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1fc12ba3-9dfe-408c-bcd0-8ca5636053fb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

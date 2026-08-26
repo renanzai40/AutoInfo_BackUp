@@ -1,0 +1,114 @@
+[
+  {
+    "collection_id": "col-20260810T055858-112c56b2",
+    "timestamp": "2026-08-10T06:03:39.373242+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://rsshub.app/ncpssd/newlist (bozo): <urlopen error [Errno 101] Network is unreachable>",
+        "source_failed": true,
+        "reason": "RSS parse error for https://rsshub.app/ncpssd/newlist (bozo): <urlopen error [Errno 101] Network is unreachable>"
+      }
+    ],
+    "duration_ms": 133641.0
+  },
+  {
+    "collection_id": "col-20260815T181030-ae72ea26",
+    "timestamp": "2026-08-15T18:11:38.283710+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://rsshub.app/ncpssd/newlist: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://rsshub.app/ncpssd/newlist: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30043.0
+  },
+  {
+    "collection_id": "col-20260815T182038-eb2fbbd8",
+    "timestamp": "2026-08-15T18:21:46.237790+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://rsshub.app/ncpssd/newlist: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://rsshub.app/ncpssd/newlist: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30056.0
+  },
+  {
+    "collection_id": "col-20260815T183340-acebe8c5",
+    "timestamp": "2026-08-15T18:34:10.908247+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://rsshub.app/ncpssd/newlist: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://rsshub.app/ncpssd/newlist: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30567.0
+  },
+  {
+    "collection_id": "col-20260825T151610-cba0a08f",
+    "timestamp": "2026-08-25T15:17:28.644452+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://rsshub.app/ncpssd/newlist: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://rsshub.app/ncpssd/newlist: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30050.0
+  },
+  {
+    "collection_id": "col-20260825T152636-120b9e36",
+    "timestamp": "2026-08-25T15:27:50.906851+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://rsshub.app/ncpssd/newlist: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://rsshub.app/ncpssd/newlist: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30092.0
+  },
+  {
+    "collection_id": "col-20260825T154343-63f4c25e",
+    "timestamp": "2026-08-25T15:44:55.646481+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://rsshub.app/ncpssd/newlist: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://rsshub.app/ncpssd/newlist: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30045.0
+  }
+]

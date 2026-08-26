@@ -1,0 +1,24 @@
+{
+  "id": "d68fb74d82e1cba9",
+  "source_name": "WSJ Markets",
+  "source_type": "rss",
+  "source_url": "https://www.wsj.com/articles/arabica-coffee-prices-hit-new-high-on-u-s-colombia-tariff-spat-582446fe?mod=rss_markets_main",
+  "title": "Arabica Coffee Prices Hit Record on U.S., Colombia Tariff Spat",
+  "content": "Arabica coffee prices hit a record level, as traders digested the withdrawal of President Trump’s threats to impose tariffs and economic sanctions on Colombia.",
+  "content_type": "text",
+  "source_platform": "WSJ Markets",
+  "collected_at": "2025-01-27T12:20:00-05:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f45f37b7-0150-4fe8-9974-764b579643b5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

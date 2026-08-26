@@ -1,0 +1,24 @@
+{
+  "id": "d7597d294092242e",
+  "source_name": "b2b-news-network",
+  "source_type": "rss",
+  "source_url": "https://www.b2bnn.com/2026/08/why-equipment-downtime-quietly-drains-profits/",
+  "title": "Why Equipment Downtime Quietly Drains Profits",
+  "content": "Facility leaders rarely notice the moment a mechanical system starts losing efficiency. There is no alarm, nosudden failure, just a slow drift in performance that accumulates over months until the utility bill or the maintenance invoice tells the real story. For organizations that operate commercial buildings, plants, or campuses, this gradual erosion is often more [&#8230;]",
+  "content_type": "text",
+  "source_platform": "b2b-news-network",
+  "collected_at": "2026-08-24T19:07:41+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://b2bnn.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "85fc98d9-063d-43ad-9773-297f1bc631c0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "01485991b32afa45",
+  "source_name": "hnrss",
+  "source_type": "rss",
+  "source_url": "https://situational-awareness.ai/",
+  "title": "Situational Awareness: The Decade Ahead",
+  "content": "<p>Article URL: <a href=\"https://situational-awareness.ai/\">https://situational-awareness.ai/</a></p>\n<p>Comments URL: <a href=\"https://news.ycombinator.com/item?id=49435573\">https://news.ycombinator.com/item?id=49435573</a></p>\n<p>Points: 1</p>\n<p># Comments: 0</p>",
+  "content_type": "text",
+  "source_platform": "hnrss",
+  "collected_at": "2026-08-25T15:13:49+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://hnrss.org/newest"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2d1d54d1-2264-4e06-8211-c88e930d49dc",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

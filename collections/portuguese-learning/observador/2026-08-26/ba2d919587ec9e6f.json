@@ -1,0 +1,24 @@
+{
+  "id": "ba2d919587ec9e6f",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/novo-drone-possivelmente-armado-com-explosivos-detetado-perto-do-aeroporto-de-leipzig-e-o-terceiro-este-mes/",
+  "title": "Terceiro drone encontrado junto ao aeroporto de Leipzig",
+  "content": "Engenho foi encontrado a 14 de agosto, 10 dias após dois drones terem perturbado o aeroporto ligado à NATO. Chanceler alemão prometeu que responsáveis serão revelados.",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T19:37:59+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c51a3256-040e-4b9c-99dd-78c0b8aba494",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

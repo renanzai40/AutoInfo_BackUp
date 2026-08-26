@@ -1,0 +1,24 @@
+{
+  "id": "6c12da0eb40741b5",
+  "source_name": "marTech",
+  "source_type": "rss",
+  "source_url": "https://martech.org/the-terrifying-math-behind-your-new-ai-workforce/",
+  "title": "The terrifying math behind your new AI workforce",
+  "content": "<div><img alt=\"MarTechBot Explains it all.\" class=\"attachment-large size-large wp-post-image\" height=\"450\" src=\"https://martech.org/wp-content/uploads/2025/11/mtb-explains-it-all-new.png\" style=\"margin-bottom: 15px;\" width=\"800\" /></div>\n<p>Autonomous marketing agents promise massive labor savings, but ballooning API fees and middleware costs can easily break your technology budget.</p>\n<p>The post <a href=\"https://martech.org/the-terrifying-math-behind-your-new-ai-workforce/\">The terrifying math behind your new AI workforce</a> appeared first on <a href=\"https://martech.org\">MarTech</a>.</p>",
+  "content_type": "text",
+  "source_platform": "marTech",
+  "collected_at": "2026-08-24T12:02:00+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://martech.org/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5bccb025-cfb4-43eb-8f89-6873c3af9974",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

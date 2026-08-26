@@ -1,0 +1,601 @@
+keywords:
+  robles:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:19.935702+00:00'
+    updated_at: '2026-08-25T21:29:31.169810+00:00'
+    source: auto-discovery:20minutos
+  cni:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:19.940931+00:00'
+    updated_at: '2026-08-25T21:29:31.215652+00:00'
+    source: auto-discovery:20minutos
+  ceuta:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:19.949574+00:00'
+    updated_at: '2026-08-25T21:55:56.652690+00:00'
+    source: auto-discovery:20minutos
+  melilla:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:19.959071+00:00'
+    updated_at: '2026-08-25T21:29:31.305028+00:00'
+    source: auto-discovery:20minutos
+  government:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:19.968343+00:00'
+    updated_at: '2026-08-25T21:55:44.508404+00:00'
+    source: auto-discovery:20minutos
+  alerted:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:19.977524+00:00'
+    updated_at: '2026-08-25T21:29:31.350064+00:00'
+    source: auto-discovery:20minutos
+  prior:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:19.987326+00:00'
+    updated_at: '2026-08-25T21:29:31.439783+00:00'
+    source: auto-discovery:20minutos
+  assault:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:19.997187+00:00'
+    updated_at: '2026-08-25T21:58:31.937639+00:00'
+    source: auto-discovery:20minutos
+  cni alerted:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.007969+00:00'
+    updated_at: '2026-08-25T21:29:31.626512+00:00'
+    source: auto-discovery:20minutos
+  alerted the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.018690+00:00'
+    updated_at: '2026-08-25T21:29:31.672756+00:00'
+    source: auto-discovery:20minutos
+  the government:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.029547+00:00'
+    updated_at: '2026-08-25T21:55:44.553240+00:00'
+    source: auto-discovery:20minutos
+  government prior:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.040784+00:00'
+    updated_at: '2026-08-25T21:29:31.822196+00:00'
+    source: auto-discovery:20minutos
+  prior the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.052126+00:00'
+    updated_at: '2026-08-25T21:29:31.868622+00:00'
+    source: auto-discovery:20minutos
+  the ceuta:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.063655+00:00'
+    updated_at: '2026-08-25T21:49:29.268036+00:00'
+    source: auto-discovery:20minutos
+  ceuta assault:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.076136+00:00'
+    updated_at: '2026-08-25T21:19:20.076136+00:00'
+    source: auto-discovery:20minutos
+  cni alerted the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.089646+00:00'
+    updated_at: '2026-08-25T21:29:31.960114+00:00'
+    source: auto-discovery:20minutos
+  alerted the government:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.103061+00:00'
+    updated_at: '2026-08-25T21:29:32.005560+00:00'
+    source: auto-discovery:20minutos
+  the government prior:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.116342+00:00'
+    updated_at: '2026-08-25T21:29:32.059086+00:00'
+    source: auto-discovery:20minutos
+  government prior the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.130631+00:00'
+    updated_at: '2026-08-25T21:29:32.154881+00:00'
+    source: auto-discovery:20minutos
+  prior the ceuta:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.146285+00:00'
+    updated_at: '2026-08-25T21:29:32.210596+00:00'
+    source: auto-discovery:20minutos
+  the ceuta assault:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.161250+00:00'
+    updated_at: '2026-08-25T21:19:20.161250+00:00'
+    source: auto-discovery:20minutos
+  defense:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.176655+00:00'
+    updated_at: '2026-08-25T21:49:29.181110+00:00'
+    source: auto-discovery:20minutos
+  minister:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.192120+00:00'
+    updated_at: '2026-08-25T21:49:29.136163+00:00'
+    source: auto-discovery:20minutos
+  asserts:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.207430+00:00'
+    updated_at: '2026-08-25T21:19:20.207430+00:00'
+    source: auto-discovery:20minutos
+  spanish:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.223494+00:00'
+    updated_at: '2026-08-25T21:49:25.631435+00:00'
+    source: auto-discovery:20minutos
+  control:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.239572+00:00'
+    updated_at: '2026-08-25T21:52:14.395402+00:00'
+    source: auto-discovery:20minutos
+  defense minister:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.256245+00:00'
+    updated_at: '2026-08-25T21:28:40.335500+00:00'
+    source: auto-discovery:20minutos
+  minister asserts:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.274198+00:00'
+    updated_at: '2026-08-25T21:19:20.274198+00:00'
+    source: auto-discovery:20minutos
+  asserts spanish:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.291938+00:00'
+    updated_at: '2026-08-25T21:19:20.291938+00:00'
+    source: auto-discovery:20minutos
+  spanish control:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.309993+00:00'
+    updated_at: '2026-08-25T21:19:20.309993+00:00'
+    source: auto-discovery:20minutos
+  control over:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.327768+00:00'
+    updated_at: '2026-08-25T21:39:16.734868+00:00'
+    source: auto-discovery:20minutos
+  over ceuta:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.347134+00:00'
+    updated_at: '2026-08-25T21:19:20.347134+00:00'
+    source: auto-discovery:20minutos
+  ceuta and:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.366783+00:00'
+    updated_at: '2026-08-25T21:29:32.256824+00:00'
+    source: auto-discovery:20minutos
+  and melilla:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.386031+00:00'
+    updated_at: '2026-08-25T21:28:47.596905+00:00'
+    source: auto-discovery:20minutos
+  defense minister asserts:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.407208+00:00'
+    updated_at: '2026-08-25T21:19:20.407208+00:00'
+    source: auto-discovery:20minutos
+  minister asserts spanish:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.427274+00:00'
+    updated_at: '2026-08-25T21:19:20.427274+00:00'
+    source: auto-discovery:20minutos
+  asserts spanish control:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.447618+00:00'
+    updated_at: '2026-08-25T21:19:20.447618+00:00'
+    source: auto-discovery:20minutos
+  spanish control over:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.469018+00:00'
+    updated_at: '2026-08-25T21:19:20.469018+00:00'
+    source: auto-discovery:20minutos
+  control over ceuta:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.491763+00:00'
+    updated_at: '2026-08-25T21:19:20.491763+00:00'
+    source: auto-discovery:20minutos
+  over ceuta and:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.512829+00:00'
+    updated_at: '2026-08-25T21:19:20.512829+00:00'
+    source: auto-discovery:20minutos
+  ceuta and melilla:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.535055+00:00'
+    updated_at: '2026-08-25T21:28:47.643562+00:00'
+    source: auto-discovery:20minutos
+  commended:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.560113+00:00'
+    updated_at: '2026-08-25T21:19:20.560113+00:00'
+    source: auto-discovery:20minutos
+  timely:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.582991+00:00'
+    updated_at: '2026-08-25T21:19:20.582991+00:00'
+    source: auto-discovery:20minutos
+  role:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.606599+00:00'
+    updated_at: '2026-08-25T21:38:20.272865+00:00'
+    source: auto-discovery:20minutos
+  cni commended:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.630422+00:00'
+    updated_at: '2026-08-25T21:19:20.630422+00:00'
+    source: auto-discovery:20minutos
+  commended for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.655282+00:00'
+    updated_at: '2026-08-25T21:19:20.655282+00:00'
+    source: auto-discovery:20minutos
+  its timely:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.679757+00:00'
+    updated_at: '2026-08-25T21:19:20.679757+00:00'
+    source: auto-discovery:20minutos
+  timely role:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.704555+00:00'
+    updated_at: '2026-08-25T21:19:20.704555+00:00'
+    source: auto-discovery:20minutos
+  cni commended for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.729697+00:00'
+    updated_at: '2026-08-25T21:19:20.729697+00:00'
+    source: auto-discovery:20minutos
+  commended for its:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.786470+00:00'
+    updated_at: '2026-08-25T21:19:20.786470+00:00'
+    source: auto-discovery:20minutos
+  for its timely:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.813554+00:00'
+    updated_at: '2026-08-25T21:19:20.813554+00:00'
+    source: auto-discovery:20minutos
+  its timely role:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.841883+00:00'
+    updated_at: '2026-08-25T21:19:20.841883+00:00'
+    source: auto-discovery:20minutos
+  large-scale:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.928011+00:00'
+    updated_at: '2026-08-25T21:53:15.263629+00:00'
+    source: auto-discovery:20minutos
+  significant:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.955234+00:00'
+    updated_at: '2026-08-25T21:55:14.605329+00:00'
+    source: auto-discovery:20minutos
+  assault ceuta:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:20.981551+00:00'
+    updated_at: '2026-08-25T21:19:20.981551+00:00'
+    source: auto-discovery:20minutos
+  ceuta was:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:21.009084+00:00'
+    updated_at: '2026-08-25T21:19:21.009084+00:00'
+    source: auto-discovery:20minutos
+  was large-scale:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:21.036658+00:00'
+    updated_at: '2026-08-25T21:19:21.036658+00:00'
+    source: auto-discovery:20minutos
+  large-scale and:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:21.064646+00:00'
+    updated_at: '2026-08-25T21:19:21.064646+00:00'
+    source: auto-discovery:20minutos
+  and significant:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:21.092687+00:00'
+    updated_at: '2026-08-25T21:19:21.092687+00:00'
+    source: auto-discovery:20minutos
+  assault ceuta was:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:21.121342+00:00'
+    updated_at: '2026-08-25T21:19:21.121342+00:00'
+    source: auto-discovery:20minutos
+  ceuta was large-scale:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:21.153054+00:00'
+    updated_at: '2026-08-25T21:19:21.153054+00:00'
+    source: auto-discovery:20minutos
+  was large-scale and:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:21.183198+00:00'
+    updated_at: '2026-08-25T21:19:21.183198+00:00'
+    source: auto-discovery:20minutos
+  large-scale and significant:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:21.212547+00:00'
+    updated_at: '2026-08-25T21:19:21.212547+00:00'
+    source: auto-discovery:20minutos
+  european commission:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:24.653237+00:00'
+    updated_at: '2026-08-25T21:28:24.840128+00:00'
+    source: auto-discovery:20minutos
+  spain:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:24.683978+00:00'
+    updated_at: '2026-08-25T21:56:50.681998+00:00'
+    source: auto-discovery:20minutos
+  migration crisis:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:24.748553+00:00'
+    updated_at: '2026-08-25T21:28:25.002418+00:00'
+    source: auto-discovery:20minutos
+  emergency funds:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:24.779748+00:00'
+    updated_at: '2026-08-25T21:28:24.882809+00:00'
+    source: auto-discovery:20minutos
+  brussels:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:24.811453+00:00'
+    updated_at: '2026-08-25T21:19:24.811453+00:00'
+    source: auto-discovery:20minutos
+  prioritizing:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:24.843935+00:00'
+    updated_at: '2026-08-25T21:19:24.843935+00:00'
+    source: auto-discovery:20minutos
+  spain's:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:24.878177+00:00'
+    updated_at: '2026-08-25T21:30:05.907653+00:00'
+    source: auto-discovery:20minutos
+  request:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:24.912545+00:00'
+    updated_at: '2026-08-25T21:28:24.755832+00:00'
+    source: auto-discovery:20minutos
+  emergency:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:24.947953+00:00'
+    updated_at: '2026-08-25T21:39:20.527872+00:00'
+    source: auto-discovery:20minutos
+  funds:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:24.982673+00:00'
+    updated_at: '2026-08-25T21:28:24.713061+00:00'
+    source: auto-discovery:20minutos
+  migration:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.017825+00:00'
+    updated_at: '2026-08-25T21:36:24.904001+00:00'
+    source: auto-discovery:20minutos
+  crisis.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.052432+00:00'
+    updated_at: '2026-08-25T21:49:29.224777+00:00'
+    source: auto-discovery:20minutos
+  brussels prioritizing:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.091468+00:00'
+    updated_at: '2026-08-25T21:19:25.091468+00:00'
+    source: auto-discovery:20minutos
+  prioritizing spain's:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.130607+00:00'
+    updated_at: '2026-08-25T21:19:25.130607+00:00'
+    source: auto-discovery:20minutos
+  spain's request:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.170006+00:00'
+    updated_at: '2026-08-25T21:19:25.170006+00:00'
+    source: auto-discovery:20minutos
+  request for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.209216+00:00'
+    updated_at: '2026-08-25T21:19:25.209216+00:00'
+    source: auto-discovery:20minutos
+  for emergency:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.245904+00:00'
+    updated_at: '2026-08-25T21:19:25.245904+00:00'
+    source: auto-discovery:20minutos
+  funds for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.284023+00:00'
+    updated_at: '2026-08-25T21:19:25.284023+00:00'
+    source: auto-discovery:20minutos
+  ceuta migration:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.362649+00:00'
+    updated_at: '2026-08-25T21:19:25.362649+00:00'
+    source: auto-discovery:20minutos
+  migration crisis.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.401683+00:00'
+    updated_at: '2026-08-25T21:19:25.401683+00:00'
+    source: auto-discovery:20minutos
+  brussels prioritizing spain's:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.440929+00:00'
+    updated_at: '2026-08-25T21:19:25.440929+00:00'
+    source: auto-discovery:20minutos
+  prioritizing spain's request:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.479220+00:00'
+    updated_at: '2026-08-25T21:19:25.479220+00:00'
+    source: auto-discovery:20minutos
+  spain's request for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.518039+00:00'
+    updated_at: '2026-08-25T21:19:25.518039+00:00'
+    source: auto-discovery:20minutos
+  request for emergency:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.557550+00:00'
+    updated_at: '2026-08-25T21:19:25.557550+00:00'
+    source: auto-discovery:20minutos
+  for emergency funds:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.598226+00:00'
+    updated_at: '2026-08-25T21:19:25.598226+00:00'
+    source: auto-discovery:20minutos
+  emergency funds for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.639684+00:00'
+    updated_at: '2026-08-25T21:19:25.639684+00:00'
+    source: auto-discovery:20minutos
+  funds for the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.680131+00:00'
+    updated_at: '2026-08-25T21:19:25.680131+00:00'
+    source: auto-discovery:20minutos
+  for the ceuta:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.721790+00:00'
+    updated_at: '2026-08-25T21:19:25.721790+00:00'
+    source: auto-discovery:20minutos
+  the ceuta migration:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.763108+00:00'
+    updated_at: '2026-08-25T21:19:25.763108+00:00'
+    source: auto-discovery:20minutos
+  ceuta migration crisis.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.803883+00:00'
+    updated_at: '2026-08-25T21:19:25.803883+00:00'
+    source: auto-discovery:20minutos
+  european:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.847491+00:00'
+    updated_at: '2026-08-25T21:48:44.307091+00:00'
+    source: auto-discovery:20minutos
+  commission:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.892528+00:00'
+    updated_at: '2026-08-25T21:28:24.582133+00:00'
+    source: auto-discovery:20minutos
+  highlights:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.935442+00:00'
+    updated_at: '2026-08-25T21:53:21.790997+00:00'
+    source: auto-discovery:20minutos
+  important:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:25.979120+00:00'
+    updated_at: '2026-08-25T21:45:58.800869+00:00'
+    source: auto-discovery:20minutos
+  remaining:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:26.023462+00:00'
+    updated_at: '2026-08-25T21:19:26.023462+00:00'
+    source: auto-discovery:20minutos
+  challenges.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:26.067307+00:00'
+    updated_at: '2026-08-25T21:52:46.614556+00:00'
+    source: auto-discovery:20minutos
+  the european:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:19:26.112800+00:00'
+    updated_at: '2026-08-25T21:48:44.353933+00:00'
+    source: auto-discovery:20minutos

@@ -1,0 +1,24 @@
+{
+  "id": "5544aac73733cfc1",
+  "source_name": "the-verge",
+  "source_type": "rss",
+  "source_url": "https://www.theverge.com/games/984422/nvidia-geforce-now-steam-controller-machine-support",
+  "title": "GeForce Now is getting support for the Steam Controller",
+  "content": "Nvidia's GeForce Now cloud gaming service will officially support Valve's Steam Controller and Steam Machine starting later this year. With Steam Controller support, you'll be able to play games with Valve's great new gamepad when using the GeForce Now app on your Steam Deck or Steam Machine. If you're using GeForce Now on Windows or [&#8230;]",
+  "content_type": "text",
+  "source_platform": "the-verge",
+  "collected_at": "2026-08-25T12:47:15-04:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.theverge.com/rss/index.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "29ec8dfb-2716-4896-8607-aacdaa2f8c08",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

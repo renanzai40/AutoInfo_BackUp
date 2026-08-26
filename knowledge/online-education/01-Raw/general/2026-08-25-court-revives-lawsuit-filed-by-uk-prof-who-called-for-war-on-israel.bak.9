@@ -1,0 +1,70 @@
+---
+title: Court Revives Lawsuit Filed by UK Prof Who Called for War on Israel
+domain: online-education
+tier: 01-Raw
+entry_id: online-education-general-court-revives-lawsuit-filed-by-uk-prof-who-called-for-war-on-israel
+source_url: https://www.insidehighered.com/news/quick-takes/2026/08/25/court-revives-lawsuit-prof-who-called-war-israel
+source_type: rss
+source_platform: inside-higher-ed
+collected_at: '2026-08-25T07:00:00+00:00'
+summary: A court has revived a lawsuit filed by a University of Kentucky professor who previously called for war on Israel.
+  The article discusses the legal case and its implications for academic freedom and free speech.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 8402dfdc-c47a-4c9c-b46f-865730c4aaec
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<span>Court Revives Lawsuit Filed by UK Prof Who Called for War on Israel </span>
+
+            <div class="field field--name-field-featured-image field--type-entity-reference field--label-hidden field__item">  <img alt="A photo of the brick side of a building with brick letters spelling out &quot;UK,&quot; the University of Kentucky logo." height="1414" src="https://www.insidehighered.com/sites/default/files/2025-07/GettyImages-2160484409.jpg" width="2121" />
+
+</div>
+      
+<span><span>kathryn.palmer…</span></span>
+
+<span><time datetime="2026-08-25T03:00:00-04:00" title="Tuesday, August 25, 2026 - 03:00 AM">Tue, 08/25/2026 - 03:00 AM</time>
+</span>
+
+  <div class="field field--name-field-authors field--type-entity-reference field--label-inline clearfix">
+    <div class="field__label">Byline(s)</div>
+          <div class="field__items">
+              <div class="field__item"><a href="https://www.insidehighered.com/author/kathryn-palmer" hreflang="en">Kathryn Palmer</a></div>
+              </div>
+      </div>
+
+## Summary
+A court has revived a lawsuit filed by a University of Kentucky professor who previously called for war on Israel. The article discusses the legal case and its implications for academic freedom and free speech.
+
+## Key Points
+- Court decision revives lawsuit against a University of Kentucky professor
+- Professor made controversial statements advocating for war on Israel
+- Legal case involves issues of academic freedom and free speech
+- Reported by Inside Higher Ed, focusing on higher education news
+- Institutional involvement from the University of Kentucky
+
+
+## Entities
+- **Kathryn Palmer** (person, relevance=)
+- **University of Kentucky** (org, relevance=)
+- **UK Professor** (person, relevance=)
+- **Israel** (concept, relevance=)
+- **Lawsuit** (procedure, relevance=)
+- **Court** (org, relevance=)

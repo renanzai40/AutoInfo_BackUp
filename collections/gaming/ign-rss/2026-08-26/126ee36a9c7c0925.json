@@ -1,0 +1,24 @@
+{
+  "id": "126ee36a9c7c0925",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/call-of-duty-modern-warfare-4-beta-pushes-unplanned-update-to-address-fan-feedback",
+  "title": "Call of Duty: Modern Warfare 4 Beta Pushes Unplanned Update to Address Fan Feedback",
+  "content": "Infinity Ward has pushed an unplanned update for the Call of Duty: Modern Warfare 4 beta in order to quickly address fan feedback.",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T16:47:20+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4183fffc-1bf1-48bc-a62f-2415db589302",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

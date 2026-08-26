@@ -1,0 +1,24 @@
+{
+  "id": "4a442d8f850750a0",
+  "source_name": "lobsters",
+  "source_type": "rss",
+  "source_url": "https://hacks.mozilla.org/2026/08/intent-to-ship-jpeg-xl/",
+  "title": "Intent to Ship: JPEG XL",
+  "content": "<p><a href=\"https://lobste.rs/s/26oj2u/intent_ship_jpeg_xl\">Comments</a></p>",
+  "content_type": "text",
+  "source_platform": "lobsters",
+  "collected_at": "2026-08-24T11:25:08-05:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://lobste.rs/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7720c98b-0b61-4006-8a87-1b9640f27661",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

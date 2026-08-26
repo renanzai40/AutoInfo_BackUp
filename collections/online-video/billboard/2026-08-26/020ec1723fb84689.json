@@ -1,0 +1,24 @@
+{
+  "id": "020ec1723fb84689",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/music/rb-hip-hop/kanye-west-russia-shows-canceled-venue-1236323787/",
+  "title": "Ye’s Russia Shows Canceled After Venue Says No Rental Agreement Has Been Signed",
+  "content": "Yeezy was slated to perform a pair of shows at Gazprom Arena in October.",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T15:44:57+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ebcb6818-2288-46d1-98ce-2266eba665cb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "50edec2e6b98b653",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/madre-hayden-panettiere-habla-sobre-muerte-actriz-no-me-creo-que-sea-real-no-tenia-control-sobre-sus-decisiones_7029179_0.html",
+  "title": "La madre de Hayden Panettiere habla sobre la muerte de la actriz: \"No tenía control sobre sus decisiones\"",
+  "content": "La intérprete falleció el pasado 16 de agosto y, por el momento, su muerte continúa bajo investigación y no se ha hecho pública una causa oficial.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T14:14:25+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3d4104da-43b4-433d-a28f-76f91fe4ff5a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

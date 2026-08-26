@@ -1,0 +1,24 @@
+{
+  "id": "02cf28d164365e33",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/travel/euclaim-flight-compenstion-company-files-for-bankruptcy",
+  "title": "Company offering compensation flight delays ends in bankruptcy",
+  "content": "The court decision to declare the company insolvent puts hundreds of active compensation claims at risk.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T23:20:43+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "991e4b3e-7ff2-4d8c-94b9-162c16a15178",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

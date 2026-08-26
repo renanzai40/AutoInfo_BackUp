@@ -1,0 +1,51 @@
+---
+title: Tedde Moore, Ralphie’s Teacher in ‘A Christmas Story,’ Dies at 79
+domain: online-video
+tier: 01-Raw
+entry_id: online-video-general-tedde-moore-ralphie-s-teacher-in-a-christmas-story-dies-at-79
+source_url: https://www.hollywoodreporter.com/movies/movie-news/tedde-moore-dead-a-christmas-story-teacher-ralphie-1236669867/
+source_type: rss
+source_platform: rss
+collected_at: '2026-08-10T04:08:06+00:00'
+summary: Tedde Moore, actress who played Miss Shields in 'A Christmas Story' (1983), died at 79. She was the mother of Grammy-winning
+  music producer 40.
+tags: []
+quality_tier: 2
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 70.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: b5b72e4b-1daa-4777-ad80-672d704e55fc
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+The actress, the mother of Grammy-winning music producer 40, portrayed Miss Shields in the 1983 Christmas classic opposite Peter Billingsley.
+
+## Summary
+Tedde Moore, actress who played Miss Shields in 'A Christmas Story' (1983), died at 79. She was the mother of Grammy-winning music producer 40.
+
+## Key Points
+- Tedde Moore, known for her role as Miss Shields in 'A Christmas Story', has died at 79
+- She played opposite Peter Billingsley in the 1983 Christmas classic
+- Mother of Grammy-winning music producer 40
+
+
+## Entities
+- **Tedde Moore** (person, relevance=)
+- **Miss Shields** (concept, relevance=)
+- **A Christmas Story** (concept, relevance=)
+- **Peter Billingsley** (person, relevance=)
+- **40** (person, relevance=)

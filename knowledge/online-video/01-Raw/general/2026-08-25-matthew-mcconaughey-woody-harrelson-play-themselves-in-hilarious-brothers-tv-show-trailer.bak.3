@@ -1,0 +1,52 @@
+---
+title: Matthew McConaughey & Woody Harrelson Play Themselves in Hilarious Brothers TV Show Trailer
+domain: online-video
+tier: 01-Raw
+entry_id: online-video-general-matthew-mcconaughey-woody-harrelson-play-themselves-in-hilarious-brothers-tv-show-trailer
+source_url: https://www.comingsoon.net/tv/trailers/2181656-matthew-mcconaughey-woody-harrelson-play-themselves-hilarious-brothers-trailer
+source_type: rss
+source_platform: comingsoon
+collected_at: '2026-08-25T15:11:25+00:00'
+summary: Apple TV released the official trailer for Brothers, a comedy series starring Matthew McConaughey and Woody Harrelson
+  as themselves. The show premieres on Wednesday, September 23, 2026, with the first two episodes.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: dbf7103a-e884-4cf8-81ff-d06ba3a29252
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<p>Apple TV has just released the official trailer for the highly anticipated comedy series Brothers starring Matthew McConaughey and Woody Harrelson. The video promises an absolute joyride as the longtime pals take viewers on a grand family adventure. Brothers premieres on Apple TV on Wednesday, September 23, 2026, with the first two episodes. The remaining [&#8230;]</p>
+<p>The post <a href="https://www.comingsoon.net/tv/trailers/2181656-matthew-mcconaughey-woody-harrelson-play-themselves-hilarious-brothers-trailer">Matthew McConaughey &amp; Woody Harrelson Play Themselves in Hilarious Brothers TV Show Trailer</a> appeared first on <a href="https://www.comingsoon.net">ComingSoon.net - Movie Trailers, TV &amp; Streaming News, and More</a>.</p>
+
+## Summary
+Apple TV released the official trailer for Brothers, a comedy series starring Matthew McConaughey and Woody Harrelson as themselves. The show premieres on Wednesday, September 23, 2026, with the first two episodes.
+
+## Key Points
+- Matthew McConaughey and Woody Harrelson star as themselves in the Apple TV comedy series Brothers
+- The official trailer was recently released by Apple TV
+- The show premieres on September 23, 2026 with the first two episodes
+
+
+## Entities
+- **Matthew McConaughey** (person, relevance=)
+- **Woody Harrelson** (person, relevance=)
+- **Apple TV** (org, relevance=)
+- **Brothers** (concept, relevance=)
+- **ComingSoon.net** (org, relevance=)

@@ -1,0 +1,24 @@
+{
+  "id": "001e5044e38ee707",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/proisshestviya/28044391",
+  "title": "В Тернополе на западе Украины группа людей напала на сотрудников ТЦК",
+  "content": "Полиция устанавливает участников инцидента",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T23:15:58+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5662f543-6229-4834-a4c3-a0c90df8bb07",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

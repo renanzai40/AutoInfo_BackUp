@@ -1,0 +1,22 @@
+{
+  "id": "41cd69f3ff9496c2",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://news.crunchbase.com/venture/latam-startup-vc-silicon-valley-expansion-qa-quinzanos-monashees/",
+  "title": "The VC Firm That Helped Build Latin America’s Startup Scene Is Crossing Into Silicon Valley",
+  "content": "Monashees, one of Latin America's oldest and most influential VC firms, believes the next phase of the region's startup ecosystem requires a permanent Silicon Valley presence, opening a San Francisco office last year. We spoke with firm partner Fabiola Quinzaños to talk through the firm's evolution and how it is meeting this AI moment.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-11T11:00:59+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://news.crunchbase.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7d398b94-e222-4763-b28c-0f6a0b8a7c75"
+}

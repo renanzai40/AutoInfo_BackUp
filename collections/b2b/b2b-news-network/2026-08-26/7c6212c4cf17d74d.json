@@ -1,0 +1,24 @@
+{
+  "id": "7c6212c4cf17d74d",
+  "source_name": "b2b-news-network",
+  "source_type": "rss",
+  "source_url": "https://www.b2bnn.com/2026/08/what-does-a-vacant-house-cost-a-business-each-month/",
+  "title": "What Does a Vacant House Cost a Business Each Month?",
+  "content": "An empty property looks like a dormant asset on the balance sheet. It behaves like a subscription. Taxes, premiums, utilities, and maintenance keep drawing down cash whether or not anyone walks through the door. Photo by Josh Lemmon on Unsplash Alt text: The empty living room of a vacant house with bare floorboards and no [&#8230;]",
+  "content_type": "text",
+  "source_platform": "b2b-news-network",
+  "collected_at": "2026-08-24T09:34:10+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://b2bnn.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "53376b48-f7cd-4b0c-8b59-9f4c2a09382b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "0f8ed0120826e6ca",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/industrie-mode/dolly-parton-celle-qui-porte-du-faux-et-du-vrai-20230806",
+  "title": "Dolly Parton : celle qui portait du faux et du vrai",
+  "content": "DES DIVAS ET DES BIJOUX (1/6) - Ses bijoux, la star country préférait les coudre sur ses tenues insensées, pleines de paillettes et de perlouses. Un univers de strass pour mieux mettre en lumière son aura féministe et philanthropique adulée par l'Amérique.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T20:37:59+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "78224cea-bbbe-4a43-bc3a-92c6c6acf269",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "d9bd17b2dc7372de",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/festival-de-musica-experimental-les-siestes-regressa-na-sexta-feira-a-coimbra/",
+  "title": "Festival \"Les Siestes\" regressa a Coimbra na sexta-feira",
+  "content": "A programação do \"Les Siestes\" abre pelas 18h00 de sexta-feira com a DJ conimbricense Alana Vegana, uma atuação \"que explora a relação entre o etéreo e o ruído e cruza diferentes linguagens da música eletrónica\"",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T22:56:08+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c84e9ba9-7d2b-4da1-8d54-9e70fc5f7369",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

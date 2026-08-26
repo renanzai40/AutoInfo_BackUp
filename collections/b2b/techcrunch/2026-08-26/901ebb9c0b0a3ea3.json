@@ -1,0 +1,24 @@
+{
+  "id": "901ebb9c0b0a3ea3",
+  "source_name": "techcrunch",
+  "source_type": "rss",
+  "source_url": "https://techcrunch.com/2026/08/25/whatsapp-tightens-account-security-with-stronger-two-step-verification-and-more/",
+  "title": "WhatsApp tightens account security with stronger two-step verification and more",
+  "content": "WhatsApp’s two-step verification previously relied on a six-digit PIN, but now users can choose a longer, alphanumeric password with special characters.",
+  "content_type": "text",
+  "source_platform": "techcrunch",
+  "collected_at": "2026-08-25T13:00:00+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://techcrunch.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6fcb8ce6-3c92-40f3-b91e-f0928142e25e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

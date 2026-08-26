@@ -1,0 +1,24 @@
+{
+  "id": "4f91ac906d52954b",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/vid%C3%A9o/20260825-tchad-l-arm%C3%A9e-d%C3%A9nonce-une-nouvelle-violation-du-territoire",
+  "title": "Tchad : l'armée dénonce une nouvelle \"violation du territoire\"",
+  "content": "Le conflit au Soudan déborde de nouveau au Tchad. L'armée tchadienne affirme que des aéronefs et des drones liés aux belligérants soudanais ont poursuivi et bombardé une colonne de véhicules jusque sur le territoire tchadien. La correspondance à Ndjamena de Ghislaine Allahtaroum.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T15:34:23+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "195401d9-d314-4c78-af11-c587db8f1a51",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

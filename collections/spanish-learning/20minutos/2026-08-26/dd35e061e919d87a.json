@@ -1,0 +1,24 @@
+{
+  "id": "dd35e061e919d87a",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/cataluna/tarragona/mueren-dos-mujeres-que-sabado-resultaron-heridas-tras-caida-un-muro-por-las-fuertes-lluvias-roda-bera_7029223_0.html",
+  "title": "El Ayuntamiento de Roda de Berà rectifica y asegura que las dos mujeres a las que les cayó un muro están críticas",
+  "content": "El consistorio ha pedido disculpas por \"la angustia y el dolor que esta información errónea haya podido generar\".",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T16:12:59+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "aacdd62d-6c92-42b0-8146-cd492da3a037",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

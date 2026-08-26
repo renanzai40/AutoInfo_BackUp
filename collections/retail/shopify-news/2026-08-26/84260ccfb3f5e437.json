@@ -1,0 +1,24 @@
+{
+  "id": "84260ccfb3f5e437",
+  "source_name": "shopify-news",
+  "source_type": "rss",
+  "source_url": "https://shopify.com/news/americans-say-they-re-holding-firm-on-holiday-shopping-the-season-starts-now",
+  "title": "Americans say they’re holding firm on holiday shopping – the season starts now",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "shopify-news",
+  "collected_at": "2023-10-10T09:00:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.shopify.com/news/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "195c441f-c161-4c3f-8a4f-1026cd2a9d3d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

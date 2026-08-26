@@ -1,0 +1,43 @@
+{
+  "id": "49435728",
+  "source_name": "hackernews",
+  "source_type": "hackernews",
+  "source_url": "https://news.ycombinator.com/item?id=49435728",
+  "title": "How much of HN is AI?",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "hackernews",
+  "collected_at": "2026-08-25T15:41:26.420032+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "by": "surprisetalk",
+    "descendants": 14,
+    "id": 49435728,
+    "kids": [
+      49435963,
+      49435932,
+      49435879,
+      49435949,
+      49435924,
+      49435969,
+      49435877,
+      49435881,
+      49435975,
+      49435926
+    ],
+    "score": 52,
+    "time": 1787671421,
+    "title": "How much of HN is AI?",
+    "type": "story",
+    "url": "https://blog.coredump.cx/p/how-much-of-hn-is-ai"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c2004ac7-35fd-4eb7-b3cc-4163c75898fd",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

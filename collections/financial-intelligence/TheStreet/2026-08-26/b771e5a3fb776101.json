@@ -1,0 +1,24 @@
+{
+  "id": "b771e5a3fb776101",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/investing/stocks/jane-street-bullish-sandisk-sndk-stock",
+  "title": "Jane Street turns bullish on volatile AI stock",
+  "content": "Jane Street increased its AI stock stake by more than 500%, making it one of its biggest holdings.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T15:16:53+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a53ce62f-9ba2-4a69-98c0-f23b993cd32c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

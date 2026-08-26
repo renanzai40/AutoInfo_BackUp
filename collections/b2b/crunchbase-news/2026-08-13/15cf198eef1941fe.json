@@ -1,0 +1,22 @@
+{
+  "id": "15cf198eef1941fe",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://news.crunchbase.com/venture/global-unicorn-counts-rise-ai-robotics-chips-h1-2026/",
+  "title": "Global New Unicorn Counts In The First Half Of 2026 Have Already Surpassed 2025’s Totals",
+  "content": "A total 195 companies joined The Crunchbase Unicorn Board in the first half of 2026 — far surpassing counts seen since the second half of 2022. Already, H1 is above the new unicorn totals for all of 2025, when 193 companies were minted with that status.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-10T11:00:38+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://news.crunchbase.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bd95d084-03ec-470b-8b30-fe5e4ca6f830"
+}

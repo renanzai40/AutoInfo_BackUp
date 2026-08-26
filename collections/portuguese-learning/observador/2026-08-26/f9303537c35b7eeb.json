@@ -1,0 +1,24 @@
+{
+  "id": "f9303537c35b7eeb",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/mulher-e-filho-de-luis-neves-acompanharam-mai-ao-vaticano-ministerio-garante-que-despesas-foram-pagas-a-titulo-privado/",
+  "title": "Mulher e filho de Luís Neves acompanharam MAI ao Vaticano",
+  "content": "Mulher e filho do ministro integraram comitiva de 130 portugueses recebidos pelo Leão XIV. Ministério garante que já estavam em Itália em visita privada.",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T21:50:19+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5b95b623-9ea3-4f95-9c73-49d90d2c1b7f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

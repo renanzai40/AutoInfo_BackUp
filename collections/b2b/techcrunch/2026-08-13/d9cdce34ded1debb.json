@@ -1,0 +1,22 @@
+{
+  "id": "d9cdce34ded1debb",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://techcrunch.com/2026/08/12/tesla-wants-to-build-a-10b-solar-factory-in-texas/",
+  "title": "Tesla wants to build a $10B solar factory in Texas",
+  "content": "Tesla wants to build a massive solar factory in Texas, but first it wants the state to chip in to defray the costs.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-12T16:18:31+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://techcrunch.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "44b78b13-987a-4d81-8255-99f2891ada10"
+}

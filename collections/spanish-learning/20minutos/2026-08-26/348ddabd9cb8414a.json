@@ -1,0 +1,24 @@
+{
+  "id": "348ddabd9cb8414a",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/cinemania/noticias/sunrise-ultimo-amanecer-prime-video-anna-todd-maia-reficco-fernando-lindez-romance-juvenil_7027960_0.html",
+  "title": "La creadora de 'After' cambia la toxicidad por un romance más maduro en la nueva película de Amazon",
+  "content": "Un amor de verano, una enfermedad crónica y las calas de Mallorca: así es la película con la que Prime Video quiere enamorarte en agosto.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T17:21:22+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bf172b7e-839e-40de-9578-3b0656204d01",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

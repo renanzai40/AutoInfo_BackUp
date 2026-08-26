@@ -1,0 +1,49 @@
+---
+title: Usher Reacts to Clone Conspiracy Theory Brewing After New Jersey Show With Chris Brown
+domain: online-video
+tier: 01-Raw
+entry_id: online-video-general-usher-reacts-to-clone-conspiracy-theory-brewing-after-new-jersey-show-with-chris-brown
+source_url: https://www.billboard.com/music/music-news/usher-clone-tour-chris-brown-1236312389/
+source_type: rss
+source_platform: rss
+collected_at: '2026-08-10T02:48:06+00:00'
+summary: Usher addresses conspiracy claims of being replaced by a clone on stage during a New Jersey show with Chris Brown,
+  engaging with comments on the topic.
+tags: []
+quality_tier: 2
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 70.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 4ef8daec-b2a3-4260-af1a-949ebb9e349b
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+Claims that Usher was replaced with a clone on stage kept the R&#38;B star busy in the comments section.
+
+## Summary
+Usher addresses conspiracy claims of being replaced by a clone on stage during a New Jersey show with Chris Brown, engaging with comments on the topic.
+
+## Key Points
+- Usher performed in New Jersey with Chris Brown
+- Conspiracy theory emerged claiming Usher was replaced by a clone on stage
+- Usher personally responded to the claims in the comments section
+
+
+## Entities
+- **Usher** (person, relevance=)
+- **Chris Brown** (person, relevance=)
+- **New Jersey** (location, relevance=)

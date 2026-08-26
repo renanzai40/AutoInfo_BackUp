@@ -1,0 +1,24 @@
+[92m08:52:27 - LiteLLM:WARNING[0m: get_model_cost_map.py:271 - LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: The read operation timed out. Falling back to local backup.
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping Italian language learning entries into 3–5 semantic themes with concise, descriptive titles. It lists entries covering various topics such 
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides a task to categorize a set of Italian news entries into 3-5 thematic groups, with entries covering sports events, a seismic incident, cultural anecdotes, and a polit
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides a list of Italian learning entries covering diverse topics such as cultural events, sports, celebrity news, natural disasters, and technology. It instructs to group
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This collection of news entries covers various topics in Italian media, including art investigations, political scandals, celebrity stories, and financial advice. It highlights issues su
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This content consists of a set of Italian news articles covering diverse topics such as sports, culture, politics, and natural events. The task involves grouping these entries into coher
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article presents a collection of news snippets covering diverse topics including private political meetings on yachts, the ongoing Russia-Ukraine conflict, social etiquette guideline
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping knowledge base entries into 3–5 themes with descriptive titles. It specifies requirements for theme naming and includes a list of entries f
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions to group various Italian learning knowledge base entries into 3–5 semantic themes. It lists entries covering topics from financial calculations to enter
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping Italian news and learning entries into 3-5 thematic categories, with specific rules for creating concise, semantic theme titles and returni
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This collection of Italian-language articles covers diverse topics including EU airport security scrutiny, family relationship advice, Italian political history, social issues, wine and 
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions to group five knowledge base entries into 3-5 thematic categories based on their content. The entries cover diverse topics including astrology, art, po

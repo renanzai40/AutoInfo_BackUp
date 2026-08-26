@@ -1,0 +1,25 @@
+{
+  "id": "53b1a6a39f2e9901",
+  "source_name": "court-gov",
+  "source_type": "web",
+  "source_url": "https://www.court.gov.cn/rss.html",
+  "title": "哎呀,出错了！",
+  "content": "[\n中文版\n] [\nEnglish\n]\n抱歉，找不到您要的页面......\n点击以下链接浏览网站其他内容：\n返回网站首页（https://www.court.gov.cn/index.html）\n关于我们\n联系我们",
+  "content_type": "text",
+  "source_platform": "court-gov",
+  "collected_at": "",
+  "language": "",
+  "domain": "legal-compliance",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "author": "",
+    "date": ""
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "367188f1-fe7d-4cbd-b489-a82f4bed7095",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

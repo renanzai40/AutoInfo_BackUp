@@ -1,0 +1,22 @@
+{
+  "id": "901590f1ec7d2ec4",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://techcrunch.com/2026/08/12/as-ai-safety-concerns-mount-three-pioneers-make-the-case-for-staying-open/",
+  "title": "As AI safety concerns mount, three pioneers make the case for staying open",
+  "content": "At Ai4, three of the world's most respected AI experts—Geoffrey Hinton, Fei-Fei Li, and Andrew Ng—debated regulation, open-source access, and how America can compete as China advances in Asia.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-12T17:51:00+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://techcrunch.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1c7153cd-97ef-4525-9446-ea25f1f405d8"
+}

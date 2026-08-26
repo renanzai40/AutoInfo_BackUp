@@ -1,0 +1,24 @@
+{
+  "id": "2bf0f7863ff0332a",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/dataroom-milena-gabanelli/codice-strada-ecco-cosa-cambia-perche-non-ridurra-numero-vittime/a9ec82f6-0fb3-11ef-a8f0-a1f7c0d711f2-va.shtml",
+  "title": "Codice della strada, ecco cosa cambia e perché non ridurrà il numero delle vittime",
+  "content": "<p><img alt=\"Codice della strada, ecco cosa cambia e perché non ridurrà il numero delle vittime\" src=\"https://images2.corriereobjects.it/methode_image/Video/2024/05/11/Interni/Foto%20Interni%20-%20Trattate/QUADcodice-kX5F--656x492@Corriere-Web-Nazionale.jpg\" title=\"Codice della strada, ecco cosa cambia e perché non ridurrà il numero delle vittime\" /><p></p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-13T06:05:06+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "feccd71a-ba30-457f-8d27-e33610e7df2f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

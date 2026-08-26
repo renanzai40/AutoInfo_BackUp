@@ -1,0 +1,27 @@
+{
+  "id": "sI_-QEBiEemtDRLx7Ne8jg",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Unordered Data Structures",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "sI_-QEBiEemtDRLx7Ne8jg",
+    "slug": "cs-fundamentals-3",
+    "name": "Unordered Data Structures"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "09076bda-7db3-45af-9de8-49b911be75af",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

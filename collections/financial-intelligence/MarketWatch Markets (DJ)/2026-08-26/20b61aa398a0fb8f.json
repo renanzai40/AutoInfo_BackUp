@@ -1,0 +1,24 @@
+{
+  "id": "20b61aa398a0fb8f",
+  "source_name": "MarketWatch Markets (DJ)",
+  "source_type": "rss",
+  "source_url": "https://www.marketwatch.com/story/what-nvidia-says-on-wednesday-to-address-concerns-about-its-competitiveness-could-be-key-for-the-stock-1f9ef8fd?mod=mw_rss_topstories",
+  "title": "What Nvidia says on Wednesday to address concerns about its competitiveness could be key for the stock",
+  "content": "The company’s commentary on its competitiveness, business agreements and memory will be key to the stock, a J.P. Morgan analyst says.",
+  "content_type": "text",
+  "source_platform": "MarketWatch Markets (DJ)",
+  "collected_at": "2026-08-25T15:04:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.marketwatch.com/marketwatch/topstories/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "50be0b7d-7f53-4fde-8f8a-8a5491cf9f0d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

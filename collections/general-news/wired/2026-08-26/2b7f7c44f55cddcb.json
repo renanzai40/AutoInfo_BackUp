@@ -1,0 +1,24 @@
+{
+  "id": "2b7f7c44f55cddcb",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/when-the-packaging-is-the-product-empty-boxes-influencers/",
+  "title": "Influencers and Resellers Are Turning Empty Boxes Into Big Cash",
+  "content": "As the appetite for “authenticity” grows online, content creators are buying up empty boxes for luxury goods—and resellers are cashing in for “crazy prices.”",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-21T10:30:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9286dca1-1ff1-4e0c-b5d0-da4681a91ffc",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

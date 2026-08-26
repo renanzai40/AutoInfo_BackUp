@@ -1,0 +1,24 @@
+{
+  "id": "389f252074cde6a1",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/teatro-municipal-de-braganca-reabre-em-setembro-com-mais-de-40-espetaculos-classicfest-e-bo-jazz-em-destaque/",
+  "title": "Teatro de Bragança com mais de 40 espetáculos até dezembro",
+  "content": "A programação deste ano encerra a 19 de dezembro",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T22:11:46+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "976e8ff9-cff5-436a-aed7-c02e86865cfb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

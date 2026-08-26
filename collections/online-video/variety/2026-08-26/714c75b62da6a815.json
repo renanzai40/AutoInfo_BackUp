@@ -1,0 +1,24 @@
+{
+  "id": "714c75b62da6a815",
+  "source_name": "variety",
+  "source_type": "rss",
+  "source_url": "https://variety.com/2026/film/news/andrew-garfield-talks-playing-sam-altman-artificial-open-ai-1236842579/",
+  "title": "Andrew Garfield Opens Up About Playing Sam Altman in ‘Artificial,’ Says OpenAI Is Doing ‘Damage to the Soul of Humanity’",
+  "content": "Andrew Garfield is opening up about stepping into the shoes of OpenAI CEO Sam Altman in Luca Guadagnino&#8217;s upcoming film “Artificial.&#8221; Garfield portrays the tech executive in the drama, which takes place during the five-day corporate saga in November 2023 that saw Altman abruptly fired as OpenAI CEO before ultimately returning to the company. In [&#8230;]",
+  "content_type": "text",
+  "source_platform": "variety",
+  "collected_at": "2026-08-25T16:01:38+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://variety.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "22ef019a-d5d5-435f-9703-ed09666fc003",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

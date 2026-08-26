@@ -1,0 +1,24 @@
+{
+  "id": "8e94c0de5629e1df",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/gallery/best-kindle/",
+  "title": "What’s the Best Kindle of 2026? (So Far)",
+  "content": "I’ve tested every single Kindle. Here’s how Amazon’s ebook readers stack up.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-23T11:03:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4e06beb7-adc4-4edb-8b16-1c0b463803fb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

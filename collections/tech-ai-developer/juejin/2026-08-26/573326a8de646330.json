@@ -1,0 +1,24 @@
+{
+  "id": "573326a8de646330",
+  "source_name": "juejin",
+  "source_type": "rss",
+  "source_url": "https://juejin.cn/post/7677814079651807282",
+  "title": "ZGI 运行日志：还原任务与节点状态",
+  "content": "智能体任务失败后，排查需要从整次运行下钻到具体节点，核对状态、耗时、前序关系、输入输出与错误信息。任务级和节点级记录连在一起，才能还原中断位置及影响范围。",
+  "content_type": "text",
+  "source_platform": "juejin",
+  "collected_at": "2026-08-25T14:41:28+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://juejin.cn/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "92e37bd5-ca5f-4257-a0b4-456a97b67808",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "a273bccbda4ff0ab",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/tv/tv-news/jim-green-dead-abc-stephen-king-it-fallen-angel-1236680809/",
+  "title": "Jim Green, Former ABC Executive and Producer of ‘Stephen King’s It,’ Dies at 83",
+  "content": "He also helped develop ‘Duel’ and ‘Brian’s Song,’ shepherded ‘Fallen Angel’ and the miniseries ‘And the Sea Will Tell’ and worked with Mary-Kate and Ashley Olsen.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T17:04:16+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "811bc389-b864-4fa4-81e4-e9c4036c8c98",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

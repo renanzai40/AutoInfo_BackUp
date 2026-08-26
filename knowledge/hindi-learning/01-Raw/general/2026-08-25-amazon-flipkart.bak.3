@@ -1,0 +1,51 @@
+---
+title: Amazon-Flipkart पर कैंसिलेशन रूल बदल गए हैं, फायदा या नुकसान?
+domain: hindi-learning
+tier: 01-Raw
+entry_id: hindi-learning-general-amazon-flipkart
+source_url: https://www.aajtak.in/technology/tech-news/story/amazon-flipkart-new-order-cancellation-rules-seller-penalty-customer-impact-india-ttecm-dskc-2629917-2026-08-25?utm_source=rssfeed
+source_type: rss
+source_platform: aaj-tak
+collected_at: '2026-08-25T20:57:44+05:30'
+summary: Amazon and Flipkart have updated their cancellation rules, imposing penalties on sellers who cancel orders themselves.
+  These changes are part of broader modifications to existing policies, aiming to affect customer experience.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: hi
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: cccbcf81-f3f7-410d-abe3-f2c1f76e000f
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+Amazon और Flipkart से खरीदारी करते हैं तो आपके लिए ये खबर जरूरी है. दरअसल कंपनी ने कैंसिलेशन के नियम बदले हैं. सेलर अगर खुद से आपका ऑर्डर कैंसिल करता है तो उन्हें पेनाल्टी देनी होगी. इसके अलावा पुराने नियमों में भी कुछ बदलाव हुए हैं.
+
+## Summary
+Amazon and Flipkart have updated their cancellation rules, imposing penalties on sellers who cancel orders themselves. These changes are part of broader modifications to existing policies, aiming to affect customer experience.
+
+## Key Points
+- Amazon and Flipkart have changed their cancellation rules.
+- Sellers will face penalties if they cancel orders themselves.
+- There have been updates to old rules as well.
+- The changes are intended to benefit customers and ensure fair practices.
+
+
+## Entities
+- **Amazon** (org, relevance=)
+- **Flipkart** (org, relevance=)
+- **Cancellation rules** (concept, relevance=)
+- **Penalty** (concept, relevance=)

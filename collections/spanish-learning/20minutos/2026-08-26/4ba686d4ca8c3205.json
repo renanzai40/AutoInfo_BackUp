@@ -1,0 +1,24 @@
+{
+  "id": "4ba686d4ca8c3205",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/tecnologia/actualidad/que-no-se-vio-video-viral-robots-chinos-atletas-les-deja-mal-lugar_7029152_0.html",
+  "title": "Lo que no se vio en el vídeo viral del sprint de los robots chinos atletas... y que les deja en mal lugar",
+  "content": "Todavía queda camino por recorrer para que los robots sean capaces de correr a gran velocidad con la misma naturalidad y control que un atleta humano.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T14:00:08+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "28666635-c415-4496-a990-f6a17975e3d8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

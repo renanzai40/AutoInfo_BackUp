@@ -1,0 +1,24 @@
+{
+  "id": "b6e36fe6c02f0271",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/games/horror/a-disturbing-90s-point-and-click-horror-game-about-waking-up-in-a-rundown-asylum-with-no-recollection-of-who-you-are-is-getting-a-glow-up-in-2026/",
+  "title": "A disturbing '90s point-and-click horror game about waking up in a rundown asylum with no recollection of who you are is getting a glow up in 2026",
+  "content": "Sanitarium probably doesn't need a new version, but it's getting one anyway.",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-24T23:43:35+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0f314db7-866b-4a9e-a8c5-3377c3cf842b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

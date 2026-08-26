@@ -1,0 +1,22 @@
+{
+  "id": "07d442b0949b581c",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://newsletter.pragmaticengineer.com/p/the-pulse-metas-self-inflicted-resignation",
+  "title": "The Pulse: Meta’s self-inflicted resignation-wave",
+  "content": "The social media giant is offering $1M+ retainer equity grants to staff who are leaving: and even this is not effective. Also: is Grok Bot the &#8220;OpenClaw moment&#8221; for managed AI agents?",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-14T16:55:55+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://newsletter.pragmaticengineer.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "da63093e-04d9-4de1-9c8b-73b80267f5d6"
+}

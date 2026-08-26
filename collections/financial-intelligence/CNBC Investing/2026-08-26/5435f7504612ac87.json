@@ -1,0 +1,24 @@
+{
+  "id": "5435f7504612ac87",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/25/india-billion-foreign-inflows-rupee-weakness.html",
+  "title": "New Delhi draws in $73 billion in 11 weeks, powered by special deposits for non-resident Indians",
+  "content": "India has attracted inflows of $73 billion in 11 weeks, driven mostly by foreign currency bank deposits made by non-resident Indians.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-25T10:23:53+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9e6e9913-4506-49c7-a88e-6f7f499e3ea7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

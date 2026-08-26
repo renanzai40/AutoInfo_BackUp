@@ -1,0 +1,24 @@
+{
+  "id": "97dda87fa0aede38",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/viajes/actualidad/mejores-aerolineas-viajar-ninos-tarifas-especiales-servicios-extra-juguetes-kits-actividades_7029196_0.html",
+  "title": "Las mejores aerolíneas para viajar con niños: desde tarifas especiales hasta servicios extra como juguetes o kits",
+  "content": "Cada compañía aérea mantiene sus propias condiciones a la hora de volar con los pequeños.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T16:47:19+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1287cb43-7a17-45b7-8f15-4ca93e37d511",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

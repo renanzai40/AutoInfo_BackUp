@@ -1,0 +1,24 @@
+{
+  "id": "5959cfd003bbbc37",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/international/guerre-en-ukraine-un-britannique-tue-en-combattant-pour-la-russie-20260825",
+  "title": "Guerre en Ukraine : un Britannique tué en combattant pour la Russie",
+  "content": "Bradley Townsend avait quitté le nord de l’Angleterre pour rejoindre la Russie et s’était engagé dans ses forces armées malgré son absence d’expérience militaire. Il aurait été tué par un drone dans la région de Donetsk.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T23:35:01+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "aa68e68b-8765-4815-a7fc-1004d6eb3d41",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "179210863cce3b94",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/india/news/story/why-does-assam-flood-every-year-know-the-science-behind-the-brahmaputra-fury-ntc-dpmx-dskc-2610129-2026-07-27?utm_source=rssfeed",
+  "title": "हर साल बाढ़ में क्यों डूबता है असम? समझिए ब्रह्मपुत्र के रौद्र रूप के पीछे का साइंस",
+  "content": "एक्सपर्ट्स का कहना है कि ब्रह्मपुत्र नदी की विशाल जलधारा, हिमालय से आने वाली भारी गाद, पहाड़ों से घिरी असम घाटी, पूर्वोत्तर में एक साथ होने वाली मूसलाधार बारिश और जलवायु परिवर्तन जैसे कारक हर साल राज्य में बाढ़ की स्थिति पैदा करते हैं, जिसे पूरी तरह रोकना संभव नहीं है.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-07-27T20:43:46+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f6075609-9d17-4da2-8c70-289295762e95",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

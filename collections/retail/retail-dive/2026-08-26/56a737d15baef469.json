@@ -1,0 +1,24 @@
+{
+  "id": "56a737d15baef469",
+  "source_name": "retail-dive",
+  "source_type": "rss",
+  "source_url": "https://www.retaildive.com/news/ann-taylor-stages-a-brand-comeback-with-substack-fall-fashion-blitz/828475/",
+  "title": "Ann Taylor eyes comeback with Substack, fall fashion blitz",
+  "content": "<p>The brand&rsquo;s first major integrated campaign in nearly a decade follows initiatives focused on fan community, such as an editorial newsletter.</p>",
+  "content_type": "text",
+  "source_platform": "retail-dive",
+  "collected_at": "2026-08-24T10:31:00-04:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.retaildive.com/feeds/news/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "76d6f03e-fd2f-4f64-a75a-4d97934294d3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,27 @@
+{
+  "id": "sgi8_tG4EfCUKQr_3GN6mQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Master After Effects: Analyze & Create Dynamic Motion",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "sgi8_tG4EfCUKQr_3GN6mQ",
+    "slug": "master-after-effects-analyze-create-dynamic-motion",
+    "name": "Master After Effects: Analyze & Create Dynamic Motion"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "510575c8-0753-433e-88a8-18ecc41b2c52",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

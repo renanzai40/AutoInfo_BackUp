@@ -1,0 +1,54 @@
+---
+title: हिसार में सफाईकर्मियों और पुलिस के बीच हुआ टकराव
+domain: hindi-learning
+tier: 01-Raw
+entry_id: hindi-learning-general-
+source_url: https://www.aajtak.in/short-videos/video/haryana-hisar-strike-sanitation-workers-20-days-municipal-corporation-administration-fight-police-mmtc-2629988-2026-08-25?utm_source=rssfeed
+source_type: rss
+source_platform: aaj-tak
+collected_at: '2026-08-25T23:42:24+05:30'
+summary: In Hisar, a clash occurred between sanitation workers and police during an ongoing 20-day strike. The municipal administration
+  launched a garbage collection drive with heavy police presence to manage the situation.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: unique
+source_score: 90.0
+language: hi
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 78bb45e3-62e7-471c-951c-44473c7f46cd
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: false
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: true
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+हिसार में सफाई कर्मचारियों की करीब 20 दिनों से जारी हड़ताल के बीच नगर निगम प्रशासन ने भारी पुलिस बल की मौजूदगी में शहर से कचरा उठाने का अभियान चलाया।
+
+## Summary
+In Hisar, a clash occurred between sanitation workers and police during an ongoing 20-day strike. The municipal administration launched a garbage collection drive with heavy police presence to manage the situation.
+
+## Key Points
+- Sanitation workers in Hisar have been on strike for approximately 20 days.
+- Municipal authorities initiated a garbage collection operation supported by heavy police presence.
+- The confrontation led to a clash between the workers and police.
+- The strike is disrupting city sanitation services.
+- Police involvement suggests efforts to ensure essential services continue despite the strike.
+
+
+## Entities
+- **Hisar** (concept, relevance=)
+- **Sanitation workers** (person, relevance=)
+- **Municipal administration** (org, relevance=)
+- **Police** (org, relevance=)
+- **Strike** (concept, relevance=)
+- **Garbage collection campaign** (procedure, relevance=)

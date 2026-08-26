@@ -1,0 +1,24 @@
+{
+  "id": "ef4da0edce9e2c7e",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/viajes/actualidad/quieres-encontrar-playa-perfecta-herramienta-ayuda_7027901_0.html",
+  "title": "¿Quieres encontrar la playa perfecta este verano? Esta herramienta te ayuda",
+  "content": "Skyscanner ha lanzado una funcionalidad que permite a los usuarios saber cuál es el arenal que mejor se ajusta a sus necesidades y a sus deseos.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T11:42:20+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "93f16ca8-46ca-4e9c-a88b-dfe3828fc2c7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

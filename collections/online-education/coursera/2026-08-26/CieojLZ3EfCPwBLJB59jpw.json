@@ -1,0 +1,27 @@
+{
+  "id": "CieojLZ3EfCPwBLJB59jpw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Analyze and Create Your AI Marketing Plan",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "CieojLZ3EfCPwBLJB59jpw",
+    "slug": "analyze-and-create-your-ai-marketing-plan",
+    "name": "Analyze and Create Your AI Marketing Plan"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2e274b8a-817a-4ace-bb7f-f424eae37c4e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

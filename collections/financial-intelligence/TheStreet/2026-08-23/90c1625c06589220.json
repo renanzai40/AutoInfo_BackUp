@@ -1,0 +1,24 @@
+{
+  "id": "90c1625c06589220",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/personal-finance/trump-accounts-treasury-irs-proposed-investment-rules-five-etfs",
+  "title": "New proposal could limit your child’s Trump Account options",
+  "content": "How five ETFs will shape the savings of 7 million children",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-22T22:37:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e7ec4a59-b7a0-4276-92cf-70ae40a2889a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

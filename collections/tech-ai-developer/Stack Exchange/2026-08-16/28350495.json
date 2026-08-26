@@ -1,0 +1,50 @@
+{
+  "id": 28350495,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/28350495/can-i-build-a-solid-website-without-using-javascript",
+  "title": "Can I build a solid website without using JavaScript?",
+  "content": "Can I build a solid website without using JavaScript?",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-15T19:01:40.189009+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "javascript",
+      "html",
+      "css",
+      "build"
+    ],
+    "owner": {
+      "account_id": 5115525,
+      "reputation": 255,
+      "user_id": 4100798,
+      "user_type": "registered",
+      "accept_rate": 80,
+      "profile_image": "https://www.gravatar.com/avatar/96a285e03e0141bbee81965cabf8501d?s=256&d=identicon&r=PG",
+      "display_name": "Sam",
+      "link": "https://stackoverflow.com/users/4100798/sam"
+    },
+    "is_answered": true,
+    "view_count": 3322,
+    "closed_date": 1423161830,
+    "accepted_answer_id": 28350819,
+    "answer_count": 1,
+    "score": 0,
+    "last_activity_date": 1786819785,
+    "creation_date": 1423157829,
+    "last_edit_date": 1786819785,
+    "question_id": 28350495,
+    "link": "https://stackoverflow.com/questions/28350495/can-i-build-a-solid-website-without-using-javascript",
+    "closed_reason": "Opinion-based",
+    "title": "Can I build a solid website without using JavaScript?"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8f640785-8adc-4e03-bb22-eb81fca3a5fa"
+}

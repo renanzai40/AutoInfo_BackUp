@@ -1,0 +1,24 @@
+{
+  "id": "243def5e225054bc",
+  "source_name": "b2b-news-network",
+  "source_type": "rss",
+  "source_url": "https://www.b2bnn.com/2026/08/the-perplexing-perplexity-deal/",
+  "title": "The Perplexing Perplexity Deal",
+  "content": "The rule holds even in AI: in the enterprise, the best sales org beats the best tech (or models) On its face, the reported Nvidia-Perplexity deal makes very little sense. Perplexity was the first major AI product to make live web search, synthesized answers and visible citations feel like a coherent alternative to Google. Then [&#8230;]",
+  "content_type": "text",
+  "source_platform": "b2b-news-network",
+  "collected_at": "2026-08-24T13:41:47+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://b2bnn.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a77dcf46-82e2-40d0-a33f-ece71784d4aa",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

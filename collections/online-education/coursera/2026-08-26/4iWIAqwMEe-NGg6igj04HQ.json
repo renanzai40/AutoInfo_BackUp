@@ -1,0 +1,27 @@
+{
+  "id": "4iWIAqwMEe-NGg6igj04HQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Inteligencia Artificial Generativa para Docentes",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "4iWIAqwMEe-NGg6igj04HQ",
+    "slug": "inteligencia-artificial-generativa-para-docentes",
+    "name": "Inteligencia Artificial Generativa para Docentes"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "893787cb-78fb-48c4-81fa-7eccc4de72cb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

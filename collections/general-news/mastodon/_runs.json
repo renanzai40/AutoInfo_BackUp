@@ -1,0 +1,66 @@
+[
+  {
+    "collection_id": "col-20260815T190204-2059ae64",
+    "timestamp": "2026-08-15T19:02:34.987259+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://mastodon.social/api/v1/timelines/public (source: mastodon): [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://mastodon.social/api/v1/timelines/public (source: mastodon): [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30608.0
+  },
+  {
+    "collection_id": "col-20260825T151905-c85b90e7",
+    "timestamp": "2026-08-25T15:19:37.516745+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://mastodon.social/api/v1/timelines/public (source: mastodon): [Errno 104] Connection reset by peer",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://mastodon.social/api/v1/timelines/public (source: mastodon): [Errno 104] Connection reset by peer"
+      }
+    ],
+    "duration_ms": 405.0
+  },
+  {
+    "collection_id": "col-20260825T153025-acb4a6c3",
+    "timestamp": "2026-08-25T15:30:57.258037+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://mastodon.social/api/v1/timelines/public (source: mastodon): [Errno 104] Connection reset by peer",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://mastodon.social/api/v1/timelines/public (source: mastodon): [Errno 104] Connection reset by peer"
+      }
+    ],
+    "duration_ms": 401.0
+  },
+  {
+    "collection_id": "col-20260825T154628-1c0c3b07",
+    "timestamp": "2026-08-25T15:46:59.870662+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://mastodon.social/api/v1/timelines/public (source: mastodon): [Errno 104] Connection reset by peer",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://mastodon.social/api/v1/timelines/public (source: mastodon): [Errno 104] Connection reset by peer"
+      }
+    ],
+    "duration_ms": 397.0
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "id": "d06c9dfa30ad88b5",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/religion/rashiphal/video/tula-rashifal-26-august-2026-libra-daily-horoscope-today-2629616-2026-08-26?utm_source=rssfeed",
+  "title": "तुला राशि",
+  "content": "आर्थिक स्थिति में सुधार होगा, शिक्षा के क्षेत्र में सफलता मिलेगी, अपने स्वास्थ्य का ख्याल रखना होगा, करियर में उन्नति के मौके सामने आएंगे, अचानक खर्चो...",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-26T02:08:02+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "589b192e-e7b9-4ab0-9bc5-51daea3a1b55",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

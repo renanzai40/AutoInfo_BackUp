@@ -1,0 +1,24 @@
+{
+  "id": "c5b76cdc7da43c04",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/sport/28044333",
+  "title": "\"Сабах\" стал вторым азербайджанским клубом, вышедшим в основной этап ЛЧ",
+  "content": "В заключительном раунде квалификации команда обыграла израильский \"Хапоэль\" из Беэр-Шевы",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T22:23:09+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9bf16c4e-50ad-411c-912d-3daffa3250a4",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

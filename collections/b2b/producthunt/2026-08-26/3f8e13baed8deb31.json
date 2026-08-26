@@ -1,0 +1,24 @@
+{
+  "id": "3f8e13baed8deb31",
+  "source_name": "producthunt",
+  "source_type": "rss",
+  "source_url": "https://www.producthunt.com/products/kanasensei",
+  "title": "KanaSensei",
+  "content": "<p>\n            Read Japanese kana in two weeks\n          </p>\n          <p>\n            <a href=\"https://www.producthunt.com/products/kanasensei?utm_campaign=producthunt-atom-posts-feed&amp;utm_medium=rss-feed&amp;utm_source=producthunt-atom-posts-feed\">Discussion</a>\n            |\n            <a href=\"https://www.producthunt.com/r/p/1227963?app_id=339\">Link</a>\n          </p>",
+  "content_type": "text",
+  "source_platform": "producthunt",
+  "collected_at": "2026-08-20T12:24:28-07:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.producthunt.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "da26aa2b-515e-4261-bdc1-2000ed05d37c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

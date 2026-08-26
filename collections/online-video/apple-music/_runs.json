@@ -1,0 +1,98 @@
+[
+  {
+    "collection_id": "col-20260815T184548-46b73103",
+    "timestamp": "2026-08-15T18:45:53.135566+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json (source: apple-music): Client error '404 Not Found' for url 'https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json?q=music'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json (source: apple-music): Client error '404 Not Found' for url 'https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json?q=music'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 4776.0
+  },
+  {
+    "collection_id": "col-20260815T185744-db886ea5",
+    "timestamp": "2026-08-15T18:57:46.345850+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json (source: apple-music): Client error '404 Not Found' for url 'https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json (source: apple-music): Client error '404 Not Found' for url 'https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 1893.0
+  },
+  {
+    "collection_id": "col-20260815T190138-a05a7141",
+    "timestamp": "2026-08-15T19:01:42.649328+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json (source: apple-music): Client error '404 Not Found' for url 'https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json (source: apple-music): Client error '404 Not Found' for url 'https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 3507.0
+  },
+  {
+    "collection_id": "col-20260825T151510-1a39b5d2",
+    "timestamp": "2026-08-25T15:15:56.337160+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json (source: apple-music): Client error '404 Not Found' for url 'https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json (source: apple-music): Client error '404 Not Found' for url 'https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 6117.0
+  },
+  {
+    "collection_id": "col-20260825T153409-ed01b249",
+    "timestamp": "2026-08-25T15:34:51.041547+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json (source: apple-music): Client error '404 Not Found' for url 'https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json (source: apple-music): Client error '404 Not Found' for url 'https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 2357.0
+  },
+  {
+    "collection_id": "col-20260825T154258-739c21b3",
+    "timestamp": "2026-08-25T15:43:32.543762+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json (source: apple-music): Client error '404 Not Found' for url 'https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json (source: apple-music): Client error '404 Not Found' for url 'https://rss.marketingtools.apple.com/api/v2/us/music/most-recent/25/explicit.json'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 5378.0
+  }
+]

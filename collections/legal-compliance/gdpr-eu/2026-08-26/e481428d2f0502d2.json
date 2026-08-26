@@ -1,0 +1,24 @@
+{
+  "id": "e481428d2f0502d2",
+  "source_name": "gdpr-eu",
+  "source_type": "rss",
+  "source_url": "https://gdpr.eu/gdpr-vs-lgpd/",
+  "title": "What is the LGPD? Brazil’s version of the GDPR",
+  "content": "<p>Brazil passed the General Data Protection Law in 2018, and it will come into effect February 2020. This article examines the GDPR vs. the LGPD, how it differs, and...</p>\n<p>The post <a href=\"https://gdpr.eu/gdpr-vs-lgpd/\">What is the LGPD? Brazil’s version of the GDPR</a> appeared first on <a href=\"https://gdpr.eu\">GDPR.eu</a>.</p>",
+  "content_type": "text",
+  "source_platform": "gdpr-eu",
+  "collected_at": "2019-07-31T11:14:27+00:00",
+  "language": "",
+  "domain": "legal-compliance",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://gdpr.eu/feed/"
+  },
+  "version": 2,
+  "previous_version": 1,
+  "supersedes": "legal-compliance-general-what-is-the-lgpd-brazil-s-version-of-the-gdpr",
+  "trace_id": "92f34473-9c81-4101-b80e-603ddf3261e9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

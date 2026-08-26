@@ -1,0 +1,24 @@
+{
+  "id": "e1dc13d11cb03495",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/business/news/story/rule-change-modi-govt-toughens-import-rules-to-curb-hoarding-amid-sugar-price-hike-tutc-dskc-2629380-2026-08-25?utm_source=rssfeed",
+  "title": "बेलगाम चीनी के दामों पर लगेगी लगाम, सरकार ने अचानक बदला ये नियम",
+  "content": "Rule Change: चीनी की कीमतों में अचानक आए तेज उछाल के बीच सरकार ने इसके आयात से जुड़े नियमों में बदलाव किया है, जिसका उद्देश्य चीनी की जमाखोरी और कालाबाजारी को रोकना है.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T09:12:02+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "669a9075-b2df-4674-b7dd-1939590c2b82",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

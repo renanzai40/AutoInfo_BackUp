@@ -1,0 +1,24 @@
+{
+  "id": "493da17188909884",
+  "source_name": "variety",
+  "source_type": "rss",
+  "source_url": "https://variety.com/2026/film/news/paul-thomas-anderson-cameron-winter-janus-films-criterion-1236842042/",
+  "title": "Paul Thomas Anderson’s ‘Cameron Winter at Carnegie Hall’ Concert Movie Acquired by Janus Films, Criterion",
+  "content": "Janus Films and Criterion have acquired North American rights to “Cameron Winter at Carnegie Hall,” a concert film shot and directed by Paul Thomas Anderson. The concert was captured on 35mm and 16mm film during a sold-out solo performance from the Geese frontman at Carnegie Hall in December 2025. Geese kicked off its Getting Killed world [&#8230;]",
+  "content_type": "text",
+  "source_platform": "variety",
+  "collected_at": "2026-08-25T16:00:00+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://variety.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6a6cb297-e88b-43aa-981d-2017f949a498",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "24e2f64ddcfbb9ca",
+  "source_name": "Substack RSS (tech) — Pragmatic Engineer",
+  "source_type": "rss",
+  "source_url": "https://newsletter.pragmaticengineer.com/p/the-pragmatic-engineer-ama",
+  "title": "The Pragmatic Engineer AMA",
+  "content": "In this AMA episode, Gergely Orosz answers listener questions on AI, engineering, hiring, and careers.",
+  "content_type": "text",
+  "source_platform": "Substack RSS (tech) — Pragmatic Engineer",
+  "collected_at": "2026-07-08T16:38:49+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://newsletter.pragmaticengineer.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7b9e010f-89b9-4ba6-8b27-48ae6c396086",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "ebb46eb8fd5806de",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/best-kindle-accessories/",
+  "title": "The Kindle Accessories I Never Want to Read Without (2026)",
+  "content": "Looking to better protect your Kindle or add a little personality to your favorite e-reader? From cases and covers to page turners and even charms, this is the guide for you.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-24T11:09:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "23282b28-2356-44eb-ba8a-4ff61811d30b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

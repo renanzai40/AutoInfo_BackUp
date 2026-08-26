@@ -1,0 +1,52 @@
+---
+title: Kevin Hart & Jack Black’s Live-Action Sci-Fi Video Game Movie Available on Peacock Today
+domain: online-video
+tier: 01-Raw
+entry_id: online-video-general-kevin-hart-jack-black-s-live-action-sci-fi-video-game-movie-available-on-peacock-today
+source_url: https://www.comingsoon.net/guides/news/2181647-kevin-hart-jack-black-borderlands-movie-peacock
+source_type: rss
+source_platform: comingsoon
+collected_at: '2026-08-25T15:05:59+00:00'
+summary: A live-action science fiction film adaptation of a video game starring Kevin Hart and Jack Black has become available
+  for streaming on Peacock starting today. The announcement was published by ComingSoon.net.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: f8cdd8c7-4ef0-4aee-81e6-cfddc05162d6
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<p>Kevin Hart and Jack Black-led live-action video game film lands on Peacock today!</p>
+<p>The post <a href="https://www.comingsoon.net/guides/news/2181647-kevin-hart-jack-black-borderlands-movie-peacock">Kevin Hart &amp; Jack Black&#8217;s Live-Action Sci-Fi Video Game Movie Available on Peacock Today</a> appeared first on <a href="https://www.comingsoon.net">ComingSoon.net - Movie Trailers, TV &amp; Streaming News, and More</a>.</p>
+
+## Summary
+A live-action science fiction film adaptation of a video game starring Kevin Hart and Jack Black has become available for streaming on Peacock starting today. The announcement was published by ComingSoon.net.
+
+## Key Points
+- A live-action video game adaptation film starring Kevin Hart and Jack Black is now streaming on Peacock
+- The film is described as a live-action sci-fi video game movie
+- The news was reported by ComingSoon.net, an entertainment news outlet covering movie trailers, TV, and streaming content
+
+
+## Entities
+- **Kevin Hart** (person, relevance=)
+- **Jack Black** (person, relevance=)
+- **Peacock** (technology, relevance=)
+- **Borderlands movie** (concept, relevance=)
+- **ComingSoon.net** (org, relevance=)

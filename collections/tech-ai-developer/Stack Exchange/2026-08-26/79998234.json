@@ -1,0 +1,47 @@
+{
+  "id": 79998234,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/79998234/excel-scroll-bar-stuck-with-2500-extra-empty-rows-even-after-deleting-rows-recr",
+  "title": "Excel scroll bar stuck with 2500 extra empty rows even after deleting rows. Recreating the sheet is NOT an option",
+  "content": "Excel scroll bar stuck with 2500 extra empty rows even after deleting rows. Recreating the sheet is NOT an option",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-26T00:53:25.798577+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "excel",
+      "scrollbar",
+      "worksheet"
+    ],
+    "owner": {
+      "account_id": 14674442,
+      "reputation": 107,
+      "user_id": 18255654,
+      "user_type": "registered",
+      "profile_image": "https://www.gravatar.com/avatar/eda9ab121bec596025bcdac64caf2c08?s=256&d=identicon&r=PG",
+      "display_name": "Zaida",
+      "link": "https://stackoverflow.com/users/18255654/zaida"
+    },
+    "is_answered": false,
+    "view_count": 12,
+    "answer_count": 0,
+    "score": 1,
+    "last_activity_date": 1787703196,
+    "creation_date": 1787703196,
+    "question_id": 79998234,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/79998234/excel-scroll-bar-stuck-with-2500-extra-empty-rows-even-after-deleting-rows-recr",
+    "title": "Excel scroll bar stuck with 2500 extra empty rows even after deleting rows. Recreating the sheet is NOT an option"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c4d24642-a4ab-4b89-875f-0025a63e085a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

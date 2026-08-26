@@ -1,0 +1,24 @@
+{
+  "id": "cec196b66ae4efb9",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/motori/news/24_maggio_05/bugatti-bolide-hypercar-che-non-si-puo-guidare-nemmeno-pista-ecco-perche-64987dd2-ffef-11ee-aedc-ae24712d0e0b.shtml",
+  "title": "Bugatti Bolide: la hypercar che non si può guidare nemmeno in pista. Ecco perché",
+  "content": "<p><img alt=\"Bugatti Bolide: la hypercar che non si può guidare nemmeno in pista. Ecco perché\" src=\"https://images2.corriereobjects.it/methode_image/2024/04/21/Motori/Foto%20Motori%20-%20Trattate/02bugatti_bolidehighspeedlaunchcontrol-kbue--656x492corriere-web-sezioni_master_ori_crop_MASTER__0x0.jpg\" title=\"Bugatti Bolide: la hypercar che non si può guidare nemmeno in pista. Ecco perché\" /><p>Non esiste un circuito con un rettilineo abbastanza lungo dove l’ultimo bolide da corsa sviluppato dallo storico marchio possa scatenare i suoi 1.578 cavalli</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-06T11:24:11+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e38d58ff-909c-4a60-a72f-cce4eb42c61e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

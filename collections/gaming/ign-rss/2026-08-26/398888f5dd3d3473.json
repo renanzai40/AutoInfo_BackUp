@@ -1,0 +1,24 @@
+{
+  "id": "398888f5dd3d3473",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/asus-special-gold-rog-xbox-ally-x20-is-surprisingly-affordable-if-you-avoid-the-bundle",
+  "title": "Asus' Special Gold ROG Xbox Ally X20 Is Surprisingly Affordable – If You Avoid the Bundle",
+  "content": "While everything seems to be going up in price lately, due to an ongoing RAMageddon that doesn't seem to be letting up any time soon, Asus' handhelds have somehow avoided the price increases that are hitting everything in the category. And, while the company's special anniversary version of the Xbox Ally X is a bit more expensive than the regular version, it's not by much.",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T12:30:00+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b322c1d8-7d2e-4e29-8079-ca0254287519",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

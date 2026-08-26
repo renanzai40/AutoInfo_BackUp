@@ -1,0 +1,24 @@
+{
+  "id": "aa6c3c769eabd760",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/proisshestviya/28044223",
+  "title": "Движение в сторону Москвы перекрыли на трассе М-11 \"Нева\" из-за опрокидывания фуры",
+  "content": "Разлива топлива не зафиксировано",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T20:45:41+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3e2b3e85-a9a0-4f4b-93f0-d55a1ef0ce9c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

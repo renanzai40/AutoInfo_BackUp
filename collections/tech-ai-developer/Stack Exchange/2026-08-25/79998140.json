@@ -1,0 +1,49 @@
+{
+  "id": 79998140,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/79998140/reading-who-am-i-register-in-mpu6050-issue",
+  "title": "Reading &quot;WHO_AM_I&quot; register in MPU6050 issue",
+  "content": "Reading &quot;WHO_AM_I&quot; register in MPU6050 issue",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-25T15:58:38.586501+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "c",
+      "i2c",
+      "stm32f4",
+      "stm32cubeide",
+      "mpu6050"
+    ],
+    "owner": {
+      "account_id": 46953542,
+      "reputation": 1,
+      "user_id": 33063032,
+      "user_type": "registered",
+      "profile_image": "https://www.gravatar.com/avatar/3389654857bacf95b99971a44a7099e6?s=256&d=identicon&r=PG&f=y&so-version=2",
+      "display_name": "MohammadAli Borna",
+      "link": "https://stackoverflow.com/users/33063032/mohammadali-borna"
+    },
+    "is_answered": false,
+    "view_count": 1,
+    "answer_count": 0,
+    "score": 0,
+    "last_activity_date": 1787673517,
+    "creation_date": 1787673517,
+    "question_id": 79998140,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/79998140/reading-who-am-i-register-in-mpu6050-issue",
+    "title": "Reading &quot;WHO_AM_I&quot; register in MPU6050 issue"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ddb8c26f-0412-4341-bfda-61420b9a855a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

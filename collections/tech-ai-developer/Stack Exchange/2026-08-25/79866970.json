@@ -1,0 +1,47 @@
+{
+  "id": 79866970,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/79866970/how-do-i-pass-a-function-with-variable-as-an-argument",
+  "title": "How do I pass a function with variable as an argument",
+  "content": "How do I pass a function with variable as an argument",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-25T15:28:07.504011+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "c++",
+      "parameter-passing"
+    ],
+    "owner": {
+      "account_id": 45286864,
+      "reputation": 1,
+      "user_id": 32195340,
+      "user_type": "registered",
+      "profile_image": "https://www.gravatar.com/avatar/bad514ab874f05d97729d7249c2f7798?s=256&d=identicon&r=PG&f=y&so-version=2",
+      "display_name": "PKMaster PKDaps",
+      "link": "https://stackoverflow.com/users/32195340/pkmaster-pkdaps"
+    },
+    "is_answered": false,
+    "view_count": 162,
+    "answer_count": 7,
+    "score": 0,
+    "last_activity_date": 1787671174,
+    "creation_date": 1768310698,
+    "last_edit_date": 1787671174,
+    "question_id": 79866970,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/79866970/how-do-i-pass-a-function-with-variable-as-an-argument",
+    "title": "How do I pass a function with variable as an argument"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9dec0e6b-3443-40b9-a2ff-ffc56db4c287",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

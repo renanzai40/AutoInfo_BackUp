@@ -1,0 +1,24 @@
+{
+  "id": "a1bdf3821b10949c",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/deportes/futbol/luis-fuente-sobre-los-pitos-san-mames-los-campeones-mundo-siento-pena-respeto-no-se-puede-perder-nunca_7028978_0.html",
+  "title": "Luis de la Fuente, tajante sobre los pitos en San Mamés a los campeones del mundo: \"Siento pena\"",
+  "content": "El seleccionador nacional estuvo presente en el estadio del Athletic en el recibimiento a la copa del mundo el pasado sábado.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T10:36:22+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a225f027-72dc-426d-89f7-7101e46b9f18",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

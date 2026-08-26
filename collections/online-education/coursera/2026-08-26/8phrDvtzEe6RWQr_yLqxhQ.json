@@ -1,0 +1,27 @@
+{
+  "id": "8phrDvtzEe6RWQr_yLqxhQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "User Interface Design and Prototyping",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "8phrDvtzEe6RWQr_yLqxhQ",
+    "slug": "user-interface-design-and-prototyping",
+    "name": "User Interface Design and Prototyping"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f1b4551d-6d92-4ad3-8b7d-1995fd199584",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "34c2c42158c9ed4a",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/ceuta/torres-vivas-acuerdan-ubicar-los-migrantes-espacios-designados-desde-consenso-ceuta_7029350_0.html",
+  "title": "Torres y Vivas acuerdan ubicar a los migrantes en espacios designados \"desde el consenso\" en Ceuta",
+  "content": "El ministro ha anunciado que este miércoles presidirá la primera reunión del Comité de Situación para la gestión de la crisis en la ciudad autónoma.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T22:07:46+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "451e1072-5fe8-4e59-9237-a3a8acb396b6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

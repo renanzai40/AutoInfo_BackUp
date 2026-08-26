@@ -1,0 +1,24 @@
+{
+  "id": "a86d7f9ff07289cd",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/romance-a-escrava-acoriana-de-pedro-almeida-maia-publicado-nos-eua-no-outono/",
+  "title": "\"A Escrava Açoriana\" de Almeida Maia chega aos EUA no outono",
+  "content": "Pedro Almeida Maia nasceu em 1979 em Ponta Delgada e é psicólogo organizacional, mestre em Psicologia do Trabalho, das Organizações e dos Recursos Humanos pelas universidades de Coimbra e de Barcelona",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T23:27:52+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4a10524a-b684-4db9-a1e9-9b4f669c209f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

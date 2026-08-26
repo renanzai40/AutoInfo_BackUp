@@ -1,0 +1,24 @@
+{
+  "id": "36ef8850b065003c",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/alice-campello-alvaro-morata-viven-con-sus-cuatro-hijos-su-verano-mas-feliz-tranquilo_7029316_0.html",
+  "title": "Alice Campello y Álvaro Morata viven con sus cuatro hijos su verano más feliz y tranquilo",
+  "content": "Hace un año, la pareja estaba separada. Por ello, han vivido su reconciliación intensamente, en Cerdeña.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T19:25:42+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "00e4f85d-7478-43b6-b8a2-09acb7433363",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

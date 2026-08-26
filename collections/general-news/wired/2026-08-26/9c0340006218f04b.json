@@ -1,0 +1,24 @@
+{
+  "id": "9c0340006218f04b",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/review/nyrius-phoenix-home-true-4k60/",
+  "title": "Nyrius Phoenix Home True 4K60 (2026): A Solution for Cord Clutter",
+  "content": "The Nyrius Phoenix Home True 4K60 can wirelessly transmit games, TV shows, movies, and more across your home (even through walls).",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-21T11:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "135f698b-b942-46c7-9104-c547ceb070d5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

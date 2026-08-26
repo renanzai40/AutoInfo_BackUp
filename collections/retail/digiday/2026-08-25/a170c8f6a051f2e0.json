@@ -1,0 +1,24 @@
+{
+  "id": "a170c8f6a051f2e0",
+  "source_name": "digiday",
+  "source_type": "rss",
+  "source_url": "https://digiday.com/media/x-creates-a-new-revenue-model-for-creators-but-will-it-actually-win-them-over/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss",
+  "title": "X creates a new revenue model for creators — but will it actually win them over?",
+  "content": "X's new \"original content rewards program\" seeks creators who publish high-quality content on the platform. Will it bring in more creators?",
+  "content_type": "text",
+  "source_platform": "digiday",
+  "collected_at": "2026-08-25T04:01:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://digiday.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ec8322ba-411f-4467-8a0f-61d9880cbc7d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

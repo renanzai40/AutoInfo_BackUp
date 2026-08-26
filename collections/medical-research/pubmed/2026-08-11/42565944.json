@@ -1,0 +1,66 @@
+{
+  "id": "42565944",
+  "source_name": "pubmed",
+  "source_type": "api",
+  "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42565944&retmode=xml",
+  "title": "Alignment between expanded carrier screening panels and conditions leading to PGT-M: a real-world cohort study.",
+  "content": "PURPOSE: To assess the extent to which expanded carrier screening (ECS) panels capture the genetic conditions for which preimplantation genetic testing for monogenic diseases (PGT-M) is performed.\nMETHODS: A retrospective observational study conducted at a single university-affiliated PGT unit from 2015 to 2023. Women undergoing PGT-M for autosomal recessive or X-linked genetic conditions were included. Genetic conditions were cross-matched with five ECS panels (four commercial panels and one publicly funded ECS panel) and compared with a targeted, population-specific screening. Coverage was assessed at both the woman and gene levels using paired statistical comparisons.\nRESULTS: A total of 330 cases were included; seven women underwent PGT-M for two eligible conditions and were therefore counted twice. These cases involved 110 different genes with an uneven distribution: eight genes accounted for 53.2% of cases, while 71 genes were observed in a single case. At the individual-woman level, targeted, population-specific screening showed lower coverage (47.9%) than that of all ECS panels (71.8-91.5%), with overall differences statistically significant (P < 0.001). At the gene level, coverage ranged from 20.9 to 79.1% across panels (P < 0.001). The evaluated ECS panels included 271-787 genes, with the largest panel demonstrating higher case coverage than the other commercial panels.\nCONCLUSIONS: Expanded carrier screening panels capture most autosomal recessive and X-linked genetic conditions for which PGT-M is performed. These findings support the clinical utility of ECS in identifying couples at risk of having children affected by such conditions.",
+  "content_type": "text",
+  "source_platform": "pubmed",
+  "collected_at": "2026 Aug 07",
+  "language": "",
+  "domain": "medical-research",
+  "topic_tags": [
+    "Autosomal recessive disorders",
+    "Carrier screening",
+    "Expanded carrier screening",
+    "IVF",
+    "PGT-M",
+    "Reproductive genetics"
+  ],
+  "quality_tier": 1,
+  "raw_data": {
+    "pmid": "42565944",
+    "pmc_id": "",
+    "authors": [
+      {
+        "lastname": "Zivi",
+        "firstname": "Einat",
+        "initials": "E"
+      },
+      {
+        "lastname": "Clymer",
+        "firstname": "Avia",
+        "initials": "A"
+      },
+      {
+        "lastname": "Freireich",
+        "firstname": "Orit",
+        "initials": "O"
+      },
+      {
+        "lastname": "Altarescu",
+        "firstname": "Gheona",
+        "initials": "G"
+      },
+      {
+        "lastname": "Ben-Ami",
+        "firstname": "Ido",
+        "initials": "I"
+      },
+      {
+        "lastname": "Tsafrir",
+        "firstname": "Avi",
+        "initials": "A"
+      }
+    ],
+    "journal": "Journal of assisted reproduction and genetics",
+    "pub_date": "2026 Aug 07",
+    "doi": "10.1007/s10815-026-03992-1",
+    "mesh_terms": []
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a799dbd1-f2eb-49f3-ad36-b5c976bf55d8"
+}

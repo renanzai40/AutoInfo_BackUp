@@ -1,0 +1,24 @@
+{
+  "id": "0d39df8fb5a71184",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/india/gujarat/story/mumbai-ahmedabad-vande-bharat-stone-pelting-surat-anandiben-patel-ntc-apdy-rptc-2629948-2026-08-25?utm_source=rssfeed",
+  "title": "वंदे भारत एक्सप्रेस पर पथराव, ट्रेन में सवार थीं UP की राज्यपाल आनंदीबेन",
+  "content": "मुंबई से अहमदाबाद जा रही वंदे भारत एक्सप्रेस पर सूरत के पास पथराव हुआ. उत्तराण और कोसाड के बीच हुई इस घटना के बाद एक संदिग्ध को गिरफ्तार किया गया और उससे पूछताछ की जा रही है. ट्रेन में यूपी की राज्यपाल आनंदीबेन पटेल और दमन-दीव, दादरा एवं नगर हवेली के प्रशासक प्रफुल पटेल भी सवार थे.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T22:21:52+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6883cdc4-898f-4eaf-9da9-56ce1705403e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

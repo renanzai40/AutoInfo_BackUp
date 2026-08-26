@@ -1,0 +1,24 @@
+{
+  "id": "3ff654da066211e6",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/motor/actualidad/nuevo-geely-e2-cuesta-menos-14-000-euros-ofrece-hasta-497-kilometros-ciudad_7028793_0.html",
+  "title": "El nuevo Geely E2 cuesta menos de 14.000 euros y ofrece hasta 497 kilómetros en ciudad",
+  "content": "El Geely E2 llegará en septiembre con dos baterías, amplio equipamiento y una agresiva oferta ligada a financiación.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T05:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "300f18dc-9f11-4962-8733-cc9af7c724d6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

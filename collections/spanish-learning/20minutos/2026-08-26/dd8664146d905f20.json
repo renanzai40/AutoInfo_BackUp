@@ -1,0 +1,24 @@
+{
+  "id": "dd8664146d905f20",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/andalucia/almeria/rescatan-dos-perros-7-su-paso-por-balanegra-uno-ellos-atado-quitamiedos_7029250_0.html",
+  "title": "Rescatan a dos perros en la A-7 a su paso por la zona de Balanegra, uno de ellos atado al quitamiedos",
+  "content": "Los animales presentaban signos de deshidratación y su presencia en las inmediaciones de la autovía suponía un peligro para la circulación.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T17:30:13+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "db2e3d61-7abb-4de7-88c8-dfcd86340100",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "d0d2f2a90589e3ce",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/cataluna/barcelona/los-bombers-trabajan-un-incendio-declarado-collserola-cerca-barrio-canyelles_7029237_0.html",
+  "title": "El incendio de Collserola obliga a desalojar viviendas en un barrio de Barcelona y confina a 14.000 personas",
+  "content": "Más de un centenar de bomberos trabajan para controlar las llamas, que avanzan por un cerro en dirección a Sant Cugat.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T16:20:55+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "db53173c-43a5-4688-aa77-26851aee0565",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

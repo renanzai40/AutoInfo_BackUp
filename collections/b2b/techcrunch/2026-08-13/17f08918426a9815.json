@@ -1,0 +1,22 @@
+{
+  "id": "17f08918426a9815",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://techcrunch.com/2026/08/12/mesh-automattics-crm-for-everyone-comes-to-android/",
+  "title": "Mesh, Automattic’s CRM for everyone, comes to Android",
+  "content": "Mesh, an AI-powered contacts app and relationship manager from Automattic is now an Android app.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-12T16:57:58+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://techcrunch.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c503ab56-6522-4721-ac69-a27ef2650e55"
+}

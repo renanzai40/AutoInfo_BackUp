@@ -1,0 +1,24 @@
+{
+  "id": "ce74fca1017ec0f6",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/entertainment/tiktok-live-sports-bare-knuckle-boxing-king-of-content",
+  "title": "Forget the NFL, TikTok live sports has an unlikely king of content",
+  "content": "When it comes to engaging audiences on TikTok, one type of competition stands above the rest.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T16:20:57+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d1bd937e-325c-4090-8f43-30565873d65f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

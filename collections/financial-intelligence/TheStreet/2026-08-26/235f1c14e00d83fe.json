@@ -1,0 +1,24 @@
+{
+  "id": "235f1c14e00d83fe",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/investing/stocks/michael-burry-alibaba-stock-dilution-warning",
+  "title": "After Burry ditched Alibaba for JD, Alibaba proved his point",
+  "content": "The investor bailed on share dilution fears. A day later, Alibaba priced a $10.3B offering that sent shares tumbling.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T08:03:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "81293899-0a64-4aec-b1f3-127b34ee8227",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

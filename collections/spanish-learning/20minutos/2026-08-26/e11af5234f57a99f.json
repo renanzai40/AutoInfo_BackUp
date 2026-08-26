@@ -1,0 +1,24 @@
+{
+  "id": "e11af5234f57a99f",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/internacional/hallan-turquia-una-escultura-hace-11-000-anos-que-representa-una-persona-sobre-un-leopardo_7029288_0.html",
+  "title": "Hallan una escultura de hace 11.000 años que representa a una persona sobre un leopardo",
+  "content": "La pieza, de 70 centímetros, combina figuras humana y animal en una composición inédita y fue hallada en el mismo lugar donde se colocó.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T18:00:04+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a18ea0a8-3520-4a6d-a348-1ce82f50b619",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

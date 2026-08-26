@@ -1,0 +1,24 @@
+{
+  "id": "5e421f01fbef4880",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/tecnologia/moviles-dispositivos/apple-presenta-nuevo-mac-mini-chips-m6-m5-pro-mas-potencia-ia-trabajos-exigentes_7029275_0.html",
+  "title": "Apple presenta el Mac mini con los chips M6 y M5 Pro: mayor potencia para la IA y los trabajos exigentes",
+  "content": "Apple lanza el nuevo Mac mini con procesadores M6 y M5 Pro, mayor rendimiento en IA y conectividad Wi-Fi 7.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T17:43:29+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "adc2478f-48bc-411f-8968-d6852f8a17ba",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

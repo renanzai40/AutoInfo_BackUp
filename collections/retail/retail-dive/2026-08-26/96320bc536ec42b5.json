@@ -1,0 +1,24 @@
+{
+  "id": "96320bc536ec42b5",
+  "source_name": "retail-dive",
+  "source_type": "rss",
+  "source_url": "https://www.retaildive.com/news/walmart-new-private-label-scenerio/828696/",
+  "title": "Walmart goes all in on boho style with new private label",
+  "content": "<figure><div><img src=\"https://imgproxy.divecdn.com/AsVgCT9BNpYpIaw9tTbIqyqfafc5tNJExhlI9SYndwM/g:nowe:84:47/c:2218:1253/rs:fill:1600:900:1/Z3M6Ly9kaXZlc2l0ZS1zdG9yYWdlL2RpdmVpbWFnZS9jeXByZXNzLXRleGFzLXN1cGVyY2VudGVyLWZhc2hpb24tZGlzcGxheS5qcGc=.webp\" /></div></figure><p>Scenario will launch in all stores across five departments, representing one of the broadest category footprints in Walmart Fashion.</p>",
+  "content_type": "text",
+  "source_platform": "retail-dive",
+  "collected_at": "2026-08-25T12:03:00-04:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.retaildive.com/feeds/news/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "558c7836-8069-43ba-bc6c-910d99d5949e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,54 @@
+---
+title: UNESCO partners with Coursera and launches free AI ethics course, developed in collaboration with LG AI Research, for
+  learners and institutions worldwide
+domain: online-education
+tier: 01-Raw
+entry_id: online-education-general-unesco-partners-with-coursera-and-launches-free-ai-ethics-course-developed-in-collaboration-with-lg-ai-research-for-learners-and-institutions-worldwide
+source_url: https://blog.coursera.org/unesco-partners-with-coursera-and-launches-free-ai-ethics-course/
+source_type: rss
+source_platform: rss
+collected_at: '2026-07-20T06:30:00+00:00'
+summary: UNESCO has partnered with Coursera to launch a free course on the ethics of AI, called the Global MOOC on the Ethics
+  of AI. This course was developed in collaboration with LG AI Research and is available to learners and institutions worldwide.
+tags: []
+quality_tier: 2
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 70.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: b92ebde2-b602-40d7-be32-e94029d0c314
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<p>Today, I’m proud to welcome UNESCO, the United Nations Educational, Scientific and Cultural Organization, to Coursera as they launch their first free course, the Global MOOC on the Ethics of AI, which they built with LG AI Research.</p>
+<p>The post <a href="https://blog.coursera.org/unesco-partners-with-coursera-and-launches-free-ai-ethics-course/">UNESCO partners with Coursera and launches free AI ethics course, developed in collaboration with LG AI Research, for learners and institutions worldwide</a> appeared first on <a href="https://blog.coursera.org">Coursera Blog</a>.</p>
+
+## Summary
+UNESCO has partnered with Coursera to launch a free course on the ethics of AI, called the Global MOOC on the Ethics of AI. This course was developed in collaboration with LG AI Research and is available to learners and institutions worldwide.
+
+## Key Points
+- UNESCO's first free course on Coursera focuses on the ethics of AI.
+- The course was developed in partnership with LG AI Research.
+- It is designed for global learners and institutions to promote AI ethics education.
+- The MOOC format allows broad accessibility and free access to educational content.
+
+
+## Entities
+- **UNESCO** (org, relevance=)
+- **Coursera** (org, relevance=)
+- **LG AI Research** (org, relevance=)
+- **AI ethics** (concept, relevance=)
+- **MOOC** (concept, relevance=)

@@ -1,0 +1,24 @@
+{
+  "id": "cc4095ace3f03c21",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/camila-rebelo-revalida-titulo-nos-100-metros-costas-e-portugal-soma-seis-ouros-em-taranto2026/",
+  "title": "Taranto2026. Nadadora Camila Rebelo revalida título",
+  "content": "Na natação, Portugal conta agora sete medalhas em Taranto2026",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T19:25:43+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "fdfdfc45-2b10-464f-ad74-4efe567af9bc",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "8796e035889aa3ff",
+  "source_name": "MarketWatch Markets (DJ)",
+  "source_type": "rss",
+  "source_url": "https://www.marketwatch.com/story/why-amd-can-beat-rivals-intel-and-nvidia-in-the-market-for-data-center-cpus-e49a53f1?mod=mw_rss_topstories",
+  "title": "Why AMD can beat rivals Intel and Nvidia in the market for data-center CPUs",
+  "content": "The chip maker is strongly positioned to gain share in the market for data-center CPUs and to see profit from revenue, a Raymond James analyst says.",
+  "content_type": "text",
+  "source_platform": "MarketWatch Markets (DJ)",
+  "collected_at": "2026-08-25T20:59:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.marketwatch.com/marketwatch/topstories/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b7ab0afa-79e2-4f3e-a68f-9689a8b71364",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

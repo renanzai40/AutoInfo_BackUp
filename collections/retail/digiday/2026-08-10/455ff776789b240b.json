@@ -1,0 +1,22 @@
+{
+  "id": "455ff776789b240b",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://digiday.com/marketing/zoom-relies-on-creators-to-boost-ai-search-results/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss",
+  "title": "Zoom relies on creators to boost AI search results",
+  "content": "As AI changes how brands are discovered, Zoom is leaning on creators and journalists to shape its reputation.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-10T04:01:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://digiday.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f4279d61-bd03-49f3-a353-c72addc52080"
+}

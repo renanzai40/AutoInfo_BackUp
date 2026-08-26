@@ -1,0 +1,24 @@
+{
+  "id": "334542a0addde77a",
+  "source_name": "rt-news",
+  "source_type": "rss",
+  "source_url": "https://www.rt.com/news/644615-trump-gender-change-schools-warning/?utm_source=rss&utm_medium=rss&utm_campaign=RSS",
+  "title": "Trump threatens US schools over gender transitions",
+  "content": "<img align=\"left\" alt=\"Preview\" src=\"https://mf.b37mrtl.ru/files/2026.08/thumbnail/6a8d4b8220302740026072f8.jpg\" style=\"margin-right: 10px;\" /> President Donald Trump has warned US schools against promoting gender-related changes, saying such policies will be treated as “child abuse” <br /><a href=\"https://www.rt.com/news/644615-trump-gender-change-schools-warning/?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=RSS\">Read Full Article at RT.com</a>",
+  "content_type": "text",
+  "source_platform": "rt-news",
+  "collected_at": "2026-08-25T10:04:39+00:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.rt.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2094810c-c79e-46fb-ae09-103ca85ff53c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

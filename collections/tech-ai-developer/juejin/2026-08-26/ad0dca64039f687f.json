@@ -1,0 +1,24 @@
+{
+  "id": "ad0dca64039f687f",
+  "source_name": "juejin",
+  "source_type": "rss",
+  "source_url": "https://juejin.cn/post/7677878351721431050",
+  "title": "Vibe Coding 上头之后，我开始用 SDD 给 AI 编程加一张“施工图”",
+  "content": "第一次用 AI Coding Agent 写项目，体验往往非常爽。 你只需要说一句： 几分钟后，目录建好了，接口写好了，页面也能打开。两千行代码摆在面前，仿佛一个下午就完成了过去一周的工作。 但继续开",
+  "content_type": "text",
+  "source_platform": "juejin",
+  "collected_at": "2026-08-25T15:41:17+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://juejin.cn/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a050e8cd-9eae-451c-a9ad-4b03ac6ac741",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "c11362de64f2f28b",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/internacional/bruselas-tramitara-como-prioridad-peticion-espana-fondos-emergencia-para-crisis-migratoria-ceuta_7029232_0.html",
+  "title": "Bruselas tramitará \"como prioridad\" la petición de España de fondos de emergencia para la crisis migratoria en Ceuta",
+  "content": "La Comisión Europea advierte de que aún quedan \"importantes retos\" y pide agilizar el retorno de quienes estén en situación irregular.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T16:11:08+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "793a44f3-3990-45f6-934a-e894b29f2aea",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

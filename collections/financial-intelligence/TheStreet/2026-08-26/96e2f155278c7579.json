@@ -1,0 +1,24 @@
+{
+  "id": "96e2f155278c7579",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/latest-news/intuit-inc-intu-q4-2026-earnings-forecast-updates",
+  "title": "Intuit Inc. Q4 2026 Earnings: Live Updates from $INTU Earnings Call, Forecast",
+  "content": "$INTU is down 43% year-to-date amid a sluggish row for the TurboTax creator. Could today's earnings hold the keys for a turnaround?",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T19:30:31+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ba244ead-33af-46c9-b03e-e3a4b048f41b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

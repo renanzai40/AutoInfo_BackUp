@@ -1,0 +1,24 @@
+{
+  "id": "f0732dd12b70f0b2",
+  "source_name": "pitchfork",
+  "source_type": "rss",
+  "source_url": "https://pitchfork.com/story/2nd-grade-announce-new-album-girls-and-boys/",
+  "title": "2nd Grade Announce New Album Girls and Boys",
+  "content": "Listen to single “Anywhere Girls” now",
+  "content_type": "text",
+  "source_platform": "pitchfork",
+  "collected_at": "2026-08-25T16:22:39+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://pitchfork.com/feed/feed-news/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9bfcf652-b4b0-44e4-95a4-8e2eab4d2cf6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

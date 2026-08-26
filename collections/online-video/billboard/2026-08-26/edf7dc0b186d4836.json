@@ -1,0 +1,24 @@
+{
+  "id": "edf7dc0b186d4836",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/music/pop/pupsies-misery-hyperpop-digi-pop-interview-1236321404/",
+  "title": "Is Digi-Pop the Newest Hyperpop Wave?",
+  "content": "How Pupsies' debut chart hit \"Misery\" could be leading the charge.",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T16:00:00+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e7a68ee4-a33f-42bf-a800-a5366bb9edb6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "f2292ae2800678df",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/cook/news/cards/i-14-migliori-beach-club-d-italia-nord-sud-isole-comprese/guida-migliori-beach-club-d-italia_principale.shtml",
+  "title": "I 14 migliori Beach Club d’Italia da nord a sud, isole comprese",
+  "content": "<p><img alt=\"I 14 migliori Beach Club d’Italia da nord a sud, isole comprese\" src=\"https://images2.corriereobjects.it/methode_image/2024/05/10/Cucina/Foto%20Cucina%20-%20Trattate/phi%20beach-k3RG-U3480246775282MQF-656x492@Corriere-Web-Sezioni.jpg\" title=\"I 14 migliori Beach Club d’Italia da nord a sud, isole comprese\" /><p>È uscita la Guida ai migliori beach club d’Italia. Il sistema di valutazione? Espresso in uno, due fino a un massimo di tre Ombrelloni. Ad aggiudicarsi i Gold sono stati 14 stabilimenti balneari su un totale di 225 da nord a sud, isole comprese</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-12T14:48:09+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "27f1b0cb-aafe-4a07-9309-464327629a17",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

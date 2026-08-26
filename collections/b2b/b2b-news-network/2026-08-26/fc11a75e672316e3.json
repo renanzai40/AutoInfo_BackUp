@@ -1,0 +1,24 @@
+{
+  "id": "fc11a75e672316e3",
+  "source_name": "b2b-news-network",
+  "source_type": "rss",
+  "source_url": "https://www.b2bnn.com/2026/08/focus-after-8-hours-of-screens-a-day-what-really-changes-at-work/",
+  "title": "Focus After 8 Hours of Screens a Day: What Really Changes at Work",
+  "content": "An eight-hour screen day is no longer unusual. For many knowledge workers, it is simply the job: email, team chat, CRM dashboards, spreadsheets, video calls, research and presentations &#8211; followed, often, by more screen time after work. But eight hours is not a magic neurological threshold where concentration suddenly collapses. The more useful question is [&#8230;]",
+  "content_type": "text",
+  "source_platform": "b2b-news-network",
+  "collected_at": "2026-08-24T12:57:36+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://b2bnn.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2eba4d18-b05b-4f93-a209-8719785b4e0f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

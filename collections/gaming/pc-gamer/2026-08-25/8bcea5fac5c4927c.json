@@ -1,0 +1,24 @@
+{
+  "id": "8bcea5fac5c4927c",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/hardware/graphics-cards/dlss-4-5-ray-reconstruction-is-a-definite-improvement-but-path-traced-fidelity-is-still-not-a-100-percent-solved-issue/",
+  "title": "DLSS 4.5 Ray Reconstruction is a definite improvement but path traced fidelity is still not a 100% solved issue",
+  "content": "Nvidia has rounded out the DLSS 4.5 stack… now where's DLSS 5?",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-25T15:30:00+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "72faa996-24c7-4ff9-8ded-e0c24eece776",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

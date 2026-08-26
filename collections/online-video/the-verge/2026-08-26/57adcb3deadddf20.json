@@ -1,0 +1,24 @@
+{
+  "id": "57adcb3deadddf20",
+  "source_name": "the-verge",
+  "source_type": "rss",
+  "source_url": "https://www.theverge.com/tech/984353/apple-polishing-cloth-cheaper",
+  "title": "Apple&#8217;s ‘new’ polishing cloth is the same except $10 cheaper",
+  "content": "Apple just dropped a new polishing cloth, and unlike its refreshed Mac Mini models, it comes with a price cut, as spotted earlier by MacRumors. The polishing cloth is still \"made with soft, nonabrasive material\" but costs $9 instead of $19. It doesn't look like anything else has changed, as the description matches an archived [&#8230;]",
+  "content_type": "text",
+  "source_platform": "the-verge",
+  "collected_at": "2026-08-25T10:25:52-04:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.theverge.com/rss/index.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "682b167e-a469-46b8-a010-c6038890146e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

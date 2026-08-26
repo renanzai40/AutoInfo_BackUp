@@ -1,0 +1,24 @@
+{
+  "id": "4cd1db55d3c5d7dc",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://newsaf.cgtn.com/news/2026-08-25/UN-launches-22m-education-initiative-for-Sudan-s-children-1PShzk8UrcI/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "UN launches $22m education initiative for Sudan's children",
+  "content": "The support will benefit children in three Sudanese states; West Darfur, South Kordofan and Gedaref with the aim of restoring “safe, quality and inclusive education” amid the world's largest humanitarian and displacement crisis.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T16:57:42+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "42f69561-8f48-4be2-8758-4fb863944064",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

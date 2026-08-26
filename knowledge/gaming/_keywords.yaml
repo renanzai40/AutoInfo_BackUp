@@ -1,0 +1,601 @@
+keywords:
+  codedev group:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:54.944374+00:00'
+    updated_at: '2026-08-25T18:19:04.135616+00:00'
+    source: auto-discovery:rss
+  full spectrum interactive:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:54.949141+00:00'
+    updated_at: '2026-08-25T18:19:04.182679+00:00'
+    source: auto-discovery:rss
+  the unreal guys:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:54.960380+00:00'
+    updated_at: '2026-08-25T18:19:04.227335+00:00'
+    source: auto-discovery:rss
+  codedev:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:54.972590+00:00'
+    updated_at: '2026-08-25T18:19:04.273932+00:00'
+    source: auto-discovery:rss
+  group:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:54.985008+00:00'
+    updated_at: '2026-08-25T18:33:58.639914+00:00'
+    source: auto-discovery:rss
+  launched:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:54.999155+00:00'
+    updated_at: '2026-08-25T18:55:10.646437+00:00'
+    source: auto-discovery:ign-rss
+  new:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.012339+00:00'
+    updated_at: '2026-08-25T19:11:20.322718+00:00'
+    source: auto-discovery:rock-paper-shotgun
+  studio:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.026480+00:00'
+    updated_at: '2026-08-25T19:10:56.426549+00:00'
+    source: auto-discovery:rock-paper-shotgun
+  called:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.037560+00:00'
+    updated_at: '2026-08-25T19:11:05.459694+00:00'
+    source: auto-discovery:rock-paper-shotgun
+  full:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.051410+00:00'
+    updated_at: '2026-08-25T18:55:13.871982+00:00'
+    source: auto-discovery:ign-rss
+  spectrum:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.065780+00:00'
+    updated_at: '2026-08-25T18:19:04.457941+00:00'
+    source: auto-discovery:rss
+  interactive.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.080409+00:00'
+    updated_at: '2026-08-15T19:21:55.080409+00:00'
+    source: auto-discovery:rss
+  group launched:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.096005+00:00'
+    updated_at: '2026-08-15T19:21:55.096005+00:00'
+    source: auto-discovery:rss
+  launched new:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.111574+00:00'
+    updated_at: '2026-08-15T19:21:55.111574+00:00'
+    source: auto-discovery:rss
+  new studio:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.128706+00:00'
+    updated_at: '2026-08-15T19:21:55.128706+00:00'
+    source: auto-discovery:rss
+  studio called:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.145493+00:00'
+    updated_at: '2026-08-15T19:21:55.145493+00:00'
+    source: auto-discovery:rss
+  called full:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.162006+00:00'
+    updated_at: '2026-08-15T19:21:55.162006+00:00'
+    source: auto-discovery:rss
+  full spectrum:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.181690+00:00'
+    updated_at: '2026-08-25T18:19:04.547802+00:00'
+    source: auto-discovery:rss
+  spectrum interactive.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.200264+00:00'
+    updated_at: '2026-08-15T19:21:55.200264+00:00'
+    source: auto-discovery:rss
+  codedev group launched:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.217061+00:00'
+    updated_at: '2026-08-15T19:21:55.217061+00:00'
+    source: auto-discovery:rss
+  group launched new:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.233328+00:00'
+    updated_at: '2026-08-15T19:21:55.233328+00:00'
+    source: auto-discovery:rss
+  launched new studio:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.251444+00:00'
+    updated_at: '2026-08-15T19:21:55.251444+00:00'
+    source: auto-discovery:rss
+  new studio called:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.271318+00:00'
+    updated_at: '2026-08-15T19:21:55.271318+00:00'
+    source: auto-discovery:rss
+  studio called full:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.293181+00:00'
+    updated_at: '2026-08-15T19:21:55.293181+00:00'
+    source: auto-discovery:rss
+  called full spectrum:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.313169+00:00'
+    updated_at: '2026-08-15T19:21:55.313169+00:00'
+    source: auto-discovery:rss
+  full spectrum interactive.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.335879+00:00'
+    updated_at: '2026-08-15T19:21:55.335879+00:00'
+    source: auto-discovery:rss
+  known:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.359054+00:00'
+    updated_at: '2026-08-25T19:11:05.551379+00:00'
+    source: auto-discovery:rock-paper-shotgun
+  unreal:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.381996+00:00'
+    updated_at: '2026-08-25T18:42:26.102112+00:00'
+    source: auto-discovery:gcores-rss
+  guys.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.404143+00:00'
+    updated_at: '2026-08-15T19:21:55.404143+00:00'
+    source: auto-discovery:rss
+  group also:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.439485+00:00'
+    updated_at: '2026-08-25T18:19:04.726690+00:00'
+    source: auto-discovery:rss
+  also known:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.467932+00:00'
+    updated_at: '2026-08-25T18:19:04.771748+00:00'
+    source: auto-discovery:rss
+  known the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.495550+00:00'
+    updated_at: '2026-08-25T18:19:04.817764+00:00'
+    source: auto-discovery:rss
+  the unreal:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.525419+00:00'
+    updated_at: '2026-08-25T18:19:04.862426+00:00'
+    source: auto-discovery:rss
+  unreal guys.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.560357+00:00'
+    updated_at: '2026-08-15T19:21:55.560357+00:00'
+    source: auto-discovery:rss
+  codedev group also:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.586514+00:00'
+    updated_at: '2026-08-25T18:19:04.907285+00:00'
+    source: auto-discovery:rss
+  group also known:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.613092+00:00'
+    updated_at: '2026-08-25T18:19:04.954214+00:00'
+    source: auto-discovery:rss
+  also known the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.649864+00:00'
+    updated_at: '2026-08-25T18:19:04.997986+00:00'
+    source: auto-discovery:rss
+  known the unreal:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.679437+00:00'
+    updated_at: '2026-08-25T18:19:05.046350+00:00'
+    source: auto-discovery:rss
+  the unreal guys.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.705401+00:00'
+    updated_at: '2026-08-15T19:21:55.705401+00:00'
+    source: auto-discovery:rss
+  launch:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.740289+00:00'
+    updated_at: '2026-08-25T18:58:29.903806+00:00'
+    source: auto-discovery:ign-rss
+  reported:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.775059+00:00'
+    updated_at: '2026-08-15T19:21:59.542051+00:00'
+    source: auto-discovery:rss
+  gamesindustry.biz.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.802195+00:00'
+    updated_at: '2026-08-15T19:21:55.802195+00:00'
+    source: auto-discovery:rss
+  the studio:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.835369+00:00'
+    updated_at: '2026-08-25T19:10:37.401477+00:00'
+    source: auto-discovery:rock-paper-shotgun
+  studio launch:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.865306+00:00'
+    updated_at: '2026-08-15T19:21:55.865306+00:00'
+    source: auto-discovery:rss
+  launch was:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.900954+00:00'
+    updated_at: '2026-08-25T18:55:38.188745+00:00'
+    source: auto-discovery:ign-rss
+  was reported:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:55.987985+00:00'
+    updated_at: '2026-08-15T19:21:55.987985+00:00'
+    source: auto-discovery:rss
+  reported gamesindustry.biz.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:56.081690+00:00'
+    updated_at: '2026-08-15T19:21:56.081690+00:00'
+    source: auto-discovery:rss
+  the studio launch:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:56.170787+00:00'
+    updated_at: '2026-08-15T19:21:56.170787+00:00'
+    source: auto-discovery:rss
+  studio launch was:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:56.244220+00:00'
+    updated_at: '2026-08-15T19:21:56.244220+00:00'
+    source: auto-discovery:rss
+  launch was reported:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:56.277428+00:00'
+    updated_at: '2026-08-15T19:21:56.277428+00:00'
+    source: auto-discovery:rss
+  was reported gamesindustry.biz.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:56.313782+00:00'
+    updated_at: '2026-08-15T19:21:56.313782+00:00'
+    source: auto-discovery:rss
+  saber interactive:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:56.388779+00:00'
+    updated_at: '2026-08-25T18:19:07.792834+00:00'
+    source: auto-discovery:rss
+  chatgpt:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:56.481025+00:00'
+    updated_at: '2026-08-25T18:19:07.839527+00:00'
+    source: auto-discovery:rss
+  rideshare stimulator:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:56.566925+00:00'
+    updated_at: '2026-08-25T18:19:07.889784+00:00'
+    source: auto-discovery:rss
+  writer:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:56.632533+00:00'
+    updated_at: '2026-08-25T18:19:08.123256+00:00'
+    source: auto-discovery:rss
+  saber:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:56.672346+00:00'
+    updated_at: '2026-08-25T18:19:07.937104+00:00'
+    source: auto-discovery:rss
+  interactive:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:56.713500+00:00'
+    updated_at: '2026-08-25T19:11:05.317345+00:00'
+    source: auto-discovery:rock-paper-shotgun
+  denies:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:56.791054+00:00'
+    updated_at: '2026-08-25T18:58:04.721697+00:00'
+    source: auto-discovery:ign-rss
+  replacing:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:56.867570+00:00'
+    updated_at: '2026-08-25T18:19:08.076520+00:00'
+    source: auto-discovery:rss
+  ai.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:56.910217+00:00'
+    updated_at: '2026-08-15T19:21:56.910217+00:00'
+    source: auto-discovery:rss
+  interactive denies:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:56.947573+00:00'
+    updated_at: '2026-08-25T18:19:08.216779+00:00'
+    source: auto-discovery:rss
+  denies replacing:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:56.991125+00:00'
+    updated_at: '2026-08-25T18:19:08.262608+00:00'
+    source: auto-discovery:rss
+  replacing writer:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.028398+00:00'
+    updated_at: '2026-08-25T18:19:08.309172+00:00'
+    source: auto-discovery:rss
+  writer with:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.070127+00:00'
+    updated_at: '2026-08-25T18:19:08.355171+00:00'
+    source: auto-discovery:rss
+  with ai.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.115122+00:00'
+    updated_at: '2026-08-15T19:21:57.115122+00:00'
+    source: auto-discovery:rss
+  saber interactive denies:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.159270+00:00'
+    updated_at: '2026-08-25T18:19:08.399850+00:00'
+    source: auto-discovery:rss
+  interactive denies replacing:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.201986+00:00'
+    updated_at: '2026-08-25T18:19:08.443725+00:00'
+    source: auto-discovery:rss
+  denies replacing writer:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.318619+00:00'
+    updated_at: '2026-08-25T18:19:08.490177+00:00'
+    source: auto-discovery:rss
+  replacing writer with:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.369586+00:00'
+    updated_at: '2026-08-25T18:19:08.534783+00:00'
+    source: auto-discovery:rss
+  writer with ai.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.421746+00:00'
+    updated_at: '2026-08-15T19:21:57.421746+00:00'
+    source: auto-discovery:rss
+  allegations:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.474054+00:00'
+    updated_at: '2026-08-25T18:18:03.525952+00:00'
+    source: auto-discovery:eurogamer
+  specifically:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.528613+00:00'
+    updated_at: '2026-08-25T18:53:03.478173+00:00'
+    source: auto-discovery:ign-rss
+  involve:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.582946+00:00'
+    updated_at: '2026-08-15T19:21:57.582946+00:00'
+    source: auto-discovery:rss
+  use:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.634600+00:00'
+    updated_at: '2026-08-25T18:20:29.211761+00:00'
+    source: auto-discovery:rss
+  game:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.682613+00:00'
+    updated_at: '2026-08-25T19:11:31.371688+00:00'
+    source: auto-discovery:rock-paper-shotgun
+  rideshare:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.732920+00:00'
+    updated_at: '2026-08-25T18:19:08.171281+00:00'
+    source: auto-discovery:rss
+  stimulator.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.782877+00:00'
+    updated_at: '2026-08-15T19:21:57.782877+00:00'
+    source: auto-discovery:rss
+  the allegations:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.841081+00:00'
+    updated_at: '2026-08-15T19:21:57.841081+00:00'
+    source: auto-discovery:rss
+  allegations specifically:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.893738+00:00'
+    updated_at: '2026-08-15T19:21:57.893738+00:00'
+    source: auto-discovery:rss
+  specifically involve:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.945656+00:00'
+    updated_at: '2026-08-15T19:21:57.945656+00:00'
+    source: auto-discovery:rss
+  involve the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.009779+00:00'
+    updated_at: '2026-08-15T19:21:58.009779+00:00'
+    source: auto-discovery:rss
+  the use:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.156470+00:00'
+    updated_at: '2026-08-25T18:18:03.622099+00:00'
+    source: auto-discovery:eurogamer
+  use chatgpt:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.212651+00:00'
+    updated_at: '2026-08-15T19:21:58.212651+00:00'
+    source: auto-discovery:rss
+  chatgpt for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.271599+00:00'
+    updated_at: '2026-08-15T19:21:58.271599+00:00'
+    source: auto-discovery:rss
+  the game:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.331218+00:00'
+    updated_at: '2026-08-25T19:11:23.430865+00:00'
+    source: auto-discovery:rock-paper-shotgun
+  game rideshare:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.385949+00:00'
+    updated_at: '2026-08-15T19:21:58.385949+00:00'
+    source: auto-discovery:rss
+  rideshare stimulator.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.443038+00:00'
+    updated_at: '2026-08-15T19:21:58.443038+00:00'
+    source: auto-discovery:rss
+  the allegations specifically:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.501757+00:00'
+    updated_at: '2026-08-15T19:21:58.501757+00:00'
+    source: auto-discovery:rss
+  allegations specifically involve:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.555249+00:00'
+    updated_at: '2026-08-15T19:21:58.555249+00:00'
+    source: auto-discovery:rss
+  specifically involve the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.617082+00:00'
+    updated_at: '2026-08-15T19:21:58.617082+00:00'
+    source: auto-discovery:rss
+  involve the use:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.701427+00:00'
+    updated_at: '2026-08-15T19:21:58.701427+00:00'
+    source: auto-discovery:rss
+  the use chatgpt:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.813242+00:00'
+    updated_at: '2026-08-15T19:21:58.813242+00:00'
+    source: auto-discovery:rss
+  use chatgpt for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.898774+00:00'
+    updated_at: '2026-08-15T19:21:58.898774+00:00'
+    source: auto-discovery:rss
+  chatgpt for the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.000583+00:00'
+    updated_at: '2026-08-15T19:21:59.000583+00:00'
+    source: auto-discovery:rss
+  for the game:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.063056+00:00'
+    updated_at: '2026-08-15T19:21:59.063056+00:00'
+    source: auto-discovery:rss
+  the game rideshare:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.119630+00:00'
+    updated_at: '2026-08-15T19:21:59.119630+00:00'
+    source: auto-discovery:rss
+  game rideshare stimulator.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.256555+00:00'
+    updated_at: '2026-08-15T19:21:59.256555+00:00'
+    source: auto-discovery:rss
+  company:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.324722+00:00'
+    updated_at: '2026-08-25T18:36:48.536240+00:00'
+    source: auto-discovery:gcores-rss
+  provided:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.383156+00:00'
+    updated_at: '2026-08-25T19:10:22.073983+00:00'
+    source: auto-discovery:rock-paper-shotgun
+  further:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.449945+00:00'
+    updated_at: '2026-08-25T18:23:51.889927+00:00'
+    source: auto-discovery:gamesindustry-biz

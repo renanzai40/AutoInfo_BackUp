@@ -1,0 +1,24 @@
+{
+  "id": "2e91613474511271",
+  "source_name": "digiday",
+  "source_type": "rss",
+  "source_url": "https://digiday.com/marketing/in-graphic-detail-how-ai-search-has-impacted-the-web-traffic-of-over-50-advertisers/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss",
+  "title": "In Graphic Detail: How AI search has impacted the web traffic of over 50 advertisers",
+  "content": "Data spanning one agency’s entire client roster shows the true impact of AI search on web traffic and conversions.",
+  "content_type": "text",
+  "source_platform": "digiday",
+  "collected_at": "2026-08-25T04:01:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://digiday.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "fb94527b-f321-4f0d-af9d-ec9d7dab9d39",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

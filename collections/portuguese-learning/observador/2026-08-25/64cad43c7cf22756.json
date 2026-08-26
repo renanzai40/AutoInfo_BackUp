@@ -1,0 +1,24 @@
+{
+  "id": "64cad43c7cf22756",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/agricultores-de-serpa-pedem-reuniao-urgente-ao-governo-por-causa-da-subida-do-preco-do-gasoleo-agricola/",
+  "title": "Agricultores de Serpa querem reunião com Governo",
+  "content": "\"Cada litro consumido é um fator de produção necessário para produzir alimentos\", observou",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T16:15:43+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "dc4339e6-4f46-4e3f-a2b0-96325d973ae0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

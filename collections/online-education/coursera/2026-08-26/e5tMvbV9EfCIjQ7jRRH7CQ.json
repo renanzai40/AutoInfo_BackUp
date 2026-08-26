@@ -1,0 +1,27 @@
+{
+  "id": "e5tMvbV9EfCIjQ7jRRH7CQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Sustainable Practices in High-Tech Manufacturing",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "e5tMvbV9EfCIjQ7jRRH7CQ",
+    "slug": "sustainable-practices-in-high-tech-manufacturing",
+    "name": "Sustainable Practices in High-Tech Manufacturing"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "33c02235-c84b-4889-998f-503e27fb0571",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

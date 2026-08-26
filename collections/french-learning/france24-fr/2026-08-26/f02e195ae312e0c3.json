@@ -1,0 +1,24 @@
+{
+  "id": "f02e195ae312e0c3",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/vid%C3%A9o/20260825-guin%C3%A9e-au-moins-trente-et-un-morts-dans-l-%C3%A9boulement-d-une-d%C3%A9charge",
+  "title": "Guinée : au moins trente et un morts dans l'éboulement d'une décharge",
+  "content": "En Guinée, au moins trente et une personnes sont mortes dans l'éboulement d'une décharge. Le gouvernement affirme que \"d'importants moyens matériels et humains ont été mobilisés\" pour rechercher d'éventuelles personnes encore ensevelies. Le récit d'Emily Boyle.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T15:29:42+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5a8c37dd-8a22-49b2-a540-68825a888c02",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

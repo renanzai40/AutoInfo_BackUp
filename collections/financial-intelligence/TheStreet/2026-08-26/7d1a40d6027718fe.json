@@ -1,0 +1,24 @@
+{
+  "id": "7d1a40d6027718fe",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/investing/stocks/chevron-cvx-stock-rises-on-angola-oil-discovery",
+  "title": "Chevron stock turns heads as company strikes fresh oil",
+  "content": "A new oil find off the coast of Angola pushed Chevron stock near record highs.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T17:33:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7462a8e5-f5d7-4db1-a583-d7993de39dd7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,22 @@
+{
+  "id": "c7e01358f75ab155",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://gdpr.eu/gdpr-in-2020/",
+  "title": "How the GDPR could change in 2020",
+  "content": "<p>GDPR regulators have been busy. They issued hundreds of fines to companies, including Google and Facebook, more than €114 million in the first 20 months of GDPR. Later this...</p>\n<p>The post <a href=\"https://gdpr.eu/gdpr-in-2020/\">How the GDPR could change in 2020</a> appeared first on <a href=\"https://gdpr.eu\">GDPR.eu</a>.</p>",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2020-02-20T14:35:50+00:00",
+  "language": "",
+  "domain": "legal-compliance",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://gdpr.eu/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "69a78ea1-8688-4a89-9732-569c5d272969"
+}

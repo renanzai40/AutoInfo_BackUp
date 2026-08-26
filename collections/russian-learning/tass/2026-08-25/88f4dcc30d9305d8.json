@@ -1,0 +1,24 @@
+{
+  "id": "88f4dcc30d9305d8",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/kosmos/28043917",
+  "title": "Космонавты будут мониторить МКС на предмет утечек",
+  "content": "Во время работы на орбитальной станции двум космонавтам нужно будет раз в неделю во время сеанса целевой работы сканировать потенциально проблемные и отремонтированные места возникновения негерметичностей",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T18:16:09+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3104e48f-d2a0-42bd-bc84-0fcabc463d24",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "168a885f5d0fe609",
+  "source_name": "the-verge",
+  "source_type": "rss",
+  "source_url": "https://www.theverge.com/tech/961785/wyze-indoor-cam-pan-tilt-2k-night-vision",
+  "title": "The lens in Wyze’s new $40 indoor camera retracts for privacy",
+  "content": "Wyze announced a new pan-and-tilt security camera today designed for indoor use. The entire Indoor Cam Pan can rotate 360 degrees, while the camera and lens on its front can tilt up and down 103 degrees. When you want privacy, the lens can tilt down until it completely disappears inside the Indoor Cam Pan's body [&#8230;]",
+  "content_type": "text",
+  "source_platform": "the-verge",
+  "collected_at": "2026-08-25T09:00:00-04:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.theverge.com/rss/index.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5d8ff367-8c08-48f9-bdff-6ba70df20cb6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

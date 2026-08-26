@@ -1,0 +1,24 @@
+{
+  "id": "e3e46e0e509109be",
+  "source_name": "the-verge",
+  "source_type": "rss",
+  "source_url": "https://www.theverge.com/tech/983020/gulikit-dock-nintendo-switch-2-hands-on",
+  "title": "GuliKit’s Switch 2 TV dock gives me one feature I’ve missed when traveling",
+  "content": "Nintendo didn’t design its Switch dock with travel in mind. Genki’s Covert Dock is a much smaller alternative my family has been using to connect our Switch to hotel TVs for years, but I’ve come to realize I much prefer having a stand for the console when using it this way. So when it came [&#8230;]",
+  "content_type": "text",
+  "source_platform": "the-verge",
+  "collected_at": "2026-08-25T09:00:00-04:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.theverge.com/rss/index.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d619463c-c5f6-4c07-9aaa-b009ae0b9c12",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

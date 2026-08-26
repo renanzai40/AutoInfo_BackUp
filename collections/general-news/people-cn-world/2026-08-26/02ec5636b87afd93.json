@@ -1,0 +1,24 @@
+{
+  "id": "02ec5636b87afd93",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0605/c1002-40494817.html",
+  "title": "来自神舟二十号的“太空问候”！中国航天员为世博会中国馆送祝福",
+  "content": "<p style=\"text-indent: 2em; text-align: center;\">   </p> <p style=\"text-indent: 2em;\">人民网东京6月5日电 （许可）2025大阪世博会中国馆开馆近两个月，目前已成为世博园内一道亮丽的风景线，吸引了无数参观者驻足。中国馆以“共同构建人与自然生命共同体——绿色发展的未来社会”为主题，通过一系列独具匠心的设计和互动体验，充分展现了中国在科技创新、绿色发展和文化传承等方面的最新成就。日前，三位神舟二十号航天员陈冬、陈中瑞、王杰，从中国空间站为2025大阪世博会中国馆送来了来自太空的祝福。</p> <p style=\"text-indent: 2em;\">陈冬遥祝世博会中国馆圆满成功，并祝愿大家的梦想都能如星辰般闪耀，照亮前行之路。从古人“摘星”的梦想，到今朝触碰宇宙，人类探索未知的脚步从未停歇。让我们一起在逐梦圆梦的道路上奋力奔跑，勇敢前行！</p> <p style=\"text-indent: 2em;\">陈中瑞带着太空植物栽培实验成果喊话：守护地球不只是口号，更是行动！希望通过我们的努力，地球乃至整个宇宙会有更多的绿色，让未来社会更加生机勃勃，让孩子们梦想中的景象更加美丽。</p> <p style=\"text-indent: 2em;\">王杰从太空向地面发来温暖问候，当看到眼前这颗蓝绿色的星球时，人类共同家园的意义也愈发清晰。中国空间站不仅是科技地标，更是全球航天合作的“太空客厅”。让我们同球共济、和合共生，携手描绘人类更加美好的未来！</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-05T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c72100a0-7ecd-4caf-a522-5f99b46909c8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

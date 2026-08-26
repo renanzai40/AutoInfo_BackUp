@@ -1,0 +1,24 @@
+{
+  "id": "5b35133bd28f5928",
+  "source_name": "gamesindustry-biz",
+  "source_type": "rss",
+  "source_url": "https://www.gamesindustry.biz/entity-raises-58-million-to-build-browser-based-console-quality-gaming-platform",
+  "title": "Entity raises $5.8 million to build browser-based \"console-quality\" gaming platform",
+  "content": "<img src=\"https://assetsio.gnwcdn.com/entity.webp?width=690&amp;quality=85&amp;format=jpg&amp;auto=webp\" /> <p>Irish startup Entity has raised $5.8 million (&euro;5 million) in seed funding to build a browser-based gaming platform it says will deliver console-quality games without downloads or installs.</p> <p><a href=\"https://www.gamesindustry.biz/entity-raises-58-million-to-build-browser-based-console-quality-gaming-platform\">Read more</a></p>",
+  "content_type": "text",
+  "source_platform": "gamesindustry-biz",
+  "collected_at": "2026-08-25T16:56:48+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.gamesindustry.biz/feed/news"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5cf2b44c-898b-4b60-9f1d-8e5042f7a0b9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

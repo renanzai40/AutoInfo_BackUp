@@ -1,0 +1,35 @@
+{
+  "id": "49437165",
+  "source_name": "hackernews",
+  "source_type": "hackernews",
+  "source_url": "https://news.ycombinator.com/item?id=49437165",
+  "title": "A new ceiling for Λ: the de Bruijn–Newman constant",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "hackernews",
+  "collected_at": "2026-08-25T19:12:23.929814+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "by": "judegomila",
+    "descendants": 3,
+    "id": 49437165,
+    "kids": [
+      49437822,
+      49437888
+    ],
+    "score": 30,
+    "time": 1787677171,
+    "title": "A new ceiling for Λ: the de Bruijn–Newman constant",
+    "type": "story",
+    "url": "https://www.judegomila.com/posts/riemann-lambda-0.1787854"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7260caa4-a9d2-4963-9064-5c17deffadf2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

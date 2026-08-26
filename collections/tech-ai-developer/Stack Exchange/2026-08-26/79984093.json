@@ -1,0 +1,48 @@
+{
+  "id": 79984093,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/79984093/install-expo-moduleslatest-cannot-find-a-compatible-expo-sdk-for-react-native-0",
+  "title": "Install-expo-modules@latest cannot find a compatible Expo SDK for React Native 0.86.0",
+  "content": "Install-expo-modules@latest cannot find a compatible Expo SDK for React Native 0.86.0",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-26T00:53:25.798577+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "android",
+      "mobile",
+      "expo",
+      "react-native-cli"
+    ],
+    "owner": {
+      "account_id": 29235706,
+      "reputation": 333,
+      "user_id": 22398389,
+      "user_type": "registered",
+      "profile_image": "https://www.gravatar.com/avatar/adbe3fc9e02223b090718cc1a28e0425?s=256&d=identicon&r=PG&f=y&so-version=2",
+      "display_name": "Stanisław Olszak",
+      "link": "https://stackoverflow.com/users/22398389/stanis%c5%82aw-olszak"
+    },
+    "is_answered": false,
+    "view_count": 155,
+    "answer_count": 1,
+    "score": 1,
+    "last_activity_date": 1787705432,
+    "creation_date": 1784791806,
+    "question_id": 79984093,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/79984093/install-expo-moduleslatest-cannot-find-a-compatible-expo-sdk-for-react-native-0",
+    "title": "Install-expo-modules@latest cannot find a compatible Expo SDK for React Native 0.86.0"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1cc4c28e-92c0-4ff0-ae1b-9b20190252ba",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

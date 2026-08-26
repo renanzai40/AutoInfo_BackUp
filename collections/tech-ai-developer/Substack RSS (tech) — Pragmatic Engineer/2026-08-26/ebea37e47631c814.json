@@ -1,0 +1,24 @@
+{
+  "id": "ebea37e47631c814",
+  "source_name": "Substack RSS (tech) — Pragmatic Engineer",
+  "source_type": "rss",
+  "source_url": "https://newsletter.pragmaticengineer.com/p/the-pulse-groks-cli-caught-uploading",
+  "title": "The Pulse: Grok’s CLI caught uploading all your local files to the cloud",
+  "content": "Also: engineering leaders concerned about continued increase in code review load, devs at enterprises surprised by high enterprise pricing, and more",
+  "content_type": "text",
+  "source_platform": "Substack RSS (tech) — Pragmatic Engineer",
+  "collected_at": "2026-07-16T16:48:53+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://newsletter.pragmaticengineer.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5fda1a7b-85b8-4e9a-9207-271f6c1f34a8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

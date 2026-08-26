@@ -1,0 +1,27 @@
+[92m06:10:27 - LiteLLM:WARNING[0m: get_model_cost_map.py:271 - LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: The read operation timed out. Falling back to local backup.
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping gaming-related knowledge base entries into 3 to 5 thematic categories, emphasizing the use of short, semantic titles and avoiding generic n
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article describes a task to categorize gaming-related knowledge base entries into 3–5 themes, covering topics like company news, graphics technology updates, entertainment tie-ins, 
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions to group various gaming-related knowledge base entries into 3-5 semantic themes, with guidelines for creating unique and descriptive titles. It lists en
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article instructs on grouping gaming-related knowledge base entries into thematic categories, covering topics such as Nintendo Switch bundle announcements, gaming partnerships, prod
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article instructs to group a set of gaming knowledge base entries into 3-5 themes with semantic titles. It provides eight entries covering topics like game releases, cancelled projec
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping a set of gaming-related knowledge base entries into 3–5 themes. It emphasizes using short, semantic titles for each theme and ensures each 
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping gaming knowledge base entries into 3–5 themes with specific naming rules, such as using short semantic titles. It lists several entries cov
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article presents various gaming news entries covering legal disputes, game releases, mod updates, and franchise rumors, along with instructions to group these entries into thematic c
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article lists several gaming news entries covering game development updates, studio independence movements, an industry networking event, and AI safety tools. It instructs to group t
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions for grouping gaming news entries into thematic categories, covering topics such as game closures, sales data, industry events, and company announcement
+LLM returned None content — empty response
+LLM returned only 1 theme group(s), retrying with stricter prompt
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+Strict retry returned only 1 group(s), falling back to deterministic grouping
+LLM returned None content — empty response

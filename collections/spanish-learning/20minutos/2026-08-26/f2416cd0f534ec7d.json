@@ -1,0 +1,24 @@
+{
+  "id": "f2416cd0f534ec7d",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/galicia/coruna/avistan-cuatro-ballenas-azules-ocho-millas-costa-cabo-fisterra_7029322_0.html",
+  "title": "Avistan cuatro ballenas azules a ocho millas de la costa del Cabo Fisterra",
+  "content": "Si bien su tamaño medio es de entre 24 y 27 metros de longitud, hay registros de ejemplares de más de 30 metros de longitud y 170 toneladas de peso, lo que lo convierten en el mayor animal del planeta.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T19:54:20+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "61c95e53-078f-428e-85b7-0f890c5e2963",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "538270637a3b2b84",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/am%C3%A9riques/20260825-guerre-commerciale-face-%C3%A0-trump-le-canada-d%C3%A9fend-la-langue-fran%C3%A7aise-et-sa-souverainet%C3%A9",
+  "title": "Guerre commerciale : face à Trump, le Canada défend la langue française et sa souveraineté",
+  "content": "Mark Carney a affirmé, lundi, que les États-Unis avaient fait des demandes “inacceptables” qui “auraient mis en péril la culture et la langue française” au Canada. Le Premier ministre canadien en a fait une des raisons pour lesquelles il a claqué la porte des négociations avec Washington.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T16:21:53+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "52844395-dc28-4117-96cc-06f33e1562b9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

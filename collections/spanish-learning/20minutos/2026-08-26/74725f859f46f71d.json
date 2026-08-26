@@ -1,0 +1,24 @@
+{
+  "id": "74725f859f46f71d",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/salud/hallan-una-forma-entrenar-sistema-inmunitario-contra-reaparicion-cancer-con-celulas-madre-recubiertas-propio-tumor_7029313_0.html",
+  "title": "Hallan una forma de entrenar al sistema inmunitario contra la reaparición del cáncer con células madre",
+  "content": "Este método funcionó en placas de Petri y ha sido desarrollado por un equipo de la Universidad de San Francisco, en Estados Unidos.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T19:14:15+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "10cbe987-6012-4e45-9fef-30c63d0754f3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

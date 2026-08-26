@@ -1,0 +1,27 @@
+{
+  "id": "ZA5RDyTyEe-_Bw7l9wp8FQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Inteligencia Artificial para personajes en Unreal Engine",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "ZA5RDyTyEe-_Bw7l9wp8FQ",
+    "slug": "inteligencia-artificial-para-personajes-en-unreal-engine",
+    "name": "Inteligencia Artificial para personajes en Unreal Engine"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "656eca89-5675-4338-9f6e-e2e5210fd0b8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

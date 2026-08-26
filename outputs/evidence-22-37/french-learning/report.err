@@ -1,0 +1,12 @@
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This collection of news entries covers diverse topics including French politics and healthcare, US political controversies, space technology, entertainment events, and high-profile legal
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions to group a set of knowledge base entries into 3-5 semantic themes, covering diverse topics such as international conflicts, French politics, health issu
+LLM returned None content — empty response
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article outlines a task to group a set of news entries into 3-5 semantic themes, with entries covering international politics, cultural events, and security incidents. It provides sp
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article outlines a task to group several knowledge base entries into 3–5 thematic categories for a French learning context, covering topics from politics to healthcare. It provides s
+LLM groups matched only 0/6 entries, falling back to deterministic grouping
+LLM returned None content — empty response

@@ -1,0 +1,49 @@
+---
+title: Количество погибших из-за пожара на Амурском ГХК увеличилось до трех человек
+domain: russian-learning
+tier: 01-Raw
+entry_id: russian-learning-general-
+source_url: https://www.interfax.ru/russia/1111209
+source_type: rss
+source_platform: interfax
+collected_at: '2026-08-25T18:11:00+03:00'
+summary: A fire at the Amur Gas Chemical Complex in Amur Oblast has resulted in three deaths. The victims are employees from
+  contracting organizations, including two Chinese citizens and one Russian citizen. The incident has been confirmed by the
+  enterprise's press service.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: unique
+source_score: 90.0
+language: ru
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: dc807b1c-3bdb-4318-a760-3e0e078f5a1a
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: false
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+Три человека погибли из-за пожара на Амурском газохимическом комплексе (АГХК, Амурская область), сообщает пресс-служба предприятия."По уточненным данным, к сожалению, подтверждена гибель трех человек, сотрудников подрядных организаций - двух граждан КНР и одного гражданина России.
+
+## Summary
+A fire at the Amur Gas Chemical Complex in Amur Oblast has resulted in three deaths. The victims are employees from contracting organizations, including two Chinese citizens and one Russian citizen. The incident has been confirmed by the enterprise's press service.
+
+## Key Points
+- Three people died in the fire at the Amur Gas Chemical Complex.
+- The victims are contractors, with two from China and one from Russia.
+- The fire occurred in the Amur Oblast region.
+- The information is reported by the enterprise's press service.
+
+
+## Entities
+- **Амурский газохимический комплекс** (org, relevance=)

@@ -1,0 +1,24 @@
+{
+  "id": "517064b2e7c5938d",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0604/c1002-40493498.html",
+  "title": "巴林等五国当选联合国安理会非常任理事国",
+  "content": "<p style=\"text-indent: 2em;\">联合国大会3日选举巴林、哥伦比亚、刚果（金）、拉脱维亚、利比里亚五国为联合国安全理事会非常任理事国。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-04T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6c6a495f-bac8-4330-9270-50add14feb21",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

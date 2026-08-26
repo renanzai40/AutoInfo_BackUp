@@ -1,0 +1,24 @@
+{
+  "id": "aa44209df4f08ce9",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/explained/story/fcra-bill-amendment-ngo-foreign-funding-parliament-ntcpvp-dskc-2614062-2026-08-03?utm_source=rssfeed",
+  "title": "FCRA बिल में क्या है? विदेशी फंड वाले NGO पर कसेगा शिकंजा, जानिए 10 बदलाव",
+  "content": "विपक्ष इस बिल का विरोध कर सकता है क्योंकि उनका मानना है कि इससे NGO के काम करने की आजादी पर असर पड़ सकता है.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-03T13:52:27+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0fcf50d5-862c-4e56-a03e-d7fbca03b2ba",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

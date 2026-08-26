@@ -1,0 +1,24 @@
+{
+  "id": "7fb5a01e648f5737",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/spirit-airlines-wants-to-sell-its-data-to-google-former-flight-attendants-are-freaked-out/",
+  "title": "Spirit Airlines Wants to Sell Its Data to Google. Former Flight Attendants Are Freaked Out",
+  "content": "“It never crossed my mind that they would be so bold as to sell our private data for AI,” says one former Spirit Airlines flight attendant.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-25T09:15:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b1e8803a-c6e1-4b2f-8d5e-f5bec9b8e7ee",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "fbae19eb52b9fb0d",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/rajasthan/story/udaipur-five-star-hotel-tourist-family-unpaid-bill-rs-574-lakh-fir-lclar-strc-2629969-2026-08-25?utm_source=rssfeed",
+  "title": "5 स्टार होटल में 10 दिन ठहरा परिवार, 5.74 लाख का बिल दिए बिना फरार",
+  "content": "उदयपुर के 5 स्टार होटल द ओबरॉय उदय विलास में दिल्ली का एक परिवार 10 दिन ठहरा. होटल के मुताबिक, लंच, डिनर और अन्य सेवाओं समेत 5.74 लाख रुपये का बिल बना. आरोप है कि चेक आउट पर अनुराग यादव ने भुगतान से इनकार किया और बिल ट्रैवल एजेंसी के जिम्मे बताया. एजेंसी ने ऐसी डील से इनकार किया. पुलिस जांच कर रही है.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T23:26:18+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "66491073-2bf1-491a-a7f1-fdee8b6ee79a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

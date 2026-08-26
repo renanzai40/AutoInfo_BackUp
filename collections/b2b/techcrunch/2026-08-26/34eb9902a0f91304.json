@@ -1,0 +1,24 @@
+{
+  "id": "34eb9902a0f91304",
+  "source_name": "techcrunch",
+  "source_type": "rss",
+  "source_url": "https://techcrunch.com/2026/08/25/your-vote-matters-decide-which-audience-choice-sessions-will-make-it-to-techcrunch-founder-summit/",
+  "title": "Your vote matters! Decide which Audience Choice sessions will make it to TechCrunch Founder Summit",
+  "content": "Each year, we get a huge influx of applicants to speak at TechCrunch’s events, and this year’s Founder Summit in Boston on November 4 will be no different!",
+  "content_type": "text",
+  "source_platform": "techcrunch",
+  "collected_at": "2026-08-25T18:22:50+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://techcrunch.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "07bd21d6-9766-418e-aa12-e992ce783408",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

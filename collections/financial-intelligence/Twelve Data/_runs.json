@@ -1,0 +1,82 @@
+[
+  {
+    "collection_id": "col-20260820T060957-38f63c9a",
+    "timestamp": "2026-08-20T06:10:01.017030+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://api.twelvedata.com/quote (source: Twelve Data): Client error '401 Unauthorized' for url 'https://api.twelvedata.com/quote'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://api.twelvedata.com/quote (source: Twelve Data): Client error '401 Unauthorized' for url 'https://api.twelvedata.com/quote'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+      }
+    ],
+    "duration_ms": 1437.0
+  },
+  {
+    "collection_id": "col-20260823T020951-033c44cd",
+    "timestamp": "2026-08-23T02:09:55.027707+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://api.twelvedata.com/quote (source: Twelve Data): Client error '401 Unauthorized' for url 'https://api.twelvedata.com/quote'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://api.twelvedata.com/quote (source: Twelve Data): Client error '401 Unauthorized' for url 'https://api.twelvedata.com/quote'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+      }
+    ],
+    "duration_ms": 1984.0
+  },
+  {
+    "collection_id": "col-20260823T021409-94af2957",
+    "timestamp": "2026-08-23T02:14:14.526457+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://api.twelvedata.com/quote (source: Twelve Data): Client error '401 Unauthorized' for url 'https://api.twelvedata.com/quote'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://api.twelvedata.com/quote (source: Twelve Data): Client error '401 Unauthorized' for url 'https://api.twelvedata.com/quote'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+      }
+    ],
+    "duration_ms": 2251.0
+  },
+  {
+    "collection_id": "col-20260824T052446-be67ff92",
+    "timestamp": "2026-08-24T05:24:59.935717+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://api.twelvedata.com/quote (source: Twelve Data): Client error '401 Unauthorized' for url 'https://api.twelvedata.com/quote'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://api.twelvedata.com/quote (source: Twelve Data): Client error '401 Unauthorized' for url 'https://api.twelvedata.com/quote'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+      }
+    ],
+    "duration_ms": 2096.0
+  },
+  {
+    "collection_id": "col-20260825T153815-124f1c06",
+    "timestamp": "2026-08-25T15:38:51.447502+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://api.twelvedata.com/quote (source: Twelve Data): Client error '401 Unauthorized' for url 'https://api.twelvedata.com/quote'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://api.twelvedata.com/quote (source: Twelve Data): Client error '401 Unauthorized' for url 'https://api.twelvedata.com/quote'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+      }
+    ],
+    "duration_ms": 1220.0
+  }
+]

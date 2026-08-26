@@ -1,0 +1,24 @@
+{
+  "id": "55dff0c6302e6121",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/investing/stocks/jpmorgan-warns-investors-about-artificial-intelligence-ai-stocks",
+  "title": "JPMorgan sends another strong message to stock market investors",
+  "content": "JPMorgan just published something about AI stocks and the stock market that investors should read.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T18:33:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "08b02b2b-728f-4fd1-b76b-ac58687ea8f5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "0dbd8a868373ce03",
+  "source_name": "WSJ Markets",
+  "source_type": "rss",
+  "source_url": "https://www.wsj.com/articles/gold-edges-lower-feds-rate-decision-in-focus-09dbfceb?mod=rss_markets_main",
+  "title": "Comex Gold, Silver Settle Lower",
+  "content": "Gold settled 1.4% lower, down two of the past three sessions, and silver fell 2.5%, down three of the past four sessions.",
+  "content_type": "text",
+  "source_platform": "WSJ Markets",
+  "collected_at": "2025-01-27T14:01:00-05:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f122f68a-971c-4617-83e1-caaf4898fbd6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

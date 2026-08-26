@@ -1,0 +1,34 @@
+{
+  "id": "49436706",
+  "source_name": "hackernews",
+  "source_type": "hackernews",
+  "source_url": "https://news.ycombinator.com/item?id=49436706",
+  "title": "Fuzzing the Gleam Compiler",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "hackernews",
+  "collected_at": "2026-08-25T19:12:23.929831+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "by": "crowdhailer",
+    "descendants": 1,
+    "id": 49436706,
+    "kids": [
+      49436805
+    ],
+    "score": 21,
+    "time": 1787675455,
+    "title": "Fuzzing the Gleam Compiler",
+    "type": "story",
+    "url": "https://www.kurz.net/posts/fuzzing-gleam-compiler"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7e1a738e-6f35-420a-a6bf-ec91ec574fdf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

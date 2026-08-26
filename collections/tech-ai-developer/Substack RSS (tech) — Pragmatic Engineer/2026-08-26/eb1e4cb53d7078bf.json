@@ -1,0 +1,24 @@
+{
+  "id": "eb1e4cb53d7078bf",
+  "source_name": "Substack RSS (tech) — Pragmatic Engineer",
+  "source_type": "rss",
+  "source_url": "https://newsletter.pragmaticengineer.com/p/how-kent-beck-shapes-the-software",
+  "title": "How Kent Beck shapes the software engineering industry",
+  "content": "Kent Beck reflects on Agile, TDD, and why building trust&#8212;not just generating code&#8212;will define the future of software engineering in the AI era.",
+  "content_type": "text",
+  "source_platform": "Substack RSS (tech) — Pragmatic Engineer",
+  "collected_at": "2026-07-01T16:57:46+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://newsletter.pragmaticengineer.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ea481631-55de-491f-b737-82c472003292",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

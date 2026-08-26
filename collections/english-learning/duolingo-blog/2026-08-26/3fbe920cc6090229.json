@@ -1,0 +1,24 @@
+{
+  "id": "3fbe920cc6090229",
+  "source_name": "duolingo-blog",
+  "source_type": "rss",
+  "source_url": "https://blog.duolingo.com/japanese-writing-systems/",
+  "title": "Dear Duolingo: Why does Japanese have three writing systems?",
+  "content": "And when is each system used? Here’s what you need to know about writing in Japanese.",
+  "content_type": "text",
+  "source_platform": "duolingo-blog",
+  "collected_at": "2026-07-21T12:00:00+00:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://blog.duolingo.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e878a106-5238-4406-b4f4-5f4ba384f740",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "10f9973846be2dff",
+  "source_name": "b2b-news-network",
+  "source_type": "rss",
+  "source_url": "https://www.b2bnn.com/2026/08/how-to-approach-valuation-on-a-canadian-business-acquisition/",
+  "title": "How to Approach Valuation on a Canadian Business Acquisition",
+  "content": "I&#8217;ve started a more than a half dozen businesses, a couple in Canada, taken on investors and had a couple of exits, and I&#8217;ve learned a few things over the years. Including this: agreeing on a prove of often the simplest part, it&#8217;s what occurs after that is more complicated. That is not to say [&#8230;]",
+  "content_type": "text",
+  "source_platform": "b2b-news-network",
+  "collected_at": "2026-08-25T17:22:52+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://b2bnn.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "13ec5c91-027e-4475-834e-a1fb9d7eaa02",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "3ffa4f839414995d",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/esteri/24_maggio_12/terremoto-in-messico-nel-chiapas-magnitudo-6-4-al-confine-con-il-guatemala-037bf6a1-1d06-4f92-8ebe-dbd19a732xlk.shtml",
+  "title": "Terremoto in Messico nel Chiapas, magnitudo 6,4 al confine con il Guatemala",
+  "content": "<p><img alt=\"Terremoto in Messico nel Chiapas, magnitudo 6,4 al confine con il Guatemala\" src=\"https://images2.corriereobjects.it/methode_image/2024/05/12/Esteri/Foto%20Esteri%20-%20Trattate/6640cb7be1576_ori_crop_MASTER__0x0.jpeg\" title=\"Terremoto in Messico nel Chiapas, magnitudo 6,4 al confine con il Guatemala\" /><p>La scossa è stata documentata dal Servizio geologico degli Stati Uniti a una profondità di 75,4 chilometri. Frane nel GuatemalaLa scossa è stata documentata dal Servizio geologico degli Stati Uniti a una profondità di 75,4 chilometri. Frane nel GuatemalaLa scossa è stata documentata dal Servizio geologico degli Stati Uniti a una profondità di 75,4 chilometri. Frane nel Guatemala</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-12T16:09:48+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a2434d5e-f413-4f85-99ac-b8fe3a6c70f9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

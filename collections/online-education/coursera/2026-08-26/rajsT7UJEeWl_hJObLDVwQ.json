@@ -1,0 +1,27 @@
+{
+  "id": "rajsT7UJEeWl_hJObLDVwQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "剪辑：像编剧一样剪辑",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "rajsT7UJEeWl_hJObLDVwQ",
+    "slug": "jian-ji",
+    "name": "剪辑：像编剧一样剪辑"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f8985660-b2cc-4d3b-a9ea-a9db096201b5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

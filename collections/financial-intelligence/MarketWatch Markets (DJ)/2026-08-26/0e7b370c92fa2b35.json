@@ -1,0 +1,24 @@
+{
+  "id": "0e7b370c92fa2b35",
+  "source_name": "MarketWatch Markets (DJ)",
+  "source_type": "rss",
+  "source_url": "https://www.marketwatch.com/story/my-main-goal-is-to-help-people-im-single-74-with-10-million-burning-a-hole-in-my-pocket-what-should-i-do-0e6112e1?mod=mw_rss_topstories",
+  "title": "‘My main goal is to help people’: I’m single, 74, with $10 million burning a hole in my pocket. What should I do?",
+  "content": "“I also own my home and an SUV outright, with no outstanding debt.”",
+  "content_type": "text",
+  "source_platform": "MarketWatch Markets (DJ)",
+  "collected_at": "2026-08-26T00:01:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.marketwatch.com/marketwatch/topstories/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "40eb91ec-6ce2-40c3-94ee-8303e257a70c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

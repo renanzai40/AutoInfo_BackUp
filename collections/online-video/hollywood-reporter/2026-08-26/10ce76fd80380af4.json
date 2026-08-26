@@ -1,0 +1,24 @@
+{
+  "id": "10ce76fd80380af4",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/business/business-news/daniel-dae-kim-production-company-3ad-caa-representation-1236680418/",
+  "title": "Daniel Dae Kim and His Production Company 3AD Jump to CAA (Exclusive)",
+  "content": "The veteran star, previously with UTA, has had a busy few years in front of and behind the screen.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T16:30:00+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3afa3377-039f-4ad0-a3d4-d0b968172a10",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

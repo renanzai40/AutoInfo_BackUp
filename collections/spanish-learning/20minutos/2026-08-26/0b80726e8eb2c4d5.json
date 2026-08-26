@@ -1,0 +1,24 @@
+{
+  "id": "0b80726e8eb2c4d5",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/madrid/primer-encierro-san-sebastian-los-reyes-deja-diez-heridos-uno-ellos-con-pronostico-reservado_7029131_0.html",
+  "title": "El primer encierro de San Sebastián de los Reyes deja diez heridos, uno de ellos con pronóstico reservado",
+  "content": "Unos 1.800 mozos han corrido por las calles de la localidad madrileña, que este martes a las 22.00 horas acoge el único encierro nocturno de sus fiestas.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T12:54:43+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "da3a3f29-eb9d-4940-a8eb-7a16a25acfd3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

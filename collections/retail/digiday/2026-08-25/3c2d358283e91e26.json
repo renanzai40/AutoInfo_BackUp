@@ -1,0 +1,24 @@
+{
+  "id": "3c2d358283e91e26",
+  "source_name": "digiday",
+  "source_type": "rss",
+  "source_url": "https://digiday.com/podcasts/the-case-for-and-against-turning-off-google-crawlers/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss",
+  "title": "The case for and against turning off Google crawlers",
+  "content": "Google’s AI crawlers erode publisher traffic, but blocking them risks losing vital referrals and legal blowback.",
+  "content_type": "text",
+  "source_platform": "digiday",
+  "collected_at": "2026-08-25T04:01:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://digiday.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b7dc44ad-86c4-4405-8130-c586c00dae67",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

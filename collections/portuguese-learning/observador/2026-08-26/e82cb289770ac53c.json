@@ -1,0 +1,24 @@
+{
+  "id": "e82cb289770ac53c",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/conselho-das-financas-publicas-de-cabo-verde-alerta-para-defice-e-aumento-da-despesa-orcamental/",
+  "title": "Défice de Cabo Verde agrava para 1,9% do PIB",
+  "content": "A retificação prevê novas medidas nas áreas económica e social, incluindo a gratuitidade do primeiro ciclo do ensino superior e dos cuidados de saúde, reforços na saúde e na proteção social e compensações à eletricidade e aos combustíveis",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T22:11:27+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6ca97f96-e132-46e3-8846-d9869af61d89",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

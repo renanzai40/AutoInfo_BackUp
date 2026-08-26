@@ -1,0 +1,14 @@
+[
+  {
+    "collection_id": "col-20260807T200520-040ec2c1",
+    "timestamp": "2026-08-07T20:05:25.003235+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "errors": [],
+    "duration_ms": 1759.0,
+    "trace_ids": [
+      "3dc84786-5525-4012-8df7-f34eff4a5ebb"
+    ]
+  }
+]

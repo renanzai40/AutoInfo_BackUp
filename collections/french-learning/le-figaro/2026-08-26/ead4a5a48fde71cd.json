@@ -1,0 +1,24 @@
+{
+  "id": "ead4a5a48fde71cd",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/conjoncture/les-medecins-generalistes-liberaux-travaillaient-46-heures-par-semaine-en-2025-20260826",
+  "title": "Les médecins généralistes libéraux travaillaient 46 heures par semaine en 2025",
+  "content": "Selon une étude du ministère de la Santé, les jeunes praticiens ont des horaires, en moyenne, moins lourds que leurs aînés.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-26T06:00:00+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "aa58a678-8c6e-47d9-be2a-6ce71fa8d453",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

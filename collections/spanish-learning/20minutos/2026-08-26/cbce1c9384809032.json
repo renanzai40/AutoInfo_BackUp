@@ -1,0 +1,24 @@
+{
+  "id": "cbce1c9384809032",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/cataluna/guardia-civil-intercepta-407-botellas-alcohol-ocultas-un-coche-frontera-entre-espana-andorra_7029263_0.html",
+  "title": "La Guardia Civil intercepta 407 botellas de alcohol en un vehículo en la frontera entre España y Andorra",
+  "content": "Los agentes también localizaron 1.500 euros en efectivo y una navaja escondidos en los laterales del vehículo.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T17:24:55+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9b068049-bc40-4299-8060-63a293cd9de8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

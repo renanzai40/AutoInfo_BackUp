@@ -1,0 +1,24 @@
+{
+  "id": "75da8c6803c16757",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/camara-de-mortagua-avanca-com-reabilitacao-de-etar/",
+  "title": "Câmara de Mortágua avança com reabilitação de ETAR",
+  "content": "Esta será a “maior intervenção a realizar no sistema de tratamento de águas residuais do concelho”, realçou a autarquia",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T15:30:32+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7f8be0c9-32ee-4bf5-b5aa-98af87d20aee",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

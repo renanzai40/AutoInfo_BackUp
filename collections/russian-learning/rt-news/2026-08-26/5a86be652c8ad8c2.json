@@ -1,0 +1,24 @@
+{
+  "id": "5a86be652c8ad8c2",
+  "source_name": "rt-news",
+  "source_type": "rss",
+  "source_url": "https://www.rt.com/india/644613-us-sanctions-indian-companies/?utm_source=rss&utm_medium=rss&utm_campaign=RSS",
+  "title": "US adds more Indian companies to Iran sanctions list",
+  "content": "<img align=\"left\" alt=\"Preview\" src=\"https://mf.b37mrtl.ru/files/2026.08/thumbnail/6a8d4e6c20302762ed3c7ab7.jpg\" style=\"margin-right: 10px;\" /> The US has added four Indian companies to its Iran sanctions list, amid the Middle East conflict <br /><a href=\"https://www.rt.com/india/644613-us-sanctions-indian-companies/?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=RSS\">Read Full Article at RT.com</a>",
+  "content_type": "text",
+  "source_platform": "rt-news",
+  "collected_at": "2026-08-25T08:06:38+00:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.rt.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c26b4a90-5b29-4ce0-b492-3b337cccc96b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

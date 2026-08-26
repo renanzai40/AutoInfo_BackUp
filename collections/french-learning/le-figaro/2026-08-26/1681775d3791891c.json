@@ -1,0 +1,24 @@
+{
+  "id": "1681775d3791891c",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/societes/qu-est-ce-que-qiddiya-investment-company-cette-societe-saoudienne-derriere-le-projet-de-parcs-d-attractions-en-region-parisienne-20260825",
+  "title": "Qu’est-ce que Qiddiya Investment Company, cette société saoudienne derrière le projet de parcs d’attractions en région parisienne ?",
+  "content": "Le projet de complexe de loisirs incluant trois parcs à thème à Cergy-Pontoise (Val-d’Oise), annoncé par Emmanuel Macron lundi à l’occasion de la venue à Paris du prince héritier saoudien, est porté par cette entreprise publique, filiale du fonds souverain saoudien.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T16:27:30+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5290f6bf-f2cd-4dcd-8932-a55b7d82e008",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

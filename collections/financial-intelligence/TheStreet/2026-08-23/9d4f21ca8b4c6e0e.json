@@ -1,0 +1,24 @@
+{
+  "id": "9d4f21ca8b4c6e0e",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/deals/greenforest-portable-folding-desk-amazon-sale",
+  "title": "Amazon's $51 folding work desk has a space-saving design that doubles as a side table",
+  "content": "\"If you want a desk that’s simple, smart, and space-friendly, this desk is a great choice.\"",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-22T20:45:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "acd33e0d-889d-4727-b64d-f7cc85eb9e4f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

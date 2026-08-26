@@ -1,0 +1,56 @@
+---
+title: Marvel & Star Wars’ Crossover Feels Like an MCU Movie for One Big Reason, Kevin Smith Reveals
+domain: online-video
+tier: 01-Raw
+entry_id: online-video-general-marvel-star-wars-crossover-feels-like-an-mcu-movie-for-one-big-reason-kevin-smith-reveals
+source_url: https://www.comingsoon.net/comics/news/2181691-kevin-smith-star-wars-marvel-crossover-mcu-approach
+source_type: rss
+source_platform: comingsoon
+collected_at: '2026-08-25T15:27:18+00:00'
+summary: Kevin Smith's Star Wars/Marvel comic crossover, Hope Assembles, blends the two franchises by bringing A New Hope
+  characters into Marvel's Earth-616 universe via a reality-altering spell, feeling like an MCU movie in approach. The project
+  is a first official crossover between the two franchises. Smith is the writer behind this five-issue series.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: fba52fe7-12b6-4872-90f7-e68c7badd24e
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<p>Kevin Smith says Marvel and Star Wars’ upcoming crossover feels like an MCU movie. The filmmaker is writing Star Wars/Marvel: Hope Assembles, the first official comic book crossover between the two franchises. The five-issue series will bring characters from A New Hope into Marvel’s Earth-616 universe. A reality-shattering spell causes the events of A New [&#8230;]</p>
+<p>The post <a href="https://www.comingsoon.net/comics/news/2181691-kevin-smith-star-wars-marvel-crossover-mcu-approach">Marvel &amp; Star Wars’ Crossover Feels Like an MCU Movie for One Big Reason, Kevin Smith Reveals</a> appeared first on <a href="https://www.comingsoon.net">ComingSoon.net - Movie Trailers, TV &amp; Streaming News, and More</a>.</p>
+
+## Summary
+Kevin Smith's Star Wars/Marvel comic crossover, Hope Assembles, blends the two franchises by bringing A New Hope characters into Marvel's Earth-616 universe via a reality-altering spell, feeling like an MCU movie in approach. The project is a first official crossover between the two franchises. Smith is the writer behind this five-issue series.
+
+## Key Points
+- Kevin Smith is writing the first official Star Wars/Marvel comic crossover, Star Wars/Marvel: Hope Assembles.
+- The crossover brings characters from A New Hope into Marvel's Earth-616 universe through a reality-shattering spell.
+- The approach feels like an MCU movie, according to Kevin Smith.
+
+
+## Entities
+- **Kevin Smith** (person, relevance=)
+- **Star Wars/Marvel: Hope Assembles** (concept, relevance=)
+- **Marvel** (org, relevance=)
+- **Star Wars** (concept, relevance=)
+- **A New Hope** (concept, relevance=)
+- **Earth-616** (concept, relevance=)
+- **MCU** (concept, relevance=)
+- **ComingSoon.net** (org, relevance=)

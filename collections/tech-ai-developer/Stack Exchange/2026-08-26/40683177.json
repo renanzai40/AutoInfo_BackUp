@@ -1,0 +1,48 @@
+{
+  "id": 40683177,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/40683177/name-provided-not-a-properly-formed-account-name",
+  "title": "Name provided not a properly formed account name",
+  "content": "Name provided not a properly formed account name",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-25T16:04:55.317906+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "powershell",
+      "active-directory"
+    ],
+    "owner": {
+      "account_id": 8459366,
+      "reputation": 103,
+      "user_id": 6345619,
+      "user_type": "registered",
+      "accept_rate": 55,
+      "profile_image": "https://lh5.googleusercontent.com/-dhB6L-aFoCo/AAAAAAAAAAI/AAAAAAAADhw/Jo6QedgclXc/s256-rj/photo.jpg",
+      "display_name": "Justin Merwin",
+      "link": "https://stackoverflow.com/users/6345619/justin-merwin"
+    },
+    "is_answered": false,
+    "view_count": 13097,
+    "answer_count": 2,
+    "score": 0,
+    "last_activity_date": 1787673775,
+    "creation_date": 1479491459,
+    "last_edit_date": 1479743225,
+    "question_id": 40683177,
+    "content_license": "CC BY-SA 3.0",
+    "link": "https://stackoverflow.com/questions/40683177/name-provided-not-a-properly-formed-account-name",
+    "title": "Name provided not a properly formed account name"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "dc072e67-92bf-48ca-a7cf-a8374e5529e1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

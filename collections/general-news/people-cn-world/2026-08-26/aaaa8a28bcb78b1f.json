@@ -1,0 +1,24 @@
+{
+  "id": "aaaa8a28bcb78b1f",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0604/c1002-40493546.html",
+  "title": "2025年世界环境日主题活动在北京举行",
+  "content": "<p style=\"text-indent: 2em;\">当日，联合国环境规划署驻华代表处在北京举办2025年世界环境日主题活动，邀请来自联合国机构、政府部门、相关企业与机构的嘉宾，探讨交流治理塑料污染的政策与实践。</p> <p style=\"text-indent: 2em;\">6月5日是世界环境日。据介绍，今年的世界环境日将重点关注塑料污染带来的影响，推动全球形成“拒绝、减少、再利用、回收、反思”的塑料治理共识。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-04T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f74f7cd7-a85a-4044-a676-5296804a9fa4",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "730c6e3166d3b121",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/sport/28044207",
+  "title": "Батраков считает, что у него могут быть проблемы с адаптацией в \"Галатасарае\"",
+  "content": "Полузащитник подписал с турецким клубом пятилетний контракт",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T20:38:40+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ba45031c-5483-42ff-8109-942f54fe2ac3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

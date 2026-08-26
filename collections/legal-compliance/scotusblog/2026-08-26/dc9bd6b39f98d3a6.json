@@ -1,0 +1,24 @@
+{
+  "id": "dc9bd6b39f98d3a6",
+  "source_name": "scotusblog",
+  "source_type": "rss",
+  "source_url": "https://www.scotusblog.com/2026/08/justices-navigate-rising-security-threats/",
+  "title": "Justices navigate rising security threats",
+  "content": "Plus, President Trump brings CNN case to SCOTUS.",
+  "content_type": "text",
+  "source_platform": "scotusblog",
+  "collected_at": "2026-08-21T13:00:00+00:00",
+  "language": "",
+  "domain": "legal-compliance",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.scotusblog.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "03596713-16c4-4f5b-8bc1-688456eb9aed",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

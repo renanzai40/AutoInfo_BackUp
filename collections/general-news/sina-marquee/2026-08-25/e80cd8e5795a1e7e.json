@@ -1,0 +1,24 @@
+{
+  "id": "e80cd8e5795a1e7e",
+  "source_name": "sina-marquee",
+  "source_type": "rss",
+  "source_url": "http://go.rss.sina.com.cn/redirect.php?url=http://you.video.sina.com.cn/b/16972162-1239095354.html",
+  "title": "[播客]独家实拍：我那永远跪着的母亲(11/07 22:10)",
+  "content": "独家实拍：我那永远跪着的母亲",
+  "content_type": "text",
+  "source_platform": "sina-marquee",
+  "collected_at": "",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://rss.sina.com.cn/news/marquee/ddt.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "792873ff-1d85-4ae1-a560-69fb025fb9ea",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

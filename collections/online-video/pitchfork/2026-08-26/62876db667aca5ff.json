@@ -1,0 +1,24 @@
+{
+  "id": "62876db667aca5ff",
+  "source_name": "pitchfork",
+  "source_type": "rss",
+  "source_url": "https://pitchfork.com/story/televisions-richard-lloyd-diagnosed-with-cancer-crowdfunding-treatment/",
+  "title": "Television’s Richard Lloyd Diagnosed With Cancer",
+  "content": "“I am taking this in stride, but it has become very difficult on our own and financially we are strapped,” says the guitarist",
+  "content_type": "text",
+  "source_platform": "pitchfork",
+  "collected_at": "2026-08-24T14:10:34+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://pitchfork.com/feed/feed-news/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8afdbfe7-e5d2-4cbe-885e-5946fe0fb081",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

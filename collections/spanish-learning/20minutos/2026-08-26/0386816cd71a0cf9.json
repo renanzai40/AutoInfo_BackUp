@@ -1,0 +1,24 @@
+{
+  "id": "0386816cd71a0cf9",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gastronomia/recetas/marc-cucurella-futbolista-bocadillo-preferido-lomo-pollo-queso-jamon-mezclado-mayonesa-ketchup_7025770_0.html",
+  "title": "Marc Cucurella: \"Mi bocadillo favorito lleva lomo, pollo, queso, jamón york, huevo, mayonesa...\"",
+  "content": "El jugador de la selección española que llevó a nuestro país a la victoria en el último mundial habló sobre ello durante una rueda de prensa.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-22T18:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ffc1c723-bae0-4b42-ba94-c637739faf4f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

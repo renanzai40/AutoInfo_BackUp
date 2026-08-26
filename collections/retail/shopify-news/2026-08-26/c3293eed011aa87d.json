@@ -1,0 +1,24 @@
+{
+  "id": "c3293eed011aa87d",
+  "source_name": "shopify-news",
+  "source_type": "rss",
+  "source_url": "https://shopify.com/news/7-things-you-need-to-know-about-this-years-holiday-shoppers",
+  "title": "7 things you need to know about this year's holiday shoppers",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "shopify-news",
+  "collected_at": "2023-10-16T09:00:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.shopify.com/news/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e1debbe3-7f69-47b0-a5ae-2826064aa350",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,58 @@
+---
+title: Trump asks Supreme Court to hear his defamation case against CNN
+domain: legal-compliance
+tier: 01-Raw
+entry_id: legal-compliance-general-trump-asks-supreme-court-to-hear-his-defamation-case-against-cnn
+source_url: https://www.scotusblog.com/2026/08/trump-asks-supreme-court-to-hear-his-defamation-case-against-cnn/
+source_type: rss
+source_platform: scotusblog
+collected_at: '2026-08-21T00:05:11+00:00'
+summary: Former President Donald Trump has petitioned the Supreme Court to review his defamation lawsuit against CNN, alleging
+  that CNN's use of the phrase 'the Big Lie' to describe his election fraud claims falsely linked him to Adolf Hitler and
+  Nazi propaganda. Lower courts dismissed the case, ruling that the phrase was ambiguous and not a false statement of fact.
+  Trump argues there is a split in appellate courts on applying legal standards for defamation involving opinion versus fact.
+tags: []
+quality_tier: 2
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 70.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 8e4246d5-8ce8-421d-a101-25b4c46ddd04
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<p>President Donald Trump has asked the Supreme Court to weigh in on <a href="https://www.scotusblog.com/cases/trump-v-cable-news-network-inc/">his defamation case</a> against cable news giant CNN. In <a href="https://www.supremecourt.gov/DocketPDF/26/26-223/419166/20260814175803632_TRUMP_Petition%20for%20a%20Writ%20of%20Certiorari.pdf">a filing</a> submitted on Aug. 14 but docketed on Thursday, Trump told the justices that “CNN falsely and maliciously portrayed” him “as a knowing liar who fabricated objections to the 2020 election, lacked supporting evidence, and deliberately deceived the American people.”</p><p>The dispute has its roots in CNN’s coverage of the aftermath of the 2020 presidential election. Trump contended that when CNN used the phrase “the Big Lie” to describe his insistence that the election had been stolen, and that he was the actual winner, it did so to link him with Adolf Hitler and Nazi propaganda – which, Trump said, was defamation.</p><p>A federal judge in Fort Lauderdale, Florida, dismissed Trump’s case. In <a href="https://law.justia.com/cases/federal/appellate-courts/ca11/23-14044/23-14044-2025-11-18.html">an eight-page, unsigned opinion</a>, the U.S. Court of Appeals for the 11th Circuit upheld that ruling.</p><p>The court of appeals explained that whether a plaintiff has a defamation claim hinges on whether the defendant made a false statement of fact. But CNN had not “explicitly claimed that Trump’s ‘actions and statements were designed to be, and actually were, variations of those [that] Hitler used to suppress and destroy populations,’” the court wrote. The court rejected Trump’s contention that CNN’s “use of the phrase ‘Big Lie’” “<em>could</em> reasonably be interpreted’” as equating Trump’s actions with Hitler’s. Instead, the court said, the phrase “Big Lie” “is at least … ambiguous” – just as, the court suggested, Trump’s contention that he was merely “exercising a constitutional right to identify his concerns with the integrity of elections” was “susceptible to multiple subjective interpretations.”</p><p>Trump then came to the Supreme Court, asking the justices to take up his case. He pointed to the court’s 1990 decision in <a href="https://tile.loc.gov/storage-services/service/ll/usrep/usrep497/usrep497001/usrep497001.pdf"><em>Milkovich v. Lorain Journal Co.</em></a>, holding that the First Amendment did not shield an article that was “categorized as ‘opinion’ as opposed to ‘fact’” from a defamation claim.</p><p>The courts of appeals, Trump contended, have divided – an important factor that the Supreme Court considers in deciding whether to grant review – on how to apply <em>Milkovich</em>. Four courts of appeals, he said, use “contextual, multi-factor tests to consider whether a statement of opinion conveys objectively verifiable facts to a reasonable observer.” But the 11th Circuit in this case effectively made “a ‘subjective assessment’” instead, he argued. Having determined that the phrase “Big Lie” was ambiguous, he contended, the lower court “ignored the false factual claims for which CNN used the ‘Big Lie’ as a shorthand, including its use of photographs comparing President Trump to Hitler.”</p><p>CNN’s response to Trump’s petition for review is due on Sept. 21.</p>
+
+## Summary
+Former President Donald Trump has petitioned the Supreme Court to review his defamation lawsuit against CNN, alleging that CNN's use of the phrase 'the Big Lie' to describe his election fraud claims falsely linked him to Adolf Hitler and Nazi propaganda. Lower courts dismissed the case, ruling that the phrase was ambiguous and not a false statement of fact. Trump argues there is a split in appellate courts on applying legal standards for defamation involving opinion versus fact.
+
+## Key Points
+- Trump's defamation case against CNN centers on coverage of his 2020 election claims, specifically the use of 'the Big Lie' phrase.
+- Federal courts dismissed the case, finding that CNN's statements were not provably false assertions of fact.
+- The Supreme Court's decision to hear the case could clarify legal standards for defamation when opinions imply false facts.
+- Trump cites conflicting interpretations of the Milkovich decision among lower courts as a reason for Supreme Court review.
+- CNN's response to the petition is due on September 21, 2026.
+
+
+## Entities
+- **Donald Trump** (person, relevance=)
+- **CNN** (org, relevance=)
+- **Supreme Court** (org, relevance=)
+- **Adolf Hitler** (person, relevance=)
+- **Nazi propaganda** (concept, relevance=)
+- **The Big Lie** (concept, relevance=)
+- **Milkovich v. Lorain Journal Co.** (concept, relevance=)
+- **U.S. Court of Appeals for the 11th Circuit** (org, relevance=)

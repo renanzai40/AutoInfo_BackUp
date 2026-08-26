@@ -1,0 +1,24 @@
+{
+  "id": "a05c8a9149fb4f0a",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/television/supervivientes-all-stars-3-ya-tiene-lista-concursantes-confirmados-maria-jesus-ruiz-lola-ortiz-alma-bollo-albert-barranco_7029180_0.html",
+  "title": "'Supervivientes All Stars 3' ya tiene la lista de todos sus concursantes confirmados",
+  "content": "'Supervivientes All Stars 3' ya tiene lista de concursantes confirmados: María Jesús Ruiz, Lola Ortiz, Alma Bollo, Albert Barranco...",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T14:49:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d4d9d4a0-c320-4b15-a24a-471f6863b218",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

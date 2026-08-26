@@ -1,0 +1,24 @@
+{
+  "id": "03fb76c53e3082ba",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/tecnologia/cards/triton-ci-riprova-il-nuovo-sottomarino-a-forma-di-ufo-costa-6-milioni-di-euro-che-arriva-a-200-metri-di-profondita/una-bolla-sottomarina_principale.shtml",
+  "title": "Triton ci riprova: il nuovo sottomarino a forma di Ufo costa 6 milioni di euro che arriva a 200 metri di profondità",
+  "content": "<p><img alt=\"Triton ci riprova: il nuovo sottomarino a forma di Ufo costa 6 milioni di euro che arriva a 200 metri di profondità\" src=\"https://images2.corriereobjects.it/methode_image/2024/04/26/Tecnologia/Foto%20Tecnologia%20-%20Trattate/662bb1eebb941_ori_crop_MASTER__0x0.jpeg\" title=\"Triton ci riprova: il nuovo sottomarino a forma di Ufo costa 6 milioni di euro che arriva a 200 metri di profondità\" /><p>Dopo l'incidente del 2019 in cui morirono cinque persone, Triton lancia il 660 AVA che ospita fino a 8 passeggeri e può navigare fino a 12 ore, ma non ha un bagnoDopo l'incidente del 2019 in cui morirono cinque persone, Triton lancia il 660 AVA che ospita fino a 8 passeggeri e può navigare fino a 12 ore, ma non ha un bagnoDopo l'incidente del 2019 in cui morirono cinque persone, Triton lancia il 660 AVA che ospita fino a 8 passeggeri e può navigare fino a 12 ore, ma non ha un bagno</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-12T12:49:05+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "62689809-9177-4614-91d6-8feb71fbdab9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,22 @@
+{
+  "id": "85a9a2ea6e38bc8e",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://digiday.com/marketing/openai-is-coming-for-smb-advertisers/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss",
+  "title": "OpenAI is coming for SMB advertisers",
+  "content": "The company is going after smaller advertisers. Its job listings prove it.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-10T04:01:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://digiday.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c3f39c1d-6aa3-4d0c-a185-61cbeb926699"
+}

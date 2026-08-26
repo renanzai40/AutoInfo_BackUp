@@ -1,0 +1,24 @@
+{
+  "id": "3ae01a219bc20923",
+  "source_name": "hnrss",
+  "source_type": "rss",
+  "source_url": "https://megaton.ai/v-benchmark",
+  "title": "Launching V<Benchmark> by Megaton to Measure Video AI Performance",
+  "content": "<p>Article URL: <a href=\"https://megaton.ai/v-benchmark\">https://megaton.ai/v-benchmark</a></p>\n<p>Comments URL: <a href=\"https://news.ycombinator.com/item?id=49435947\">https://news.ycombinator.com/item?id=49435947</a></p>\n<p>Points: 1</p>\n<p># Comments: 0</p>",
+  "content_type": "text",
+  "source_platform": "hnrss",
+  "collected_at": "2026-08-25T15:37:50+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://hnrss.org/newest"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "140b8cba-2c23-4dbe-a5c3-1362b0a8ba70",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

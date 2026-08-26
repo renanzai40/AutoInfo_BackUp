@@ -1,0 +1,24 @@
+{
+  "id": "d3f9e43780bbb095",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0604/c1002-40494041.html",
+  "title": "王毅分别会见阿联酋总统中国事务特使、日本国际贸易促进协会会长",
+  "content": "<p style=\"text-indent: 2em;\">新华社北京6月4日电 中共中央政治局委员、中央外办主任王毅4日在京分别会见阿联酋总统中国事务特使哈勒敦、日本国际贸易促进协会会长河野洋平。</p> <p style=\"text-indent: 2em;\">在会见哈勒敦时，王毅表示，在两国元首战略引领下，中阿关系保持良好发展势头。愿同阿方一道，根据两国元首重要共识，在涉及彼此核心利益问题上相互支持，拓展各领域互利合作，在国际和地区事务中保持密切配合，推动中阿全面战略伙伴关系深入向前发展。</p> <p style=\"text-indent: 2em;\">哈勒敦表示，愿同中方加强高层交往，进一步提升阿中特殊友好的全面战略伙伴关系水平。阿方恪守一个中国原则，将秉持独立自主原则，坚定不移推进对华合作。</p> <p style=\"text-indent: 2em;\">在会见河野洋平时，王毅表示，河野先生长期致力于中日友好事业，中方对此高度赞赏。“以民促官”在当前形势下依然具有重要现实意义。中方重视石破茂首相近期关于日本应深刻汲取历史教训、不做侵略国家的表态。历史不容篡改，只有坚持“以史为鉴”，才能真正开辟未来。</p> <p style=\"text-indent: 2em;\">河野表示，协会愿继续为促进日中友好合作作出贡献。</p> <p style=\"text-indent: 2em;\">双方还就加强中日韩三方合作和人文交流交换了看法。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-04T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c3718c35-8802-4bae-8b90-6cae4b549612",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

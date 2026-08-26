@@ -1,0 +1,24 @@
+{
+  "id": "292996cd701a2a68",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/obschestvo/28044397",
+  "title": "Организаторы концерта Канье Уэста сообщили, что находятся на связи с артистом",
+  "content": "В Say Agency отметили, что концерты американского рэпера в Санкт-Петербурге на данный момент не отменены",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T23:24:21+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "104de8d9-7f74-495a-9320-28489ee63ae6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

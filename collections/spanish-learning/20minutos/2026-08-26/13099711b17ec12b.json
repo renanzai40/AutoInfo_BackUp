@@ -1,0 +1,24 @@
+{
+  "id": "13099711b17ec12b",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/nacional/gobierno-aprueba-un-anteproyecto-para-reformar-las-leyes-extranjeria-asilo-plena-crisis-migratoria-ceuta_7029186_0.html",
+  "title": "El Ejecutivo lanza una reforma de las leyes de extranjería y asilo para agilizar las devoluciones en medio de la crisis en Ceuta",
+  "content": "El Consejo de Ministros ha dado luz verde a una reforma para adaptar el marco normativo español al nuevo pacto europeo de migración y asilo, que todavía debe volver a ratificarse antes de iniciar su tramitación parlamentaria.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T14:32:56+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5bbc3d60-d00c-451d-a621-bc4dd5c7a7a2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

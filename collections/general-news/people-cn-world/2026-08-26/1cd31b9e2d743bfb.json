@@ -1,0 +1,24 @@
+{
+  "id": "1cd31b9e2d743bfb",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0604/c1002-40493974.html",
+  "title": "外交部：愿继续为促进巴基斯坦与阿富汗改善发展关系发挥建设性作用",
+  "content": "<p style=\"text-indent: 2em;\">新华社北京6月4日电（记者许可）针对巴基斯坦政府和阿富汗临时政府近日宣布将两国外交关系由代办级提升至大使级，外交部发言人林剑4日在例行记者会上表示，中方对此表示欢迎，愿继续为促进巴阿两国改善发展关系发挥建设性作用。</p> <p style=\"text-indent: 2em;\">林剑说，这有助于巴阿双方增进互信，加强合作，共同维护本地区和平稳定。这也是巴方和阿方落实今年5月中阿巴三方外长非正式会晤成果的重要积极举措。</p> <p style=\"text-indent: 2em;\">他表示，中方愿同包括巴、阿两国在内的地区国家一道，共同维护本地区的和平、稳定和发展，致力于构建周边命运共同体。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-04T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c35b85a5-d3ed-427c-b826-86754f51c6af",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

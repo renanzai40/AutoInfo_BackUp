@@ -1,0 +1,24 @@
+{
+  "id": "293a12e89953d0c8",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/best-pool-cleaning-robots/",
+  "title": "I Tried the Best Robotic Pool Cleaners of 2026: Beatbot, iGarden, Dreame",
+  "content": "Pack up your pool cleaning supplies. Let one of these robot buddies maintain your water quality instead",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-21T11:33:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c02b01b1-701d-4262-b830-e20f2b0fea88",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "a9b9d7211af01677",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/programas/a-guerra-traduzida/eua-pedem-suspensao-de-ataques-para-visita-da-cia-a-russia/",
+  "title": "EUA pedem suspensão de ataques para visita da CIA à Rússia",
+  "content": "O The Kiev Independent afirma que Kiev concordou em suspender os ataques a Moscovo e a São Petesburgo entre 24 e 26 de agosto durante a presença de \"uma delegação de alto escalão\" em Moscovo.",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T20:50:18+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "264c65c8-0ef2-4683-b76f-1febcb8c683a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

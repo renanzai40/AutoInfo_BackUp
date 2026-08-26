@@ -1,0 +1,24 @@
+{
+  "id": "d069b74ad455a8c4",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/empresarios-mocambicanos-querem-parceria-com-o-pam-para-aumentar-producao-alimentar-e-combater-desnutricao/",
+  "title": "Moçambique: privados aliados ao PAM contra fome",
+  "content": "A responsável do PAM para a área de emergência, Edna Possolo, disse, no final do encontro com a CTA, que aquele organismo internacional quer agora avançar na criação de resiliência alimentar face aos choques climáticos",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T23:14:24+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3c81b0f8-bd68-4083-989d-d0be5de81ed0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

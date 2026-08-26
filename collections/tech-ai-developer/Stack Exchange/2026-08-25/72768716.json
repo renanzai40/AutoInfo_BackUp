@@ -1,0 +1,48 @@
+{
+  "id": 72768716,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/72768716/how-to-set-max-execution-time-during-mysqldump",
+  "title": "How to set max_execution_time during mysqldump",
+  "content": "How to set max_execution_time during mysqldump",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-25T15:58:38.586501+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "mysql",
+      "amazon-rds"
+    ],
+    "owner": {
+      "account_id": 1684944,
+      "reputation": 19956,
+      "user_id": 1548432,
+      "user_type": "registered",
+      "accept_rate": 86,
+      "profile_image": "https://www.gravatar.com/avatar/3eccf815d82c84550fa37f1f77c1c23d?s=256&d=identicon&r=PG",
+      "display_name": "Kay",
+      "link": "https://stackoverflow.com/users/1548432/kay"
+    },
+    "is_answered": false,
+    "view_count": 4319,
+    "answer_count": 0,
+    "score": 3,
+    "last_activity_date": 1787673216,
+    "creation_date": 1656316586,
+    "last_edit_date": 1787673216,
+    "question_id": 72768716,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/72768716/how-to-set-max-execution-time-during-mysqldump",
+    "title": "How to set max_execution_time during mysqldump"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ea5539ce-b4ef-407d-a89e-dc2ce206bb51",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

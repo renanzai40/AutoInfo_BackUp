@@ -1,0 +1,24 @@
+{
+  "id": "49d1bb02ea768470",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/retail/bjs-wholesale-cuts-product-variety-as-demand-shifts",
+  "title": "BJ’s Wholesale customers will face a significant store change",
+  "content": "BJ’s Wholesale is planning a major change as it responds to an evolving shopping environment.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T21:03:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f94b6d6b-9002-48e2-8ced-d4be79d74a84",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "0b20347cdae671c8",
+  "source_name": "techcrunch-ai",
+  "source_type": "rss",
+  "source_url": "https://techcrunch.com/2026/08/25/the-world-seems-to-be-ready-an-interview-with-openai-head-of-product-thibault-sottiaux/",
+  "title": "‘The world seems to be ready’: An interview with OpenAI head of product Thibault Sottiaux",
+  "content": "TechCrunch talks agents, UX, and reporting to Greg Brockman with OpenAI's head of product.",
+  "content_type": "text",
+  "source_platform": "techcrunch-ai",
+  "collected_at": "2026-08-25T12:00:00+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://techcrunch.com/category/artificial-intelligence/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "09a7f26d-5127-4171-938f-a555621918f8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

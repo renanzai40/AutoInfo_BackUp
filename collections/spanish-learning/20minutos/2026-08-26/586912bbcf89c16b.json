@@ -1,0 +1,24 @@
+{
+  "id": "586912bbcf89c16b",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/castilla-y-leon/palencia/muere-una-mujer-herida-un-disparo-por-su-pareja-cuando-cazaban-palencia_7029338_0.html",
+  "title": "Muere una mujer herida de un disparo por su pareja cuando cazaban en Palencia",
+  "content": "Las primeras pesquisas descartan que los hechos estuvieran relacionados con un episodio de violencia de género.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T21:04:30+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "cbe75b6b-77b1-400a-877e-206ec5d9b220",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

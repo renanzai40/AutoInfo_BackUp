@@ -1,0 +1,24 @@
+{
+  "id": "8fb34a93a1d74fcb",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/india/delhi/story/delhi-le-meridian-hotel-divij-maria-died-after-jumping-to-the-poolside-ntcpvp-rpti-2629911-2026-08-25?utm_source=rssfeed",
+  "title": "दिल्ली: ली मेरिडियन होटल में सुसाइड, 37 साल के शख्स ने दी जान",
+  "content": "दिल्ली के ली मेरिडियन होटल में सुसाइड की घटना सामने आई है. यहां 37 साल के दिविज मारिया नाम के शख्स ने होटल के पुल साइड से कूदकर की आत्महत्या की है.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T20:42:34+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "38a78200-046a-4039-8e67-6e4befcbf49a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

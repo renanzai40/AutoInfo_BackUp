@@ -1,0 +1,24 @@
+{
+  "id": "15873da4f50122d9",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/Chinese-FM-calls-on-Middle-East-Gulf-parties-to-resume-dialogue-1PS4zYvvTVu/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Chinese FM calls on Middle East, Gulf parties to resume dialogue",
+  "content": "Chinese Foreign Minister Wang Yi said on Monday that the current situation in the Middle East and the Gulf region is once again at a critical juncture, expressing hope that the parties concerned will return to the track of dialogue and negotiation as soon as possible.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T09:31:21+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7f8e7bc5-fc87-41ab-97a7-3338a0136b92",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

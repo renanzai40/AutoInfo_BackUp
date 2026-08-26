@@ -1,0 +1,24 @@
+{
+  "id": "b71f4d87cc812846",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/22/stocks-market-investments-diversification.html",
+  "title": "The biggest U.S. stocks have done great for you. Experts say not to get greedy",
+  "content": "Low-cost S&amp;P 500 index funds are the foundation of many portfolios to grow wealth, but investors should add assets to diversify and lower volatility.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-22T13:26:14+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ff408615-ef20-4a51-a079-1bf925da88f6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

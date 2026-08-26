@@ -1,0 +1,24 @@
+{
+  "id": "92b7611186e96505",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/spettacoli/eurovision/24_maggio_12/la-classifica-di-eurovision-2024-live-durante-la-finale-66a7a218-8ff9-4806-8131-c38ef0c9fxlk.shtml",
+  "title": "La classifica di Eurovision 2024, live durante la finale",
+  "content": "<p><img alt=\"La classifica di Eurovision 2024, live durante la finale\" src=\"https://images2.corriereobjects.it/methode_image/2024/05/11/Spettacoli/Foto%20Spettacoli%20-%20Trattate/663fd06f8d611_ori_crop_MASTER__0x0.jpeg\" title=\"La classifica di Eurovision 2024, live durante la finale\" /><p>È il momento dei voti delle giurie nazionali annunciati dai portavoce dei Paesi partecipanti ad Eurovision Song Contest, in collegamento con la Malmö ArenaÈ il momento dei voti delle giurie nazionali annunciati dai portavoce dei Paesi partecipanti ad Eurovision Song Contest, in collegamento con la Malmö Arena</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-12T21:53:28+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4ab0f44b-5ce8-4a07-9422-dfc82ec9113d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

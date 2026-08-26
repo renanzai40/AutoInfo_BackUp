@@ -1,0 +1,24 @@
+{
+  "id": "649a8848da6e5022",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/25/iran-oman-strait-hormuz-oil.html",
+  "title": "Iran and Oman discuss joint shipping route in Strait of Hormuz and mine clearing mission",
+  "content": "Iran and Oman on Tuesday discussed a proposal to establish a jointly managed shipping route through the Strait of Hormuz.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-25T21:07:56+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d15e4f2b-fd00-4daf-a06e-0b862c467f03",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

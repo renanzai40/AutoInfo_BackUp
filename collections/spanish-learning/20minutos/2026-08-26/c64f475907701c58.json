@@ -1,0 +1,24 @@
+{
+  "id": "c64f475907701c58",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/bigote-arrocet-muy-preocupado-por-su-salud-me-han-visto-una-mancha-un-bulto-un-rinon_7029265_0.html",
+  "title": "Bigote Arrocet, preocupado por su salud: \"Me han visto una mancha y un bulto\"",
+  "content": "La revista 'Semana' recoge sus declaraciones en su edición impresa de este miércoles.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T17:31:10+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "cd961b3d-1205-4f71-8559-9df0b8f28659",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

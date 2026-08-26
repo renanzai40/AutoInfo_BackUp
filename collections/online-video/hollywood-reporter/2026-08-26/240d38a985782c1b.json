@@ -1,0 +1,24 @@
+{
+  "id": "240d38a985782c1b",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/movies/movie-news/2026-ny-film-festival-naza-israel-gaza-documentary-1236680717/",
+  "title": "New York Film Festival Adds North American Premiere of ‘NAZA’ Documentary",
+  "content": "The film, from 'No Other Land' directors Yuval Abraham and Rachel Szor and produced by the Oscar-winning team behind 'The Zone of Interest,' was shot from the rooftops of Tel Aviv and documents Israel's bombing of Gaza.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T15:53:25+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c01836fa-5ba4-4cd2-a12e-e98d924d0a4c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

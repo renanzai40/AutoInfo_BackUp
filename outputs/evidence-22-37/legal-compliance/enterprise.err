@@ -1,0 +1,5 @@
+[92m14:34:10 - LiteLLM:WARNING[0m: get_model_cost_map.py:271 - LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: The read operation timed out. Falling back to local backup.
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping knowledge base entries into semantic themes, with an example entry being an error page from a legal compliance source indicating no medical
+LLM returned only 1 theme group(s), retrying with stricter prompt
+Strict retry returned only 1 group(s), falling back to deterministic grouping

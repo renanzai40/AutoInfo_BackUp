@@ -1,0 +1,24 @@
+{
+  "id": "0540560e57038682",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/China-donated-smart-rehabilitation-device-put-into-use-in-Kyrgyzstan-1PSjg6WbX1e/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "China-donated smart rehabilitation device put into use in Kyrgyzstan",
+  "content": "A China-donated smart rehabilitation device was officially handed over and put into use at the Clinical Emergency Hospital in Bishkek, capital of Kyrgyzstan on August 22, 2026.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T13:34:50+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b2ee24fe-08af-496e-8572-b0bdb2003633",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

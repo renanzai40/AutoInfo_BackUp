@@ -1,0 +1,24 @@
+{
+  "id": "d0ba32714b9248ec",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/salud/consumo-cannabis-se-asocia-con-una-aparicion-mas-temprana-psicosis_7027799_0.html",
+  "title": "El consumo de cannabis se asocia con una aparición más temprana de la psicosis",
+  "content": "Para llegar a esta conclusión, los investigadores revisaron 149 estudios que reunían a más de 71.000 personas.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-22T07:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8eb7cbd8-e28e-40a5-9e61-f9632072b333",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

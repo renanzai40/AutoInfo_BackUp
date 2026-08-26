@@ -1,0 +1,24 @@
+{
+  "id": "349793c46c6d9e39",
+  "source_name": "open-culture",
+  "source_type": "rss",
+  "source_url": "https://www.openculture.com/2026/08/first-film-adaptation-of-mary-shelleys-frankenstein.html",
+  "title": "The Very First Film Adaptation of Mary Shelley’s Frankenstein, a Thomas Edison Production (1910)",
+  "content": "The story of humans creating monstrous beings&#160;in their image may have perennial relevance, even if it seems specific to our contemporary cultural moment. What, after all, is Oscar Isaac’s AI inventor in Ex Machina but a 21st-century update of Victor Frankenstein? (Before Isaac went on to portray Victor himself in Guillermo del Toro’s 2025 film [&#8230;]",
+  "content_type": "text",
+  "source_platform": "open-culture",
+  "collected_at": "2026-08-25T08:00:22+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.openculture.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4ee2e8ea-bd46-4d14-b42e-4cd147cb516f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

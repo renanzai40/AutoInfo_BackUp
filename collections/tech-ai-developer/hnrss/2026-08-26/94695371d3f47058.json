@@ -1,0 +1,24 @@
+{
+  "id": "94695371d3f47058",
+  "source_name": "hnrss",
+  "source_type": "rss",
+  "source_url": "https://veruscite.com/hallucinations",
+  "title": "Hall of Hallucinated Citations in Published Papers",
+  "content": "<p>Article URL: <a href=\"https://veruscite.com/hallucinations\">https://veruscite.com/hallucinations</a></p>\n<p>Comments URL: <a href=\"https://news.ycombinator.com/item?id=49436254\">https://news.ycombinator.com/item?id=49436254</a></p>\n<p>Points: 1</p>\n<p># Comments: 0</p>",
+  "content_type": "text",
+  "source_platform": "hnrss",
+  "collected_at": "2026-08-25T15:57:41+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://hnrss.org/newest"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "783fa41d-7045-48a6-8d95-bac4daac562b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

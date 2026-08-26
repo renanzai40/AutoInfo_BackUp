@@ -1,0 +1,24 @@
+{
+  "id": "608a73ce33a8c8f2",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/programas/e-o-vencedor-e/taxar-os-lucros-das-petroliferas-e-so-fogo-de-vista/",
+  "title": "Taxar os lucros das petrolíferas é só fogo de vista?",
+  "content": "O pedido de imposto europeu sobre lucros extraordinários tem eficácia nula na carteira e a receita no passado ficou muito aquém do previsto. A crise em Ceuta expõe a fraqueza do executivo de Madrid.",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T19:59:26+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9722efd6-1894-40a3-a0e7-540e7a206be7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

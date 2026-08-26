@@ -1,0 +1,24 @@
+{
+  "id": "49d2e95a663d1686",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/trump-afirma-que-execucoes-no-irao-tem-de-ter-fim-imediatamente/",
+  "title": "Trump diz que execuções no Irão têm de ter \"fim imediato\"",
+  "content": "Este ano, pelo menos 1.639 pessoas foram até agora executadas no Irão",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T17:36:05+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2aeeae87-a8ce-4fe1-9c5e-dca961ff7653",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

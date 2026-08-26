@@ -1,0 +1,24 @@
+{
+  "id": "7642144a77189cc3",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/25/china-iran-us-sanctions-banks-cips.html",
+  "title": "China needs U.S. dollars but is building a hedge against Washington’s sanctions",
+  "content": "The U.S. can pressure Chinese banks over Iran through access to its financial system, while Beijing is building alternatives such as CIPS.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-25T16:00:11+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5328125c-1e64-4784-9892-b18b3ea5abd6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

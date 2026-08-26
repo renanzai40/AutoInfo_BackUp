@@ -1,0 +1,24 @@
+{
+  "id": "221da1fdc4a9d23e",
+  "source_name": "variety",
+  "source_type": "rss",
+  "source_url": "https://variety.com/2026/gaming/news/series-entertainment-vibe-gaming-run-ai-platform-1236842425/",
+  "title": "Series Entertainment Brings Vibe-Gaming to Life with ‘RUN,’ An AI-Based Platform to Create Games and Shows (EXCLUSIVE)",
+  "content": "The generative AI boom brought us “vibe coding,” and then eventually “vibe directing.” Now, a new entry: vibe&#8230;game development? It&#8217;s the idea behind Series Entertainment’s “RUN,” a new platform that lets users create new games while shortening the typically months- or yearslong window for building them down to days. The platform, which is now in beta, aims to [&#8230;]",
+  "content_type": "text",
+  "source_platform": "variety",
+  "collected_at": "2026-08-25T15:15:00+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://variety.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "047a1330-6151-42d0-b6da-231d7cae98e2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

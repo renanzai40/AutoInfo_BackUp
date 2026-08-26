@@ -1,0 +1,24 @@
+{
+  "id": "d001a607a2470799",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/Chinese-team-wins-Esports-World-Cup-2026-in-Paris-1PRQfjjQiAg/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Chinese team wins Esports World Cup 2026 in Paris",
+  "content": "A Chinese team, All Gamers, on Sunday beat double-champions Team Falcons from Saudi Arabia to win the video-gaming Esports World Cup (EWC) held Sunday in Paris.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T06:21:24+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ee115d74-2621-45f9-8434-eda7411529f3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

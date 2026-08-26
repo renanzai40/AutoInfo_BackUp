@@ -1,0 +1,24 @@
+{
+  "id": "f321204ed33ab4d0",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://newsus.cgtn.com/news/2026-08-25/Venezuela-earthquake-amputees-begin-long-road-to-recovery-1PSVbuDW1S8/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Venezuela earthquake amputees begin long road to recovery",
+  "content": "Venezuela earthquake amputees begin long road to recovery",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T21:51:31+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e46b876f-c5c7-41c4-8f8c-154e33d4441e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,22 @@
+{
+  "id": "49b65aff4e6cac8b",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.scotusblog.com/2026/08/president-trump-signs-new-birthright-citizenship-and-birth-tourism-orders/",
+  "title": "President Trump issues new birthright citizenship and “birth tourism” orders",
+  "content": "Plus, the next great First Amendment battleground is on the back of your car.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-07T13:00:00+00:00",
+  "language": "",
+  "domain": "legal-compliance",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.scotusblog.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4a102ae4-fd1d-44bc-b314-692fa76a07b1"
+}

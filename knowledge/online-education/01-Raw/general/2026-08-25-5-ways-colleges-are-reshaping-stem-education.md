@@ -1,0 +1,67 @@
+---
+title: 5 Ways Colleges Are Reshaping STEM Education
+domain: online-education
+tier: 01-Raw
+entry_id: online-education-general-5-ways-colleges-are-reshaping-stem-education
+source_url: https://www.insidehighered.com/news/student-success/academic-life/2026/08/25/5-ways-colleges-are-reshaping-stem-education
+source_type: rss
+source_platform: inside-higher-ed
+collected_at: '2026-08-25T07:00:00+00:00'
+summary: Colleges are innovating STEM education by redesigning introductory courses, expanding hands-on learning opportunities,
+  and establishing new career pathways. These efforts aim to enhance student success in science, technology, engineering,
+  and mathematics fields.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 0f8b5893-54aa-4be2-a768-62c550995766
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<span>5 Ways Colleges Are Reshaping STEM Education</span>
+
+            <div class="field field--name-field-featured-image field--type-entity-reference field--label-hidden field__item">  <img alt="Teacher with female pupils building robotic vehicle in science lesson." height="1414" src="https://www.insidehighered.com/sites/default/files/2026-08/GettyImages-999236728.jpg" width="2121" />
+
+</div>
+      
+<span><span>Joshua.Bay</span></span>
+
+<span><time datetime="2026-08-25T03:00:00-04:00" title="Tuesday, August 25, 2026 - 03:00 AM">Tue, 08/25/2026 - 03:00 AM</time>
+</span>
+<p><span>Colleges are redesigning gateway courses, expanding hands-on learning and creating new career paths to help more students succeed in STEM.</span></p>
+  <div class="field field--name-field-authors field--type-entity-reference field--label-inline clearfix">
+    <div class="field__label">Byline(s)</div>
+          <div class="field__items">
+              <div class="field__item"><a href="https://www.insidehighered.com/author/joshua-bay" hreflang="en">Joshua Bay</a></div>
+              </div>
+      </div>
+
+## Summary
+Colleges are innovating STEM education by redesigning introductory courses, expanding hands-on learning opportunities, and establishing new career pathways. These efforts aim to enhance student success in science, technology, engineering, and mathematics fields.
+
+## Key Points
+- Redesigning gateway STEM courses to improve student engagement and accessibility.
+- Expanding hands-on and practical learning experiences in STEM curricula.
+- Creating new career pathways to better prepare STEM graduates for the workforce.
+- Focusing on strategies to increase overall student success rates in STEM disciplines.
+
+
+## Entities
+- **Colleges** (org, relevance=)
+- **STEM** (concept, relevance=)
+- **Joshua Bay** (person, relevance=)

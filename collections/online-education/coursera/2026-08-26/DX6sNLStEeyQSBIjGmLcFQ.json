@@ -1,0 +1,27 @@
+{
+  "id": "DX6sNLStEeyQSBIjGmLcFQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Building No-Code Apps with AppSheet: Implementation",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "DX6sNLStEeyQSBIjGmLcFQ",
+    "slug": "building-no-code-apps-with-appsheet-implementation",
+    "name": "Building No-Code Apps with AppSheet: Implementation"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "187a80d9-aec2-4680-9be3-33efb4a1ab4c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

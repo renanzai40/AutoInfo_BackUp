@@ -1,0 +1,24 @@
+{
+  "id": "ec13845d2676dee3",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/nacional/marlaska-niega-version-robles-sobre-aviso-cni-no-habia-ningun-informe-que-atisbara-que-iba-suceder-30-julio_7029193_0.html",
+  "title": "Marlaska niega la versión de Robles sobre el aviso del CNI: \"No había ningún informe que atisbara lo que iba a suceder el 30 de julio\"",
+  "content": "Marlaska ha considerado que España tiene \"excelentes\" servicios de información que a su juicio han actuado \"perfectamente\"",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T14:30:06+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "71572984-c265-470c-9225-0488a8677ebf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

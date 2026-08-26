@@ -1,0 +1,24 @@
+{
+  "id": "9b09876bf19fc2a6",
+  "source_name": "crunchbase-news",
+  "source_type": "rss",
+  "source_url": "https://news.crunchbase.com/ma/startup-unicorns-acquisitions-ai-fintech-biotech/",
+  "title": "Startups Are Still Acquiring Startups, Led By Ultra-High-Valuation Unicorns",
+  "content": "Amid fierce competition for an edge in the AI race, well-funded startups commonly find it’s simply faster to buy another company than try to build out certain technologies themselves.",
+  "content_type": "text",
+  "source_platform": "crunchbase-news",
+  "collected_at": "2026-08-24T11:00:12+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://news.crunchbase.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "418350bc-7719-419e-afb3-db458bd50f74",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

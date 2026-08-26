@@ -1,0 +1,24 @@
+{
+  "id": "af61d3949bca93cd",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/theluxonomist/lifestyle/espiritu-extasis-rolls-royce-su-apasionada-historia_6995207_0.html",
+  "title": "Velocidad, belleza, armonía y un amor secreto: esto esconde el emblema de Rolls-Royce",
+  "content": "El nombre del famoso emblema de la firma es Espíritu del Éxtasis y esconde una apasionada historia de amor.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2022-08-03T13:30:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a36b81d8-d2c4-4c54-9153-57cd84eda5b2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

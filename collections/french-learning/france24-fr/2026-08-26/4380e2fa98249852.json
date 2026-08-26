@@ -1,0 +1,24 @@
+{
+  "id": "4380e2fa98249852",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/vid%C3%A9o/20260825-au-kenya-un-cr%C3%A9ateur-de-mode-fait-revivre-le-tissage-traditionnel",
+  "title": "Au Kenya, un créateur de mode fait revivre le tissage traditionnel",
+  "content": "Au Kenya, un jeune créateur de mode mise sur des vêtements entièrement réalisés à la main pour se démarquer. Il utilise exclusivement des métiers à tisser manuels afin de préserver et de remettre au goût du jour des savoir-faire traditionnels menacés par l'industrialisation. Récit de Laurent Berstecher.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T15:37:48+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bdc0c6ef-7fe2-4520-9a48-9a3b4bc2a53b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

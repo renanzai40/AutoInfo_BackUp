@@ -1,0 +1,24 @@
+{
+  "id": "42712830cb305de9",
+  "source_name": "interfax",
+  "source_type": "rss",
+  "source_url": "https://www.interfax.ru/business/1111203",
+  "title": "\"Нижнекамскнефтехим\" признал убыток по МСФО в 1,5 млрд руб.",
+  "content": "ПАО \"Нижнекамскнефтехим\" (НКНХ, входит в \"СИБУР\") в январе-июне 2026 года признало убыток от обесценения активов в размере 1,5 млрд рублей, говорится в отчетности компании по МСФО.",
+  "content_type": "text",
+  "source_platform": "interfax",
+  "collected_at": "2026-08-25T17:28:00+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.interfax.ru/rss.asp"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4c3c0251-8e71-4a88-ad6b-f35ccf58fdb7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

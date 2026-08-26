@@ -1,0 +1,24 @@
+{
+  "id": "dfd2e21d418dd041",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-22/Japan-s-record-defense-spending-plan-piles-pressure-on-FY-2027-budget-1POFzNtZeUM/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Japan's record defense spending plan piles pressure on FY 2027 budget",
+  "content": "Japan's fiscal 2027 budget requests are expected to top 130 trillion yen (about $818 billion), driven largely by a record defense expenditure request of around 8.9 trillion yen, Kyodo News reported on Friday.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-22T10:54:45+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7d4727f9-c703-49bc-9e13-2ca3948e1a5f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

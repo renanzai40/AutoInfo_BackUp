@@ -1,0 +1,24 @@
+{
+  "id": "e1d5d3f289b6587a",
+  "source_name": "hnrss",
+  "source_type": "rss",
+  "source_url": "https://www.zeroroot.ai",
+  "title": "Show HN: Gibson ADK and Security Runtime",
+  "content": "<p>I have spent 15 years in DevSecOps, platform engineering and offensive security. Over the last year I did most of the things HN says not to do. I wrote a lot of code alone in a vacuum and built this thing far past an MVP.<p>It started as a way to automate my bug bounty hobby and to try to find an edge so I could get more findings (scale, automation etc). I wanted agents that could run recon, triage what they found, keep a record etc etc.<p>Then I noticed the same patterns at every client I had worked with, (mainly banks and gov teams) and pivoted. \nWhat it is now: an all-in-one solution to getting your agents into prod.<p>You keep your framework, or build from scratch with gibson. A named person grants each agent read, write or execute on specific things, and the grant cannot exceed what that person holds. Every model call and tool call goes through the runtime first, and a call outside the grant never executes. Untrusted work runs in its own Firecracker microVM. Every action lands in an append-only record you can replay to any moment. Everything an agent finds goes into a knowledgegraph (on going memory for all agents), so the next run starts from it. It runs in Kubernetes, hosted or in your own cluster, can be air-gapped.<p>This could also have been an Ask HN. I am trying to figure out how to go to market.  Im not sure if I should open source it, do a true platform or move back entirely and go deep into what I truly like doing which is red team/hacking and re-release it as an offsec focused tool and try to innovate there with the framework. Any advice/suggestions would be awesome.  Thanks!</p>\n<hr />\n<p>Comments URL: <a href=\"https://news.ycombinator.com/item?id=49435908\">https://news.ycombinator.com/item?id=49435908</a></p>\n<p>Points: 1</p>\n<p># Comments: 0</p>",
+  "content_type": "text",
+  "source_platform": "hnrss",
+  "collected_at": "2026-08-25T15:35:18+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://hnrss.org/newest"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d8f8f866-6757-486e-87ad-3fa806b0b38d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

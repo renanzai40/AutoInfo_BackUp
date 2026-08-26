@@ -1,0 +1,24 @@
+{
+  "id": "b53e0bd28315ff2e",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/cronache/24_maggio_13/terremoto-di-magnitudo-2-9-ai-campi-flegrei-nessun-danno-6de22d5c-282a-4457-8451-cd6df58b6xlk.shtml",
+  "title": "Terremoto di magnitudo 2.9 ai Campi Flegrei. Nessun danno",
+  "content": "<p><img alt=\"Terremoto di magnitudo 2.9 ai Campi Flegrei. Nessun danno\" src=\"https://images2.corriereobjects.it/methode_image/2024/05/13/Interni/Foto%20Interni%20-%20Trattate/664189dca6696.r_d.1504-1727-0_ori_crop_MASTER__0x0.jpeg\" title=\"Terremoto di magnitudo 2.9 ai Campi Flegrei. Nessun danno\" /><p>L'epicentro a due chilometri da Pozzuoli. Tre giorni fa altre due scosseL'epicentro a due chilometri da PozzuoliL'epicentro a due chilometri da Pozzuoli</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-13T05:51:37+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ad2f4253-ddd9-4440-9e62-dc83a74e4e8b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

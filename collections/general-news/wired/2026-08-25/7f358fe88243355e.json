@@ -1,0 +1,24 @@
+{
+  "id": "7f358fe88243355e",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/the-county-prosecutors-who-became-ice-informants/",
+  "title": "The County Prosecutors Who Became ICE Informants",
+  "content": "Illinois prosecutors shared defendants’ personal data with federal immigration agents without criminal warrants, public disclosure, or legislative oversight.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-25T11:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e4576c85-9c73-4789-a6cd-6f64adcf91bf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

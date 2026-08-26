@@ -1,0 +1,24 @@
+{
+  "id": "1bbbbfddc2adbeef",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/21/supreme-court-trump-white-house-ballroom.html",
+  "title": "Supreme Court allows Trump to continue White House ballroom construction for now",
+  "content": "President Donald Trump had the White House's East Wing demolished in 2025 to make way for his controversial planned ballroom.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-22T11:40:54+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "48947d7c-882a-4770-ae50-d894c2254051",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

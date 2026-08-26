@@ -1,0 +1,24 @@
+{
+  "id": "907a84e202662f78",
+  "source_name": "modern-retail",
+  "source_type": "rss",
+  "source_url": "https://www.modernretail.co/operations/the-big-business-of-dorm-decor-with-urban-outfitters/?utm_campaign=modernretaildis&utm_medium=rss&utm_source=general-rss",
+  "title": "The big business of dorm decor with Urban Outfitters",
+  "content": "This week on the Modern Retail podcast, Urban Outfitters' Karen Booker dives into the company's dorm room decor strategy.",
+  "content_type": "text",
+  "source_platform": "modern-retail",
+  "collected_at": "2026-08-22T04:00:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.modernretail.co/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d6e07bd7-fbd9-4464-b7e4-c43030b9a58f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

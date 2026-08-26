@@ -1,0 +1,24 @@
+{
+  "id": "0aabec3962e33a1b",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/queijadas-de-sintra-distinguidas-com-medalha-de-ouro-sapa-270-anos-piriquita-gregorio-e-preto-reconhecidas-pelo-municipio/",
+  "title": "Queijadas de Sintra distinguidas com medalha de ouro",
+  "content": "Enquanto \"incontornável ativo turístico\", as \"queijadas exportam o nome de Sintra para as mais longínquas geografias, como embaixador da excelência e da cultura\", considerou a autarquia",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T21:08:01+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d80a54cd-dd2c-4ec6-b349-28688aca6b3d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

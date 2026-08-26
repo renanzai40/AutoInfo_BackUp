@@ -1,0 +1,24 @@
+{
+  "id": "62eabe177cc3fbf1",
+  "source_name": "producthunt",
+  "source_type": "rss",
+  "source_url": "https://www.producthunt.com/products/inquio",
+  "title": "Inquio",
+  "content": "<p>\n            See what your bot is getting wrong\n          </p>\n          <p>\n            <a href=\"https://www.producthunt.com/products/inquio?utm_campaign=producthunt-atom-posts-feed&amp;utm_medium=rss-feed&amp;utm_source=producthunt-atom-posts-feed\">Discussion</a>\n            |\n            <a href=\"https://www.producthunt.com/r/p/1215722?app_id=339\">Link</a>\n          </p>",
+  "content_type": "text",
+  "source_platform": "producthunt",
+  "collected_at": "2026-08-05T06:40:24-07:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.producthunt.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ba46b119-6a7d-4362-8ebb-f6b9a387f8b1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

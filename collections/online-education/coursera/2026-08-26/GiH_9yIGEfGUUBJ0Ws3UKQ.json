@@ -1,0 +1,27 @@
+{
+  "id": "GiH_9yIGEfGUUBJ0Ws3UKQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "PostgreSQL 17: Core Concepts and Advanced SQL Techniques",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "GiH_9yIGEfGUUBJ0Ws3UKQ",
+    "slug": "packt-postgresql-17-core-concepts-and-advanced-sql-techniques-ojoqu",
+    "name": "PostgreSQL 17: Core Concepts and Advanced SQL Techniques"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "fd3fda5d-57a9-4429-bed8-238a276dd8eb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

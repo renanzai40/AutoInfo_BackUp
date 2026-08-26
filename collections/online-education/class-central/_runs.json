@@ -1,0 +1,146 @@
+[
+  {
+    "collection_id": "col-20260810T044950-4864ee4f",
+    "timestamp": "2026-08-10T04:49:54.524485+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 403 for https://www.classcentral.com/report/feed/",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 403 for https://www.classcentral.com/report/feed/"
+      }
+    ],
+    "duration_ms": 816.0
+  },
+  {
+    "collection_id": "col-20260810T055858-112c56b2",
+    "timestamp": "2026-08-10T05:59:04.995083+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 403 for https://www.classcentral.com/report/feed/",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 403 for https://www.classcentral.com/report/feed/"
+      }
+    ],
+    "duration_ms": 1235.0
+  },
+  {
+    "collection_id": "col-20260812T182350-1ac49020",
+    "timestamp": "2026-08-12T18:23:54.038407+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 403 for https://www.classcentral.com/report/feed/",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 403 for https://www.classcentral.com/report/feed/"
+      }
+    ],
+    "duration_ms": 1194.0
+  },
+  {
+    "collection_id": "col-20260815T181030-ae72ea26",
+    "timestamp": "2026-08-15T18:10:34.620407+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.classcentral.com/report/feed/: Client error '403 Forbidden' for url 'https://www.classcentral.com/report/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.classcentral.com/report/feed/: Client error '403 Forbidden' for url 'https://www.classcentral.com/report/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+      }
+    ],
+    "duration_ms": 913.0
+  },
+  {
+    "collection_id": "col-20260815T182038-eb2fbbd8",
+    "timestamp": "2026-08-15T18:20:42.636710+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.classcentral.com/report/feed/: Client error '403 Forbidden' for url 'https://www.classcentral.com/report/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.classcentral.com/report/feed/: Client error '403 Forbidden' for url 'https://www.classcentral.com/report/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+      }
+    ],
+    "duration_ms": 1301.0
+  },
+  {
+    "collection_id": "col-20260815T183244-3348642b",
+    "timestamp": "2026-08-15T18:32:46.699886+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.classcentral.com/report/feed/: Client error '403 Forbidden' for url 'https://www.classcentral.com/report/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.classcentral.com/report/feed/: Client error '403 Forbidden' for url 'https://www.classcentral.com/report/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+      }
+    ],
+    "duration_ms": 2425.0
+  },
+  {
+    "collection_id": "col-20260825T151610-cba0a08f",
+    "timestamp": "2026-08-25T15:16:19.170188+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.classcentral.com/report/feed/: Client error '403 Forbidden' for url 'https://www.classcentral.com/report/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.classcentral.com/report/feed/: Client error '403 Forbidden' for url 'https://www.classcentral.com/report/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+      }
+    ],
+    "duration_ms": 886.0
+  },
+  {
+    "collection_id": "col-20260825T152636-120b9e36",
+    "timestamp": "2026-08-25T15:26:43.562356+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.classcentral.com/report/feed/: Client error '403 Forbidden' for url 'https://www.classcentral.com/report/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.classcentral.com/report/feed/: Client error '403 Forbidden' for url 'https://www.classcentral.com/report/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+      }
+    ],
+    "duration_ms": 2829.0
+  },
+  {
+    "collection_id": "col-20260825T154343-63f4c25e",
+    "timestamp": "2026-08-25T15:43:48.945428+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.classcentral.com/report/feed/: Client error '403 Forbidden' for url 'https://www.classcentral.com/report/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.classcentral.com/report/feed/: Client error '403 Forbidden' for url 'https://www.classcentral.com/report/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+      }
+    ],
+    "duration_ms": 967.0
+  }
+]

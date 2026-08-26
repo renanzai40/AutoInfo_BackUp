@@ -1,0 +1,24 @@
+{
+  "id": "4e97b8bf97ddf18a",
+  "source_name": "producthunt",
+  "source_type": "rss",
+  "source_url": "https://www.producthunt.com/products/decawork",
+  "title": "Decawork",
+  "content": "<p>\n            Control your company's internal AI agents and tools\n          </p>\n          <p>\n            <a href=\"https://www.producthunt.com/products/decawork?utm_campaign=producthunt-atom-posts-feed&amp;utm_medium=rss-feed&amp;utm_source=producthunt-atom-posts-feed\">Discussion</a>\n            |\n            <a href=\"https://www.producthunt.com/r/p/1229726?app_id=339\">Link</a>\n          </p>",
+  "content_type": "text",
+  "source_platform": "producthunt",
+  "collected_at": "2026-08-22T22:41:57-07:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.producthunt.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4dc2da4d-48bc-4c60-9702-06a743806429",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

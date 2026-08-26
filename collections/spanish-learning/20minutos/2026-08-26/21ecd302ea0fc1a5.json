@@ -1,0 +1,24 @@
+{
+  "id": "21ecd302ea0fc1a5",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/baleares/detienen-un-padre-un-hijo-por-huir-un-bar-palma-sin-pagar-una-cuenta-46-euros_7029277_0.html",
+  "title": "Detienen a un padre y un hijo por huir de un bar sin pagar una cuenta de 46 euros",
+  "content": "Los dos negaron haber consumido en el establecimiento, pero las cámaras de seguridad mostraron que habían comido dos platos de paella y tomado varias cervezas.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T17:50:37+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bebad341-a110-4d62-80c3-a04ca324d313",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

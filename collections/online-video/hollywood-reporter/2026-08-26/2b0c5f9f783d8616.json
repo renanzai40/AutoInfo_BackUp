@@ -1,0 +1,24 @@
+{
+  "id": "2b0c5f9f783d8616",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/tv/tv-features/five-star-weekend-season-two-showrunner-interview-1236678167/",
+  "title": "How ‘The Five Star Weekend’ Could Expand the Book Into a Multi-Season Series",
+  "content": "Writer and executive producer Bekah Brunstetter explains key changes and how she tried to visualize the perfect image vs. messier emotional reality theme from the Elin Hilderbrand book in the Jennifer Garner-starring Peacock series, which was recently renewed for a second season.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T17:00:00+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e39ca729-e8d9-4150-b8cf-a46cd3443289",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

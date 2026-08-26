@@ -1,0 +1,24 @@
+{
+  "id": "707752b9d90a1a42",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/cook/news/cards/cioccolato-come-scegliere-migliore-pochi-passaggi/importanza-sapere-leggere-un-etichetta_principale.shtml",
+  "title": "Cioccolato, come scegliere il migliore in pochi passaggi",
+  "content": "<p><img alt=\"Cioccolato, come scegliere il migliore in pochi passaggi \" src=\"https://images2.corriereobjects.it/methode_image/2024/03/28/Cucina/Foto%20Cucina%20-%20Trattate/iStock-1170698495-kjq-U34701043122143FcB-656x492@Corriere-Web-Sezioni.jpg\" title=\"Cioccolato, come scegliere il migliore in pochi passaggi \" /><p>Quanto cacao è richiesto per fare un buon cioccolato? E, soprattutto, quale cacao è il migliore? Lo zucchero che posto deve avere in etichetta? Quali altri ingredienti sono permessi? Ecco alcune indicazioni per riuscire a scegliere il cioccolato migliore </p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-11T09:28:19+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "110443f2-184a-47a6-8ce9-5caaa286a304",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

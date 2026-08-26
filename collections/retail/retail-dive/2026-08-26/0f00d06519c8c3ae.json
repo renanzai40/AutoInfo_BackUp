@@ -1,0 +1,24 @@
+{
+  "id": "0f00d06519c8c3ae",
+  "source_name": "retail-dive",
+  "source_type": "rss",
+  "source_url": "https://www.retaildive.com/news/dicks-sporting-goods-foot-locker-in-the-game-despite-declines-losses-gloomy-outlook-q2/828694/",
+  "title": "Dick’s keeps Foot Locker in the game despite losses, gloomy outlook",
+  "content": "<figure><div><img src=\"https://imgproxy.divecdn.com/rjQuvoyvyjdKa7xNE85Mo0FJgoNoPT-lC8yKeRws4wo/g:nowe:42:147/c:1230:694/rs:fill:1600:900:1/Z3M6Ly9kaXZlc2l0ZS1zdG9yYWdlL2RpdmVpbWFnZS8yXzNUbjdaVDEuanBlZw==.webp\" /></div></figure><p>The mall chain, which depends on new and retro sneaker styles, is getting hit hard by fewer launches and shifting demand in athletic footwear.</p>",
+  "content_type": "text",
+  "source_platform": "retail-dive",
+  "collected_at": "2026-08-25T12:25:00-04:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.retaildive.com/feeds/news/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3f8548ca-e31a-4228-88a7-7325347cb17b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

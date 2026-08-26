@@ -1,0 +1,24 @@
+{
+  "id": "fb8f9bd5fb175fdf",
+  "source_name": "b2b-news-network",
+  "source_type": "rss",
+  "source_url": "https://www.b2bnn.com/2026/08/freezvon-for-startups-building-a-professional-phone-presence-without-a-traditional-office/",
+  "title": "Freezvon for Startups: Building a Professional Phone Presence Without a Traditional Office",
+  "content": "Not every startup begins in an office. Some start with two people working from home. Others are built by teams living in different cities or even different countries. A founder may be talking to customers from a laptop in Berlin, while a developer works from Kyiv and a sales manager joins calls from Warsaw. That [&#8230;]",
+  "content_type": "text",
+  "source_platform": "b2b-news-network",
+  "collected_at": "2026-08-25T10:38:20+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://b2bnn.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4fe7a9c7-6cfe-429a-84ac-ef1f59e0e629",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

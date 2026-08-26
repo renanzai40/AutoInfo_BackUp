@@ -1,0 +1,24 @@
+{
+  "id": "d733b408fb6e8ffb",
+  "source_name": "hnrss",
+  "source_type": "rss",
+  "source_url": "https://www.tryhunch.ca",
+  "title": "Show HN: Hunch – a macOS AI assistant that uses your Mac in the background",
+  "content": "<p>Article URL: <a href=\"https://www.tryhunch.ca\">https://www.tryhunch.ca</a></p>\n<p>Comments URL: <a href=\"https://news.ycombinator.com/item?id=49435546\">https://news.ycombinator.com/item?id=49435546</a></p>\n<p>Points: 1</p>\n<p># Comments: 0</p>",
+  "content_type": "text",
+  "source_platform": "hnrss",
+  "collected_at": "2026-08-25T15:12:30+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://hnrss.org/newest"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ffbb1e1e-8ec0-4e83-a8e4-5722b0f8a688",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

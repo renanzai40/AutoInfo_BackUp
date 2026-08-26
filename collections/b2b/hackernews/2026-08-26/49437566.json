@@ -1,0 +1,30 @@
+{
+  "id": "49437566",
+  "source_name": "hackernews",
+  "source_type": "hackernews",
+  "source_url": "https://news.ycombinator.com/item?id=49437566",
+  "title": "Clara (YC P26) is hiring a growth engineer to bring AI doctors to market",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "hackernews",
+  "collected_at": "2026-08-25T19:12:23.929796+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "by": "gfavvas",
+    "id": 49437566,
+    "score": 1,
+    "time": 1787678932,
+    "title": "Clara (YC P26) is hiring a growth engineer to bring AI doctors to market",
+    "type": "job",
+    "url": "https://www.ycombinator.com/companies/clara-2/jobs/8snci6k-founding-full-stack-growth-engineer"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8376ce71-ecc8-4e8d-b6c4-3ff6cf4f2356",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

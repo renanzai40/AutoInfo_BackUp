@@ -1,0 +1,24 @@
+{
+  "id": "abce43f6a7d99e49",
+  "source_name": "npr-news",
+  "source_type": "rss",
+  "source_url": "https://www.npr.org/2026/08/25/g-s1-140004/up-first-newsletter-iran-economic-war-scotus-mail-in-voting-dhs-privacy",
+  "title": "Trump calls leaders to isolate Iran. And, SCOTUS backs Trump for now on mail-in voting",
+  "content": "President Trump is calling on world leaders to join his economic war against Iran. And, the Supreme Court is backing the president for now on his order to restrict mail-in voting.",
+  "content_type": "text",
+  "source_platform": "npr-news",
+  "collected_at": "2026-08-25T07:09:01-04:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.npr.org/1001/rss.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "39ada18e-0bb1-450e-be55-7be98fce917a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

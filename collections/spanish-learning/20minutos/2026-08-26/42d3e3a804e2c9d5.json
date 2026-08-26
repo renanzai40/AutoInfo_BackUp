@@ -1,0 +1,24 @@
+{
+  "id": "42d3e3a804e2c9d5",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/television/una-tortuga-muerde-gluteo-una-modelo-espanola-zanzibar-habia-un-alga-detras-se-confundio_7029192_0.html",
+  "title": "Una tortuga muerde el glúteo a una modelo española: \"Había un alga detrás y se confundió\"",
+  "content": "La joven ha explicado que se encontraba realizando una excursión típica de Zanzíbar cuando el animal le mordió.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T14:37:40+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "62482f84-d150-41a1-ae34-820c96ee8939",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

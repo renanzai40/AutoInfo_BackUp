@@ -1,0 +1,24 @@
+{
+  "id": "dbe40ce4f8193265",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/camara-de-cascais-garante-que-atlantida-cine-continuara-a-ser-um-cinema-mas-admite-que-modelo-de-funcionamento-ainda-nao-esta-fechado/",
+  "title": "Atlântida Cine mantém-se cinema, diz Câmara de Cascais",
+  "content": "O Atlântida Cine não vai ser transformado em auditório multiusos, garante a Câmara de Cascais",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T18:03:17+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "288b39aa-70cc-4ecb-b763-cf7631fb08cf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

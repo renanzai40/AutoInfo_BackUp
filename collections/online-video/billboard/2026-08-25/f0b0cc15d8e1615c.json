@@ -1,0 +1,24 @@
+{
+  "id": "f0b0cc15d8e1615c",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/pro/aeg-presents-reveals-4000-capacity-austin-venue/",
+  "title": "AEG Presents Reveals New 4,000-Capacity Austin Venue",
+  "content": "United Heritage Hall is set to open in spring 2027.",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T15:00:00+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4c924a63-d506-448b-bd77-87d1b8d1941c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

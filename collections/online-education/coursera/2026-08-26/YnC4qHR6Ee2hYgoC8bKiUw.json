@@ -1,0 +1,27 @@
+{
+  "id": "YnC4qHR6Ee2hYgoC8bKiUw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Machine Learning in the Enterprise - Français",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "YnC4qHR6Ee2hYgoC8bKiUw",
+    "slug": "machine-learning-in-enterprise-fr",
+    "name": "Machine Learning in the Enterprise - Français"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bb2e46e1-36d1-4bd1-b386-895baaa7ba03",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

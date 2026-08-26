@@ -1,0 +1,24 @@
+{
+  "id": "ebd3e393b4e5a0a6",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/deals/sundpey-166-piece-tool-set-with-drill-amazon-sale",
+  "title": "Amazon's $40 166-piece tool set is a DIYer's dream that can fix practically anything",
+  "content": "It includes a rechargeable cordless drill.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T16:15:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ebb32ba9-cde4-4346-8bda-adfb10c2fce9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

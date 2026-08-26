@@ -1,0 +1,48 @@
+{
+  "id": 79998111,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/79998111/fix-the-aspect-ratio-of-the-components-of-a-jtextpane",
+  "title": "Fix the aspect ratio of the components of a JTextPane",
+  "content": "Fix the aspect ratio of the components of a JTextPane",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-25T16:04:55.317906+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "java",
+      "swing",
+      "jtextpane"
+    ],
+    "owner": {
+      "account_id": 27834272,
+      "reputation": 711,
+      "user_id": 21252090,
+      "user_type": "registered",
+      "profile_image": "https://lh3.googleusercontent.com/a/AEdFTp4RrNwyeQcFsuwo_zJQJDKohzkcuE8ISxaBzKXi=k-s256",
+      "display_name": "Grinding For Reputation",
+      "link": "https://stackoverflow.com/users/21252090/grinding-for-reputation"
+    },
+    "is_answered": false,
+    "view_count": 36,
+    "answer_count": 0,
+    "score": 0,
+    "last_activity_date": 1787673873,
+    "creation_date": 1787664242,
+    "last_edit_date": 1787673873,
+    "question_id": 79998111,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/79998111/fix-the-aspect-ratio-of-the-components-of-a-jtextpane",
+    "title": "Fix the aspect ratio of the components of a JTextPane"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c554927c-b3d9-4c7f-8905-4187c50a6e47",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "459ee14f9364f63f",
+  "source_name": "pitchfork",
+  "source_type": "rss",
+  "source_url": "https://pitchfork.com/story/shudder-to-think-announce-who-sent-you-ep/",
+  "title": "Shudder to Think Announce Who Sent You EP",
+  "content": "Listen to the title track",
+  "content_type": "text",
+  "source_platform": "pitchfork",
+  "collected_at": "2026-08-25T14:02:55+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://pitchfork.com/feed/feed-news/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a43efbf8-726c-496e-beb3-f6c0ff70b26f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

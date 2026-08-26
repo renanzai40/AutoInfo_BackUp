@@ -1,0 +1,24 @@
+{
+  "id": "8002bdef2c9e13ec",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/sport/28044421",
+  "title": "Шнайдер и Рууд сыграют с Андреевой и Рублевым в 1/4 финала микста на US Open",
+  "content": "В первом круге Диана Шнайдер и Каспер Рууд обыграли Джессику Пегулу и Тейлора Фритца",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T23:46:27+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "59e8cedd-f1dd-4c3d-bdaa-a66f948805b6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

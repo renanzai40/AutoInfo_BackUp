@@ -1,0 +1,24 @@
+{
+  "id": "8e4c88a4afb29a0b",
+  "source_name": "techcrunch",
+  "source_type": "rss",
+  "source_url": "https://techcrunch.com/2026/08/25/that-fake-grand-theft-auto-vi-demo-is-actually-just-malware/",
+  "title": "That fake Grand Theft Auto VI demo is actually just malware",
+  "content": "Grand Theft Auto fans, eager for news about one of the most anticipated video games of all time, appear especially vulnerable to this new cyberattack.",
+  "content_type": "text",
+  "source_platform": "techcrunch",
+  "collected_at": "2026-08-25T15:48:38+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://techcrunch.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "246dae6a-7680-4467-8b25-49a6dbd0fa2d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

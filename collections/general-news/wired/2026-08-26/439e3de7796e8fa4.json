@@ -1,0 +1,24 @@
+{
+  "id": "439e3de7796e8fa4",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/metas-big-reckoning-is-here/",
+  "title": "Meta’s Big Reckoning Is Here",
+  "content": "Meta is in court again over child safety, and this time it’s a landmark case that could force significant changes to core features of Facebook and Instagram.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-21T15:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8253a0a1-4ed2-4b91-b59f-fa6d9dcbc5d1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

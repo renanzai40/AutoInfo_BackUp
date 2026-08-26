@@ -1,0 +1,24 @@
+{
+  "id": "87abdbacf8d59c15",
+  "source_name": "hnrss",
+  "source_type": "rss",
+  "source_url": "https://pgdog.dev/blog/pgdog-vs-rds-proxy",
+  "title": "PgDog vs. RDS Proxy",
+  "content": "<p>Article URL: <a href=\"https://pgdog.dev/blog/pgdog-vs-rds-proxy\">https://pgdog.dev/blog/pgdog-vs-rds-proxy</a></p>\n<p>Comments URL: <a href=\"https://news.ycombinator.com/item?id=49436234\">https://news.ycombinator.com/item?id=49436234</a></p>\n<p>Points: 1</p>\n<p># Comments: 0</p>",
+  "content_type": "text",
+  "source_platform": "hnrss",
+  "collected_at": "2026-08-25T15:56:04+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://hnrss.org/newest"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bd6d76aa-9e01-4523-b51a-da3332012c03",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

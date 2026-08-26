@@ -1,0 +1,24 @@
+{
+  "id": "5725dad9e370a802",
+  "source_name": "b2b-news-network",
+  "source_type": "rss",
+  "source_url": "https://www.b2bnn.com/2026/08/the-slow-color-shift-homeowners-overlook/",
+  "title": "The Slow Color Shift Homeowners Overlook",
+  "content": "Homeowners investing in resin-based countertops, floors, and accent surfaces often expect a permanent, glass-like finish. Over time, though, many notice a subtle shift: a once-clear coating develops a faint amber or yellow tone. This change surprises people who assume any discoloration signals a flaw in installation or materials, when it reflects a well-documented characteristic of [&#8230;]",
+  "content_type": "text",
+  "source_platform": "b2b-news-network",
+  "collected_at": "2026-08-24T18:53:53+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://b2bnn.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "21a25024-fd5f-42cc-8bf8-879ecb6703e5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

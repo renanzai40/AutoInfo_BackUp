@@ -1,0 +1,24 @@
+{
+  "id": "59d0da37b809329e",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/spacex-vai-construir-base-espacial-nos-eua-no-valor-de-86-mil-milhoes-de-euros/",
+  "title": "SpaceX constrói base espacial de 86 mil milhões no Louisiana",
+  "content": "A base espacial deverá ter um custo de, pelo menos, 100.000 milhões de dólares",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T19:44:17+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2b7dfe07-44ff-47aa-a612-4f3b3125c49c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

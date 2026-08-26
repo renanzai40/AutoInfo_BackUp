@@ -1,0 +1,24 @@
+{
+  "id": "100314d44f5f43a9",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/25/cash-is-no-longer-king-in-home-sales.html",
+  "title": "Cash is no longer king in home sales",
+  "content": "Cash buyers are a diminishing share of the overall housing market, as more supply and weaker prices give all buyers more purchasing power.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-25T16:38:40+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "52abee06-69c2-4eef-bae6-8c05d94b4cc5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

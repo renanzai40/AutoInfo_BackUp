@@ -1,0 +1,24 @@
+{
+  "id": "7a6f6e0babcfe731",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/moyen-orient/20260825-moyen-orient-en-direct-p%C3%A9trolier-touch%C3%A9-oman-iran-%C3%A9tats-unis-trump-isra%C3%ABl",
+  "title": "🔴 En direct : Donald Trump annonce que le détroit d'Ormuz a été déminé",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T15:01:11+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e075390d-dea0-4e91-9fe9-e0c372be6206",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

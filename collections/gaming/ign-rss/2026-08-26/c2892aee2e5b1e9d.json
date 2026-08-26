@@ -1,0 +1,24 @@
+{
+  "id": "c2892aee2e5b1e9d",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/zach-creggers-resident-evil-movie-includes-first-person-sequences-and-yes-umbrella-is-involved",
+  "title": "Zach Cregger's Resident Evil Movie Includes First-Person Sequences — and Yes, Umbrella Is Involved",
+  "content": "Zach Cregger's Resident Evil movie will pay homage to the series' first-person gameplay, newly-released footage has revealed.",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T09:52:29+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0fddc2b7-8f62-4ae0-b493-64dda4e498a3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

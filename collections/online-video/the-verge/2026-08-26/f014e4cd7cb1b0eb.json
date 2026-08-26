@@ -1,0 +1,24 @@
+{
+  "id": "f014e4cd7cb1b0eb",
+  "source_name": "the-verge",
+  "source_type": "rss",
+  "source_url": "https://www.theverge.com/tech/984190/apple-mac-mini-m6-m5-pro-price-specs",
+  "title": "Apple’s new Mac Mini has fresh M6 and M5 Pro chip offerings — and higher prices",
+  "content": "Apple is announcing a new generation of the Mac Mini, once again offering two models: one with a new M6 chip and a higher-end model with the M5 Pro found in this year's MacBook Pro. The new Minis have the same tiny design and footprint as the 2024 M4 / M4 Pro models, but with [&#8230;]",
+  "content_type": "text",
+  "source_platform": "the-verge",
+  "collected_at": "2026-08-25T09:00:00-04:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.theverge.com/rss/index.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "01578bb2-bf8f-4122-887c-1883e12aa199",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

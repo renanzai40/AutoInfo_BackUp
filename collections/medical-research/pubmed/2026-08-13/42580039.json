@@ -1,0 +1,103 @@
+{
+  "id": "42580039",
+  "source_name": "pubmed",
+  "source_type": "api",
+  "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42580039&retmode=xml",
+  "title": "Faster is not better for planned oocyte cryopreservation: intercycle interval and mature oocyte yield.",
+  "content": "RESEARCH QUESTION: Does the time elapsed between planned oocyte cryopreservation cycles affect oocyte yield at the second retrieval?\nDESIGN: This retrospective cohort study included 2412 patients undergoing at least two oocyte retrievals within 180 days for elective oocyte cryopreservation between 2010 and 2022. The primary outcome was mature oocyte yield in the second cycle. Secondary outcomes included changes in total oocyte yield, stimulation days, and gonadotrophin dose (IU) required in the second cycle, and frequency of cancellation of the second cycle.\nRESULTS: Patients were categorized by time elapsed between stimulation cycles: immediate second cycle (≤28 days, n = 399), standard timing (29-90 days, n = 1448), or delayed second cycle (91-180 days, n = 565). After adjusting for age, mature oocyte yield at first stimulation, protocol, and trigger medication, mature oocyte yield at the second retrieval was 9% lower for the immediate group (rate ratio 0.91, 95% CI 0.86-0.96) and 7% lower for the delayed group (rate ratio 0.93, 95% CI 0.89-0.98) compared with standard timing. These differences did not meet the prespecified criteria for inferiority, defined as a 20% decrease in oocyte yield. The number of days of stimulation did not differ by interval group. Total gonadotrophin dose was significantly higher for patients who underwent their second cycle immediately compared with those who underwent their second cycle with standard timing (mean difference 187 IU, 95% CI 35-339).\nCONCLUSIONS: Compared with waiting 1-3 months before the second stimulation for planned oocyte cryopreservation, shorter or longer intervals (up to 180 days) are non-inferior, although associated with a small decrease in oocyte yield. The clinical relevance of these findings may vary depending on patient scenario.",
+  "content_type": "text",
+  "source_platform": "pubmed",
+  "collected_at": "2026 Jul 16",
+  "language": "",
+  "domain": "medical-research",
+  "topic_tags": [
+    "Egg freezing",
+    "Fertility preservation",
+    "Oocyte cryopreservation"
+  ],
+  "quality_tier": 1,
+  "raw_data": {
+    "pmid": "42580039",
+    "pmc_id": "",
+    "authors": [
+      {
+        "lastname": "Clain",
+        "firstname": "Elizabeth",
+        "initials": "E"
+      },
+      {
+        "lastname": "Kaizer",
+        "firstname": "Laura K",
+        "initials": "LK"
+      },
+      {
+        "lastname": "Sammel",
+        "firstname": "Mary D",
+        "initials": "MD"
+      },
+      {
+        "lastname": "Dolitsky",
+        "firstname": "Shelley",
+        "initials": "S"
+      },
+      {
+        "lastname": "Morris",
+        "firstname": "Joshua M",
+        "initials": "JM"
+      },
+      {
+        "lastname": "Zalles",
+        "firstname": "Laura",
+        "initials": "L"
+      },
+      {
+        "lastname": "Wang",
+        "firstname": "Jerry",
+        "initials": "J"
+      },
+      {
+        "lastname": "Homer",
+        "firstname": "Michael",
+        "initials": "M"
+      },
+      {
+        "lastname": "Uhler",
+        "firstname": "Meike L",
+        "initials": "ML"
+      },
+      {
+        "lastname": "Hoyos",
+        "firstname": "Luis R",
+        "initials": "LR"
+      },
+      {
+        "lastname": "Hill",
+        "firstname": "Micah",
+        "initials": "M"
+      },
+      {
+        "lastname": "Devine",
+        "firstname": "Kate",
+        "initials": "K"
+      },
+      {
+        "lastname": "Romanski",
+        "firstname": "Phillip",
+        "initials": "P"
+      },
+      {
+        "lastname": "Polotsky",
+        "firstname": "Alex",
+        "initials": "A"
+      }
+    ],
+    "journal": "Reproductive biomedicine online",
+    "pub_date": "2026 Jul 16",
+    "doi": "10.1016/j.rbmo.2026.105871",
+    "mesh_terms": []
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "567a4b50-3406-4a61-94ee-fe0a61714945"
+}

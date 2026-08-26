@@ -1,0 +1,66 @@
+[
+  {
+    "collection_id": "col-20260815T181643-4debb52e",
+    "timestamp": "2026-08-15T18:19:17.549375+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.theatlantic.com/feed/all/: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.theatlantic.com/feed/all/: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30113.0
+  },
+  {
+    "collection_id": "col-20260815T183444-2255fb58",
+    "timestamp": "2026-08-15T18:35:15.489430+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.theatlantic.com/feed/all/: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.theatlantic.com/feed/all/: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30611.0
+  },
+  {
+    "collection_id": "col-20260825T153025-acb4a6c3",
+    "timestamp": "2026-08-25T15:33:00.213949+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.theatlantic.com/feed/all/: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.theatlantic.com/feed/all/: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30114.0
+  },
+  {
+    "collection_id": "col-20260825T154628-1c0c3b07",
+    "timestamp": "2026-08-25T15:49:01.635136+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.theatlantic.com/feed/all/: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.theatlantic.com/feed/all/: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30076.0
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "collection_id": "col-20260815T181608-874eb172",
+    "timestamp": "2026-08-15T18:16:43.681096+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://news.google.com/rss/search?q=site:yystv.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://news.google.com/rss/search?q=site:yystv.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30056.0
+  },
+  {
+    "collection_id": "col-20260815T183311-9ac5f4f0",
+    "timestamp": "2026-08-15T18:33:41.738533+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://news.google.com/rss/search?q=site:yystv.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://news.google.com/rss/search?q=site:yystv.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30562.0
+  },
+  {
+    "collection_id": "col-20260825T151345-2b4be2c9",
+    "timestamp": "2026-08-25T15:14:23.104135+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://news.google.com/rss/search?q=site:yystv.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://news.google.com/rss/search?q=site:yystv.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30045.0
+  },
+  {
+    "collection_id": "col-20260825T153504-30ca5f42",
+    "timestamp": "2026-08-25T15:35:40.259738+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://news.google.com/rss/search?q=site:yystv.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://news.google.com/rss/search?q=site:yystv.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30019.0
+  },
+  {
+    "collection_id": "col-20260825T154134-094ea8eb",
+    "timestamp": "2026-08-25T15:42:10.177865+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://news.google.com/rss/search?q=site:yystv.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://news.google.com/rss/search?q=site:yystv.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30043.0
+  }
+]

@@ -1,0 +1,33 @@
+{
+  "id": 9792175,
+  "source_name": "zhihu-daily",
+  "source_type": "api",
+  "source_url": "https://daily.zhihu.com/story/9792175",
+  "title": "瞎扯 · 如何正确地吐槽",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "zhihu-daily",
+  "collected_at": "2026-08-25T23:05:40.148149+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "image_hue": "0x66573a",
+    "title": "瞎扯 · 如何正确地吐槽",
+    "url": "https://daily.zhihu.com/story/9792175",
+    "hint": "VOL.3975",
+    "ga_prefix": "082606",
+    "images": [
+      "https://picx.zhimg.com/v2-1f8590dc22328f029e3c2eeb73f7d0c9.jpg?source=8673f162"
+    ],
+    "type": 0,
+    "id": 9792175
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b0b11d08-9783-4865-b2da-dfa5a9beefa2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

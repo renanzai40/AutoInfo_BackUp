@@ -1,0 +1,24 @@
+{
+  "id": "01d5762f79d71330",
+  "source_name": "shopify-news",
+  "source_type": "rss",
+  "source_url": "https://shopify.com/news/shopify-merchants-drive-record-high-9-3-billion-in-black-friday-cyber-monday-sales",
+  "title": "Shopify merchants drive record-high $9.3 billion in Black Friday-Cyber Monday sales",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "shopify-news",
+  "collected_at": "2023-11-28T14:02:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.shopify.com/news/feed"
+  },
+  "version": 2,
+  "previous_version": 1,
+  "supersedes": "retail-general-shopify-merchants-drive-record-high-9-3-billion-in-black-friday-cyber-monday-sales",
+  "trace_id": "a41040ee-56c0-4b5c-81f4-5e21208b12cf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

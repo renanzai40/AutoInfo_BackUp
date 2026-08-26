@@ -1,0 +1,24 @@
+{
+  "id": "8cc3a22d0d731cf9",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/tv/tv-news/dan-stevens-robocop-prime-video-1236680755/",
+  "title": "Dan Stevens Cast as RoboCop in Prime Video’s Reboot",
+  "content": "The actor has will take the lead in Amazon's update of the sci-fi series.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T16:22:15+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c49bb260-e9e4-43ed-94a4-5aa5e1152c21",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

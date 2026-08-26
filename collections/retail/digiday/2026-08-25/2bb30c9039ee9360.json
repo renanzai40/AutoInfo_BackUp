@@ -1,0 +1,24 @@
+{
+  "id": "2bb30c9039ee9360",
+  "source_name": "digiday",
+  "source_type": "rss",
+  "source_url": "https://digiday.com/media/walmart-finally-starts-supporting-apple-pay-and-google-pay/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss",
+  "title": "Walmart finally starts supporting Apple Pay and Google Pay",
+  "content": "Walmart will begin to support contactless payment methods at select Walmart stores and Sam’s Club locations",
+  "content_type": "text",
+  "source_platform": "digiday",
+  "collected_at": "2026-08-25T04:01:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://digiday.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "34e4755f-07ba-4f04-a0f5-888f8024138f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,27 @@
+{
+  "id": "9oudjmM0EfGIcg461-x1NQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Stress Management for Employees and Startup Founders",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "9oudjmM0EfGIcg461-x1NQ",
+    "slug": "stress-management-for-employees-and-startup-founders",
+    "name": "Stress Management for Employees and Startup Founders"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3113bc41-2e1e-46b1-97e3-3e30c033d3c7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

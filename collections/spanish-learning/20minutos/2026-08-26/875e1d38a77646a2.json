@@ -1,0 +1,24 @@
+{
+  "id": "875e1d38a77646a2",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/television/los-detalles-accidente-carmen-borrego-pasara-diez-dias-con-escayola-necesitara-varias-semanas-recuperacion_7029089_0.html",
+  "title": "Los detalles del accidente de Carmen Borrego: deberá llevar escayola y necesitará semanas de recuperación",
+  "content": "La colaboradora tiene una lesión en la mano izquierda por la que deberá guardar reposo durante varias semanas.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T11:52:40+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c90e01f5-2cde-48b5-817e-dad3fbab8656",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

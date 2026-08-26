@@ -1,0 +1,24 @@
+{
+  "id": "713216084c71d590",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/international/suede-stockholm-veut-exproprier-la-propriete-d-un-homme-d-affaires-lie-a-poutine-pres-d-une-base-navale-20260825",
+  "title": "Suède : Stockholm veut exproprier la propriété d'un homme d'affaires lié à Poutine près d'une base navale",
+  "content": "Cette propriété se trouve à l’un des accès de la base navale de Muskö, située à une soixantaine de kilomètres au sud de Stockholm, a indiqué l’armée dans un communiqué.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T15:28:51+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "901b05bd-f148-4110-a6fc-015f9c5d24b7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

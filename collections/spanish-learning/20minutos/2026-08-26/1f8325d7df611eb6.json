@@ -1,0 +1,24 @@
+{
+  "id": "1f8325d7df611eb6",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/animaleros/otros-animales/guia-salud-sobre-los-mitos-realidades-alimentacion-las-serpientes-cautividad_7020248_0.html",
+  "title": "Mitos y realidades en la alimentación de las serpientes en cautividad",
+  "content": "Ofrecer leche o carne picada a una serpiente puede resultarle fatal; estos reptiles carecen de la capacidad de digerir la lactosa.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-23T08:21:25+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1730669b-87a0-44a5-9632-039228ce0c36",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

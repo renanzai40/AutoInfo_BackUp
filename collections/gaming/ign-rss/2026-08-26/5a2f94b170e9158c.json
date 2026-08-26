@@ -1,0 +1,24 @@
+{
+  "id": "5a2f94b170e9158c",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/pokemon-veteran-james-turner-rejoins-franchise-following-work-on-the-plucky-squire",
+  "title": "Pokémon Veteran James Turner Rejoins Franchise Following Work on The Plucky Squire",
+  "content": "Pokémon development veteran James Turner is returning to the world of pocket monsters, after previously leaving to make The Plucky Squire.",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T09:03:00+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "61717c08-0316-4873-b1cf-c1354683e969",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,8 @@
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions to group a set of knowledge base entries into 3-5 thematic categories based on their content. The entries cover diverse topics such as energy logistics
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions to group a set of knowledge base entries into 3-5 unique themes with short semantic titles, and lists entries covering news topics like international cr
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions for grouping news entries into thematic categories
+LLM returned only 1 theme group(s), retrying with stricter prompt
+LLM groups matched only 0/8 entries, falling back to deterministic grouping

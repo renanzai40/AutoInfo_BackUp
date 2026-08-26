@@ -1,0 +1,24 @@
+{
+  "id": "f87b29e2834c5cb9",
+  "source_name": "variety",
+  "source_type": "rss",
+  "source_url": "https://variety.com/2026/tv/news/issa-rae-hbo-pilot-male-friendship-boxing-las-vegas-1236842572/",
+  "title": "Issa Rae Sets HBO Pilot About Male Friendship and Pro Boxers in Las Vegas",
+  "content": "10 years after Issa Rae&#8217;s seminal comedy series &#8220;Insecure&#8221; premiered on HBO, the network has ordered a new comedy pilot written and executive produced by Rae. Currently known as &#8220;Untitled Male Friendship Show,&#8221; the project is set in the world of professional boxing in Las Vegas. More to come&#8230;",
+  "content_type": "text",
+  "source_platform": "variety",
+  "collected_at": "2026-08-25T15:41:31+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://variety.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "54f3227d-e264-4e9b-89b3-5a901cb8dd6c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

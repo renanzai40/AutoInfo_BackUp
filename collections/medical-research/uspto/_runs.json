@@ -1,0 +1,783 @@
+[
+  {
+    "collection_id": "col-20260808T112812-e92e0a1f",
+    "timestamp": "2026-08-08T11:28:12.540365+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260808T115826-3bba0303",
+    "timestamp": "2026-08-08T11:58:27.055137+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260808T122326-06d26a70",
+    "timestamp": "2026-08-08T12:23:26.847786+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T165417-b8ae634e",
+    "timestamp": "2026-08-10T16:54:17.952265+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T180412-ce1780b4",
+    "timestamp": "2026-08-10T18:04:12.471381+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T184917-f05868a0",
+    "timestamp": "2026-08-10T18:49:17.544808+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T190650-ed25437d",
+    "timestamp": "2026-08-10T19:06:51.074621+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T193331-ee09e2e1",
+    "timestamp": "2026-08-10T19:33:32.345475+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T195325-09c76797",
+    "timestamp": "2026-08-10T19:53:25.810399+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T203311-78682374",
+    "timestamp": "2026-08-10T20:33:12.344614+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T231710-592d974b",
+    "timestamp": "2026-08-10T23:17:11.313724+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T233614-ec0e6f73",
+    "timestamp": "2026-08-10T23:36:15.410398+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260811T063242-d51b1eb6",
+    "timestamp": "2026-08-11T06:32:42.905965+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260811T175701-5cf0b658",
+    "timestamp": "2026-08-11T17:57:02.517072+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260811T182436-86ccfa18",
+    "timestamp": "2026-08-11T18:24:37.364928+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T050136-6bbe0c4b",
+    "timestamp": "2026-08-12T05:01:36.669687+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T053723-eeb8a9e0",
+    "timestamp": "2026-08-12T05:37:24.636058+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T062745-7b1e8ecd",
+    "timestamp": "2026-08-12T06:27:45.645601+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T064318-fbae46bc",
+    "timestamp": "2026-08-12T06:43:18.830703+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T065511-355074f3",
+    "timestamp": "2026-08-12T06:55:11.724457+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T074002-038c14c8",
+    "timestamp": "2026-08-12T07:40:02.650930+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T074702-9f372b61",
+    "timestamp": "2026-08-12T07:47:02.774650+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T075400-8a23a271",
+    "timestamp": "2026-08-12T07:54:01.318965+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T113700-3e90d2d6",
+    "timestamp": "2026-08-12T11:37:01.541873+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T121031-b9d09ee7",
+    "timestamp": "2026-08-12T12:10:32.217765+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260813T051918-dee3cdbe",
+    "timestamp": "2026-08-13T05:19:19.538866+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260813T052535-3124e74d",
+    "timestamp": "2026-08-13T05:25:36.945703+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260813T070150-4cf59dd5",
+    "timestamp": "2026-08-13T07:01:51.148738+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 4.0
+  },
+  {
+    "collection_id": "col-20260813T073208-d082f670",
+    "timestamp": "2026-08-13T07:32:09.060999+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260813T101353-9a304d0a",
+    "timestamp": "2026-08-13T10:13:53.985479+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260813T122406-7943df85",
+    "timestamp": "2026-08-13T12:24:07.037513+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260813T132530-54757652",
+    "timestamp": "2026-08-13T13:25:31.493248+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260813T133641-eb3b3057",
+    "timestamp": "2026-08-13T13:36:42.889327+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 4.0
+  },
+  {
+    "collection_id": "col-20260813T192536-14d3f8a9",
+    "timestamp": "2026-08-13T19:25:37.655434+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260813T194045-e16d45cc",
+    "timestamp": "2026-08-13T19:40:46.763049+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260815T183231-67dbde54",
+    "timestamp": "2026-08-15T18:32:33.141823+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov) — no keyless patent search API available",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov) — no keyless patent search API available"
+      }
+    ],
+    "duration_ms": 1084.0
+  },
+  {
+    "collection_id": "col-20260815T185221-742e2b05",
+    "timestamp": "2026-08-15T18:52:22.091820+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260815T185730-01f8bcb3",
+    "timestamp": "2026-08-15T18:57:31.385052+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260815T190126-54ea4210",
+    "timestamp": "2026-08-15T19:01:27.646663+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260815T190947-1ef0e50a",
+    "timestamp": "2026-08-15T19:09:48.000144+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260815T193311-adcbb52f",
+    "timestamp": "2026-08-15T19:33:11.895208+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260817T035150-c627d65c",
+    "timestamp": "2026-08-17T03:51:51.328473+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260817T162127-7c4b2cf0",
+    "timestamp": "2026-08-17T16:21:28.587633+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260818T054825-e0ccc7fe",
+    "timestamp": "2026-08-18T05:48:26.968572+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260818T063541-d6022cb5",
+    "timestamp": "2026-08-18T06:35:50.599070+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov) — no keyless patent search API available",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov) — no keyless patent search API available"
+      }
+    ],
+    "duration_ms": 631.0
+  },
+  {
+    "collection_id": "col-20260820T060225-6f3d6bf6",
+    "timestamp": "2026-08-20T06:02:26.639336+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260824T051530-cf246352",
+    "timestamp": "2026-08-24T05:15:31.723758+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260824T052327-453908e4",
+    "timestamp": "2026-08-24T05:23:28.038704+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260824T055151-6843d589",
+    "timestamp": "2026-08-24T05:51:52.987295+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)",
+        "source_failed": true,
+        "reason": "PatentsView API retired by USPTO (HTTP 301; migrated to data.uspto.gov)"
+      }
+    ],
+    "duration_ms": 3.0
+  }
+]

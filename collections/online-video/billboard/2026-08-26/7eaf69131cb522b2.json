@@ -1,0 +1,24 @@
+{
+  "id": "7eaf69131cb522b2",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/media/podcasts/madonna-2026-mtv-vma-lead-nominee-pop-shop-podcast-1236323318/",
+  "title": "Madonna Comes Full-Circle as the Leading Nominee at 2026 MTV VMAs",
+  "content": "On the new <em>Billboard Pop Shop Podcast</em>, Katie &#38; Keith talk about Madonna's deep history with the VMAs leading into the Sept. 27 show.",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T17:56:16+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3249df4c-4869-4c29-ad3c-5dbdd937f445",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

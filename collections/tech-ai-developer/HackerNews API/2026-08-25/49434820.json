@@ -1,0 +1,39 @@
+{
+  "id": "49434820",
+  "source_name": "HackerNews API",
+  "source_type": "hackernews",
+  "source_url": "https://news.ycombinator.com/item?id=49434820",
+  "title": "Bomb Fishing Is Wreaking Havoc on Indonesia's Coral Reefs",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "hackernews",
+  "collected_at": "2026-08-25T15:18:51.203302+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "by": "speckx",
+    "descendants": 33,
+    "id": 49434820,
+    "kids": [
+      49435084,
+      49435498,
+      49435069,
+      49435016,
+      49434907,
+      49435247
+    ],
+    "score": 48,
+    "time": 1787668172,
+    "title": "Bomb Fishing Is Wreaking Havoc on Indonesia's Coral Reefs",
+    "type": "story",
+    "url": "https://e360.yale.edu/digest/bomb-fishing-coral-reefs"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "57a08abe-edbb-47c9-86d2-c160b07680e2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

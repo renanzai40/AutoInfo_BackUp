@@ -1,0 +1,24 @@
+{
+  "id": "8a0e8e591159aae0",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/elections/presidentielles/presidentielle-2027-il-n-y-a-plus-de-favori-dans-le-bloc-central-assure-attal-apres-la-chute-de-philippe-dans-un-sondage-20260825",
+  "title": "Présidentielle 2027 : «Il n'y a plus de favori» dans le bloc central, assure Attal après la chute de Philippe dans un sondage",
+  "content": "Après la publication de l’étude Harris Interactive/Toluna, l’entourage de Gabriel Attal avait déjà estimé lundi qu’Édouard Philippe «est en train de perdre son pari».",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T22:14:41+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "66a8637c-7ce7-4c03-a11a-833aa6997212",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

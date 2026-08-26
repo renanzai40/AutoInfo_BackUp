@@ -1,0 +1,27 @@
+{
+  "id": "pkGGJ4SKEe-L8RKezlgehQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Develop Code with Gemini in BigQuery",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "pkGGJ4SKEe-L8RKezlgehQ",
+    "slug": "googlecloud-develop-code-with-gemini-in-bigquery-l6l2o",
+    "name": "Develop Code with Gemini in BigQuery"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "17ec3d90-5d3d-4330-9b06-f4bcabf1c0e9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

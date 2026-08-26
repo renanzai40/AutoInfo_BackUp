@@ -1,0 +1,24 @@
+{
+  "id": "76eb477476dc2b11",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/mezhdunarodnaya-panorama/28044011",
+  "title": "Иран заявил о согласовании с Оманом временного маршрута через Ормузский пролив",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T18:50:42+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c5cf8606-404b-4e8b-90c4-847ea836b1c4",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

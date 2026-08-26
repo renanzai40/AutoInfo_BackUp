@@ -1,0 +1,55 @@
+---
+title: US to raise tariffs on Canadian cars, trucks, auto parts and steel
+domain: general-news
+tier: 01-Raw
+entry_id: general-news-general-us-to-raise-tariffs-on-canadian-cars-trucks-auto-parts-and-steel
+source_url: https://news.cgtn.com/news/2026-08-24/news-1PSn7o9Xico/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World
+source_type: rss
+source_platform: cgtn-world
+collected_at: '2026-08-24T13:39:17+00:00'
+summary: The United States plans to increase tariffs on Canadian imports, specifically targeting cars, trucks, auto parts,
+  and steel. This trade policy change could affect economic relations and manufacturing industries. The article briefly outlines
+  this development without further details.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: e3e1b808-de72-4dbe-963a-c353d1c56c82
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+US to raise tariffs on Canadian cars, trucks, auto parts and steel
+
+## Summary
+The United States plans to increase tariffs on Canadian imports, specifically targeting cars, trucks, auto parts, and steel. This trade policy change could affect economic relations and manufacturing industries. The article briefly outlines this development without further details.
+
+## Key Points
+- US is raising tariffs on key Canadian exports.
+- Affected sectors include automotive (cars, trucks, auto parts) and steel.
+- This may lead to increased costs for businesses and consumers in both countries.
+- No specific information on tariff rates or implementation timelines is provided.
+- The move could influence US-Canada trade negotiations and agreements.
+
+
+## Entities
+- **US** (org, relevance=)
+- **Canada** (org, relevance=)
+- **cars** (technology, relevance=)
+- **trucks** (technology, relevance=)
+- **auto parts** (concept, relevance=)
+- **steel** (concept, relevance=)

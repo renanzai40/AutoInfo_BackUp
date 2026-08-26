@@ -1,0 +1,24 @@
+{
+  "id": "2b663fd7436e4a49",
+  "source_name": "crunchbase-news",
+  "source_type": "rss",
+  "source_url": "https://news.crunchbase.com/startups/bootstrapped-self-funded-business-ai-relevancy-desilva-lateral/",
+  "title": "Why Bootstrapped Businesses Are More Relevant Than Ever",
+  "content": "The traditional VC model funds a risky search for product-market fit, argues guest author Richard de Silva of Lateral Investment Management, while bootstrapped founders typically start with known customer problems, prioritize profitability and grow steadily from revenue rather than outside capital.",
+  "content_type": "text",
+  "source_platform": "crunchbase-news",
+  "collected_at": "2026-08-25T11:00:13+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://news.crunchbase.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3e381861-87c2-44fe-9f72-dd74ee6001c7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

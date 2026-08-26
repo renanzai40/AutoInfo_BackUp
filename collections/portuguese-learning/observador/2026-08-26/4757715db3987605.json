@@ -1,0 +1,24 @@
+{
+  "id": "4757715db3987605",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/programas/justica-cega/os-servicos-secretos-cubanos-tentaram-recrutar-me-em-76/",
+  "title": "\"Os serviços secretos cubanos tentaram recrutar-me em 76\"",
+  "content": "Antes de ser advogado, Agostinho Pereira de Miranda foi inspetor da PJ, tendo investigado o caso do atentado à bomba contra a Embaixada de Cuba em 1976. 2.ª parte de uma longa conversa com Luís Rosa.",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T16:30:55+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4ce40880-07c1-453a-8cda-6cda526be7f6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,27 @@
+{
+  "id": "GusAwbvHEfCaEgr_2GQldQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Star Schemas & Track Changes",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "GusAwbvHEfCaEgr_2GQldQ",
+    "slug": "star-schemas--track-changes",
+    "name": "Star Schemas & Track Changes"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "aa3f5e34-01ad-4ec3-9b0a-a9b8bdb1e2fa",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

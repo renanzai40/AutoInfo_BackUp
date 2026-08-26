@@ -1,0 +1,27 @@
+{
+  "id": "3K3rBiYYEe6JJAruShrzEQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Introduction to Image Generation - Français",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "3K3rBiYYEe6JJAruShrzEQ",
+    "slug": "introduction-to-image-generation---franais",
+    "name": "Introduction to Image Generation - Français"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9b059372-8699-466f-8192-f39ee300e89f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

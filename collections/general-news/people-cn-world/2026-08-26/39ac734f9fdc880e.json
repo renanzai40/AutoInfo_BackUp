@@ -1,0 +1,24 @@
+{
+  "id": "39ac734f9fdc880e",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0604/c1002-40493854.html",
+  "title": "韩国当选总统李在明宣誓就职",
+  "content": "<p style=\"text-align: center;\"><img alt=\"李在明4日上午在第21届韩国总统就职宣誓仪式上宣誓就职。（图片来源：韩联社）\" height=\"467\" src=\"/NMediaFile/2025/0604/MAIN1749015730112OCF641X0JJ.jpg\" width=\"700\" /></p> <p style=\"text-align: center;\"><span>李在明4日上午在第21届韩国总统就职宣誓仪式上宣誓就职。图片来源：韩联社</span></p> <p style=\"text-indent: 2em;\">人民网首尔6月4日电 （周玉波、李美玉） 韩国当选总统李在明4日上午在国会正式宣誓就职，成为第21任韩国总统。</p> <p style=\"text-indent: 2em;\">李在明在就职演说中表示，将推行“实用外交”，追求国家利益最大化。</p> <p style=\"text-indent: 2em;\">李在明表示，将立即启动紧急经济应对小组，依靠国家财政重启经济良性循环。他说，将打造重焕活力的发展型国家，重点扶持AI、半导体等尖端产业，建设主导未来的工业强国。</p> <p style=\"text-indent: 2em;\">李在明表示，敞开与朝鲜对话与合作的通道，努力构建半岛和平机制。</p> <p style=\"text-indent: 2em;\">韩国行政安全部表示，韩国国会议长、最高法院院长、宪法法院代理院长及各党党首、国会议员、国务委员等约300人出席当天的宣誓就职仪式。</p> <p style=\"text-indent: 2em;\">据韩联社报道，李在明推进将总统办公室迁回至原总统府青瓦台的方案。但在青瓦台维修工作完毕之前，预计李在明将前往龙山总统府上班。</p> <p style=\"text-indent: 2em;\">李在明在第21届韩国总统选举中获胜，他的总统任期自当地时间6月4日6时21分正式开启。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-04T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bbc2a4d6-c18b-4cba-8c63-caee79157663",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

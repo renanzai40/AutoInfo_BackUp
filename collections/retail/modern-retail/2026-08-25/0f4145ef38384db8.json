@@ -1,0 +1,24 @@
+{
+  "id": "0f4145ef38384db8",
+  "source_name": "modern-retail",
+  "source_type": "rss",
+  "source_url": "https://www.modernretail.co/operations/brands-briefing-to-grow-sales-on-amazon-brands-are-turning-to-tiktok-shop/?utm_campaign=modernretaildis&utm_medium=rss&utm_source=general-rss",
+  "title": "Brands Briefing: To grow sales on Amazon, brands are turning to TikTok Shop",
+  "content": "While TikTok Shop is still fairly young, it's proving crucial to brands' sales across other channels, particularly Amazon.",
+  "content_type": "text",
+  "source_platform": "modern-retail",
+  "collected_at": "2026-08-25T14:00:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.modernretail.co/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "58266fbc-3c36-4479-a235-3ffc8bc35ed0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

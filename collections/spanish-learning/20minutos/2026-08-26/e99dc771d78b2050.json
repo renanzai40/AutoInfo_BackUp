@@ -1,0 +1,24 @@
+{
+  "id": "e99dc771d78b2050",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gastronomia/productos/comprar-pollo-piel-amarilla-piel-blanca-expertos-revelan-diferencian-ambas-opciones_7025743_0.html",
+  "title": "¿Comprar pollo con piel amarilla o piel blanca? Los expertos revelan en qué se diferencian ambas opciones",
+  "content": "Un conocido carnicero explica lo que hay que saber sobre este producto de alimentación tan consumido en nuestras fronteras.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-23T18:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e1e028a8-1ff7-4249-9ea0-16de24127d1e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

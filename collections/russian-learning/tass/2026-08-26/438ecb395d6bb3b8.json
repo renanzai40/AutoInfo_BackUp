@@ -1,0 +1,24 @@
+{
+  "id": "438ecb395d6bb3b8",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/proisshestviya/28044243",
+  "title": "Медики назвали число смертей от укусов ядовитых змей",
+  "content": "Около 274-513 тыс. жертв рептилий погибают из-за отравления ежегодно",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T21:21:16+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2f2be4b7-6e07-4aaa-b123-ceed624fd452",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

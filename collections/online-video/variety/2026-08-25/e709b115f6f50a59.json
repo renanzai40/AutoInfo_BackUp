@@ -1,0 +1,24 @@
+{
+  "id": "e709b115f6f50a59",
+  "source_name": "variety",
+  "source_type": "rss",
+  "source_url": "https://variety.com/2026/film/global/oscars-germany-sandra-wollner-everytime-1236842383/",
+  "title": "Oscars: Germany Selects Sandra Wollner’s ‘Everytime’ for International Feature Race",
+  "content": "Sandra Wollner’s “Everytime” has been selected as Germany’s entry for the Academy Award for best international feature film. Due to a change in the rules of the Academy of Motion Picture Arts and Sciences this spring, two major German films are already eligible for submission in the international feature film category: Visar Morina’s “Shame and [&#8230;]",
+  "content_type": "text",
+  "source_platform": "variety",
+  "collected_at": "2026-08-25T15:57:21+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://variety.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a31eaa1d-94e1-402c-8e3b-258a0bb06004",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

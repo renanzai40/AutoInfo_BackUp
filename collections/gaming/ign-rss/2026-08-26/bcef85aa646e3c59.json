@@ -1,0 +1,24 @@
+{
+  "id": "bcef85aa646e3c59",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/fans-pay-tribute-to-dolly-parton-after-country-music-legend-dies-at-80",
+  "title": "Fans Pay Tribute to Dolly Parton After Country Music Legend Dies at 80",
+  "content": "Country music icon, actress, and philanthropist Dolly Parton has died at 80 years old.",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T18:05:24+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "14e6d85f-037c-4b5f-a8fa-8eb267633953",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

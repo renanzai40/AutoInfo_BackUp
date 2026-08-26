@@ -1,0 +1,24 @@
+{
+  "id": "795a37fafb26f1d7",
+  "source_name": "MarketWatch Markets (DJ)",
+  "source_type": "rss",
+  "source_url": "https://www.marketwatch.com/story/dicks-sporting-goods-stock-is-having-its-worst-day-ever-as-sneakers-arent-selling-without-deeper-discounts-5a868358?mod=mw_rss_topstories",
+  "title": "Dick’s Sporting Goods’ epic drop hits other footwear giants, as shoppers sour on retro sneakers",
+  "content": "Shares of the sporting-goods retailer suffering a record selloff as profit and sales missed expectations and the full-year outlook was slashed.",
+  "content_type": "text",
+  "source_platform": "MarketWatch Markets (DJ)",
+  "collected_at": "2026-08-25T22:57:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.marketwatch.com/marketwatch/topstories/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ee22455e-8f79-4a84-a8f6-753ba3e6b150",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

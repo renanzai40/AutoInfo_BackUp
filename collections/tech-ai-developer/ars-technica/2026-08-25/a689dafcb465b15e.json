@@ -1,0 +1,24 @@
+{
+  "id": "a689dafcb465b15e",
+  "source_name": "ars-technica",
+  "source_type": "rss",
+  "source_url": "https://arstechnica.com/health/2026/08/rfk-jr-may-upend-how-vaccine-recommendations-are-categorized/",
+  "title": "RFK Jr. may upend how vaccine recommendations are categorized",
+  "content": "There are currently 3 categories. Without reason, RFK Jr. is considering changes.",
+  "content_type": "text",
+  "source_platform": "ars-technica",
+  "collected_at": "2026-08-24T21:04:48+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.arstechnica.com/arstechnica/index"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "848dc9d1-a859-4031-963b-e408c8f099d9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

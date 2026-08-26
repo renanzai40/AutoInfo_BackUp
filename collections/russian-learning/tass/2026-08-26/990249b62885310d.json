@@ -1,0 +1,24 @@
+{
+  "id": "990249b62885310d",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/obschestvo/28043999",
+  "title": "В Дивеево прибыл ковчег с мощами Спиридона Тримифунтского",
+  "content": "Святыня пробудет в Нижегородской епархии с 25 по 27 августа",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T18:45:12+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "db74650d-d7b0-4c25-a2e1-7a96dcd645ba",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

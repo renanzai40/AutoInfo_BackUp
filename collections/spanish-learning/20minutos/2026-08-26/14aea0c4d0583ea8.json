@@ -1,0 +1,24 @@
+{
+  "id": "14aea0c4d0583ea8",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/deportes/mordisco-pogacar-vuelta-tras-un-impresionante-ataque-50-kilometros-meta-andorra_7029301_0.html",
+  "title": "'Mordisco' de Pogacar a La Vuelta tras un impresionante ataque a casi 50 kilómetros de la meta",
+  "content": "El ciclista esloveno del UAE se hizo con el triunfo en un recorrido de montaña para aumentar su distancia al frente de la clasificación, con una ventaja de más de tres minutos.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T18:21:39+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "794a0755-ab74-47d5-b499-13cdc5cecdb7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,91 @@
+{
+  "id": "42571690",
+  "source_name": "pubmed",
+  "source_type": "api",
+  "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42571690&retmode=xml",
+  "title": "[Clinical and preprocedural factors influencing in vitro fertilization outcomes: a machine learning-based analysis].",
+  "content": "Infertility affects 15-20% of the reproductive-age population, and assisted reproductive technologies, particularly in vitro fertilization (IVF), play an increasingly important role in its management. IVF success is multifactorial and influenced by numerous clinical and biological factors. Our aim was to review the most important preprocedural and procedural factors influencing IVF outcomes, with special emphasis on predictors identified by machine learning models. A narrative literature review was conducted, focusing on studies applying machine learning approaches, including results from the Gametogenesis Research Group at the University of Szeged. Machine learning models consistently identify maternal age and embryo quality (embryo score) as the strongest predictors of IVF success, maternal age above 35 years is associated with reduced success rates, besides body mass index, anti-Müllerian hormone, follicle-stimulating hormone levels, as well as endometrial thickness play relevant roles with variable impact. Preprocedural thyroid-stimulating hormone levels within the normal range show no clear association with outcomes. Overall, the results confirm that IVF success is determined by complex interactions among multiple factors. Machine learning models enable the determination of the relative weight of these well-established and repeatedly validated factors and improve the accuracy of prediction. Machine learning represents a promising tool for predicting IVF outcomes and may support personalized treatment strategies in reproductive medicine. Orv Hetil. 2026; 167(32): 1262-1268.",
+  "content_type": "text",
+  "source_platform": "pubmed",
+  "collected_at": "2026 Aug 09",
+  "language": "",
+  "domain": "medical-research",
+  "topic_tags": [
+    "anyai életkor",
+    "body mass index",
+    "embryo score",
+    "endometrial thickness",
+    "endometriumvastagság",
+    "in vitro fertilization",
+    "in vitro fertilizáció",
+    "maternal age",
+    "testtömegindex",
+    "thyreoideastimuláló hormon",
+    "thyroid-stimulating hormone",
+    "’embryo score’"
+  ],
+  "quality_tier": 1,
+  "raw_data": {
+    "pmid": "42571690",
+    "pmc_id": "",
+    "authors": [
+      {
+        "lastname": "Nádasdi",
+        "firstname": "Bernadett",
+        "initials": "B"
+      },
+      {
+        "lastname": "Vedelek",
+        "firstname": "Viktor",
+        "initials": "V"
+      },
+      {
+        "lastname": "Bereczki",
+        "firstname": "Kristóf",
+        "initials": "K"
+      },
+      {
+        "lastname": "Zádori",
+        "firstname": "Petra Lilla",
+        "initials": "PL"
+      },
+      {
+        "lastname": "Mátyus",
+        "firstname": "Blanka",
+        "initials": "B"
+      },
+      {
+        "lastname": "Sinka",
+        "firstname": "Rita",
+        "initials": "R"
+      },
+      {
+        "lastname": "Zádori",
+        "firstname": "János",
+        "initials": "J"
+      },
+      {
+        "lastname": "Vágvölgyi",
+        "firstname": "Anna",
+        "initials": "A"
+      }
+    ],
+    "journal": "Orvosi hetilap",
+    "pub_date": "2026 Aug 09",
+    "doi": "10.1556/650.2026.33608",
+    "mesh_terms": [
+      "Humans",
+      "Female",
+      "Fertilization in Vitro",
+      "Machine Learning",
+      "Pregnancy",
+      "Adult",
+      "Predictive Learning Models",
+      "Maternal Age"
+    ]
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "52157043-60e2-4f75-9eb2-34d7ab13b300"
+}

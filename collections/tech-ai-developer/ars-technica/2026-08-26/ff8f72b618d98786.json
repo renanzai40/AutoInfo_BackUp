@@ -1,0 +1,24 @@
+{
+  "id": "ff8f72b618d98786",
+  "source_name": "ars-technica",
+  "source_type": "rss",
+  "source_url": "https://arstechnica.com/ai/2026/08/ai-is-hitting-entry-level-jobs-hardest-stanford-study-finds/",
+  "title": "AI is hitting entry-level jobs hardest, Stanford study finds",
+  "content": "Young employment in AI-impacted fields down 19% compared to more AI-resistant occupations.",
+  "content_type": "text",
+  "source_platform": "ars-technica",
+  "collected_at": "2026-08-24T21:45:53+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.arstechnica.com/arstechnica/index"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d147925e-eda4-44f6-a86c-752db35e9e3b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

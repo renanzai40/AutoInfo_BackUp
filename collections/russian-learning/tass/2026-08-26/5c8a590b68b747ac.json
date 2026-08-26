@@ -1,0 +1,24 @@
+{
+  "id": "5c8a590b68b747ac",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/obschestvo/28044317",
+  "title": "Трамп распорядился приспустить флаги в США из-за смерти Долли Партон",
+  "content": "Американский президент назвал смерть кантри-певицы настоящей утратой для миллионов людей",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T22:15:01+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d157b9e8-25aa-4309-a88e-3dd87b539319",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

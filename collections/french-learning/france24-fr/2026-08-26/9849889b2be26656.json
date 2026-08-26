@@ -1,0 +1,24 @@
+{
+  "id": "9849889b2be26656",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/afrique/20260825-ceuta-ils-mangent-les-chats-fausses-images-rumeur-persistante",
+  "title": "\"À Ceuta, ils mangent les chats\" : de fausses images et une rumeur persistante",
+  "content": "Des félins \"massacrés\" à Ceuta ? Trois semaines après l'arrivée de milliers de migrants dans l'enclave espagnole de Ceuta fin juillet, des sites et internautes espagnols affirment que des chats auraient été tués par des migrants. Mais toutes les photos de chats difffusées à ce jour sont décontextualisées ou fausses. Une association locale de préservation des chats contactée par France 24 affirme également qu'il s'agit d'une rumeur.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T16:51:17+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9691a4d7-4e00-4fa2-9977-7cb9904f292d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

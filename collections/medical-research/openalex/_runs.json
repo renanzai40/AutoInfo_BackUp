@@ -1,0 +1,16 @@
+[
+  {
+    "collection_id": "col-20260815T183222-244a4715",
+    "timestamp": "2026-08-15T18:32:27.414543+00:00",
+    "status": "success",
+    "items_found": 3,
+    "items_new": 2,
+    "items_filtered": 1,
+    "errors": [],
+    "duration_ms": 4260.0,
+    "trace_ids": [
+      "c542a4d0-dfd2-4bc2-8644-793cf325cde4",
+      "57900826-470d-4d53-bf7f-acdfd282e7ea"
+    ]
+  }
+]

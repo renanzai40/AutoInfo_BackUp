@@ -1,0 +1,24 @@
+{
+  "id": "ae3fbec16669e78e",
+  "source_name": "gematsu",
+  "source_type": "rss",
+  "source_url": "https://www.gematsu.com/2026/08/knuckle-jet-launches-september-1",
+  "title": "Knuckle Jet launches September 1",
+  "content": "<img src=\"https://www.gematsu.com/wp-content/uploads/2026/08/Knuckle-Jet-Date_08-24-26.jpg\" /> Side-scrolling action platformer Knuckle Jet will launch for PC via Steam on September 1, developer &hellip;",
+  "content_type": "text",
+  "source_platform": "gematsu",
+  "collected_at": "2026-08-24T19:36:59+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.gematsu.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ffe88714-acc7-438c-b3b6-6d56a9779df6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

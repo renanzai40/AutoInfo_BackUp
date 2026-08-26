@@ -1,0 +1,24 @@
+{
+  "id": "b9ae4a267db938fa",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/games/grand-theft-auto/i-turned-car-friction-off-in-gta-5-help/",
+  "title": "I turned car friction off in GTA 5. Help",
+  "content": "I have died 400 times in the last 20 seconds. I have accelerated Samsara's Wheel to the speed of light.",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-24T17:00:00+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "58964241-85f2-4070-8dc9-5089610b6298",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

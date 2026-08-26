@@ -1,0 +1,24 @@
+{
+  "id": "8ed90a0ad3722935",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/secteur/high-tech/jeux-video-final-fantasy-vii-revelation-et-le-retour-de-the-witcher-3-pour-l-ouverture-de-la-gamescom-2026-20260825",
+  "title": "Jeux vidéo : Final Fantasy VII Revelation et le retour de The Witcher 3 pour l'ouverture de la Gamescom 2026",
+  "content": "Plus grand salon européen du jeu vidéo, la Gamescom réunit cette année à Cologne plus de 1600 exposants et doit présenter plus de 800 jeux.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T23:45:25+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "476f8b71-b551-4ac2-b269-8db6e04f90ce",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "cee7499ec538c49a",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/politika/28044235",
+  "title": "Медведев назвал признание независимости Абхазии торжеством справедливости",
+  "content": "По словам председателя партии \"Единая Россия\", с 26 августа 2008 года \"республика добилась значимых результатов в деле упрочения своей государственности и обеспечения устойчивого социально-экономического развития страны\"",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T21:03:56+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "82d6fa13-3236-400c-b26a-f968f4e31b77",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "816d9a96f83d7993",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/cataluna/marlaska-ordena-abrir-una-investigacion-los-agentes-que-cargaron-contra-un-aficionado-barca-para-quitarle-una-estelada_7029076_0.html",
+  "title": "Marlaska ordena investigar a los agentes que cargaron contra un aficionado del Barcelona para quitarle una bandera estelada",
+  "content": "El FC Barcelona emitió un comunicado condenando los hechos y defendiendo el uso de la estelada, asegurando que es legal.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T11:32:56+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a46fbe93-48b0-497b-a758-e2d8e05a343e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

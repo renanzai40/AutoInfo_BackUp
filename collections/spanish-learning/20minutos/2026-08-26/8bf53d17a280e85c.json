@@ -1,0 +1,24 @@
+{
+  "id": "8bf53d17a280e85c",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/deportes/futbol/sorteo-champions-league-2026-2027-horario-donde-ver-equipos-clasificados-fechas-clave-esta-edicion_7029001_0.html",
+  "title": "Sorteo de la Champions: horario y dónde ver, equipos clasificados y fechas clave",
+  "content": "La UEFA realiza este jueves el sorteo de la fase de liguilla de la nueva edición de la Champions League, competición en la que este año estarán Real Madrid, FC Barcelona, Atlético de Madrid, Betis y Villarreal.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T09:06:38+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b82265fa-a9e8-4906-a6fe-a46510963fbb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

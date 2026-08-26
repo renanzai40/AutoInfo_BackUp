@@ -1,0 +1,24 @@
+{
+  "id": "75cd08d5c9ea0c4b",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/gangue-do-rolex-suspeito-de-roubo-de-relogio-morre-apos-vitima-de-assalto-perseguir-motas-e-colidir-com-uma-delas/",
+  "title": "Roubo de relógios. Suspeito morre após tentativa de fuga",
+  "content": "O caso foi entregue à Polícia Judiciária, que se encontra no local a realizar perícias",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T17:27:31+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "fb7f2b69-7143-4b00-a0cc-f9483608166e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

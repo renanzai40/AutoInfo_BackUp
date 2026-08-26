@@ -1,0 +1,42 @@
+{
+  "id": "49310682",
+  "source_name": "hackernews",
+  "source_type": "hackernews",
+  "source_url": "https://news.ycombinator.com/item?id=49310682",
+  "title": "The First At-Home Test for Infected Ticks Could Improve Lyme Disease Diagnosis",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "hackernews",
+  "collected_at": "2026-08-15T18:36:18.466658+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "by": "gmays",
+    "descendants": 45,
+    "id": 49310682,
+    "kids": [
+      49312017,
+      49311505,
+      49311965,
+      49311549,
+      49311821,
+      49312842,
+      49311879,
+      49311633,
+      49311664,
+      49311756,
+      49311690
+    ],
+    "score": 122,
+    "time": 1786802689,
+    "title": "The First At-Home Test for Infected Ticks Could Improve Lyme Disease Diagnosis",
+    "type": "story",
+    "url": "https://www.smithsonianmag.com/innovation/the-first-at-home-test-for-infected-ticks-could-improve-lyme-disease-diagnosis-180989235/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6161590b-763d-445f-9375-47c3bd87d9ca"
+}

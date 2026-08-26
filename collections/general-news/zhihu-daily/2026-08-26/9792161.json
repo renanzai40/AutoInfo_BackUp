@@ -1,0 +1,33 @@
+{
+  "id": 9792161,
+  "source_name": "zhihu-daily",
+  "source_type": "api",
+  "source_url": "https://daily.zhihu.com/story/9792161",
+  "title": "为什么高端狼人杀已经公式化了？",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "zhihu-daily",
+  "collected_at": "2026-08-25T23:05:40.148149+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "image_hue": "0x927258",
+    "title": "为什么高端狼人杀已经公式化了？",
+    "url": "https://daily.zhihu.com/story/9792161",
+    "hint": "司马懿 · 3 分钟阅读",
+    "ga_prefix": "082607",
+    "images": [
+      "https://picx.zhimg.com/v2-9c737051274a70f6cdb499020abfc5e0.jpg?source=8673f162"
+    ],
+    "type": 0,
+    "id": 9792161
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "50cc1380-d2a6-47c0-b531-04bf4189bb2f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

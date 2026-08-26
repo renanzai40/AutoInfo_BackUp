@@ -1,0 +1,24 @@
+{
+  "id": "44368b60d0ed2006",
+  "source_name": "retail-dive",
+  "source_type": "rss",
+  "source_url": "https://www.retaildive.com/news/walmart-communications-chief-allyson-park-departure-after-3-years/828576/",
+  "title": "Walmart communications chief to depart after 3 years",
+  "content": "<figure><div><img src=\"https://imgproxy.divecdn.com/OZiHySraz9s0Jc6iabb78hz__shK5dUMs8MXVzbVpgM/g:nowe:0:495/c:3874:2189/rs:fill:1600:900:1/Z3M6Ly9kaXZlc2l0ZS1zdG9yYWdlL2RpdmVpbWFnZS9JTUctMTE5OS5qcGc=.webp\" /></div></figure><p>Allyson Park&rsquo;s tenure was marked by intense change at the retail giant, including the departure of longtime CEO Doug McMillon.</p>",
+  "content_type": "text",
+  "source_platform": "retail-dive",
+  "collected_at": "2026-08-24T11:33:00-04:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.retaildive.com/feeds/news/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "395420fc-c6d8-40ab-a8d8-3b6dccef65cb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

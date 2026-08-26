@@ -1,0 +1,24 @@
+{
+  "id": "50a1d860a32529d5",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/societes/une-majorite-de-patrons-francais-apprehende-la-politique-economique-du-prochain-president-selon-une-etude-du-medef-20260825",
+  "title": "Fiscalité, charges, bureaucratie : les chefs d’entreprise mettent la pression sur les candidats à la présidentielle",
+  "content": "ANALYSE - Un sondage d’une ampleur inédite auprès de 66 000 dirigeants est dévoilé à l’occasion de La REF 2026, la rentrée du Medef, qui se tient les 26 et 27 août à Roland-Garros. Si l’organisation patronale l’a placée sous le signe du « courage », les inquiétudes sont nombreuses.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T19:33:20+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9682a464-1707-4f02-8ef0-0a22830910c7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,22 @@
+{
+  "id": "08d99d1d89a8f6b0",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://news.crunchbase.com/ai/native-not-sprinkle-business-growth-change-morse-strattam/",
+  "title": "AI-Native, Not AI-Sprinkle: Why AI Is A Business Change, Not A Technology Change",
+  "content": "Companies unlock AI’s biggest productivity gains not by adding AI tools to existing workflows, but by redesigning teams, roles and daily work around AI. The broader lesson, argues Bob Morse, co-founder and managing partner of Strattam Capital, is that achieving transformational gains like 3x productivity requires CEO- and board-backed organizational change — not merely technology adoption.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-11T11:00:55+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://news.crunchbase.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2ecb23ca-e22a-4e7c-926a-63622479534d"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "9edc2eab0f202ac1",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/politika/28044131",
+  "title": "В Ханое Ассамблея народов мира обсуждает развитие народной дипломатии",
+  "content": "В пленарном заседании поучаствовали представители дипломатического корпуса, российских, вьетнамских и международных организаций, деловых и академических кругов двух стран",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T20:52:14+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "aed6762f-cb5f-4d1f-947a-f1d18c973adf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

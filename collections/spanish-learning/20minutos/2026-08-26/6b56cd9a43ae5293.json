@@ -1,0 +1,24 @@
+{
+  "id": "6b56cd9a43ae5293",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/deportes/deportes_motor/formula-1/espectacular-video-madring-plena-accion-grabado-desde-cielo-por-policia_7029346_0.html",
+  "title": "El espectacular vídeo del circuito Madring en plena acción grabado desde el cielo por la Policía Nacional",
+  "content": "La Policía Nacional publicó en sus redes sociales un vídeo de los monoplazas de Fórmula 3 durante sus entrenamientos en el trazado madrileño.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T21:45:55+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ce7972ee-9c64-49dd-824a-c741fddc3a63",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

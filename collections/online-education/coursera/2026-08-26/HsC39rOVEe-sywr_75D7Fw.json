@@ -1,0 +1,27 @@
+{
+  "id": "HsC39rOVEe-sywr_75D7Fw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Advanced Security and Troubleshooting",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "HsC39rOVEe-sywr_75D7Fw",
+    "slug": "packt-advanced-security-and-troubleshooting-fndef",
+    "name": "Advanced Security and Troubleshooting"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "df28fd23-332f-41bf-b648-66bd4c1eac78",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

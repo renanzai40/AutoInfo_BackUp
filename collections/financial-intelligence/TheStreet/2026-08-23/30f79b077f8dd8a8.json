@@ -1,0 +1,24 @@
+{
+  "id": "30f79b077f8dd8a8",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/personal-finance/pslf-payment-count-drops-education-department-coding-errors",
+  "title": "Education Department just rattled student loan borrowers",
+  "content": "The rules around PSLF payments are shifting, and the details are getting harder to pin down.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-22T20:37:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "06bd174c-e4e5-4f7a-9c91-8c2fdaebb9e3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

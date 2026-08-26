@@ -1,0 +1,24 @@
+{
+  "id": "007e1ee224e624f6",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/investing/voo-vanguard-etf-nvidia-earnings-apple-ceo-transition",
+  "title": "Vanguard's VOO draws $4.3 billion during red week",
+  "content": "Two events before September could reshape VOO's next quarter",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T13:03:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7359cb23-f5cf-4d91-be8d-b0f7abb4b0a2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

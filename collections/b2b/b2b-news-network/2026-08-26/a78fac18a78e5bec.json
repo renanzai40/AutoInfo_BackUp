@@ -1,0 +1,24 @@
+{
+  "id": "a78fac18a78e5bec",
+  "source_name": "b2b-news-network",
+  "source_type": "rss",
+  "source_url": "https://www.b2bnn.com/2026/08/this-week-in-ai-the-bank-of-nvidia/",
+  "title": "This Week in AI: The Bank of Nvidia",
+  "content": "Nvidia used to sell chips. Increasingly, it finances the companies that buy them, guarantees the infrastructure that houses them, invests in the power and land required to run them, funds the models that consume them and helps create financial instruments through which everybody else can invest in the resulting infrastructure. At some point, the world’s [&#8230;]",
+  "content_type": "text",
+  "source_platform": "b2b-news-network",
+  "collected_at": "2026-08-24T22:12:36+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://b2bnn.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "16f31927-a1e5-404d-ac04-0b075e9988e8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

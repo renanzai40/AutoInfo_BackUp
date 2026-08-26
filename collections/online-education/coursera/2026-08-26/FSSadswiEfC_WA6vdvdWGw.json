@@ -1,0 +1,27 @@
+{
+  "id": "FSSadswiEfC_WA6vdvdWGw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": " Vulnerability Assessment and Management",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "FSSadswiEfC_WA6vdvdWGw",
+    "slug": "vulnerability-assessment-and-management",
+    "name": " Vulnerability Assessment and Management"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4872ff31-569a-45a8-9420-5d52aba911df",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

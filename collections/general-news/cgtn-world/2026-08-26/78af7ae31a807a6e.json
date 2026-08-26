@@ -1,0 +1,24 @@
+{
+  "id": "78af7ae31a807a6e",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://newsus.cgtn.com/news/2026-08-25/Colombia-faces-years-of-rebuilding-after-earthquake-devastation-1PSUlo2D5w4/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Colombia faces years of rebuilding after earthquake devastation",
+  "content": "Colombia faces years of rebuilding after earthquake devastation",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T21:51:20+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c82648e2-baf2-4bd8-8e61-2c3192807c26",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

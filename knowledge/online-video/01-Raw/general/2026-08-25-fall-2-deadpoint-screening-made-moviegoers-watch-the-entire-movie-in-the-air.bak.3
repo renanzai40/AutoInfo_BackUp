@@ -1,0 +1,52 @@
+---
+title: 'Fall 2: Deadpoint Screening Made Moviegoers Watch the Entire Movie in the Air'
+domain: online-video
+tier: 01-Raw
+entry_id: online-video-general-fall-2-deadpoint-screening-made-moviegoers-watch-the-entire-movie-in-the-air
+source_url: https://www.comingsoon.net/movies/news/2181644-fall-2-screening-lionsgate-fans-wooden-planks
+source_type: rss
+source_platform: comingsoon
+collected_at: '2026-08-25T15:25:54+00:00'
+summary: 'Lionsgate hosted immersive screenings of Fall 2: Deadpoint in Los Angeles on August 22, where select moviegoers
+  watched the entire movie while in the air, mirroring the film''s premise. The event was a unique promotional experience
+  for the sequel. It took place on a specific date and location.'
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 97a72af3-81d8-4d1f-88d3-f74e7b397701
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<p>Fall 2: Deadpoint just gave a few lucky fans an experience unlike any other. Select moviegoers who were looking forward to Lionsgate&#8217;s sequel got a unique, immersive preview on August 22. Instead of showing the film in standard theatres, Lionsgate held two screenings in Los Angeles that brought the film&#8217;s central premise to life. Viewers [&#8230;]</p>
+<p>The post <a href="https://www.comingsoon.net/movies/news/2181644-fall-2-screening-lionsgate-fans-wooden-planks">Fall 2: Deadpoint Screening Made Moviegoers Watch the Entire Movie in the Air</a> appeared first on <a href="https://www.comingsoon.net">ComingSoon.net - Movie Trailers, TV &amp; Streaming News, and More</a>.</p>
+
+## Summary
+Lionsgate hosted immersive screenings of Fall 2: Deadpoint in Los Angeles on August 22, where select moviegoers watched the entire movie while in the air, mirroring the film's premise. The event was a unique promotional experience for the sequel. It took place on a specific date and location.
+
+## Key Points
+- Lionsgate held immersive screenings of Fall 2: Deadpoint in LA on Aug 22
+- Screenings involved watching the movie 'in the air', reflecting the film's central premise
+- Event was a unique promotional experience for select lucky fans
+
+
+## Entities
+- **Fall 2: Deadpoint** (movie, relevance=)
+- **Lionsgate** (org, relevance=)
+- **Los Angeles** (location, relevance=)
+- **August 22** (date, relevance=)

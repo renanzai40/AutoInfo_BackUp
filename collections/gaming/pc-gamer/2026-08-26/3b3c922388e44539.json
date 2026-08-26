@@ -1,0 +1,24 @@
+{
+  "id": "3b3c922388e44539",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/news/live/gamescom-opening-night-live-2026-live-coverage/",
+  "title": "Gamescom Opening Night Live 2026: every announcement as it happens",
+  "content": "Keep up with Keighley's world premiere gauntlet as we follow along live right here.",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-25T16:49:14+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2cd8fab1-3998-4d5d-8c63-e4dd79813368",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

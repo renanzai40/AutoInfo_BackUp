@@ -1,0 +1,24 @@
+{
+  "id": "ef5bbe7de642d031",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/music/chart-beat/karol-g-judeline-rusowsky-bby-wow-no-1-1236323969/",
+  "title": "Karol G, Judeline & Rusowsky Take ‘BbY WOW’ To No. 1: ‘So Thankful’",
+  "content": "\"I’m so thankful to Karol for giving me this opportunity,\" says Judeline on their first No. 1.",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T17:41:25+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0a803478-682e-49f4-a70a-467557db342f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

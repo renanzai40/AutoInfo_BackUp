@@ -1,0 +1,24 @@
+{
+  "id": "6dfdc57581c12e5b",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/music/features/cardi-b-meek-mill-lil-uzi-vert-more-fuel-the-atlantics-hustle-grit-2026-1236323875/",
+  "title": "Cardi B, Meek Mill, Lil Uzi Vert & More Fuel the Atlantic’s Hustle & Grit: See the Movement Mix",
+  "content": "From New York swagger to Philly determination, Billboard and Planet Fitness soundtrack the Atlantic region’s drive with a mix informed by Luminate listening data",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T15:59:56+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "fdc4cd78-f95a-401f-9cdb-a39a467bf089",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

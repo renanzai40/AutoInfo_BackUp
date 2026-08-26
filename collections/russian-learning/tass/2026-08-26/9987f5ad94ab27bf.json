@@ -1,0 +1,24 @@
+{
+  "id": "9987f5ad94ab27bf",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/armiya-i-opk/28044441",
+  "title": "Боец Добычин спас из горящей машины двух сослуживцев",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-26T00:02:03+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "30f1cb97-99d9-49ff-a78a-2cb3f34b254b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,27 @@
+{
+  "id": "0E4lBD_DEfCXXhLR-bLm7w",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "3D Animation in Unreal Engine: Create an Original Character",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "0E4lBD_DEfCXXhLR-bLm7w",
+    "slug": "3d-animation-in-unreal-engine-create-an-original-character",
+    "name": "3D Animation in Unreal Engine: Create an Original Character"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4ab8e46f-0e19-4fec-a7d6-e2fe038d1ee0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

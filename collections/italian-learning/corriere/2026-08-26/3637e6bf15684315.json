@@ -1,0 +1,24 @@
+{
+  "id": "3637e6bf15684315",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/cook/news/24_maggio_12/come-apparecchiare-tavola-secondo-galateo-parole-non-dire-mai-3ba864e2-0ea8-11ef-aec7-630484bff6fc.shtml",
+  "title": "Come apparecchiare la tavola secondo il galateo (e le parole da non dire mai)",
+  "content": "<p><img alt=\"Come apparecchiare la tavola secondo il galateo (e le parole da non dire mai)\" src=\"https://images2.corriereobjects.it/methode_image/2024/05/10/Cucina/Foto%20Cucina%20-%20Trattate/iStock-1467902169-kXyF-U3480242701416BBB-656x492@Corriere-Web-Sezioni.jpg\" title=\"Come apparecchiare la tavola secondo il galateo (e le parole da non dire mai)\" /><p>Posate, bicchieri, tovaglioli: tutto quello che c’è da sapere per una cena a prova di bon ton. Attenzione, poi, a quel che dite: non tutto è concesso</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-13T07:42:47+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "87e59df9-6c59-4469-b0ce-f92d17b8312d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

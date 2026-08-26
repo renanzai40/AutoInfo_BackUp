@@ -1,0 +1,24 @@
+{
+  "id": "2172ab193f285913",
+  "source_name": "WSJ Markets",
+  "source_type": "rss",
+  "source_url": "https://www.wsj.com/articles/the-extra-reward-for-owning-stocks-over-bonds-has-disappeared-c3f9c223?mod=rss_markets_main",
+  "title": "The Extra Reward for Owning Stocks Over Bonds Has Disappeared",
+  "content": "There is little sign of crimped demand for equities among individual investors, who remain bullish after two years of blockbuster gains.",
+  "content_type": "text",
+  "source_platform": "WSJ Markets",
+  "collected_at": "2025-01-27T01:05:00-05:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8c16b849-2e9f-467b-8503-020bffac64cb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

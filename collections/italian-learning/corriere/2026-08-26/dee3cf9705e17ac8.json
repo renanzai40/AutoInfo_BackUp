@@ -1,0 +1,24 @@
+{
+  "id": "dee3cf9705e17ac8",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/lettere-al-direttore/12-05-2024/index.shtml",
+  "title": "Accumulare allegramente debito  senza pensare a chi pagherà",
+  "content": "<p><img alt=\"Accumulare allegramente debito  senza pensare a chi pagherà\" src=\"https://images2.corriereobjects.it/methode_image/2024/05/13/Varie/Foto%20Varie%20-%20Trattate/debito%20pubblico-kfnD-U43290917671022zu-656x492@Corriere-Web.jpg\" title=\"Accumulare allegramente debito  senza pensare a chi pagherà\" /><p></p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-13T07:13:14+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "efb28b11-784a-41d4-9c77-78f4fa24a799",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

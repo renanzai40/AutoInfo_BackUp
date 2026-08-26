@@ -1,0 +1,35 @@
+{
+  "id": "https://openalex.org/W4409168731",
+  "source_name": "openalex",
+  "source_type": "api",
+  "source_url": "https://api.openalex.org/works/https://openalex.org/W4409168731",
+  "title": "Parkinson’s Spectrum Mechanisms in Pregnancy: Exploring Hypothetical Scenarios for MSA in the Era of ART",
+  "content": "Multiple System Atrophy (MSA) is a rare, rapidly progressive neurodegenerative disorder marked by autonomic dysfunction, parkinsonism, and cerebellar ataxia. While predominantly affecting individuals in their fifth or sixth decade, advancements in assisted reproductive technologies (ART) have created new clinical scenarios involving pregnancies in women within MSA's typical onset range. Given the scarcity of documented MSA pregnancies, this review leverages insights from related Parkinson's spectrum mechanisms to explore hypothetical scenarios for how pregnancy-induced physiological changes might influence MSA progression. Pregnancy-induced hormonal fluctuations, including elevated estrogen and progesterone levels, may modulate α-synuclein aggregation and neuroinflammatory pathways. Immune adaptations, such as fetal microchimerism and Th2-biased immune profiles, introduce additional complexities, particularly in donor embryo pregnancies involving complex microchimerism. Metabolic demands and oxidative stress further intersect with these mechanisms, potentially accelerating disease progression. We analyze existing literature and theoretical models, emphasizing the need for interdisciplinary research. Clinical implications are discussed to propose evidence-based strategies for optimizing maternal-fetal outcomes. This paper identifies critical knowledge gaps and proposes avenues for future investigation to optimize maternal-fetal outcomes in this unique and underexplored clinical intersection.",
+  "content_type": "text",
+  "source_platform": "openalex",
+  "collected_at": "2025-04-03",
+  "language": "",
+  "domain": "medical-research",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "authors": [
+      "Dalibor Kovacevic",
+      "Gordana Velikić",
+      "D Marić",
+      "D Marić",
+      "Dušica Marić",
+      "Dušica Marić",
+      "Miljan Puletić",
+      "Ljiljana Gvozdenović",
+      "Danilo Vojvodić",
+      "Gordana Šupić"
+    ],
+    "cited_by_count": 1,
+    "published_date": "2025-04-03"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c542a4d0-dfd2-4bc2-8644-793cf325cde4"
+}

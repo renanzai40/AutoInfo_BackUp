@@ -1,0 +1,24 @@
+{
+  "id": "cef0bf1ffc0a2068",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://roma.corriere.it/notizie/cronaca/24_maggio_13/vittorio-sgarbi-inchiesta-quadro-montecarlo-eb089437-41f3-42f9-89c5-406864ba0xlk.shtml",
+  "title": "Sgarbi, il quadro e l’inchiesta: «Anche questa finirà in nulla»",
+  "content": "<p><img alt=\"Sgarbi, il quadro e l’inchiesta: «Anche questa finirà in nulla»\" src=\"https://images2.corriereobjects.it/methode_image/2024/05/12/Roma/Foto%20Roma%20-%20Trattate/66411e6302864_ori_crop_MASTER__0x0.jpeg\" title=\"Sgarbi, il quadro e l’inchiesta: «Anche questa finirà in nulla»\" /><p>Il caso del presunto Valentin de Boulogne, caravaggista francese: se fosse vero, varrebbe 5,5 milioni di euroIl caso del presunto Valentin de Boulogne, caravaggista francese: se fosse vero, varrebbe 5,5 milioni di euroIl caso del presunto Valentin de Boulogne, caravaggista francese: se fosse vero, varrebbe 5,5 milioni di euro</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-13T08:07:52+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b339bc3a-60c6-48d0-a119-13d7d9a9cda8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

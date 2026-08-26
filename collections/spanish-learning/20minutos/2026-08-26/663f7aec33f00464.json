@@ -1,0 +1,24 @@
+{
+  "id": "663f7aec33f00464",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/viajes/destinos/pequeno-pueblo-lleida-mas-bienes-patrimonio-humanidad-habitante-espana-durro_7021898_0.html",
+  "title": "El pueblo de Lleida con más bienes Patrimonio de la Humanidad por habitante",
+  "content": "Entre los atractivos de esta pequeña villa pirenaica se encuentran dos iglesias medievales que forman parte del famoso conjunto de templos románicos de la Vall de Boí.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-24T12:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "24f27ac4-ccaf-44aa-9bf5-721965097b74",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

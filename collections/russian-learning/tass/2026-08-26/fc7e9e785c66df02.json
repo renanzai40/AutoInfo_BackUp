@@ -1,0 +1,24 @@
+{
+  "id": "fc7e9e785c66df02",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/politika/28044195",
+  "title": "Слуцкий: европейские лидеры отрезали себе путь к участию в переговорах",
+  "content": "Страны Европы неприкрыто вовлечены в украинский конфликт, предоставляя Киеву разрешение на производство дальнобойных ракет для ударов по мирным жителям, заявил лидер ЛДПР",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T20:30:17+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b47f9ab4-68c5-4689-b837-bbeca5f9ebe6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

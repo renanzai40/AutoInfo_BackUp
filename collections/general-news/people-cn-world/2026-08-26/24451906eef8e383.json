@@ -1,0 +1,24 @@
+{
+  "id": "24451906eef8e383",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0605/c1002-40494451.html",
+  "title": "美国再次在联合国安理会否决加沙停火决议草案",
+  "content": "<p>　　新华社联合国6月4日电（记者尚绪谦）美国4日再次在联合国安理会否决有关要求在巴勒斯坦加沙地带立即停火的决议草案。</p> <p>　　安理会当天对一项由10个非常任理事国提出的决议草案进行表决。该决议草案要求在加沙地带立即无条件永久停火，立即无条件释放所有被扣押人员，立即无条件解除所有对加沙地带的人道准入限制。安理会15个成员中14个投了赞成票，常任理事国美国行使了否决权，导致决议草案未获通过。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-05T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6a3db057-13fa-4cf2-b102-afe93e250a62",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

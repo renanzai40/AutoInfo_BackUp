@@ -1,0 +1,24 @@
+{
+  "id": "11e385e5422dcf5e",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/mujer/moda/aitana-marca-superestrella-adidas-coleccion-deportiva-coquette_7029256_0.html",
+  "title": "Aitana se marca un 'Superestrella' con Adidas: así es la colección deportiva más 'coquette'",
+  "content": "La artista acaba de anunciar por sorpresa una colaboración con el gigante del deporte, dándole su toque romántico y azul a las siluetas icónicas de la firma.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T17:25:42+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7c86cbe2-6599-4ffa-b643-7086a2cbd082",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

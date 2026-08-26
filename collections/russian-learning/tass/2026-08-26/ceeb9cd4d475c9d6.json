@@ -1,0 +1,24 @@
+{
+  "id": "ceeb9cd4d475c9d6",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/kultura/28044025",
+  "title": "В Петербурге откроется выставка нидерландской живописи из собрания музея \"Архангельского\"",
+  "content": "Экспозиция объединит 28 картин, которые в основном принадлежат фамильной коллекции князей Юсуповых",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T19:01:32+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "be05102d-6f51-46ae-adde-892b14e815d4",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

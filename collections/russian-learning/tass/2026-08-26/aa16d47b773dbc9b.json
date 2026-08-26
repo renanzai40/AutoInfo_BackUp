@@ -1,0 +1,24 @@
+{
+  "id": "aa16d47b773dbc9b",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/mezhdunarodnaya-panorama/28044335",
+  "title": "Евродепутат Блага назвал Зеленского фашистом за отказ проводить выборы",
+  "content": "Депутат Европарламента от Словакии обвинил лидеров либеральной оппозиции республики, что они героизируют Владимира Зеленского, \"так как являются такими же фашистами, как он\"",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T22:27:06+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "705290cc-7a23-4a9e-b9ff-72bd8d5b08fe",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

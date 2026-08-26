@@ -1,0 +1,24 @@
+{
+  "id": "0f8dbb27957db428",
+  "source_name": "hnrss",
+  "source_type": "rss",
+  "source_url": "https://blog.coredump.cx/p/how-much-of-hn-is-ai",
+  "title": "How much of HN is AI?",
+  "content": "<p>Article URL: <a href=\"https://blog.coredump.cx/p/how-much-of-hn-is-ai\">https://blog.coredump.cx/p/how-much-of-hn-is-ai</a></p>\n<p>Comments URL: <a href=\"https://news.ycombinator.com/item?id=49435728\">https://news.ycombinator.com/item?id=49435728</a></p>\n<p>Points: 4</p>\n<p># Comments: 0</p>",
+  "content_type": "text",
+  "source_platform": "hnrss",
+  "collected_at": "2026-08-25T15:23:41+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://hnrss.org/newest"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "eec924a7-eb16-44fa-a746-bd625bfba6b3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,601 @@
+keywords:
+  openai:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.745428+00:00'
+    updated_at: '2026-08-26T00:01:05.220859+00:00'
+    source: auto-discovery:digiday
+  smb advertisers:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.753744+00:00'
+    updated_at: '2026-08-25T23:58:07.551218+00:00'
+    source: auto-discovery:rss
+  pursuing:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.767304+00:00'
+    updated_at: '2026-08-10T06:10:08.767304+00:00'
+    source: auto-discovery:rss
+  smb:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.783993+00:00'
+    updated_at: '2026-08-25T23:58:07.595570+00:00'
+    source: auto-discovery:rss
+  advertising:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.821302+00:00'
+    updated_at: '2026-08-26T00:01:05.397114+00:00'
+    source: auto-discovery:digiday
+  market.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.847499+00:00'
+    updated_at: '2026-08-26T00:02:36.617020+00:00'
+    source: auto-discovery:modern-retail
+  openai pursuing:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.863914+00:00'
+    updated_at: '2026-08-10T06:10:08.863914+00:00'
+    source: auto-discovery:rss
+  pursuing the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.881642+00:00'
+    updated_at: '2026-08-10T06:10:08.881642+00:00'
+    source: auto-discovery:rss
+  the smb:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.897377+00:00'
+    updated_at: '2026-08-10T06:10:08.897377+00:00'
+    source: auto-discovery:rss
+  smb advertising:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.917644+00:00'
+    updated_at: '2026-08-10T06:10:08.917644+00:00'
+    source: auto-discovery:rss
+  advertising market.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.941673+00:00'
+    updated_at: '2026-08-10T06:10:08.941673+00:00'
+    source: auto-discovery:rss
+  openai pursuing the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.015607+00:00'
+    updated_at: '2026-08-10T06:10:09.015607+00:00'
+    source: auto-discovery:rss
+  pursuing the smb:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.045347+00:00'
+    updated_at: '2026-08-10T06:10:09.045347+00:00'
+    source: auto-discovery:rss
+  the smb advertising:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.067963+00:00'
+    updated_at: '2026-08-10T06:10:09.067963+00:00'
+    source: auto-discovery:rss
+  smb advertising market.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.136871+00:00'
+    updated_at: '2026-08-10T06:10:09.136871+00:00'
+    source: auto-discovery:rss
+  company's:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.167093+00:00'
+    updated_at: '2026-08-26T00:04:07.671559+00:00'
+    source: auto-discovery:rss
+  job:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.190650+00:00'
+    updated_at: '2026-08-25T23:58:07.724623+00:00'
+    source: auto-discovery:rss
+  listings:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.219820+00:00'
+    updated_at: '2026-08-25T23:58:07.769374+00:00'
+    source: auto-discovery:rss
+  reveal:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.265353+00:00'
+    updated_at: '2026-08-10T06:10:09.265353+00:00'
+    source: auto-discovery:rss
+  strategic:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.326539+00:00'
+    updated_at: '2026-08-26T00:04:32.732771+00:00'
+    source: auto-discovery:retail-dive
+  shift.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.370395+00:00'
+    updated_at: '2026-08-10T06:10:09.370395+00:00'
+    source: auto-discovery:rss
+  the company's:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.421562+00:00'
+    updated_at: '2026-08-26T00:04:07.717902+00:00'
+    source: auto-discovery:rss
+  company's job:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.439380+00:00'
+    updated_at: '2026-08-10T06:10:09.439380+00:00'
+    source: auto-discovery:rss
+  job listings:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.459326+00:00'
+    updated_at: '2026-08-25T23:58:07.813034+00:00'
+    source: auto-discovery:rss
+  listings reveal:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.481421+00:00'
+    updated_at: '2026-08-10T06:10:09.481421+00:00'
+    source: auto-discovery:rss
+  reveal this:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.523728+00:00'
+    updated_at: '2026-08-10T06:10:09.523728+00:00'
+    source: auto-discovery:rss
+  this strategic:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.583472+00:00'
+    updated_at: '2026-08-10T06:10:09.583472+00:00'
+    source: auto-discovery:rss
+  strategic shift.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.609337+00:00'
+    updated_at: '2026-08-10T06:10:09.609337+00:00'
+    source: auto-discovery:rss
+  the company's job:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.635824+00:00'
+    updated_at: '2026-08-10T06:10:09.635824+00:00'
+    source: auto-discovery:rss
+  company's job listings:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.662210+00:00'
+    updated_at: '2026-08-10T06:10:09.662210+00:00'
+    source: auto-discovery:rss
+  job listings reveal:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.685054+00:00'
+    updated_at: '2026-08-10T06:10:09.685054+00:00'
+    source: auto-discovery:rss
+  listings reveal this:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.710196+00:00'
+    updated_at: '2026-08-10T06:10:09.710196+00:00'
+    source: auto-discovery:rss
+  reveal this strategic:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.734198+00:00'
+    updated_at: '2026-08-10T06:10:09.734198+00:00'
+    source: auto-discovery:rss
+  this strategic shift.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.761376+00:00'
+    updated_at: '2026-08-10T06:10:09.761376+00:00'
+    source: auto-discovery:rss
+  smaller:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.786618+00:00'
+    updated_at: '2026-08-10T06:10:09.786618+00:00'
+    source: auto-discovery:rss
+  advertisers:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.811375+00:00'
+    updated_at: '2026-08-26T00:01:05.265575+00:00'
+    source: auto-discovery:digiday
+  new:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.835663+00:00'
+    updated_at: '2026-08-26T00:05:55.324181+00:00'
+    source: auto-discovery:retail-dive
+  target:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.862910+00:00'
+    updated_at: '2026-08-26T00:05:48.005513+00:00'
+    source: auto-discovery:retail-dive
+  audience:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.887915+00:00'
+    updated_at: '2026-08-10T06:10:09.887915+00:00'
+    source: auto-discovery:rss
+  openai.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.913744+00:00'
+    updated_at: '2026-08-10T06:10:09.913744+00:00'
+    source: auto-discovery:rss
+  smaller advertisers:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.939313+00:00'
+    updated_at: '2026-08-10T06:10:09.939313+00:00'
+    source: auto-discovery:rss
+  advertisers are:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:09.967651+00:00'
+    updated_at: '2026-08-10T06:10:09.967651+00:00'
+    source: auto-discovery:rss
+  the new:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.001478+00:00'
+    updated_at: '2026-08-26T00:02:56.594098+00:00'
+    source: auto-discovery:modern-retail
+  new target:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.028062+00:00'
+    updated_at: '2026-08-10T06:10:10.028062+00:00'
+    source: auto-discovery:rss
+  target audience:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.056293+00:00'
+    updated_at: '2026-08-10T06:10:10.056293+00:00'
+    source: auto-discovery:rss
+  audience for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.085910+00:00'
+    updated_at: '2026-08-10T06:10:10.085910+00:00'
+    source: auto-discovery:rss
+  for openai.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.116970+00:00'
+    updated_at: '2026-08-10T06:10:10.116970+00:00'
+    source: auto-discovery:rss
+  smaller advertisers are:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.147495+00:00'
+    updated_at: '2026-08-10T06:10:10.147495+00:00'
+    source: auto-discovery:rss
+  advertisers are the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.177004+00:00'
+    updated_at: '2026-08-10T06:10:10.177004+00:00'
+    source: auto-discovery:rss
+  are the new:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.209661+00:00'
+    updated_at: '2026-08-10T06:10:10.209661+00:00'
+    source: auto-discovery:rss
+  the new target:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.243799+00:00'
+    updated_at: '2026-08-10T06:10:10.243799+00:00'
+    source: auto-discovery:rss
+  new target audience:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.276408+00:00'
+    updated_at: '2026-08-10T06:10:10.276408+00:00'
+    source: auto-discovery:rss
+  target audience for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.309282+00:00'
+    updated_at: '2026-08-10T06:10:10.309282+00:00'
+    source: auto-discovery:rss
+  audience for openai.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.342347+00:00'
+    updated_at: '2026-08-10T06:10:10.342347+00:00'
+    source: auto-discovery:rss
+  georgia-pacific:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.398639+00:00'
+    updated_at: '2026-08-25T23:58:28.040130+00:00'
+    source: auto-discovery:rss
+  programmatic advertising:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.434552+00:00'
+    updated_at: '2026-08-10T06:10:10.434552+00:00'
+    source: auto-discovery:rss
+  supply-side platform (ssp):
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.473668+00:00'
+    updated_at: '2026-08-10T06:10:10.473668+00:00'
+    source: auto-discovery:rss
+  supply-side control:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.515479+00:00'
+    updated_at: '2026-08-25T23:58:28.175178+00:00'
+    source: auto-discovery:rss
+  cut:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.553201+00:00'
+    updated_at: '2026-08-25T23:58:28.218549+00:00'
+    source: auto-discovery:rss
+  ssps:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.596698+00:00'
+    updated_at: '2026-08-25T23:58:28.084678+00:00'
+    source: auto-discovery:rss
+  streamlining:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.636882+00:00'
+    updated_at: '2026-08-10T06:10:10.636882+00:00'
+    source: auto-discovery:rss
+  programmatic:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.673703+00:00'
+    updated_at: '2026-08-25T23:58:28.130319+00:00'
+    source: auto-discovery:rss
+  supply:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.713691+00:00'
+    updated_at: '2026-08-26T00:03:31.899165+00:00'
+    source: auto-discovery:modern-retail
+  chain.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.759307+00:00'
+    updated_at: '2026-08-10T06:10:10.759307+00:00'
+    source: auto-discovery:rss
+  georgia-pacific cut:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.807658+00:00'
+    updated_at: '2026-08-25T23:58:28.261853+00:00'
+    source: auto-discovery:rss
+  cut its:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.850005+00:00'
+    updated_at: '2026-08-25T23:58:28.305811+00:00'
+    source: auto-discovery:rss
+  its ssps:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.889511+00:00'
+    updated_at: '2026-08-25T23:58:28.348822+00:00'
+    source: auto-discovery:rss
+  streamlining its:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.929737+00:00'
+    updated_at: '2026-08-10T06:10:10.929737+00:00'
+    source: auto-discovery:rss
+  its programmatic:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.980459+00:00'
+    updated_at: '2026-08-10T06:10:10.980459+00:00'
+    source: auto-discovery:rss
+  programmatic supply:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.026241+00:00'
+    updated_at: '2026-08-10T06:10:11.026241+00:00'
+    source: auto-discovery:rss
+  supply chain.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.066030+00:00'
+    updated_at: '2026-08-10T06:10:11.066030+00:00'
+    source: auto-discovery:rss
+  georgia-pacific cut its:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.110756+00:00'
+    updated_at: '2026-08-25T23:58:28.394165+00:00'
+    source: auto-discovery:rss
+  cut its ssps:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.151795+00:00'
+    updated_at: '2026-08-25T23:58:28.438103+00:00'
+    source: auto-discovery:rss
+  streamlining its programmatic:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.195031+00:00'
+    updated_at: '2026-08-10T06:10:11.195031+00:00'
+    source: auto-discovery:rss
+  its programmatic supply:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.243172+00:00'
+    updated_at: '2026-08-10T06:10:11.243172+00:00'
+    source: auto-discovery:rss
+  programmatic supply chain.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.289124+00:00'
+    updated_at: '2026-08-10T06:10:11.289124+00:00'
+    source: auto-discovery:rss
+  company:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.332296+00:00'
+    updated_at: '2026-08-26T00:06:10.193599+00:00'
+    source: auto-discovery:retail-dive
+  prioritized:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.378674+00:00'
+    updated_at: '2026-08-10T06:10:11.378674+00:00'
+    source: auto-discovery:rss
+  supply-side:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.426798+00:00'
+    updated_at: '2026-08-25T23:58:28.570746+00:00'
+    source: auto-discovery:rss
+  control:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.471185+00:00'
+    updated_at: '2026-08-25T23:58:28.614788+00:00'
+    source: auto-discovery:rss
+  demand-side:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.516472+00:00'
+    updated_at: '2026-08-25T23:58:28.527210+00:00'
+    source: auto-discovery:rss
+  tactics:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.563286+00:00'
+    updated_at: '2026-08-10T06:10:24.621579+00:00'
+    source: auto-discovery:rss
+  improve:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.609796+00:00'
+    updated_at: '2026-08-10T06:10:11.609796+00:00'
+    source: auto-discovery:rss
+  efficiency.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.657551+00:00'
+    updated_at: '2026-08-10T06:10:11.657551+00:00'
+    source: auto-discovery:rss
+  the company:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.707527+00:00'
+    updated_at: '2026-08-26T00:06:10.236987+00:00'
+    source: auto-discovery:retail-dive
+  company prioritized:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.784329+00:00'
+    updated_at: '2026-08-10T06:10:11.784329+00:00'
+    source: auto-discovery:rss
+  prioritized supply-side:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.830804+00:00'
+    updated_at: '2026-08-10T06:10:11.830804+00:00'
+    source: auto-discovery:rss
+  control over:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.877572+00:00'
+    updated_at: '2026-08-10T06:10:11.877572+00:00'
+    source: auto-discovery:rss
+  over demand-side:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.925091+00:00'
+    updated_at: '2026-08-10T06:10:11.925091+00:00'
+    source: auto-discovery:rss
+  demand-side tactics:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.973159+00:00'
+    updated_at: '2026-08-10T06:10:11.973159+00:00'
+    source: auto-discovery:rss
+  tactics improve:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:12.026225+00:00'
+    updated_at: '2026-08-10T06:10:12.026225+00:00'
+    source: auto-discovery:rss
+  improve efficiency.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:12.138128+00:00'
+    updated_at: '2026-08-10T06:10:12.138128+00:00'
+    source: auto-discovery:rss
+  the company prioritized:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:12.187615+00:00'
+    updated_at: '2026-08-10T06:10:12.187615+00:00'
+    source: auto-discovery:rss
+  company prioritized supply-side:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:12.240384+00:00'
+    updated_at: '2026-08-10T06:10:12.240384+00:00'
+    source: auto-discovery:rss
+  prioritized supply-side control:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:12.288624+00:00'
+    updated_at: '2026-08-10T06:10:12.288624+00:00'
+    source: auto-discovery:rss
+  supply-side control over:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:12.336884+00:00'
+    updated_at: '2026-08-10T06:10:12.336884+00:00'
+    source: auto-discovery:rss
+  control over demand-side:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:12.395392+00:00'
+    updated_at: '2026-08-10T06:10:12.395392+00:00'
+    source: auto-discovery:rss
+  over demand-side tactics:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:12.448401+00:00'
+    updated_at: '2026-08-10T06:10:12.448401+00:00'
+    source: auto-discovery:rss
+  demand-side tactics improve:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:12.499509+00:00'
+    updated_at: '2026-08-10T06:10:12.499509+00:00'
+    source: auto-discovery:rss
+  tactics improve efficiency.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:12.550838+00:00'
+    updated_at: '2026-08-10T06:10:12.550838+00:00'
+    source: auto-discovery:rss

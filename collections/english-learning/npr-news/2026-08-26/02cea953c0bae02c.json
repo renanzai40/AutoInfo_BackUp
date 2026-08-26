@@ -1,0 +1,24 @@
+{
+  "id": "02cea953c0bae02c",
+  "source_name": "npr-news",
+  "source_type": "rss",
+  "source_url": "https://www.npr.org/2026/08/25/nx-s1-5944266/adam-mosseri-instagram-meta-child-safety-trial",
+  "title": "Instagram head Adam Mosseri testifies in defense of Meta in child safety trial",
+  "content": "The social media giant is being sued by four states who allege it designed Facebook and Instagram to hook kids — and lied to the public about the risks.",
+  "content_type": "text",
+  "source_platform": "npr-news",
+  "collected_at": "2026-08-25T18:50:57-04:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.npr.org/1001/rss.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ab264e5e-0dd9-4111-96d1-1af287ac2688",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

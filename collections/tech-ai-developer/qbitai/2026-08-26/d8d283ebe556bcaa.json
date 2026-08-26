@@ -1,0 +1,24 @@
+{
+  "id": "d8d283ebe556bcaa",
+  "source_name": "qbitai",
+  "source_type": "rss",
+  "source_url": "https://www.qbitai.com/2026/08/479096.html",
+  "title": "AI4S开始进入「项目时代」：紫东太初把AI从做Task推向做Project",
+  "content": "AI科研能力从工具级转向系统级",
+  "content_type": "text",
+  "source_platform": "qbitai",
+  "collected_at": "2026-08-25T05:48:05+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.qbitai.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f2e5115e-5d05-41a7-95a8-96ae33c36fb7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

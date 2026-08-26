@@ -1,0 +1,24 @@
+{
+  "id": "90ff03a136550b3d",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/software/windows/microsoft-had-to-change-the-anti-piracy-hologram-on-the-windows-95-box-because-an-undisclosed-government-assumed-the-baby-on-it-was-naked/",
+  "title": "Microsoft had to change the anti-piracy hologram on the Windows 95 box because an undisclosed government assumed the baby on it was naked",
+  "content": "Microsoft says the government \"shall remain nameless for obvious reasons\".",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-25T14:53:30+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "96631789-7cc0-450b-809c-9c15210a7bd7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

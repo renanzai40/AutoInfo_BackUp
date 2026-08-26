@@ -1,0 +1,33 @@
+{
+  "id": 9792142,
+  "source_name": "zhihu-daily",
+  "source_type": "api",
+  "source_url": "https://daily.zhihu.com/story/9792142",
+  "title": "为什么说 CPU 是人造物的巅峰？",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "zhihu-daily",
+  "collected_at": "2026-08-25T16:22:31.876275+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "image_hue": "0xa57bb0",
+    "title": "为什么说 CPU 是人造物的巅峰？",
+    "url": "https://daily.zhihu.com/story/9792142",
+    "hint": "Dunkirk · 4 分钟阅读",
+    "ga_prefix": "082507",
+    "images": [
+      "https://picx.zhimg.com/v2-368922eb58947d54fa143281a77f5de7.jpg?source=8673f162"
+    ],
+    "type": 0,
+    "id": 9792142
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "fcb57bba-32d0-4732-a961-e8d177fe2ffc",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

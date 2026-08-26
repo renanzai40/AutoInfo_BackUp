@@ -1,0 +1,22 @@
+{
+  "id": "78c369ac933f7d94",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://news.crunchbase.com/venture/biggest-funding-rounds-billion-dollar-raises-manufacturing-energy-ai/",
+  "title": "The Week’s 10 Biggest Funding Rounds: A Big Week For Big Checks",
+  "content": "Startups raised funding rounds with a lot of zeroes at the end this week, with three companies securing financings of $1 billion or more. Additionally, a robust lineup of companies in sectors including AI, e-commerce, cybersecurity, biotech and even mining also announced sizable new rounds.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-07T19:52:22+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://news.crunchbase.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ab7db99e-1beb-40a4-81b1-aba47b225747"
+}

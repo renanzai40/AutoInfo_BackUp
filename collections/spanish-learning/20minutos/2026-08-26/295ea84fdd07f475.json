@@ -1,0 +1,24 @@
+{
+  "id": "295ea84fdd07f475",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/viajes/dragon-ball-z-tendra-un-parque-tematico-francia-asi-sera-tierra-goku-cerca-paris_7029245_0.html",
+  "title": "'Dragon Ball Z' tendrá un parque temático en Francia: así será la tierra de Goku",
+  "content": "El Elíseo confirmó una inversión de 6.000 millones de euros destinados al complejo de atracciones tras la visita del príncipe heredero saudita Mohammed bin Salman.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T17:36:38+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "da9317db-41f4-4f0a-82fc-c418f5c5fd19",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

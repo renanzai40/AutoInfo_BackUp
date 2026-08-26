@@ -1,0 +1,24 @@
+{
+  "id": "7ac8a8095663ba43",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0605/c1002-40494364.html",
+  "title": "加拿大森林火灾过火面积超过2万平方公里",
+  "content": "<p>　　新华社渥太华6月3日电（记者林威）加拿大跨部门森林消防中心3日发布的最新数据显示，今年以来加拿大森林火灾过火面积已达2.2万平方公里。在已进入紧急状态的两个省，超过2.6万人被迫撤离。</p> <p>　　根据该中心数据，加拿大全国已发生1722起森林火灾，有202处在燃野火，其中103处处于失控状态，中西部地区火势最为严重。</p> <p>　　马尼托巴省和萨斯喀彻温省5月底已宣布进入紧急状态。目前已有超过9000人从萨斯喀彻温省北部撤离，未来几天这一数字可能会达到1.5万。此前马尼托巴省已有1.7万人被迫疏散。不列颠哥伦比亚省、艾伯塔省和安大略省也面临较严重的火情。</p> <p>　　加拿大环境与气候变化部称，野火烟雾最浓重的是安大略省西北部和马尼托巴省中部，且浓烟蔓延到了美国中西部地区。</p> <p>　　欧洲哥白尼大气监测局的消息说，加拿大野火产生的浓烟已飘过大西洋到达欧洲，预计本周将有更多浓烟抵达。</p> <p>　　加拿大野火季通常从5月持续至9月。过去两年野火季，加拿大受灾严重。2024年森林大火过火面积超过5.3万平方公里，2023年更是达到创纪录的17.3万平方公里。目前有迹象表明，2025年野火季或将继续保持活跃态势。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-05T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "cbc04652-ebb4-491f-bf5f-ffe42dcfc10b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

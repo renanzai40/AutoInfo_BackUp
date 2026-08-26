@@ -1,0 +1,24 @@
+{
+  "id": "f1bb41cbb0f21fc5",
+  "source_name": "WSJ Markets",
+  "source_type": "rss",
+  "source_url": "https://www.wsj.com/articles/now-wanted-in-silicon-valley-ho-hum-businesses-with-thin-profit-margins-ab07de5f?mod=rss_markets_main",
+  "title": "Now Wanted in Silicon Valley: Ho-Hum Businesses With Thin Profit Margins",
+  "content": "Venture-capital firms are bringing AI and dealmaking to accounting, property management and other unglamorous fields.",
+  "content_type": "text",
+  "source_platform": "WSJ Markets",
+  "collected_at": "2025-01-26T05:30:00-05:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a5c0eb28-6978-40d0-9d59-d9dd1cd62ca9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

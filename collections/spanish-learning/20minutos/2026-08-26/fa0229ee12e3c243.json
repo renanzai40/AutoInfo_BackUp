@@ -1,0 +1,24 @@
+{
+  "id": "fa0229ee12e3c243",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/baleares/detenido-un-entrenador-voleibol-por-violar-dejar-embarazada-una-menor-palma_7029037_0.html",
+  "title": "Detenido un entrenador de voleibol por violar y dejar embarazada a una menor de 15 años en Mallorca",
+  "content": "El joven, de 23 años, habría agredido sexualmente a la víctima, de 15, tras invitarla a comer a su casa y ha quedado en libertad con una orden de alejamiento.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T10:50:18+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "75db4f3d-c16a-4ebd-82a9-2e68d5793713",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

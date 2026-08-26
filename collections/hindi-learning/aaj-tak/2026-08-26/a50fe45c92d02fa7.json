@@ -1,0 +1,24 @@
+{
+  "id": "a50fe45c92d02fa7",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/religion/rashiphal/video/meen-rashifal-26-august-2026-pisces-daily-horoscope-today-vdop-2629807-2026-08-26?utm_source=rssfeed",
+  "title": "मीन राशि",
+  "content": "आज उधार लेनदेन से बचना होगा, किसी के बारे में नेगेटिव ना सोचें, कहीं दूर से धन आगमन के रास्ते बनेंगे,दिनभर किसी काम में व्यस्त रहेंगे,खान-पान सेहत के ...",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-26T02:24:02+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ce538539-9622-45b5-911a-82c35cca2fee",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,49 @@
+{
+  "id": 58905249,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/58905249/integrate-attribute-of-xarray",
+  "title": "integrate attribute of xarray",
+  "content": "integrate attribute of xarray",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-25T15:17:44.244583+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "python",
+      "attributes",
+      "python-xarray"
+    ],
+    "owner": {
+      "account_id": 10789000,
+      "reputation": 23,
+      "user_id": 10376696,
+      "user_type": "registered",
+      "profile_image": "https://www.gravatar.com/avatar/7d1a59c92f8862daf5f30d93e76f2c3d?s=256&d=identicon&r=PG&f=y&so-version=2",
+      "display_name": "SCSullivan",
+      "link": "https://stackoverflow.com/users/10376696/scsullivan"
+    },
+    "is_answered": true,
+    "view_count": 473,
+    "accepted_answer_id": 58924778,
+    "answer_count": 1,
+    "score": 2,
+    "last_activity_date": 1787670253,
+    "creation_date": 1574025205,
+    "last_edit_date": 1787670253,
+    "question_id": 58905249,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/58905249/integrate-attribute-of-xarray",
+    "title": "integrate attribute of xarray"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "cbcda239-c2db-4687-8744-b373f017eebc",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

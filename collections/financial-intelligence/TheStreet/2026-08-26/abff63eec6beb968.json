@@ -1,0 +1,24 @@
+{
+  "id": "abff63eec6beb968",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/investing/stocks/bill-gates-owns-25-billion-rsg-stock",
+  "title": "Bill Gates owns $25 billion in blue-chip S&P 500 stock",
+  "content": "The largest holding in his portfolio also helps fund the Gates Foundation.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T19:07:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bda97fb1-1cf8-4d2d-bbe9-7636b9840a8a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

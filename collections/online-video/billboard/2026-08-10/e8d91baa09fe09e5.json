@@ -1,0 +1,22 @@
+{
+  "id": "e8d91baa09fe09e5",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/music/music-news/ariana-grande-petal-number-1-album-reaction-1236312364/",
+  "title": "Ariana Grande Reacts to ‘Petal’ Debuting at No. 1 on Billboard 200",
+  "content": "She also celebrated the making of the album, her seventh No. 1, with behind-the-scenes footage from the studio captioned \"petal forever.\"",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-09T22:30:49+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "02449584-d70a-41c9-bf3c-4cc37217da04"
+}

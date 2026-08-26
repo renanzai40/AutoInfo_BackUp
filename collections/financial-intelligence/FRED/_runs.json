@@ -1,0 +1,82 @@
+[
+  {
+    "collection_id": "col-20260820T060957-38f63c9a",
+    "timestamp": "2026-08-20T06:10:03.620944+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://api.stlouisfed.org/fred/ (source: FRED): Client error '404 Not Found' for url 'https://api.stlouisfed.org/fred/?file_type=json&series_id=GDP'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://api.stlouisfed.org/fred/ (source: FRED): Client error '404 Not Found' for url 'https://api.stlouisfed.org/fred/?file_type=json&series_id=GDP'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 1316.0
+  },
+  {
+    "collection_id": "col-20260823T020951-033c44cd",
+    "timestamp": "2026-08-23T02:09:57.295922+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://api.stlouisfed.org/fred/ (source: FRED): Client error '404 Not Found' for url 'https://api.stlouisfed.org/fred/?file_type=json&series_id=GDP'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://api.stlouisfed.org/fred/ (source: FRED): Client error '404 Not Found' for url 'https://api.stlouisfed.org/fred/?file_type=json&series_id=GDP'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 739.0
+  },
+  {
+    "collection_id": "col-20260823T021409-94af2957",
+    "timestamp": "2026-08-23T02:14:16.140499+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://api.stlouisfed.org/fred/ (source: FRED): Client error '404 Not Found' for url 'https://api.stlouisfed.org/fred/?file_type=json&series_id=GDP'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://api.stlouisfed.org/fred/ (source: FRED): Client error '404 Not Found' for url 'https://api.stlouisfed.org/fred/?file_type=json&series_id=GDP'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 671.0
+  },
+  {
+    "collection_id": "col-20260824T052446-be67ff92",
+    "timestamp": "2026-08-24T05:25:02.837202+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://api.stlouisfed.org/fred/ (source: FRED): Client error '404 Not Found' for url 'https://api.stlouisfed.org/fred/?file_type=json&series_id=GDP'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://api.stlouisfed.org/fred/ (source: FRED): Client error '404 Not Found' for url 'https://api.stlouisfed.org/fred/?file_type=json&series_id=GDP'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 1552.0
+  },
+  {
+    "collection_id": "col-20260825T153815-124f1c06",
+    "timestamp": "2026-08-25T15:38:54.394862+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://api.stlouisfed.org/fred/ (source: FRED): Client error '404 Not Found' for url 'https://api.stlouisfed.org/fred/?file_type=json&series_id=GDP'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://api.stlouisfed.org/fred/ (source: FRED): Client error '404 Not Found' for url 'https://api.stlouisfed.org/fred/?file_type=json&series_id=GDP'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 1541.0
+  }
+]

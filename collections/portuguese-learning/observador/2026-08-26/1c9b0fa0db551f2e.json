@@ -1,0 +1,24 @@
+{
+  "id": "1c9b0fa0db551f2e",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/dgartes-apoia-115-projetos-artisticos-em-58-paises-com-1-milhao-de-euros-mas-41-ficaram-de-fora-por-falta-de-verba/",
+  "title": "Programa da DGArtes abrange 115 projetos internacionais",
+  "content": "As entidades candidatas ao Programa de Apoio a Projetos - Internacionalização foram esta sexta notificadas da decisão final, estando previsto que os projetos apoiados se desenvolvam entre 1 de setembro de 2026 e 28 de fevereiro de 2028",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T22:47:31+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b5b49eb6-21f1-43b6-8f21-6ceef1f909ed",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

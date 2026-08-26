@@ -1,0 +1,24 @@
+{
+  "id": "9081bf4ee29017b5",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/proisshestviya/28044359",
+  "title": "В Сумах произошли два взрыва",
+  "content": "В Сумской области объявлена воздушная тревога",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T22:50:53+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "798252c2-0bde-42c8-99ed-ac21854cfc0e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "b71c4e7121ec41a3",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/business/business-news/mark-curry-raquel-lee-secret-settlement-alleged-sex-abuse-1236680259/",
+  "title": "Raquel Lee Reached Secret Settlement With Mark Curry Years Before Suing Disney Over Alleged Sexual Abuse",
+  "content": "The 2015 private resolution between the actors has surfaced after the actress claimed in court that the company was negligent in protecting her against sexual assault when she worked on \"The Poof Point\" at 14 years old.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T15:59:34+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0814f7f9-1617-465a-8d0d-994216128f36",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

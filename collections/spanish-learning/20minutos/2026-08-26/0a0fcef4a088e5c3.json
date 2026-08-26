@@ -1,0 +1,24 @@
+{
+  "id": "0a0fcef4a088e5c3",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/lainformacion/economia-y-finanzas/sabias-hay-oro-bajo-suelo-madrid_7029251_0.html",
+  "title": "¿Sabías que hay oro bajo el suelo de Madrid? Te lo contamos en un minuto",
+  "content": "La cámara acorazada del Banco de España (BdE) alberga unas 280 toneladas de oro, concentrando el grueso de las reservas del Estado español.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T21:18:09+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0d2891b8-277b-46b7-a010-0836cf3a3ba2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

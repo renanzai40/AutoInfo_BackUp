@@ -1,0 +1,27 @@
+{
+  "id": "pdAAp3FQEfCAyA7fSPcIsw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Create Amazing Macros in Affinity Photo",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "pdAAp3FQEfCAyA7fSPcIsw",
+    "slug": "create-amazing-macros-in-affinity-photo",
+    "name": "Create Amazing Macros in Affinity Photo"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d5f78bcc-0ce3-4f21-b7bd-f9b1aff1c3e0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

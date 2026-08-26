@@ -1,0 +1,24 @@
+{
+  "id": "33a695391d8361ed",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/motor/actualidad/sigue-siendo-mejor-hibrido-urbano-probamos-toyota-yaris-hybrid-para-comprobarlo_7018302_0.html",
+  "title": "¿Sigue siendo el Toyota Yaris el mejor híbrido urbano? Después de probarlo, tengo varias cosas claras",
+  "content": "El Toyota Yaris Hybrid nos deja claro, tras probarlo, que un utilitario puede ser eficiente, tecnológico y cómodo sin costar un riñón.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-16T07:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "558af3f1-9b58-46ab-b1f5-da4570bad0d4",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

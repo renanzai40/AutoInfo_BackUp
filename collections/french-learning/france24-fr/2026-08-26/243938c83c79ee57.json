@@ -1,0 +1,24 @@
+{
+  "id": "243938c83c79ee57",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/vid%C3%A9o/20260825-sophie-adenot-retourne-dans-l-espace-pour-une-deuxi%C3%A8me-sortie-extrav%C3%A9hiculaire",
+  "title": "Sophie Adenot retourne dans l'espace pour une deuxième sortie extravéhiculaire",
+  "content": "Une semaine après sa première sortie extravéhiculaire historique, Sophie Adenot retourne hors de la Station spatiale internationale. La Française, accompagnée de l’astronaute américain Anil Menon, doit achever le remplacement d’une antenne de communication essentielle entre l’ISS et le centre de contrôle de Houston. Explications de notre journaliste Sylvain Rousseau.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T14:42:50+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "65b88e91-d970-46b7-96d9-8c217d4a6c93",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

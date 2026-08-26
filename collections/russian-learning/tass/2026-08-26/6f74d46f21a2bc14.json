@@ -1,0 +1,24 @@
+{
+  "id": "6f74d46f21a2bc14",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/mezhdunarodnaya-panorama/28044405",
+  "title": "Минюст США допустил снос Кеннеди-центра, если в название не вернут имя Трампа",
+  "content": "В американском ведомстве отметили, что на месте этого здания может появиться сооружение \"типа большого открытого амфитеатра\"",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T23:46:39+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5e75c7bc-1c68-4317-9478-61a8accb2d27",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

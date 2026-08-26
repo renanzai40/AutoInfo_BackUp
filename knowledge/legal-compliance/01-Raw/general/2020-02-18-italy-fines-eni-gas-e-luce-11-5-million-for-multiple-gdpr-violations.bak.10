@@ -1,0 +1,53 @@
+---
+title: Italy fines Eni Gas e Luce €11.5 million for multiple GDPR violations
+domain: legal-compliance
+tier: 01-Raw
+entry_id: legal-compliance-general-italy-fines-eni-gas-e-luce-11-5-million-for-multiple-gdpr-violations
+source_url: https://gdpr.eu/italy-fines-energy-company-for-multiple-gdpr-violations/
+source_type: rss
+source_platform: rss
+collected_at: '2020-02-18T12:46:53+00:00'
+summary: Italy's data protection authority fined Eni Gas e Luce €11.5 million for multiple GDPR violations. The fines were
+  split into two separate penalties of €8.5 million and €3 million, highlighting enforcement of data privacy laws. This case
+  underscores the consequences of non-compliance with GDPR regulations.
+tags: []
+quality_tier: 2
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 70.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: b170b9b9-c819-47d2-bd76-31a2fda37121
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<p>On Jan. 17, 2020, the Italian Supervisory Authority (ISA) announced it had imposed two separate fines of €8.5 million and €3 million on Eni Gas e Luce (EGL), an...</p>
+<p>The post <a href="https://gdpr.eu/italy-fines-energy-company-for-multiple-gdpr-violations/">Italy fines Eni Gas e Luce €11.5 million for multiple GDPR violations</a> appeared first on <a href="https://gdpr.eu">GDPR.eu</a>.</p>
+
+## Summary
+Italy's data protection authority fined Eni Gas e Luce €11.5 million for multiple GDPR violations. The fines were split into two separate penalties of €8.5 million and €3 million, highlighting enforcement of data privacy laws. This case underscores the consequences of non-compliance with GDPR regulations.
+
+## Key Points
+- Italian Supervisory Authority imposed fines on Eni Gas e Luce for GDPR violations.
+- Total fine amount is €11.5 million, divided into €8.5 million and €3 million.
+- Violations are related to GDPR, a key data protection regulation.
+- This action demonstrates strict enforcement of data privacy laws in Italy.
+- The case involves an energy company, but GDPR rules apply broadly to personal data handling.
+
+
+## Entities
+- **Italian Supervisory Authority (ISA)** (org, relevance=)
+- **Eni Gas e Luce (EGL)** (org, relevance=)
+- **GDPR** (concept, relevance=)

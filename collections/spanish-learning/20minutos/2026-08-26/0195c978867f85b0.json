@@ -1,0 +1,24 @@
+{
+  "id": "0195c978867f85b0",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/cinemania/noticias/ali-g-camara-oculta-trailer-pelicula-sacha-baron-cohen-amazon_7029244_0.html",
+  "title": "Ali G vuelve con cámara oculta: tráiler y fecha de estreno de la película secreta de Sacha Baron Cohen",
+  "content": "La secuela de 'Ali G anda suelto' (2002) llegará en octubre aplicando el formato de falso documental al primer personaje exitoso del creador de Borat.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T17:46:48+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "efb079e9-3628-4332-bb8f-1d6e94525249",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

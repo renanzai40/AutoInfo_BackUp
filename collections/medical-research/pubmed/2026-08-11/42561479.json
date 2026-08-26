@@ -1,0 +1,80 @@
+{
+  "id": "42561479",
+  "source_name": "pubmed",
+  "source_type": "api",
+  "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42561479&retmode=xml",
+  "title": "Impact of oocyte vitrification on chromosome-specific aneuploidy patterns and oocyte resilience in advanced maternal age patients.",
+  "content": "RESEARCH QUESTION: Does oocyte vitrification affect chromosome-specific and age-dependent aneuploidy patterns in blastocysts from women of advanced maternal age?\nDESIGN: This observational study included 163 aneuploid blastocysts derived from 441 fresh and 343 vitrified-warmed oocytes obtained from 122 patients of advanced maternal age undergoing oocyte accumulation for preimplantation genetic testing for aneuploidies (PGT-A). The blastocysts were compared based on whether they were derived from fresh or vitrified-warmed oocytes, obtained from the same patients. Chromosome-specific aneuploidy distributions were compared and age-related patterns were assessed by heatmap visualization and forest plot analyses. Age-dependent euploidy trends were evaluated by regression analysis. The number of euploid blastocysts obtained per inseminated metaphase II (MII) oocyte was calculated as an indicator of oocyte resilience to vitrification.\nRESULTS: Euploidy rates declined with increasing maternal age in both cohorts, with comparable regression slopes between fresh and vitrified-warmed oocytes. Oocyte vitrification did not alter the global or chromosome-specific distribution of aneuploidies or their age-related dynamics. Chromosomes classically associated with age-dependent errors (16, 22, 21, 15, 18 and 13) showed similar age-dependent profiles in both cohorts. Despite preserved chromosomal stability, vitrified-warmed oocytes exhibited a significantly lower euploid blastocyst rate per inseminated MII oocyte, indicating reduced developmental competence.\nCONCLUSIONS: Oocyte vitrification does not substantially alter the patterns of whole-chromosome aneuploidy in blastocysts from women of advanced maternal age. However, vitrification reduces oocyte resilience, mainly affecting developmental competence. Integrating chromosome-specific analyses, a refined framework was provided for interpreting PGT-A outcomes and personalizing IVF treatments in advanced maternal age patients.",
+  "content_type": "text",
+  "source_platform": "pubmed",
+  "collected_at": "2026 Jun 29",
+  "language": "",
+  "domain": "medical-research",
+  "topic_tags": [
+    "Advanced maternal age",
+    "Aneuploidy",
+    "IVF",
+    "Oocyte vitrification",
+    "Preimplantation genetic testing for aneuploidies"
+  ],
+  "quality_tier": 1,
+  "raw_data": {
+    "pmid": "42561479",
+    "pmc_id": "",
+    "authors": [
+      {
+        "lastname": "Canosa",
+        "firstname": "Stefano",
+        "initials": "S"
+      },
+      {
+        "lastname": "Ottolini",
+        "firstname": "Christian Simon",
+        "initials": "CS"
+      },
+      {
+        "lastname": "Capalbo",
+        "firstname": "Antonio",
+        "initials": "A"
+      },
+      {
+        "lastname": "Coticchio",
+        "firstname": "Giovanni",
+        "initials": "G"
+      },
+      {
+        "lastname": "Cimadomo",
+        "firstname": "Danilo",
+        "initials": "D"
+      },
+      {
+        "lastname": "Revelli",
+        "firstname": "Alberto",
+        "initials": "A"
+      },
+      {
+        "lastname": "Gennarelli",
+        "firstname": "Gianluca",
+        "initials": "G"
+      },
+      {
+        "lastname": "Bongioanni",
+        "firstname": "Francesca",
+        "initials": "F"
+      },
+      {
+        "lastname": "Rienzi",
+        "firstname": "Laura",
+        "initials": "L"
+      }
+    ],
+    "journal": "Reproductive biomedicine online",
+    "pub_date": "2026 Jun 29",
+    "doi": "10.1016/j.rbmo.2026.105841",
+    "mesh_terms": []
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "97500ff1-fe2d-4962-b7d6-66c1b2221f3a"
+}

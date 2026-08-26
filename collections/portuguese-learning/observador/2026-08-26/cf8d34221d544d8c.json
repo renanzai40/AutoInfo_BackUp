@@ -1,0 +1,24 @@
+{
+  "id": "cf8d34221d544d8c",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/chega-quer-auditoria-a-seguranca-social-antes-do-oe-para-identificar-pensoes-milionarias-e-imorais/",
+  "title": "Chega desafia Governo a fazer auditoria à Segurança Social",
+  "content": "O Chega quer saber quantos acumulam pensões elevadas com salários e cargos nomeados pelo Estado. Caso de ex-ministro Correia de Campos serve de exemplo ao partido.",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T19:32:10+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "030462e0-0221-44b8-b7b9-9e1a32d228fc",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

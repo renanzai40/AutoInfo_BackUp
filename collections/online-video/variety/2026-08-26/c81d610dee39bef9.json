@@ -1,0 +1,24 @@
+{
+  "id": "c81d610dee39bef9",
+  "source_name": "variety",
+  "source_type": "rss",
+  "source_url": "https://variety.com/2026/tv/news/shaquille-o-neal-dunkman-lakers-sale-kobe-bryant-1236842517/",
+  "title": "‘Dunkman’: How Shaquille O’Neal Made Dunk Contests Great Again",
+  "content": "Shaquille O’Neal loves solving problems. The basketball icon and four-time NBA champion, 54, has two master’s degrees, a doctorate, served as a sheriff’s deputy and honorary U.S. Marshal, and once played for Doc Rivers. Back in 2016, the basketball icon needed to install a home security system only to have a company quote him $60,000 [&#8230;]",
+  "content_type": "text",
+  "source_platform": "variety",
+  "collected_at": "2026-08-25T16:01:14+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://variety.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "dfed7524-7667-4d2b-961d-628bafe15660",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

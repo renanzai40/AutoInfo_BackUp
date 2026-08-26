@@ -1,0 +1,24 @@
+{
+  "id": "f9736f41c6fa2183",
+  "source_name": "scotusblog",
+  "source_type": "rss",
+  "source_url": "https://www.scotusblog.com/2026/08/the-latest-on-the-mail-in-voting-and-ballroom-battles/",
+  "title": "The latest on the mail-in voting and ballroom battles",
+  "content": "Plus, the kidney stones that made John Marshall the chief justice.",
+  "content_type": "text",
+  "source_platform": "scotusblog",
+  "collected_at": "2026-08-24T13:00:00+00:00",
+  "language": "",
+  "domain": "legal-compliance",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.scotusblog.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8977c271-bd23-4fd3-a1af-ec41494563d3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

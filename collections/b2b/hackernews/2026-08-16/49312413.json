@@ -1,0 +1,35 @@
+{
+  "id": "49312413",
+  "source_name": "hackernews",
+  "source_type": "hackernews",
+  "source_url": "https://news.ycombinator.com/item?id=49312413",
+  "title": "Europe's scorched landscapes seen from space after summer heatwaves",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "hackernews",
+  "collected_at": "2026-08-15T18:36:18.466679+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "by": "blondie9x",
+    "descendants": 17,
+    "id": 49312413,
+    "kids": [
+      49312655,
+      49312689,
+      49312945,
+      49312887
+    ],
+    "score": 40,
+    "time": 1786814486,
+    "title": "Europe's scorched landscapes seen from space after summer heatwaves",
+    "type": "story",
+    "url": "https://www.bbc.com/news/articles/c4gxy0wqqd9o"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "eb370ea8-035e-4487-a079-a8559a847bfb"
+}

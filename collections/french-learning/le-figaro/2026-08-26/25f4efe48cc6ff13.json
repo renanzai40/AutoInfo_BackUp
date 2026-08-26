@@ -1,0 +1,24 @@
+{
+  "id": "25f4efe48cc6ff13",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/vox/societe/jerome-fourquet-avec-le-parc-dragon-ball-la-france-accepte-son-destin-de-parc-d-attraction-geant-du-village-planetaire-20260825",
+  "title": "Jérôme Fourquet : «Avec le parc Dragon Ball, la France accepte son destin de parc d’attractions géant du village planétaire»",
+  "content": "ENTRETIEN - Le futur parc consacré au dessin animé japonais, financé par l’Arabie saoudite, est révélateur de la place qu’occupe désormais la France dans la mondialisation : une destination récréative, où les usines ferment et les touristes affluent, analyse le sondeur.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T19:27:14+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "adc7264d-9ee3-40d5-bd91-46d7b717ccb4",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

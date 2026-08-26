@@ -1,0 +1,24 @@
+{
+  "id": "71f671e76375a005",
+  "source_name": "rt-news",
+  "source_type": "rss",
+  "source_url": "https://www.rt.com/news/644650-us-measles-outbreak-deaths/?utm_source=rss&utm_medium=rss&utm_campaign=RSS",
+  "title": "First deaths in US measles crisis reported",
+  "content": "<img align=\"left\" alt=\"Preview\" src=\"https://mf.b37mrtl.ru/files/2026.08/thumbnail/6a8de1342030270fad2790fa.jpg\" style=\"margin-right: 10px;\" /> The first two people have died of measles in the US this year, amid a record resurgence of the disease <br /><a href=\"https://www.rt.com/news/644650-us-measles-outbreak-deaths/?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=RSS\">Read Full Article at RT.com</a>",
+  "content_type": "text",
+  "source_platform": "rt-news",
+  "collected_at": "2026-08-25T19:17:32+00:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.rt.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "beffb8ca-9c77-4d22-8a2b-ecfae8e78c98",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

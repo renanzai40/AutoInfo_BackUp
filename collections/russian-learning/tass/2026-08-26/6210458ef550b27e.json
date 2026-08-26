@@ -1,0 +1,24 @@
+{
+  "id": "6210458ef550b27e",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/ekonomika/28044445",
+  "title": "В Корпорации МСП сообщили о росте числа организаторов концертов на 10% за год",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-26T00:05:18+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b93a5a1a-5282-49d8-8b3f-f28da4064fed",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

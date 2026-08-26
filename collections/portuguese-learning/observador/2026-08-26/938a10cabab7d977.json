@@ -1,0 +1,24 @@
+{
+  "id": "938a10cabab7d977",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/especiais/inem-em-clima-de-guerra-ministra-convoca-sindicato-e-direcao-mas-acusacoes-de-interesses-ocultos-acabam-em-queixa-crime/",
+  "title": "INEM. Ministra tenta parar guerra interna e evitar greve",
+  "content": "Ana Paula Martins tenta apaziguar ambiente no instituto de socorro, mas sindicato avança com queixa contra presidente e ainda avalia processo contra a ministra. Há duas greves marcadas para setembro.",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T18:47:38+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1caeea23-9a82-4f45-bb6d-19d6c7a8ffb7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

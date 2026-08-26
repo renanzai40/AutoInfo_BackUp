@@ -1,0 +1,496 @@
+# Weekly Digest — russian-learning
+
+**Domain**: russian-learning  
+**Period**: Weekly (2026-08-19 – 2026-08-26)  
+**Generated**: 2026-08-25T21:30:07.243887+00:00  
+**Total entries**: 27
+
+---
+
+## Executive Summary
+
+Key developments during this period include escalating international trade disputes with Canada imposing retaliatory tariffs on the US, ongoing military conflicts leading to infrastructure damage and economic impacts in affected regions, and significant space exploration milestones from NASA and SpaceX. Economic indicators showed mixed signals with falling oil prices but rebounding stock markets, while local policies in Russia adapted to safety and efficiency needs.
+
+### Key Findings
+
+- **International Trade Tensions**: Canada announced retaliatory tariffs on US goods worth nearly $28 billion, effective from September 8, potentially escalating trade disputes. (Source: https://www.interfax.ru/world/1111222, https://tass.ru/ekonomika/28044009, https://www.interfax.ru/world/1111200)- **Military and Conflict Updates**: The Russian Ministry of Defense reported intercepting 39 drones, and attacks in Kherson destroyed 170 hectares of crops, highlighting ongoing regional tensions. (Source: https://www.interfax.ru/russia/1111227, https://tass.ru/proisshestviya/28043925)- **Economic Indicators**: Oil prices fell to $88.33 per barrel, the Russian stock market rebounded, but EU fuel prices increased by 16.9% year-over-year, indicating economic volatility. (Source: https://www.interfax.ru/business/1111215, https://www.interfax.ru/business/1111218, https://www.interfax.ru/business/1111196)- **Space Exploration Milestones**: Astronauts completed a spacewalk to install a new communication antenna, and SpaceX announced plans for a new spaceport in Louisiana for Starship missions. (Source: https://tass.ru/kosmos/28044321, https://tass.ru/kosmos/28044225)- **Local Policy Adjustments**: Regions in Russia adjusted fuel sales policies for efficiency and recommended indoor school events for safety, reflecting adaptive measures. (Source: https://www.interfax.ru/russia/1111232, https://tass.ru/obschestvo/28044263, https://tass.ru/ekonomika/28044255)
+### Trends & Patterns
+
+- Economic volatility with fluctuating oil prices and trade tariffs impacting global and local markets.
+- Geopolitical tensions escalating through military actions, drone interceptions, and international disputes.
+- Increased focus on safety and regulatory adjustments in response to weather risks, conflicts, and public health concerns.
+- Continued technological advancements in space exploration and energy sectors, driving innovation and infrastructure development.
+
+### Recommendations
+
+- Businesses and investors should monitor international trade policies closely and diversify supply chains to mitigate risks from tariffs and economic shifts.
+- Regions affected by conflicts should prioritize infrastructure repair, agricultural support, and enhanced disaster preparedness programs.
+- Individuals and organizations should adhere to safety advisories, such as weather warnings and fuel efficiency measures, to reduce vulnerabilities.
+
+---
+
+## Entries
+
+### 1. Мирра Андреева и Андрей Рублев вышли в четвертьфинал US Open в миксте
+
+| Field | Value |
+|-------|-------|
+| **Source** | interfax |
+| **Type** | rss |
+| **Collected** | 2026-08-25T23:29:00+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Mirra Andreyeva and Andrey Rublev, a Russian tennis pair, won their first-round match against Italians Sara Errani and Andrea Vavassori at the US Open mixed doubles. This victory advances them to the quarterfinals of the Grand Slam tournament.
+
+
+[View Source](https://www.sport-interfax.ru/1111239)
+
+---
+
+### 2. В Бердянске ветеран Великой Отечественной войны отметил 100-летний юбилей
+
+| Field | Value |
+|-------|-------|
+| **Source** | tass |
+| **Type** | rss |
+| **Collected** | 2026-08-25T22:30:41+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Grigory Rozuman, a veteran of the Great Patriotic War, celebrated his 100th birthday in Berdyansk. He was honored with multiple prestigious military awards and medals for his service during World War II.
+
+
+[View Source](https://tass.ru/obschestvo/28044341)
+
+---
+
+### 3. Астронавты NASA и ЕКА завершили выход в открытый космос
+
+| Field | Value |
+|-------|-------|
+| **Source** | tass |
+| **Type** | rss |
+| **Collected** | 2026-08-25T22:18:17+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: NASA and ESA astronauts Anil Menon and Sophie Adeno completed a 6.5-hour spacewalk to install a new communication antenna on the orbital station. This antenna improves communication with NASA's Mission Control Center in Houston.
+
+
+[View Source](https://tass.ru/kosmos/28044321)
+
+---
+
+### 4. Топливо в Севастополе в среду будут продавать по QR-кодам и свободно
+
+| Field | Value |
+|-------|-------|
+| **Source** | interfax |
+| **Type** | rss |
+| **Collected** | 2026-08-25T21:58:00+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Fuel in Sevastopol will be sold both freely and via QR codes at gas stations of the 'TES' network, as announced by Governor Mikhail Razvozhaev. The sale will include four fuel types: Ai-95, Ai-95 NP, Ai-92, and Diesel, starting on Wednesday.
+
+
+[View Source](https://www.interfax.ru/russia/1111232)
+
+---
+
+### 5. Школам Кировской области рекомендовали отказаться от линеек на улице 1 сентября
+
+| Field | Value |
+|-------|-------|
+| **Source** | tass |
+| **Type** | rss |
+| **Collected** | 2026-08-25T21:53:48+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The Minister of Education in Kirov Oblast, Natalia Bastrikova, has advised schools to avoid holding outdoor lines on September 1st and instead conduct events indoors with minimal participants. This recommendation aims to adjust traditional celebrations for safety or health reasons.
+
+
+[View Source](https://tass.ru/obschestvo/28044263)
+
+---
+
+### 6. В Астраханской области снизят отпуск топлива до 30 л в руки
+
+| Field | Value |
+|-------|-------|
+| **Source** | tass |
+| **Type** | rss |
+| **Collected** | 2026-08-25T21:45:55+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The Astrakhan region is reducing fuel allocation to 30 liters per person. This measure aims to increase gas station efficiency by extending working hours and refueling more cars daily. The regional head, Igor Babushkin, announced this change.
+
+
+[View Source](https://tass.ru/ekonomika/28044255)
+
+---
+
+### 7. SpaceX начнет строительство нового космодрома для Starship в Луизиане
+
+| Field | Value |
+|-------|-------|
+| **Source** | tass |
+| **Type** | rss |
+| **Collected** | 2026-08-25T20:48:44+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: SpaceX has announced plans to begin construction of a new spaceport in Louisiana for its Starship spacecraft in 2027. The project aims to support future missions and expand the company's operational capabilities in space exploration.
+
+
+[View Source](https://tass.ru/kosmos/28044225)
+
+---
+
+### 8. МЧС предупредило о ливнях с градом и ветром до 22 м/с в Калмыкии
+
+| Field | Value |
+|-------|-------|
+| **Source** | tass |
+| **Type** | rss |
+| **Collected** | 2026-08-25T20:46:21+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: EMERCOM warned residents of Kalmykia about severe weather conditions, including downpours, hail, and wind speeds up to 22 m/s. The advisory includes safety measures such as wearing reflective clothing and maintaining safe driving practices.
+
+
+[View Source](https://tass.ru/obschestvo/28044219)
+
+---
+
+### 9. Минобороны РФ сообщило, что с утра вторника над регионами сбиты 39 беспилотников
+
+| Field | Value |
+|-------|-------|
+| **Source** | interfax |
+| **Type** | rss |
+| **Collected** | 2026-08-25T20:42:00+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The Russian Ministry of Defense announced that air defense systems intercepted and destroyed 39 Ukrainian drones between 8:00 and 20:00 Moscow time on Tuesday. The drones were of aircraft type and were engaged over various regions.
+
+
+[View Source](https://www.interfax.ru/russia/1111227)
+
+---
+
+### 10. Совет ЕС рассматривает вопрос о cанкциях против израильского министра Бен-Гвира
+
+| Field | Value |
+|-------|-------|
+| **Source** | interfax |
+| **Type** | rss |
+| **Collected** | 2026-08-25T20:41:00+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The EU is considering sanctions against Israeli Minister of National Security Itamar Ben Gvir due to his unacceptable statements about Gaza. The EU has firmly condemned his remarks, and the possibility of European sanctions is under review.
+
+
+[View Source](https://www.interfax.ru/world/1111224)
+
+---
+
+### 11. Odatv: сообщение "Эрдоган умер" стало поводом для расследования прокуратуры
+
+| Field | Value |
+|-------|-------|
+| **Source** | tass |
+| **Type** | rss |
+| **Collected** | 2026-08-25T20:39:47+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: A false news report claiming Turkish President Erdoğan's death has prompted prosecutorial investigation. Arrest warrants have been issued for the editor, office manager, and author of the report published by the Denge newspaper.
+
+
+[View Source](https://tass.ru/mezhdunarodnaya-panorama/28044209)
+
+---
+
+### 12. Подмосковный экспорт рыбных консервов и икры вырос на 20%
+
+| Field | Value |
+|-------|-------|
+| **Source** | tass |
+| **Type** | rss |
+| **Collected** | 2026-08-25T20:36:52+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The Moscow Region has experienced a 20% increase in exports of fish canned products and caviar. Approximately 1,500 tons of these products were shipped abroad in physical terms.
+
+
+[View Source](https://tass.ru/ekonomika/28044203)
+
+---
+
+### 13. Канада объявила о введении с 8 сентября ответных пошлин в отношении США
+
+| Field | Value |
+|-------|-------|
+| **Source** | interfax |
+| **Type** | rss |
+| **Collected** | 2026-08-25T19:53:00+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Canada has announced retaliatory tariffs against the United States, effective from September 8. The tariffs will range from 15% to 50% on various goods, as stated by the Canadian Ministry of Finance.
+
+
+[View Source](https://www.interfax.ru/world/1111222)
+
+---
+
+### 14. Выпуск алюминия в странах Персидского залива в июле упал на 44% г/г
+
+| Field | Value |
+|-------|-------|
+| **Source** | interfax |
+| **Type** | rss |
+| **Collected** | 2026-08-25T19:41:00+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article reports that primary aluminum production in the Persian Gulf countries fell by 44% year-over-year in July, reaching 293,000 tons. This data is based on preliminary estimates from the International Aluminum Institute.
+
+
+[View Source](https://www.interfax.ru/world/1111221)
+
+---
+
+### 15. Рынок акций РФ во вторник поднялся к 2120п по индексу МосБиржи
+
+| Field | Value |
+|-------|-------|
+| **Source** | interfax |
+| **Type** | rss |
+| **Collected** | 2026-08-25T19:12:00+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The Russian stock market rebounded on Tuesday, nearly recovering early-week losses to reach 2120p on the Moscow Exchange index. The rebound was driven by news of CIA Director John Ratcliffe's visit to Russia for talks, but was constrained by falling commodity prices and ongoing Russia-Ukraine geopolitical tensions.
+
+
+[View Source](https://www.interfax.ru/business/1111218)
+
+---
+
+### 16. Пять человек пострадали при столкновении автобуса и грузовика в Петербурге
+
+| Field | Value |
+|-------|-------|
+| **Source** | interfax |
+| **Type** | rss |
+| **Collected** | 2026-08-25T19:10:00+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: A bus and a truck collided in the Kurortny district of St. Petersburg on Tuesday, causing injuries to five people. The incident was reported by the press service of the city's Main Directorate of the Ministry of Emergency Situations.
+
+
+[View Source](https://www.interfax.ru/russia/1111217)
+
+---
+
+### 17. Нефть ускорила падение, цена Brent опустилась до $88,33 за баррель
+
+| Field | Value |
+|-------|-------|
+| **Source** | interfax |
+| **Type** | rss |
+| **Collected** | 2026-08-25T18:59:00+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Oil prices declined further on Tuesday evening, with Brent crude falling to $88.33 per barrel.
+
+
+[View Source](https://www.interfax.ru/business/1111215)
+
+---
+
+### 18. Чистая прибыль банков США в II квартале увеличилась на 28,7% г/г
+
+| Field | Value |
+|-------|-------|
+| **Source** | interfax |
+| **Type** | rss |
+| **Collected** | 2026-08-25T18:57:00+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The article states that the total net profit of US banks in Q2 2026 increased by 28.7% year-over-year to $90.1 billion. This data is reported by the Federal Deposit Insurance Corporation (FDIC).
+
+
+[View Source](https://www.interfax.ru/world/1111214)
+
+---
+
+### 19. В Канаде анонсировали пошлины на американские товары почти на $28 млрд
+
+| Field | Value |
+|-------|-------|
+| **Source** | tass |
+| **Type** | rss |
+| **Collected** | 2026-08-25T18:51:48+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Canada announced new tariffs on US goods worth nearly $28 billion. Finance Minister François-Philippe Champagne stated they will be implemented starting next month.
+
+
+[View Source](https://tass.ru/ekonomika/28044009)
+
+---
+
+### 20. Природный пожар на площади 3,5 га тушат вблизи Анапы после падения беспилотника
+
+| Field | Value |
+|-------|-------|
+| **Source** | interfax |
+| **Type** | rss |
+| **Collected** | 2026-08-25T18:27:00+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: A natural fire has started in the Utrish nature reserve near Anapa after a drone crash, covering an area of 3.5 hectares. Authorities have requested a special helicopter for firefighting, with city head Svetlana Maslova reporting the incident.
+
+
+[View Source](https://www.interfax.ru/russia/1111210)
+
+---
+
+### 21. В Херсонской области атаки ВСУ уничтожили 170 га посевов
+
+| Field | Value |
+|-------|-------|
+| **Source** | tass |
+| **Type** | rss |
+| **Collected** | 2026-08-25T18:20:49+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Attacks in the Kherson region destroyed 170 hectares of crops. Regional head Vladimir Saldo noted that farmers are working under difficult conditions due to the ongoing conflict.
+
+
+[View Source](https://tass.ru/proisshestviya/28043925)
+
+---
+
+### 22. CBS сообщил о прибытии в Россию директора ЦРУ для переговоров
+
+| Field | Value |
+|-------|-------|
+| **Source** | interfax |
+| **Type** | rss |
+| **Collected** | 2026-08-25T17:32:00+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: CIA Director John Ratcliffe has arrived in Russia for negotiations, as reported by CBS News. He traveled on a Boeing C-17 aircraft, and meetings are scheduled in Moscow on Tuesday.
+
+
+[View Source](https://www.interfax.ru/world/1111204)
+
+---
+
+### 23. "Нижнекамскнефтехим" признал убыток по МСФО в 1,5 млрд руб.
+
+| Field | Value |
+|-------|-------|
+| **Source** | interfax |
+| **Type** | rss |
+| **Collected** | 2026-08-25T17:28:00+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Nizhnekamskneftekhim, part of the SIBUR group, reported a loss of 1.5 billion rubles under IFRS for the first half of 2026 due to asset impairment.
+
+
+[View Source](https://www.interfax.ru/business/1111203)
+
+---
+
+### 24. Канадский министр допустил введение ответных пошлин в отношении США 25 августа
+
+| Field | Value |
+|-------|-------|
+| **Source** | interfax |
+| **Type** | rss |
+| **Collected** | 2026-08-25T17:20:00+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Canadian Minister of Internal Trade Dominic LeBlanc indicated that Canada may announce retaliatory tariffs on American goods on August 25. The government appears to intend to impose these tariffs, suggesting potential trade tensions. This move is in response to unspecified actions by the United States.
+
+
+[View Source](https://www.interfax.ru/world/1111200)
+
+---
+
+### 25. Житель Мариуполя получил в Ростове-на-Дону 23 года колонии за госизмену
+
+| Field | Value |
+|-------|-------|
+| **Source** | interfax |
+| **Type** | rss |
+| **Collected** | 2026-08-25T17:14:00+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: Alexei Khanov, a resident of Mariupol, was found guilty by the Southern District Military Court in Rostov-on-Don for state treason and preparation of a terrorist act. He was sentenced to 23 years in a strict regime colony with a fine of 600,000 rubles.
+
+
+[View Source](https://www.interfax.ru/russia/1111199)
+
+---
+
+### 26. Порт Усть-Луга в Ленобласти на 72 часа задержал повредивший причал танкер
+
+| Field | Value |
+|-------|-------|
+| **Source** | interfax |
+| **Type** | rss |
+| **Collected** | 2026-08-25T17:11:00+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: The tanker Louloulight II has been delayed for 72 hours at the Ust-Luga port in Leningrad Oblast due to damage to the berth. The detention was ordered by the port captain.
+
+
+[View Source](https://www.interfax.ru/russia/1111198)
+
+---
+
+### 27. В Евросоюзе в июле автомобильное топливо подорожало на 16,9% г/г
+
+| Field | Value |
+|-------|-------|
+| **Source** | interfax |
+| **Type** | rss |
+| **Collected** | 2026-08-25T16:57:00+03:00 |
+| **Relevance** | —/100 |
+| **Tags** | — |
+
+**Summary**: In July, prices for automotive fuels and oils for personal transport in the European Union increased by 16.9% year-over-year, according to Eurostat data.
+
+
+[View Source](https://www.interfax.ru/business/1111196)
+
+---
+
+
+---
+
+*AutoInfo Digest · russian-learning · 2026-08-25T21:30:07.243887+00:00*

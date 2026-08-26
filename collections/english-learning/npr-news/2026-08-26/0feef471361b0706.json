@@ -1,0 +1,24 @@
+{
+  "id": "0feef471361b0706",
+  "source_name": "npr-news",
+  "source_type": "rss",
+  "source_url": "https://www.npr.org/2026/08/25/nx-s1-5943574/spokane-wildfire-evacuees-return-home-but-its-still-a-hazmat-situation",
+  "title": "Spokane wildfire evacuees return home, but it's 'still a hazmat situation'",
+  "content": "Most evacuees have been allowed to return to their homes near burn zones in Spokane, despite concerns about lingering toxins.",
+  "content_type": "text",
+  "source_platform": "npr-news",
+  "collected_at": "2026-08-25T05:00:00-04:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.npr.org/1001/rss.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1681aa8f-0e8f-4447-a0cc-36ed56d22a40",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

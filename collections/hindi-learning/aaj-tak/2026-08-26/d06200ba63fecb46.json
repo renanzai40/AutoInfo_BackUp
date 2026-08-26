@@ -1,0 +1,24 @@
+{
+  "id": "d06200ba63fecb46",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/bihar/video/patna-students-clash-with-bihar-police-during-bent-on-marching-towards-cm-samrat-residence-vdoj-2629541-2026-08-25?utm_source=rssfeed",
+  "title": "पटना में CM आवास की तरफ कूच पर आमादा छात्र, पुलिस से भ‍िड़े",
+  "content": "बिहार की राजधानी पटना में छात्रों और पुलिस के बीच भिड़ंत हो गई. अपनी मांगों को लेकर छात्र एक बार फिर मोर्चे पर उतरे. पटना में छात्रों का आंदोलन 18 अगस्त से चल रहा है. सरकार और छात्रों के बीच लगातार बातचीत भी चल रही है, लेकिन कुछ मांगों को लेकर छात्र और सरकार आमने-सामने आ गए हैं.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T12:33:48+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4d2fc6ce-a98f-474b-964a-7b655cb33942",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

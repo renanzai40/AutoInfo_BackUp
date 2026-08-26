@@ -1,0 +1,114 @@
+[
+  {
+    "collection_id": "col-20260810T060419-ab51f01f",
+    "timestamp": "2026-08-10T06:06:33.454847+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.youtube.com/feeds/videos.xml?channel_id=UC0vBXGSyV14uvJ4hECDOl0Q (bozo): <urlopen error [Errno 101] Network is unreachable>",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.youtube.com/feeds/videos.xml?channel_id=UC0vBXGSyV14uvJ4hECDOl0Q (bozo): <urlopen error [Errno 101] Network is unreachable>"
+      }
+    ],
+    "duration_ms": 133467.0
+  },
+  {
+    "collection_id": "col-20260815T180950-46e6223c",
+    "timestamp": "2026-08-15T18:10:20.776865+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.youtube.com/feeds/videos.xml?channel_id=UC0vBXGSyV14uvJ4hECDOl0Q: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.youtube.com/feeds/videos.xml?channel_id=UC0vBXGSyV14uvJ4hECDOl0Q: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30053.0
+  },
+  {
+    "collection_id": "col-20260815T182146-b896519c",
+    "timestamp": "2026-08-15T18:21:46.666683+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.youtube.com/feeds/videos.xml?channel_id=UC0vBXGSyV14uvJ4hECDOl0Q: [Errno 104] Connection reset by peer",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.youtube.com/feeds/videos.xml?channel_id=UC0vBXGSyV14uvJ4hECDOl0Q: [Errno 104] Connection reset by peer"
+      }
+    ],
+    "duration_ms": 106.0
+  },
+  {
+    "collection_id": "col-20260815T183415-b03f7b37",
+    "timestamp": "2026-08-15T18:34:36.183016+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.youtube.com/feeds/videos.xml?channel_id=UC0vBXGSyV14uvJ4hECDOl0Q: [Errno 104] Connection reset by peer",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.youtube.com/feeds/videos.xml?channel_id=UC0vBXGSyV14uvJ4hECDOl0Q: [Errno 104] Connection reset by peer"
+      }
+    ],
+    "duration_ms": 20079.0
+  },
+  {
+    "collection_id": "col-20260825T151510-1a39b5d2",
+    "timestamp": "2026-08-25T15:15:40.673032+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.youtube.com/feeds/videos.xml?channel_id=UC0vBXGSyV14uvJ4hECDOl0Q: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.youtube.com/feeds/videos.xml?channel_id=UC0vBXGSyV14uvJ4hECDOl0Q: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30071.0
+  },
+  {
+    "collection_id": "col-20260825T153409-ed01b249",
+    "timestamp": "2026-08-25T15:34:40.251502+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.youtube.com/feeds/videos.xml?channel_id=UC0vBXGSyV14uvJ4hECDOl0Q: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.youtube.com/feeds/videos.xml?channel_id=UC0vBXGSyV14uvJ4hECDOl0Q: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30107.0
+  },
+  {
+    "collection_id": "col-20260825T154258-739c21b3",
+    "timestamp": "2026-08-25T15:43:18.086298+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.youtube.com/feeds/videos.xml?channel_id=UC0vBXGSyV14uvJ4hECDOl0Q: [Errno 104] Connection reset by peer",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.youtube.com/feeds/videos.xml?channel_id=UC0vBXGSyV14uvJ4hECDOl0Q: [Errno 104] Connection reset by peer"
+      }
+    ],
+    "duration_ms": 19514.0
+  }
+]

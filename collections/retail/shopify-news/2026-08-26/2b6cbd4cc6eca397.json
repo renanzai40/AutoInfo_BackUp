@@ -1,0 +1,24 @@
+{
+  "id": "2b6cbd4cc6eca397",
+  "source_name": "shopify-news",
+  "source_type": "rss",
+  "source_url": "https://shopify.com/news/shopify-s-bfcm-globe-brings-commerce-to-life-like-never-before-heres-how-our-engineers-built-it",
+  "title": "Shopify’s BFCM globe brings commerce to life like never before – here's how our engineers built it",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "shopify-news",
+  "collected_at": "2023-11-24T13:27:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.shopify.com/news/feed"
+  },
+  "version": 2,
+  "previous_version": 1,
+  "supersedes": "retail-general-shopify-s-bfcm-globe-brings-commerce-to-life-like-never-before-here-s-how-our-engineers-built-it",
+  "trace_id": "704fa43b-c9ad-4faf-85c0-65d105199788",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

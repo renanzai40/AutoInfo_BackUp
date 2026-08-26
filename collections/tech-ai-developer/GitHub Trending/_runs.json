@@ -1,0 +1,24 @@
+[
+  {
+    "collection_id": "col-20260815T184541-2206d2d7",
+    "timestamp": "2026-08-15T18:45:43.035310+00:00",
+    "status": "success",
+    "items_found": 10,
+    "items_new": 10,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 1823.0,
+    "trace_ids": [
+      "5e24f010-0b1e-46d2-ba92-0e77572b05dd",
+      "7dd447ed-601e-4e43-8945-85ae6bbfe998",
+      "1f376dd2-0c3a-4d37-a080-1e5ba156e61c",
+      "213a864f-958f-4445-9dcf-91d92507a025",
+      "32f8121a-62b2-48af-8b5c-a0218df11d84",
+      "824cdd06-8161-4c3c-9032-8879719c63e2",
+      "2b033564-5669-4a5f-bfee-82f0f7993fa4",
+      "2662e9db-d773-4167-849b-23af0bbe867e",
+      "b0c6fed6-906e-4fb3-be7d-d23d6e34b029",
+      "f01b8355-551e-4a86-8ecd-70444ba21b16"
+    ]
+  }
+]

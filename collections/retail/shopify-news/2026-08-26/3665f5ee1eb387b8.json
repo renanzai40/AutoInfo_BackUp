@@ -1,0 +1,24 @@
+{
+  "id": "3665f5ee1eb387b8",
+  "source_name": "shopify-news",
+  "source_type": "rss",
+  "source_url": "https://shopify.com/news/they-did-it-again-shopify-merchants-break-black-friday-record-with-4-1-billion-in-sales",
+  "title": "They did it again! Shopify merchants break Black Friday record with $4.1 billion in sales",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "shopify-news",
+  "collected_at": "2023-11-25T13:49:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.shopify.com/news/feed"
+  },
+  "version": 2,
+  "previous_version": 1,
+  "supersedes": "retail-general-they-did-it-again-shopify-merchants-break-black-friday-record-with-4-1-billion-in-sales",
+  "trace_id": "3d910171-f0fb-416b-9307-e14b9e774caf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

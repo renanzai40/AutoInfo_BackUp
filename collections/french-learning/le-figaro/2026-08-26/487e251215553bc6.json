@@ -1,0 +1,24 @@
+{
+  "id": "487e251215553bc6",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/elections/presidentielles/presidentielle-2027-les-retraites-l-incontournable-sujet-qui-empoisonne-la-campagne-des-candidats-20260825",
+  "title": "Présidentielle 2027 : les retraites, l’incontournable sujet qui empoisonne la campagne des candidats",
+  "content": "DÉCRYPTAGE - Alors que les pensions représentent un quart de la dépense publique, les candidats à la fonction suprême seront bien obligés de prendre position.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T20:23:14+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "086abc2d-9477-4fa3-beb2-4be73762ed27",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

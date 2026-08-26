@@ -1,0 +1,24 @@
+{
+  "id": "7d96fe5c91d75abc",
+  "source_name": "Substack RSS (tech) — Pragmatic Engineer",
+  "source_type": "rss",
+  "source_url": "https://newsletter.pragmaticengineer.com/p/context-engineering-with-dex-horthy",
+  "title": "Context engineering with Dex Horthy",
+  "content": "Dex Horthy explains why context engineering is key to building more effective AI-assisted software without sacrificing code quality.",
+  "content_type": "text",
+  "source_platform": "Substack RSS (tech) — Pragmatic Engineer",
+  "collected_at": "2026-07-15T16:08:59+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://newsletter.pragmaticengineer.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d4eae388-f58c-4ad7-84cb-9741c91ef5d7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

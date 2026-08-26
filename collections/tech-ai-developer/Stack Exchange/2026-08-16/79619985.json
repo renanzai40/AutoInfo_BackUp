@@ -1,0 +1,47 @@
+{
+  "id": 79619985,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/79619985/how-to-make-natvis-files-recognisable-with-visual-studio-with-ninja-generator",
+  "title": "How to make natvis files recognisable with Visual Studio with Ninja generator?",
+  "content": "How to make natvis files recognisable with Visual Studio with Ninja generator?",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-15T19:01:40.189009+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "visual-studio",
+      "cmake",
+      "natvis"
+    ],
+    "owner": {
+      "account_id": 5975952,
+      "reputation": 16934,
+      "user_id": 4696802,
+      "user_type": "registered",
+      "accept_rate": 42,
+      "profile_image": "https://i.sstatic.net/AkVoc.jpg?s=256",
+      "display_name": "Zebrafish",
+      "link": "https://stackoverflow.com/users/4696802/zebrafish"
+    },
+    "is_answered": true,
+    "view_count": 464,
+    "answer_count": 1,
+    "score": 2,
+    "last_activity_date": 1786819841,
+    "creation_date": 1747150766,
+    "last_edit_date": 1786819841,
+    "question_id": 79619985,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/79619985/how-to-make-natvis-files-recognisable-with-visual-studio-with-ninja-generator",
+    "title": "How to make natvis files recognisable with Visual Studio with Ninja generator?"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ecf3c66a-4848-4659-8bf7-b468e2dde17e"
+}

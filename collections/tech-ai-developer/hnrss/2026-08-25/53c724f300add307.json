@@ -1,0 +1,24 @@
+{
+  "id": "53c724f300add307",
+  "source_name": "hnrss",
+  "source_type": "rss",
+  "source_url": "https://keenable.ai/",
+  "title": "Show HN: Keenable – A different web search API for AI agents",
+  "content": "<p>Hey HN! We built <a href=\"https://keenable.ai\" rel=\"nofollow\">https://keenable.ai</a>, a different web search API for AI agents.<p>Keenable searches our own 100B+ page index. We are focused on low cost and latency (p95 <250ms from us-east). We don’t believe in benchmaxxing, so we open-sourced our internal benchmarking suite, NEEDLE (available at <a href=\"https://keenableai.github.io/needle\" rel=\"nofollow\">https://keenableai.github.io/needle</a>): a live benchmark that compares Keenable with other search APIs on fresh agent-like queries.<p>I spent seven years at Amazon as a scientist working on web grounding for Alexa/AGI, and my co-founder Andrey previously led search at Yandex. We started Keenable because agents search differently from humans, and we wanted to build around those patterns directly.<p>The API is available now and we provide a free allowance of 100,000 requests a month.<p>It also exposes a novel SQL-like interface to the web, which is useful for structured extraction and agent workflows.<p>Happy to answer questions about the index, crawl, ranking, latency, or benchmarking.</p>\n<hr />\n<p>Comments URL: <a href=\"https://news.ycombinator.com/item?id=49435555\">https://news.ycombinator.com/item?id=49435555</a></p>\n<p>Points: 1</p>\n<p># Comments: 0</p>",
+  "content_type": "text",
+  "source_platform": "hnrss",
+  "collected_at": "2026-08-25T15:12:52+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://hnrss.org/newest"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2daa3ce0-fea3-48ec-b69c-66e161a22e08",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

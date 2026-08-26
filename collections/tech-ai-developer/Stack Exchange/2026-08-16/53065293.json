@@ -1,0 +1,47 @@
+{
+  "id": 53065293,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/53065293/how-to-make-image-move-in-a-frame-infinitely",
+  "title": "How to make image move in a frame infinitely?",
+  "content": "How to make image move in a frame infinitely?",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-15T19:01:40.189009+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "javascript",
+      "html",
+      "css"
+    ],
+    "owner": {
+      "account_id": 5981651,
+      "reputation": 190,
+      "user_id": 4909671,
+      "user_type": "registered",
+      "accept_rate": 100,
+      "profile_image": "https://www.gravatar.com/avatar/5dd0dfc4471d87cf96e39be6ddf450a9?s=256&d=identicon&r=PG&f=y&so-version=2",
+      "display_name": "Leonardo",
+      "link": "https://stackoverflow.com/users/4909671/leonardo"
+    },
+    "is_answered": true,
+    "view_count": 1325,
+    "answer_count": 2,
+    "score": -2,
+    "last_activity_date": 1786819757,
+    "creation_date": 1540905790,
+    "last_edit_date": 1786819757,
+    "question_id": 53065293,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/53065293/how-to-make-image-move-in-a-frame-infinitely",
+    "title": "How to make image move in a frame infinitely?"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5f252b1f-b823-46f4-a973-188157bb309d"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "f85182e384d080c7",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/sport/28043997",
+  "title": "\"Ак Барс\" заключил контракт с американским нападающим Хейзом",
+  "content": "Форвард провел 805 матчей в НХЛ",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T18:41:19+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3afcf09b-b2a4-499d-980f-3e688e9f788d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

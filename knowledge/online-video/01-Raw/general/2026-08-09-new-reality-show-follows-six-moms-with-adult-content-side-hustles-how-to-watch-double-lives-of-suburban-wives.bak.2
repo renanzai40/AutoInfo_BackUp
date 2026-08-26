@@ -1,0 +1,49 @@
+---
+title: 'New Reality Show Follows Six Moms With Adult Content Side Hustles: How to Watch ‘Double Lives of Suburban Wives’'
+domain: online-video
+tier: 01-Raw
+entry_id: online-video-general-new-reality-show-follows-six-moms-with-adult-content-side-hustles-how-to-watch-double-lives-of-suburban-wives
+source_url: https://www.hollywoodreporter.com/tv/tv-news/watch-double-lives-of-suburban-wives-stream-tlc-online-free-1236669817/
+source_type: rss
+source_platform: rss
+collected_at: '2026-08-09T23:59:46+00:00'
+summary: A new reality show, 'Double Lives of Suburban Wives', follows six St. Louis moms who create adult content online
+  to support their families. The show explores their secret lives and how they balance family responsibilities with their
+  side hustles. Viewers can watch the series to glimpse into the lives of these women navigating dual identities.
+tags: []
+quality_tier: 2
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 70.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 8cae5208-cd30-4d29-8311-50c59a36c2d7
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+Behind closed doors, these St. Louis women help support their families by creating spicy online content.
+
+## Summary
+A new reality show, 'Double Lives of Suburban Wives', follows six St. Louis moms who create adult content online to support their families. The show explores their secret lives and how they balance family responsibilities with their side hustles. Viewers can watch the series to glimpse into the lives of these women navigating dual identities.
+
+## Key Points
+- Six St. Louis moms star in 'Double Lives of Suburban Wives'
+- The reality show focuses on their adult content creation as a side hustle
+- The series explores balancing family life with secretive online endeavors
+
+
+## Entities
+- **Double Lives of Suburban Wives** (technology, relevance=)
+- **St. Louis** (org, relevance=)

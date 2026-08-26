@@ -1,0 +1,24 @@
+{
+  "id": "d7adf95e73e5a3eb",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/best-car-phone-mounts-and-holders/",
+  "title": "The 4 Best Car Phone Mounts I’ve Tried (2026): Belkin, Andery, Andobil",
+  "content": "The best car phone holders keep your phone firmly in place while never getting in your line of sight. I took a dozen on road trips this summer to find the best.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-25T11:08:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "df281b97-954a-4528-bc95-4f6035571dcf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

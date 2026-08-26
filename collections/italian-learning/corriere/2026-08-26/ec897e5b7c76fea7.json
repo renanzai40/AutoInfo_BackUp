@@ -1,0 +1,24 @@
+{
+  "id": "ec897e5b7c76fea7",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/sport/ciclismo/diretta-live/24_maggio_12/giro-d-italia-2024-diretta-tappa-avezzano-napoli.shtml",
+  "title": "Giro, tappa Avezzano-Napoli: vince in volata Kooij su Milan Pogacar resta in rosa Cronaca",
+  "content": "<p><img alt=\"Giro, tappa Avezzano-Napoli: vince in volata Kooij su Milan Pogacar resta in rosa Cronaca\" src=\"https://images2.corriereobjects.it/methode_image/2024/05/12/Sport/Foto%20Sport%20-%20Trattate/AFP_34RB9HD-kXIF--656x492@Corriere-Web-Nazionale.jpg\" title=\"Giro, tappa Avezzano-Napoli: vince in volata Kooij su Milan Pogacar resta in rosa Cronaca\" /><p>Il Giro d'Italia arriva a Napoli in questa nona tappa: 214 km da percorrereIl Giro d'Italia arriva a Napoli in questa nona tappa: 214 km da percorrereIl Giro d'Italia arriva a Napoli in questa nona tappa: 214 km da percorrere</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-12T17:39:06+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "69ec85b8-529b-4938-955c-eb7eb9fd29d5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,54 @@
+{
+  "id": "42566879",
+  "source_name": "pubmed",
+  "source_type": "api",
+  "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42566879&retmode=xml",
+  "title": "Machine learning-based analysis of factors associated with clinical pregnancy in vitrified-warmed single euploid embryo transfer cycles.",
+  "content": "RESEARCH QUESTION: Which factors influence clinical pregnancy outcomes in vitrified-warmed single euploid embryo transfer cycles using machine learning models?\nDESIGN: This retrospective cohort study included 4300 vitrified-warmed single euploid embryo transfer cycles derived exclusively from intracytoplasmic sperm injection or intracytoplasmic morphologically selected sperm injection performed at the Assisted Reproductive Technology and Reproductive Genetics Centre of Sisli Memorial Hospital, Istanbul, Turkey between October 2011 and February 2023. Twenty-six clinical, demographic and embryological variables were analysed using multiple machine learning algorithms, namely Adaptive Boosting (AdaBoost), Random Forest, Extreme Gradient Boosting (XGBoost), Light Gradient Boosting Machine, and Extremely Randomized Trees. Model performance was evaluated using five-fold cross-validation, F1-score and area under the receiver operating characteristic curve (AUC). SHapley Additive exPlanations were used to interpret model outputs.\nRESULTS: Seven clinically relevant factors influencing clinical pregnancy were identified: number of previous cycles, anti-Müllerian hormone concentration, endometrial thickness, post-warming embryo quality, maternal age, number of vitrified embryos, and endometrial preparation method. Discriminatory performance was mostly comparable across models, with AUC values ranging from 0.760 (AdaBoost) to 0.778 (XGBoost). Calibration analysis demonstrated that Random Forest and LGBM achieved the best performance in the full feature setting (Brier scores 0.178 and 0.179, respectively), whereas XGBoost showed optimal calibration in the selected feature setting (Brier score 0.201). Pairwise bootstrap analysis (1000 iterations) identified a significant AUC difference between XGBoost and Random Forest (P = 0.048), with no other significant pairwise differences.\nCONCLUSIONS: Machine learning models identified key determinants of clinical pregnancy in euploid embryo transfer cycles. These insights may facilitate risk stratification and optimize IVF treatment strategies.",
+  "content_type": "text",
+  "source_platform": "pubmed",
+  "collected_at": "2026 Jul 04",
+  "language": "",
+  "domain": "medical-research",
+  "topic_tags": [
+    "Clinical pregnancy rate",
+    "Euploid embryo",
+    "Machine learning",
+    "Vitrified-warmed embryo transfer"
+  ],
+  "quality_tier": 1,
+  "raw_data": {
+    "pmid": "42566879",
+    "pmc_id": "",
+    "authors": [
+      {
+        "lastname": "Ozer",
+        "firstname": "Gonul",
+        "initials": "G"
+      },
+      {
+        "lastname": "Pehlivanli",
+        "firstname": "Ayca Cakmak",
+        "initials": "AC"
+      },
+      {
+        "lastname": "Deniz",
+        "firstname": "Eylem",
+        "initials": "E"
+      },
+      {
+        "lastname": "Kahraman",
+        "firstname": "Semra",
+        "initials": "S"
+      }
+    ],
+    "journal": "Reproductive biomedicine online",
+    "pub_date": "2026 Jul 04",
+    "doi": "10.1016/j.rbmo.2026.105864",
+    "mesh_terms": []
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c860a295-4074-4a97-ab65-895c3d3a9b30"
+}

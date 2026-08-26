@@ -1,0 +1,10 @@
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article presents a task to organize various online education entries into 3-5 thematic groups with concise semantic titles, emphasizing unique and descriptive naming without catch-al
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article presents a task to categorize
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article presents a list of knowledge base entries focused on online education, covering diverse topics such as music history, ancient communication systems, AI courses, philosophy, a
+LLM returned None content — empty response
+LLM returned only 1 theme group(s), retrying with stricter prompt
+Strict retry returned only 1 group(s), falling back to deterministic grouping

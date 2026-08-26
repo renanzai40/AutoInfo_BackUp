@@ -1,0 +1,24 @@
+{
+  "id": "adbaba72d68f6e1c",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/6-o-festival-internacional-de-guitarra-do-fundao-reune-artistas-de-cinco-paises-entre-4-e-6-de-setembro/",
+  "title": "Festival de Guitarra do Fundão arranca a 4 de setembro",
+  "content": "O festival foi promovido pelo Município do Fundão e pela Associação Concordis - Quarteto de Guitarras",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T23:53:05+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4725c42a-c394-465d-a313-03cb5525230c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

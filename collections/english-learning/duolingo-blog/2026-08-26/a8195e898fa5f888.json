@@ -1,0 +1,24 @@
+{
+  "id": "a8195e898fa5f888",
+  "source_name": "duolingo-blog",
+  "source_type": "rss",
+  "source_url": "https://blog.duolingo.com/slang-words-in-france/",
+  "title": "8 slang words you’ll hear in France",
+  "content": "Slang is an important part of a balanced vocabulary!",
+  "content_type": "text",
+  "source_platform": "duolingo-blog",
+  "collected_at": "2026-07-28T12:00:45+00:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://blog.duolingo.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "367b047c-6b06-449d-92cf-80913bcc8985",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

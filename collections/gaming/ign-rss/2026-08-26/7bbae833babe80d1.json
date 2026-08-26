@@ -1,0 +1,24 @@
+{
+  "id": "7bbae833babe80d1",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/clutch-picks-up-a-publisher-as-maverick-games-partners-with-focus-entertainment",
+  "title": "Clutch Picks Up a Publisher as Maverick Games Partners with Focus Entertainment",
+  "content": "Focus Entertainment has announced it has forged a “major publishing partnership” with independent racing studio Maverick Games for its upcoming project, Clutch, after Amazon backed out earlier this year.",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T08:23:37+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "390d7ce3-8c5c-43ad-bcf2-1b8382547248",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

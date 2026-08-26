@@ -1,0 +1,24 @@
+{
+  "id": "56b4f7562a6d78d8",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/programas/explicador/engenharia-aeroespacial-a-expectativa-de-quem-entra-e-a-experiencia-de-quem-terminou/",
+  "title": "Engenharia Aeroespacial. A expectativa e a experiência",
+  "content": "Luís Silva prepara-se para entrar em Engenharia Aeroespacial. David Moura terminou o curso com 20. Dois olhares sobre a expectativa e a experiência no curso com média de entrada mais alta do país.",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T18:26:18+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3e95533b-a1f0-4d8b-bd06-69b04889d1bc",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

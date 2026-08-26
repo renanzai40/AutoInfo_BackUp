@@ -1,0 +1,24 @@
+{
+  "id": "c9873c3ba18d8043",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/camara-de-coimbra-recorre-da-condenacao-no-concurso-de-programador-do-convento/",
+  "title": "Coimbra recorre da sentença sobre concurso do CSF",
+  "content": "A sentença surgiu depois de uma ação contra o município de Coimbra por Mickael de Oliveira, encenador e dramaturgo que tinha sido proposto pelo júri",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T16:15:27+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "508ec3b1-d97a-4967-8bde-33d89795e67f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

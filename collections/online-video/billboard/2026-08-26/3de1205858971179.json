@@ -1,0 +1,24 @@
+{
+  "id": "3de1205858971179",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/music/country/dolly-parton-death-1236324068/",
+  "title": "Dolly Parton, One of Country Music’s Biggest & Brightest Icons, Dies at 80",
+  "content": "Parton was one of the most influential songwriters to hit Nashville -- or the world",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T18:06:23+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "430b3f6e-7e66-4c0e-aaf4-2f921f779fcc",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

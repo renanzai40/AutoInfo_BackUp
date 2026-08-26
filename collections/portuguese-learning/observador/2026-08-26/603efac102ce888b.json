@@ -1,0 +1,24 @@
+{
+  "id": "603efac102ce888b",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/programas/gabinete-de-guerra/mais-patriots-na-ucrania-e-determinante-para-o-pais/",
+  "title": "\"Mais Patriots na Ucrânia é determinante para o país\"",
+  "content": "Bruno Cardoso Reis diz que entrega de mísseis Patriot à Ucrânia é sinal positivo para as defesas ucranianas. Admite ainda que secretismo sobre o que cedeu o sistema é forma de confundir a Rússia.",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T16:38:27+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "53d363db-abe8-4331-ad92-15ae030ef645",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

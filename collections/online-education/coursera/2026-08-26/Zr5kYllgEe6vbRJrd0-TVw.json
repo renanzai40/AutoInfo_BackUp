@@ -1,0 +1,27 @@
+{
+  "id": "Zr5kYllgEe6vbRJrd0-TVw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Build a Mobile App with Firebase",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "Zr5kYllgEe6vbRJrd0-TVw",
+    "slug": "build-a-mobile-app-with-firebase",
+    "name": "Build a Mobile App with Firebase"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1c770f83-3de6-46a2-9bf9-4b9c0d96ded6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

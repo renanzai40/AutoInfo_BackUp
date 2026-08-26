@@ -1,0 +1,24 @@
+{
+  "id": "777a846153940f1a",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/motor/movilidad/cuanto-cobra-conductor-camion-basura-sueldo-espana_7012028_0.html",
+  "title": "El sueldo de un conductor del camión de la basura en España: esto es lo que suelen cobrar",
+  "content": "Para trabajar en la recogida de residuos como camionero, es necesario cumplir con una serie de requisitos, así como adaptarse a los turnos de noche, pero ¿compensa su remuneración?",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-07-14T08:23:36+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "96b143ce-d423-432a-b762-a347894e2e86",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

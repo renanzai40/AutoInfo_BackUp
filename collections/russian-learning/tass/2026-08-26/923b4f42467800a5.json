@@ -1,0 +1,24 @@
+{
+  "id": "923b4f42467800a5",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/sport/28044305",
+  "title": "Баскетболисты \"Зенита\" сыграли вничью с \"Веной\" в товарищеском матче",
+  "content": "Встреча завершилась со счетом 79:79",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T22:04:35+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "40253371-8920-445c-b23e-fb3afc6b242d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

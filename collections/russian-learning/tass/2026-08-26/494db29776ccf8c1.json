@@ -1,0 +1,24 @@
+{
+  "id": "494db29776ccf8c1",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/ekonomika/28044237",
+  "title": "В Калужской области запустили две линии завода по производству радиофармпрепаратов",
+  "content": "По словам технического директора АО \"Росатом наука\" Юрия Лемехова, с начала августа на предприятии ведутся пусконаладочных работы",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T21:12:18+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4aa65044-42fe-4b4b-80f8-8212614ff6aa",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

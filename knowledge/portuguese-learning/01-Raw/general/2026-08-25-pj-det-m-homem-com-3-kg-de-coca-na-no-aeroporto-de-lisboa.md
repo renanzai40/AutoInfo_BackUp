@@ -1,0 +1,52 @@
+---
+title: PJ detém homem com 3 kg de cocaína no aeroporto de Lisboa
+domain: portuguese-learning
+tier: 01-Raw
+entry_id: portuguese-learning-general-pj-det-m-homem-com-3-kg-de-coca-na-no-aeroporto-de-lisboa
+source_url: https://observador.pt/2026/08/25/pj-detem-homem-no-aeroporto-de-lisboa-com-34-kg-de-cocaina-trazida-da-america-do-sul/
+source_type: rss
+source_platform: observador
+collected_at: '2026-08-25T18:43:25+01:00'
+summary: A man was arrested by PJ at Lisbon Airport carrying 3 kg of cocaine. He will be presented to an investigating judge
+  for initial interrogation and to be informed of coercive measures.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: pt
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: eaa45613-6290-4503-b0eb-e66210505f63
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+O detido será presente a juiz de instrução para primeiro interrogatório e conhecimento das medidas de coação
+
+## Summary
+A man was arrested by PJ at Lisbon Airport carrying 3 kg of cocaine. He will be presented to an investigating judge for initial interrogation and to be informed of coercive measures.
+
+## Key Points
+- PJ arrested an individual at Lisbon Airport
+- The individual was in possession of 3 kilograms of cocaine
+- The detainee will face an investigating judge for interrogation
+- Coercive measures will be communicated to him
+
+
+## Entities
+- **PJ** (org, relevance=)
+- **man** (person, relevance=)
+- **cocaína** (drug, relevance=)
+- **juiz de instrução** (person, relevance=)
+- **interrogatório** (procedure, relevance=)

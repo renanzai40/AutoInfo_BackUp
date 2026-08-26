@@ -1,0 +1,24 @@
+{
+  "id": "074d8b088ff62d5e",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/costa-quer-orcamento-da-ue-2028-2034-aprovado-ainda-este-ano-e-diz-que-paz-sem-defesa-e-uma-ilusao/",
+  "title": "Costa quer orçamento da UE aprovado ainda este ano",
+  "content": "Numa altura em que se debate o próximo orçamento da UE para 2028-2034, o responsável apontou que, \"com a proposta apresentada pela Comissão Europeia para o próximo orçamento, há, pela primeira vez, uma forte contribuição do orçamento europeu para a defesa coletiva\"",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T19:16:07+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e7a442f8-6768-4553-8ce4-0d36ed0944cd",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,46 @@
+{
+  "id": 79998138,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/79998138/how-to-learn-total-amount-of-articles-in-livingsdocs-cms",
+  "title": "How to learn total amount of articles in LivingsDocs CMS?",
+  "content": "How to learn total amount of articles in LivingsDocs CMS?",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-25T15:58:38.586501+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "livingsdocs"
+    ],
+    "owner": {
+      "account_id": 2094724,
+      "reputation": 3073,
+      "user_id": 1863775,
+      "user_type": "registered",
+      "accept_rate": 60,
+      "profile_image": "https://www.gravatar.com/avatar/94a99262b31f9db42be7dc0187c35fc5?s=256&d=identicon&r=PG",
+      "display_name": "Eugene Kaurov",
+      "link": "https://stackoverflow.com/users/1863775/eugene-kaurov"
+    },
+    "is_answered": false,
+    "view_count": 4,
+    "answer_count": 0,
+    "score": -1,
+    "last_activity_date": 1787673418,
+    "creation_date": 1787673418,
+    "question_id": 79998138,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/79998138/how-to-learn-total-amount-of-articles-in-livingsdocs-cms",
+    "title": "How to learn total amount of articles in LivingsDocs CMS?"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9a38bd35-8ae4-40cc-8f54-7523998d0019",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

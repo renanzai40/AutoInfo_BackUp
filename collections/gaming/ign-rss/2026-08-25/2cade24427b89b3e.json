@@ -1,0 +1,24 @@
+{
+  "id": "2cade24427b89b3e",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/the-chronicles-of-riddick-escape-from-butcher-bay-remains-one-of-the-most-underrated-games-ever",
+  "title": "The Chronicles of Riddick: Escape from Butcher Bay Remains One of the Most Underrated Games Ever",
+  "content": "The Chronicles of Riddick: Escape from Butcher Bay didn’t just break the licensed-game curse, it was a bona fide Game of the Year contender on Xbox that year (it was won by a little game called Halo 2 that released in November of that year).",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T13:18:00+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "fd3c6e17-07f6-402e-8ceb-c533c5721a05",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

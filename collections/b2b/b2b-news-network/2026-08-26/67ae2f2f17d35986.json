@@ -1,0 +1,24 @@
+{
+  "id": "67ae2f2f17d35986",
+  "source_name": "b2b-news-network",
+  "source_type": "rss",
+  "source_url": "https://www.b2bnn.com/2026/08/the-ev-market-moving-at-three-speeds/",
+  "title": "The EV Market: Moving at Three Speeds",
+  "content": "China has crossed into mass adoption, Europe is accelerating again and North America is fragmenting. Schneider Electric’s latest home charger points to the less visible infrastructure problem beneath the sales gap. Despite scattershot adoption in North America, the global electric vehicle transition hasn&#8217;t stalled, but it has has split into three increasingly different markets. China [&#8230;]",
+  "content_type": "text",
+  "source_platform": "b2b-news-network",
+  "collected_at": "2026-08-25T13:37:34+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://b2bnn.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "71cc7f71-5109-4ab4-840e-200019622149",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

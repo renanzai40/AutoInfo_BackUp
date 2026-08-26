@@ -1,0 +1,24 @@
+{
+  "id": "e2f68496eb9ce7e9",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/cataluna/govern-asegura-que-trabaja-para-un-inicio-curso-con-maxima-normalidad-pese-huelga-convocada-primer-dia-clases_7029173_0.html",
+  "title": "El Govern afirma que trabaja para un inicio de curso \"con normalidad\" pese a la huelga convocada para el primer día",
+  "content": "Está prevista una comparecencia de la consellera de Educación Esther Niubó en los próximos días.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T14:20:35+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3d7b30de-b62d-491d-adc8-b632a800a75f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

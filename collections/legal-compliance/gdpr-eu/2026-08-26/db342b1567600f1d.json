@@ -1,0 +1,24 @@
+{
+  "id": "db342b1567600f1d",
+  "source_name": "gdpr-eu",
+  "source_type": "rss",
+  "source_url": "https://gdpr.eu/consumers-gdpr-data-privacy-rights/",
+  "title": "Do consumers know their GDPR data privacy rights?",
+  "content": "<p>In addition to data protection, the EU’s General Data Protection Regulation requires businesses to ensure consumers can exercise their data privacy rights. But first, individuals must know these rights.</p>\n<p>The post <a href=\"https://gdpr.eu/consumers-gdpr-data-privacy-rights/\">Do consumers know their GDPR data privacy rights?</a> appeared first on <a href=\"https://gdpr.eu\">GDPR.eu</a>.</p>",
+  "content_type": "text",
+  "source_platform": "gdpr-eu",
+  "collected_at": "2019-06-20T15:44:28+00:00",
+  "language": "",
+  "domain": "legal-compliance",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://gdpr.eu/feed/"
+  },
+  "version": 2,
+  "previous_version": 1,
+  "supersedes": "legal-compliance-general-do-consumers-know-their-gdpr-data-privacy-rights",
+  "trace_id": "f34d4942-783a-494e-9a4b-7835efec5a5b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

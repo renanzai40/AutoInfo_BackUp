@@ -1,0 +1,24 @@
+{
+  "id": "04ceeb23bcea1b29",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/Five-parties-win-seats-in-Kazakhstan-s-first-unicameral-election-1PShj7wf7SE/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Five parties win seats in Kazakhstan's first unicameral election",
+  "content": "Five political parties have won seats in Kazakhstan's first election to the country's new unicameral parliament, the Kurultai, according to preliminary results released on Monday by the Central Election Commission.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T12:32:19+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "feb9f720-5bea-4e0b-bbf5-3ab0375f51a2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

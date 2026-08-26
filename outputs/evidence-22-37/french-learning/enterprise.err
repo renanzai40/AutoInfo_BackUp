@@ -1,0 +1,11 @@
+[92m13:12:53 - LiteLLM:WARNING[0m: get_model_cost_map.py:271 - LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: The read operation timed out. Falling back to local backup.
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article compiles multiple news stories covering international events such as the dissolution of Syrian Kurdish forces, the death of music icon Dolly Parton, economic advising in Fre
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The content provides an instruction to group a set of knowledge base entries into 3-5 semantic themes, covering diverse topics such as French politics, housing law, healthcare statistics
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping knowledge base entries into 3–5 themes with short, semantic titles. It emphasizes that each entry must be assigned to exactly one theme, an
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions to group a set of French learning knowledge base entries into 3-5 thematic categories. It lists entries covering diverse news topics such as internation
+LLM returned None content — empty response
+LLM returned None content — empty response

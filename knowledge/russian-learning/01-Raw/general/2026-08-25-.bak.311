@@ -1,0 +1,53 @@
+---
+title: Израиль пока не намерен уходить из буферной зоны на юге Сирии
+domain: russian-learning
+tier: 01-Raw
+entry_id: russian-learning-general-
+source_url: https://www.interfax.ru/world/1111197
+source_type: rss
+source_platform: interfax
+collected_at: '2026-08-25T17:17:00+03:00'
+summary: Israeli Defense Minister Israel Katz stated that Israeli forces will not leave the buffer zone in southern Syria
+  as long as threats from jihadists persist. He emphasized during a visit that Israel will retain control of Mount Hermon
+  and the security zone until the threat is eliminated.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: unique
+source_score: 90.0
+language: ru
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 087ca836-90f9-4f55-bd3f-2155504e7c93
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: false
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+Израильские военные не покинут буферную зону в южной Сирии, пока с территории этой страны будут по-прежнему исходить угрозы, заявил министр обороны Израиля Исраэль Кац."Мы не оставим гору Хермон и зону безопасности, пока угроза джихадистов для Государства Израиль сохраняется", - приводит The Times of Israel слова министра, который посещает во вторник зону безопасности в Сирии.
+
+## Summary
+Israeli Defense Minister Israel Katz stated that Israeli forces will not leave the buffer zone in southern Syria as long as threats from jihadists persist. He emphasized during a visit that Israel will retain control of Mount Hermon and the security zone until the threat is eliminated.
+
+## Key Points
+- Israel will not withdraw its military from the buffer zone in southern Syria.
+- The decision is based on ongoing threats from the territory, specifically from jihadist groups.
+- Defense Minister Israel Katz affirmed this during a visit to the security zone.
+- Mount Hermon and the security zone are key areas involved in Israel's stance.
+
+
+## Entities
+- **Israel** (org, relevance=)
+- **Syria** (org, relevance=)
+- **Mount Hermon** (concept, relevance=)
+- **Israel Katz** (person, relevance=)
+- **jihadists** (concept, relevance=)

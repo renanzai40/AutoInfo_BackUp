@@ -1,0 +1,54 @@
+---
+title: As U.S.-Canada trade talks collapse, Carney says retaliatory tariffs will start Sept. 8
+domain: financial-intelligence
+tier: 01-Raw
+entry_id: financial-intelligence-general-as-u-s-canada-trade-talks-collapse-carney-says-retaliatory-tariffs-will-start-sept-8
+source_url: https://www.cnbc.com/2026/08/22/us-canada-trade-talks-collapse-ushering-in-wave-of-new-tariffs.html
+source_type: rss
+source_platform: CNBC Investing
+collected_at: '2026-08-22T20:18:15+00:00'
+summary: The U.S.-Canada trade negotiations have collapsed, leading to the imposition of new 50% tariffs by the Trump administration
+  on certain Canadian exports. In response, Canada, represented by Carney, has announced retaliatory tariffs set to begin
+  on September 8, escalating trade tensions between the two countries.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: a734087f-0ad5-4e4e-8de0-793bcaa37521
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: true
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+New 50% Trump administration tariffs on some Canadian exports went into place after the U.S. and Canada failed to reach a deal on Friday.
+
+## Summary
+The U.S.-Canada trade negotiations have collapsed, leading to the imposition of new 50% tariffs by the Trump administration on certain Canadian exports. In response, Canada, represented by Carney, has announced retaliatory tariffs set to begin on September 8, escalating trade tensions between the two countries.
+
+## Key Points
+- U.S. and Canada failed to reach a trade deal on Friday.
+- New 50% tariffs were implemented on some Canadian exports.
+- Canada announced retaliatory tariffs starting September 8.
+- The situation marks an escalation in trade disputes.
+
+
+## Entities
+- **U.S.** (org, relevance=)
+- **Canada** (org, relevance=)
+- **Carney** (person, relevance=)
+- **Trump administration** (org, relevance=)
+- **tariffs** (concept, relevance=)
+- **trade talks** (concept, relevance=)

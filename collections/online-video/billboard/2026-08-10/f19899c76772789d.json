@@ -1,0 +1,22 @@
+{
+  "id": "f19899c76772789d",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/music/music-news/stray-kids-this-and-that-best-new-music-poll-results-1236312374/",
+  "title": "Fans Choose Stray Kids ‘This & That’ as This Week’s Favorite New Music",
+  "content": "The mini album brought in more than 85% of the vote this week.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-10T01:29:40+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e7102837-1e41-41ff-8135-4cd4555e69a3"
+}

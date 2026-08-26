@@ -1,0 +1,24 @@
+{
+  "id": "328962941b25d9aa",
+  "source_name": "variety",
+  "source_type": "rss",
+  "source_url": "https://variety.com/2026/biz/news/stability-ai-raises-76-million-funding-round-1236842351/",
+  "title": "Stability AI Raises $76 Million in Funding Round Backed by Universal Music Group, Warner Music Group, Sony Music and Electronic Arts (EXCLUSIVE)",
+  "content": "Stability AI, the AI startup backed by the likes of James Cameron and Sean Parker, has raised $76 million in a Series B funding round from a roster of investors including some of the entertainment industry’s top record labels and gaming companies. The company’s newest investors include the top three record labels, Universal Music Group, [&#8230;]",
+  "content_type": "text",
+  "source_platform": "variety",
+  "collected_at": "2026-08-25T15:00:00+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://variety.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f261326b-2971-4137-9ad6-e78ba9fe5638",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

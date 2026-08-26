@@ -1,0 +1,22 @@
+{
+  "id": "5760e73f1444455e",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://newsletter.pragmaticengineer.com/p/pushing-software-engineering-limits",
+  "title": "Pushing software engineering limits with “napkin math”",
+  "content": "Turbopuffer cofounder Simon Eskildsen on the benefits of longer tenure, using first principles to build durable software &#8211; and why founders should be cautious when raising VC money",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-07-21T16:52:07+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://newsletter.pragmaticengineer.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c869ca16-900d-4d92-83ad-c631b1bebe8b"
+}

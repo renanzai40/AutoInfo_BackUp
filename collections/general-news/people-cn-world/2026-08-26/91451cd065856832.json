@@ -1,0 +1,24 @@
+{
+  "id": "91451cd065856832",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0605/c1002-40494439.html",
+  "title": "俄外长：乌克兰拒绝俄罗斯停火2至3天的提议是“严重错误”",
+  "content": "<p>　　新华社莫斯科6月4日电（记者赵冰）俄罗斯外交部长拉夫罗夫4日表示，乌克兰拒绝俄罗斯停火2至3天的提议是“严重错误”。</p> <p>　　俄总统普京当天召集政府成员开会并听取有关俄乌谈判情况的汇报。拉夫罗夫在会上说，俄方提出该建议，是为让双方能够妥善收集接触线上阵亡人员的遗体，或是转移可能存在的伤员。</p> <p>　　普京表示，乌方拒绝俄方上述提议并不令人意外。</p> <p>　　拉夫罗夫还说，在任何情况下，保持沟通渠道总是好的，因为“这使我们能够首先解决人道主义问题”。他表示，相互协调人道主义措施可以释放善意，加强信任，这正是现阶段所必需的。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-05T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bb3d6c0e-d846-4077-a7cb-cc5c1d42dffc",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

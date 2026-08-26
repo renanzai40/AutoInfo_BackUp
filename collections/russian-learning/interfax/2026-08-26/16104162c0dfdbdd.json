@@ -1,0 +1,24 @@
+{
+  "id": "16104162c0dfdbdd",
+  "source_name": "interfax",
+  "source_type": "rss",
+  "source_url": "https://www.interfax.ru/world/1111224",
+  "title": "Совет ЕС рассматривает вопрос о cанкциях против израильского министра Бен-Гвира",
+  "content": "В ЕС расценивают высказывания министра национальной безопасности Израиля Итамара Бен-Гвира в отношении сектора Газа как недопустимые, в настоящее время рассматривается вопрос о европейских санкциях против него.\"Мы решительно и недвусмысленно осудили заявления израильского министра Бен-Гвира относительно Газы.",
+  "content_type": "text",
+  "source_platform": "interfax",
+  "collected_at": "2026-08-25T20:41:00+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.interfax.ru/rss.asp"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0d961a74-ce86-46d1-96c7-d1b51e0805aa",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

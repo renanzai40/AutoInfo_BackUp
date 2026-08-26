@@ -1,0 +1,24 @@
+{
+  "id": "a51f5fdda034fae7",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/elections/presidentielles/guillaume-tabard-la-peur-des-candidats-a-la-presidentielle-d-assumer-des-mesures-difficiles-20260825",
+  "title": "Guillaume Tabard : «La peur des candidats à la présidentielle d’assumer des mesures difficiles»",
+  "content": "CONTRE-POINT - De Gabriel Attal à Marine Le Pen, chacun proclame l’urgence qu’il y a à redresser les finances publiques. Mais le bât blesse lorsqu’il s’agit de passer de l’énoncé de principes généraux à l’énumération de décisions concrètes, forcément impopulaires.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T21:04:02+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3cf7f339-c884-421e-9fff-367ee658a8cf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

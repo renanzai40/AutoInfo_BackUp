@@ -1,0 +1,24 @@
+{
+  "id": "1bb219f8238696e9",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/cinemania/noticias/hayden-panettiere-anna-paquin-actrices-infantiles-hollywood_7028903_0.html",
+  "title": "La muerte de Hayden Panettiere reabre una dura denuncia sobre las actrices infantiles en Hollywood: \"No estábamos protegidas\"",
+  "content": "La actriz de 'X-Men' y 'True Blood' asegura que muchas niñas fueron sexualizadas prematuramente en Hollywood y recuerda a Hayden Panettiere, Michelle Trachtenberg y Daveigh Chase.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T13:44:21+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b58113c9-fd9c-4305-b6ca-da80d71272d9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

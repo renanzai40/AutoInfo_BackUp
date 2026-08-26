@@ -1,0 +1,24 @@
+{
+  "id": "a79eb7a07aa87d82",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/internacional/hallan-los-cuerpos-un-nino-cinco-anos-su-padre-desaparecidos-hace-dos-meses_7029318_0.html",
+  "title": "Hallan los cuerpos de un niño de cinco años y de su padre desaparecidos desde el pasado mes de junio",
+  "content": "La comunicación de la familia con ambos se perdió el 27 de junio, después de que Bryan Brigou les comentase que planeaba acudir a la feria de la localidad de Onhaye con su hijo, Tyméo.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T19:42:09+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5699f957-df89-4f99-8f35-74d1a099210e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

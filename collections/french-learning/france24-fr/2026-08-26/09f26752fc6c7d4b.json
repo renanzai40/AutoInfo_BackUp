@@ -1,0 +1,24 @@
+{
+  "id": "09f26752fc6c7d4b",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/moyen-orient/20260825-syrie-les-forces-kurdes-annoncent-leur-dissolution-suite-%C3%A0-l-accord-avec-damas",
+  "title": "Syrie : les forces kurdes annoncent leur dissolution à la suite de l'accord avec Damas",
+  "content": "Les Forces démocratiques syriennes, dont le chef Mazloum Abdi a annoncé, mardi, la dissolution en vertu d'un accord avec le président Ahmed al-Charaa, constituaient l'armée des Kurdes de Syrie et avaient vaincu avec le soutien de l'Occident les jihadistes du groupe État islamique.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T19:17:10+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ff09552b-1e93-4c16-82a7-907109777c58",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

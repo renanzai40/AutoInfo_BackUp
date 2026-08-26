@@ -1,0 +1,22 @@
+{
+  "id": "f6a49d321235ca2d",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/best-apple-watch-accessories/",
+  "title": "6 Best Apple Watch Accessories to Upgrade Your Watch (2026)",
+  "content": "These are the Apple Watch accessories I recommend adding to your setup.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-15T10:30:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e7fc15f6-5648-48e8-aa05-56152f008284"
+}

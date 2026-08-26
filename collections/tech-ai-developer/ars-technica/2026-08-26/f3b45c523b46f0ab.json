@@ -1,0 +1,24 @@
+{
+  "id": "f3b45c523b46f0ab",
+  "source_name": "ars-technica",
+  "source_type": "rss",
+  "source_url": "https://arstechnica.com/apple/2026/08/with-new-mac-studio-and-mac-mini-apple-leans-hard-into-local-ai-inference/",
+  "title": "Apple's new desktop computers are designed specifically for local AI development",
+  "content": "Folks have been daisy-chaining Macs for AI—this refresh keeps that in mind.",
+  "content_type": "text",
+  "source_platform": "ars-technica",
+  "collected_at": "2026-08-25T13:00:11+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.arstechnica.com/arstechnica/index"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5896101c-10fa-4db6-a687-95cf6e986361",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

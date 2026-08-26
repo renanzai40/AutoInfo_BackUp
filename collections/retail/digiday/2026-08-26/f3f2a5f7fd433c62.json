@@ -1,0 +1,24 @@
+{
+  "id": "f3f2a5f7fd433c62",
+  "source_name": "digiday",
+  "source_type": "rss",
+  "source_url": "https://digiday.com/marketing/openai-is-sharpening-its-focus-on-enterprise-advertisers/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss",
+  "title": "OpenAI is sharpening its focus on enterprise advertisers",
+  "content": "The company is hiring a dedicated marketing role aimed at positioning OpenAI as a 'premium advertising platform for the world’s marketers'.",
+  "content_type": "text",
+  "source_platform": "digiday",
+  "collected_at": "2026-08-24T04:01:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://digiday.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1e5fad74-dd05-416d-b305-01a052c55141",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,22 @@
+{
+  "id": "a68e5502a394cc8a",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://news.crunchbase.com/transportation/clearjet-raises-25m-logistics-ai-seriesb/",
+  "title": "Exclusive: ClearJet raises $25M to build the ‘Uber of Cargo’",
+  "content": "Austin-based ClearJet, an AI-enabled logistics technology startup connects shippers with unused cargo capacity on commercial flights, has raised a $25 million Edison Partners-led Series B, it tells Crunchbase News exclusively.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-12T12:00:18+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://news.crunchbase.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "fdc9fb45-a055-4899-97f3-8818b0d6b01b"
+}

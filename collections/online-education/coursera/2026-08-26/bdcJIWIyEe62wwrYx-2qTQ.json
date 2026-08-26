@@ -1,0 +1,27 @@
+{
+  "id": "bdcJIWIyEe62wwrYx-2qTQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Product Management: Developing and Delivering a New Product",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "bdcJIWIyEe62wwrYx-2qTQ",
+    "slug": "product-management-developing-and-delivering-a-new-product",
+    "name": "Product Management: Developing and Delivering a New Product"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a5b06eab-0f56-4eed-81c1-df47a155c409",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

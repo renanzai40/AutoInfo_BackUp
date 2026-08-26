@@ -1,0 +1,24 @@
+{
+  "id": "9b9c5e09412963bb",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/ue-pede-a-israel-que-trave-retorica-atroz-de-ben-gvir-e-recorda-proposta-de-sancoes-ao-ministro/",
+  "title": "UE pede a Israel que trave retórica \"atroz\" de Ben-Gvir",
+  "content": "Benjamin Netanyahu ameaçou novas retiradas da população de Gaza caso esta não cessasse o lançamento de \"papagaios, drones e balões\"",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T16:33:25+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "eb82a98c-0e6b-440a-8355-4f9eb674c03b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

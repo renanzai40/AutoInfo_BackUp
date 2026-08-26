@@ -1,0 +1,24 @@
+{
+  "id": "bc4f60354816ec09",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://newsaf.cgtn.com/news/2026-08-24/Ebola-deaths-in-DR-Congo-near-2-700-mark-1PRVM8Qhcpa/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Ebola deaths in DR Congo near 2,700 mark",
+  "content": "With 5,514 confirmed cases and 2,642 deaths, the World Health Organization warns this is now the nation's fastest-growing outbreak to date.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T15:05:03+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6e038635-5f35-4514-b994-8aada14d4839",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

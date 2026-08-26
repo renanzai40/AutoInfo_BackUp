@@ -1,0 +1,24 @@
+{
+  "id": "813e050776380ded",
+  "source_name": "gdpr-eu",
+  "source_type": "rss",
+  "source_url": "https://gdpr.eu/cookies/",
+  "title": "Cookies, the GDPR, and the ePrivacy Directive",
+  "content": "<p>Cookies are an important tool that can give businesses a great deal of insight into their users’ online activity. Despite their importance, the regulations governing cookies are split between...</p>\n<p>The post <a href=\"https://gdpr.eu/cookies/\">Cookies, the GDPR, and the ePrivacy Directive</a> appeared first on <a href=\"https://gdpr.eu\">GDPR.eu</a>.</p>",
+  "content_type": "text",
+  "source_platform": "gdpr-eu",
+  "collected_at": "2019-05-09T13:56:35+00:00",
+  "language": "",
+  "domain": "legal-compliance",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://gdpr.eu/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "df5ff0a5-0728-4fd2-a34b-0f22011712d6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

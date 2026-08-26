@@ -1,0 +1,24 @@
+{
+  "id": "71d2825fe257a7dd",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/%C3%A9co-tech/20260826-spacex-elon-musk-compte-construire-gigantesque-base-spatiale-louisiane-starship",
+  "title": "Avec SpaceX, Elon Musk compte construire une gigantesque base spatiale en Louisiane",
+  "content": "Elon Musk, le patron de SpaceX, a annoncé mardi vouloir construire en Louisiane le plus grand site de lancement au monde, capable d'accueillir des milliers de vols de sa mégafusée Starship chaque année, avec un premier tir espéré en 2029.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-26T02:59:45+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "cf31ea78-6886-4e59-8234-747c7de97038",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

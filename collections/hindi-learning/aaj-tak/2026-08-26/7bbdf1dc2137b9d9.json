@@ -1,0 +1,24 @@
+{
+  "id": "7bbdf1dc2137b9d9",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/auto/news/story/mg-hector-hawk-ev-launch-price-range-features-auam-dskc-2629866-2026-08-25?utm_source=rssfeed",
+  "title": "टाटा-महिंद्रा से टक्कर, आ रही है नई 7-सीटर SUV, इतनी होगी कीमत",
+  "content": "एमजी मोटर भारतीय बाजार में एक नई एसयूवी लेकर आ रही है. वैसे तो कंपनी शुरुआत में इस कार को इलेक्ट्रिक अवतार में लॉन्च कर रही है. लेकिन आने वाले दिनों में इसका प्लगइन हाइब्रिड वर्जन भी मार्केट में आएगा. ये एक 7 सीटर कार होने वाली है, जिसका मुकाबला टाटा और महिंद्रा की 7 सीटर गाड़ियों से होगा.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T19:24:20+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c8755c46-a52c-4f7a-b226-3aa31298d21b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

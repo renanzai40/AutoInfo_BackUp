@@ -1,0 +1,24 @@
+{
+  "id": "d2a1f83315af22b0",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/marseille/marseille-trois-policiers-portent-plainte-pour-outrage-contre-sebastien-delogu-20260825",
+  "title": "Marseille : trois policiers portent plainte pour outrage contre Sébastien Delogu",
+  "content": "Le député LFI des Bouches-du-Rhône Sébastien Delogu est visé par une plainte pour outrage par trois policiers qui étaient en opération à proximité de son domicile.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T20:01:07+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "18cfe626-4d12-4f15-a4e7-ea391704d81c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

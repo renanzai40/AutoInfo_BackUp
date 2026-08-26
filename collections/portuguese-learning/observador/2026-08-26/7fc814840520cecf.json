@@ -1,0 +1,24 @@
+{
+  "id": "7fc814840520cecf",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/programas/a-guerra-traduzida/kremlin-diz-que-kiev-estaria-a-planear-invadir-a-russia/",
+  "title": "Kremlin diz que Kiev estaria a planear invadir a Rússia",
+  "content": "De acordo com um assessor de Vladimir Putin, Kiev planeava invadir a Rússia antes de Moscovo ter invadido a Ucrânia. Segundo a mesma fonte, a data da operação militar seria 8 de março de 2022.",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T20:51:24+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "608882be-fc6b-41b3-8927-6055efc613b9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

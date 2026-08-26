@@ -1,0 +1,24 @@
+{
+  "id": "b6d82c7524999df3",
+  "source_name": "inside-higher-ed",
+  "source_type": "rss",
+  "source_url": "https://www.insidehighered.com/opinion/career-advice/teaching/2026/08/26/office-hours-hold-value-we-need-adapt-opinion",
+  "title": "Are Office Hours Pointless?",
+  "content": "<span>Are Office Hours Pointless?</span>\n\n            <div class=\"field field--name-field-featured-image field--type-entity-reference field--label-hidden field__item\">  <img alt=\"A Post-it like note with a paper clip says &quot;Office Hours.&quot;\" height=\"1481\" src=\"https://www.insidehighered.com/sites/default/files/2026-08/GettyImages-1389757990.jpg\" width=\"2023\" />\n\n</div>\n      \n<span><span>Elizabeth Redden</span></span>\n\n<span><time datetime=\"2026-08-26T03:00:00-04:00\" title=\"Wednesday, August 26, 2026 - 03:00 AM\">Wed, 08/26/2026 - 03:00 AM</time>\n</span>\n<p>We think they still hold value, but we need to adapt.</p>\n  <div class=\"field field--name-field-authors field--type-entity-reference field--label-inline clearfix\">\n    <div class=\"field__label\">Byline(s)</div>\n          <div class=\"field__items\">\n              <div class=\"field__item\"><a href=\"https://www.insidehighered.com/author/tim-franz\" hreflang=\"en\">Tim Franz </a></div>\n          <div class=\"field__item\"><a href=\"https://www.insidehighered.com/author/lauren-vicker\" hreflang=\"en\"> Lauren Vicker </a></div>\n              </div>\n      </div>",
+  "content_type": "text",
+  "source_platform": "inside-higher-ed",
+  "collected_at": "2026-08-26T07:00:00+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.insidehighered.com/rss.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "caa39d4a-d9eb-43af-85a5-a148c23a26ed",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

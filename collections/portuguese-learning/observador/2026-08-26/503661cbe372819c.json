@@ -1,0 +1,24 @@
+{
+  "id": "503661cbe372819c",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/presidente-de-cabo-verde-rejeita-proposta-do-governo-para-pgr-e-pede-que-nomes-nao-sejam-revelados-antes-de-haver-consenso/",
+  "title": "José Maria Neves veta proposta para PGR",
+  "content": "Júlio Martins foi procurador-geral da República entre 2008 e 2014",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T22:10:54+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "abb32f47-6f91-4f6b-8399-d62d0fb76e61",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,50 @@
+---
+title: Trump calls leaders to isolate Iran. And, SCOTUS backs Trump for now on mail-in voting
+domain: english-learning
+tier: 01-Raw
+entry_id: english-learning-general-trump-calls-leaders-to-isolate-iran-and-scotus-backs-trump-for-now-on-mail-in-voting
+source_url: https://www.npr.org/2026/08/25/g-s1-140004/up-first-newsletter-iran-economic-war-scotus-mail-in-voting-dhs-privacy
+source_type: rss
+source_platform: npr-news
+collected_at: '2026-08-25T07:09:01-04:00'
+summary: President Trump is urging world leaders to join economic sanctions against Iran. Meanwhile, the Supreme Court has
+  temporarily upheld Trump's order to restrict mail-in voting.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 4ac4d146-3363-472c-883a-5e7df7d383bc
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+President Trump is calling on world leaders to join his economic war against Iran. And, the Supreme Court is backing the president for now on his order to restrict mail-in voting.
+
+## Summary
+President Trump is urging world leaders to join economic sanctions against Iran. Meanwhile, the Supreme Court has temporarily upheld Trump's order to restrict mail-in voting.
+
+## Key Points
+- Trump is calling for global economic isolation of Iran.
+- The Supreme Court supports Trump's mail-in voting restrictions for now.
+- These decisions reflect ongoing political and legal strategies in the U.S.
+
+
+## Entities
+- **Trump** (person, relevance=)
+- **Iran** (org, relevance=)
+- **Supreme Court** (org, relevance=)
+- **mail-in voting** (procedure, relevance=)

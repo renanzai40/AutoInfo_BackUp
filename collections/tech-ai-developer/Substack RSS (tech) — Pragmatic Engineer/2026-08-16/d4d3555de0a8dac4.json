@@ -1,0 +1,22 @@
+{
+  "id": "d4d3555de0a8dac4",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://newsletter.pragmaticengineer.com/p/formal-methods-with-hillel-wayne",
+  "title": "Formal methods with Hillel Wayne",
+  "content": "Hillel Wayne explains why formal methods like TLA+ matter, how they help build reliable software, and whether AI will finally bring formal verification into the mainstream.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-07-29T16:22:31+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://newsletter.pragmaticengineer.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e2beb420-eecd-4574-8571-12d2d3984ee7"
+}

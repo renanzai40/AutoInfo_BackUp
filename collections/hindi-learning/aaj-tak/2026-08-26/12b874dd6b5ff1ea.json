@@ -1,0 +1,24 @@
+{
+  "id": "12b874dd6b5ff1ea",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/world/story/canada-20-billion-retaliatory-tariffs-us-goods-trade-war-trump-ntc-apdy-dskc-2629941-2026-08-25?utm_source=rssfeed",
+  "title": "ट्रंप को कनाडा का करारा जवाब, अमेरिकी सामानों पर 20 अरब डॉलर का टैरिफ",
+  "content": "कनाडा ने अमेरिका के खिलाफ करीब 20 अरब डॉलर के अमेरिकी सामान पर जवाबी टैरिफ लगा दिए हैं. इसमें स्टील, डेयरी उत्पाद, घरेलू उपकरण, कृषि उपकरण और रोजमर्रा की चीजें शामिल हैं, जिनमें कुछ पर 50% तक शुल्क लगाया गया है.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T21:42:10+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4dbac537-562c-4f97-badd-985ce9557a2d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "bdd0f8d3a68b51c0",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/exames-feitos-acordo-fechado-sporting-oficializa-contratacao-de-moncef-zekri-o-trunfo-na-mangas-para-ser-a-nova-sombra-de-maxi-araujo/",
+  "title": "Exames feitos, acordo fechado: Zekri é a sombra de Maxi",
+  "content": "Moncef Zekri representou Marrocos no último Mundial Sub-17, ganho por Portugal no Qatar, fazendo duas assistências em cinco jogos",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T20:40:05+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "21b35e0c-edad-4853-b5d1-9fa190542f2a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

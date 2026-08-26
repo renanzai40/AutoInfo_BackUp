@@ -1,0 +1,24 @@
+{
+  "id": "543fb1074c3179c0",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/lainformacion/economia-y-finanzas/coche-chino-acelera-espana-las-consultas-recambios-los-talleres-se-triplican-un-ano_7029243_0.html",
+  "title": "El coche chino acelera: las consultas de recambios en los talleres españoles se triplican en el último ejercicio",
+  "content": "cada vez circulan más vehículos de estos fabricantes y empiezan a entrar en sus primeros ciclos de mantenimiento, reparación y sustitución de componentes.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T16:48:14+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4d88a088-f961-4878-b90b-2e5e0166a91c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

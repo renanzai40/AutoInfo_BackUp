@@ -1,0 +1,24 @@
+{
+  "id": "993d442a350d9611",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-25/-Enough-is-enough-Canadian-politicians-sharpen-tone-over-US-tariffs-1PT5gpT6JwI/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "'Enough is enough': Canadian politicians sharpen tone over US tariffs",
+  "content": "Canadian political leaders stepped up their rhetoric on Monday in response to the latest US tariff threats.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-25T01:34:27+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a5411ad7-04f0-42fb-9c19-c27c554525f5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

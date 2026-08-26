@@ -1,0 +1,18 @@
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions to group 8 diverse knowledge base entries into 3-5 semantic themes, emphasizing short, descriptive titles and no catch-all names.",
+  "key_points": [
+  
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This collection of news entries covers diverse topics including international geopolitics, sports, politics, entertainment, and economics, which are to be grouped into thematic categorie
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions to group a set of news entries into 3-5 semantic themes, with each entry assigned to exactly one theme. The entries cover diverse topics including infra
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping knowledge base entries into 3-5 semantic themes, with a list of eight entries covering diverse topics like traffic, space, drones, politics
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article lists multiple knowledge base entries from Portuguese-speaking regions, covering topics like energy supply, education, cultural festivals, business news, and healthcare techn
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+LLM returned None content — empty response
+LLM returned None content — empty response
+LLM returned None content — empty response
+LLM returned None content — empty response

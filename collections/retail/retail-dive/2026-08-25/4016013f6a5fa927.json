@@ -1,0 +1,24 @@
+{
+  "id": "4016013f6a5fa927",
+  "source_name": "retail-dive",
+  "source_type": "rss",
+  "source_url": "https://www.retaildive.com/news/fragrance-beauty-sales-growth-first-half-2026/828479/",
+  "title": "Fragrance drives beauty sales as consumers seek ‘emotional and functional value’",
+  "content": "<figure><div><img src=\"https://imgproxy.divecdn.com/6_ZKSTTGbHlH2Cq5CkiCchoqPFBCRSaKNNujNTOYjow/g:ce/rs:fill:1600:900:1/Z3M6Ly9kaXZlc2l0ZS1zdG9yYWdlL2RpdmVpbWFnZS9HZXR0eUltYWdlcy0yMjQzNzI3MTkzLmpwZ19yZXNpemUuanBn.webp\" /></div></figure><p>Prestige and mass beauty retail sales were up in the U.S. in the first half of the year, underscoring the resilience of the category, according to&nbsp;Circana.&nbsp;</p>",
+  "content_type": "text",
+  "source_platform": "retail-dive",
+  "collected_at": "2026-08-24T11:17:00-04:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.retaildive.com/feeds/news/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "82e7aff3-5fdb-4299-9d9a-2183b8d51873",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

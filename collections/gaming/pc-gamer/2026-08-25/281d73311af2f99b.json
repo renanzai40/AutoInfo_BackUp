@@ -1,0 +1,24 @@
+{
+  "id": "281d73311af2f99b",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/hardware/processors/two-architectures-on-one-chip-arm-and-ibm-team-up-in-a-legendary-crossover-but-alas-its-for-enterprise-infrastructure/",
+  "title": "Two architectures on one chip: Arm and IBM team up in a legendary crossover, but alas it's for 'enterprise infrastructure'",
+  "content": "It will reportedly operate at more than 5.7 GHz.",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-25T12:12:19+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9f58cbd6-bc01-4fb4-9638-a807f2966bc1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

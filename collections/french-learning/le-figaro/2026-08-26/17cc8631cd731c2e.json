@@ -1,0 +1,24 @@
+{
+  "id": "17cc8631cd731c2e",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/societes/les-forains-ont-voulu-notre-peau-et-ils-l-ont-eue-mirapolis-le-fiasco-du-premier-grand-parc-d-attractions-francais-20260824",
+  "title": "«Les forains ont voulu notre peau et ils l’ont eue» : Mirapolis, le fiasco du premier grand parc d’attractions français",
+  "content": "RÉCIT - Le terrain sur lequel des investisseurs saoudiens veulent construire trois parcs d’attractions a accueilli en 1987 un projet ambitieux qui voulait raconter nos contes et légendes. Il n’aura survécu que cinq ans.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T14:33:59+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f75e1ab4-8f1c-4f22-8c18-aae63aa65727",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

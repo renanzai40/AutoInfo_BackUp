@@ -1,0 +1,24 @@
+{
+  "id": "996f0ea5bd493681",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/25/debasement-trade-debt-gold-bitcoin-dollar.html",
+  "title": "The 'debasement trade' returns after Bessent bond maneuver. Crypto and gold are back in style",
+  "content": "Concern over the size and the cost of U.S. government spending has given new life to the debasement trade.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-25T15:16:02+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1ba82659-8a05-40e7-ad62-fa2c4fbc5342",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

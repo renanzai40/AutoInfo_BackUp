@@ -1,0 +1,24 @@
+{
+  "id": "833022e4efb43be1",
+  "source_name": "duolingo-blog",
+  "source_type": "rss",
+  "source_url": "https://blog.duolingo.com/what-does-y-mean-in-spanish/",
+  "title": "“Y” vs. “e”: What does “y” mean in Spanish?",
+  "content": "We’ll tell you what it means *and* when to use it!",
+  "content_type": "text",
+  "source_platform": "duolingo-blog",
+  "collected_at": "2026-08-25T12:00:00+00:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://blog.duolingo.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b9d71768-dda8-4650-903d-8cfd9849806f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

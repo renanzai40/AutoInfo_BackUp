@@ -1,0 +1,24 @@
+{
+  "id": "51049ac0b4f89c5e",
+  "source_name": "variety",
+  "source_type": "rss",
+  "source_url": "https://variety.com/2026/tv/news/robocop-tv-series-cast-dan-stevens-1236842597/",
+  "title": "‘Robocop’ TV Series Casts Dan Stevens in Lead Role",
+  "content": "Dan Stevens is set for the title role in the &#8220;Robocop&#8221; TV series at Amazon Prime Video, Variety has confirmed. The show was originally announced in July at the streamer. Prime Video has given the show an eight-episode order. The project has been in development since Amazon acquired MGM in 2022, with Amazon looking to [&#8230;]",
+  "content_type": "text",
+  "source_platform": "variety",
+  "collected_at": "2026-08-25T16:10:34+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://variety.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "409e55ab-181b-4973-90a1-db0aa4f55677",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

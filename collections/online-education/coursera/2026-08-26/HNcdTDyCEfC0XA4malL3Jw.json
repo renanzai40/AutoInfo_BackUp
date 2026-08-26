@@ -1,0 +1,27 @@
+{
+  "id": "HNcdTDyCEfC0XA4malL3Jw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Mastering Microsoft Endpoint Manager and Intune",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "HNcdTDyCEfC0XA4malL3Jw",
+    "slug": "packt-mastering-microsoft-endpoint-manager-and-intune-sntyi",
+    "name": "Mastering Microsoft Endpoint Manager and Intune"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bdf76753-c68a-4c4b-afaf-6ef19882c4ad",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

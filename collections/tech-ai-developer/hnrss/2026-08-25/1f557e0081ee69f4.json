@@ -1,0 +1,24 @@
+{
+  "id": "1f557e0081ee69f4",
+  "source_name": "hnrss",
+  "source_type": "rss",
+  "source_url": "https://docs.python.org/3.16/library/time-complexity.html",
+  "title": "Time complexity of operations on Python's built-in types",
+  "content": "<p>Article URL: <a href=\"https://docs.python.org/3.16/library/time-complexity.html\">https://docs.python.org/3.16/library/time-complexity.html</a></p>\n<p>Comments URL: <a href=\"https://news.ycombinator.com/item?id=49435595\">https://news.ycombinator.com/item?id=49435595</a></p>\n<p>Points: 1</p>\n<p># Comments: 0</p>",
+  "content_type": "text",
+  "source_platform": "hnrss",
+  "collected_at": "2026-08-25T15:15:08+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://hnrss.org/newest"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "aaca1209-105f-40b9-8b70-459074cb6535",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

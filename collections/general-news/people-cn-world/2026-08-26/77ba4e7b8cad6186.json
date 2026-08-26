@@ -1,0 +1,24 @@
+{
+  "id": "77ba4e7b8cad6186",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0604/c1002-40493630.html",
+  "title": "中国援桑给巴尔医疗队推进当地精准化诊疗",
+  "content": "<p style=\"text-indent: 2em;\">人民网约翰内斯堡6月1日电 （记者邹松）中国（江苏）援桑给巴尔医疗队日前成功完成了该地区历史上首例CT引导下经皮肺穿刺活检。这一开创性操作标志着桑给巴尔呼吸疾病诊断技术进入精准化时代，也再次展现了中国医疗援助团队在推动当地医疗技术发展方面的重要作用。</p> <p style=\"text-indent: 2em;\">“这是桑给巴尔历史上第一例此类手术。”桑给巴尔卫生部物流部主管、医疗队专员哈立德·姆萨巴·拉希德表示，“我们对中国医疗队所展现出的专业能力和技术水平深表钦佩。这不仅是一次医学上的突破，更是我们中桑友谊的生动体现。”</p> <p style=\"text-indent: 2em;\">据悉，此次操作由医疗队队长，呼吸与危重症医学科陈炜主导，联合影像科张建东和当地医生协作完成。在CT实时引导下，精准穿刺并成功获取病变组织，为后续病理诊断和治疗提供了坚实依据。</p> <p style=\"text-indent: 2em;\">参与此次协作的当地医生拉什迪表示：“在过去，我们对深部肺部结节几乎束手无策，往往只能依赖影像学推断进行治疗，存在很大局限性。这次手术让我深受震撼，中国医生的技术精确、操作规范，也让我学到了很多新知识。这是我们医院诊断能力质的飞跃。”</p> <p style=\"text-indent: 2em;\">该项技术在国内已经成熟开展。此次在桑给巴尔的成功实施不仅填补了当地医疗空白，也为后续肺部疑难病例的精准诊治提供了可复制、可推广的范例。中国医疗队表示，将在未来继续开展相关技术培训和临床合作，推动更多先进诊疗技术在桑给巴尔落地生根。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-04T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c0d679c0-a2e7-488f-a440-4cc0cae3cb2b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

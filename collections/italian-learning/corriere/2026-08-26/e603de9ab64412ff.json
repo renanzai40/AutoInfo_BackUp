@@ -1,0 +1,24 @@
+{
+  "id": "e603de9ab64412ff",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/economia/consumi/24_maggio_12/aeroporti-nuovi-scanner-bagagli-nel-mirino-ue-l-algoritmo-anti-esplosivo-non-soddisfa-i-requisiti-a5f258a2-89fd-4942-922e-2a2c17bf3xlk.shtml",
+  "title": "Aeroporti, nuovi scanner bagagli nel mirino Ue: «L’algoritmo anti-esplosivo non soddisfa i requisiti»",
+  "content": "<p><img alt=\"Aeroporti, nuovi scanner bagagli nel mirino Ue: «L’algoritmo anti-esplosivo non soddisfa i requisiti»\" src=\"https://images2.corriereobjects.it/methode_image/2024/05/12/Economia/Foto%20Economia%20-%20Trattate/66400eeb83a03_ori_crop_MASTER__0x0.jpeg\" title=\"Aeroporti, nuovi scanner bagagli nel mirino Ue: «L’algoritmo anti-esplosivo non soddisfa i requisiti»\" /><p>Gli apparecchi effettuano la Tac alle valige senza dover tirare fuori nulla. Ma quelli con uno specifico software ora possono analizzare i liquidi solo nei contenitori di massimo 330 millilitriGli apparecchi effettuano la Tac alle valige senza dover tirare fuori nulla. Ma quelli con uno specifico software ora possono analizzare i liquidi solo nei contenitori di massimo 330 millilitriGli apparecchi effettuano la Tac alle valige senza dover tirare fuori nulla. Ma quelli con uno specifico software ora possono analizzare i liquidi solo nei contenitori di massimo 330 millilitri</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-12T09:59:45+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f17003cb-a9b8-4552-a13b-a62cc49d701c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

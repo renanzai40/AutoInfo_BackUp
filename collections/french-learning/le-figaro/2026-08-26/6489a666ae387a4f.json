@@ -1,0 +1,24 @@
+{
+  "id": "6489a666ae387a4f",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/musique/jolene-i-will-always-love-you-9-to-5-les-dix-titres-iconiques-de-dolly-parton-morte-a-80-ans-20260825",
+  "title": "Jolene, I Will Always Love You, 9 to 5... Les dix titres iconiques de Dolly Parton, l’icône de la country morte à 80 ans",
+  "content": "Chanteuse et compositrice, Dolly Parton laisse derrière elle un répertoire immense. Voici dix chansons emblématiques pour redécouvrir l’une des plus grandes figures de la musique américaine.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T21:50:42+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7e5cac05-c561-45be-b56c-3e01bac8caaa",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,49 @@
+{
+  "id": 35277727,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/35277727/how-to-use-requestbodyadvice",
+  "title": "How to use RequestBodyAdvice",
+  "content": "How to use RequestBodyAdvice",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-26T00:53:25.798577+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "java",
+      "spring-mvc",
+      "spring-boot"
+    ],
+    "owner": {
+      "account_id": 4166276,
+      "reputation": 1761,
+      "user_id": 5140458,
+      "user_type": "registered",
+      "accept_rate": 50,
+      "profile_image": "https://i.sstatic.net/KEYs5.jpg?s=256",
+      "display_name": "Vivek Sinha",
+      "link": "https://stackoverflow.com/users/5140458/vivek-sinha"
+    },
+    "is_answered": false,
+    "view_count": 9153,
+    "answer_count": 2,
+    "score": 3,
+    "last_activity_date": 1787702735,
+    "creation_date": 1454959795,
+    "last_edit_date": 1454960100,
+    "question_id": 35277727,
+    "content_license": "CC BY-SA 3.0",
+    "link": "https://stackoverflow.com/questions/35277727/how-to-use-requestbodyadvice",
+    "title": "How to use RequestBodyAdvice"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f26e4ab9-27f0-4ee6-a207-ed813c585633",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "01aeb60ad673e2a8",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/simpsons-black-mirror-parody-disney-plus-special",
+  "title": "The Simpsons Parodies Black Mirror in New Disney+ Special",
+  "content": "Ahead of the Season 38 premiere, The Simpsons is returning to Disney+ for a special episode that lampoons Black Mirror. Check out our exclusive preview of \"Yellow Mirror.\"",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T15:16:24+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "be3e794b-92df-49cd-8a3a-6bc251073831",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

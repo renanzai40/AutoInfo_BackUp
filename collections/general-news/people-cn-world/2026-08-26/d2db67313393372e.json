@@ -1,0 +1,24 @@
+{
+  "id": "d2db67313393372e",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0604/c1002-40493491.html",
+  "title": "波兰总理：将于下周举行政府信任投票",
+  "content": "<p>　　新华社华沙6月3日电（记者张章 崔力）波兰总理图斯克3日说，波兰议会将于11日对其领导的政府举行信任投票。</p> <p>　　图斯克在当天内阁会议前表示，此次信任投票将为政府自2023年10月议会选举后上任以来的工作提供评估的机会。对政府整体及各部委工作的评估将是7月的主要任务。</p> <p>　　图斯克2日在电视讲话中呼吁议会举行信任投票，誓言继续执政。他说，总统选举结果“不会改变任何事”。</p> <p>　　在1日举行的波兰总统选举第二轮投票中，图斯克支持的公民联盟候选人特扎斯科夫斯基落败，独立候选人纳夫罗茨基以50.89%的得票率当选新一任波兰总统，他在选举中得到了最大反对党、右翼的法律与公正党的支持。</p> <p>　　此间舆论认为，纳夫罗茨基的当选让政府的民意支持率和推进政治议程的能力受到质疑，图斯克因此才选择发起信任投票。此前，图斯克已与执政联盟其他领导人进行了沟通。</p> <p>　　负责进行信任投票的波兰议会众议院共有460个议席，图斯克领导的执政联盟目前占有242席。根据波兰法律，政府信任投票需要众议院超过半数赞成才能获得通过。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-04T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a73b1322-9caf-4035-a92d-d6c5b91a820b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

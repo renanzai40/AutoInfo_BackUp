@@ -1,0 +1,50 @@
+{
+  "id": 34721178,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/34721178/pika-blockingconnection-rabbitmq-connection-closed",
+  "title": "Pika BlockingConnection &amp; RabbitMQ : connection closed",
+  "content": "Pika BlockingConnection &amp; RabbitMQ : connection closed",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-26T00:53:25.798577+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "python",
+      "azure",
+      "rabbitmq",
+      "pika"
+    ],
+    "owner": {
+      "account_id": 1775213,
+      "reputation": 3331,
+      "user_id": 1619115,
+      "user_type": "registered",
+      "accept_rate": 45,
+      "profile_image": "https://www.gravatar.com/avatar/b249051e67331f8910ab0ec80d1b45f8?s=256&d=identicon&r=PG",
+      "display_name": "Alex Grs",
+      "link": "https://stackoverflow.com/users/1619115/alex-grs"
+    },
+    "is_answered": false,
+    "view_count": 13527,
+    "answer_count": 1,
+    "score": 3,
+    "last_activity_date": 1787702735,
+    "creation_date": 1452513984,
+    "last_edit_date": 1452520709,
+    "question_id": 34721178,
+    "content_license": "CC BY-SA 3.0",
+    "link": "https://stackoverflow.com/questions/34721178/pika-blockingconnection-rabbitmq-connection-closed",
+    "title": "Pika BlockingConnection &amp; RabbitMQ : connection closed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e9d5c9e4-788d-4b51-9232-5a55757f9a7e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

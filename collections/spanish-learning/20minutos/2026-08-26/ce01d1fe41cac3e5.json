@@ -1,0 +1,24 @@
+{
+  "id": "ce01d1fe41cac3e5",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gastronomia/fresco-ligero-rapido-clave-plato-preparado-cuya-demanda-sube-un-5-verano_7026093_0.html",
+  "title": "Fresco, ligero y rápido: la clave del plato preparado cuya demanda sube un 5% en la temporada veraniega",
+  "content": "La Asociación de Platos Preparados de España asegura que la razón por la cual estos platos preparados ganan popularidad en esta época del año es por su \"conveniencia\".",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-15T16:32:12+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c897e21a-4b6a-4909-8809-0e8daf9d4f92",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

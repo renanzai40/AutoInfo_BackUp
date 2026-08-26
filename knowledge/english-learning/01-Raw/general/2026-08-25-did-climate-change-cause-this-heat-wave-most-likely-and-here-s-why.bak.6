@@ -1,0 +1,50 @@
+---
+title: Did climate change cause this heat wave? Most likely, and here's why
+domain: english-learning
+tier: 01-Raw
+entry_id: english-learning-general-did-climate-change-cause-this-heat-wave-most-likely-and-here-s-why
+source_url: https://www.npr.org/2026/08/25/nx-s1-5940053/heat-wave-extreme-forecast-climate
+source_type: rss
+source_platform: npr-news
+collected_at: '2026-08-25T05:00:00-04:00'
+summary: The article discusses how climate change is likely a cause of heat waves, with the author sharing guidance to help
+  understand this connection. As the senior climate editor at NPR, the author provides insights into climate change's role
+  in extreme weather events.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: e329c445-bde3-4858-816e-3a5b0a75550c
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+As the senior climate editor at NPR, when extreme weather impacts us, I often send out guidance to the newsroom to help everyone understand the role of climate change. Here's what I tell them.
+
+## Summary
+The article discusses how climate change is likely a cause of heat waves, with the author sharing guidance to help understand this connection. As the senior climate editor at NPR, the author provides insights into climate change's role in extreme weather events.
+
+## Key Points
+- Climate change is a probable factor in causing heat waves.
+- Expert guidance is needed to comprehend climate change's impact on extreme weather.
+- Media organizations like NPR play a role in educating the public about climate issues.
+
+
+## Entities
+- **climate change** (concept, relevance=)
+- **heat wave** (concept, relevance=)
+- **NPR** (org, relevance=)

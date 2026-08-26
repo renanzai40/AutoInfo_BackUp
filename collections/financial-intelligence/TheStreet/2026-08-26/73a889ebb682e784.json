@@ -1,0 +1,24 @@
+{
+  "id": "73a889ebb682e784",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/retail/walmart-launches-scenario-fashion-line",
+  "title": "Walmart is changing its approach in one key category",
+  "content": "The retailer hopes its latest launch, aimed at younger shoppers, will help capture more spending.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T23:33:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "45a45ab6-849d-4a4e-ac1b-bd1ffe3a8ff8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "b8ae67c928102e93",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/games/strategy/total-war-warhammer-shows-off-its-spicy-new-endgames-including-a-rat-counter-that-tells-you-how-many-skaven-still-need-killing-in-the-vermintide/",
+  "title": "Total War: Warhammer shows off its spicy new endgames, including a 'rat counter' that tells you how many Skaven still need killing in The Vermintide",
+  "content": "160,000 DEAD RATS.",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-25T16:20:52+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d49846bd-2654-4c95-8cd5-2c8ac802f43c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,22 @@
+{
+  "id": "9d2b87a6ce8b89dd",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://newsletter.pragmaticengineer.com/p/the-pulse-quitting-spotify-podcasts",
+  "title": "The Pulse: Quitting Spotify Podcasts over reliability",
+  "content": "Also: Chinese open models match closed ones from Anthropic and OpenAI, AWS&#8217;s &#8220;heart-attack&#8221; billing error, and more",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-07-23T15:59:37+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://newsletter.pragmaticengineer.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "978316b3-74aa-4f45-9b1a-12e861e887b8"
+}

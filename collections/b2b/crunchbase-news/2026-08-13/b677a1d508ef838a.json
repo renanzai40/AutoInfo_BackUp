@@ -1,0 +1,22 @@
+{
+  "id": "b677a1d508ef838a",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://news.crunchbase.com/venture/active-startup-investors-july-2026-khosla-yc-coatue-nvda/",
+  "title": "No Summer Doldrums For Active Startup Investors In July",
+  "content": "Active startup investors kept up the pace in July, with familiar names topping the ranks in several metrics including most prolific venture dealmakers, most active lead backers, biggest spenders and highest-volume seed investors.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-07T11:00:52+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://news.crunchbase.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "94c9da9c-2005-43a0-8902-e5ab55db5615"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "gMjP_zQuEfGBnQ58UPJrCw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Rust From Zero",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "gMjP_zQuEfGBnQ58UPJrCw",
+    "slug": "rust",
+    "name": "Rust From Zero"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "729241af-0e63-4203-9713-36bb07f68495",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

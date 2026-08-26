@@ -1,0 +1,24 @@
+{
+  "id": "5fba980402272343",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/vid%C3%A9o/20260825-au-kenya-un-jeune-cr%C3%A9ateur-de-mode-redonne-vie-au-tissage-traditionnel",
+  "title": "Au Kenya, un jeune créateur de mode redonne vie au tissage traditionnel",
+  "content": "🇰🇪 Au Kenya, un jeune créateur de mode mise sur le tissage manuel pour se démarquer. Il fabrique des tissus et des vêtements à la main, faisant revivre un savoir-faire traditionnel menacé par l’industrialisation.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T13:22:57+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a6a23b66-2cdc-4f78-b3ac-aa6c4dd22455",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

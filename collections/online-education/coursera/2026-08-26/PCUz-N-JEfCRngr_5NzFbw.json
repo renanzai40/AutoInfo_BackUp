@@ -1,0 +1,27 @@
+{
+  "id": "PCUz-N-JEfCRngr_5NzFbw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Professional Skills: Digital Security",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "PCUz-N-JEfCRngr_5NzFbw",
+    "slug": "digital-security",
+    "name": "Professional Skills: Digital Security"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "fefed68c-72eb-4ffb-b291-aa390f3d3c54",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

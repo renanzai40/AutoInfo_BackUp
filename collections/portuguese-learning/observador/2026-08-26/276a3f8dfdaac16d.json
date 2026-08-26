@@ -1,0 +1,24 @@
+{
+  "id": "276a3f8dfdaac16d",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/bruno-fernandes-eleito-o-jogador-masculino-do-ano-em-inglaterra-pela-associacao-de-futebolistas-profissionais/",
+  "title": "Bruno Fernandes eleito jogador masculino do ano pela PFA",
+  "content": "\"São aqueles que jogam contra nós no campo que votam e, provavelmente, não é fácil votar em alguém que joga contra ti\", declarou o médio de 31 anos",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T23:28:45+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "71096a1c-282d-4d8a-90ef-4bf18d2d0451",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

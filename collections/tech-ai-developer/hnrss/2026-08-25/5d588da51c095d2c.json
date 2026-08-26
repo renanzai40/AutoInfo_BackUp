@@ -1,0 +1,24 @@
+{
+  "id": "5d588da51c095d2c",
+  "source_name": "hnrss",
+  "source_type": "rss",
+  "source_url": "https://dl.acm.org/doi/pdf/10.1145/3820012",
+  "title": "Warnock: Harnessing GPU Geometry Amplification for Vector Graphics",
+  "content": "<p>Article URL: <a href=\"https://dl.acm.org/doi/pdf/10.1145/3820012\">https://dl.acm.org/doi/pdf/10.1145/3820012</a></p>\n<p>Comments URL: <a href=\"https://news.ycombinator.com/item?id=49435781\">https://news.ycombinator.com/item?id=49435781</a></p>\n<p>Points: 1</p>\n<p># Comments: 1</p>",
+  "content_type": "text",
+  "source_platform": "hnrss",
+  "collected_at": "2026-08-25T15:26:45+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://hnrss.org/newest"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "690416bb-4fbf-49cc-83c7-f95810ffaa6c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

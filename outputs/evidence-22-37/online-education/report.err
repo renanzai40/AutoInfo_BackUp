@@ -1,0 +1,10 @@
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping knowledge base entries related to online education into 3-5 semantic themes, with guidelines to use descriptive titles and assign each entr
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions to group eight knowledge base entries related to online education into thematic categories. The entries discuss diverse topics including racial equity i
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping diverse knowledge base entries into 3–5 themes, emphasizing concise and descriptive titles. It lists several entries covering topics from h
+LLM returned only 1 theme group(s), retrying with stricter prompt
+Strict retry returned only 1 group(s), falling back to deterministic grouping

@@ -1,0 +1,52 @@
+{
+  "id": 79997140,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/79997140/how-do-i-escape-an-sql-server-database-name-that-contains-brackets",
+  "title": "How do I escape an SQL Server database name that contains brackets []?",
+  "content": "How do I escape an SQL Server database name that contains brackets []?",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-25T15:28:07.504011+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "sql",
+      "sql-server",
+      "t-sql",
+      "special-characters",
+      "sql-server-2025"
+    ],
+    "owner": {
+      "account_id": 4030991,
+      "reputation": 28377,
+      "user_id": 3357935,
+      "user_type": "registered",
+      "accept_rate": 82,
+      "profile_image": "https://i.sstatic.net/jaomO.png?s=256",
+      "display_name": "Stevoisiak",
+      "link": "https://stackoverflow.com/users/3357935/stevoisiak"
+    },
+    "is_answered": false,
+    "view_count": 122,
+    "closed_date": 1787329307,
+    "answer_count": 0,
+    "score": -4,
+    "last_activity_date": 1787671282,
+    "creation_date": 1787329117,
+    "last_edit_date": 1787671282,
+    "question_id": 79997140,
+    "link": "https://stackoverflow.com/questions/79997140/how-do-i-escape-an-sql-server-database-name-that-contains-brackets",
+    "closed_reason": "Duplicate",
+    "title": "How do I escape an SQL Server database name that contains brackets []?"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "94c1d2f8-c466-4c05-ba98-8872097557af",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

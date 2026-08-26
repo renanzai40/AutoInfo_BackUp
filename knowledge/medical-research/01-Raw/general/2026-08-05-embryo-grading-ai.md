@@ -1,0 +1,27 @@
+---
+title: Embryo grading AI
+domain: medical-research
+tier: 01-Raw
+entry_id: medical-research-general-embryo-grading-ai
+source_url: https://example.org/embryo-ai
+source_type: import
+source_platform: ''
+collected_at: '2026-08-05T03:19:57.190875+00:00'
+summary: ''
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: unique
+source_score: 0.0
+language: ''
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: ''
+deleted: true
+deleted_at: '2026-08-12T04:46:22.789507+00:00'
+---
+
+## Original Content
+AI models improve embryo grading consistency.

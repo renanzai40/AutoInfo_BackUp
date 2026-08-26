@@ -1,0 +1,24 @@
+{
+  "id": "f7de5c7e92ad72c8",
+  "source_name": "npr-news",
+  "source_type": "rss",
+  "source_url": "https://www.npr.org/2026/08/25/nx-s1-5944240/canada-us-tariffs",
+  "title": "Canada announces retaliatory tariffs on the U.S. as the countries' trade fight deepens",
+  "content": "The measures come after President Trump imposed 50% tariffs on many Canadian goods and threatened more after trade talks broke down on Friday.",
+  "content_type": "text",
+  "source_platform": "npr-news",
+  "collected_at": "2026-08-25T11:20:18-04:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.npr.org/1001/rss.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "04087a6a-7591-4bac-88e3-701f09f06ddd",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

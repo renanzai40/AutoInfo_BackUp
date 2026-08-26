@@ -1,0 +1,24 @@
+{
+  "id": "6d5f7b9556a57979",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/proisshestviya/28044051",
+  "title": "ТАСС: группа солдат ВСУ с инвалидностью подралась с киевскими полицейскими",
+  "content": "Они выкрикивали оскорбления в адрес правоохранителей",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T19:04:01+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3f1f653c-105f-4ab6-98a2-5da48bf7cd4f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

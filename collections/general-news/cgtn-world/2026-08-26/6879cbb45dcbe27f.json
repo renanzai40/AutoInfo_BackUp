@@ -1,0 +1,24 @@
+{
+  "id": "6879cbb45dcbe27f",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://newsaf.cgtn.com/news/2026-08-24/Ethiopia-s-Kejelcha-retakes-world-half-marathon-record--1PRXg2zBa8w/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Ethiopia's Kejelcha retakes world half marathon record",
+  "content": "The performance came months after Kejelcha made headlines with a 1:59:40 marathon debut in London, the fastest marathon debut ever recorded",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T15:01:53+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bf09911c-399a-430e-b96b-2619c83d47c5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

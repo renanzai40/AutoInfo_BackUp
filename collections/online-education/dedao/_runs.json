@@ -1,0 +1,130 @@
+[
+  {
+    "collection_id": "col-20260810T044950-4864ee4f",
+    "timestamp": "2026-08-10T04:52:12.909255+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://rsshub.app/dedao/articles (bozo): <urlopen error [Errno 101] Network is unreachable>",
+        "source_failed": true,
+        "reason": "RSS parse error for https://rsshub.app/dedao/articles (bozo): <urlopen error [Errno 101] Network is unreachable>"
+      }
+    ],
+    "duration_ms": 134063.0
+  },
+  {
+    "collection_id": "col-20260810T055858-112c56b2",
+    "timestamp": "2026-08-10T06:01:24.205941+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://rsshub.app/dedao/articles (bozo): <urlopen error [Errno 101] Network is unreachable>",
+        "source_failed": true,
+        "reason": "RSS parse error for https://rsshub.app/dedao/articles (bozo): <urlopen error [Errno 101] Network is unreachable>"
+      }
+    ],
+    "duration_ms": 134383.0
+  },
+  {
+    "collection_id": "col-20260815T181030-ae72ea26",
+    "timestamp": "2026-08-15T18:11:08.118331+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://rsshub.app/dedao/articles: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://rsshub.app/dedao/articles: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30116.0
+  },
+  {
+    "collection_id": "col-20260815T182038-eb2fbbd8",
+    "timestamp": "2026-08-15T18:21:16.053027+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://rsshub.app/dedao/articles: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://rsshub.app/dedao/articles: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30045.0
+  },
+  {
+    "collection_id": "col-20260815T183259-fdc879b3",
+    "timestamp": "2026-08-15T18:33:30.185901+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://rsshub.app/dedao/articles: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://rsshub.app/dedao/articles: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30658.0
+  },
+  {
+    "collection_id": "col-20260825T151610-cba0a08f",
+    "timestamp": "2026-08-25T15:16:55.600869+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://rsshub.app/dedao/articles: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://rsshub.app/dedao/articles: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30106.0
+  },
+  {
+    "collection_id": "col-20260825T152636-120b9e36",
+    "timestamp": "2026-08-25T15:27:18.605668+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://rsshub.app/dedao/articles: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://rsshub.app/dedao/articles: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30106.0
+  },
+  {
+    "collection_id": "col-20260825T154343-63f4c25e",
+    "timestamp": "2026-08-25T15:44:23.001254+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://rsshub.app/dedao/articles: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://rsshub.app/dedao/articles: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30089.0
+  }
+]

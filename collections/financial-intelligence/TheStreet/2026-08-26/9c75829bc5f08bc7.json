@@ -1,0 +1,24 @@
+{
+  "id": "9c75829bc5f08bc7",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/fed/bessent-40-trillion-debt-fed-rate-hike",
+  "title": "Bessent’s $40 trillion debt answer puts Fed rate hike in focus",
+  "content": "Bessent’s bond-buyback strategy complicates the Federal Reserve’s interest-rate path.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T16:40:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "804ca475-4218-41f7-bb57-8ef295e2ef21",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

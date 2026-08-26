@@ -1,0 +1,27 @@
+{
+  "id": "4ltPmv2EEe-ehwr_ziEUiw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "GenAI for Talent Acquisition: Smarter Candidate Screening",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "4ltPmv2EEe-ehwr_ziEUiw",
+    "slug": "genai-for-talent-acquisition-smarter-candidate-screening",
+    "name": "GenAI for Talent Acquisition: Smarter Candidate Screening"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "024ad28b-d857-4a85-9af6-14c7d6a33224",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

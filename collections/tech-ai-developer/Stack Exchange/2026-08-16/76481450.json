@@ -1,0 +1,47 @@
+{
+  "id": 76481450,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/76481450/integration-of-secureye-s-fb3k-biometric-machine-with-custom-attendance-software",
+  "title": "Integration of secureye s-fb3k biometric machine with custom attendance software built on laravel",
+  "content": "Integration of secureye s-fb3k biometric machine with custom attendance software built on laravel",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-15T19:01:40.189009+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "c++",
+      "laravel",
+      "web-applications",
+      "sdk",
+      "biometrics"
+    ],
+    "owner": {
+      "account_id": 28826566,
+      "reputation": 1,
+      "user_id": 22077842,
+      "user_type": "registered",
+      "profile_image": "https://lh3.googleusercontent.com/a/AAcHTtdcxZqjURo7xCUQLWmg5rr-NlZP0Zb-XHvZU6JE=k-s256",
+      "display_name": "Amit Kumar",
+      "link": "https://stackoverflow.com/users/22077842/amit-kumar"
+    },
+    "is_answered": false,
+    "view_count": 453,
+    "answer_count": 1,
+    "score": 0,
+    "last_activity_date": 1786820152,
+    "creation_date": 1686823939,
+    "question_id": 76481450,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/76481450/integration-of-secureye-s-fb3k-biometric-machine-with-custom-attendance-software",
+    "title": "Integration of secureye s-fb3k biometric machine with custom attendance software built on laravel"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f7c0c3a8-5eb4-42b3-a9d6-632103dc1812"
+}

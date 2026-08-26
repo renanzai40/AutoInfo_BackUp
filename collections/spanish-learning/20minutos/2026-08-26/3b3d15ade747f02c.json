@@ -1,0 +1,24 @@
+{
+  "id": "3b3d15ade747f02c",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/television/un-toro-mecanico-con-forma-pene-protagonista-las-fiestas-alginet-por-aqui-pasan-ninos_7029185_0.html",
+  "title": "Un toro mecánico con forma de pene crea la controversia en las fiestas de Alginet: \"Por aquí pasan los niños\"",
+  "content": "Los vecinos se encuentran divididos y el Ayuntamiento ha asegurado que no tiene nada que ver con la colocación de este instrumento de feria.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T14:34:06+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "49a606ea-2a35-4e50-9482-40ab8b4e84ef",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

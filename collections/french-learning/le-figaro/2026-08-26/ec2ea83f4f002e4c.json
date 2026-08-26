@@ -1,0 +1,24 @@
+{
+  "id": "ec2ea83f4f002e4c",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/conjoncture/gabriel-zucman-thomas-piketty-emmanuel-saez-ces-economistes-ideologues-qui-reecrivent-le-logiciel-du-ps-et-de-lfi-20260825",
+  "title": "Gabriel Zucman, Thomas Piketty, Emmanuel Saez... Ces économistes idéologues qui réécrivent le logiciel du PS et de LFI",
+  "content": "Ils conseillent depuis des années les formations de gauche en Europe et aux États-Unis. Leur idée fixe : instaurer une taxe sur le patrimoine des plus riches. À court terme, leurs espoirs portent sur la Californie et la France.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T18:42:23+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3e067f40-f576-404e-97b7-c972c480475d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

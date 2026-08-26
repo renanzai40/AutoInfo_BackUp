@@ -1,0 +1,24 @@
+{
+  "id": "642e84930d35f62c",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/technology/ibm-arm-mainframe-chip-ai",
+  "title": "IBM takes another giant step in the AI race",
+  "content": "The move opens IBM Z to a software ecosystem it has never natively supported, and the reason why says a lot about where enterprise AI is headed.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T12:17:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5d26ca7f-780c-4e12-b485-da08fc8d1c6e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

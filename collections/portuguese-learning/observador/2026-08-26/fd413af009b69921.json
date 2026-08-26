@@ -1,0 +1,24 @@
+{
+  "id": "fd413af009b69921",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/canada-retalia-com-tarifas-aplicadas-as-importacoes-dos-eua-medida-incide-sobre-importacoes-avaliadas-em-20-mil-milhoes-de-dolares/",
+  "title": "Canadá retalia com tarifas aplicadas às importações dos EUA",
+  "content": "Mark Carney, o primeiro-ministro canadiano, já tinha prometido que o Canadá iria retaliar \"dólar por dólar\" a eventuais tarifas dos EUA, que se confirmaram.",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T16:26:12+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bb6b5f4d-a71e-43cf-bf6e-57982f3f4729",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

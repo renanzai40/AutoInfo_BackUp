@@ -1,0 +1,24 @@
+{
+  "id": "ff098d2c5ae36d0e",
+  "source_name": "saastr",
+  "source_type": "rss",
+  "source_url": "https://www.saastr.com/stripe-buys-openrouter-for-7b-anthropic-turns-its-first-profit-and-silver-lake-circles-workday-at-43b-20vc-x-saastr/",
+  "title": "Stripe Buys OpenRouter for $7B, Anthropic Turns Its First Profit, and Silver Lake Circles Workday at $43B: 20VC x SaaStr",
+  "content": "Plus the math that has to be true for AI to reach $600B in revenue: $100K of tokens per engineer, and 30% fewer engineers. A heavy week on 20VC x SaaStr with Harry Stebbings, Rory O&#8217;Driscoll and Jason Lemkin: SpaceX closed its $60B all-stock takeover of Cursor Stripe bought OpenRouter for around $7B, four months... <br /><a class=\"more-link fade\" href=\"https://www.saastr.com/stripe-buys-openrouter-for-7b-anthropic-turns-its-first-profit-and-silver-lake-circles-workday-at-43b-20vc-x-saastr/\">Continue Reading</a>",
+  "content_type": "text",
+  "source_platform": "saastr",
+  "collected_at": "2026-08-23T12:42:24+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.saastr.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "25d1d0bb-1fe0-4ab7-af93-ff6c97334627",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

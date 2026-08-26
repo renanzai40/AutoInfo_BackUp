@@ -1,0 +1,24 @@
+{
+  "id": "458fd268bc2fd1a3",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/bc/entrenar-verano-shein-rutina_7026411_5.html",
+  "title": "¿Volver a entrenar después de verano? Las prendas de SHEIN que te darán el empujón que necesitas",
+  "content": "Las colecciones Glowmode y Aralina incluyen ropa para todo tipo de disciplinas y cuerpos, combinando funcionalidad y un toque aesthetic para que entrenar sea más fácil que nunca.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-24T05:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bd01e27e-232b-46a1-b719-8be2f36dd7fc",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

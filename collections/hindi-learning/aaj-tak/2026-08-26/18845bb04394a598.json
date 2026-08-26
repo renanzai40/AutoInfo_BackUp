@@ -1,0 +1,24 @@
+{
+  "id": "18845bb04394a598",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/defence-news/story/former-cds-anil-chauhan-denies-attack-pakistan-kirana-hills-operation-sindoor-ntc-drmt-rpti-2629923-2026-08-25?utm_source=rssfeed",
+  "title": "भारत ने किराना हिल्स पर किया था हमला? पूर्व CDS ने बताया सच",
+  "content": "'ऑपरेशन सिंदूर' के दौरान भारत ने पाकिस्तान के सरगोधा में किराना हिल्स या किसी परमाणु ठिकाने पर हमला नहीं किया था. इसका खुलासा पूर्व चीफ ऑफ डिफेंस स्टाफ जनरल अनिल चौहान ने किया है. उन्होंने बताया कि भारत का ड्रोन मिशन टारगेट न मिलने के कारण किराना हिल्स की पहाड़ियों से टकरा गया था, जिसकी वजह से हिल्स से धुआं उठा होगा.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T23:05:16+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5805bce2-5c0e-41f4-b184-5afe2d8e446b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

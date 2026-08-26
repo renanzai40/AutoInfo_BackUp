@@ -1,0 +1,24 @@
+{
+  "id": "6bd01daa14c150eb",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/retail/salvation-army-thrift-store-closures",
+  "title": "Discount retailer quietly closes another store",
+  "content": "Several stores have closed over the past year, with another location set to shut down in just days.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T13:33:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c4d3d875-0f21-45be-b5f8-d055726c880b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

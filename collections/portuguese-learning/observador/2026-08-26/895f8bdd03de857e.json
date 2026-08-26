@@ -1,0 +1,24 @@
+{
+  "id": "895f8bdd03de857e",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/camara-de-gaia-aprova-por-unanimidade-proposta-do-ps-para-criar-rede-de-guardas-noturnos-no-concelho/",
+  "title": "Gaia aprova rede de guardas-noturnos proposta pelo PS",
+  "content": "Os socialistas apontam também a exemplos de outros municípios, como o Porto, Gondomar, Matosinhos, Amadora, Cascais, Aveiro e Lisboa, com \"serviços ativos ou em revitalização\"",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T19:15:36+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3738118e-666b-49bf-8092-a59c302d48df",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

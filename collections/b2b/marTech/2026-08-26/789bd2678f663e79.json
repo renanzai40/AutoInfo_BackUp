@@ -1,0 +1,24 @@
+{
+  "id": "789bd2678f663e79",
+  "source_name": "marTech",
+  "source_type": "rss",
+  "source_url": "https://martech.org/ai-is-making-bad-marketing-data-harder-to-ignore/",
+  "title": "AI is making bad marketing data harder to ignore",
+  "content": "<div><img alt=\"Robots reviewing a storyboard.\" class=\"attachment-large size-large wp-post-image\" height=\"450\" src=\"https://martech.org/wp-content/uploads/2026/04/robot-storyboard-800x450.png\" style=\"margin-bottom: 15px;\" width=\"800\" /></div>\n<p>AI workflows inherit the weaknesses in your data. Learn how to find gaps across your data pipeline and fix them at the source.</p>\n<p>The post <a href=\"https://martech.org/ai-is-making-bad-marketing-data-harder-to-ignore/\">AI is making bad marketing data harder to ignore</a> appeared first on <a href=\"https://martech.org\">MarTech</a>.</p>",
+  "content_type": "text",
+  "source_platform": "marTech",
+  "collected_at": "2026-08-25T12:25:00+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://martech.org/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8110603a-26ba-4a25-9a58-c6a30787500d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

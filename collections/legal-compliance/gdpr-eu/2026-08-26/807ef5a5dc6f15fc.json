@@ -1,0 +1,24 @@
+{
+  "id": "807ef5a5dc6f15fc",
+  "source_name": "gdpr-eu",
+  "source_type": "rss",
+  "source_url": "https://gdpr.eu/data-anonymization-taxa-4x35/",
+  "title": "Data anonymization and GDPR compliance: the case of Taxa 4×35",
+  "content": "<p>Studying the case of Taxa 4x35, a Danish taxi company, sheds light on how data protection agencies are enforcing GDPR requirements for data anonymization.</p>\n<p>The post <a href=\"https://gdpr.eu/data-anonymization-taxa-4x35/\">Data anonymization and GDPR compliance: the case of Taxa 4&#215;35</a> appeared first on <a href=\"https://gdpr.eu\">GDPR.eu</a>.</p>",
+  "content_type": "text",
+  "source_platform": "gdpr-eu",
+  "collected_at": "2019-05-06T10:18:17+00:00",
+  "language": "",
+  "domain": "legal-compliance",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://gdpr.eu/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "257dad92-2ced-4ff3-b994-ce0ad1f9556a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

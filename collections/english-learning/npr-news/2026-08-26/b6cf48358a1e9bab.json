@@ -1,0 +1,24 @@
+{
+  "id": "b6cf48358a1e9bab",
+  "source_name": "npr-news",
+  "source_type": "rss",
+  "source_url": "https://www.npr.org/2026/08/25/nx-s1-5943041/south-carolina-senate-runoff-graham-norman-trump-endorsement",
+  "title": "South Carolina U.S. senate runoff election will test Trump's endorsement",
+  "content": "The primary runoff in South Carolina between Sen. Darline Graham and Rep. Ralph Norman is another test of President Trump's influence. He's backing Darline, sister of the late Sen. Lindsey Graham.",
+  "content_type": "text",
+  "source_platform": "npr-news",
+  "collected_at": "2026-08-25T16:47:54-04:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.npr.org/1001/rss.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8c9ca3ee-dfe2-47eb-9220-6bc1c9c3eae8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

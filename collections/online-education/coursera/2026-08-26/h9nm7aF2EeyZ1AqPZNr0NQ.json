@@ -1,0 +1,27 @@
+{
+  "id": "h9nm7aF2EeyZ1AqPZNr0NQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Create a Cover Letter with an Envelope using Microsoft Word",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "h9nm7aF2EeyZ1AqPZNr0NQ",
+    "slug": "create-a-cover-letter-with-an-envelope-using-microsoft-word",
+    "name": "Create a Cover Letter with an Envelope using Microsoft Word"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ab671885-d322-41ff-802b-a434b522a4f9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

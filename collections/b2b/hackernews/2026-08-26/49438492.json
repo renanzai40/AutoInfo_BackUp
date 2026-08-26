@@ -1,0 +1,39 @@
+{
+  "id": "49438492",
+  "source_name": "hackernews",
+  "source_type": "hackernews",
+  "source_url": "https://news.ycombinator.com/item?id=49438492",
+  "title": "Pgbot: A 5.9 MB read-only Postgres tool for humans and agents",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "hackernews",
+  "collected_at": "2026-08-25T19:12:23.929800+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "by": "sashash",
+    "descendants": 3,
+    "id": 49438492,
+    "kids": [
+      49438540,
+      49438528,
+      49438663,
+      49438538,
+      49438493,
+      49438571
+    ],
+    "score": 12,
+    "time": 1787682657,
+    "title": "Pgbot: A 5.9 MB read-only Postgres tool for humans and agents",
+    "type": "story",
+    "url": "https://pgbot.dev/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a1c8f60f-425b-499e-8f04-f904b95d20b8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

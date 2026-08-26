@@ -1,0 +1,24 @@
+{
+  "id": "0ff59843063376b6",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/deportes/futbol/marc-cucurella-ansioso-por-debutar-bernabeu-con-real-madrid-se-que-impone-me-ha-tocado-sufrirlo_7029015_0.html",
+  "title": "Marc Cucurella, ansioso por debutar con el Real Madrid en el Santiago Bernabéu: \"Sé lo que impone este estadio\"",
+  "content": "El lateral jugará ante la Real Sociedad su primer partido como futbolista blanco en el feudo madridista.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T09:39:40+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "eeb95fe5-dc1f-44f2-8fcb-5acac9dc818f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,27 @@
+{
+  "id": "FBvT5U8KEe-Yaw6jHW3arw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Get Started with iOS App Development ",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "FBvT5U8KEe-Yaw6jHW3arw",
+    "slug": "get-started-with-ios-app-development",
+    "name": "Get Started with iOS App Development "
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8934fe82-48e6-451c-b14b-bd134771ab67",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

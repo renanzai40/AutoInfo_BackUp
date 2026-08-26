@@ -1,0 +1,24 @@
+{
+  "id": "029e39d7517e5e1d",
+  "source_name": "duolingo-blog",
+  "source_type": "rss",
+  "source_url": "https://blog.duolingo.com/whats-the-easiest-language-to-learn/",
+  "title": "What’s the easiest language to learn?",
+  "content": "Here’s what makes a language “easier” for some, and how to choose a language to learn!",
+  "content_type": "text",
+  "source_platform": "duolingo-blog",
+  "collected_at": "2026-08-20T12:00:00+00:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://blog.duolingo.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ba95ead5-651d-427a-838a-b092e840a6c7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

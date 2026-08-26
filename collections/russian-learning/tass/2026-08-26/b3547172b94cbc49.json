@@ -1,0 +1,24 @@
+{
+  "id": "b3547172b94cbc49",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/ekonomika/28043979",
+  "title": "Институт Столыпина: Россия может сохранить четвертое место в мире по объему ВВП",
+  "content": "Такой показатель говорит об экономической устойчивости, о работоспособности институтов экономической и бюджетной политики, финансовой инфраструктуры, отметил исполнительный директор Института экономики роста им. П. А. Столыпина Антон Свириденко",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T18:41:47+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6b6f3008-c1c6-40b0-a22b-5a519cb7c068",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

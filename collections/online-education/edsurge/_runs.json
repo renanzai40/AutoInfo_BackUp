@@ -1,0 +1,146 @@
+[
+  {
+    "collection_id": "col-20260810T044950-4864ee4f",
+    "timestamp": "2026-08-10T04:49:53.699089+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.edsurge.com/feed (bozo): <urlopen error [Errno 111] Connection refused>",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.edsurge.com/feed (bozo): <urlopen error [Errno 111] Connection refused>"
+      }
+    ],
+    "duration_ms": 1031.0
+  },
+  {
+    "collection_id": "col-20260810T055858-112c56b2",
+    "timestamp": "2026-08-10T05:59:03.745970+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.edsurge.com/feed (bozo): <urlopen error [Errno 111] Connection refused>",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.edsurge.com/feed (bozo): <urlopen error [Errno 111] Connection refused>"
+      }
+    ],
+    "duration_ms": 1355.0
+  },
+  {
+    "collection_id": "col-20260812T182350-1ac49020",
+    "timestamp": "2026-08-12T18:23:52.833113+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.edsurge.com/feed (bozo): <urlopen error [Errno 111] Connection refused>",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.edsurge.com/feed (bozo): <urlopen error [Errno 111] Connection refused>"
+      }
+    ],
+    "duration_ms": 903.0
+  },
+  {
+    "collection_id": "col-20260815T181030-ae72ea26",
+    "timestamp": "2026-08-15T18:10:33.695419+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.edsurge.com/feed: [Errno 111] Connection refused",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.edsurge.com/feed: [Errno 111] Connection refused"
+      }
+    ],
+    "duration_ms": 1078.0
+  },
+  {
+    "collection_id": "col-20260815T182038-eb2fbbd8",
+    "timestamp": "2026-08-15T18:20:41.324037+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.edsurge.com/feed: [Errno 111] Connection refused",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.edsurge.com/feed: [Errno 111] Connection refused"
+      }
+    ],
+    "duration_ms": 1006.0
+  },
+  {
+    "collection_id": "col-20260815T183236-d73d0e58",
+    "timestamp": "2026-08-15T18:32:38.578280+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.edsurge.com/feed: [Errno 111] Connection refused",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.edsurge.com/feed: [Errno 111] Connection refused"
+      }
+    ],
+    "duration_ms": 1518.0
+  },
+  {
+    "collection_id": "col-20260825T151610-cba0a08f",
+    "timestamp": "2026-08-25T15:16:18.265478+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.edsurge.com/feed: [Errno 111] Connection refused",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.edsurge.com/feed: [Errno 111] Connection refused"
+      }
+    ],
+    "duration_ms": 993.0
+  },
+  {
+    "collection_id": "col-20260825T152636-120b9e36",
+    "timestamp": "2026-08-25T15:26:40.711882+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.edsurge.com/feed: [Errno 111] Connection refused",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.edsurge.com/feed: [Errno 111] Connection refused"
+      }
+    ],
+    "duration_ms": 1067.0
+  },
+  {
+    "collection_id": "col-20260825T154343-63f4c25e",
+    "timestamp": "2026-08-25T15:43:47.954940+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.edsurge.com/feed: [Errno 111] Connection refused",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.edsurge.com/feed: [Errno 111] Connection refused"
+      }
+    ],
+    "duration_ms": 2114.0
+  }
+]

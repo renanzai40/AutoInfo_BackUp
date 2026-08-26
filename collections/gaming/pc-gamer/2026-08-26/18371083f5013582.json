@@ -1,0 +1,24 @@
+{
+  "id": "18371083f5013582",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/games/grand-theft-auto/latest-gta-6-leak-confirms-full-dong/",
+  "title": "Latest GTA 6 leak confirms full dong",
+  "content": "It's perfectly natural.",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-24T20:22:51+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a85006b4-2acd-40cc-9a9e-01d37101dcf6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

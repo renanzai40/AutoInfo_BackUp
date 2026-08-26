@@ -1,0 +1,24 @@
+{
+  "id": "633186fb9926f571",
+  "source_name": "ars-technica",
+  "source_type": "rss",
+  "source_url": "https://arstechnica.com/gaming/2026/08/new-bootloader-lets-you-take-the-meta-out-of-the-original-meta-quest/",
+  "title": "New bootloader lets you take the \"Meta\" out of the original Meta Quest",
+  "content": "Privilege escalation attack grants \"full control\" and freedom from Meta's servers/apps.",
+  "content_type": "text",
+  "source_platform": "ars-technica",
+  "collected_at": "2026-08-25T16:04:37+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.arstechnica.com/arstechnica/index"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c1a8d5d6-5a8d-4fbf-b37a-301b12d1d1bc",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

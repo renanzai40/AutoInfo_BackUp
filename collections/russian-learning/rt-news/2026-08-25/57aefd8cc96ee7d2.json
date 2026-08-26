@@ -1,0 +1,24 @@
+{
+  "id": "57aefd8cc96ee7d2",
+  "source_name": "rt-news",
+  "source_type": "rss",
+  "source_url": "https://www.rt.com/news/644640-rare-tornado-rips-france/?utm_source=rss&utm_medium=rss&utm_campaign=RSS",
+  "title": "Rare tornado rips through southern France (VIDEOS)",
+  "content": "<img align=\"left\" alt=\"Preview\" src=\"https://mf.b37mrtl.ru/files/2026.08/thumbnail/6a8da2e885f5405f7637c99e.png\" style=\"margin-right: 10px;\" /> A tornado in southern France has injured 39 people and damaged around 300 homes, according to local officials <br /><a href=\"https://www.rt.com/news/644640-rare-tornado-rips-france/?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=RSS\">Read Full Article at RT.com</a>",
+  "content_type": "text",
+  "source_platform": "rt-news",
+  "collected_at": "2026-08-25T14:29:44+00:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.rt.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "aece5f5a-2cb9-4ec2-859c-e4ae2b14c0ae",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

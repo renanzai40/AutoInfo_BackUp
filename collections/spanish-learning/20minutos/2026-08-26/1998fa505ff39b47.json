@@ -1,0 +1,24 @@
+{
+  "id": "1998fa505ff39b47",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/animaleros/perros/planta-que-puede-intoxicar-gravemente-un-perro-crece-parques-jardines-descampados_7014884_0.html",
+  "title": "La planta que puede intoxicar gravemente a un perro y crece en parques",
+  "content": "Las semillas del ricino contienen ricina, una de las toxinas vegetales más potentes, y requieren atención veterinaria inmediata tras su ingestión.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T07:30:15+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b7487687-cf5d-41e9-b88a-e32e3cb9e7eb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

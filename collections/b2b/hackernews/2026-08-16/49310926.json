@@ -1,0 +1,36 @@
+{
+  "id": "49310926",
+  "source_name": "hackernews",
+  "source_type": "hackernews",
+  "source_url": "https://news.ycombinator.com/item?id=49310926",
+  "title": "A Spectre Is Haunting Unicode",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "hackernews",
+  "collected_at": "2026-08-15T18:36:18.466669+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "by": "sensanaty",
+    "descendants": 9,
+    "id": 49310926,
+    "kids": [
+      49312732,
+      49312152,
+      49312860,
+      49312432,
+      49312481
+    ],
+    "score": 56,
+    "time": 1786804444,
+    "title": "A Spectre Is Haunting Unicode",
+    "type": "story",
+    "url": "https://www.dampfkraft.com/ghost-characters.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "80b196ef-4fff-48c1-bb00-d83fbee87f5b"
+}

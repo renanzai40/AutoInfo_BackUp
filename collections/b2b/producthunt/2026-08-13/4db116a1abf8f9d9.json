@@ -1,0 +1,22 @@
+{
+  "id": "4db116a1abf8f9d9",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.producthunt.com/products/click-6",
+  "title": "Click",
+  "content": "<p>\n            Live research context for ChatGPT and Claude\n          </p>\n          <p>\n            <a href=\"https://www.producthunt.com/products/click-6?utm_campaign=producthunt-atom-posts-feed&amp;utm_medium=rss-feed&amp;utm_source=producthunt-atom-posts-feed\">Discussion</a>\n            |\n            <a href=\"https://www.producthunt.com/r/p/1220687?app_id=339\">Link</a>\n          </p>",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-11T12:25:25-07:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.producthunt.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "def124d6-f74f-4e26-854c-8e65fdfbbe7e"
+}

@@ -1,0 +1,64 @@
+---
+title: 苹果推出搭载M6和M5 Ultra芯片的Mac Studio及Mac mini
+domain: gaming
+tier: 01-Raw
+entry_id: gaming-general-m6-m5-ultra-mac-studio-mac-mini
+source_url: https://www.gcores.com/articles/218773
+source_type: rss
+source_platform: gcores-rss
+collected_at: '2026-08-25T22:22:34+08:00'
+summary: Apple announced new M6 and M5 Ultra chips powering redesigned Mac mini and Mac Studio, delivering significant AI
+  and performance improvements. The M6 is Apple's first 2nm chip with up to 1.2x better multi-thread performance and 30% better
+  AI compute vs M5, while the M5 Ultra features a quad-die architecture supporting on-device running of massive LLMs.
+tags: []
+quality_tier: 2
+relevance_score: 0.0
+dedup_status: unique
+source_score: 70.0
+language: unknown
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: f055d647-b044-4c65-a626-910ea1e7d14e
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: false
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<img src="https://image.gcores.com/8ee2899d0b82cca97dff04fcd206265b-692-389.jpg?x-oss-process=image/resize,limit_1,m_fill,w_626,h_292/quality,q_90" /><p>苹果公司今日宣布推出全新 M6 与 M5 Ultra 芯片，并同步发布搭载上述芯片的新款 Mac mini 与 Mac Studio，在性能与 AI 计算能力方面实现颠覆性跃升。M6 是 Apple 首款 2 纳米制程芯片，M5 Ultra 则是 Apple 迄今最强大的芯片，两款 SoC 均大幅拓展了台式 Mac 的性能极限。</p><div>
+<figure><img alt="" src="https://image.gcores.com/585082cce07efc3707e76cd63ae31cb0-692-389.jpg?x-oss-process=image/resize,limit_1,m_lfit,w_700,h_2000/quality,q_90/watermark,image_d2F0ZXJtYXJrLnBuZw,g_se,x_10,y_10" /></figure></div><p>M6 芯片搭载 12 核中央处理器（含 2 颗超级核心、4 颗性能核心与 6 颗能效核心），较 M5 增加 2 颗核心，多线程性能提升最高可达 1.2 倍。12 核图形处理器每颗核心均内置神经网络加速器，AI 峰值计算性能比 M5 提升近 30%。双 16 核神经网络引擎的峰值计算性能较前代提升最高可达 2 倍，统一内存带宽最高可达 170GB/s。</p><div>
+<figure><img alt="" src="https://image.gcores.com/2848f22ffe5276c4c165a814a52f4ad6-692-461.jpg?x-oss-process=image/resize,limit_1,m_lfit,w_700,h_2000/quality,q_90/watermark,image_d2F0ZXJtYXJrLnBuZw,g_se,x_10,y_10" /></figure></div><p>M5 Ultra 首次采用四晶粒架构，以新一代 UltraFusion 封装技术将两枚双晶粒 M5 Max 连接为一体，晶粒间带宽超过 4.4TB/s。这枚芯片集成最多 36 核中央处理器与最多 80 核图形处理器，每颗图形处理器核心均内置神经网络加速器，AI 峰值计算性能相比 M3 Ultra 提升最高可达 4.5 倍。512GB 统一内存与 1.2TB/s 内存带宽，使用户得以完全在设备端运行具有数千亿参数的超大型大语言模型。</p><div>
+<figure><img alt="" src="https://image.gcores.com/89385bc1134314041c4ecc7d20160a16-692-461.jpg?x-oss-process=image/resize,limit_1,m_lfit,w_700,h_2000/quality,q_90/watermark,image_d2F0ZXJtYXJrLnBuZw,g_se,x_10,y_10" /></figure></div><div>
+<figure><img alt="" src="https://image.gcores.com/008f3f4283b8344c8cd5e4ac5e240a85-692-461.jpg?x-oss-process=image/resize,limit_1,m_lfit,w_700,h_2000/quality,q_90/watermark,image_d2F0ZXJtYXJrLnBuZw,g_se,x_10,y_10" /></figure></div><p>搭载 M6 或 M5 Pro 的新款 Mac mini AI 性能提升最高可达 4 倍，存储与图形处理速度均可翻倍；搭载 M5 Max 或 M5 Ultra 的新款 Mac Studio AI 性能提升最高可达 4.3 倍，并首次支持多机集群，四台系统组成的集群 AI 推理速度相比单机提升最高可达 3 倍。两款产品均将于 8 月 27 日起在中国大陆开放订购，9 月 22 日正式发售。</p>
+
+## Summary
+Apple announced new M6 and M5 Ultra chips powering redesigned Mac mini and Mac Studio, delivering significant AI and performance improvements. The M6 is Apple's first 2nm chip with up to 1.2x better multi-thread performance and 30% better AI compute vs M5, while the M5 Ultra features a quad-die architecture supporting on-device running of massive LLMs.
+
+## Key Points
+- M6 chip is Apple's first 2nm processor with 12-core CPU and 12-core GPU, offering up to 1.2x faster multi-thread performance and 30% better AI peak compute than M5
+- M5 Ultra uses a quad-die architecture with UltraFusion packaging, featuring up to 36-core CPU and 80-core GPU with up to 4.5x AI performance improvement over M3 Ultra
+- M5 Ultra supports up to 512GB unified memory with 1.2TB/s bandwidth, enabling on-device execution of trillion-parameter large language models
+- New Mac mini delivers up to 4x AI performance improvement while Mac Studio achieves up to 4.3x improvement with multi-machine clustering support for up to 3x faster AI inference
+- Both products available for pre-order starting August 27 with general release on September 22 in mainland China
+
+
+## Entities
+- **Apple** (org, relevance=)
+- **M6** (technology, relevance=)
+- **M5 Ultra** (technology, relevance=)
+- **M5 Max** (technology, relevance=)
+- **M5 Pro** (technology, relevance=)
+- **M3 Ultra** (technology, relevance=)
+- **Mac mini** (technology, relevance=)
+- **Mac Studio** (technology, relevance=)
+- **UltraFusion** (technology, relevance=)
+- **神经网络加速器** (technology, relevance=)
+- **大语言模型** (concept, relevance=)

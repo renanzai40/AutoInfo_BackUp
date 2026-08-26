@@ -1,0 +1,22 @@
+{
+  "id": "19e00077854fe8f8",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://pitchfork.com/story/liim-lines-up-new-album-a-sunflower-garden-in-harlem-is-hard-to-find/",
+  "title": "Liim Lines Up New Album A Sunflower Garden in Harlem Is Hard to Find",
+  "content": "AJRadico joins the rising Harlem rapper on “1980”",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-07T16:52:00+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://pitchfork.com/feed/feed-news/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "afdd1b9b-eed5-4983-8d56-997a2c0e2384"
+}

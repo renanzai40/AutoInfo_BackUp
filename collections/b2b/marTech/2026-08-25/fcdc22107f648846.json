@@ -1,0 +1,24 @@
+{
+  "id": "fcdc22107f648846",
+  "source_name": "marTech",
+  "source_type": "rss",
+  "source_url": "https://martech.org/how-to-build-an-ai-content-system-that-works/",
+  "title": "How to build an AI content system that works",
+  "content": "<div><img alt=\"How to mitigate stock content misuse in your DAM\" class=\"attachment-large size-large wp-post-image\" height=\"450\" src=\"https://martech.org/wp-content/uploads/2024/07/How-to-mitigate-stock-content-misuse-in-your-DAM-800x450.png\" style=\"margin-bottom: 15px;\" width=\"800\" /></div>\n<p>Build a reliable AI content system in Claude Code with the right context, specialized agents, and human review.</p>\n<p>The post <a href=\"https://martech.org/how-to-build-an-ai-content-system-that-works/\">How to build an AI content system that works</a> appeared first on <a href=\"https://martech.org\">MarTech</a>.</p>",
+  "content_type": "text",
+  "source_platform": "marTech",
+  "collected_at": "2026-08-25T14:15:50+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://martech.org/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8c4e2a11-9deb-410f-ad6c-a5142d82cce7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

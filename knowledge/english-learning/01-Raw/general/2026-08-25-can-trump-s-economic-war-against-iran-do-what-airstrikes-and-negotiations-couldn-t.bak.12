@@ -1,0 +1,53 @@
+---
+title: Can Trump's economic war against Iran do what airstrikes and negotiations couldn't?
+domain: english-learning
+tier: 01-Raw
+entry_id: english-learning-general-can-trump-s-economic-war-against-iran-do-what-airstrikes-and-negotiations-couldn-t
+source_url: https://www.npr.org/2026/08/25/nx-s1-5943572/trump-iran-sanctions
+source_type: rss
+source_platform: npr-news
+collected_at: '2026-08-25T05:07:09-04:00'
+summary: The article explores whether new U.S. sanctions on Iran can achieve what airstrikes and negotiations have not, in
+  the context of nearly six months of conflict and ongoing economic pressure on Iran. It questions the effectiveness of economic
+  measures as a strategy against Iran.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 7587b94e-a296-4738-aeef-5b849c7a27f2
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+What a new round of U.S. sanctions could mean after nearly six months of war with Iran — and years of economic pressure on the country.
+
+## Summary
+The article explores whether new U.S. sanctions on Iran can achieve what airstrikes and negotiations have not, in the context of nearly six months of conflict and ongoing economic pressure on Iran. It questions the effectiveness of economic measures as a strategy against Iran.
+
+## Key Points
+- U.S. is intensifying sanctions against Iran as part of an economic war strategy.
+- Previous approaches like airstrikes and negotiations have failed to resolve tensions with Iran.
+- Economic pressure is being evaluated as a potential alternative to military or diplomatic actions.
+- The article discusses the implications and potential outcomes of the new sanctions on Iran's situation.
+
+
+## Entities
+- **Trump** (person, relevance=)
+- **U.S.** (org, relevance=)
+- **Iran** (org, relevance=)
+- **sanctions** (concept, relevance=)
+- **airstrikes** (procedure, relevance=)

@@ -1,0 +1,24 @@
+{
+  "id": "e7008f8ad952f649",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/guterres-insta-conselho-de-seguranca-a-travar-ciclo-vicioso-de-conflitos-e-fome/",
+  "title": "Guterres pede fim de \"ciclo vicioso\" de conflitos e fome",
+  "content": "Guterres lamenta \"marco vergonhoso\" - em 2025, registaram-se duas fomes em simultâneo: em Gaza e no Sudão",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T18:44:17+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "47b3b043-cfd4-4969-bf31-5a0e5e75b5c3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

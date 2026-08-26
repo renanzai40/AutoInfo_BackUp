@@ -1,0 +1,24 @@
+{
+  "id": "cebff95aa4af6f83",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/investing/stocks/tom-lee-fall-stock-picks-arista-jpmorgan-avoid-robinhood",
+  "title": "Longtime analyst says investors should consider these stocks in fall 2026",
+  "content": "The analyst, who has been tracking markets for over 30 years, just reshaped his core buy list heading into mid-term elections.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-23T00:07:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "570d9cbe-5328-4c6f-b88b-efe5438d6c69",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "5ad910fdffbe2256",
+  "source_name": "pitchfork",
+  "source_type": "rss",
+  "source_url": "https://pitchfork.com/story/bonnaroo-is-taking-2027-off/",
+  "title": "Bonnaroo Is Taking 2027 Off",
+  "content": "The Tennessee festival will allow its storm-damaged grounds to recover before a 2028 return",
+  "content_type": "text",
+  "source_platform": "pitchfork",
+  "collected_at": "2026-08-21T17:25:49+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://pitchfork.com/feed/feed-news/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5b0002a0-77c8-4b46-b629-419b8d052ab2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

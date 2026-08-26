@@ -1,0 +1,24 @@
+{
+  "id": "4cc05c1f289a1fe2",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/early-labor-day-kitchen-appliance-deals-2026/",
+  "title": "The Best Early Labor Day Kitchen Deals to Ease You Back Into Fall (2026)",
+  "content": "With school and sports starting again, these discounts on Instant Pots, cookware, and coffee gear arrive right on time.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-25T21:26:24+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bbdb8126-d12e-44e8-8fab-50c88b327007",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "75915222d0a324d3",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/vid%C3%A9o/20260825-apr%C3%A8s-quarante-sept-ans-la-syrie-sort-de-la-liste-noire-am%C3%A9ricaine",
+  "title": "Après quarante-sept ans, la Syrie sort de la liste noire américaine",
+  "content": "Pour la première fois depuis quarante-sept ans, la Syrie ne figure plus sur la liste américaine des États soutenant le terrorisme. Une décision saluée par les autorités syriennes, qui espèrent qu'elle facilitera la reconstruction du pays et son retour sur la scène internationale. Récit de Marc Paupe.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T15:40:21+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "11fdc615-9bde-4d31-aeb8-6f5cb571dc93",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

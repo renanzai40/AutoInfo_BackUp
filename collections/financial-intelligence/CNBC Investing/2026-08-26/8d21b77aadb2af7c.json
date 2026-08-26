@@ -1,0 +1,24 @@
+{
+  "id": "8d21b77aadb2af7c",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/25/2-of-our-software-stocks-face-major-tests-of-whether-their-rallies-are-for-real.html",
+  "title": "2 of our software stocks face major tests of whether their rallies are for real",
+  "content": "Here are the questions we are looking to answer when CrowdStrike and Salesforce report earnings Wednesday evening.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-25T20:27:12+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "72b035b2-ca60-45e6-ab60-6ec1bd591764",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "d90f5f2ee7cfc88b",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0604/c1002-40493479.html",
+  "title": "俄侦查委员会：俄两座桥梁被炸系乌克兰所为",
+  "content": "<p>　　新华社莫斯科6月3日电（记者陈汀）俄罗斯侦查委员会3日发布消息说，俄布良斯克州和库尔斯克州日前发生的桥梁被炸事件系乌克兰所为。</p> <p>　　俄侦查委员会说，初步调查发现，恐怖分子是受乌方指使，精心策划了针对平民的袭击。该委员会缴获了爆炸装置部件及其他物证。</p> <p>　　俄侦查委员会将事件定性为“恐怖袭击”，恐袭已造成7人死亡，包括儿童在内113人受伤。俄侦查委员会表示，将在俄联邦安全局和内务部支持下查明事件组织者和实施者，并将其绳之以法。</p> <p>　　布良斯克州和库尔斯克州5月31日和6月1日分别发生桥梁坍塌，造成火车脱轨和多人伤亡。俄方随后发布消息说，两座桥梁是被炸毁的。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-04T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3645dedc-4f87-4b3c-b824-49fe6ed308d2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

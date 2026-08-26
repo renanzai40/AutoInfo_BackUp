@@ -1,0 +1,24 @@
+{
+  "id": "a804c49de1c8efc9",
+  "source_name": "rt-news",
+  "source_type": "rss",
+  "source_url": "https://www.rt.com/news/644647-canada-retaliatory-tariffs-us/?utm_source=rss&utm_medium=rss&utm_campaign=RSS",
+  "title": "Canada hits US with retaliatory tariffs",
+  "content": "<img align=\"left\" alt=\"Preview\" src=\"https://mf.b37mrtl.ru/files/2026.08/thumbnail/6a8dca7685f54070c43f4c16.jpg\" style=\"margin-right: 10px;\" /> Ottawa has announced new tariffs on hundreds of US products, amid a deepening trade war with Washington <br /><a href=\"https://www.rt.com/news/644647-canada-retaliatory-tariffs-us/?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=RSS\">Read Full Article at RT.com</a>",
+  "content_type": "text",
+  "source_platform": "rt-news",
+  "collected_at": "2026-08-25T17:12:42+00:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.rt.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "390154f5-f51f-4a9c-a13b-7091f2182cfe",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

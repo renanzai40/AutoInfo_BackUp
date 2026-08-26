@@ -1,0 +1,24 @@
+{
+  "id": "8aa1793d7f860ef1",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/legend-of-the-white-dragon-review",
+  "title": "Legend of the White Dragon Review",
+  "content": "Legend of the White Dragon review: Jason David Frank's final movie won’t be as memorable as he was.",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T12:00:00+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "038f847a-dc04-45e0-8012-ea4a7830ce42",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

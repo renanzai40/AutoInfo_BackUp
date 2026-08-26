@@ -1,0 +1,7 @@
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article describes a task to group a set of knowledge base entries related to Italian news, culture, and issues into 3-5 semantic themes. It specifies criteria for theme titles and th
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides a list of diverse knowledge base entries covering topics such as cultural events, sports updates, crime incidents, celebrity news, natural disasters, and technologic
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article compiles a diverse set of knowledge base entries in Italian with English summaries, covering topics such as airport security technology, family relationship advice, political
+LLM groups matched only 0/5 entries, falling back to deterministic grouping

@@ -1,0 +1,24 @@
+{
+  "id": "1fb0ad95a3a8bd34",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/crime/news/story/motihari-newborn-baby-sale-human-trafficking-asha-worker-arrested-pvzs-strc-2629691-2026-08-25?utm_source=rssfeed",
+  "title": "मोतिहारी में ममता शर्मसार, चंद रुपयों के लिए माता-पिता ने बेच दिया नवजात",
+  "content": "पूर्वी चंपारण के मोतिहारी में नवजात की खरीद-बिक्री का मामला सामने आया है. पुलिस ने बच्चे को सुरक्षित बरामद कर माता-पिता, खरीदार और आशा कर्मी समेत आरोपियों को गिरफ्तार किया है. पढ़ें ये पूरी शर्मनाक कहानी.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T15:10:16+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4c082a2f-eed4-4dc3-9eb5-11cfb76a280c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

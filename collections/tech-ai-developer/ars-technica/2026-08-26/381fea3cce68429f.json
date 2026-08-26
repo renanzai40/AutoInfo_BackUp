@@ -1,0 +1,24 @@
+{
+  "id": "381fea3cce68429f",
+  "source_name": "ars-technica",
+  "source_type": "rss",
+  "source_url": "https://arstechnica.com/health/2026/08/ai-wont-replace-radiologists-but-it-will-dramatically-change-their-jobs/",
+  "title": "AI won’t replace radiologists, but it will dramatically change their jobs",
+  "content": "A pioneering AI scientist once predicted computers would replace human radiologists. They haven't.",
+  "content_type": "text",
+  "source_platform": "ars-technica",
+  "collected_at": "2026-08-25T15:10:03+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.arstechnica.com/arstechnica/index"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d2bfbf4f-6d24-467b-982e-41dc01db176f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

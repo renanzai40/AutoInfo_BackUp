@@ -1,0 +1,27 @@
+{
+  "id": "_HtpP_VIEe2OqwqhrYNGhQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Financial Planning",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "_HtpP_VIEe2OqwqhrYNGhQ",
+    "slug": "financial-planning-course-isb",
+    "name": "Financial Planning"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d98eefa3-61dd-449f-bc15-6e1861c284cc",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

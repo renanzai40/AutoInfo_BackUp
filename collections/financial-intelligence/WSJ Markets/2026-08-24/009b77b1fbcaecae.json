@@ -1,0 +1,24 @@
+{
+  "id": "009b77b1fbcaecae",
+  "source_name": "WSJ Markets",
+  "source_type": "rss",
+  "source_url": "https://www.wsj.com/articles/financial-services-roundup-market-talk-94f52cba?mod=rss_markets_main",
+  "title": "Financial Services Roundup: Market Talk",
+  "content": "Gain insight on Experian, SoFi Technologies and more in the latest Market Talks covering Financial Services.",
+  "content_type": "text",
+  "source_platform": "WSJ Markets",
+  "collected_at": "2025-01-27T12:27:00-05:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c77f0186-a90a-48c1-a494-e96745565835",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

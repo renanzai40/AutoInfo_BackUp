@@ -1,0 +1,24 @@
+{
+  "id": "b0739bc348fb310d",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0604/c1002-40493876.html",
+  "title": "美国5月汽车销量暴跌",
+  "content": "<p>　　新华社纽约6月3日电（记者徐静）行业数据公司美国沃兹情报公司3日发布的数据显示，美国5月轻型汽车销量出现五年来最大跌幅。</p> <p>　　数据显示，美国5月轻型汽车销量为1565万辆，比4月修正后的1725万辆下降约160万辆，为2020年4月以来最大降幅。美国3月轻型汽车销量为1783万辆。</p> <p>　　美国政府对进口汽车加征25%关税的措施4月3日生效。分析人士认为，美国消费者3月、4月赶在价格上涨前购买车辆，是导致5月销售惨淡的原因之一。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-04T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0e571123-f52d-48ba-b710-6f687f9017a3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

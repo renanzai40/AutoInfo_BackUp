@@ -1,0 +1,24 @@
+{
+  "id": "bb3aadb2b51f0f96",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/nuevo-look-carlos-alcaraz-tras-volver-las-pistas-que-desata-las-comparaciones-ferran-alcaraz_7029116_0.html",
+  "title": "El nuevo 'look' de Alcaraz tras volver a las pistas que desata las comparaciones",
+  "content": "El deportista ha decidido dejarse crecer el pelo y ha aparecido en Nueva York con una imagen completamente diferente.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T12:37:11+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c8c52590-1cde-4589-a71e-2e6f41202330",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

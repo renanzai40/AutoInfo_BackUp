@@ -1,0 +1,27 @@
+{
+  "id": "aKgfVs3CEeu0KQ5V9fFcUQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Research Methodologies",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "aKgfVs3CEeu0KQ5V9fFcUQ",
+    "slug": "research-methodologies",
+    "name": "Research Methodologies"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3470317e-272b-4d2c-8c8b-09835aba6291",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

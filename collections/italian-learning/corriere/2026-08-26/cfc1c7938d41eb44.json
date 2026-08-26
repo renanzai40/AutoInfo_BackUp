@@ -1,0 +1,24 @@
+{
+  "id": "cfc1c7938d41eb44",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/economia/lavoro/24_maggio_12/l-italia-non-e-un-paese-per-mamme-una-su-cinque-lascia-il-lavoro-dopo-il-primo-figlio-9f6ce7e1-0cd6-4b90-8f69-e25f1542axlk.shtml",
+  "title": "L’Italia non è un paese per mamme: una su cinque lascia il lavoro dopo il primo figlio",
+  "content": "<p><img alt=\"L’Italia non è un paese per mamme: una su cinque lascia il lavoro dopo il primo figlio\" src=\"https://images2.corriereobjects.it/methode_image/2024/05/12/Economia/Foto%20Economia%20-%20Trattate/6640959b17e1b_ori_crop_MASTER__0x0.jpeg\" title=\"L’Italia non è un paese per mamme: una su cinque lascia il lavoro dopo il primo figlio\" /><p>Il 72,8% delle convalide di dimissioni di neogenitori riguarda le donne: i dati del rapporto di Save the children «Le equilibriste»Il 72,8% delle convalide di dimissioni di neogenitori riguarda le donne: i dati del rapporto di Save the children «Le equilibriste»Il 72,8% delle convalide di dimissioni di neogenitori riguarda le donne: i dati del rapporto di Save the children «Le equilibriste»</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-12T12:48:04+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "522dd387-87c0-4b2f-8c3c-dde9b478f8b0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

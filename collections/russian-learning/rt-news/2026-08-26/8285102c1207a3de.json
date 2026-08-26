@@ -1,0 +1,24 @@
+{
+  "id": "8285102c1207a3de",
+  "source_name": "rt-news",
+  "source_type": "rss",
+  "source_url": "https://www.rt.com/africa/644638-south-sudan-un-peacekeepers-killed/?utm_source=rss&utm_medium=rss&utm_campaign=RSS",
+  "title": "Two UN peacekeepers killed in South Sudan",
+  "content": "<img align=\"left\" alt=\"Preview\" src=\"https://mf.b37mrtl.ru/files/2026.08/thumbnail/6a8d918a20302763f57fb395.jpeg\" style=\"margin-right: 10px;\" /> Two UN peacekeepers were killed and seven people injured after unidentified gunmen ambushed a patrol in South Sudan <br /><a href=\"https://www.rt.com/africa/644638-south-sudan-un-peacekeepers-killed/?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=RSS\">Read Full Article at RT.com</a>",
+  "content_type": "text",
+  "source_platform": "rt-news",
+  "collected_at": "2026-08-25T13:42:33+00:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.rt.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bf438d83-5746-4945-99b1-472edc6d1ef3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

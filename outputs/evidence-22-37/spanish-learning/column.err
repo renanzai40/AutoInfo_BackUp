@@ -1,0 +1,39 @@
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions for grouping eight Spanish-learning knowledge base entries into 3-5 themes. It specifies that each entry must be assigned to exactly one theme, with ti
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article compiles news entries on diverse topics including migration tensions in Ceuta with police intervention, tributes following Dolly Parton's death, Carlos Alcaraz's tennis comeb
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions for grouping a set of knowledge base entries into 3-5 semantic themes, emphasizing concise, unique titles and avoiding generic or keyword-based names. 
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+LLM returned None content — empty response
+LLM returned None content — empty response
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The content instructs to group eight Spanish-language news entries into 3-5 themes, covering topics from international politics and automotive trends to travel, sports, and local inciden
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The content provides a list of Spanish-language entries on diverse topics, including health, entertainment, politics, and philosophy, and instructs to group them into 3–5 semantic themes
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article presents a list of news entries in Spanish, covering diverse topics such as business, politics, entertainment, and sports, and instructs to group them into 3–5 semantic them
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article presents a collection of diverse knowledge base entries ranging from health and celebrity news to social issues and philosophy, and provides instructions to group them into 3
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article presents a collection of diverse knowledge base entries covering topics such as literature, personal stories, sports, accidents, forensic science, disability in research, me
+LLM returned None content — empty response
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article outlines guidelines for categorizing diverse knowledge base entries into 3-5 semantic themes, emphasizing unique and descriptive titles without generic names. It provides exa
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article presents a collection of knowledge base entries covering diverse topics including economic trends like
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions to group a set of Spanish-language knowledge base entries into 3-5 themes with short semantic titles. The entries cover diverse topics including viral s
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions for grouping various knowledge base entries into thematic categories based on content similarity. It lists eight entries covering diverse topics and re
+LLM returned only 1 theme group(s), retrying with stricter prompt
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions to group a set of Spanish-language knowledge base entries into 3–5 themes, with entries covering diverse topics such as employment salaries, classical p
+Strict retry returned only 1 group(s), falling back to deterministic grouping
+LLM returned None content — empty response

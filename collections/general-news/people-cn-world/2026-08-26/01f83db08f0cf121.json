@@ -1,0 +1,24 @@
+{
+  "id": "01f83db08f0cf121",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0605/c1002-40494417.html",
+  "title": "印度班加罗尔一板球场外发生踩踏事故致11死50伤",
+  "content": "<p>　　新华社新德里6月4日电　据印度媒体报道，印度南部城市班加罗尔一座板球场外4日发生踩踏事故，已造成至少11人死亡、50人受伤。</p> <p>　　报道说，踩踏发生在班加罗尔金纳斯瓦米体育场外，当时数千名板球迷聚集在一起庆祝班加罗尔皇家挑战者队夺得印度板球超级联赛冠军。伤者已被送往附近医院，预计死亡人数还会增加。</p> <p>　　班加罗尔是印度卡纳塔克邦首府。卡纳塔克邦副首席部长希瓦库马尔证实有人丧生，但并未透露具体人数，“人群无法控制，我为过度拥挤道歉”。</p> <p>　　印度新能源和可再生能源部长普拉尔哈德·乔希在社交媒体发文说：“由于规划不周和人群管理不善而造成如此惨重损失，让人心碎。”</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-05T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "af03684b-5828-4114-9f31-d0887e7f0042",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

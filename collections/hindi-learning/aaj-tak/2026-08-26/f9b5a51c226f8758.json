@@ -1,0 +1,24 @@
+{
+  "id": "f9b5a51c226f8758",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/short-videos/video/haryana-hisar-strike-sanitation-workers-20-days-municipal-corporation-administration-fight-police-mmtc-2629988-2026-08-25?utm_source=rssfeed",
+  "title": "हिसार में सफाईकर्मियों और पुलिस के बीच हुआ टकराव",
+  "content": "हिसार में सफाई कर्मचारियों की करीब 20 दिनों से जारी हड़ताल के बीच नगर निगम प्रशासन ने भारी पुलिस बल की मौजूदगी में शहर से कचरा उठाने का अभियान चलाया।",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T23:42:24+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "78bb45e3-62e7-471c-951c-44473c7f46cd",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

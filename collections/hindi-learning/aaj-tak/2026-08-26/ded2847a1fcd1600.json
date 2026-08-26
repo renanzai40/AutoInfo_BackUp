@@ -1,0 +1,24 @@
+{
+  "id": "ded2847a1fcd1600",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/uttar-pradesh/story/badaun-ambedkar-statue-stone-pelting-police-8-injured-vehicles-damaged-uttar-pradesh-ntc-amkr-rptc-2630003-2026-08-26?utm_source=rssfeed",
+  "title": "बदायूं में बाबा साहब की प्रतिमा को लेकर बवाल, ग्रामीणों ने पुलिस पर किया पथराव",
+  "content": "यूपी के बदायूं में डॉ. भीमराव आंबेडकर की प्रतिमा लगाने को लेकर हंगामा देखने को मिला. एक ओर गांव वालों का आरोप है कि पुलिस ने प्रतिमा को नुकसान पहुंचाने की कोशिश की, वहीं पुलिस का कहना है कि पथराव किया गया.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-26T00:35:19+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b35449e5-ce39-45dd-9812-8aaa723e58eb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

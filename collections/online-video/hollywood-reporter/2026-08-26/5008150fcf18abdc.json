@@ -1,0 +1,24 @@
+{
+  "id": "5008150fcf18abdc",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/tv/tv-news/usa-network-medical-drama-diplomatic-immunity-1236680746/",
+  "title": "Medical Drama ‘Diplomatic Immunity’ Scores USA Series Order",
+  "content": "The show comes from 'Covert Affairs' creators Matt Corman and Chris Ord and Fox Entertainment Studios.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T17:03:55+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8d217f0f-5384-4c26-a874-d8e0276f2ca1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

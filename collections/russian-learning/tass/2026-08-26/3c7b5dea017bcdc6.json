@@ -1,0 +1,24 @@
+{
+  "id": "3c7b5dea017bcdc6",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/proisshestviya/28044395",
+  "title": "Сторонники сына Роберта Кочаряна собрались у здания суда в Ереване",
+  "content": "Судебное заседание длится уже более трех часов",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T23:23:16+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "eaf7fba9-6192-4530-94a6-9ffe0bb26fd5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

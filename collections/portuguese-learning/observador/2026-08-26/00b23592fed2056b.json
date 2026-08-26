@@ -1,0 +1,24 @@
+{
+  "id": "00b23592fed2056b",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/saude-e-prioridade-estrategica-do-governo-regional-dos-acores/",
+  "title": "Saúde é \"prioridade estratégica\" do Governo dos Açores",
+  "content": "Estamos hoje aqui a cumprir mais um marco e uma meta do nosso PRR",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T15:30:41+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e53a36b6-ae9c-4bbb-8a5a-4a800e245295",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

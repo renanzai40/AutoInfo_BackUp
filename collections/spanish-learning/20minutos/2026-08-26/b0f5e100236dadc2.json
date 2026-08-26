@@ -1,0 +1,24 @@
+{
+  "id": "b0f5e100236dadc2",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/ibai-llanos-pilla-in-fraganti-un-seguidor-que-puso-venta-una-carta-pokemon-que-le-habia-firmado-dias-antes-2-500-euros_7029247_0.html",
+  "title": "Ibai Llanos pilla 'in fraganti' a un seguidor que vendía una carta Pokémon que le había firmado días antes",
+  "content": "El 'streamer' vasco muestra el incidente que protagonizó en la segunda entrega de sus vídeos al frente de su propia casa de empeños.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T18:12:53+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ef61d081-d959-4707-8190-bea7c1b0f3f9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

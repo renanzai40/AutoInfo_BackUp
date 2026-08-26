@@ -1,0 +1,24 @@
+{
+  "id": "18b80940802ccb7a",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/united-airlines-inicia-rota-entre-ilha-terceira-e-newark-no-verao-de-2027/",
+  "title": "United Airlines liga a Terceira a Newark a partir de 2027",
+  "content": "A operação, que deverá decorrer entre 9 de junho e 5 de setembro de 2027, integra três voos semanais, com uma aeronave Boeing 737 MAX 8",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T22:12:14+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "11be09ff-c936-4150-beed-fbe8d6359b50",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

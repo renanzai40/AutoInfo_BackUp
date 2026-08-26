@@ -1,0 +1,24 @@
+{
+  "id": "63924b36c68efc64",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/obschestvo/28044399",
+  "title": "В Сухуме открылась фотовыставка, посвященная признанию РФ независимости Абхазии",
+  "content": "В экспозицию, в частности, вошли кадры российских и югоосетинских информагентств",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T23:30:58+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0279bd6b-b081-4167-98a9-1a366a941deb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

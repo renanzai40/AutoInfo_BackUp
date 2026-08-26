@@ -1,0 +1,24 @@
+{
+  "id": "0ec6b26a78a00dc6",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/mujer/blogs/el-blog-de-lilih-blue/por-que-libros-exito-thrillers-mujeres-asesinadas_7028677_0.html",
+  "title": "¿Por qué los libros que tienen más éxito son 'thrillers' de mujeres asesinadas?",
+  "content": "La fina línea entre leer sobre violencia para entender nuestros miedos y que la repetición normalice el machismo estructural.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T09:16:18+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c99fb494-20a2-4cd6-8f36-74dadafd0e26",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

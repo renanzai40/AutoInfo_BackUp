@@ -1,0 +1,24 @@
+{
+  "id": "0d1904cfc70fc703",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/25/trump-darline-graham-south-carolina-primary.html",
+  "title": "Sen. Darline Graham, Trump's pick for South Carolina Senate, wins GOP primary",
+  "content": "Sen. Darline Graham on Tuesday defeated Rep. Ralph Norman, winning the GOP nomination for a South Carolina Senate seat.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-26T01:07:28+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ca2315e7-19fd-44ce-af75-9554f36b1da3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

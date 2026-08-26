@@ -1,0 +1,24 @@
+{
+  "id": "02935b9cbf258a83",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-25/US-threatens-economic-D-Day-sanctions-on-Iran-1PT7Ga2unMk/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "US threatens 'economic D-Day' sanctions on Iran",
+  "content": "US Treasury Secretary Scott Bessent on Monday threatened Iran with \"an economic D-Day,\" announcing a wave of new sanctions aimed at further isolating the country.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-25T00:31:29+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4e7242e1-6a06-4564-8355-f50bdd7bdd62",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

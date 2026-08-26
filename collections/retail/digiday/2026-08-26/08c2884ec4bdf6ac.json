@@ -1,0 +1,24 @@
+{
+  "id": "08c2884ec4bdf6ac",
+  "source_name": "digiday",
+  "source_type": "rss",
+  "source_url": "https://digiday.com/marketing/the-new-ai-playbook-the-rules-brands-are-setting-around-customer-facing-content/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss",
+  "title": "The new AI playbook: The rules brands are setting around customer-facing content",
+  "content": "For some brands, AI platforms and services are proving to be game-changing for their ability to speed up creative processes, and save money.",
+  "content_type": "text",
+  "source_platform": "digiday",
+  "collected_at": "2026-08-24T04:01:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://digiday.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "be4cd597-a461-4dcd-bf9e-0a230fe5777b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

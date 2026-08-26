@@ -1,0 +1,24 @@
+{
+  "id": "3c6da2980cd52337",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/marvel-tokon-devs-confess-regaining-trust-after-fumbled-pc-launch-will-be-extremely-challenging",
+  "title": "Marvel Tokon Devs Confess Regaining Trust After Fumbled PC Launch Will Be 'Extremely Challenging'",
+  "content": "Arc System Works has apologized for Marvel Tokon: Fighting Souls' PC launch and admitted it will be \"extremely difficult\" to regain player trust.",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T16:01:18+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "55dada61-b3ea-4f67-8e06-e82fbd2ed759",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

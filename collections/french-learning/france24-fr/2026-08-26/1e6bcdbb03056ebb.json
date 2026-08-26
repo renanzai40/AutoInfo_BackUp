@@ -1,0 +1,24 @@
+{
+  "id": "1e6bcdbb03056ebb",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/vid%C3%A9o/20260825-replay-sophie-adenot-effectue-sa-deuxi%C3%A8me-sortie-dans-l-espace",
+  "title": "Replay : Sophie Adenot effectue sa deuxième sortie dans l'espace",
+  "content": "L'astronaute française Sophie Adenot effectue sa deuxième sortie extra-véhiculaire, seulement une semaine après être devenue la première femme française à faire une sortie dans l'espace.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T13:56:01+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5d874667-223b-4906-a88a-cc89a5fd9580",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

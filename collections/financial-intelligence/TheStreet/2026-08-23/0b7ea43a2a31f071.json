@@ -1,0 +1,24 @@
+{
+  "id": "0b7ea43a2a31f071",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/shopping/seiko-ssb425-luxury-chronograph-watch-amazon-sale",
+  "title": "Amazon's $212 Seiko luxury watch proves every collector needs a chronograph",
+  "content": "It has 100 meters of water resistance.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-22T19:15:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5270a631-f235-4c6b-81ed-1da57c72d4e3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

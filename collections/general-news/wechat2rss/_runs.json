@@ -1,0 +1,114 @@
+[
+  {
+    "collection_id": "col-20260812T181446-cfb544a5",
+    "timestamp": "2026-08-12T18:17:03.650006+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 404 for https://wechat2rss.xlab.app/feed/{id}.xml",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 404 for https://wechat2rss.xlab.app/feed/{id}.xml"
+      }
+    ],
+    "duration_ms": 1322.0
+  },
+  {
+    "collection_id": "col-20260812T183923-cc16e2e6",
+    "timestamp": "2026-08-12T18:39:58.953833+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://wechat2rss.xlab.app/feed/{id}.xml: Client error '404 Not Found' for url 'https://wechat2rss.xlab.app/feed/%7Bid%7D.xml'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://wechat2rss.xlab.app/feed/{id}.xml: Client error '404 Not Found' for url 'https://wechat2rss.xlab.app/feed/%7Bid%7D.xml'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 3723.0
+  },
+  {
+    "collection_id": "col-20260815T181643-4debb52e",
+    "timestamp": "2026-08-15T18:17:17.158606+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://wechat2rss.xlab.app/feed/{id}.xml: Client error '404 Not Found' for url 'https://wechat2rss.xlab.app/feed/%7Bid%7D.xml'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://wechat2rss.xlab.app/feed/{id}.xml: Client error '404 Not Found' for url 'https://wechat2rss.xlab.app/feed/%7Bid%7D.xml'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 2573.0
+  },
+  {
+    "collection_id": "col-20260815T183250-a93147fc",
+    "timestamp": "2026-08-15T18:32:52.362255+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://wechat2rss.xlab.app/feed/{id}.xml: Client error '404 Not Found' for url 'https://wechat2rss.xlab.app/feed/%7Bid%7D.xml'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://wechat2rss.xlab.app/feed/{id}.xml: Client error '404 Not Found' for url 'https://wechat2rss.xlab.app/feed/%7Bid%7D.xml'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 1717.0
+  },
+  {
+    "collection_id": "col-20260825T151905-c85b90e7",
+    "timestamp": "2026-08-25T15:20:08.301302+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch timed out for https://wechat2rss.xlab.app/feed/{id}.xml: _ssl.c:1063: The handshake operation timed out",
+        "source_failed": true,
+        "reason": "RSS fetch timed out for https://wechat2rss.xlab.app/feed/{id}.xml: _ssl.c:1063: The handshake operation timed out"
+      }
+    ],
+    "duration_ms": 30613.0
+  },
+  {
+    "collection_id": "col-20260825T153025-acb4a6c3",
+    "timestamp": "2026-08-25T15:30:59.820903+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://wechat2rss.xlab.app/feed/{id}.xml: Client error '404 Not Found' for url 'https://wechat2rss.xlab.app/feed/%7Bid%7D.xml'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://wechat2rss.xlab.app/feed/{id}.xml: Client error '404 Not Found' for url 'https://wechat2rss.xlab.app/feed/%7Bid%7D.xml'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 2412.0
+  },
+  {
+    "collection_id": "col-20260825T154628-1c0c3b07",
+    "timestamp": "2026-08-25T15:47:01.379899+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://wechat2rss.xlab.app/feed/{id}.xml: Client error '404 Not Found' for url 'https://wechat2rss.xlab.app/feed/%7Bid%7D.xml'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://wechat2rss.xlab.app/feed/{id}.xml: Client error '404 Not Found' for url 'https://wechat2rss.xlab.app/feed/%7Bid%7D.xml'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 1363.0
+  }
+]

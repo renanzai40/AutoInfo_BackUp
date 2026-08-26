@@ -1,0 +1,24 @@
+{
+  "id": "bc1138d302153363",
+  "source_name": "modern-retail",
+  "source_type": "rss",
+  "source_url": "https://www.modernretail.co/announcement/ai-marketing-strategies-from-experimentation-to-execution-with-samsung-bayer-davids-bridal-and-dolcegabbana-beauty/?utm_campaign=modernretaildis&utm_medium=rss&utm_source=general-rss",
+  "title": "AI Marketing Strategies: From experimentation to execution with Samsung, Bayer, David’s Bridal and Dolce&Gabbana Beauty",
+  "content": "On Sept. 24 in New York City, Digiday, Glossy and Modern Retail will host the second iteration of AI Marketing Strategies, bringing together brand leaders, agency executives, analysts and technology providers to explore what’s actually working as AI reshapes modern marketing.",
+  "content_type": "text",
+  "source_platform": "modern-retail",
+  "collected_at": "2026-08-25T04:00:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.modernretail.co/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9d87dc84-e14e-48e2-9b6f-7a5d26c917fc",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

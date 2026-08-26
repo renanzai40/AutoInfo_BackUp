@@ -1,0 +1,24 @@
+{
+  "id": "a3b1b49570098221",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0604/c1002-40493758.html",
+  "title": "韩国总统李在明正式宣誓就职",
+  "content": "<p>　　新华社快讯：韩国总统李在明4日正式宣誓就职。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-04T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8a4a3042-8f6e-4339-bb3a-0f0c0d42c920",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

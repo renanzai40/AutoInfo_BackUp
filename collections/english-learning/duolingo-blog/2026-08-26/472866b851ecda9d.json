@@ -1,0 +1,24 @@
+{
+  "id": "472866b851ecda9d",
+  "source_name": "duolingo-blog",
+  "source_type": "rss",
+  "source_url": "https://blog.duolingo.com/how-is-the-international-phonetic-alphabet-used/",
+  "title": "What’s the International Phonetic Alphabet, and how do I use it?",
+  "content": "The IPA is a fantastic tool for improving your pronunciation!",
+  "content_type": "text",
+  "source_platform": "duolingo-blog",
+  "collected_at": "2026-07-23T12:00:00+00:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://blog.duolingo.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c14d7d0f-f881-47ae-bd2f-07d526c9d09b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

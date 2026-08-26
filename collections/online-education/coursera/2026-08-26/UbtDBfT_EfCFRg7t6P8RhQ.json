@@ -1,0 +1,27 @@
+{
+  "id": "UbtDBfT_EfCFRg7t6P8RhQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Simulate with Monte Carlo",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "UbtDBfT_EfCFRg7t6P8RhQ",
+    "slug": "simulate-with-monte-carlo",
+    "name": "Simulate with Monte Carlo"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "31447c95-cdbe-4eb2-84d0-98c7799432d9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

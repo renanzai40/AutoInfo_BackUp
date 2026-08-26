@@ -1,0 +1,24 @@
+{
+  "id": "e5c3e1822013c0b5",
+  "source_name": "variety",
+  "source_type": "rss",
+  "source_url": "https://variety.com/2026/tv/global/paramounts-5-sued-by-blackbox-multimedia-drama-series-1236842534/",
+  "title": "Paramount’s Brit Network 5 Being Sued by Producer Blackbox Multimedia Over Shelved Drama Series",
+  "content": "Paramount&#8217;s U.K. network 5 is being sued by one of its production partners over what the company claims was the &#8220;wrongful termination&#8221; of an agreement over a crime drama series. Blackbox Multimedia, the U.K. banner that has made series for 5 such as &#8220;The Ex-Wife&#8221; and &#8220;Benidorm is Murder,&#8221; claims that it is owned money [&#8230;]",
+  "content_type": "text",
+  "source_platform": "variety",
+  "collected_at": "2026-08-25T15:48:56+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://variety.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0dbabb10-1b49-4863-8d95-40b573902b12",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

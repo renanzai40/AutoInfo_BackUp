@@ -1,0 +1,24 @@
+{
+  "id": "609c801311a903ae",
+  "source_name": "gdpr-eu",
+  "source_type": "rss",
+  "source_url": "https://gdpr.eu/italy-fines-energy-company-for-multiple-gdpr-violations/",
+  "title": "Italy fines Eni Gas e Luce €11.5 million for multiple GDPR violations",
+  "content": "<p>On Jan. 17, 2020, the Italian Supervisory Authority (ISA) announced it had imposed two separate fines of €8.5 million and €3 million on Eni Gas e Luce (EGL), an...</p>\n<p>The post <a href=\"https://gdpr.eu/italy-fines-energy-company-for-multiple-gdpr-violations/\">Italy fines Eni Gas e Luce €11.5 million for multiple GDPR violations</a> appeared first on <a href=\"https://gdpr.eu\">GDPR.eu</a>.</p>",
+  "content_type": "text",
+  "source_platform": "gdpr-eu",
+  "collected_at": "2020-02-18T12:46:53+00:00",
+  "language": "",
+  "domain": "legal-compliance",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://gdpr.eu/feed/"
+  },
+  "version": 2,
+  "previous_version": 1,
+  "supersedes": "legal-compliance-general-italy-fines-eni-gas-e-luce-11-5-million-for-multiple-gdpr-violations",
+  "trace_id": "cafd71db-1ebd-48b5-a08d-3da3c0a18c3f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,52 @@
+---
+title: The Dog Stars’ First Reactions Are Saying the Same Things About Ridley Scott Movie
+domain: online-video
+tier: 01-Raw
+entry_id: online-video-general-the-dog-stars-first-reactions-are-saying-the-same-things-about-ridley-scott-movie
+source_url: https://www.comingsoon.net/movies/news/2181619-the-dog-stars-first-reactions-ridley-scott-movie-2
+source_type: rss
+source_platform: comingsoon
+collected_at: '2026-08-25T14:16:43+00:00'
+summary: Early reactions to Ridley Scott's 'The Dog Stars' praise his direction and Josh Brolin's performance but criticize
+  the screenplay. The film is a post-apocalyptic sci-fi movie. Reactions provide an early glimpse of audience expectations.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: b683a9eb-c801-4e85-a7d7-738ad6243215
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<p>The first reactions to Ridley Scott&#8217;s The Dog Stars have arrived ahead of the film&#8217;s theatrical release. Early reactions have highlighted Scott&#8217;s direction and the performances, particularly Josh Brolin’s. Meanwhile, several viewers have raised issues with the screenplay. The reactions provide an early picture of what audiences can expect from the post-apocalyptic sci-fi movie. The [&#8230;]</p>
+<p>The post <a href="https://www.comingsoon.net/movies/news/2181619-the-dog-stars-first-reactions-ridley-scott-movie-2">The Dog Stars’ First Reactions Are Saying the Same Things About Ridley Scott Movie</a> appeared first on <a href="https://www.comingsoon.net">ComingSoon.net - Movie Trailers, TV &amp; Streaming News, and More</a>.</p>
+
+## Summary
+Early reactions to Ridley Scott's 'The Dog Stars' praise his direction and Josh Brolin's performance but criticize the screenplay. The film is a post-apocalyptic sci-fi movie. Reactions provide an early glimpse of audience expectations.
+
+## Key Points
+- Ridley Scott's direction is praised in early reactions of 'The Dog Stars'
+- Josh Brolin's performance is highlighted as a strong point
+- The screenplay has been criticized by several early viewers
+- The film is classified as a post-apocalyptic sci-fi movie
+
+
+## Entities
+- **The Dog Stars** (movie, relevance=)
+- **Ridley Scott** (person, relevance=)
+- **Josh Brolin** (person, relevance=)
+- **post-apocalyptic sci-fi** (concept, relevance=)

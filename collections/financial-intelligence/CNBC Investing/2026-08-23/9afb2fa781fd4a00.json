@@ -1,0 +1,24 @@
+{
+  "id": "9afb2fa781fd4a00",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/22/emergency-savings-workers-financial-strain.html",
+  "title": "Emergency savings shortfall signals 'danger' for working households, Suze Orman says",
+  "content": "A new survey shows even a $500 unexpected expense may throw households off track when it comes to big life goals like saving for retirement.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-22T13:30:01+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "144dad88-cf72-4518-9e23-a222c0ffaef3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

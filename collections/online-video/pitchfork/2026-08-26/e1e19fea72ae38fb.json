@@ -1,0 +1,24 @@
+{
+  "id": "e1e19fea72ae38fb",
+  "source_name": "pitchfork",
+  "source_type": "rss",
+  "source_url": "https://pitchfork.com/story/dolly-parton-dies-at-80/",
+  "title": "Dolly Parton Dies at 80",
+  "content": "Her publicist confirmed a small, private service will be held for immediate family.",
+  "content_type": "text",
+  "source_platform": "pitchfork",
+  "collected_at": "2026-08-25T17:59:34+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://pitchfork.com/feed/feed-news/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "08bc86d2-8ce1-47a6-800c-c7c51ca12b6e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

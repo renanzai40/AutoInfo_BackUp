@@ -1,0 +1,24 @@
+{
+  "id": "d8ae8cc163d0c8a4",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/vid%C3%A9o/20260825-espace-nouvelle-sortie-extrav%C3%A9hiculaire-pour-sophie-adenot",
+  "title": "Espace : nouvelle sortie extravéhiculaire pour Sophie Adenot",
+  "content": "Sophie Adenot sort ce mardi dans l'espace pour la deuxième fois, afin de terminer sa mission restée inachevée il y a une semaine. Voici quelques images (accélérées) du début de cette sortie extravéhiculaire, destinée à remplacer une antenne de communication. Elle doit durer environ six heures et demie.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T14:30:26+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "00fd3f10-5ebf-4630-9847-59564f542983",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

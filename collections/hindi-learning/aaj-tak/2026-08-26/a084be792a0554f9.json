@@ -1,0 +1,24 @@
+{
+  "id": "a084be792a0554f9",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/science/story/187-earthquakes-7-days-ring-of-fire-dskc-2629708-2026-08-25?utm_source=rssfeed",
+  "title": "7 दिन में 187 भूकंप, धरती के &#039;रिंग ऑफ फायर&#039; में क्यों बढ़ी हलचल?",
+  "content": "पिछले 7 दिनों में 4.5 या उससे ज्यादा तीव्रता के 187 भूकंप दर्ज हुए. इनमें कई झटके पैसिफिक रिंग ऑफ फायर में आए. जापान, इंडोनेशिया, अलास्का और अमेरिका में हुई इस हलचल ने फिर भूकंपों पर ध्यान खींचा है.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T16:13:11+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "63aa2c56-1a7e-48aa-83dd-c6a81a57baaf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

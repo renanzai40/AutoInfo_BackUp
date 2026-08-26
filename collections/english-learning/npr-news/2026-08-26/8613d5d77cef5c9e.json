@@ -1,0 +1,24 @@
+{
+  "id": "8613d5d77cef5c9e",
+  "source_name": "npr-news",
+  "source_type": "rss",
+  "source_url": "https://www.npr.org/2026/08/25/nx-s1-5940807/noncitizen-voters-trump-nevada-call",
+  "title": "DHS acknowledges the noncitizen numbers it touted on voter rolls were inflated",
+  "content": "The Trump administration claimed to have found 250,000 noncitizens on the voter rolls in four states. But the agency's communications with states since then indicate that data was preliminary.",
+  "content_type": "text",
+  "source_platform": "npr-news",
+  "collected_at": "2026-08-25T14:15:23-04:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.npr.org/1001/rss.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "09755e62-21e0-4b9d-b98f-ff6e3c78b95a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

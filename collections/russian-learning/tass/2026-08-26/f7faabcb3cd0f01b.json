@@ -1,0 +1,24 @@
+{
+  "id": "f7faabcb3cd0f01b",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/ekonomika/28044413",
+  "title": "В аэропорту Тамбова ввели ограничения",
+  "content": "Об этом заявили в Росавиации",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T23:36:40+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b43eb6b7-19f8-44ee-86d9-2b1785d1fd6b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "49a167bcc2f82f5f",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/gallery/the-best-mattress-toppers/",
+  "title": "The Best Mattress Toppers I've Tried (2026): Supportive, Plush, Memory Foam",
+  "content": "These toppers will transform your mattress into exactly what you need, whether that’s a super-plush pillow top, memory foam, or targeted back support.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-22T10:32:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "82ed3d33-576c-41a4-840c-74a8b9c94d4a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

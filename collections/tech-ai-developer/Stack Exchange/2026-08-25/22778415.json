@@ -1,0 +1,50 @@
+{
+  "id": 22778415,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/22778415/how-to-load-an-aspx-page-in-div-with-jquery-in-asp-net",
+  "title": "How to Load an .aspx page in Div with jQuery in asp.net?",
+  "content": "How to Load an .aspx page in Div with jQuery in asp.net?",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-25T15:45:11.611974+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "jquery",
+      "asp.net",
+      "load",
+      "external"
+    ],
+    "owner": {
+      "account_id": 1041293,
+      "reputation": 6084,
+      "user_id": 1047280,
+      "user_type": "registered",
+      "accept_rate": 42,
+      "profile_image": "https://www.gravatar.com/avatar/3478bf086c0600c7a6ec37b0f16828ca?s=256&d=identicon&r=PG&f=y&so-version=2",
+      "display_name": "SHEKHAR SHETE",
+      "link": "https://stackoverflow.com/users/1047280/shekhar-shete"
+    },
+    "is_answered": false,
+    "view_count": 11104,
+    "answer_count": 4,
+    "score": 1,
+    "last_activity_date": 1787672421,
+    "creation_date": 1396333823,
+    "last_edit_date": 1396334125,
+    "question_id": 22778415,
+    "content_license": "CC BY-SA 3.0",
+    "link": "https://stackoverflow.com/questions/22778415/how-to-load-an-aspx-page-in-div-with-jquery-in-asp-net",
+    "title": "How to Load an .aspx page in Div with jQuery in asp.net?"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "fbf851f1-dab0-4852-91e9-d0a9ad843cd3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

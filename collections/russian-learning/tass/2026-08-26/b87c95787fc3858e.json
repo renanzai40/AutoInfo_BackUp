@@ -1,0 +1,24 @@
+{
+  "id": "b87c95787fc3858e",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/obschestvo/28044191",
+  "title": "РПЦ представила Галлахеру данные о преследовании УПЦ со стороны киевских властей",
+  "content": "Глава дипслужбы Ватикана и председатель Отдела внешних церковных связей Московского патриархата митрополит Антоний обсудили вопросы о ситуации в мире",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T20:25:33+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4089858e-ccbe-4c75-b33e-f4dc3673c3f8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

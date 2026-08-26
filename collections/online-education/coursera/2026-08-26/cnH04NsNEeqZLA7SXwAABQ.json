@@ -1,0 +1,27 @@
+{
+  "id": "cnH04NsNEeqZLA7SXwAABQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Blockchain Evolution and Technology Concepts",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "cnH04NsNEeqZLA7SXwAABQ",
+    "slug": "blockchain-evolution-and-technology-concepts",
+    "name": "Blockchain Evolution and Technology Concepts"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bc169341-86ec-464d-8cc2-e36420f99106",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

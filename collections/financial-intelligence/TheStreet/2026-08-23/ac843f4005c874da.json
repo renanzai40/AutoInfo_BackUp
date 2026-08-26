@@ -1,0 +1,24 @@
+{
+  "id": "ac843f4005c874da",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/investing/stocks/dz-bank-spacex-spcx-stock-sell-rating-valuation",
+  "title": "Top analyst sees trouble looming for SpaceX stock",
+  "content": "A German bank made a bold bear call on SpaceX just as a fresh wave of shares hits the market.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-22T20:00:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b03ade35-89de-4165-8f36-f7235c44de90",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

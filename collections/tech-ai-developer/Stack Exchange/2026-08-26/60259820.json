@@ -1,0 +1,47 @@
+{
+  "id": 60259820,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/60259820/azure-dev-ops-push-authentication-failed-source-tree-on-mac",
+  "title": "Azure dev ops push Authentication failed [source tree on mac]",
+  "content": "Azure dev ops push Authentication failed [source tree on mac]",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-26T00:53:25.798577+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "version-control",
+      "azure-devops",
+      "atlassian-sourcetree"
+    ],
+    "owner": {
+      "account_id": 7931386,
+      "reputation": 73,
+      "user_id": 5989113,
+      "user_type": "registered",
+      "profile_image": "https://www.gravatar.com/avatar/63874c9e26d1efc18be1a1678916cc08?s=256&d=identicon&r=PG&f=y&so-version=2",
+      "display_name": "Mackr",
+      "link": "https://stackoverflow.com/users/5989113/mackr"
+    },
+    "is_answered": false,
+    "view_count": 9074,
+    "answer_count": 1,
+    "score": 7,
+    "last_activity_date": 1787702735,
+    "creation_date": 1581933285,
+    "question_id": 60259820,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/60259820/azure-dev-ops-push-authentication-failed-source-tree-on-mac",
+    "title": "Azure dev ops push Authentication failed [source tree on mac]"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e108e555-6e91-49b8-a80c-c7036176ba4c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

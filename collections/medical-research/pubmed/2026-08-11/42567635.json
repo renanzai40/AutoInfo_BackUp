@@ -1,0 +1,71 @@
+{
+  "id": "42567635",
+  "source_name": "pubmed",
+  "source_type": "api",
+  "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42567635&retmode=xml",
+  "title": "Dose-dependent perinatal risks of clomiphene citrate in US IVF cycles: a national cohort study, 2004-2021.",
+  "content": "OBJECTIVES: The relationship between clomiphene citrate (CC) dosing regimens and adverse reproductive outcomes has not been fully elucidated, both with and without use of in vitro fertilisation (IVF). We aimed to study the association between cumulative CC dose and perinatal outcomes among fresh autologous IVF cycles.\nDESIGN: Retrospective cohort study.\nSETTING: We included all fresh autologous IVF embryo transfer cycles performed in the US fertility clinics during 2004-2021 using CC for ovulation induction. We used robust Poisson regression models to estimate adjusted risk ratios (aRRs) and 95% CIs for associations between four categories of CC dose (<500 mg, 500-749 mg, 750-999 mg and ≥1000 mg) and perinatal outcomes of interest.\nPARTICIPANTS: 21 004 fresh autologous embryo transfer cycles using CC.\nPRIMARY OUTCOME MEASURES: The primary outcome measures included biochemical pregnancy, clinical pregnancy, spontaneous abortion, stillbirth, live birth, multiple birth and preterm delivery.\nRESULTS: Among fresh autologous embryo transfer cycles using CC, 21.3% used <500 mg, 67.8% used 500-749 mg, 7.2% used 750-999 mg and 3.7% used ≥1000 mg. After adjustment, rates of spontaneous abortion were higher for patients using 500-749 mg (11.8%; aRR, 1.12; 95% CI 1.02 to 1.25) and 750-999 mg of CC (14.4%; aRR, 1.38; 95% CI 1.18 to 1.62) than for those using <500 mg (10.3%). The ≥1000 mg group had a three-fold higher rate of stillbirth than the <500 mg group, but these estimates were imprecise (0.7% vs 0.2%; aRR, 3.31; 95% CI 0.88 to 12.40). Multiple birth risk was significantly higher among all CC dosage categories compared with the <500 mg group.\nCONCLUSION: Our findings extend previous findings on the association between CC exposure and adverse perinatal outcomes by demonstrating a dose-dependent relationship.",
+  "content_type": "text",
+  "source_platform": "pubmed",
+  "collected_at": "2026 Aug 07",
+  "language": "",
+  "domain": "medical-research",
+  "topic_tags": [
+    "adverse birth outcomes",
+    "clomiphene citrate",
+    "embryo transfer",
+    "in vitro fertilization",
+    "ovulation induction"
+  ],
+  "quality_tier": 1,
+  "raw_data": {
+    "pmid": "42567635",
+    "pmc_id": "",
+    "authors": [
+      {
+        "lastname": "Boulet",
+        "firstname": "Sheree",
+        "initials": "S"
+      },
+      {
+        "lastname": "Zhang",
+        "firstname": "Yujia",
+        "initials": "Y"
+      },
+      {
+        "lastname": "Kissin",
+        "firstname": "Dmitry",
+        "initials": "D"
+      },
+      {
+        "lastname": "Davies",
+        "firstname": "Michael",
+        "initials": "M"
+      }
+    ],
+    "journal": "BMJ open",
+    "pub_date": "2026 Aug 07",
+    "doi": "10.1136/bmjopen-2025-115285",
+    "mesh_terms": [
+      "Humans",
+      "Female",
+      "Clomiphene",
+      "Pregnancy",
+      "Retrospective Studies",
+      "Adult",
+      "Fertilization in Vitro",
+      "Fertility Agents, Female",
+      "Ovulation Induction",
+      "United States",
+      "Dose-Response Relationship, Drug",
+      "Embryo Transfer",
+      "Pregnancy Outcome",
+      "Abortion, Spontaneous",
+      "Infant, Newborn"
+    ]
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9870a560-5277-4e13-8c30-4132946800bb"
+}

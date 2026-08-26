@@ -1,0 +1,24 @@
+{
+  "id": "2b36c3c903f8309c",
+  "source_name": "WSJ Markets",
+  "source_type": "rss",
+  "source_url": "https://www.wsj.com/articles/trump-big-bank-conservative-bias-accusations-168abb27?mod=rss_markets_main",
+  "title": "Trump Adds Fuel to Claims That Big Banks Discriminate Against Conservatives",
+  "content": "The president has told Bank of America and JPMorgan Chase to stop cutting conservatives off from doing business.",
+  "content_type": "text",
+  "source_platform": "WSJ Markets",
+  "collected_at": "2025-01-25T05:30:00-05:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "461599c3-7889-4d64-afd8-94fa2bdea7e0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

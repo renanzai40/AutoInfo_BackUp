@@ -1,0 +1,24 @@
+{
+  "id": "e5dbf7b321a5bb9b",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/lainformacion/economia-y-finanzas/gasto-pensiones-alcanza-nuevo-maximo-agosto-superar-los-14-470-millones_7029087_0.html",
+  "title": "El gasto en pensiones alcanza nuevo máximo en el mes de agosto al superar los 14.470 millones de euros",
+  "content": "La pensión media de jubilación, que perciben más de dos tercios de los pensionistas, llegó 1.575 euros mensuales, un 4,5% más que en agosto de hace un año.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T11:43:55+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d0ea173e-e95b-44b2-a053-d925979b23f7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

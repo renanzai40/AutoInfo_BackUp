@@ -1,0 +1,24 @@
+{
+  "id": "431aeb975904ec6a",
+  "source_name": "open-culture",
+  "source_type": "rss",
+  "source_url": "https://www.openculture.com/2026/08/discover-the-ancient-roman-shorthand-writing-system-with-4000-symbols-commissioned-by-cicero.html",
+  "title": "Discover the Ancient Roman Shorthand Writing System with 4,000 Symbols Commissioned by Cicero",
+  "content": "You can still type a symbol originally invented for Cicero nearly 21 centuries ago — at least if you configure your keyboard properly.&#160; The character ⁊ appears in Unicode as U+204A, but is better known as the “Tironian et”: the “et” is Latin for “and,” and the “Tironian” comes from its creator, a man named [&#8230;]",
+  "content_type": "text",
+  "source_platform": "open-culture",
+  "collected_at": "2026-08-14T13:51:24+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.openculture.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e74ffe9f-6dbb-4e99-bff5-70f6c04f7b69",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,33 @@
+{
+  "id": 9792171,
+  "source_name": "zhihu-daily",
+  "source_type": "api",
+  "source_url": "https://daily.zhihu.com/story/9792171",
+  "title": "黑洞的内部是什么样子的？",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "zhihu-daily",
+  "collected_at": "2026-08-25T23:05:40.148149+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "image_hue": "0x0b0d0f",
+    "title": "黑洞的内部是什么样子的？",
+    "url": "https://daily.zhihu.com/story/9792171",
+    "hint": "Bright Summer · 6 分钟阅读",
+    "ga_prefix": "082607",
+    "images": [
+      "https://pica.zhimg.com/v2-be6d1654ba1575e8091dc7e6f45f5940.jpg?source=8673f162"
+    ],
+    "type": 0,
+    "id": 9792171
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "38edc7eb-9bbd-41f8-9648-dc08ebd164d8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,27 @@
+{
+  "id": "LuXbfNnCEeq3nQoreMGNOQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Performing Data Aggregation using SQL Aggregate Functions",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "LuXbfNnCEeq3nQoreMGNOQ",
+    "slug": "performing-data-aggregation-using-sql-aggregate-functions",
+    "name": "Performing Data Aggregation using SQL Aggregate Functions"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a26cc697-8e4a-49be-ab15-a6b1041f1376",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

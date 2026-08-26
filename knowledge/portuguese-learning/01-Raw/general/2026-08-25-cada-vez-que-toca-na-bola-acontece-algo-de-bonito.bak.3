@@ -1,0 +1,51 @@
+---
+title: '"Cada vez que toca na bola, acontece algo de bonito"'
+domain: portuguese-learning
+tier: 01-Raw
+entry_id: portuguese-learning-general-cada-vez-que-toca-na-bola-acontece-algo-de-bonito
+source_url: https://observador.pt/2026/08/25/cada-vez-que-toca-na-bola-acontece-algo-de-bonito-os-elogios-a-estreia-de-rodrigo-mora-e-a-defesa-de-de-gea-que-evitou-o-primeiro-golo/
+source_type: rss
+source_platform: observador
+collected_at: '2026-08-25T15:29:58+01:00'
+summary: Rodrigo Mora made his starting debut for AS Roma in a match against Fiorentina at the Olympic Stadium. He was substituted
+  at the 54th minute during a commanding victory for the team.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: pt
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: a2b7f8a7-e554-48ac-8b8a-cfaba475613e
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+Rodrigo Mora foi titular na estreia pela Roma no Estádio Olímpico e saiu aos 54' na goleada dos giallorossi frente à Fiorentina
+
+## Summary
+Rodrigo Mora made his starting debut for AS Roma in a match against Fiorentina at the Olympic Stadium. He was substituted at the 54th minute during a commanding victory for the team.
+
+## Key Points
+- Rodrigo Mora started in his debut match for AS Roma.
+- The match took place at the Estádio Olímpico.
+- He was substituted at the 54th minute.
+- Roma achieved a large victory over Fiorentina.
+
+
+## Entities
+- **Rodrigo Mora** (person, relevance=)
+- **Roma** (org, relevance=)
+- **Fiorentina** (org, relevance=)
+- **Estádio Olímpico** (org, relevance=)

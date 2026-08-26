@@ -1,0 +1,114 @@
+[
+  {
+    "collection_id": "col-20260812T181446-cfb544a5",
+    "timestamp": "2026-08-12T18:17:01.805546+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://news.google.com/rss (bozo): <urlopen error [Errno 101] Network is unreachable>",
+        "source_failed": true,
+        "reason": "RSS parse error for https://news.google.com/rss (bozo): <urlopen error [Errno 101] Network is unreachable>"
+      }
+    ],
+    "duration_ms": 134633.0
+  },
+  {
+    "collection_id": "col-20260812T183923-cc16e2e6",
+    "timestamp": "2026-08-12T18:39:54.711952+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://news.google.com/rss: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://news.google.com/rss: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30616.0
+  },
+  {
+    "collection_id": "col-20260815T181643-4debb52e",
+    "timestamp": "2026-08-15T18:17:14.055550+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://news.google.com/rss: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://news.google.com/rss: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30058.0
+  },
+  {
+    "collection_id": "col-20260815T183158-767947c7",
+    "timestamp": "2026-08-15T18:32:28.939935+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://news.google.com/rss: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://news.google.com/rss: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30619.0
+  },
+  {
+    "collection_id": "col-20260825T151905-c85b90e7",
+    "timestamp": "2026-08-25T15:19:36.412767+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://news.google.com/rss: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://news.google.com/rss: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30174.0
+  },
+  {
+    "collection_id": "col-20260825T153025-acb4a6c3",
+    "timestamp": "2026-08-25T15:30:56.190670+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://news.google.com/rss: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://news.google.com/rss: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30172.0
+  },
+  {
+    "collection_id": "col-20260825T154628-1c0c3b07",
+    "timestamp": "2026-08-25T15:46:58.824507+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://news.google.com/rss: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://news.google.com/rss: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30171.0
+  }
+]

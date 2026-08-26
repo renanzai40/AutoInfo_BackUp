@@ -1,0 +1,24 @@
+{
+  "id": "d62cd5ddf01697bc",
+  "source_name": "the-verge",
+  "source_type": "rss",
+  "source_url": "https://www.theverge.com/gadgets/984430/nothing-os-5-launch-android-17",
+  "title": "Nothing OS 5.0 brings a new Glyph Interface app and a more customizable homescreen",
+  "content": "With the new design of Nothing OS 5.0, app icons and widgets can use adaptive color to get color tints pulled from your wallpaper, which update whenever your wallpaper changes. Alongside Android's built-in Dynamic Colors, the company says it allows you to have specific elements change to match your wallpaper \"while Nothing's predominantly monochrome character [&#8230;]",
+  "content_type": "text",
+  "source_platform": "the-verge",
+  "collected_at": "2026-08-25T12:58:53-04:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.theverge.com/rss/index.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f9583838-931e-4d10-83f8-c33e061ff49a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

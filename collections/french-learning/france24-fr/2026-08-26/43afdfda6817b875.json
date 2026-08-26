@@ -1,0 +1,24 @@
+{
+  "id": "43afdfda6817b875",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/am%C3%A9riques/20260825-le-patron-de-la-cia-en-visite-%C3%A0-moscou-selon-des-m%C3%A9dias-am%C3%A9ricains",
+  "title": "Le patron de la CIA en visite à Moscou, selon des médias américains",
+  "content": "Selon les médias américains CBS et Axios, le patron de la CIA, John Ratcliffe, est en visite mardi à Moscou. Une annonce que ni le gouvernement américain ni le Kremlin n'ont jusqu'ici officiellement confirmé.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T15:55:51+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d1bf2f38-e23e-4b7e-b75a-f791fa4e5603",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

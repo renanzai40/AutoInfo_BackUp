@@ -1,0 +1,24 @@
+{
+  "id": "39296279b14b958b",
+  "source_name": "techcrunch",
+  "source_type": "rss",
+  "source_url": "https://techcrunch.com/2026/08/25/apples-latest-mac-mini-runs-on-a-new-m6-chip-and-starts-at-899/",
+  "title": "Apple’s latest Mac Mini runs on a new M6 chip, and starts at $899",
+  "content": "The base model of the Mac Mini comes with 256GB of storage, 16GB of RAM, and costs $899.",
+  "content_type": "text",
+  "source_platform": "techcrunch",
+  "collected_at": "2026-08-25T13:55:06+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://techcrunch.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "aee2848f-0799-47df-9b1e-9ab092b55f5b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

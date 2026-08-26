@@ -1,0 +1,82 @@
+[
+  {
+    "collection_id": "col-20260815T181643-4debb52e",
+    "timestamp": "2026-08-15T18:18:17.328962+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://medium.com/feed/@towardsdatascience: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://medium.com/feed/@towardsdatascience: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30051.0
+  },
+  {
+    "collection_id": "col-20260815T183333-a96dc231",
+    "timestamp": "2026-08-15T18:34:03.950666+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://medium.com/feed/@towardsdatascience: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://medium.com/feed/@towardsdatascience: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30575.0
+  },
+  {
+    "collection_id": "col-20260825T151905-c85b90e7",
+    "timestamp": "2026-08-25T15:21:08.484752+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://medium.com/feed/@towardsdatascience: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://medium.com/feed/@towardsdatascience: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30083.0
+  },
+  {
+    "collection_id": "col-20260825T153025-acb4a6c3",
+    "timestamp": "2026-08-25T15:32:00.010389+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://medium.com/feed/@towardsdatascience: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://medium.com/feed/@towardsdatascience: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30045.0
+  },
+  {
+    "collection_id": "col-20260825T154628-1c0c3b07",
+    "timestamp": "2026-08-25T15:48:01.491426+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://medium.com/feed/@towardsdatascience: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://medium.com/feed/@towardsdatascience: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30032.0
+  }
+]

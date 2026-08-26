@@ -1,0 +1,24 @@
+{
+  "id": "c4cad93abb588936",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0604/c1002-40493784.html",
+  "title": "李在明宣誓就职韩国总统 表示将推行“实用外交”",
+  "content": "<p>　　新华社首尔6月4日电（记者黄昕欣　陆睿）韩国总统李在明当地时间4日上午11时许在国会正式宣誓就职。</p> <p>　　李在明在就职讲话中说，将推行“实用外交”，追求国家利益最大化。李在明还表示，将启动紧急经济专班，依靠国家财政实现经济良性循环。</p> <p>　　韩国行政安全部说，韩国国会议长等要员、政党代表、国会议员、国务委员等约300人参加宣誓就职活动。</p> <p>　　李在明于当天当地时间6时21分开启总统任期。当地时间8时7分许，李在明听取了联合参谋本部议长金明秀关于军队统帅权移交的汇报。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-04T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "db5b00fd-1511-43e9-bf54-659cb69cceb1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

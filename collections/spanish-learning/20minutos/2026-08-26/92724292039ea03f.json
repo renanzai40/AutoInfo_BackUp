@@ -1,0 +1,24 @@
+{
+  "id": "92724292039ea03f",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/ofertas-descuentos/cero-dudas-hora-examen-visualiza-fracciones-raices-con-calculadora-casio_7028549_0.html",
+  "title": "Cero dudas a la hora del examen: visualiza fracciones y raíces con la calculadora de CASIO",
+  "content": "Con esta calculadora CASIO no habrá ecuación que se te resista, y lo mejor es que además de elegante tiene descuento temporal en Amazon.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T16:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "57ae9559-345d-4e4a-8999-9fbd028318d6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,22 @@
+{
+  "id": "0e80f12aa53eeb6a",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/halo-2s-midnight-release-turns-into-a-hostage-situation-in-a-new-short-film",
+  "title": "Halo 2's Midnight Release Turns Into a Hostage Situation in a New Short Film",
+  "content": "A new short film known as Midnight Drop will turn Halo 2's highly anticipated midnight release into the worst night for a group of gamers.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-12T16:39:46+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "15ede947-0c1e-4696-8c47-e75eed33b2ff"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "df5decf285e3560a",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/games/resident-evil/the-upcoming-resident-evil-movie-will-have-first-person-povs-as-it-demonstrates-how-authenticity-is-a-moving-target-for-a-series-that-spans-30-years/",
+  "title": "The upcoming Resident Evil movie will have first-person POVs as it demonstrates how authenticity is a moving target for a series that spans 30 years",
+  "content": "Up close and personal.",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-25T11:53:56+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ea9e6d71-a3fa-41eb-aecc-eb50973c4199",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

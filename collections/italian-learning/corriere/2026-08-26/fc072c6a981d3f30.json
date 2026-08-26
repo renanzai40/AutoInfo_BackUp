@@ -1,0 +1,24 @@
+{
+  "id": "fc072c6a981d3f30",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://video.corriere.it/video-virali/portale-visivo-mette-contatto-dublino-new-york/28d2f990-0ee4-11ef-aec7-630484bff6fc",
+  "title": "Un «portale visivo» mette in contatto Dublino e New York",
+  "content": "<p><img alt=\"Un «portale visivo» mette in contatto Dublino e New York\" src=\"https://images2.corriereobjects.it/methode_image/Video/2024/05/10/Interni/Foto%20Interni%20-%20Trattate/portale_visivo_mette_in_contatto_dublino_e_new_york_656_ori_crop_MASTER__0x0.jpg\" title=\"Un «portale visivo» mette in contatto Dublino e New York\" /><p>Un'installazione artistica montata per strada ha permesso alle persone delle due città di trovarsi faccia a faccia</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-12T22:11:48+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2f491161-5693-4e55-abeb-a25460b524c8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "5cc80631116509c3",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/video/the-best-ai-stocks-to-buy-now-and-ones-to-avoid",
+  "title": "The best AI stocks to buy now — and one to avoid",
+  "content": "CFRA Senior Vice President and Equity Analyst Angelo Zino breaks down where he sees opportunity in AI and what could derail the trade.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T16:38:27+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "11c89b81-006b-473f-b1d2-d6926258ea8c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "2bcf1f6f1b870a24",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/deals/devoko-5-by-3-foot-metal-patio-shed-walmart-sale-mp-august-2026",
+  "title": "Walmart is selling a 'sturdy' metal storage shed for $110 that's easy to assemble",
+  "content": "\"It's big enough for all my tools, yet small enough to fit on my driveway.\"",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T05:00:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "266581ee-a02a-4f2c-8f77-629cf29b12af",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

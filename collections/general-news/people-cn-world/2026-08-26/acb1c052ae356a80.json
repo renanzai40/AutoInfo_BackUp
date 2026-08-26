@@ -1,0 +1,24 @@
+{
+  "id": "acb1c052ae356a80",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0604/c1002-40493551.html",
+  "title": "《哪吒之魔童闹海》西班牙首映千人观影",
+  "content": "<p style=\"text-indent: 2em;\">人民网马德里6月3日电（记者许海林）当地时间5月31日，中国动画电影《哪吒之魔童闹海》（《哪吒2》）在西班牙马德里举行首映式，近千名观众到场观看，气氛热烈。</p> <p style=\"text-indent: 2em;\">中国驻西班牙大使馆屈浔公使在致辞中表示，《哪吒2》传递了中华优秀传统文化，彰显了中国科技在动漫电影领域的发展成就，在全球获得一致好评，生动体现了文明互鉴和对话符合世界大势。</p> <p style=\"text-indent: 2em;\">时值“六一”国际儿童节，许多华侨华人家庭选择以观影的方式庆祝。现场家长们纷纷表示，这是一部既富有教育意义又极具观赏价值的佳作，能够与孩子共同观看，收获共鸣，意义非凡。</p> <p style=\"text-indent: 2em;\">首映式由西班牙华人广告传媒公司启创集团主办。该集团总经理陈伟锋表示，能够为《哪吒2》的海外传播贡献力量，深感荣幸。感谢广大在西影迷朋友的热情支持，未来将继续致力于优质华语影视作品在海外的落地推广。</p> <p style=\"text-indent: 2em;\">除了在马德里及巴塞罗那举行了多场超前点映，《哪吒2》还将于6月20日起登陆西班牙20个城市30余家影院，放映西班牙语配音版、加泰罗尼亚语配音版和中文原声配西班牙语字幕版三种版本，满足不同观众的观影需求，吸引更多本地观众走进影院，感受中国动画的独特魅力。</p> <p style=\"text-indent: 2em;\">马德里中国文化中心作为支持单位，希望助力中国影视作品走上当地荧幕，通过文化传播进一步增进两国人民的相互理解与友谊，帮助更多西班牙观众认识一个多元化、立体化的中国。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-04T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "461cedb3-d0b3-4fd4-ace1-4dc6ee5ca6ef",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

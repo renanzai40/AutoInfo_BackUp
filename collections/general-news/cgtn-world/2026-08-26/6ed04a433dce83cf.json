@@ -1,0 +1,24 @@
+{
+  "id": "6ed04a433dce83cf",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/Xi-holds-talks-with-Jordan-s-king-in-Beijing-1PRVAtbWgNy/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Xi urges China, Jordan to deepen alignment of development strategies",
+  "content": "Chinese President Xi Jinping held talks with visiting King of the Hashemite Kingdom of Jordan Abdullah II ibn Al Hussein at the Great Hall of the People in Beijing on Monday afternoon.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T09:15:08+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0ece48e0-10c9-417d-bcae-523a5f74a261",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "4eebdd0f64f97174",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://newsaf.cgtn.com/news/2026-08-22/AI-and-technology-drive-China-West-Africa-healthcare-cooperation-1PP0P6cqmhq/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "AI and technology drive China-West Africa healthcare cooperation",
+  "content": "The 3rd China-West Africa Medical Summit and Expo has opened in Ghana's capital, Accra, bringing together healthcare professionals, technology companies and industry stakeholders for a three-day event focused on medical innovation and technological advancements.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-22T15:04:12+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "429b63e1-0f7e-4389-95c9-e22c1f8c09e9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

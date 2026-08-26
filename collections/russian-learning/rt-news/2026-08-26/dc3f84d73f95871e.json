@@ -1,0 +1,24 @@
+{
+  "id": "dc3f84d73f95871e",
+  "source_name": "rt-news",
+  "source_type": "rss",
+  "source_url": "https://www.rt.com/news/644611-netanyahu-son-iran-murder-plot/?utm_source=rss&utm_medium=rss&utm_campaign=RSS",
+  "title": "Netanyahu claims ‘Iran tried to murder one of my sons’",
+  "content": "<img align=\"left\" alt=\"Preview\" src=\"https://mf.b37mrtl.ru/files/2026.08/thumbnail/6a8d182b2030272c1157745e.jpg\" style=\"margin-right: 10px;\" /> The Israeli leader offered no evidence or specifics as his coalition trails in polls ahead of October’s election <br /><a href=\"https://www.rt.com/news/644611-netanyahu-son-iran-murder-plot/?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=RSS\">Read Full Article at RT.com</a>",
+  "content_type": "text",
+  "source_platform": "rt-news",
+  "collected_at": "2026-08-25T04:23:54+00:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.rt.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3f9e6946-24d4-4bd4-ba8b-981ce5e7dd92",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

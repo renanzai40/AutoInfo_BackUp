@@ -1,0 +1,24 @@
+{
+  "id": "58fa42239d94692c",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/nacional/termometros-por-debajo-los-10-oc-estas-son-las-13-capitales-provincia-las-que-temperatura-caera-este-viernes_7029122_0.html",
+  "title": "Termómetros por debajo de los 10 ºC: estas son las 13 capitales de provincia en las que la temperatura caerá este viernes",
+  "content": "Este miércoles un nuevo frente asociado a una vaguada atlántica comenzará a aproximarse desde el oeste y reactivará las precipitaciones en el país.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T13:08:59+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5dc12590-2e95-4943-94f2-09c623e352fe",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

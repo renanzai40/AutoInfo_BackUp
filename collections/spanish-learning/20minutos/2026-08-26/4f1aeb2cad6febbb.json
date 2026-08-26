@@ -1,0 +1,24 @@
+{
+  "id": "4f1aeb2cad6febbb",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/salud/un-experto-cuenta-que-significa-que-se-te-caiga-baba-dormir_7018588_0.html",
+  "title": "Esto es lo que significa que se te caiga la baba cuando estás durmiendo",
+  "content": "Que se caiga la baba al dormir es algo habitual, aunque puede ser señal de obstrucción de nariz o boca o apnea del sueño.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-23T12:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b4ba13c6-ec6e-4891-8048-79463749edfa",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

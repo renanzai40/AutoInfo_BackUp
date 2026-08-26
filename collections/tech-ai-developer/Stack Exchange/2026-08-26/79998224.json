@@ -1,0 +1,48 @@
+{
+  "id": 79998224,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/79998224/how-to-merge-specific-rows-in-a-pandas-dataframe",
+  "title": "How to merge specific rows in a pandas DataFrame?",
+  "content": "How to merge specific rows in a pandas DataFrame?",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-26T00:53:25.798577+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "python",
+      "pandas",
+      "dataframe"
+    ],
+    "owner": {
+      "account_id": 13956033,
+      "reputation": 305,
+      "user_id": 10437985,
+      "user_type": "registered",
+      "profile_image": "https://i.sstatic.net/7XTwa.jpg?s=256",
+      "display_name": "fazan",
+      "link": "https://stackoverflow.com/users/10437985/fazan"
+    },
+    "is_answered": true,
+    "view_count": 29,
+    "answer_count": 2,
+    "score": 0,
+    "last_activity_date": 1787704091,
+    "creation_date": 1787698262,
+    "last_edit_date": 1787698564,
+    "question_id": 79998224,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/79998224/how-to-merge-specific-rows-in-a-pandas-dataframe",
+    "title": "How to merge specific rows in a pandas DataFrame?"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6dd733ba-9340-40e1-97fe-48bdb17ed2f8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

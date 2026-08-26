@@ -1,0 +1,24 @@
+{
+  "id": "a41e0c0aa0e485be",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0605/c1002-40494390.html",
+  "title": "俄总统新闻秘书：克里米亚大桥遭乌方袭击但未被破坏",
+  "content": "<p>　　新华社莫斯科6月4日电（记者赵冰）俄罗斯总统新闻秘书佩斯科夫4日说，克里米亚大桥日前遭到乌克兰袭击并发生爆炸，但大桥并未被破坏，仍正常运行。</p> <p>　　佩斯科夫当天对媒体作出上述表态。佩斯科夫还表示，乌克兰仍在袭击俄民用设施，俄方正在据此采取预防措施。</p> <p>　　乌克兰国家安全局3日发起特别行动，对克里米亚大桥实施“水下袭击”。这是乌国家安全局自乌克兰危机升级以来第三次对克里米亚大桥发动袭击。俄联邦安全局同日说，在克里米亚逮捕了一名制作爆炸装置的乌克兰特工。</p> <p>　　克里米亚大桥连接克里米亚半岛和俄罗斯克拉斯诺达尔地区，全长19公里。2022年和2023年，乌国家安全局曾两次对克里米亚大桥发动袭击。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-05T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9df8c71b-1e3b-487c-82f4-2343dde9561e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

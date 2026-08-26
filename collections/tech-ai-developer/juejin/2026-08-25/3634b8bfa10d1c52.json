@@ -1,0 +1,24 @@
+{
+  "id": "3634b8bfa10d1c52",
+  "source_name": "juejin",
+  "source_type": "rss",
+  "source_url": "https://juejin.cn/post/7677785361450696755",
+  "title": "opencode的“恶果”来了，吃掉100G空间！",
+  "content": "软件质量不过关，就会有各种问题！就是因为在 Windows 的“用户目录”运行了一下 OpenCode，问题一个接一个地来。软件用不了还是小事儿，有可能直接把你的系统拖垮！ 昨天晚上就遇到这个问题了，",
+  "content_type": "text",
+  "source_platform": "juejin",
+  "collected_at": "2026-08-25T14:25:05+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://juejin.cn/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2831d2c9-2e38-4ee2-b195-3b0d6597700d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

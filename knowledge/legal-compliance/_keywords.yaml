@@ -1,0 +1,601 @@
+keywords:
+  gdpr:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.257656+00:00'
+    updated_at: '2026-08-26T07:40:53.322489+00:00'
+    source: auto-discovery:gdpr-eu
+  remote working:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.264109+00:00'
+    updated_at: '2026-08-26T07:39:59.886472+00:00'
+    source: auto-discovery:gdpr-eu
+  data protection:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.275039+00:00'
+    updated_at: '2026-08-26T07:40:08.668598+00:00'
+    source: auto-discovery:gdpr-eu
+  covid-19 pandemic:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.286030+00:00'
+    updated_at: '2026-08-26T07:43:18.035953+00:00'
+    source: auto-discovery:scotusblog
+  remote:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.297647+00:00'
+    updated_at: '2026-08-26T07:39:59.742090+00:00'
+    source: auto-discovery:gdpr-eu
+  working:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.310247+00:00'
+    updated_at: '2026-08-26T07:39:59.791473+00:00'
+    source: auto-discovery:gdpr-eu
+  increased:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.323700+00:00'
+    updated_at: '2026-08-26T07:37:38.225389+00:00'
+    source: auto-discovery:rss
+  significantly,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.337618+00:00'
+    updated_at: '2026-08-10T06:08:32.337618+00:00'
+    source: auto-discovery:rss
+  even:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.351577+00:00'
+    updated_at: '2026-08-26T05:58:59.025317+00:00'
+    source: auto-discovery:rss
+  before:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.366326+00:00'
+    updated_at: '2026-08-26T07:37:37.990834+00:00'
+    source: auto-discovery:rss
+  pandemic,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.382272+00:00'
+    updated_at: '2026-08-10T06:08:32.382272+00:00'
+    source: auto-discovery:rss
+  accelerated:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.397878+00:00'
+    updated_at: '2026-08-26T07:39:59.839200+00:00'
+    source: auto-discovery:gdpr-eu
+  lockdown:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.411216+00:00'
+    updated_at: '2026-08-10T06:08:32.411216+00:00'
+    source: auto-discovery:rss
+  measures.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.427330+00:00'
+    updated_at: '2026-08-26T07:44:37.872968+00:00'
+    source: auto-discovery:scotusblog
+  working has:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.445119+00:00'
+    updated_at: '2026-08-26T04:00:10.488381+00:00'
+    source: auto-discovery:gdpr-eu
+  has increased:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.462289+00:00'
+    updated_at: '2026-08-10T06:08:32.462289+00:00'
+    source: auto-discovery:rss
+  increased significantly,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.479233+00:00'
+    updated_at: '2026-08-10T06:08:32.479233+00:00'
+    source: auto-discovery:rss
+  significantly, even:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.498402+00:00'
+    updated_at: '2026-08-10T06:08:32.498402+00:00'
+    source: auto-discovery:rss
+  even before:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.516282+00:00'
+    updated_at: '2026-08-26T05:57:53.225310+00:00'
+    source: auto-discovery:gdpr-eu
+  before the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.536282+00:00'
+    updated_at: '2026-08-26T07:37:38.037332+00:00'
+    source: auto-discovery:rss
+  the pandemic,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.555460+00:00'
+    updated_at: '2026-08-10T06:08:32.555460+00:00'
+    source: auto-discovery:rss
+  pandemic, and:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.573675+00:00'
+    updated_at: '2026-08-10T06:08:32.573675+00:00'
+    source: auto-discovery:rss
+  been accelerated:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.595415+00:00'
+    updated_at: '2026-08-10T06:08:32.595415+00:00'
+    source: auto-discovery:rss
+  accelerated lockdown:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.617335+00:00'
+    updated_at: '2026-08-10T06:08:32.617335+00:00'
+    source: auto-discovery:rss
+  lockdown measures.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.637656+00:00'
+    updated_at: '2026-08-10T06:08:32.637656+00:00'
+    source: auto-discovery:rss
+  remote working has:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.658246+00:00'
+    updated_at: '2026-08-26T04:00:10.617534+00:00'
+    source: auto-discovery:gdpr-eu
+  working has increased:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.679761+00:00'
+    updated_at: '2026-08-10T06:08:32.679761+00:00'
+    source: auto-discovery:rss
+  has increased significantly,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.702088+00:00'
+    updated_at: '2026-08-10T06:08:32.702088+00:00'
+    source: auto-discovery:rss
+  increased significantly, even:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.724257+00:00'
+    updated_at: '2026-08-10T06:08:32.724257+00:00'
+    source: auto-discovery:rss
+  significantly, even before:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.747472+00:00'
+    updated_at: '2026-08-10T06:08:32.747472+00:00'
+    source: auto-discovery:rss
+  even before the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.770822+00:00'
+    updated_at: '2026-08-26T05:57:53.346694+00:00'
+    source: auto-discovery:gdpr-eu
+  before the pandemic,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.793537+00:00'
+    updated_at: '2026-08-10T06:08:32.793537+00:00'
+    source: auto-discovery:rss
+  the pandemic, and:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.819259+00:00'
+    updated_at: '2026-08-10T06:08:32.819259+00:00'
+    source: auto-discovery:rss
+  pandemic, and has:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.843637+00:00'
+    updated_at: '2026-08-10T06:08:32.843637+00:00'
+    source: auto-discovery:rss
+  has been accelerated:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.869853+00:00'
+    updated_at: '2026-08-10T06:08:32.869853+00:00'
+    source: auto-discovery:rss
+  been accelerated lockdown:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.900286+00:00'
+    updated_at: '2026-08-10T06:08:32.900286+00:00'
+    source: auto-discovery:rss
+  accelerated lockdown measures.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.927050+00:00'
+    updated_at: '2026-08-10T06:08:32.927050+00:00'
+    source: auto-discovery:rss
+  data:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.954203+00:00'
+    updated_at: '2026-08-26T07:43:17.985240+00:00'
+    source: auto-discovery:scotusblog
+  protection:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:32.984126+00:00'
+    updated_at: '2026-08-26T07:45:04.637259+00:00'
+    source: auto-discovery:scotusblog
+  regulations:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.014369+00:00'
+    updated_at: '2026-08-26T07:39:58.485187+00:00'
+    source: auto-discovery:gdpr-eu
+  like:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.042130+00:00'
+    updated_at: '2026-08-26T07:45:27.431355+00:00'
+    source: auto-discovery:scotusblog
+  apply:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.072850+00:00'
+    updated_at: '2026-08-26T07:37:40.045037+00:00'
+    source: auto-discovery:rss
+  work:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.100907+00:00'
+    updated_at: '2026-08-26T07:46:24.830339+00:00'
+    source: auto-discovery:scotusblog
+  environments.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.130576+00:00'
+    updated_at: '2026-08-26T07:38:22.676747+00:00'
+    source: auto-discovery:gdpr-eu
+  protection regulations:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.160593+00:00'
+    updated_at: '2026-08-26T01:56:15.133124+00:00'
+    source: auto-discovery:gdpr-eu
+  regulations like:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.190808+00:00'
+    updated_at: '2026-08-10T06:08:33.190808+00:00'
+    source: auto-discovery:rss
+  like gdpr:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.220277+00:00'
+    updated_at: '2026-08-10T06:08:33.220277+00:00'
+    source: auto-discovery:rss
+  gdpr apply:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.253232+00:00'
+    updated_at: '2026-08-10T06:08:33.253232+00:00'
+    source: auto-discovery:rss
+  apply remote:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.284768+00:00'
+    updated_at: '2026-08-10T06:08:33.284768+00:00'
+    source: auto-discovery:rss
+  remote work:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.317132+00:00'
+    updated_at: '2026-08-26T07:40:00.527073+00:00'
+    source: auto-discovery:gdpr-eu
+  work environments.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.347499+00:00'
+    updated_at: '2026-08-26T07:38:22.833980+00:00'
+    source: auto-discovery:gdpr-eu
+  data protection regulations:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.378660+00:00'
+    updated_at: '2026-08-26T01:56:15.177071+00:00'
+    source: auto-discovery:gdpr-eu
+  protection regulations like:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.409265+00:00'
+    updated_at: '2026-08-10T06:08:33.409265+00:00'
+    source: auto-discovery:rss
+  regulations like gdpr:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.444785+00:00'
+    updated_at: '2026-08-10T06:08:33.444785+00:00'
+    source: auto-discovery:rss
+  like gdpr apply:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.476958+00:00'
+    updated_at: '2026-08-10T06:08:33.476958+00:00'
+    source: auto-discovery:rss
+  gdpr apply remote:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.511423+00:00'
+    updated_at: '2026-08-10T06:08:33.511423+00:00'
+    source: auto-discovery:rss
+  apply remote work:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.544395+00:00'
+    updated_at: '2026-08-10T06:08:33.544395+00:00'
+    source: auto-discovery:rss
+  remote work environments.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.576715+00:00'
+    updated_at: '2026-08-26T07:38:22.879559+00:00'
+    source: auto-discovery:gdpr-eu
+  organizations:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.612864+00:00'
+    updated_at: '2026-08-26T07:40:08.716770+00:00'
+    source: auto-discovery:gdpr-eu
+  adopt:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.646120+00:00'
+    updated_at: '2026-08-10T06:08:33.646120+00:00'
+    source: auto-discovery:rss
+  appropriate:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.681462+00:00'
+    updated_at: '2026-08-10T06:08:33.681462+00:00'
+    source: auto-discovery:rss
+  security:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.717465+00:00'
+    updated_at: '2026-08-26T07:44:58.663811+00:00'
+    source: auto-discovery:scotusblog
+  measures:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.754489+00:00'
+    updated_at: '2026-08-26T05:57:39.973833+00:00'
+    source: auto-discovery:gdpr-eu
+  protect:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.790460+00:00'
+    updated_at: '2026-08-26T07:42:30.978302+00:00'
+    source: auto-discovery:rss
+  personal:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.825962+00:00'
+    updated_at: '2026-08-26T07:40:09.716971+00:00'
+    source: auto-discovery:gdpr-eu
+  employees:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.864070+00:00'
+    updated_at: '2026-08-10T06:08:33.864070+00:00'
+    source: auto-discovery:rss
+  remotely.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.902474+00:00'
+    updated_at: '2026-08-26T07:40:00.268555+00:00'
+    source: auto-discovery:gdpr-eu
+  organizations must:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:33.993342+00:00'
+    updated_at: '2026-08-26T07:38:23.024869+00:00'
+    source: auto-discovery:gdpr-eu
+  must adopt:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:34.086651+00:00'
+    updated_at: '2026-08-10T06:08:34.086651+00:00'
+    source: auto-discovery:rss
+  adopt appropriate:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:34.176072+00:00'
+    updated_at: '2026-08-10T06:08:34.176072+00:00'
+    source: auto-discovery:rss
+  appropriate security:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:34.230165+00:00'
+    updated_at: '2026-08-10T06:08:34.230165+00:00'
+    source: auto-discovery:rss
+  security measures:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:34.275460+00:00'
+    updated_at: '2026-08-26T05:57:40.035140+00:00'
+    source: auto-discovery:gdpr-eu
+  measures protect:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:34.317947+00:00'
+    updated_at: '2026-08-10T06:08:34.317947+00:00'
+    source: auto-discovery:rss
+  protect personal:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:34.412620+00:00'
+    updated_at: '2026-08-26T07:40:09.766187+00:00'
+    source: auto-discovery:gdpr-eu
+  personal data:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:34.487588+00:00'
+    updated_at: '2026-08-26T07:40:09.813994+00:00'
+    source: auto-discovery:gdpr-eu
+  data when:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:34.547192+00:00'
+    updated_at: '2026-08-10T06:08:34.547192+00:00'
+    source: auto-discovery:rss
+  when employees:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:34.590036+00:00'
+    updated_at: '2026-08-10T06:08:34.590036+00:00'
+    source: auto-discovery:rss
+  employees work:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:34.658004+00:00'
+    updated_at: '2026-08-10T06:08:34.658004+00:00'
+    source: auto-discovery:rss
+  work remotely.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:34.734461+00:00'
+    updated_at: '2026-08-26T01:56:33.391686+00:00'
+    source: auto-discovery:gdpr-eu
+  organizations must adopt:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:34.780505+00:00'
+    updated_at: '2026-08-10T06:08:34.780505+00:00'
+    source: auto-discovery:rss
+  must adopt appropriate:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:34.828448+00:00'
+    updated_at: '2026-08-10T06:08:34.828448+00:00'
+    source: auto-discovery:rss
+  adopt appropriate security:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:34.877047+00:00'
+    updated_at: '2026-08-10T06:08:34.877047+00:00'
+    source: auto-discovery:rss
+  appropriate security measures:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:34.927740+00:00'
+    updated_at: '2026-08-10T06:08:34.927740+00:00'
+    source: auto-discovery:rss
+  security measures protect:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:34.980924+00:00'
+    updated_at: '2026-08-10T06:08:34.980924+00:00'
+    source: auto-discovery:rss
+  measures protect personal:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:35.035726+00:00'
+    updated_at: '2026-08-10T06:08:35.035726+00:00'
+    source: auto-discovery:rss
+  protect personal data:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:35.085275+00:00'
+    updated_at: '2026-08-26T07:40:09.860458+00:00'
+    source: auto-discovery:gdpr-eu
+  personal data when:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:35.135222+00:00'
+    updated_at: '2026-08-10T06:08:35.135222+00:00'
+    source: auto-discovery:rss
+  data when employees:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:35.183925+00:00'
+    updated_at: '2026-08-10T06:08:35.183925+00:00'
+    source: auto-discovery:rss
+  when employees work:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:35.228963+00:00'
+    updated_at: '2026-08-10T06:08:35.228963+00:00'
+    source: auto-discovery:rss
+  employees work remotely.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:35.311420+00:00'
+    updated_at: '2026-08-10T06:08:35.311420+00:00'
+    source: auto-discovery:rss
+  compliance:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:35.361667+00:00'
+    updated_at: '2026-08-26T07:40:40.084541+00:00'
+    source: auto-discovery:gdpr-eu
+  local:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:35.409628+00:00'
+    updated_at: '2026-08-26T07:37:38.699092+00:00'
+    source: auto-discovery:rss
+  national:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:35.461788+00:00'
+    updated_at: '2026-08-26T07:46:24.783562+00:00'
+    source: auto-discovery:scotusblog
+  directives:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:35.577910+00:00'
+    updated_at: '2026-08-26T07:40:00.075903+00:00'
+    source: auto-discovery:gdpr-eu
+  essential:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:35.629100+00:00'
+    updated_at: '2026-08-26T07:46:24.681325+00:00'
+    source: auto-discovery:scotusblog
+  during:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:35.685701+00:00'
+    updated_at: '2026-08-26T07:43:51.923604+00:00'
+    source: auto-discovery:scotusblog
+  transition:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:35.735586+00:00'
+    updated_at: '2026-08-26T01:53:14.728684+00:00'
+    source: auto-discovery:rss
+  work.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:35.788768+00:00'
+    updated_at: '2026-08-26T07:38:22.977553+00:00'
+    source: auto-discovery:gdpr-eu
+  compliance with:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:35.844828+00:00'
+    updated_at: '2026-08-26T07:40:00.481063+00:00'
+    source: auto-discovery:gdpr-eu
+  with local:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:08:35.899494+00:00'
+    updated_at: '2026-08-10T06:08:35.899494+00:00'
+    source: auto-discovery:rss

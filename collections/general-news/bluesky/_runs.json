@@ -1,0 +1,18 @@
+[
+  {
+    "collection_id": "col-20260815T190405-41d81294",
+    "timestamp": "2026-08-15T19:04:36.094618+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts (source: bluesky): [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts (source: bluesky): [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30532.0
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "id": "3605e18adc85433e",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/carros-iates-e-relogios-de-luxo-advogados-de-andrew-tate-dizem-que-influencer-aparenta-ser-extremamente-rico-para-gerar-atencao-online/",
+  "title": "Advogados defendem que Andrew Tate finge vida luxuosa",
+  "content": "O influencer britânico-americano Andrew Tate a conduzir um Ferrari SF90 Stradale em Bucareste, em 2024",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T20:01:28+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "78337930-23bc-4bc9-aaee-82cd720ae406",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

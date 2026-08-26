@@ -1,0 +1,24 @@
+{
+  "id": "8a0bc580e4c10b26",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/nasa-nancy-grace-roman-space-telescope-hidden-facets-of-universe/",
+  "title": "NASA’s New Space Telescope Is Poised to Discover Hidden Facets of the Universe",
+  "content": "The Nancy Grace Roman Space Telescope is expected to discover as many as 200,000 new planets and reveal details about the elusive nature of dark matter and dark energy.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-24T09:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3f398a19-f389-4f7b-af55-242e24a32e80",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "d871d7af98dc3961",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/movies/movie-news/cinespia-october-2026-lineup-hollywood-forever-1236679963/",
+  "title": "Cinespia Unveils Spooky October Lineup With Your Favorite Halloween Horrors (Exclusive)",
+  "content": "Following its 25th anniversary season, L.A.'s iconic outdoor cinematic experience will showcase four horror classics to embrace Halloween.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T16:00:00+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ba034129-881d-4840-ad8a-d6ca77dadca8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

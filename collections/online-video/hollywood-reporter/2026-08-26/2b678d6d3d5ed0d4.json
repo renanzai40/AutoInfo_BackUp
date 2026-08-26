@@ -1,0 +1,24 @@
+{
+  "id": "2b678d6d3d5ed0d4",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/music/music-news/dolly-parton-dead-country-music-1236680877/",
+  "title": "Dolly Parton, Effervescent Queen of Country Music and Just About Everything Else, Dies at 80",
+  "content": "A shrewd dealmaker who launched Dollywood, the “Jolene” and “I Will Always Love You” singer-songwriter also starred in the films ‘9 to 5,’ ‘Steel Magnolias’ and ‘Rhinestone’ and captivated the world with her grace and wit.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T17:57:50+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "dcda3877-77c4-45a4-b38a-1f7896acafa8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

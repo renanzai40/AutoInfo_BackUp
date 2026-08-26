@@ -1,0 +1,50 @@
+{
+  "id": 73661034,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/73661034/how-to-integrate-an-android-aar-library-file-into-a-flutter-project",
+  "title": "how to integrate an android .aar library file into a flutter project",
+  "content": "how to integrate an android .aar library file into a flutter project",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-25T15:17:44.244583+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "android",
+      "flutter",
+      "dependencies",
+      "aar"
+    ],
+    "owner": {
+      "account_id": 17474270,
+      "reputation": 67,
+      "user_id": 12669460,
+      "user_type": "registered",
+      "profile_image": "https://lh3.googleusercontent.com/-u6JNo8LjtP8/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rdzOfUdGtnIWVV3_leBLvwFVg-ibw/s256-rj/photo.jpg",
+      "display_name": "Nns_ninteyFIve",
+      "link": "https://stackoverflow.com/users/12669460/nns-ninteyfive"
+    },
+    "is_answered": true,
+    "view_count": 1907,
+    "accepted_answer_id": 73661121,
+    "answer_count": 1,
+    "score": 0,
+    "last_activity_date": 1787670268,
+    "creation_date": 1662720819,
+    "last_edit_date": 1787670268,
+    "question_id": 73661034,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/73661034/how-to-integrate-an-android-aar-library-file-into-a-flutter-project",
+    "title": "how to integrate an android .aar library file into a flutter project"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2a956cdd-f101-4e4e-8b42-8e856e825ae7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

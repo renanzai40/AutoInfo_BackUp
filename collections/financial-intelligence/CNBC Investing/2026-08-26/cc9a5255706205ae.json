@@ -1,0 +1,24 @@
+{
+  "id": "cc9a5255706205ae",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/25/how-to-find-missing-money-and-what-to-do-if-you-get-it.html",
+  "title": "Are you richer than you think? How to find out—and what experts say to do if you are",
+  "content": "States are holding billions of dollars in unclaimed property, and some of it may be yours.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-25T19:00:02+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ee7b24a7-d6c5-4d38-a3e2-094dd876bf5e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

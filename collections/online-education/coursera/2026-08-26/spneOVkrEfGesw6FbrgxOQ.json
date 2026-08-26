@@ -1,0 +1,27 @@
+{
+  "id": "spneOVkrEfGesw6FbrgxOQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "AI-Assisted Code Modernization",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "spneOVkrEfGesw6FbrgxOQ",
+    "slug": "ai-assisted-code-modernization",
+    "name": "AI-Assisted Code Modernization"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "dd4187a1-0b6a-4415-8631-642423c434e3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

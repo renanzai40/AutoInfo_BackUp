@@ -1,0 +1,22 @@
+{
+  "id": "9bc3175e727bf271",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/amazon-uses-your-twitch-content-to-train-its-ai-how-to-opt-out/",
+  "title": "Amazon Can Use Your Twitch Content to Train Its AI—Unless You Opt Out",
+  "content": "When Twitch announced that streamers could opt out, thousands of users questioned why their content was being used to train AI models in the first place.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-15T09:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b861b440-b7e5-448d-ae02-c5d0ce0cbbed"
+}

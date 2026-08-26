@@ -1,0 +1,24 @@
+{
+  "id": "3e5a004c15e163e5",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/mujer/estar-bien/que-es-adenomiosis-enfermedad-padece-vecina-rubia-afecta-35-mujeres_7029079_0.html",
+  "title": "Qué es la adenomiosis, la enfermedad que padece La Vecina Rubia y que afecta a un 35% de las mujeres",
+  "content": "La 'influencer' rompe su silencio y cuenta que padece adenomiosis y endometriosis profunda: \"Me he decidido a hablar de ello porque creo que puede ser de ayuda para todas\".",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T12:40:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0fe02f63-de47-41cf-9764-9806ad8d9770",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

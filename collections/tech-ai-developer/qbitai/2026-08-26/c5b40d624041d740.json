@@ -1,0 +1,24 @@
+{
+  "id": "c5b40d624041d740",
+  "source_name": "qbitai",
+  "source_type": "rss",
+  "source_url": "https://www.qbitai.com/2026/08/479192.html",
+  "title": "开源国产8B模型，比肩闭源Image 2了！",
+  "content": "SenseNova U1.5 Lite",
+  "content_type": "text",
+  "source_platform": "qbitai",
+  "collected_at": "2026-08-25T06:53:26+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.qbitai.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "48515c83-6e01-4342-adeb-9792ae26feab",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

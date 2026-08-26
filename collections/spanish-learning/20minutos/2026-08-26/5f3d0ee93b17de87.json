@@ -1,0 +1,24 @@
+{
+  "id": "5f3d0ee93b17de87",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/lainformacion/economia-y-finanzas/garamendi-sera-unico-candidato-presidencia-ceoe-tras-cerrarse-plazo-para-presentar-alternativas_7029018_0.html",
+  "title": "Garamendi será el único candidato a la CEOE tras cerrarse el plazo para presentar alternativas",
+  "content": "El comité ejecutivo de la CEOE aprobó en 2023 la supresión de la limitación a dos mandatos consecutivos de cuatro años para el presidente de la patronal, organización que Antonio Garamendi dirige desde 2018.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T09:34:42+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0a0bb914-43c5-479b-9b2c-7ff7200c0973",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

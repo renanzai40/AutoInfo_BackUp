@@ -1,0 +1,24 @@
+{
+  "id": "f1b681bc0ffad63e",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/travel/golf-villa-retreats-shuts-down-and-cancels-all-trips-refunds-available",
+  "title": "Another travel company shuts down and cancels all trips, refunds available",
+  "content": "All package holidays including plane tickets and accommodation have been canceled.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-22T22:35:57+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1e3e28b5-fdc8-4114-9229-7d7bb49ec138",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

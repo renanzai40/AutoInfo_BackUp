@@ -1,0 +1,24 @@
+{
+  "id": "c5173b24cda20f88",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0605/c1002-40494895.html",
+  "title": "欧洲央行宣布下调欧元区关键利率",
+  "content": "<p style=\"text-indent: 2em;\">新华社快讯：欧洲中央银行5日宣布，将欧元区三大关键利率分别下调25个基点。这是欧洲央行一年内第八次降息。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-05T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "271d3fbf-c21f-4790-a83c-3ccb20cb7614",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

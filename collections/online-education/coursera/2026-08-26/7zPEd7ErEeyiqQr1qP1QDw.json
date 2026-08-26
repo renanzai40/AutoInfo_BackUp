@@ -1,0 +1,27 @@
+{
+  "id": "7zPEd7ErEeyiqQr1qP1QDw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "إختيار الهدف المثالي للحملات الإعلانية على Facebook",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "7zPEd7ErEeyiqQr1qP1QDw",
+    "slug": "iikhtiar-alhadaf-almithalii-lilhamalat-aliielaniat-ealaa-facebook",
+    "name": "إختيار الهدف المثالي للحملات الإعلانية على Facebook"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8fa65ae3-31b8-46d6-9668-ab13b7b6b5b1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

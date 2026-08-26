@@ -1,0 +1,24 @@
+{
+  "id": "b32d1dc7335e7b62",
+  "source_name": "pitchfork",
+  "source_type": "rss",
+  "source_url": "https://pitchfork.com/story/tinashe-mike-shabb-lucy-bedroque-this-weeks-pitchfork-selects-playlist/",
+  "title": "Tinashe, Mike Shabb, Lucy Bedroque, and More: This Week’s Pitchfork Selects Playlist",
+  "content": "Our weekly playlist highlights songs that our writers, editors, and contributors are listening to on repeat",
+  "content_type": "text",
+  "source_platform": "pitchfork",
+  "collected_at": "2026-08-24T16:35:22+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://pitchfork.com/feed/feed-news/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b9fb159b-418c-450a-8ab4-edd6cc00084b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

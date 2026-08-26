@@ -1,0 +1,24 @@
+{
+  "id": "1c8b027bf2fca2e0",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gonzoo/un-tiktoker-suma-que-necesita-para-alquilar-un-piso-madrid-13-500-euros_7028841_0.html",
+  "title": "Un TikToker suma todo el dinero que necesita para alquilar un piso en Madrid",
+  "content": "Noel Horcajada se encontró que por una vivienda de 1.500 euros al mes debía aportar dos de fianza y seis de aval bancario, así como una estancia mínima de tres años o perdía tres meses de pago.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T07:42:32+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8108a9b7-eb01-43c9-9b9c-aaf0b6367ded",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

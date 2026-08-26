@@ -1,0 +1,24 @@
+{
+  "id": "02be43390c03e283",
+  "source_name": "juejin",
+  "source_type": "rss",
+  "source_url": "https://juejin.cn/post/7677803387145142281",
+  "title": "WiredTiger History Store：文档库里的第三种 MVCC",
+  "content": "WiredTiger 把旧版本挪到 History Store，eviction 后仍能服务快照读。本文对照 PostgreSQL 堆版本与 InnoDB undo，交代 Lookaside 到 Du",
+  "content_type": "text",
+  "source_platform": "juejin",
+  "collected_at": "2026-08-25T13:14:28+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://juejin.cn/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "45fb2ade-1acf-4f43-adb5-43b3a44ce9b2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

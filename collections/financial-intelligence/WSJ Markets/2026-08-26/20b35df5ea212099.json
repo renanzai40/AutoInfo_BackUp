@@ -1,0 +1,24 @@
+{
+  "id": "20b35df5ea212099",
+  "source_name": "WSJ Markets",
+  "source_type": "rss",
+  "source_url": "https://www.wsj.com/articles/u-s-natural-gas-futures-fall-on-shifting-weather-forecasts-1ef3e457?mod=rss_markets_main",
+  "title": "Natural Gas Falls on Shifting Weather Forecasts",
+  "content": "U.S. natural gas futures fell after weekend updates took some of the chill out of early February weather forecasts.",
+  "content_type": "text",
+  "source_platform": "WSJ Markets",
+  "collected_at": "2025-01-27T09:05:00-05:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7c1ec01b-6c08-4caa-8279-fe9f03abbc56",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

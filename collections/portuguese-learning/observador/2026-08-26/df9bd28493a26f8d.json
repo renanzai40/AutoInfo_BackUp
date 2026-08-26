@@ -1,0 +1,24 @@
+{
+  "id": "df9bd28493a26f8d",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/programas/e-o-resto-e-historia/e-o-resto-e-historia-em-video-como-aprenderam-os-portugueses-a-ler-e-a-escrever/",
+  "title": "Como aprenderam os portugueses a ler e a escrever?",
+  "content": "Aquilo que é hoje óbvio não o foi durante séculos: quando começámos a aprender a ler e escrever; como foram evoluindo os níveis de literacia; e quando teve início o esforço de alfabetização geral?",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T19:00:20+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ca4903a5-3a1c-4390-8e2f-c974591339a5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

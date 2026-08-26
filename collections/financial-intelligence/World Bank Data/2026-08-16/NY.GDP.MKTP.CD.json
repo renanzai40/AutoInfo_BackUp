@@ -1,0 +1,35 @@
+{
+  "id": "NY.GDP.MKTP.CD",
+  "source_name": "World Bank Data",
+  "source_type": "api",
+  "source_url": "https://api.worldbank.org/v2/country/USA/indicator/NY.GDP.MKTP.CD",
+  "title": "United States",
+  "content": "30769700000000",
+  "content_type": "text",
+  "source_platform": "World Bank Data",
+  "collected_at": "2026-08-15T18:57:46.072123+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "indicator": {
+      "id": "NY.GDP.MKTP.CD",
+      "value": "GDP (current US$)"
+    },
+    "country": {
+      "id": "US",
+      "value": "United States"
+    },
+    "countryiso3code": "USA",
+    "date": "2025",
+    "value": 30769700000000,
+    "unit": "",
+    "obs_status": "",
+    "decimal": 0
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2ecf9ebd-f1aa-41bf-b415-2aebad9b7495"
+}

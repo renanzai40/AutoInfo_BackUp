@@ -1,0 +1,24 @@
+{
+  "id": "d1864e54f1926a67",
+  "source_name": "b2b-news-network",
+  "source_type": "rss",
+  "source_url": "https://www.b2bnn.com/2026/08/main-factors-that-help-small-businesses-scale-fast/",
+  "title": "Main Factors That Help Small Businesses Scale Fast",
+  "content": "You know the moment. Sales are solid, customers keep coming back, the product actually works and somehow the whole operation still feels one bad week away from falling apart. Scaling has nothing to do with working harder. It comes down to which systems and calls hold up once order volume triples in a month. Here&#8217;s [&#8230;]",
+  "content_type": "text",
+  "source_platform": "b2b-news-network",
+  "collected_at": "2026-08-25T14:24:49+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://b2bnn.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d07e0f63-b1c1-4c5e-9504-ca0c22f06a6b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

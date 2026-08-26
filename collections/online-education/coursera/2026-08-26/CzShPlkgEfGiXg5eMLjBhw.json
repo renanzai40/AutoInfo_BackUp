@@ -1,0 +1,27 @@
+{
+  "id": "CzShPlkgEfGiXg5eMLjBhw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Modern Spring Security & Cloud Integration",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "CzShPlkgEfGiXg5eMLjBhw",
+    "slug": "packt-modern-spring-security-and-cloud-integration",
+    "name": "Modern Spring Security & Cloud Integration"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6d868848-f7d5-49ce-8546-7e90dae5ead4",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

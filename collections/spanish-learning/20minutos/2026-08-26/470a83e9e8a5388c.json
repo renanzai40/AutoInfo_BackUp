@@ -1,0 +1,24 @@
+{
+  "id": "470a83e9e8a5388c",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/comunicacion/muere-los-67-anos-periodista-alfonso-nasarre-director-onda-madrid_7029093_0.html",
+  "title": "Muere a los 67 años el periodista Alfonso Nasarre, director de Onda Madrid",
+  "content": "Muere a los 67 años el periodista Alfonso Nasarre, director de Onda Madrid",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T11:42:36+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a6ba7c94-b4b8-4111-a8c1-9ff8e3473159",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

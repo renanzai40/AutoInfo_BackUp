@@ -1,0 +1,47 @@
+{
+  "id": 71697972,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/71697972/how-to-convert-png-jpeg-images-to-svg-with-imagemagick",
+  "title": "How to convert PNG/JPEG images to svg with ImageMagick?",
+  "content": "How to convert PNG/JPEG images to svg with ImageMagick?",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-15T19:01:40.189009+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "svg",
+      "colors",
+      "imagemagick",
+      "imagemagick-convert",
+      "potrace"
+    ],
+    "owner": {
+      "account_id": 22175877,
+      "reputation": 57,
+      "user_id": 16700503,
+      "user_type": "registered",
+      "profile_image": "https://lh3.googleusercontent.com/a-/AOh14GifTK3jG0tDXzsaJvH5xrB0fdFNsBGt7XVbi9Ykhw=k-s256",
+      "display_name": "Adi B.",
+      "link": "https://stackoverflow.com/users/16700503/adi-b"
+    },
+    "is_answered": false,
+    "view_count": 2409,
+    "answer_count": 1,
+    "score": 2,
+    "last_activity_date": 1786819687,
+    "creation_date": 1648754102,
+    "question_id": 71697972,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/71697972/how-to-convert-png-jpeg-images-to-svg-with-imagemagick",
+    "title": "How to convert PNG/JPEG images to svg with ImageMagick?"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a4ca03dd-f6e3-45b2-90de-7c33ca4bed50"
+}

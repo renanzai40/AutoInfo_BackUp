@@ -1,0 +1,24 @@
+{
+  "id": "b5feb3713728066d",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/tu-horoscopo-diario-miercoles-26-agosto-2026_7029352_0.html",
+  "title": "Consulta tu horóscopo diario del miércoles 26 de agosto de 2026",
+  "content": "Consultar el horóscopo de ayer, hoy y mañana en 20minutos.es",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T22:00:04+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "dc848d45-4e52-4f78-8bee-3faca325514a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "5c44b91d54557d04",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/real-estate/home-purchase-cancellations-help-homebuyers",
+  "title": "A canceled home sale could be good news for buyers",
+  "content": "A Redfin report revealed that 14% of home-buying deals were canceled in July.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-26T01:03:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ee8f8be6-994a-44bb-be45-9f7026b52e3a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

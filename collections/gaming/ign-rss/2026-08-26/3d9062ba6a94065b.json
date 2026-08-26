@@ -1,0 +1,24 @@
+{
+  "id": "3d9062ba6a94065b",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/robocop-tv-show-casts-dan-stevens-as-its-star",
+  "title": "RoboCop TV Show Casts Dan Stevens as Its Star",
+  "content": "Prime Video's RoboCop TV show has reportedly cast Dan Stevens as its star.",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T16:54:42+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "785ab7d7-a586-4dd5-a143-8b8b6b7850e5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

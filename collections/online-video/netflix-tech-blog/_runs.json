@@ -1,0 +1,88 @@
+[
+  {
+    "collection_id": "col-20260810T060419-ab51f01f",
+    "timestamp": "2026-08-10T06:06:43.349417+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 1622.0,
+    "trace_ids": [
+      "21564721-50ca-4f88-b1d0-52706384d168",
+      "a98f6f76-2843-4be5-a1df-6f6563111754",
+      "0ce587b4-5514-4445-a921-024c9f18c5c2",
+      "5b489a67-d2c9-4f28-9d3b-037aa9d5b867",
+      "1d085fe5-4009-4744-ae0a-fc27709cce30"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T151510-1a39b5d2",
+    "timestamp": "2026-08-25T15:15:50.194822+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 2136.0,
+    "trace_ids": [
+      "e5624481-fd81-4825-9fc7-9904bf9d1f19"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T153409-ed01b249",
+    "timestamp": "2026-08-25T15:34:48.667486+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 3294.0,
+    "trace_ids": [
+      "aa0781c4-0fe2-4bf4-aef1-be802799a7f0"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T154258-739c21b3",
+    "timestamp": "2026-08-25T15:43:27.147633+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 1870.0,
+    "trace_ids": [
+      "60794dca-d970-47b9-b608-d146f64b1556"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T155753-864e764b",
+    "timestamp": "2026-08-25T15:58:01.379137+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 1929.0,
+    "trace_ids": [
+      "ed9275f8-03b0-4b1a-ad0f-107e771c0461"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T162230-a871c583",
+    "timestamp": "2026-08-25T16:22:39.744344+00:00",
+    "status": "success",
+    "items_found": 10,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 2207.0,
+    "trace_ids": [
+      "23a2bacb-4145-4a84-94ad-e51bd635a66f",
+      "d83a0210-c7a6-44ed-9d0d-af030e95ed98",
+      "700c1cc9-4fc7-4c71-a33f-64e4dae8667f",
+      "b902a438-548c-477f-a5b1-9a18029f4bc4",
+      "b6139535-d345-4dbd-86df-ccae4002f35e"
+    ]
+  }
+]

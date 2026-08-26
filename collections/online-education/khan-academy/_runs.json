@@ -1,0 +1,146 @@
+[
+  {
+    "collection_id": "col-20260810T044950-4864ee4f",
+    "timestamp": "2026-08-10T04:49:56.046849+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.khanacademy.org/about/blog/feed (bozo): <unknown>:15:4: not well-formed (invalid token)",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.khanacademy.org/about/blog/feed (bozo): <unknown>:15:4: not well-formed (invalid token)"
+      }
+    ],
+    "duration_ms": 1512.0
+  },
+  {
+    "collection_id": "col-20260810T055858-112c56b2",
+    "timestamp": "2026-08-10T05:59:06.288471+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.khanacademy.org/about/blog/feed (bozo): <unknown>:15:4: not well-formed (invalid token)",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.khanacademy.org/about/blog/feed (bozo): <unknown>:15:4: not well-formed (invalid token)"
+      }
+    ],
+    "duration_ms": 1280.0
+  },
+  {
+    "collection_id": "col-20260812T182350-1ac49020",
+    "timestamp": "2026-08-12T18:23:55.115071+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.khanacademy.org/about/blog/feed (bozo): <unknown>:15:4: not well-formed (invalid token)",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.khanacademy.org/about/blog/feed (bozo): <unknown>:15:4: not well-formed (invalid token)"
+      }
+    ],
+    "duration_ms": 1064.0
+  },
+  {
+    "collection_id": "col-20260815T181030-ae72ea26",
+    "timestamp": "2026-08-15T18:10:35.732743+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.khanacademy.org/about/blog/feed (bozo): <unknown>:15:4: not well-formed (invalid token)",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.khanacademy.org/about/blog/feed (bozo): <unknown>:15:4: not well-formed (invalid token)"
+      }
+    ],
+    "duration_ms": 1100.0
+  },
+  {
+    "collection_id": "col-20260815T182038-eb2fbbd8",
+    "timestamp": "2026-08-15T18:20:43.706930+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.khanacademy.org/about/blog/feed (bozo): <unknown>:15:4: not well-formed (invalid token)",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.khanacademy.org/about/blog/feed (bozo): <unknown>:15:4: not well-formed (invalid token)"
+      }
+    ],
+    "duration_ms": 1053.0
+  },
+  {
+    "collection_id": "col-20260815T183252-2b091fc2",
+    "timestamp": "2026-08-15T18:32:54.219722+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.khanacademy.org/about/blog/feed (bozo): <unknown>:15:4: not well-formed (invalid token)",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.khanacademy.org/about/blog/feed (bozo): <unknown>:15:4: not well-formed (invalid token)"
+      }
+    ],
+    "duration_ms": 1764.0
+  },
+  {
+    "collection_id": "col-20260825T151610-cba0a08f",
+    "timestamp": "2026-08-25T15:16:22.707620+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.khanacademy.org/about/blog/feed (bozo): <unknown>:15:4: not well-formed (invalid token)",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.khanacademy.org/about/blog/feed (bozo): <unknown>:15:4: not well-formed (invalid token)"
+      }
+    ],
+    "duration_ms": 3519.0
+  },
+  {
+    "collection_id": "col-20260825T152636-120b9e36",
+    "timestamp": "2026-08-25T15:26:45.377442+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.khanacademy.org/about/blog/feed (bozo): <unknown>:15:4: not well-formed (invalid token)",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.khanacademy.org/about/blog/feed (bozo): <unknown>:15:4: not well-formed (invalid token)"
+      }
+    ],
+    "duration_ms": 1796.0
+  },
+  {
+    "collection_id": "col-20260825T154343-63f4c25e",
+    "timestamp": "2026-08-25T15:43:49.972938+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.khanacademy.org/about/blog/feed (bozo): <unknown>:15:4: not well-formed (invalid token)",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.khanacademy.org/about/blog/feed (bozo): <unknown>:15:4: not well-formed (invalid token)"
+      }
+    ],
+    "duration_ms": 1008.0
+  }
+]

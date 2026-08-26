@@ -1,0 +1,27 @@
+{
+  "id": "egap7M0cEe-xcgr_7YhUxQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Modelos predictivos con Machine Learning",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "egap7M0cEe-xcgr_7YhUxQ",
+    "slug": "modelos-predictivos-con-machine-learning",
+    "name": "Modelos predictivos con Machine Learning"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "23e8a8c5-c65d-46ae-9c23-310fc25b390c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

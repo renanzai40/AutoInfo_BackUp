@@ -1,0 +1,24 @@
+{
+  "id": "ebd6aca6972a1cd0",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/governo-cabo-verdiano-quer-mais-alunos-no-ensino-tecnico-para-qualificar-mao-de-obra/",
+  "title": "Cabo-Verde quer mais alunos no ensino técnico",
+  "content": "O ministro da Educação considerou anormal apenas cerca de 1.400 seguirem a via técnica",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T23:13:53+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c3074950-3ace-4779-9c3d-079413b58811",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

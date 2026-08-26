@@ -1,0 +1,24 @@
+{
+  "id": "9fa9902414d25cf2",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/proisshestviya/28044261",
+  "title": "Жителя Водяного Запорожской области ранили возле школы из-за атаки ВСУ",
+  "content": "В селе Великая Знаменка мужчина получил ранения",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T21:32:17+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f2a24eda-5b65-4b8a-9720-5248dd569953",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

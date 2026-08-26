@@ -1,0 +1,24 @@
+{
+  "id": "3b7d7551242f3095",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/television/ivan-armesto-habla-su-reciente-paternidad-los-60-anos-fue-una-nina-buscada-es-momento-perfecto_7029290_0.html",
+  "title": "Iván Armesto habla de su reciente paternidad a los 60 años: \"Fue una niña buscada, es el momento perfecto\"",
+  "content": "Armesto, que concursó en 'Gran Hermano 1', ha hablado con 'El verano se mueve' de su nueva etapa.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T18:20:10+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "403683e5-962d-4028-8261-bd06ac5f28fb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

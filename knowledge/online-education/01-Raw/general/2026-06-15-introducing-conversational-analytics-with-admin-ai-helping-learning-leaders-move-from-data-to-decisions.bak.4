@@ -1,0 +1,54 @@
+---
+title: 'Introducing Conversational Analytics with Admin AI: Helping Learning Leaders Move from Data to Decisions'
+domain: online-education
+tier: 01-Raw
+entry_id: online-education-general-introducing-conversational-analytics-with-admin-ai-helping-learning-leaders-move-from-data-to-decisions
+source_url: https://blog.coursera.org/introducing-admin-ai/
+source_type: rss
+source_platform: coursera-blog
+collected_at: '2026-06-15T13:00:00+00:00'
+summary: Coursera is launching a pilot of Admin AI, a purpose-built agentic experience that uses conversational analytics
+  to help learning leaders analyze data more efficiently. This tool is designed to reduce manual data analysis efforts and
+  enable quicker decision-making.
+tags: []
+quality_tier: 2
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 70.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 18aa10d1-d290-4898-90dd-5ad77bde762a
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<p>Today, we’re launching the pilot of Admin AI, a purpose-built agentic experience designed to reduce the burden of manual data analysis. </p>
+<p>The post <a href="https://blog.coursera.org/introducing-admin-ai/">Introducing Conversational Analytics with Admin AI: Helping Learning Leaders Move from Data to Decisions</a> appeared first on <a href="https://blog.coursera.org">Coursera Blog</a>.</p>
+
+## Summary
+Coursera is launching a pilot of Admin AI, a purpose-built agentic experience that uses conversational analytics to help learning leaders analyze data more efficiently. This tool is designed to reduce manual data analysis efforts and enable quicker decision-making.
+
+## Key Points
+- Admin AI is a new AI-driven tool introduced by Coursera for conversational analytics.
+- The tool aims to reduce the burden of manual data analysis for learning leaders.
+- It focuses on helping users move from data insights to actionable decisions.
+- The launch is a pilot program, indicating an early-stage rollout.
+- Admin AI is described as a purpose-built agentic experience, emphasizing its specialized design.
+
+
+## Entities
+- **Admin AI** (technology, relevance=)
+- **Coursera** (org, relevance=)
+- **Conversational Analytics** (concept, relevance=)
+- **Learning Leaders** (concept, relevance=)

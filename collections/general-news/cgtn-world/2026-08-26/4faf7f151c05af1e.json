@@ -1,0 +1,24 @@
+{
+  "id": "4faf7f151c05af1e",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/Xi-Jordan-s-king-attend-signing-ceremony-of-cooperation-documents-1PS4mX6Wp3O/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Xi, Jordan's king attend signing ceremony of cooperation documents",
+  "content": "Chinese President Xi Jinping and King of the Hashemite Kingdom of Jordan Abdullah II ibn Al Hussein attended a signing ceremony of cooperation documents in Beijing on Monday.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T10:50:04+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d2ca61ba-6954-4853-9f2e-2b9d343e5ba5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

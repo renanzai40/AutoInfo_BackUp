@@ -1,0 +1,24 @@
+{
+  "id": "a84caee33b14453f",
+  "source_name": "producthunt",
+  "source_type": "rss",
+  "source_url": "https://www.producthunt.com/products/contrive",
+  "title": "Contrive",
+  "content": "<p>\n            Search and act across all your work apps\n          </p>\n          <p>\n            <a href=\"https://www.producthunt.com/products/contrive?utm_campaign=producthunt-atom-posts-feed&amp;utm_medium=rss-feed&amp;utm_source=producthunt-atom-posts-feed\">Discussion</a>\n            |\n            <a href=\"https://www.producthunt.com/r/p/1229798?app_id=339\">Link</a>\n          </p>",
+  "content_type": "text",
+  "source_platform": "producthunt",
+  "collected_at": "2026-08-23T01:19:57-07:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.producthunt.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "40a3b993-2aad-476f-8cc4-571882c22cdc",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

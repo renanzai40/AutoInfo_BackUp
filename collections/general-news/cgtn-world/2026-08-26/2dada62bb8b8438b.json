@@ -1,0 +1,24 @@
+{
+  "id": "2dada62bb8b8438b",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/What-you-need-to-know-about-the-upcoming-SCO-summit-as-it-turns-25-1PRP0xHWqGI/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "What you need to know about the upcoming SCO summit as it turns 25",
+  "content": "Founded in 2001 to address regional security concerns, the SCO has evolved into a broad-based organization covering security, economic cooperation, connectivity, digital development and cultural exchanges. Its 25th anniversary comes at a time when countries across the world are facing growing uncertainties, making regional cooperation and stability increasingly important.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T07:25:16+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4f89974f-c841-45ac-8a70-cb0fab641a22",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

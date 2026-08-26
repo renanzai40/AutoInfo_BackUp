@@ -1,0 +1,22 @@
+{
+  "id": "14eaebe667c9ce59",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/made-by-google-2026-everything-announced",
+  "title": "Made By Google 2026 Live Blog: Get Ready For the Pixel 11",
+  "content": "Every year, Google holds the Made By Google event, where the company reveals its flagship mobile hardware for the next year. This time around, we already know the Pixel 11 is going to be there, but there are sure to be a few surprises up Google's sleeve.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-12T17:15:33+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d5251fd8-9a61-4ffb-a5ed-7b712c6977c3"
+}

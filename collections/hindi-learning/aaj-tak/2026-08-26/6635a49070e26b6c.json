@@ -1,0 +1,24 @@
+{
+  "id": "6635a49070e26b6c",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/short-videos/video/mandsaur-hospital-dog-stole-jewelry-bag-cctv-video-latabai-police-jewelry-recovery-mmtc-2629952-2026-08-25?utm_source=rssfeed",
+  "title": "MP के मंदसौर अस्पताल से ज्वेलरी भरा बैग ले भागा कुत्ता",
+  "content": "मध्य प्रदेश के मंदसौर जिला अस्पताल से करीब 4 लाख रुपये के गहनों और नकदी से भरा बैग गायब हो गया। CCTV में चौंकाने वाला खुलासा हुआ कि बैग एक कुत्ता मुंह में दबाकर ले गया था। पुलिस ने CCTV के जरिए कुत्ते की गतिविधियां ट्रेस कर बैग बरामद कर लिया। महिला ने राहत की सांस ली।",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T22:31:26+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f611b539-ca17-4fb4-aebf-ff413ee0dbb3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

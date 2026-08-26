@@ -1,0 +1,24 @@
+{
+  "id": "aa5ed79a89d326bf",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/samsung-odyssey-g9-gaming-monitor-deal-august-2026",
+  "title": "Samsung's Absolutely Massive 57\" Dual 4K Gaming Monitor Drops to the Lowest Price I've Ever Seen",
+  "content": "Bigger is better.",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T16:20:00+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "80611ad2-c49d-4dea-9620-5775565d854e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

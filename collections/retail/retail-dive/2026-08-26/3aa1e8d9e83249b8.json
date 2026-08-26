@@ -1,0 +1,24 @@
+{
+  "id": "3aa1e8d9e83249b8",
+  "source_name": "retail-dive",
+  "source_type": "rss",
+  "source_url": "https://www.retaildive.com/news/gap-inc-entertainment-executive-hire-walmart-alum/828598/",
+  "title": "Gap Inc. taps Walmart alum in ‘fashiontainment’ push",
+  "content": "<figure><div><img src=\"https://imgproxy.divecdn.com/JVO-1NoH5E4xIWD-kRZfwz0SCO40cz-xK-_-jKO5yEY/g:nowe:42:15/c:1877:1060/rs:fill:1600:900:1/Z3M6Ly9kaXZlc2l0ZS1zdG9yYWdlL2RpdmVpbWFnZS9KdXN0aW5fQnJldG9uLmpwZw==.webp\" /></div></figure><p>Justin Breton is joining the retailer as vice president of development and will report to entertainment chief Pam Kaufman.</p>",
+  "content_type": "text",
+  "source_platform": "retail-dive",
+  "collected_at": "2026-08-24T12:04:00-04:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.retaildive.com/feeds/news/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "021b38bc-f344-4438-8f1b-a80e4b046814",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

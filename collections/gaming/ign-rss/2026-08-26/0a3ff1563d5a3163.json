@@ -1,0 +1,24 @@
+{
+  "id": "0a3ff1563d5a3163",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/sony-playstation-27-gaming-monitor-review",
+  "title": "Sony PlayStation 27\" Gaming Monitor Review",
+  "content": "Sony’s first PlayStation monitor has landed. It’s surprisingly modest and practically useful, but is it worth paying extra for?",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T13:00:00+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1a639a84-52b1-4a00-ba51-34f7560c7a84",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

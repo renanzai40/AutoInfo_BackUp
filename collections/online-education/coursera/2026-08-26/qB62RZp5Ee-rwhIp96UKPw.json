@@ -1,0 +1,27 @@
+{
+  "id": "qB62RZp5Ee-rwhIp96UKPw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Advancing Mask Technology for Semiconductors",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "qB62RZp5Ee-rwhIp96UKPw",
+    "slug": "advancing-mask-technology-for-semiconductors",
+    "name": "Advancing Mask Technology for Semiconductors"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0d272e6f-47ba-42aa-8d83-f530c6076b88",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

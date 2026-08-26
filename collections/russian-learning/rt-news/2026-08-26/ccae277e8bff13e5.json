@@ -1,0 +1,24 @@
+{
+  "id": "ccae277e8bff13e5",
+  "source_name": "rt-news",
+  "source_type": "rss",
+  "source_url": "https://www.rt.com/russia/644620-armenia-kocharyan-corruption-detention/?utm_source=rss&utm_medium=rss&utm_campaign=RSS",
+  "title": "Armenia’s pro-EU prime minister targets former rival",
+  "content": "<img align=\"left\" alt=\"Preview\" src=\"https://mf.b37mrtl.ru/files/2026.08/thumbnail/6a8d829920302769e92760c3.jpg\" style=\"margin-right: 10px;\" /> Former Armenian President Robert Kocharyan and his son have been detained in a corruption probe <br /><a href=\"https://www.rt.com/russia/644620-armenia-kocharyan-corruption-detention/?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=RSS\">Read Full Article at RT.com</a>",
+  "content_type": "text",
+  "source_platform": "rt-news",
+  "collected_at": "2026-08-25T12:14:33+00:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.rt.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a5aa5ac0-3dd3-4334-9de8-b85f9a2a8565",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

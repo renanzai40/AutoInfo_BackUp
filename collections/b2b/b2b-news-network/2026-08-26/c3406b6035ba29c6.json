@@ -1,0 +1,24 @@
+{
+  "id": "c3406b6035ba29c6",
+  "source_name": "b2b-news-network",
+  "source_type": "rss",
+  "source_url": "https://www.b2bnn.com/2026/08/case-study-how-trois-rivieres-turned-an-ericsson-5g-router-into-its-bus-fleets-onboard-computer/",
+  "title": "Case Study: How Trois-Rivières Turned an Ericsson 5G Router Into Its Bus Fleet’s Onboard Computer",
+  "content": "Public buses tend to accumulate technology one box at a time. A fare system arrives from one vendor. Passenger displays come from another. Cameras, vehicle-location tools, automated announcements, ridership counters and driver communications are added over years, each with its own hardware, connections and maintenance requirements. At the Société de transport de Trois-Rivières (STTR), that [&#8230;]",
+  "content_type": "text",
+  "source_platform": "b2b-news-network",
+  "collected_at": "2026-08-25T12:43:47+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://b2bnn.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e7c4a916-8f6e-472f-b4d6-0ca1244ddd80",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

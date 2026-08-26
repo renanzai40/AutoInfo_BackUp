@@ -1,0 +1,66 @@
+{
+  "id": "42590050",
+  "source_name": "pubmed",
+  "source_type": "api",
+  "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42590050&retmode=xml",
+  "title": "Sequencing Matters: Comparative Effectiveness of Density-Gradient Centrifugation and MACS for Enhancing Sperm Quality and DNA Integrity.",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "pubmed",
+  "collected_at": "2026 Jul 30",
+  "language": "",
+  "domain": "medical-research",
+  "topic_tags": [
+    "DNA fragmentation",
+    "assisted reproductive technology",
+    "centrifugation",
+    "density gradient",
+    "immunomagnetic separation",
+    "infertility",
+    "intracytoplasmic",
+    "male",
+    "semen analysis",
+    "sperm injections",
+    "spermatozoa"
+  ],
+  "quality_tier": 1,
+  "raw_data": {
+    "pmid": "42590050",
+    "pmc_id": "",
+    "authors": [
+      {
+        "lastname": "Pinggera",
+        "firstname": "Germar-Michael",
+        "initials": "GM"
+      },
+      {
+        "lastname": "Piatti",
+        "firstname": "Elisabetta",
+        "initials": "E"
+      },
+      {
+        "lastname": "Pinggera",
+        "firstname": "Valentina Elisa Maria",
+        "initials": "VEM"
+      },
+      {
+        "lastname": "Bellavia",
+        "firstname": "Marina",
+        "initials": "M"
+      },
+      {
+        "lastname": "Colpi",
+        "firstname": "Giovanni Maria",
+        "initials": "GM"
+      }
+    ],
+    "journal": "Journal of clinical medicine",
+    "pub_date": "2026 Jul 30",
+    "doi": "10.3390/jcm15155945",
+    "mesh_terms": []
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "eb54872f-9a65-4479-9ddf-f228508b42a9"
+}

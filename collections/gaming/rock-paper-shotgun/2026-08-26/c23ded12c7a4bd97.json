@@ -1,0 +1,24 @@
+{
+  "id": "c23ded12c7a4bd97",
+  "source_name": "rock-paper-shotgun",
+  "source_type": "rss",
+  "source_url": "https://www.rockpapershotgun.com/the-sunday-papers-824",
+  "title": "The Sunday Papers",
+  "content": "<img src=\"https://assetsio.gnwcdn.com/the-sunday-papers-big.jpg?width=690&amp;quality=85&amp;format=jpg&amp;auto=webp\" /> \n<p>Sometimes, Sundays are <em>only</em> for rounding up videogame criticism and journalism. I try to cast a wider net when my turn comes to deliver the Papers, because I figure you've probably been reading about videogames all week, and would appreciate e.g. an essay on the mating habits of snails or the top 7 most elaborate UFO conspiracies, but this Sunday, there are no snails or UFOs within easy dredge. So instead, please accept a boatload of finest mitherings on <a href=\"https://www.rockpapershotgun.com/games/duke-nukem\">Duke Nukem</a>, oracular visual novels, sociable space sims, and 'search action' games.</p> <p><a href=\"https://www.rockpapershotgun.com/the-sunday-papers-824\">Read more</a></p>",
+  "content_type": "text",
+  "source_platform": "rock-paper-shotgun",
+  "collected_at": "2026-08-23T08:00:00+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.rockpapershotgun.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d33d6b15-c6ad-43ba-a772-dbc6917cfb4e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "5a2a1b5303193e5b",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/animaleros/perros/no-solo-importan-los-grados-humedad-tambien-puede-poner-riesgo-los-perros_7014843_0.html",
+  "title": "No solo importan los grados: la humedad también puede poner en riesgo a los perros",
+  "content": "Los perros apenas sudan y dependen del jadeo para refrigerarse, un mecanismo que pierde eficacia cuando aumenta la humedad ambiental.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T07:29:21+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "647cddd1-59d3-42d5-b499-c3b026eb7024",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

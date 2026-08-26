@@ -1,0 +1,24 @@
+{
+  "id": "1df219b95a3bf4e3",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/tv/tv-news/rookie-alexi-hawley-renews-lionsgate-tv-overall-deal-1236680642/",
+  "title": "‘The Rookie’ Creator Alexi Hawley Renews Overall Deal at Lionsgate TV",
+  "content": "The ABC series is entering its ninth season and has a spinoff due to premiere in 2027.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T16:00:00+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3872bd1c-030e-4763-85cc-73d5a52bef0d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "5b10b5b70c35fc93",
+  "source_name": "rt-news",
+  "source_type": "rss",
+  "source_url": "https://www.rt.com/africa/644642-south-african-teen-english-channel-record/?utm_source=rss&utm_medium=rss&utm_campaign=RSS",
+  "title": "South African teen sets English Channel record",
+  "content": "<img align=\"left\" alt=\"Preview\" src=\"https://mf.b37mrtl.ru/files/2026.08/thumbnail/6a8d9ef7203027586b6f8ba1.jpg\" style=\"margin-right: 10px;\" /> Amber-Rose Berry has become the youngest South African woman to swim the English Channel <br /><a href=\"https://www.rt.com/africa/644642-south-african-teen-english-channel-record/?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=RSS\">Read Full Article at RT.com</a>",
+  "content_type": "text",
+  "source_platform": "rt-news",
+  "collected_at": "2026-08-25T15:16:34+00:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.rt.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4f5e82c6-f062-40a9-8d6a-d9818595ebdd",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "c1466d7256520e16",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/review/optoma-gt2400hdr/",
+  "title": "Optoma GT2400HDR Review: Ace Projector for Golf Simulation",
+  "content": "The Optoma GT2400HDR laser projector is great for setting up a driving range in your living room, but mediocre video quality makes it less appealing for home entertainment.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-25T10:32:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bae2232c-039a-43da-9ea2-16e5c048fd38",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

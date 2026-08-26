@@ -1,0 +1,24 @@
+{
+  "id": "5adbe22e5dbb0df3",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/lainformacion/economia-y-finanzas/gonzalo-bernardos-economista-chaval-quiere-ahorrar-para-una-vivienda-se-hace-tres-vacaciones-come-buen-restaurante-dos-tres-veces_7013306_0.html",
+  "title": "Gonzalo Bernardos: \"El chaval que quiere ahorrar para una vivienda se hace tres vacaciones y come de buen restaurante dos o tres veces\"",
+  "content": "El experto sostiene que no es posible mantener un elevado nivel de gasto.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-07-13T09:04:42+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "81127956-e349-4afd-89cd-9c4e56a5e051",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

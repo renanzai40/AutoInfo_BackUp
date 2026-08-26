@@ -1,0 +1,24 @@
+{
+  "id": "63e8f3e6a66bba83",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/cinemania/noticias/fiera-netflix-tragica-historia-real-tras-bernardeau-silvestre-cuevas-estreno-14-agosto_7024215_0.html",
+  "title": "La trágica historia real detrás de 'La fiera': el accidente que marcó el rodaje de la nueva película que llega a Netflix",
+  "content": "'La fiera' sigue la relación real de tres amigos que descubren el deporte de riesgo más extremo, el salto B.A.S.E.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T17:34:55+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "52925a1c-dc97-4b6a-acd1-dba635122462",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

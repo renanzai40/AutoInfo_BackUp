@@ -1,0 +1,24 @@
+{
+  "id": "211f0a3aa52c41f3",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/medio-ambiente/blogs/cronicaverde/rio-onor-pueblo-entre-dos-paises-donde-viajar-tiempo-con-solo-dar-un-paso_7028428_0.html",
+  "title": "Rio de Onor, el pueblo entre dos países donde viajar en el tiempo con solo dar un paso",
+  "content": "Rio de Onor / Rihonor de Castilla es el único pueblo de Europa que pertenece a dos países",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-23T10:36:46+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a2c79d6b-24e1-4bc7-ae7f-04efe2e4ff31",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

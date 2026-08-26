@@ -1,0 +1,27 @@
+{
+  "id": "owRx0e6nEe2_1Q54ZEzvJQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Fundamentals of Blockchain Architecture",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "owRx0e6nEe2_1Q54ZEzvJQ",
+    "slug": "fundamentals-blockchain-architecture",
+    "name": "Fundamentals of Blockchain Architecture"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0bf0e44c-0e8d-419c-9454-52d68de26adb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

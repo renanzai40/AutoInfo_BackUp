@@ -1,0 +1,24 @@
+{
+  "id": "59fe99c847fde059",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/retail/karen-millen-returns-physical-stores",
+  "title": "Clothing retailer returns to brick and mortar stores after 7 years",
+  "content": "A financial collapse led the brand to close all stores and shift fully online, but the fashion retailer is making an unexpected return to physical retail.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-22T17:33:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c8f59b6d-440d-431e-a08d-4a946605c3a1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

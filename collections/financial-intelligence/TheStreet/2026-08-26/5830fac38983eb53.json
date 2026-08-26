@@ -1,0 +1,24 @@
+{
+  "id": "5830fac38983eb53",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-aug-25-2026",
+  "title": "Stock Market Today (Aug. 25, 2026): $INTU, $ZM to report after the closing bell; Nasdaq jumps",
+  "content": "Investors are also awaiting the release of the Federal Reserve’s preferred inflation gauge, the personal consumption expenditures price index.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T10:43:15+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d1193d26-ff9c-42f4-ac0f-8298b03ca97f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

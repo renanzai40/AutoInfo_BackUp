@@ -1,0 +1,54 @@
+---
+title: Watch a Band Perform the Sound Effects from Pink Floyd’s “Money,” Using  a Money Counter, Torn Sheets of Paper & More
+domain: online-education
+tier: 01-Raw
+entry_id: online-education-general-watch-a-band-perform-the-sound-effects-from-pink-floyd-s-money-using-a-money-counter-torn-sheets-of-paper-more
+source_url: https://www.openculture.com/2026/08/watch-a-band-perform-the-sound-effects-from-pink-floyds-money-using-a-money-counter-torn-sheets-of-paper-more.html
+source_type: rss
+source_platform: rss
+collected_at: '2026-08-10T08:00:21+00:00'
+summary: In 1972, Pink Floyd's song 'Money' featured spliced sound effects from cash registers, tearing paper, and jingling
+  coins. Recently, German drummer Sina Doering and her band performed these sounds live using objects like a money counter,
+  torn sheets of paper, and loose change, recreating the iconic audio in a creative manner.
+tags: []
+quality_tier: 2
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 70.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 9c1ecf12-f957-47ca-9386-a3664c6728ca
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+When Pink Floyd recorded “Money” in 1972, Roger Waters spliced into the opening moments the sounds of cash registers, tearing paper, and jingling coins. Half a century later, the German drummer Sina Doering and her band performed those sounds live, using a bowl of loose change, a toy register, a money counter, and a sheet [&#8230;]
+
+## Summary
+In 1972, Pink Floyd's song 'Money' featured spliced sound effects from cash registers, tearing paper, and jingling coins. Recently, German drummer Sina Doering and her band performed these sounds live using objects like a money counter, torn sheets of paper, and loose change, recreating the iconic audio in a creative manner.
+
+## Key Points
+- Pink Floyd's 'Money' incorporated unique sound effects from everyday objects.
+- Sina Doering led a live performance that recreated these sound effects using similar items.
+- The band used a money counter, toy register, and torn paper to mimic the original audio.
+- This demonstrates an innovative approach to replicating famous musical elements in real-time.
+
+
+## Entities
+- **Pink Floyd** (org, relevance=)
+- **Roger Waters** (person, relevance=)
+- **Money** (concept, relevance=)
+- **Sina Doering** (person, relevance=)
+- **money counter** (technology, relevance=)
+- **sound effects** (concept, relevance=)

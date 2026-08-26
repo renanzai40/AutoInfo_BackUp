@@ -1,0 +1,51 @@
+---
+title: 전국 지방법원에 “폭발물 설치했다” 이메일…경찰 수색 나서
+domain: korean-learning
+tier: 01-Raw
+entry_id: korean-learning-general-
+source_url: https://www.hani.co.kr/arti/area/area_general/1274709.html
+source_type: rss
+source_platform: hankyoreh
+collected_at: '2026-08-26T08:06:15.720337+00:00'
+summary: An email claiming a bomb has been installed was sent to all district courts nationwide. Police have launched a search
+  to investigate the threat.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: unique
+source_score: 90.0
+language: ko
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 34581e54-f77a-46ee-90bb-209700347751
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: false
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: true
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<table border="0px" cellpadding="0px" cellspacing="0px" width="107px"><tr><td bgcolor="#DDDDDD" style="padding: 1px;"><table border="0px" cellpadding="0px" cellspacing="0px" height="84px" width="105px"><tr><td align="center" bgcolor="#FFFFFF" style="padding: 3px;"><img border="0" src="https://flexible.img.hani.co.kr/flexible/normal/300/180/imgdb/child/2026/0826/53_17877218939026_20260826501889.webp" /></td></tr></table></td><td nowrap="nowrap" width="13px"></td></tr></table>
+
+## Summary
+An email claiming a bomb has been installed was sent to all district courts nationwide. Police have launched a search to investigate the threat.
+
+## Key Points
+- Threat email was sent to district courts across the country.
+- Police are conducting a search in response to the threat.
+- The email mentions bomb installation.
+- The incident is a nationwide security concern.
+
+
+## Entities
+- **All district courts** (org, relevance=)
+- **Police** (org, relevance=)
+- **Bomb** (concept, relevance=)
+- **Email** (technology, relevance=)

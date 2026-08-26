@@ -1,0 +1,1459 @@
+{
+  "schema_version": 2,
+  "tool": "autoinfo validate --matrix",
+  "generated_at": "2026-08-26T12:19:55Z",
+  "commit": "b4698c1",
+  "batch_id": "b4698c1-20260826-201955",
+  "products": [
+    {
+      "domain": "spanish-learning",
+      "product": "digest",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "digest",
+          "details": "first line='# Weekly Digest — spanish-learning'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "digest",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "digest",
+          "details": "no References section"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "digest",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "digest",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "digest",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "digest",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "digest",
+          "details": "not a report/column product"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "spanish-learning",
+          "product": "digest",
+          "details": "no Sections metadata"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "digest",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "digest",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "digest",
+          "details": "127218 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": false,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "digest",
+          "details": "distant-past year 1947 — human review; distant-past year 1939 — human review"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "digest",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "digest",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "digest",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "digest",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "digest",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "digest",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    },
+    {
+      "domain": "spanish-learning",
+      "product": "report",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "report",
+          "details": "first line='# spanish-learning — Report'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "report",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "report",
+          "details": "numbers=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60]"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "report",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "report",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "report",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "report",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "report",
+          "details": "Sections=73"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "spanish-learning",
+          "product": "report",
+          "details": "metadata=73 actual=73"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "report",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "report",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "report",
+          "details": "108978 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": false,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "report",
+          "details": "distant-past year 1947 — human review; distant-past year 1939 — human review"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "report",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "report",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "report",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "report",
+          "details": "substantive analysis present"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "report",
+          "details": "no generic risk labels"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "report",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    },
+    {
+      "domain": "spanish-learning",
+      "product": "column",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "column",
+          "details": "first line='# spanish-learning — Column'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "column",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "column",
+          "details": "no References section"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "column",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "column",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "column",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "column",
+          "details": "subsections=72"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "column",
+          "details": "Sections=72"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "spanish-learning",
+          "product": "column",
+          "details": "metadata=72 actual=72"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "column",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "column",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "column",
+          "details": "87667 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": false,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "column",
+          "details": "distant-past year 1947 — human review; distant-past year 1939 — human review"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "column",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "column",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "column",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "column",
+          "details": "substantive analysis present"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "column",
+          "details": "no generic risk labels"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "column",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    },
+    {
+      "domain": "spanish-learning",
+      "product": "premium-briefing",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "premium-briefing",
+          "details": "first line='# spanish-learning — Premium Briefing'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "premium-briefing",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "premium-briefing",
+          "details": "numbers=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60]"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "premium-briefing",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "premium-briefing",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "premium-briefing",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "premium-briefing",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "premium-briefing",
+          "details": "not a report/column product"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "spanish-learning",
+          "product": "premium-briefing",
+          "details": "no Sections metadata"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "premium-briefing",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "premium-briefing",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "premium-briefing",
+          "details": "34334 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "premium-briefing",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "premium-briefing",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "premium-briefing",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "premium-briefing",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "premium-briefing",
+          "details": "substantive analysis present"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "premium-briefing",
+          "details": "no generic risk labels"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "premium-briefing",
+          "details": "analysis adds beyond heading"
+        }
+      ]
+    },
+    {
+      "domain": "spanish-learning",
+      "product": "enterprise-briefing",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "enterprise-briefing",
+          "details": "first line='# spanish-learning — Enterprise Briefing'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "enterprise-briefing",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "enterprise-briefing",
+          "details": "numbers=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60]"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "enterprise-briefing",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "enterprise-briefing",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "enterprise-briefing",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "enterprise-briefing",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "enterprise-briefing",
+          "details": "not a report/column product"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "spanish-learning",
+          "product": "enterprise-briefing",
+          "details": "no Sections metadata"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "enterprise-briefing",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "enterprise-briefing",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "enterprise-briefing",
+          "details": "35599 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "enterprise-briefing",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "enterprise-briefing",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "enterprise-briefing",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "enterprise-briefing",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "enterprise-briefing",
+          "details": "substantive analysis present"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "enterprise-briefing",
+          "details": "no generic risk labels"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "enterprise-briefing",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    },
+    {
+      "domain": "spanish-learning",
+      "product": "magazine-digest",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "magazine-digest",
+          "details": "first line='# spanish-learning — Magazine Digest'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "magazine-digest",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "magazine-digest",
+          "details": "no References section"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "magazine-digest",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "magazine-digest",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "magazine-digest",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "magazine-digest",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "magazine-digest",
+          "details": "not a report/column product"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "spanish-learning",
+          "product": "magazine-digest",
+          "details": "no Sections metadata"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "magazine-digest",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "magazine-digest",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "magazine-digest",
+          "details": "16904 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "magazine-digest",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "magazine-digest",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "magazine-digest",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "magazine-digest",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "magazine-digest",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "magazine-digest",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "magazine-digest",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    },
+    {
+      "domain": "spanish-learning",
+      "product": "tutorial",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "tutorial",
+          "details": "first line='# Weekly Digest — spanish-learning'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "tutorial",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "tutorial",
+          "details": "no References section"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "tutorial",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "tutorial",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "tutorial",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "tutorial",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "tutorial",
+          "details": "not a report/column product"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "spanish-learning",
+          "product": "tutorial",
+          "details": "no Sections metadata"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "tutorial",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "tutorial",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "tutorial",
+          "details": "146448 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": false,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "tutorial",
+          "details": "distant-past year 1947 — human review; distant-past year 1939 — human review"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "tutorial",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "tutorial",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "tutorial",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "tutorial",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "tutorial",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "tutorial",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    },
+    {
+      "domain": "spanish-learning",
+      "product": "presentation",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "presentation",
+          "details": "first line='# Weekly Digest — spanish-learning'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "presentation",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "presentation",
+          "details": "no References section"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "presentation",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "presentation",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "presentation",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "presentation",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "presentation",
+          "details": "not a report/column product"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "spanish-learning",
+          "product": "presentation",
+          "details": "no Sections metadata"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "presentation",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "presentation",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "presentation",
+          "details": "236 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "presentation",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "presentation",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "presentation",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "spanish-learning",
+          "product": "presentation",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "presentation",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "presentation",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "spanish-learning",
+          "product": "presentation",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "batch_id": "b4698c1-20260826-201955",
+    "domains": [
+      "spanish-learning"
+    ],
+    "products": [
+      "digest",
+      "report",
+      "column",
+      "premium-briefing",
+      "enterprise-briefing",
+      "magazine-digest",
+      "tutorial",
+      "presentation"
+    ],
+    "total_products": 8,
+    "total_asserts": 152,
+    "failures": 4,
+    "failing_assertions": 4,
+    "missing_products": 0,
+    "error_products": 0,
+    "skipped_products": [],
+    "raw_counts": {
+      "spanish-learning": 0
+    }
+  }
+}

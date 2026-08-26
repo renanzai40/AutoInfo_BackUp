@@ -1,0 +1,24 @@
+{
+  "id": "288d9e49ef8ff2de",
+  "source_name": "rt-news",
+  "source_type": "rss",
+  "source_url": "https://www.rt.com/russia/644641-happy-dependence-day-russian-view/?utm_source=rss&utm_medium=rss&utm_campaign=RSS",
+  "title": "Ukraine at 35: The view from Russia",
+  "content": "<img align=\"left\" alt=\"Preview\" src=\"https://mf.b37mrtl.ru/files/2026.08/thumbnail/6a8dc3fc2030276ada7a9ca3.jpg\" style=\"margin-right: 10px;\" /> Russian diplomats, politicians and analysts assess Ukraine at 35, arguing that Kiev surrendered sovereignty to the West <br /><a href=\"https://www.rt.com/russia/644641-happy-dependence-day-russian-view/?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=RSS\">Read Full Article at RT.com</a>",
+  "content_type": "text",
+  "source_platform": "rt-news",
+  "collected_at": "2026-08-25T17:10:19+00:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.rt.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b0896fd6-da0b-474c-a591-92a1db80e0f2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

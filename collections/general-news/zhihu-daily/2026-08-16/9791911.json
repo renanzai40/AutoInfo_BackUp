@@ -1,0 +1,31 @@
+{
+  "id": 9791911,
+  "source_name": "zhihu-daily",
+  "source_type": "api",
+  "source_url": "https://daily.zhihu.com/story/9791911",
+  "title": "在古代当土司是种怎样的体验？",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "zhihu-daily",
+  "collected_at": "2026-08-15T18:57:45.089039+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "image_hue": "0x1b2626",
+    "title": "在古代当土司是种怎样的体验？",
+    "url": "https://daily.zhihu.com/story/9791911",
+    "hint": "莱茵行宫伯爵 · 3 分钟阅读",
+    "ga_prefix": "081507",
+    "images": [
+      "https://picx.zhimg.com/v2-c37dd3ffcf6a1de7baeac79f3e862edb.jpg?source=8673f162"
+    ],
+    "type": 0,
+    "id": 9791911
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1c1f516d-6ec4-4f29-acc2-70e229387f92"
+}

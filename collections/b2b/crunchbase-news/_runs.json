@@ -1,0 +1,105 @@
+[
+  {
+    "collection_id": "col-20260812T181128-ca389d62",
+    "timestamp": "2026-08-12T18:11:30.953424+00:00",
+    "status": "success",
+    "items_found": 8,
+    "items_new": 8,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 727.0,
+    "trace_ids": [
+      "fdc9fb45-a055-4899-97f3-8818b0d6b01b",
+      "728e7810-6b2e-47f0-baed-b96dcb349e2f",
+      "7d398b94-e222-4763-b28c-0f6a0b8a7c75",
+      "2ecb23ca-e22a-4e7c-926a-63622479534d",
+      "bd95d084-03ec-470b-8b30-fe5e4ca6f830",
+      "d7e6444f-7043-415e-bd62-f4d80b441006",
+      "ab7db99e-1beb-40a4-81b1-aba47b225747",
+      "94c9da9c-2005-43a0-8902-e5ab55db5615"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T151045-ba456491",
+    "timestamp": "2026-08-25T15:10:50.578371+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 1721.0,
+    "trace_ids": [
+      "40ef5a37-2648-44a0-913f-5f8e5cf41a1d",
+      "3e381861-87c2-44fe-9f72-dd74ee6001c7",
+      "418350bc-7719-419e-afb3-db458bd50f74",
+      "86f11635-74f5-47b3-ae40-ebaf092eef46",
+      "a7aadbbb-0fee-48f6-8fb0-66e019cb6db8"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T152455-205948a8",
+    "timestamp": "2026-08-25T15:25:01.571564+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 3640.0,
+    "trace_ids": [
+      "f1e01b63-760c-4c13-9343-ea8108f5cb10",
+      "54ec40ec-ff8e-4ca2-bc50-680ab7037d9d",
+      "26f92db8-3bb1-4ce4-a543-b4266431c7fe",
+      "c019815a-b690-4277-ab44-192cc176dcdf",
+      "139fce5f-6307-4c82-9f06-204e100c99e6"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T153906-ea867234",
+    "timestamp": "2026-08-25T15:39:11.206351+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 1559.0,
+    "trace_ids": [
+      "17528154-0c3b-4466-9338-6914836f4a53",
+      "16e29515-a6a0-47c8-bafa-8caf57058dea",
+      "36a55830-483d-4b03-a151-a0b43200157c",
+      "a0cbd996-1c47-4cf6-9722-55c6088405f1",
+      "ca90a151-004f-4db9-894f-6e7e017a661d"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T155435-cedc9b30",
+    "timestamp": "2026-08-25T15:54:38.895529+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://news.crunchbase.com/feed/: Client error '403 Forbidden' for url 'https://news.crunchbase.com/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://news.crunchbase.com/feed/: Client error '403 Forbidden' for url 'https://news.crunchbase.com/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+      }
+    ],
+    "duration_ms": 916.0
+  },
+  {
+    "collection_id": "col-20260825T160110-5a601f4e",
+    "timestamp": "2026-08-25T16:01:15.631237+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://news.crunchbase.com/feed/: Client error '403 Forbidden' for url 'https://news.crunchbase.com/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://news.crunchbase.com/feed/: Client error '403 Forbidden' for url 'https://news.crunchbase.com/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+      }
+    ],
+    "duration_ms": 1811.0
+  }
+]

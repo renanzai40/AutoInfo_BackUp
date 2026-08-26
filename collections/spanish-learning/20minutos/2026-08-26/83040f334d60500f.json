@@ -1,0 +1,24 @@
+{
+  "id": "83040f334d60500f",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/internacional/trump-amaga-con-cambiar-nombre-lago-ontario-por-lago-america-pleno-pulso-comercial-con-canada_7029194_0.html",
+  "title": "Trump amaga con cambiar el nombre del lago Ontario por \"Lago América\" en medio del pulso con Canadá",
+  "content": "La propuesta llega en plena escalada comercial entre ambos países, después de que Washington anunciara aranceles del 50% a automóviles y acero canadienses.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T14:34:31+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ac05323f-f83b-490e-b8b8-d9477c27598c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,27 @@
+{
+  "id": "v9CQdBkhEeWjrA6seF25aw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Modern Art & Ideas",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "v9CQdBkhEeWjrA6seF25aw",
+    "slug": "modern-art-ideas",
+    "name": "Modern Art & Ideas"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b85e0039-f92b-4586-842f-5b583991816b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

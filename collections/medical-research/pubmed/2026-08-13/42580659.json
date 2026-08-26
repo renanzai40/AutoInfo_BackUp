@@ -1,0 +1,58 @@
+{
+  "id": "42580659",
+  "source_name": "pubmed",
+  "source_type": "api",
+  "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42580659&retmode=xml",
+  "title": "A Systematic Assessment of In Vitro Fertilization Add-On Interventions on Canadian Clinic Websites: A Cross-Sectional Study.",
+  "content": "OBJECTIVE: In vitro fertilization (IVF) \"add-ons\" are supplementary interventions intended to improve IVF success, despite a lack of robust supporting evidence. Professional organizations advise caution or recommend against the routine use of several add-ons. Clinic websites are a common source of patient-facing information. As such, this study examined how Canadian IVF clinic websites describe add-ons, including pricing and references to benefits and harms.\nMETHODS: This cross-sectional study systematically reviewed Canadian IVF clinic websites between November 2024 and March 2025. Recommendations from Choosing Wisely Canada and the European Society of Human Reproduction and Embryology were used to contextualize website-described add-ons. Two reviewers independently analyzed websites and appraised evidence quality using the Oxford Levels of Evidence scale. Descriptive analysis summarized the frequency, pricing, and reported benefits and harms of website-described add-ons.\nRESULTS: Forty-two Canadian IVF clinic websites were reviewed, and 17 distinct add-ons were identified. Overall, 97.6% described at least one add-on intervention. Reported costs ranged from CAD $200 to CAD $5234 per treatment cycle. Pre-implantation genetic testing for aneuploidy (85.4%) and sperm DNA fragmentation testing (53.7%) were the most commonly described. Potential benefits were referenced in 50.4% of descriptions, whereas harms were mentioned in 22.5%. Only 7.1% of websites cited supporting publications, all classified as low quality.\nCONCLUSION: Canadian IVF clinic websites frequently describe add-ons. Clearer communication about the evidence, risks, and the distinction between the standard of care and discretionary add-ons may support informed decision-making.",
+  "content_type": "text",
+  "source_platform": "pubmed",
+  "collected_at": "2026 Aug 11",
+  "language": "",
+  "domain": "medical-research",
+  "topic_tags": [
+    "Adjuvants",
+    "In vitro Fertilization",
+    "Patient Education"
+  ],
+  "quality_tier": 1,
+  "raw_data": {
+    "pmid": "42580659",
+    "pmc_id": "",
+    "authors": [
+      {
+        "lastname": "Benipal",
+        "firstname": "Harsukh",
+        "initials": "H"
+      },
+      {
+        "lastname": "Kirubarajan",
+        "firstname": "Abirami",
+        "initials": "A"
+      },
+      {
+        "lastname": "Nathoo",
+        "firstname": "Sahra",
+        "initials": "S"
+      },
+      {
+        "lastname": "Leader",
+        "firstname": "Arthur",
+        "initials": "A"
+      },
+      {
+        "lastname": "Jones",
+        "firstname": "Claire Ann",
+        "initials": "CA"
+      }
+    ],
+    "journal": "Journal of obstetrics and gynaecology Canada : JOGC = Journal d'obstetrique et gynecologie du Canada : JOGC",
+    "pub_date": "2026 Aug 11",
+    "doi": "10.1016/j.jogc.2026.103496",
+    "mesh_terms": []
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a56668b4-3e9b-4192-a1dc-55902fd1448d"
+}

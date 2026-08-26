@@ -1,0 +1,24 @@
+{
+  "id": "cf0c945ef8311d84",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/investing/stocks/fdxf-fedex-freight-holding-company-bill-gates-opens-180-million-fedex-freight-bet-in-latest-13f-filing-alongside-home-depot",
+  "title": "Bill Gates makes $180 million bet on backbone of America's economy",
+  "content": "The Gates Foundation Trust opened a new position in the newly public company weeks after it began trading as a standalone business.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-22T15:33:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "dc246768-4310-4f83-a283-b34c01232dce",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

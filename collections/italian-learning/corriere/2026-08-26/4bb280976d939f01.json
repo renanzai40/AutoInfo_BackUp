@@ -1,0 +1,24 @@
+{
+  "id": "4bb280976d939f01",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/lodicoalcorriere/index/11-05-2024/index.shtml",
+  "title": "«Sono io quindi ho ragione». Il degrado dei rapporti umani",
+  "content": "<p><img alt=\"«Sono io quindi ho ragione». Il degrado dei rapporti umani\" src=\"https://images2.corriereobjects.it/methode_image/Cassetto%20Redazionale/Nazionale/Media/Rubriche%20Immagini/Placeholder/lodicoacorriere_656x492.jpg\" title=\"«Sono io quindi ho ragione». Il degrado dei rapporti umani\" /><p></p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-12T00:18:45+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c8dfdf04-624a-4664-b967-65c0ba17e320",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

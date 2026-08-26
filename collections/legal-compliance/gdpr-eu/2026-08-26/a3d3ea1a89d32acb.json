@@ -1,0 +1,24 @@
+{
+  "id": "a3d3ea1a89d32acb",
+  "source_name": "gdpr-eu",
+  "source_type": "rss",
+  "source_url": "https://gdpr.eu/data-sharing-bounty-fine/",
+  "title": "Data sharing and GDPR compliance: Bounty UK shows what not to do",
+  "content": "<p>The UK Information Commissioner’s Office issued a massive judgment against a company for illegal data sharing. Here’s how to avoid the same fate.</p>\n<p>The post <a href=\"https://gdpr.eu/data-sharing-bounty-fine/\">Data sharing and GDPR compliance: Bounty UK shows what not to do</a> appeared first on <a href=\"https://gdpr.eu\">GDPR.eu</a>.</p>",
+  "content_type": "text",
+  "source_platform": "gdpr-eu",
+  "collected_at": "2019-04-23T12:14:17+00:00",
+  "language": "",
+  "domain": "legal-compliance",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://gdpr.eu/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b4dafa3a-6903-4f29-8d71-d325f0c851d6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "70d8e57085fc0a1f",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/short-videos/video/former-jammu-and-kashmir-cm-mehbooba-mufti-on-former-pak-pm-imran-khan-pakistan-politics-mmtc-2629904-2026-08-25?utm_source=rssfeed",
+  "title": "इमरान खान के बदलाव की राजनीति पर महबूबा ने उठाए सवाल",
+  "content": "महबूबा मुफ्ती ने इमरान खान की पाकिस्तान में बदलाव लाने की शुरुआती कोशिशों की तारीफ की, लेकिन कहा कि सत्ता में आने के बाद उनकी सरकार भी विरोधियों के खिलाफ कार्रवाई वाली राजनीतिक संस्कृति का हिस्सा बन गई।",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T20:21:31+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3992ecc1-c122-4307-a720-3c7c08596e75",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "3a486044d1b03942",
+  "source_name": "b2b-news-network",
+  "source_type": "rss",
+  "source_url": "https://www.b2bnn.com/2026/08/research-update-ai-agents-have-an-authority-problem/",
+  "title": "Research Update: AI Agents Have an Authority Problem",
+  "content": "An LLM Architecture Flaws Series Update: External Research A remarkable cluster of recent research is converging on the same conclusion: the central problem in AI agent reliability is not just whether a model knows a rule, remembers an instruction or can change its mind. It is whether the system can reliably determine which information should [&#8230;]",
+  "content_type": "text",
+  "source_platform": "b2b-news-network",
+  "collected_at": "2026-08-24T20:43:34+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://b2bnn.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a42a4563-b4a7-4ed5-b8e4-35c10536fddb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,22 @@
+{
+  "id": "a9d347d2bcd199e9",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/google-workspace-promo-code/",
+  "title": "Google Workspace Promo Codes: 14% Off for August 2026",
+  "content": "Boost your productivity and save with exclusive Google Workspace coupons from WIRED. Get up to 14% off plans for three months, including Starter, Standard, and Plus tiers.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-15T05:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5f3ffad3-d2b4-45cf-a574-a90cb009fd7f"
+}

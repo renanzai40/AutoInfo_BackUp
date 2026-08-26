@@ -1,0 +1,24 @@
+{
+  "id": "e709b115f6f50a59",
+  "source_name": "variety",
+  "source_type": "rss",
+  "source_url": "https://variety.com/2026/film/global/oscars-germany-sandra-wollner-everytime-1236842383/",
+  "title": "Oscars: Germany Selects Sandra Wollner’s ‘Everytime’ for International Feature Race",
+  "content": "Sandra Wollner’s “Everytime” has been selected as Germany’s entry for the Academy Award for best international feature film. The film&#8217;s synopsis reads as follows: The last photograph Jessie took shows the sun over Berlin. It hangs there as if nothing had happened. But Ella has lost her daughter. What remains is Jessie’s younger sister and [&#8230;]",
+  "content_type": "text",
+  "source_platform": "variety",
+  "collected_at": "2026-08-25T15:57:21+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://variety.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "892fe476-10b3-4777-bbb0-8bb8e95929cf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

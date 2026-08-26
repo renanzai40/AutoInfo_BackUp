@@ -1,0 +1,24 @@
+{
+  "id": "51e5aca4e3214a4c",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/lifestyle/arts/why-liane-moriarty-sequel-big-little-lies-1236678850/",
+  "title": "Why Liane Moriarty Broke Her Own Rules and Wrote a Sequel to ‘Big Little Lies’",
+  "content": "The author opens up about her decision to publish 'Big Little Truths' and why she won't be working on the third season of the HBO series.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T16:00:00+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3e5a62ec-81e1-4efe-b44f-1f3ec8bc361d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

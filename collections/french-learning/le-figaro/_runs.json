@@ -1,0 +1,131 @@
+[
+  {
+    "collection_id": "col-20260825T152401-d7ce57f8",
+    "timestamp": "2026-08-25T15:24:03.539727+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 829.0,
+    "trace_ids": [
+      "b41d6ce0-1cb3-4fda-8a82-72c20c24d367",
+      "1e37347b-f720-429a-b8f2-4c4d7638b515",
+      "d90e9a55-184a-49f9-8cfe-610b25793036",
+      "901b05bd-f148-4110-a6fc-015f9c5d24b7",
+      "ab9e6bf8-7922-4271-ba4f-be53c262b079"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T212326-ad7c9f75",
+    "timestamp": "2026-08-25T21:23:27.662065+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.lefigaro.fr/rss/figaro_actualites.xml: Client error '403 Forbidden' for url 'https://www.lefigaro.fr/rss/figaro_actualites.xml'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.lefigaro.fr/rss/figaro_actualites.xml: Client error '403 Forbidden' for url 'https://www.lefigaro.fr/rss/figaro_actualites.xml'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+      }
+    ],
+    "duration_ms": 535.0
+  },
+  {
+    "collection_id": "col-20260825T215911-d5301c97",
+    "timestamp": "2026-08-25T21:59:13.642977+00:00",
+    "status": "success",
+    "items_found": 20,
+    "items_new": 20,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 556.0,
+    "trace_ids": [
+      "e6de94a4-d6d0-44ee-b809-e11fe1e61fd3",
+      "742da1eb-b9c3-4765-a6a5-108eed0dacdf",
+      "f7063ef1-8c9b-4621-b806-565954a4a4d6",
+      "66a8637c-7ce7-4c03-a11a-833aa6997212",
+      "6b7940af-47dd-4dee-aa5c-cc8799728ef9",
+      "c499b938-eec0-4477-b966-0822ca92643b",
+      "7e5cac05-c561-45be-b56c-3e01bac8caaa",
+      "78224cea-bbbe-4a43-bc3a-92c6c6acf269",
+      "18cfe626-4d12-4f15-a4e7-ea391704d81c",
+      "adc7264d-9ee3-40d5-bd91-46d7b717ccb4",
+      "5290f6bf-f2cd-4dcd-8932-a55b7d82e008",
+      "f75e1ab4-8f1c-4f22-8c18-aae63aa65727",
+      "476f8b71-b551-4ac2-b269-8db6e04f90ce",
+      "4f1f5050-527f-4050-a722-f96ac92f127f",
+      "aa68e68b-8765-4815-a7fc-1004d6eb3d41",
+      "3e067f40-f576-404e-97b7-c972c480475d",
+      "9682a464-1707-4f02-8ef0-0a22830910c7",
+      "086abc2d-9477-4fa3-beb2-4be73762ed27",
+      "3cf7f339-c884-421e-9fff-367ee658a8cf",
+      "5a33089d-c187-4266-907f-c017682e5d2f"
+    ]
+  },
+  {
+    "collection_id": "col-20260826T023832-68331065",
+    "timestamp": "2026-08-26T02:38:33.960636+00:00",
+    "status": "success",
+    "items_found": 20,
+    "items_new": 20,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 810.0,
+    "trace_ids": [
+      "c5451ceb-aed8-401e-a1b6-e4b95ad7edf5",
+      "29419f16-e516-4342-9c95-7f8eeea44321",
+      "b801278e-22ba-4963-91ab-59a5b6e27d91",
+      "5aa3aae6-a1ce-447b-8c4a-11f9aaaa5984",
+      "f1f25d2e-e956-4da9-8523-1e31dd46c58d",
+      "8ae4ed0a-8fa5-4edc-b417-f40a62f3b16c",
+      "f3c6e29b-5a11-47f4-a0c8-f1d105037159",
+      "ead7a0ec-b5c0-42bc-b35e-11c4864adaa5",
+      "77a1340c-5b6e-4019-8328-21ef5fe586a4",
+      "6a88df15-950d-40f4-b7a5-4a052d49998a",
+      "50466d2d-9255-4dcf-b8ce-8c2b2b48d3c7",
+      "85a26a0b-7eb9-45c7-acfd-791bc7d6c5c1",
+      "12005014-82e8-451f-9d94-67ddacb16b4b",
+      "87db0062-5ad3-49e4-9e47-67ca140ea86e",
+      "7b83a5b4-dbea-4e32-9705-893c14e60bf2",
+      "a719a28b-2452-47b7-9425-beb7f4cfae29",
+      "00b0ba2d-5640-4b10-bbbf-45c4a883954c",
+      "f6ee54b0-6340-47ec-a250-f36ebe833e27",
+      "229236e3-7d0b-4d71-9d92-53120cc49a2c",
+      "4389f8d3-706a-4851-9bf6-cc7b09dc90fc"
+    ]
+  },
+  {
+    "collection_id": "col-20260826T042901-e913b27e",
+    "timestamp": "2026-08-26T04:29:03.197223+00:00",
+    "status": "success",
+    "items_found": 20,
+    "items_new": 20,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 612.0,
+    "trace_ids": [
+      "cbca131d-f170-4820-84ee-7b58c4fd057a",
+      "6b1ec0f7-5f1c-41ef-bde0-c68d2acb2e8d",
+      "d1727455-cab2-471e-98a6-9ff35c6aa6b6",
+      "ebc28ecc-8c18-4571-8214-6c89e304290e",
+      "e069a05a-494d-4f22-aa8a-32266a846301",
+      "03730c94-0b73-4d46-9f42-ebe2e643f226",
+      "f9f6489e-6074-4cd1-8d77-17386610d94f",
+      "988ecde4-641d-4a3c-b239-ebea4a5272f1",
+      "26ab03ee-8551-4c1b-b038-01981b32984c",
+      "c6590521-69d1-4a44-ae80-b482df67d85b",
+      "f45bc906-a832-41e6-8569-bc0347059be8",
+      "0e49b391-14c7-40f9-8e97-73e447da2bb5",
+      "d591bdf8-c23c-4954-b5df-7872a829f598",
+      "aa7f3e9a-8cd8-4acf-b6bb-aec8c8e8537b",
+      "fbb17bd8-4ca7-47da-a3bd-5ea16cac9932",
+      "aa58a678-8c6e-47d9-be2a-6ce71fa8d453",
+      "1e23aac5-4f13-4989-b2bc-657196b331dc",
+      "9263755e-ec41-487f-be48-e38851867fc7",
+      "febf6b3d-e2fd-46c9-8a2a-273de55614ee",
+      "31cf93d6-a8e3-49db-8a49-c6357a7f17a0"
+    ]
+  }
+]

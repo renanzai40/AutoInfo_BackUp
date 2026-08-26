@@ -1,0 +1,27 @@
+{
+  "id": "S-GWCuBzEe6cPA6HK-YxMQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Road Safety & Indigenous Communities: Safe Systems Approach",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "S-GWCuBzEe6cPA6HK-YxMQ",
+    "slug": "road-safety--indigenous-communities-safe-systems-approach",
+    "name": "Road Safety & Indigenous Communities: Safe Systems Approach"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b0da5a67-ad93-4195-a89d-799aa4c1dbfa",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

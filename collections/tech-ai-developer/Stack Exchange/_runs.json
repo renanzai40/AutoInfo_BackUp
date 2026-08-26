@@ -1,0 +1,145 @@
+[
+  {
+    "collection_id": "col-20260815T185751-4d6f2bdf",
+    "timestamp": "2026-08-15T18:57:53.181726+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://api.stackexchange.com/2.3/questions?order=desc&sort=activity&site=stackoverflow&pagesize=10 (source: Stack Exchange): Client error '400 Bad Request' for url 'https://api.stackexchange.com/2.3/questions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://api.stackexchange.com/2.3/questions?order=desc&sort=activity&site=stackoverflow&pagesize=10 (source: Stack Exchange): Client error '400 Bad Request' for url 'https://api.stackexchange.com/2.3/questions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400"
+      }
+    ],
+    "duration_ms": 1449.0
+  },
+  {
+    "collection_id": "col-20260815T190138-4e0e3996",
+    "timestamp": "2026-08-15T19:01:40.334873+00:00",
+    "status": "success",
+    "items_found": 8,
+    "items_new": 8,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 1492.0,
+    "trace_ids": [
+      "91de7796-2784-444e-b22e-db27fe563809",
+      "f7c0c3a8-5eb4-42b3-a9d6-632103dc1812",
+      "ecf3c66a-4848-4659-8bf7-b468e2dde17e",
+      "8f640785-8adc-4e03-bb22-eb81fca3a5fa",
+      "5f252b1f-b823-46f4-a973-188157bb309d",
+      "a4ca03dd-f6e3-45b2-90de-7c33ca4bed50",
+      "fcdde862-e1cb-4f7d-92c3-00664999167e",
+      "624d3e15-f844-4daf-865d-8f607f95572d"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T151736-8d727bf1",
+    "timestamp": "2026-08-25T15:17:44.439843+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 2507.0,
+    "trace_ids": [
+      "f04e60a4-6f54-4555-a912-ed15df3bc405",
+      "2a956cdd-f101-4e4e-8b42-8e856e825ae7",
+      "cbcda239-c2db-4687-8744-b373f017eebc",
+      "ba0d5a70-2490-4b2d-9ac6-30f5dc1ca3ff",
+      "458a7ea2-d24a-4986-be53-605396900cdf"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T152759-a5735dcd",
+    "timestamp": "2026-08-25T15:28:07.680699+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 2452.0,
+    "trace_ids": [
+      "94c1d2f8-c466-4c05-ba98-8872097557af",
+      "b2a1a3fd-4981-45c1-a685-83a0abfbf4f5",
+      "9dec0e6b-3443-40b9-a2ff-ffc56db4c287",
+      "cd8d7373-460d-4e48-bfc4-e8be4cef150a",
+      "a27757fc-af5c-4332-8075-5501305e5629"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T154503-37309faa",
+    "timestamp": "2026-08-25T15:45:11.793905+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 1334.0,
+    "trace_ids": [
+      "d96a7adb-3235-4f00-8378-e6f9437b7388",
+      "fbf851f1-dab0-4852-91e9-d0a9ad843cd3",
+      "300816e4-b992-49fc-aa49-630b829472bc",
+      "a948ff63-dd4d-44d8-89f8-6a1a1bf29e56",
+      "9894129f-1e1d-4754-9f7c-f31a34b0c5e6"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T155828-563b1ce3",
+    "timestamp": "2026-08-25T15:58:38.760829+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 2284.0,
+    "trace_ids": [
+      "7a453d3f-fa71-49bf-b83e-e3ddeca25d4e",
+      "ddb8c26f-0412-4341-bfda-61420b9a855a",
+      "9a38bd35-8ae4-40cc-8f54-7523998d0019",
+      "ea5539ce-b4ef-407d-a89e-dc2ce206bb51",
+      "54ef945e-1f52-49b3-83bf-082b524a0cca"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T160450-cf75c2c1",
+    "timestamp": "2026-08-25T16:04:55.486415+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 1231.0,
+    "trace_ids": [
+      "c554927c-b3d9-4c7f-8905-4187c50a6e47",
+      "b55ba752-6ecf-42c0-aaaf-b2aa843d5775",
+      "16f345f1-4804-4264-b006-39425c82db20",
+      "dc072e67-92bf-48ca-a7cf-a8374e5529e1",
+      "2f6d3281-95c7-408d-a48e-af6791d7eb5c"
+    ]
+  },
+  {
+    "collection_id": "col-20260826T005322-3f3c907b",
+    "timestamp": "2026-08-26T00:53:25.943682+00:00",
+    "status": "success",
+    "items_found": 10,
+    "items_new": 10,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 1294.0,
+    "trace_ids": [
+      "1cc4c28e-92c0-4ff0-ae1b-9b20190252ba",
+      "8c23f2ed-9945-4706-aa93-459d03327ac0",
+      "81719e0c-a448-4ac4-be2b-448afe7d19a8",
+      "13b84ee2-d14c-41ee-94ab-ff781fd54948",
+      "6dd733ba-9340-40e1-97fe-48bdb17ed2f8",
+      "c4d24642-a4ab-4b89-875f-0025a63e085a",
+      "36b50216-9f60-4fc6-b00c-cf9cfddb8324",
+      "e108e555-6e91-49b8-a80c-c7036176ba4c",
+      "f26e4ab9-27f0-4ee6-a207-ed813c585633",
+      "e9d5c9e4-788d-4b51-9232-5a55757f9a7e"
+    ]
+  }
+]

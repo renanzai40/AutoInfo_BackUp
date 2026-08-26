@@ -1,0 +1,24 @@
+{
+  "id": "1951bda9f9cf1d09",
+  "source_name": "npr-news",
+  "source_type": "rss",
+  "source_url": "https://www.npr.org/2026/08/25/nx-s1-5943572/trump-iran-sanctions",
+  "title": "Can Trump's economic war against Iran do what airstrikes and negotiations couldn't?",
+  "content": "What a new round of U.S. sanctions could mean after nearly six months of war with Iran — and years of economic pressure on the country.",
+  "content_type": "text",
+  "source_platform": "npr-news",
+  "collected_at": "2026-08-25T05:07:09-04:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.npr.org/1001/rss.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5f76f2f1-5ce9-41ac-b46d-04d6a583d0aa",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

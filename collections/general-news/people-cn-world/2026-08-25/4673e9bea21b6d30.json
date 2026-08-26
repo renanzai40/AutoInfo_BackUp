@@ -1,0 +1,24 @@
+{
+  "id": "4673e9bea21b6d30",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0605/c1002-40494861.html",
+  "title": "商务部：中方对合规稀土出口许可申请将予以批准",
+  "content": "<p style=\"text-indent: 2em;\">新华社北京6月5日电（记者谢希瑶）商务部新闻发言人何咏前在5日举行的例行新闻发布会上答记者问时表示，稀土等相关物项具有明显的军民两用属性，对其实施出口管制是国际通行做法。中国政府依法依规对两用物项相关出口许可申请进行审查，对符合规定的申请，中方将予以批准，促进便利合规贸易。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-05T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4832f68a-c1ec-440a-82fd-497986184cc2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

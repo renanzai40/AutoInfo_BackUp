@@ -1,0 +1,24 @@
+{
+  "id": "75b023d9b0641385",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/obschestvo/28044279",
+  "title": "У берегов Севастополя зафиксировали землетрясение",
+  "content": "Эпицентр находится в 15 км от мыса Фиолент",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T21:47:01+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "eae06730-21aa-4a99-b025-3aea8f65e653",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

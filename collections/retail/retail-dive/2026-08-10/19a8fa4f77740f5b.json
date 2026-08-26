@@ -1,0 +1,22 @@
+{
+  "id": "19a8fa4f77740f5b",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.retaildive.com/news/spencer-spirit-holdings-acquire-hot-topic-halloween/827283/",
+  "title": "Spirit Halloween parent company to acquire Hot Topic",
+  "content": "<p>Hot Topic and its subsidiaries will continue to operate independently and will maintain their headquarters in California.</p>",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-07T11:37:00-04:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.retaildive.com/feeds/news/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1fd47797-ee5c-4796-924d-16eb0bb04793"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "_UffpAE7EfGXWw4BmDDNwQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Memory, Encryption, and Protecting Data in Android",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "_UffpAE7EfGXWw4BmDDNwQ",
+    "slug": "memory-encryption-and-protecting-data-android",
+    "name": "Memory, Encryption, and Protecting Data in Android"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9e2acce9-3981-4292-a53e-a88e7283538a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

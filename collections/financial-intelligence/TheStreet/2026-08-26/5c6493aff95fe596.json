@@ -1,0 +1,24 @@
+{
+  "id": "5c6493aff95fe596",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/investing/apple-preparing-for-smart-home-hub-in-stores",
+  "title": "Apple is quietly preparing a major change inside its stores",
+  "content": "Apple’s next big hardware move may not be an iPhone",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T13:47:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ca826f60-3871-4464-88b2-500da7bbeb2c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

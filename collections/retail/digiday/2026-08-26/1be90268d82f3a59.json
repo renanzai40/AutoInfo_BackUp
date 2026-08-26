@@ -1,0 +1,24 @@
+{
+  "id": "1be90268d82f3a59",
+  "source_name": "digiday",
+  "source_type": "rss",
+  "source_url": "https://digiday.com/marketing/discord-adds-lower-funnel-with-outcomes-push/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss",
+  "title": "Discord adds lower funnel with outcomes push",
+  "content": "Discord is pushing its ad business further down the funnel, betting that its gaming communities can deliver more than impressions.",
+  "content_type": "text",
+  "source_platform": "digiday",
+  "collected_at": "2026-08-21T04:01:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://digiday.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ab6aae9d-ad7f-4412-acfd-04e6cc98d5fd",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

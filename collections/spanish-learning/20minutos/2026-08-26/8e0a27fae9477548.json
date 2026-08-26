@@ -1,0 +1,24 @@
+{
+  "id": "8e0a27fae9477548",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/ciencia/eclipse-solar-total-espana-12-agosto-donde-ver-mapas-claves-consejos-especial_6979772_4.html",
+  "title": "Especial | Eclipse solar total en España del próximo 12 de agosto de 2026: A la sombra del sol",
+  "content": "Un fenómeno astronómico extraordinario atraviesa España este 12 de agosto de 2026. Descubre cómo, cuándo y dónde vivir este espectáculo único.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-12T10:02:23+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "03c72055-210b-4d3b-8022-994de8f2e178",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,27 @@
+{
+  "id": "rAlpSmWgEeenbhIEmtW1dA",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Modern Robotics, Course 1:  Foundations of Robot Motion",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "rAlpSmWgEeenbhIEmtW1dA",
+    "slug": "modernrobotics-course1",
+    "name": "Modern Robotics, Course 1:  Foundations of Robot Motion"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2ca4ae5f-deb0-4927-9853-365848110c30",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

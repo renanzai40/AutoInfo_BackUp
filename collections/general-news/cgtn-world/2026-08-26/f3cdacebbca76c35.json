@@ -1,0 +1,24 @@
+{
+  "id": "f3cdacebbca76c35",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/news-1PRmjscY6Iw/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Landslide at Guinea landfill kills 30, government says",
+  "content": "Thirty people died in Guinea's capital Conakry on Sunday when a mound of rubbish in a landfill collapsed before dawn onto neighboring homes following heavy rains, the government said.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-23T23:00:25+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9053b313-be5d-4764-b0f3-a1ec0d39b279",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,114 @@
+[
+  {
+    "collection_id": "col-20260810T060420-3450035b",
+    "timestamp": "2026-08-10T06:06:37.549048+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://news.google.com/rss/search?q=site:ebrun.com&hl=zh-CN&gl=CN&ceid=CN:zh-Hans (bozo): <urlopen error [Errno 101] Network is unreachable>",
+        "source_failed": true,
+        "reason": "RSS parse error for https://news.google.com/rss/search?q=site:ebrun.com&hl=zh-CN&gl=CN&ceid=CN:zh-Hans (bozo): <urlopen error [Errno 101] Network is unreachable>"
+      }
+    ],
+    "duration_ms": 135088.0
+  },
+  {
+    "collection_id": "col-20260815T182153-b4cbc930",
+    "timestamp": "2026-08-15T18:22:29.466554+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://news.google.com/rss/search?q=site:ebrun.com&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://news.google.com/rss/search?q=site:ebrun.com&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30129.0
+  },
+  {
+    "collection_id": "col-20260815T183444-87168bc5",
+    "timestamp": "2026-08-15T18:35:15.162397+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://news.google.com/rss/search?q=site:ebrun.com&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://news.google.com/rss/search?q=site:ebrun.com&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30605.0
+  },
+  {
+    "collection_id": "col-20260825T151427-00fe4839",
+    "timestamp": "2026-08-25T15:15:04.401262+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://news.google.com/rss/search?q=site:ebrun.com&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://news.google.com/rss/search?q=site:ebrun.com&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30041.0
+  },
+  {
+    "collection_id": "col-20260825T153557-a43a7bbf",
+    "timestamp": "2026-08-25T15:36:30.597445+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://news.google.com/rss/search?q=site:ebrun.com&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://news.google.com/rss/search?q=site:ebrun.com&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30051.0
+  },
+  {
+    "collection_id": "col-20260825T154219-f899f7d6",
+    "timestamp": "2026-08-25T15:42:52.627138+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://news.google.com/rss/search?q=site:ebrun.com&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://news.google.com/rss/search?q=site:ebrun.com&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30036.0
+  },
+  {
+    "collection_id": "col-20260825T155208-030d0475",
+    "timestamp": "2026-08-25T15:52:44.802528+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://news.google.com/rss/search?q=site:ebrun.com&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://news.google.com/rss/search?q=site:ebrun.com&hl=zh-CN&gl=CN&ceid=CN:zh-Hans: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30061.0
+  }
+]

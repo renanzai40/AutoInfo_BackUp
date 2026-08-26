@@ -1,0 +1,24 @@
+{
+  "id": "944b14e17c596669",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/proisshestviya/28044221",
+  "title": "В подконтрольном Киеву районе Запорожской области повреждено предприятие",
+  "content": "Другие подробности не приводятся",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T20:43:57+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "cc76bf33-addc-4b56-be55-ef23b5f95f34",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

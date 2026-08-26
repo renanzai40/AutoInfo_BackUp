@@ -1,0 +1,24 @@
+{
+  "id": "b07aad2f58cd1407",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/internacional/farmear-aura-cuando-hacer-idiota-se-convierte-talento-opinion-fernando-contin_7028623_3.html",
+  "title": "Farmear aura, cuando hacer el idiota se convierte en talento",
+  "content": "\"Supongo que cada generación encuentra una manera nueva de hacer el idiota; lo verdaderamente novedoso es que la nuestra haya conseguido convertirlo en una disciplina competitiva\".",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T05:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "89d1de52-d857-47f6-9acc-708ff4ac108c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

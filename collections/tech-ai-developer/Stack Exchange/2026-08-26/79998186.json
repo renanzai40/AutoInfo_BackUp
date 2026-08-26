@@ -1,0 +1,47 @@
+{
+  "id": 79998186,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/79998186/django-channels-redis-exceptions-timeouterror-timeout-reading-from-127-0-0-163",
+  "title": "Django Channels redis.exceptions.TimeoutError: Timeout reading from 127.0.0.1:6379",
+  "content": "Django Channels redis.exceptions.TimeoutError: Timeout reading from 127.0.0.1:6379",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-26T00:53:25.798577+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "python",
+      "django",
+      "redis"
+    ],
+    "owner": {
+      "account_id": 20513829,
+      "reputation": 19,
+      "user_id": 15054977,
+      "user_type": "registered",
+      "profile_image": "https://lh3.googleusercontent.com/a-/AOh14Giv6o6vRD5wXp4HlQ7xm3u5fR2yGtSteOhvFs3P=k-s256",
+      "display_name": "Amythist Arira",
+      "link": "https://stackoverflow.com/users/15054977/amythist-arira"
+    },
+    "is_answered": true,
+    "view_count": 48,
+    "answer_count": 2,
+    "score": 2,
+    "last_activity_date": 1787704531,
+    "creation_date": 1787686237,
+    "question_id": 79998186,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/79998186/django-channels-redis-exceptions-timeouterror-timeout-reading-from-127-0-0-163",
+    "title": "Django Channels redis.exceptions.TimeoutError: Timeout reading from 127.0.0.1:6379"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "81719e0c-a448-4ac4-be2b-448afe7d19a8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

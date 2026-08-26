@@ -1,0 +1,24 @@
+{
+  "id": "22793c11295e5e6e",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/hardware/handheld-gaming-pcs/lenovo-says-it-is-clear-legion-go-faults-not-user-error-and-even-devices-out-of-warranty-could-be-repaired-free-of-charge/",
+  "title": "Lenovo says it is 'clear' Legion Go faults 'not user error' and even devices out of warranty could be repaired 'free of charge'",
+  "content": "Users have been complaining about this problem for a few weeks now.",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-25T16:23:51+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "570a8ce9-b095-46b5-9e5d-41ff34af2aa0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

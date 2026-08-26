@@ -1,0 +1,24 @@
+{
+  "id": "eee169b344491bca",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/ciudades/final-mejor-playa-espana-2026-vota-favorita_7005623_0.html",
+  "title": "¿Cuál es la mejor playa de España 2026? Vota y podrás ganar un reloj inteligente Huawei Watch Fit 5 Series",
+  "content": "¿Cuál es la mejor playa de España? Los lectores de 20minutos votan por saber cuál es la ganadora de 2026. De entre los 10 litorales de su geografía, las dos mejores han pasado a la gran final. Ya puedes elegir a la mejor de España.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-07-07T09:47:01+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8358d4bc-1643-45df-8f8d-a54c78939766",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

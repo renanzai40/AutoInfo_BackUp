@@ -1,0 +1,24 @@
+{
+  "id": "4c0d83f3a5b6ca75",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/deals/szrsth-outdoor-solar-light-walmart-flash-sale-august-2026",
+  "title": "Walmart’s bestselling solar flood light for outdoor security is only $20 right now",
+  "content": "\"They are a great addition to my home.\"",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T12:30:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3260643e-8803-4fc7-98d8-3cd3b564d4e5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "af1902a8c8280503",
+  "source_name": "shopify-news",
+  "source_type": "rss",
+  "source_url": "https://shopify.com/news/shopify-audiences-supercharges-customer-acquisition-with-new-snap-criteo-and-tiktok-integrations",
+  "title": "Shopify Audiences supercharges customer acquisition with new Snap, Criteo, and TikTok integrations",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "shopify-news",
+  "collected_at": "2023-09-25T13:03:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.shopify.com/news/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e73bfb1e-0f15-489b-9059-037e6e704879",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

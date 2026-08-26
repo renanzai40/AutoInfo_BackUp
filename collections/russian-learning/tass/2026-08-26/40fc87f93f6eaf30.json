@@ -1,0 +1,24 @@
+{
+  "id": "40fc87f93f6eaf30",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/mezhdunarodnaya-panorama/28044033",
+  "title": "Законодатель США Луна положительно оценила сообщения о поездке главы ЦРУ в РФ",
+  "content": "Джон Рэтклифф \"делает замечательные вещи в интересах\" Соединенных Штатов, отметила  член Палаты представителей Конгресса",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T19:01:11+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f9caa406-cf96-40e4-8c70-8199dae6d48c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

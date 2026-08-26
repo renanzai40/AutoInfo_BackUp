@@ -1,0 +1,24 @@
+{
+  "id": "fa3761de3a516fbf",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-22/Iran-slams-new-US-economic-pressure-campaign-1POKS7XoOUo/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Iran slams new US economic pressure campaign",
+  "content": "Iranian Foreign Ministry spokesperson Esmaeil Baghaei on Saturday criticized US President Donald Trump's planned new economic pressure campaign against Tehran, saying Washington was seeking to force other countries to comply with US sanctions.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-22T11:21:09+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0966fab1-e533-4e3b-8cca-52187d13780f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

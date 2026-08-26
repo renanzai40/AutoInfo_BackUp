@@ -1,0 +1,601 @@
+keywords:
+  ariana grande:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.139836+00:00'
+    updated_at: '2026-08-25T16:23:13.855106+00:00'
+    source: auto-discovery:rss
+  petal:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.146367+00:00'
+    updated_at: '2026-08-25T16:23:13.918794+00:00'
+    source: auto-discovery:rss
+  ariana:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.156311+00:00'
+    updated_at: '2026-08-25T16:23:13.981241+00:00'
+    source: auto-discovery:rss
+  grande's:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.167465+00:00'
+    updated_at: '2026-08-25T16:23:14.047865+00:00'
+    source: auto-discovery:rss
+  album:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.178832+00:00'
+    updated_at: '2026-08-25T18:59:31.440260+00:00'
+    source: auto-discovery:variety
+  '''petal''':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.190276+00:00'
+    updated_at: '2026-08-25T16:23:14.120133+00:00'
+    source: auto-discovery:rss
+  debuted:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.201387+00:00'
+    updated_at: '2026-08-10T06:10:07.201387+00:00'
+    source: auto-discovery:rss
+  no.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.217253+00:00'
+    updated_at: '2026-08-25T18:19:26.341183+00:00'
+    source: auto-discovery:billboard
+  billboard:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.233229+00:00'
+    updated_at: '2026-08-25T18:23:21.266100+00:00'
+    source: auto-discovery:billboard
+  ariana grande's:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.245822+00:00'
+    updated_at: '2026-08-25T16:23:14.307312+00:00'
+    source: auto-discovery:rss
+  grande's album:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.261069+00:00'
+    updated_at: '2026-08-10T06:10:07.261069+00:00'
+    source: auto-discovery:rss
+  album 'petal':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.275615+00:00'
+    updated_at: '2026-08-10T06:10:07.275615+00:00'
+    source: auto-discovery:rss
+  '''petal'' debuted':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.290595+00:00'
+    updated_at: '2026-08-10T06:10:07.290595+00:00'
+    source: auto-discovery:rss
+  debuted no.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.305340+00:00'
+    updated_at: '2026-08-10T06:10:07.305340+00:00'
+    source: auto-discovery:rss
+  no. the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.320732+00:00'
+    updated_at: '2026-08-10T06:10:07.320732+00:00'
+    source: auto-discovery:rss
+  the billboard:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.337880+00:00'
+    updated_at: '2026-08-10T06:10:07.337880+00:00'
+    source: auto-discovery:rss
+  ariana grande's album:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.355670+00:00'
+    updated_at: '2026-08-10T06:10:07.355670+00:00'
+    source: auto-discovery:rss
+  grande's album 'petal':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.372850+00:00'
+    updated_at: '2026-08-10T06:10:07.372850+00:00'
+    source: auto-discovery:rss
+  album 'petal' debuted:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.392744+00:00'
+    updated_at: '2026-08-10T06:10:07.392744+00:00'
+    source: auto-discovery:rss
+  '''petal'' debuted no.':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.412737+00:00'
+    updated_at: '2026-08-10T06:10:07.412737+00:00'
+    source: auto-discovery:rss
+  debuted no. the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.432952+00:00'
+    updated_at: '2026-08-10T06:10:07.432952+00:00'
+    source: auto-discovery:rss
+  no. the billboard:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.452602+00:00'
+    updated_at: '2026-08-10T06:10:07.452602+00:00'
+    source: auto-discovery:rss
+  her:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.472018+00:00'
+    updated_at: '2026-08-25T19:01:27.629066+00:00'
+    source: auto-discovery:variety
+  seventh:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.493334+00:00'
+    updated_at: '2026-08-25T16:23:14.372006+00:00'
+    source: auto-discovery:rss
+  album.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.514585+00:00'
+    updated_at: '2026-08-25T18:50:53.970986+00:00'
+    source: auto-discovery:pitchfork
+  this her:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.535891+00:00'
+    updated_at: '2026-08-10T06:10:07.535891+00:00'
+    source: auto-discovery:rss
+  her seventh:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.558820+00:00'
+    updated_at: '2026-08-10T06:10:07.558820+00:00'
+    source: auto-discovery:rss
+  seventh no.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.583400+00:00'
+    updated_at: '2026-08-25T16:23:14.489393+00:00'
+    source: auto-discovery:rss
+  no. album.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.606795+00:00'
+    updated_at: '2026-08-10T06:10:07.606795+00:00'
+    source: auto-discovery:rss
+  this her seventh:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.629346+00:00'
+    updated_at: '2026-08-10T06:10:07.629346+00:00'
+    source: auto-discovery:rss
+  her seventh no.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.651476+00:00'
+    updated_at: '2026-08-10T06:10:07.651476+00:00'
+    source: auto-discovery:rss
+  seventh no. album.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.674334+00:00'
+    updated_at: '2026-08-10T06:10:07.674334+00:00'
+    source: auto-discovery:rss
+  grande:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.696470+00:00'
+    updated_at: '2026-08-10T06:10:07.696470+00:00'
+    source: auto-discovery:rss
+  celebrated:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.719406+00:00'
+    updated_at: '2026-08-10T06:10:07.719406+00:00'
+    source: auto-discovery:rss
+  behind-the-scenes:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.744477+00:00'
+    updated_at: '2026-08-25T16:23:14.557129+00:00'
+    source: auto-discovery:rss
+  footage:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.768278+00:00'
+    updated_at: '2026-08-25T16:32:49.081390+00:00'
+    source: auto-discovery:netflix-tech-blog
+  studio.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.792591+00:00'
+    updated_at: '2026-08-10T06:10:07.792591+00:00'
+    source: auto-discovery:rss
+  grande celebrated:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.817301+00:00'
+    updated_at: '2026-08-10T06:10:07.817301+00:00'
+    source: auto-discovery:rss
+  celebrated with:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.842837+00:00'
+    updated_at: '2026-08-10T06:10:07.842837+00:00'
+    source: auto-discovery:rss
+  with behind-the-scenes:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.871105+00:00'
+    updated_at: '2026-08-10T06:10:07.871105+00:00'
+    source: auto-discovery:rss
+  behind-the-scenes footage:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.899184+00:00'
+    updated_at: '2026-08-10T06:10:07.899184+00:00'
+    source: auto-discovery:rss
+  footage from:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.931794+00:00'
+    updated_at: '2026-08-10T06:10:07.931794+00:00'
+    source: auto-discovery:rss
+  the studio.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.959494+00:00'
+    updated_at: '2026-08-10T06:10:07.959494+00:00'
+    source: auto-discovery:rss
+  grande celebrated with:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:07.991670+00:00'
+    updated_at: '2026-08-10T06:10:07.991670+00:00'
+    source: auto-discovery:rss
+  celebrated with behind-the-scenes:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.019742+00:00'
+    updated_at: '2026-08-10T06:10:08.019742+00:00'
+    source: auto-discovery:rss
+  with behind-the-scenes footage:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.049907+00:00'
+    updated_at: '2026-08-10T06:10:08.049907+00:00'
+    source: auto-discovery:rss
+  behind-the-scenes footage from:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.078841+00:00'
+    updated_at: '2026-08-10T06:10:08.078841+00:00'
+    source: auto-discovery:rss
+  footage from the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.112448+00:00'
+    updated_at: '2026-08-10T06:10:08.112448+00:00'
+    source: auto-discovery:rss
+  from the studio.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.148335+00:00'
+    updated_at: '2026-08-10T06:10:08.148335+00:00'
+    source: auto-discovery:rss
+  caption:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.179306+00:00'
+    updated_at: '2026-08-10T06:10:08.179306+00:00'
+    source: auto-discovery:rss
+  '''petal':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.218959+00:00'
+    updated_at: '2026-08-10T06:10:08.218959+00:00'
+    source: auto-discovery:rss
+  forever':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.254694+00:00'
+    updated_at: '2026-08-10T06:10:08.254694+00:00'
+    source: auto-discovery:rss
+  accompanied:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.288138+00:00'
+    updated_at: '2026-08-10T06:10:08.288138+00:00'
+    source: auto-discovery:rss
+  studio:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.337368+00:00'
+    updated_at: '2026-08-25T18:59:31.395674+00:00'
+    source: auto-discovery:variety
+  footage.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.372414+00:00'
+    updated_at: '2026-08-25T18:49:30.184971+00:00'
+    source: auto-discovery:netflix-tech-blog
+  the caption:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.406539+00:00'
+    updated_at: '2026-08-10T06:10:08.406539+00:00'
+    source: auto-discovery:rss
+  caption 'petal:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.441215+00:00'
+    updated_at: '2026-08-10T06:10:08.441215+00:00'
+    source: auto-discovery:rss
+  '''petal forever''':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.479882+00:00'
+    updated_at: '2026-08-10T06:10:08.479882+00:00'
+    source: auto-discovery:rss
+  forever' accompanied:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.521619+00:00'
+    updated_at: '2026-08-10T06:10:08.521619+00:00'
+    source: auto-discovery:rss
+  accompanied the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.561481+00:00'
+    updated_at: '2026-08-10T06:10:08.561481+00:00'
+    source: auto-discovery:rss
+  the studio:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.600950+00:00'
+    updated_at: '2026-08-10T06:10:08.600950+00:00'
+    source: auto-discovery:rss
+  studio footage.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.641378+00:00'
+    updated_at: '2026-08-10T06:10:08.641378+00:00'
+    source: auto-discovery:rss
+  the caption 'petal:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.679311+00:00'
+    updated_at: '2026-08-10T06:10:08.679311+00:00'
+    source: auto-discovery:rss
+  caption 'petal forever':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.723291+00:00'
+    updated_at: '2026-08-10T06:10:08.723291+00:00'
+    source: auto-discovery:rss
+  '''petal forever'' accompanied':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.766837+00:00'
+    updated_at: '2026-08-10T06:10:08.766837+00:00'
+    source: auto-discovery:rss
+  forever' accompanied the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.803480+00:00'
+    updated_at: '2026-08-10T06:10:08.803480+00:00'
+    source: auto-discovery:rss
+  accompanied the studio:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.841584+00:00'
+    updated_at: '2026-08-10T06:10:08.841584+00:00'
+    source: auto-discovery:rss
+  the studio footage.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:08.882680+00:00'
+    updated_at: '2026-08-10T06:10:08.882680+00:00'
+    source: auto-discovery:rss
+  clementine douglas:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.736327+00:00'
+    updated_at: '2026-08-25T18:11:42.202795+00:00'
+    source: auto-discovery:rss
+  dom dolla:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.779706+00:00'
+    updated_at: '2026-08-25T18:11:42.295679+00:00'
+    source: auto-discovery:rss
+  madison square garden:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.822400+00:00'
+    updated_at: '2026-08-25T18:11:42.248514+00:00'
+    source: auto-discovery:rss
+  clementine:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.865040+00:00'
+    updated_at: '2026-08-25T18:11:42.341163+00:00'
+    source: auto-discovery:rss
+  douglas:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.908101+00:00'
+    updated_at: '2026-08-25T18:11:42.388781+00:00'
+    source: auto-discovery:rss
+  announced:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:10.951299+00:00'
+    updated_at: '2026-08-25T19:01:40.667009+00:00'
+    source: auto-discovery:variety
+  first:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.056914+00:00'
+    updated_at: '2026-08-25T19:01:59.924197+00:00'
+    source: auto-discovery:variety
+  australian:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.099065+00:00'
+    updated_at: '2026-08-25T16:23:12.495968+00:00'
+    source: auto-discovery:rss
+  headline:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.141740+00:00'
+    updated_at: '2026-08-25T18:11:42.489906+00:00'
+    source: auto-discovery:rss
+  shows.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.185594+00:00'
+    updated_at: '2026-08-10T06:10:11.185594+00:00'
+    source: auto-discovery:rss
+  douglas has:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.230217+00:00'
+    updated_at: '2026-08-10T06:10:11.230217+00:00'
+    source: auto-discovery:rss
+  has announced:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.283860+00:00'
+    updated_at: '2026-08-10T06:10:36.549651+00:00'
+    source: auto-discovery:rss
+  announced her:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.328858+00:00'
+    updated_at: '2026-08-10T06:10:11.328858+00:00'
+    source: auto-discovery:rss
+  her first:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.375252+00:00'
+    updated_at: '2026-08-10T06:10:11.375252+00:00'
+    source: auto-discovery:rss
+  first australian:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.424515+00:00'
+    updated_at: '2026-08-10T06:10:11.424515+00:00'
+    source: auto-discovery:rss
+  australian headline:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.471026+00:00'
+    updated_at: '2026-08-10T06:10:11.471026+00:00'
+    source: auto-discovery:rss
+  headline shows.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.520537+00:00'
+    updated_at: '2026-08-10T06:10:11.520537+00:00'
+    source: auto-discovery:rss
+  clementine douglas has:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.566802+00:00'
+    updated_at: '2026-08-10T06:10:11.566802+00:00'
+    source: auto-discovery:rss
+  douglas has announced:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.614368+00:00'
+    updated_at: '2026-08-10T06:10:11.614368+00:00'
+    source: auto-discovery:rss
+  has announced her:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.663891+00:00'
+    updated_at: '2026-08-10T06:10:11.663891+00:00'
+    source: auto-discovery:rss
+  announced her first:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.715645+00:00'
+    updated_at: '2026-08-10T06:10:11.715645+00:00'
+    source: auto-discovery:rss
+  her first australian:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.765855+00:00'
+    updated_at: '2026-08-10T06:10:11.765855+00:00'
+    source: auto-discovery:rss
+  first australian headline:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.813769+00:00'
+    updated_at: '2026-08-10T06:10:11.813769+00:00'
+    source: auto-discovery:rss
+  australian headline shows.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.862878+00:00'
+    updated_at: '2026-08-10T06:10:11.862878+00:00'
+    source: auto-discovery:rss
+  made:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.912317+00:00'
+    updated_at: '2026-08-25T19:01:43.427161+00:00'
+    source: auto-discovery:variety
+  madison:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:11.963000+00:00'
+    updated_at: '2026-08-25T18:20:28.836885+00:00'
+    source: auto-discovery:billboard
+  square:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:12.044081+00:00'
+    updated_at: '2026-08-25T18:11:42.627516+00:00'
+    source: auto-discovery:rss
+  garden:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:12.095890+00:00'
+    updated_at: '2026-08-25T18:11:42.672923+00:00'
+    source: auto-discovery:rss
+  debut:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:12.148098+00:00'
+    updated_at: '2026-08-25T18:59:31.349889+00:00'
+    source: auto-discovery:variety
+  earlier:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:12.203935+00:00'
+    updated_at: '2026-08-25T18:54:55.809349+00:00'
+    source: auto-discovery:the-verge
+  year.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:12.315463+00:00'
+    updated_at: '2026-08-10T06:10:12.315463+00:00'
+    source: auto-discovery:rss
+  she made:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-10T06:10:12.366473+00:00'
+    updated_at: '2026-08-10T06:10:12.366473+00:00'
+    source: auto-discovery:rss

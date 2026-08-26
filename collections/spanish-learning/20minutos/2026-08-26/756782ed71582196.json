@@ -1,0 +1,24 @@
+{
+  "id": "756782ed71582196",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/television/risto-mejide-se-convierte-odiseo-para-anunciar-su-regreso-todo-es-mentira-se-acabo-calma_7029130_0.html",
+  "title": "Risto Mejide se convierte en Odiseo para anunciar su regreso a 'Todo es Mentira': \"Se acabó la calma\"",
+  "content": "Risto Mejide se convierte en Odiseo para anunciar su regreso a 'Todo es Mentira': \"Se acabó la calma\"",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T12:57:58+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e52bb041-222b-4f62-ba46-ea94eb62ca07",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

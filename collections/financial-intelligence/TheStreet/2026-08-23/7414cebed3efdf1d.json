@@ -1,0 +1,24 @@
+{
+  "id": "7414cebed3efdf1d",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/investing/stocks/quantum-computing-stock-9000-percent-revenue-jump",
+  "title": "One quantum stock just posted a 9,000% revenue jump",
+  "content": "Seven quantum computing stocks rallied Aug. 21. One earnings report buried in the group stands out from the rest.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-22T18:33:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c7103063-6a70-4516-a15f-8b0351faed82",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

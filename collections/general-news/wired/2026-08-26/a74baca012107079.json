@@ -1,0 +1,24 @@
+{
+  "id": "a74baca012107079",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/gallery/best-laptop-docking-stations/",
+  "title": "The 6 Best Laptop Docking Stations to Unlock the Full Desktop Experience (2026)",
+  "content": "Docking stations expand what your laptop can do, and I’ve been testing the best of the best to see which you should buy.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-23T10:37:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5327fcfe-e1b8-4c7a-be9f-f8c255f7d2af",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

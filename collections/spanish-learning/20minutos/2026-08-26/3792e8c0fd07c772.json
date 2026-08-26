@@ -1,0 +1,24 @@
+{
+  "id": "3792e8c0fd07c772",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/chef-jose-andres-se-reune-kiev-con-zelenski-pide-trump-mas-ayuda-militar-para-ucrania_7029249_0.html",
+  "title": "El chef José Andrés se reúne en Kiev con Zelenski y pide a Trump más ayuda militar para Ucrania",
+  "content": "El cocinero, que se ha reunido con Zelenski, apela al mandatario recordándole que hay muchas empresas americanas en riesgo.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T17:14:34+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0cd993b2-1141-4cc2-9f41-3e075ffedd25",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

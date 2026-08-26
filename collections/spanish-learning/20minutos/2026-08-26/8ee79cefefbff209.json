@@ -1,0 +1,24 @@
+{
+  "id": "8ee79cefefbff209",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/tecnologia/aplicaciones/google-tiene-nueva-funcion-android-reduce-mareo-mirar-movil-coche_7029234_0.html",
+  "title": "Google tiene una nueva función para Android que reduce el mareo al mirar el móvil en el coche",
+  "content": "Llega tarde en comparación con iPhone, pero mejor tarde que nunca y seguro que es muy bien recibida por todos los usuarios de Android.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T19:30:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "484abefe-1073-4241-95da-c2cde15cb745",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

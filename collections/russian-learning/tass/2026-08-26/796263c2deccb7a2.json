@@ -1,0 +1,24 @@
+{
+  "id": "796263c2deccb7a2",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/mezhdunarodnaya-panorama/28044277",
+  "title": "ВС Швеции хотят изъять участок гражданина РФ якобы из-за \"угрозы безопасности\"",
+  "content": "Недвижимость расположена у военной базы на острове Мускё в южной части Стокгольмского архипелага",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T21:47:58+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1f143d0e-62b3-4b5d-9f39-8cc068b07b82",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

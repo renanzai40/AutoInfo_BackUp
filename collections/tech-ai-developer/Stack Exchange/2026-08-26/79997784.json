@@ -1,0 +1,50 @@
+{
+  "id": 79997784,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/79997784/how-to-restrict-clickable-area-to-button",
+  "title": "How to restrict clickable area to Button",
+  "content": "How to restrict clickable area to Button",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-26T00:53:25.798577+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "python",
+      "html",
+      "plotly-dash"
+    ],
+    "owner": {
+      "account_id": 11361106,
+      "reputation": 7772,
+      "user_id": 8329213,
+      "user_type": "registered",
+      "accept_rate": 69,
+      "profile_image": "https://i.sstatic.net/Db9cx.jpg?s=256",
+      "display_name": "cph_sto",
+      "link": "https://stackoverflow.com/users/8329213/cph-sto"
+    },
+    "is_answered": true,
+    "view_count": 102,
+    "accepted_answer_id": 79997789,
+    "answer_count": 2,
+    "score": 3,
+    "last_activity_date": 1787704680,
+    "creation_date": 1787575652,
+    "last_edit_date": 1787576599,
+    "question_id": 79997784,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/79997784/how-to-restrict-clickable-area-to-button",
+    "title": "How to restrict clickable area to Button"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8c23f2ed-9945-4706-aa93-459d03327ac0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "74bc9818fbddfd04",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/suspeito-de-violencia-domestica-contra-o-pai-foge-pela-janela-e-atira-pedras-a-psp-e-acaba-baleado-numa-perna/",
+  "title": "Suspeito de agredir pai atingido a tiro na Amadora",
+  "content": "O suspeito encontra-se no Hospital Professor Doutor Fernando Fonseca",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T16:13:26+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bbd80d09-c9bc-4a4a-8391-39f13ca552a1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

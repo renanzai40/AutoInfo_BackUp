@@ -1,0 +1,24 @@
+{
+  "id": "8ca478c79f0f4a19",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/religion/rashiphal/video/kark-rashifal-26-august-2026-cancer-daily-horoscope-today-2629609-2026-08-26?utm_source=rssfeed",
+  "title": "कर्क राशि",
+  "content": "अपनी भावनाओं को कंट्रोल में रखें, धन लाभ के रास्ते बनेंगे, परिवार के लोगों से संबंध मधुर होंगे, नौकरी में तरक्की के लिए किए गए प्रयास सफल होंगे, अपनी ...",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-26T02:00:06+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f7a79f5e-0b17-4f35-8687-5a46adb33982",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

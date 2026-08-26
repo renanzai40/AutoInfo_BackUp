@@ -1,0 +1,24 @@
+{
+  "id": "3f897ddacb18e225",
+  "source_name": "Unpaywall",
+  "source_type": "api",
+  "source_url": "https://api.unpaywall.org/v2",
+  "title": "",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "Unpaywall",
+  "collected_at": "2026-08-07T20:05:26.019688+00:00",
+  "language": "",
+  "domain": "medical-research",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "documentation_url": "https://unpaywall.org/api/v2",
+    "msg": "Don't panic",
+    "version": "2.0.1"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f13b342b-7b19-4300-a346-5badc45db3aa"
+}

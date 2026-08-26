@@ -1,0 +1,24 @@
+{
+  "id": "0fded1e776397285",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/vid%C3%A9o/20260825-ha%C3%AFti-nouvelle-attaque-meurtri%C3%A8re-attribu%C3%A9e-%C3%A0-une-coalition-de-gangs",
+  "title": "Haïti : nouvelle attaque meurtrière attribuée à une coalition de gangs",
+  "content": "Au moins 47 personnes ont été tuées et 22 autres blessées lors d'une nouvelle attaque de gangs en #Haïti, selon un bilan provisoire de l’#ONU. La population dénonce le manque de protection face aux #violences répétées dans un pays en proie au chaos sécuritaire.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T13:53:02+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d484ef2f-0d20-4288-8ca0-50dbc78596cd",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

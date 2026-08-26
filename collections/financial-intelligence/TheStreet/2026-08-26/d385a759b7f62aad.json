@@ -1,0 +1,24 @@
+{
+  "id": "d385a759b7f62aad",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/technology/history-of-alphabet-company-timeline-facts",
+  "title": "History of Alphabet: Company timeline, milestones & facts",
+  "content": "A Stanford University research project eventually became the world’s most popular search engine.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T19:34:57+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d32d4e4b-18ed-4a23-84e9-2c5e51436285",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

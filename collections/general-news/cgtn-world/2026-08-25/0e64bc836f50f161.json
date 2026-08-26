@@ -1,0 +1,24 @@
+{
+  "id": "0e64bc836f50f161",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/2026-APEC-SME-ministerial-meeting-to-focus-on-innovation-cooperation-1PSkCyrJME8/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "2026 APEC SME ministerial meeting to focus on innovation, cooperation",
+  "content": "The 32nd Asia-Pacific Economic Cooperation (APEC) Small and Medium Enterprises (SME) Ministerial Meeting will be held on Sept. 4 in Guangzhou, south China's Guangdong Province, the Ministry of Industry and Information Technology (MIIT) said on Monday.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T13:51:29+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d575c909-baa7-4fb9-9ea1-e5fa6da5182e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

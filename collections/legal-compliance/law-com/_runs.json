@@ -1,0 +1,114 @@
+[
+  {
+    "collection_id": "col-20260810T044925-c4d8610b",
+    "timestamp": "2026-08-10T04:49:34.471430+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.law.com/feed/ (bozo): <unknown>:8:45: not well-formed (invalid token)",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.law.com/feed/ (bozo): <unknown>:8:45: not well-formed (invalid token)"
+      }
+    ],
+    "duration_ms": 3513.0
+  },
+  {
+    "collection_id": "col-20260810T055858-5f172c11",
+    "timestamp": "2026-08-10T05:59:07.720872+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://www.law.com/feed/ (bozo): <unknown>:8:45: not well-formed (invalid token)",
+        "source_failed": true,
+        "reason": "RSS parse error for https://www.law.com/feed/ (bozo): <unknown>:8:45: not well-formed (invalid token)"
+      }
+    ],
+    "duration_ms": 3348.0
+  },
+  {
+    "collection_id": "col-20260815T182025-53092144",
+    "timestamp": "2026-08-15T18:20:33.389873+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.law.com/feed/: Client error '404 Not Found' for url 'https://www.law.com/feed/?slreturn=20260815142034'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.law.com/feed/: Client error '404 Not Found' for url 'https://www.law.com/feed/?slreturn=20260815142034'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 2546.0
+  },
+  {
+    "collection_id": "col-20260815T183614-3b1e0f09",
+    "timestamp": "2026-08-15T18:36:17.565506+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.law.com/feed/: Client error '404 Not Found' for url 'https://www.law.com/feed/?slreturn=20260815143618'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.law.com/feed/: Client error '404 Not Found' for url 'https://www.law.com/feed/?slreturn=20260815143618'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 3295.0
+  },
+  {
+    "collection_id": "col-20260825T152205-3d85719c",
+    "timestamp": "2026-08-25T15:22:26.370864+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.law.com/feed/: Client error '404 Not Found' for url 'https://www.law.com/feed/?slreturn=20260825112227'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.law.com/feed/: Client error '404 Not Found' for url 'https://www.law.com/feed/?slreturn=20260825112227'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 3598.0
+  },
+  {
+    "collection_id": "col-20260825T153341-1aa1225e",
+    "timestamp": "2026-08-25T15:33:53.023726+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.law.com/feed/: Client error '404 Not Found' for url 'https://www.law.com/feed/?slreturn=20260825113352'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.law.com/feed/: Client error '404 Not Found' for url 'https://www.law.com/feed/?slreturn=20260825113352'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 5228.0
+  },
+  {
+    "collection_id": "col-20260825T154943-e759e288",
+    "timestamp": "2026-08-25T15:49:53.472821+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.law.com/feed/: Client error '404 Not Found' for url 'https://www.law.com/feed/?slreturn=20260825114954'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.law.com/feed/: Client error '404 Not Found' for url 'https://www.law.com/feed/?slreturn=20260825114954'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 3447.0
+  }
+]

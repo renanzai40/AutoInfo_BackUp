@@ -1,0 +1,24 @@
+{
+  "id": "fca7a3d23dcb8ce4",
+  "source_name": "techcrunch",
+  "source_type": "rss",
+  "source_url": "https://techcrunch.com/2026/08/25/fgv-capital-bets-on-a-new-venture-model-raises-35m-fund-ii/",
+  "title": "Fiat Ventures combines venture and advisory divisions into new brand, raises $35M Fund II",
+  "content": "In an environment where emerging fund managers struggle to attract LP attention, FGV is betting that a different venture model can help it lure LPs.",
+  "content_type": "text",
+  "source_platform": "techcrunch",
+  "collected_at": "2026-08-25T12:37:37+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://techcrunch.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ebbedb02-9b08-46cb-8a86-e0be07591adf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

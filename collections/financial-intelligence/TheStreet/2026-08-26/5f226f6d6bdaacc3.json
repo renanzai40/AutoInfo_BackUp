@@ -1,0 +1,24 @@
+{
+  "id": "5f226f6d6bdaacc3",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/shopping/lifengsoler-motion-sensor-clip-on-solar-lights-amazon-sale",
+  "title": "Amazon's $38 motion-sensor solar lights monitor 600 square feet without electricity",
+  "content": "They come in a four-pack, and each light has 800 lumens.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T14:45:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e07bd3a1-2b39-435a-88c9-499c59f01b1d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

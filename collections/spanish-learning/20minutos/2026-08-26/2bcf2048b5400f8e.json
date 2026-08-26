@@ -1,0 +1,24 @@
+{
+  "id": "2bcf2048b5400f8e",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/capaces/jesus-martin-blanco-las-personas-con-discapacidad-tenemos-voz-eso-hay-que-llevarlo-las-leyes_7028747_0.html",
+  "title": "Jesús Martín Blanco: \"Las personas con discapacidad tenemos voz, y eso hay que llevarlo a las leyes\"",
+  "content": "El director General de Derechos de las Personas con Discapacidad habla de las repercusiones que tendrá la reforma de las leyes de discapacidad y dependencia en casi 10 millones de personas en España.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T07:24:23+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0b6c9cc6-91f0-4f57-aa2f-a7fbf2d18a04",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

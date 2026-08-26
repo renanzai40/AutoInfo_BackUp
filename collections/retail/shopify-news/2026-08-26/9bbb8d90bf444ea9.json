@@ -1,0 +1,24 @@
+{
+  "id": "9bbb8d90bf444ea9",
+  "source_name": "shopify-news",
+  "source_type": "rss",
+  "source_url": "https://shopify.com/news/tis-the-season-to-treat-yourself-new-data-shows-holiday-sales-go-way-beyond-gifts",
+  "title": "‘Tis the season to treat yourself: New data shows holiday sales go way beyond gifts",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "shopify-news",
+  "collected_at": "2023-11-07T10:00:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.shopify.com/news/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0ef6234a-c873-472b-859e-11c73a6f7470",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

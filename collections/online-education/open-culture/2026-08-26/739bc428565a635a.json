@@ -1,0 +1,24 @@
+{
+  "id": "739bc428565a635a",
+  "source_name": "open-culture",
+  "source_type": "rss",
+  "source_url": "https://www.openculture.com/2026/08/the-complete-history-of-the-beatles-as-told-by-conan-obrien.html",
+  "title": "The Complete History of the Beatles as Told By Conan O’Brien",
+  "content": "The world ended in the nineteen-sixties. Or rather, one world ended in the nineteen-sixties and gave way to another, a transition personified by no human beings more clearly than the Beatles. “They are lightning rods for so much that makes the sixties a revolutionary decade,” says The Rest Is History&#160;podcast co-host Tom Holland in the [&#8230;]",
+  "content_type": "text",
+  "source_platform": "open-culture",
+  "collected_at": "2026-08-19T09:00:29+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.openculture.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8c333197-c61b-4d04-9e28-eed394d4bfaf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

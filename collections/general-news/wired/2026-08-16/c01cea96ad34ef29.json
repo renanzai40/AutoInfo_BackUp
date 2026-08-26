@@ -1,0 +1,22 @@
+{
+  "id": "c01cea96ad34ef29",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/review/retrospec-joe-rev-2/",
+  "title": "Retrospec Joe Rev 2 Review (2026): Putting the ‘Joy’ in Joyride",
+  "content": "This affordable electric BMX delighted my entire family, even if its range, ride comfort, and actual BMX abilities are limited.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-15T11:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "11f3500f-c3f0-4d93-a9c8-74392bcd8220"
+}

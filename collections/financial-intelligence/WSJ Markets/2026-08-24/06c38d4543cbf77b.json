@@ -1,0 +1,24 @@
+{
+  "id": "06c38d4543cbf77b",
+  "source_name": "WSJ Markets",
+  "source_type": "rss",
+  "source_url": "https://www.wsj.com/articles/chinese-investors-with-few-options-turn-to-dividends-ad31dcc4?mod=rss_markets_main",
+  "title": "Chinese Investors With Few Options Turn to Dividends",
+  "content": "Companies with good payouts are now the hottest bet in China markets.",
+  "content_type": "text",
+  "source_platform": "WSJ Markets",
+  "collected_at": "2025-01-27T05:30:00-05:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ffeec83b-5521-4a3b-91f7-b1884a6563e1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

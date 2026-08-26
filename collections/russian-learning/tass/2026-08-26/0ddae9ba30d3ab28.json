@@ -1,0 +1,24 @@
+{
+  "id": "0ddae9ba30d3ab28",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/ekonomika/28044301",
+  "title": "Сбер рассказал, как ИИ помогает снижать природные и экономические риски",
+  "content": "Нейросеть выявляет признаки деградации земель, нецелевого использования сельскохозяйственных угодий и распространения инвазивных растений",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T22:11:13+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e4a13071-5477-49b9-bf9f-84861fb8ebeb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

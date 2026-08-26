@@ -1,0 +1,24 @@
+{
+  "id": "65c518da9b89d17c",
+  "source_name": "shopify-news",
+  "source_type": "rss",
+  "source_url": "https://shopify.com/news/hot-take-b2b-is-the-biggest-commerce-opportunity-of-2024",
+  "title": "Hot take: B2B is the biggest commerce opportunity of 2024",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "shopify-news",
+  "collected_at": "2023-11-30T14:00:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.shopify.com/news/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5cdda770-6201-48fc-acad-13d37d0c09d0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

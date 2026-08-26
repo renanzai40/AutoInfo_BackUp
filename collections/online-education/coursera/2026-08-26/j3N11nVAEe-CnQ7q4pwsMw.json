@@ -1,0 +1,27 @@
+{
+  "id": "j3N11nVAEe-CnQ7q4pwsMw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Systems Acquisition, Development and Implementation",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "j3N11nVAEe-CnQ7q4pwsMw",
+    "slug": "packt-systems-acquisition-development-implementation-l8app",
+    "name": "Systems Acquisition, Development and Implementation"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9a46b372-7a3f-463b-a46b-d0bac74b26ea",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

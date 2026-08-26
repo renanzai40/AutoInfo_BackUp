@@ -1,0 +1,24 @@
+{
+  "id": "c3505928e78a7bed",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/nacional/gobierno-se-reune-para-declarar-situacion-interes-para-seguridad-nacional-ceuta_7028995_0.html",
+  "title": "El Gobierno aprueba el mando único en Ceuta para la \"devolución y repatriación\" de los inmigrantes tras el asalto masivo",
+  "content": "El Consejo de Ministros celebra su primera reunión tras el parón veraniego.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T12:17:53+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "77eccc78-7df7-43d7-b884-9b1f76cbb8a6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

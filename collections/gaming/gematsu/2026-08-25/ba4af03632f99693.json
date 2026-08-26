@@ -1,0 +1,24 @@
+{
+  "id": "ba4af03632f99693",
+  "source_name": "gematsu",
+  "source_type": "rss",
+  "source_url": "https://www.gematsu.com/2026/08/console-archives-bubble-bobble-launches-august-26",
+  "title": "Console Archives Bubble Bobble launches August 26",
+  "content": "<img src=\"https://www.gematsu.com/wp-content/uploads/2026/08/Console-Archives-Bubble-Bobble_08-25-26.jpg\" /> Console Archives Bubble Bobble will launch for PlayStation 5 and Switch 2 on August 26 &hellip;",
+  "content_type": "text",
+  "source_platform": "gematsu",
+  "collected_at": "2026-08-25T11:15:48+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.gematsu.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b0f0c223-1b6a-4835-9a86-16f017b81ce3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

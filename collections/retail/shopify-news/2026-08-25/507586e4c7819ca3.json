@@ -1,0 +1,24 @@
+{
+  "id": "507586e4c7819ca3",
+  "source_name": "shopify-news",
+  "source_type": "rss",
+  "source_url": "https://shopify.com/news/shaun-whites-latest-trick-whitespace-takes-flight-on-shopify",
+  "title": "Shaun White's latest trick: WHITESPACE takes flight on Shopify",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "shopify-news",
+  "collected_at": "2023-11-17T14:00:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.shopify.com/news/feed"
+  },
+  "version": 2,
+  "previous_version": 1,
+  "supersedes": "retail-general-shaun-white-s-latest-trick-whitespace-takes-flight-on-shopify",
+  "trace_id": "ee6349ec-03c9-407f-b3ae-0a0f4fbce42f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

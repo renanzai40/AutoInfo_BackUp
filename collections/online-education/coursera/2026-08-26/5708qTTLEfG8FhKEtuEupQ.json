@@ -1,0 +1,27 @@
+{
+  "id": "5708qTTLEfG8FhKEtuEupQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Advanced Corporate Finance Strategies",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "5708qTTLEfG8FhKEtuEupQ",
+    "slug": "advanced-corporate-finance-strategies",
+    "name": "Advanced Corporate Finance Strategies"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3041bae0-7344-47a1-b98a-ffca2b36ec45",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

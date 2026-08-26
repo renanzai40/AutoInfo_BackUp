@@ -1,0 +1,24 @@
+{
+  "id": "2418b34fdf4f6913",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/nordvpn-coupon/",
+  "title": "NordVPN Coupons: 75% Off, Plus 3 Months Free in August 2026",
+  "content": "Save up to 77% on 2-year plans and get 3 free months with our NordVPN discount codes.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-21T05:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "56a45ef2-11c1-4f2b-9f9b-4f93784e5af5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

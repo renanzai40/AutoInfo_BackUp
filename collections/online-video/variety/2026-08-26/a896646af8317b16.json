@@ -1,0 +1,24 @@
+{
+  "id": "a896646af8317b16",
+  "source_name": "variety",
+  "source_type": "rss",
+  "source_url": "https://variety.com/2026/tv/news/norm-macdonald-documentary-netflix-1236842172/",
+  "title": "Netflix Sets Norm Macdonald Documentary From Judd Apatow, Plus Three More Comedy Docs in October (EXCLUSIVE)",
+  "content": "At Netflix, October isn&#8217;t just for scary movies; it&#8217;s also for funny documentaries. The streamer will premiere four feature docs celebrating some of comedy&#8217;s most influential voices and institutions, with one film rolling out each week in October. Debuting on Oct. 7 is &#8220;Who Is Martin Mull?,&#8221; from the late Bob Saget and Neil Berkeley. [&#8230;]",
+  "content_type": "text",
+  "source_platform": "variety",
+  "collected_at": "2026-08-25T16:00:00+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://variety.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "232a0bd1-936c-4a3a-8634-9b5b22dce58b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

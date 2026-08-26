@@ -1,0 +1,38 @@
+{
+  "id": "49436786",
+  "source_name": "hackernews",
+  "source_type": "hackernews",
+  "source_url": "https://news.ycombinator.com/item?id=49436786",
+  "title": "Tooltips need a delay, and then they need to skip it",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "hackernews",
+  "collected_at": "2026-08-25T19:12:23.929818+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "by": "ibobev",
+    "descendants": 9,
+    "id": 49436786,
+    "kids": [
+      49438808,
+      49437626,
+      49437642,
+      49437760,
+      49437756
+    ],
+    "score": 44,
+    "time": 1787675736,
+    "title": "Tooltips need a delay, and then they need to skip it",
+    "type": "story",
+    "url": "https://blog.master.dev/tooltips-need-a-delay-and-then-they-need-to-skip-it/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9e3c4b3d-006b-4244-aeab-00677e4d8bfe",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

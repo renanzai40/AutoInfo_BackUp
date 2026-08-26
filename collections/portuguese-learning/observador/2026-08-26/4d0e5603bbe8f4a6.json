@@ -1,0 +1,24 @@
+{
+  "id": "4d0e5603bbe8f4a6",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/programas/noticiario/as-noticias-das-21h-1740/",
+  "title": "21h. Chega quer auditoria à Segurança Social antes do OE",
+  "content": "O líder do Chega explica que o objetivo é concluir quantas pessoas recebem “pensões milionárias e imorais”. Ainda, Paulo Rangel acusou José Luís Carneiro de não ter capacidade para governar.",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T21:14:59+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9eba2d3f-25ce-4f61-b5c7-43a0dbcd4fd8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

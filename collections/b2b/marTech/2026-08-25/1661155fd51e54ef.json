@@ -1,0 +1,24 @@
+{
+  "id": "1661155fd51e54ef",
+  "source_name": "marTech",
+  "source_type": "rss",
+  "source_url": "https://martech.org/run-fewer-incrementality-tests-and-get-more-from-them/",
+  "title": "Run fewer incrementality tests and get more from them",
+  "content": "<div><img alt=\"\" class=\"attachment-large size-large wp-post-image\" height=\"450\" src=\"https://martech.org/wp-content/uploads/2018/11/split-testing-ss-1920-800x450.jpg\" style=\"margin-bottom: 15px;\" width=\"800\" /></div>\n<p>Prioritize tests where uncertainty has real financial consequences, then use the results to guide decisions long after the test ends.</p>\n<p>The post <a href=\"https://martech.org/run-fewer-incrementality-tests-and-get-more-from-them/\">Run fewer incrementality tests and get more from them</a> appeared first on <a href=\"https://martech.org\">MarTech</a>.</p>",
+  "content_type": "text",
+  "source_platform": "marTech",
+  "collected_at": "2026-08-24T12:20:00+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://martech.org/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "fb6e8b02-e5a4-4a31-b704-a7a3a2c8e298",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

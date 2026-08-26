@@ -1,0 +1,46 @@
+{
+  "id": 79995414,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/79995414/esp32-zephyr-https-tls-connection-fails-error-116",
+  "title": "ESP32 + Zephyr HTTPS/TLS Connection Fails (Error -116)",
+  "content": "ESP32 + Zephyr HTTPS/TLS Connection Fails (Error -116)",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-15T19:01:40.189009+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "https",
+      "embedded",
+      "esp32",
+      "zephyr-rtos"
+    ],
+    "owner": {
+      "account_id": 20316168,
+      "reputation": 1,
+      "user_id": 14902014,
+      "user_type": "registered",
+      "profile_image": "https://lh3.googleusercontent.com/a-/AOh14Gjc4UUyu0GBy6l8xeiRrGqXrRUaOGIwT0ZJNP0DSw=k-s256",
+      "display_name": "Yassine Daoudi",
+      "link": "https://stackoverflow.com/users/14902014/yassine-daoudi"
+    },
+    "is_answered": false,
+    "view_count": 3,
+    "answer_count": 0,
+    "score": 0,
+    "last_activity_date": 1786820286,
+    "creation_date": 1786820286,
+    "question_id": 79995414,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/79995414/esp32-zephyr-https-tls-connection-fails-error-116",
+    "title": "ESP32 + Zephyr HTTPS/TLS Connection Fails (Error -116)"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "91de7796-2784-444e-b22e-db27fe563809"
+}

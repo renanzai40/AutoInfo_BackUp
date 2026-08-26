@@ -1,0 +1,24 @@
+{
+  "id": "30e316481a6c73c5",
+  "source_name": "WSJ Markets",
+  "source_type": "rss",
+  "source_url": "https://www.wsj.com/articles/deepseek-us-ai-stocks-nvidia-broadcom-6cdfae81?mod=rss_markets_main",
+  "title": "DeepSeek Won't Sink U.S. AI Titans",
+  "content": "Panic fueling the selloff of Nvidia, Broadcom and other tech giants is overblown.",
+  "content_type": "text",
+  "source_platform": "WSJ Markets",
+  "collected_at": "2025-01-27T13:12:00-05:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "093691c3-f7b8-4e6c-b8b6-423152a3dd8e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

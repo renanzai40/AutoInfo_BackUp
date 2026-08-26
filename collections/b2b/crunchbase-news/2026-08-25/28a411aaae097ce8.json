@@ -1,0 +1,24 @@
+{
+  "id": "28a411aaae097ce8",
+  "source_name": "crunchbase-news",
+  "source_type": "rss",
+  "source_url": "https://news.crunchbase.com/ai/interesting-startup-deals-ai-recycling-robotics-healthcare-data/",
+  "title": "5 Interesting Startup Deals You May Have Missed: AI For Everything From Recycling To Breathing To Winning Construction Bids",
+  "content": "This month’s installment of this column is all AI, though applications for the technology range widely, from two startups that apply AI to trash or recycling, to another that promises to help people breathe and sleep better, to a company that says its AI can help architects and builders spot commercial projects before they’re even announced.",
+  "content_type": "text",
+  "source_platform": "crunchbase-news",
+  "collected_at": "2026-08-21T11:00:42+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://news.crunchbase.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a7aadbbb-0fee-48f6-8fb0-66e019cb6db8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

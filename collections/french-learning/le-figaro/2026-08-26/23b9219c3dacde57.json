@@ -1,0 +1,24 @@
+{
+  "id": "23b9219c3dacde57",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://immobilier.lefigaro.fr/article/le-proprietaire-voulait-expulser-son-locataire-pour-remettre-son-studio-en-conformite-la-justice-s-y-oppose-20260826",
+  "title": "Le propriétaire voulait expulser son locataire pour remettre son studio en conformité : la justice s’y oppose",
+  "content": "La cour de Cassation rappelle qu’un bailleur qui a signé un bail pour un logement non décent ne peut pas ensuite lui donner congé pour remettre en état le logement vide.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-26T06:00:00+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "febf6b3d-e2fd-46c9-8a2a-273de55614ee",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

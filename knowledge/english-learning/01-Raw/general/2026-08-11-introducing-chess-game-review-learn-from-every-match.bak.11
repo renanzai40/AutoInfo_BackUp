@@ -1,0 +1,48 @@
+---
+title: 'Introducing Chess Game Review: Learn from every match'
+domain: english-learning
+tier: 01-Raw
+entry_id: english-learning-general-introducing-chess-game-review-learn-from-every-match
+source_url: https://blog.duolingo.com/chess-game-review/
+source_type: rss
+source_platform: duolingo-blog
+collected_at: '2026-08-11T12:00:14+00:00'
+summary: The article introduces a chess game review tool designed to help players learn from their matches by analyzing blunders.
+  It focuses on transforming mistakes into opportunities for skill improvement.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 6446a6cc-52b5-4e98-b15b-53b5e138195a
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+Transform your chess blunders into learning opportunities!
+
+## Summary
+The article introduces a chess game review tool designed to help players learn from their matches by analyzing blunders. It focuses on transforming mistakes into opportunities for skill improvement.
+
+## Key Points
+- Chess game review enables learning from each match.
+- Blunders are identified as critical areas for growth.
+- The feature encourages continuous improvement through post-game analysis.
+
+
+## Entities
+- **Chess Game Review** (technology, relevance=)
+- **chess blunders** (concept, relevance=)

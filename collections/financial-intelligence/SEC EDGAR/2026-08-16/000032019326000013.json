@@ -1,0 +1,31 @@
+{
+  "id": "000032019326000013",
+  "source_name": "SEC EDGAR",
+  "source_type": "sec_edgar",
+  "source_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000013/aapl-20260328.htm",
+  "title": "10-Q Apple Inc. (2026-05-01)",
+  "content": "{\"form\": \"10-Q\", \"company\": \"Apple Inc.\", \"ticker\": \"AAPL\", \"date\": \"2026-05-01\", \"report_date\": \"2026-03-28\", \"accession\": \"0000320193-26-000013\", \"source_url\": \"https://www.sec.gov/Archives/edgar/data/320193/000032019326000013/aapl-20260328.htm\"}",
+  "content_type": "text",
+  "source_platform": "sec_edgar",
+  "collected_at": "2026-08-15T19:04:53.042387+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "form": "10-Q",
+    "company": "Apple Inc.",
+    "ticker": "AAPL",
+    "cik": "320193",
+    "date": "2026-05-01",
+    "report_date": "2026-03-28",
+    "accession": "0000320193-26-000013",
+    "primary_document": "aapl-20260328.htm",
+    "title": "10-Q Apple Inc. (2026-05-01)",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000013/aapl-20260328.htm"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a330dd62-ae8c-47ff-be22-124216ea94a2"
+}

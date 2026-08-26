@@ -1,0 +1,601 @@
+keywords:
+  bob morse:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.459657+00:00'
+    updated_at: '2026-08-25T23:33:25.054477+00:00'
+    source: auto-discovery:rss
+  strattam capital:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.467840+00:00'
+    updated_at: '2026-08-25T23:33:25.098447+00:00'
+    source: auto-discovery:rss
+  ai:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.480758+00:00'
+    updated_at: '2026-08-25T23:52:50.427210+00:00'
+    source: auto-discovery:saastr
+  productivity:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.492541+00:00'
+    updated_at: '2026-08-25T23:47:09.145485+00:00'
+    source: auto-discovery:producthunt
+  ai's:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.505235+00:00'
+    updated_at: '2026-08-25T23:33:25.232276+00:00'
+    source: auto-discovery:rss
+  gains:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.517488+00:00'
+    updated_at: '2026-08-25T23:33:25.319920+00:00'
+    source: auto-discovery:rss
+  come:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.534928+00:00'
+    updated_at: '2026-08-25T23:33:25.365020+00:00'
+    source: auto-discovery:rss
+  redesigning:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.556077+00:00'
+    updated_at: '2026-08-25T23:33:25.409460+00:00'
+    source: auto-discovery:rss
+  work,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.577550+00:00'
+    updated_at: '2026-08-15T19:21:57.577550+00:00'
+    source: auto-discovery:rss
+  adding:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.592586+00:00'
+    updated_at: '2026-08-25T23:55:39.492328+00:00'
+    source: auto-discovery:techcrunch
+  tools.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.606239+00:00'
+    updated_at: '2026-08-15T19:21:57.606239+00:00'
+    source: auto-discovery:rss
+  ai's productivity:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.621257+00:00'
+    updated_at: '2026-08-15T19:21:57.621257+00:00'
+    source: auto-discovery:rss
+  productivity gains:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.638253+00:00'
+    updated_at: '2026-08-25T23:33:25.497658+00:00'
+    source: auto-discovery:rss
+  gains come:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.655653+00:00'
+    updated_at: '2026-08-25T23:33:25.541626+00:00'
+    source: auto-discovery:rss
+  come from:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.672589+00:00'
+    updated_at: '2026-08-25T23:33:25.586790+00:00'
+    source: auto-discovery:rss
+  from redesigning:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.688325+00:00'
+    updated_at: '2026-08-25T23:33:25.651913+00:00'
+    source: auto-discovery:rss
+  redesigning work,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.704628+00:00'
+    updated_at: '2026-08-15T19:21:57.704628+00:00'
+    source: auto-discovery:rss
+  work, not:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.723570+00:00'
+    updated_at: '2026-08-15T19:21:57.723570+00:00'
+    source: auto-discovery:rss
+  just adding:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.746439+00:00'
+    updated_at: '2026-08-15T19:21:57.746439+00:00'
+    source: auto-discovery:rss
+  adding tools.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.766729+00:00'
+    updated_at: '2026-08-15T19:21:57.766729+00:00'
+    source: auto-discovery:rss
+  ai's productivity gains:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.786935+00:00'
+    updated_at: '2026-08-15T19:21:57.786935+00:00'
+    source: auto-discovery:rss
+  productivity gains come:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.806734+00:00'
+    updated_at: '2026-08-25T23:33:25.696310+00:00'
+    source: auto-discovery:rss
+  gains come from:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.833035+00:00'
+    updated_at: '2026-08-25T23:33:25.758160+00:00'
+    source: auto-discovery:rss
+  come from redesigning:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.855093+00:00'
+    updated_at: '2026-08-25T23:33:25.874127+00:00'
+    source: auto-discovery:rss
+  from redesigning work,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.874549+00:00'
+    updated_at: '2026-08-15T19:21:57.874549+00:00'
+    source: auto-discovery:rss
+  redesigning work, not:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.895156+00:00'
+    updated_at: '2026-08-15T19:21:57.895156+00:00'
+    source: auto-discovery:rss
+  work, not just:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.920855+00:00'
+    updated_at: '2026-08-15T19:21:57.920855+00:00'
+    source: auto-discovery:rss
+  not just adding:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.948183+00:00'
+    updated_at: '2026-08-15T19:21:57.948183+00:00'
+    source: auto-discovery:rss
+  just adding tools.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:57.980306+00:00'
+    updated_at: '2026-08-15T19:21:57.980306+00:00'
+    source: auto-discovery:rss
+  organizational:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.019498+00:00'
+    updated_at: '2026-08-25T23:33:25.453804+00:00'
+    source: auto-discovery:rss
+  change:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.055232+00:00'
+    updated_at: '2026-08-25T23:33:25.966169+00:00'
+    source: auto-discovery:rss
+  important:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.082536+00:00'
+    updated_at: '2026-08-15T19:21:58.082536+00:00'
+    source: auto-discovery:rss
+  adoption:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.108795+00:00'
+    updated_at: '2026-08-25T23:53:56.227847+00:00'
+    source: auto-discovery:rss
+  success.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.139247+00:00'
+    updated_at: '2026-08-15T19:21:58.139247+00:00'
+    source: auto-discovery:rss
+  organizational change:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.172537+00:00'
+    updated_at: '2026-08-25T23:33:25.189469+00:00'
+    source: auto-discovery:rss
+  change more:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.204706+00:00'
+    updated_at: '2026-08-15T19:21:58.204706+00:00'
+    source: auto-discovery:rss
+  more important:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.233954+00:00'
+    updated_at: '2026-08-15T19:21:58.233954+00:00'
+    source: auto-discovery:rss
+  important than:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.262836+00:00'
+    updated_at: '2026-08-15T19:21:58.262836+00:00'
+    source: auto-discovery:rss
+  technology adoption:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.294230+00:00'
+    updated_at: '2026-08-15T19:21:58.294230+00:00'
+    source: auto-discovery:rss
+  adoption for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.329209+00:00'
+    updated_at: '2026-08-15T19:21:58.329209+00:00'
+    source: auto-discovery:rss
+  for success.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.361241+00:00'
+    updated_at: '2026-08-15T19:21:58.361241+00:00'
+    source: auto-discovery:rss
+  organizational change more:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.397527+00:00'
+    updated_at: '2026-08-15T19:21:58.397527+00:00'
+    source: auto-discovery:rss
+  change more important:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.434151+00:00'
+    updated_at: '2026-08-15T19:21:58.434151+00:00'
+    source: auto-discovery:rss
+  more important than:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.466637+00:00'
+    updated_at: '2026-08-15T19:21:58.466637+00:00'
+    source: auto-discovery:rss
+  important than technology:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.500454+00:00'
+    updated_at: '2026-08-15T19:21:58.500454+00:00'
+    source: auto-discovery:rss
+  than technology adoption:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.535625+00:00'
+    updated_at: '2026-08-15T19:21:58.535625+00:00'
+    source: auto-discovery:rss
+  technology adoption for:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.571011+00:00'
+    updated_at: '2026-08-15T19:21:58.571011+00:00'
+    source: auto-discovery:rss
+  adoption for success.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.607411+00:00'
+    updated_at: '2026-08-15T19:21:58.607411+00:00'
+    source: auto-discovery:rss
+  transformational:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.648761+00:00'
+    updated_at: '2026-08-15T19:21:58.648761+00:00'
+    source: auto-discovery:rss
+  require:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.684994+00:00'
+    updated_at: '2026-08-25T23:42:56.849316+00:00'
+    source: auto-discovery:rss
+  ceo:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.724938+00:00'
+    updated_at: '2026-08-25T23:33:26.049005+00:00'
+    source: auto-discovery:rss
+  board:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.767148+00:00'
+    updated_at: '2026-08-25T23:47:09.100494+00:00'
+    source: auto-discovery:producthunt
+  support.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.808236+00:00'
+    updated_at: '2026-08-25T23:56:18.328253+00:00'
+    source: auto-discovery:techcrunch
+  transformational gains:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.850651+00:00'
+    updated_at: '2026-08-15T19:21:58.850651+00:00'
+    source: auto-discovery:rss
+  gains such:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.884131+00:00'
+    updated_at: '2026-08-15T19:21:58.884131+00:00'
+    source: auto-discovery:rss
+  such productivity:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.916985+00:00'
+    updated_at: '2026-08-15T19:21:58.916985+00:00'
+    source: auto-discovery:rss
+  productivity require:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.955467+00:00'
+    updated_at: '2026-08-15T19:21:58.955467+00:00'
+    source: auto-discovery:rss
+  require ceo:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:58.998076+00:00'
+    updated_at: '2026-08-15T19:21:58.998076+00:00'
+    source: auto-discovery:rss
+  ceo and:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.044006+00:00'
+    updated_at: '2026-08-25T23:33:26.155784+00:00'
+    source: auto-discovery:rss
+  and board:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.081190+00:00'
+    updated_at: '2026-08-25T23:33:26.201502+00:00'
+    source: auto-discovery:rss
+  board support.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.124123+00:00'
+    updated_at: '2026-08-15T19:21:59.124123+00:00'
+    source: auto-discovery:rss
+  transformational gains such:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.167034+00:00'
+    updated_at: '2026-08-15T19:21:59.167034+00:00'
+    source: auto-discovery:rss
+  gains such productivity:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.208330+00:00'
+    updated_at: '2026-08-15T19:21:59.208330+00:00'
+    source: auto-discovery:rss
+  such productivity require:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.255604+00:00'
+    updated_at: '2026-08-15T19:21:59.255604+00:00'
+    source: auto-discovery:rss
+  productivity require ceo:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.304956+00:00'
+    updated_at: '2026-08-15T19:21:59.304956+00:00'
+    source: auto-discovery:rss
+  require ceo and:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.350039+00:00'
+    updated_at: '2026-08-15T19:21:59.350039+00:00'
+    source: auto-discovery:rss
+  ceo and board:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.396564+00:00'
+    updated_at: '2026-08-25T23:33:26.245617+00:00'
+    source: auto-discovery:rss
+  and board support.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.436003+00:00'
+    updated_at: '2026-08-15T19:21:59.436003+00:00'
+    source: auto-discovery:rss
+  business:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.479361+00:00'
+    updated_at: '2026-08-25T23:51:19.650978+00:00'
+    source: auto-discovery:saastr
+  change,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.528825+00:00'
+    updated_at: '2026-08-25T23:33:26.333460+00:00'
+    source: auto-discovery:rss
+  merely:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.583909+00:00'
+    updated_at: '2026-08-25T23:32:38.229764+00:00'
+    source: auto-discovery:b2b-news-network
+  change.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.627843+00:00'
+    updated_at: '2026-08-15T19:21:59.627843+00:00'
+    source: auto-discovery:rss
+  business change,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.667292+00:00'
+    updated_at: '2026-08-25T23:33:26.376763+00:00'
+    source: auto-discovery:rss
+  change, not:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.709713+00:00'
+    updated_at: '2026-08-15T19:21:59.709713+00:00'
+    source: auto-discovery:rss
+  not merely:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.754210+00:00'
+    updated_at: '2026-08-25T23:32:38.273680+00:00'
+    source: auto-discovery:b2b-news-network
+  merely technology:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.805830+00:00'
+    updated_at: '2026-08-15T19:21:59.805830+00:00'
+    source: auto-discovery:rss
+  technology change.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.900993+00:00'
+    updated_at: '2026-08-15T19:21:59.900993+00:00'
+    source: auto-discovery:rss
+  business change, not:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:21:59.954306+00:00'
+    updated_at: '2026-08-15T19:21:59.954306+00:00'
+    source: auto-discovery:rss
+  change, not merely:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:00.067742+00:00'
+    updated_at: '2026-08-15T19:22:00.067742+00:00'
+    source: auto-discovery:rss
+  not merely technology:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:00.110713+00:00'
+    updated_at: '2026-08-15T19:22:00.110713+00:00'
+    source: auto-discovery:rss
+  merely technology change.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:00.158675+00:00'
+    updated_at: '2026-08-15T19:22:00.158675+00:00'
+    source: auto-discovery:rss
+  crunchbase:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:00.372543+00:00'
+    updated_at: '2026-08-25T23:33:53.803177+00:00'
+    source: auto-discovery:rss
+  unicorn:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:00.450003+00:00'
+    updated_at: '2026-08-25T23:33:53.664636+00:00'
+    source: auto-discovery:rss
+  companies:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:00.576560+00:00'
+    updated_at: '2026-08-25T23:53:20.630029+00:00'
+    source: auto-discovery:rss
+  joined:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:00.622923+00:00'
+    updated_at: '2026-08-25T23:33:53.752641+00:00'
+    source: auto-discovery:rss
+  companies joined:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:00.846087+00:00'
+    updated_at: '2026-08-25T23:33:53.890663+00:00'
+    source: auto-discovery:rss
+  joined the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:00.979858+00:00'
+    updated_at: '2026-08-25T23:33:53.935355+00:00'
+    source: auto-discovery:rss
+  the crunchbase:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:01.031854+00:00'
+    updated_at: '2026-08-25T23:33:53.980370+00:00'
+    source: auto-discovery:rss
+  crunchbase unicorn:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:01.149868+00:00'
+    updated_at: '2026-08-25T23:33:54.024870+00:00'
+    source: auto-discovery:rss
+  unicorn board:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:01.200971+00:00'
+    updated_at: '2026-08-25T23:33:54.068649+00:00'
+    source: auto-discovery:rss
+  companies joined the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:01.252422+00:00'
+    updated_at: '2026-08-25T23:33:54.113621+00:00'
+    source: auto-discovery:rss
+  joined the crunchbase:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:01.376363+00:00'
+    updated_at: '2026-08-25T23:33:54.157634+00:00'
+    source: auto-discovery:rss
+  the crunchbase unicorn:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:01.440291+00:00'
+    updated_at: '2026-08-25T23:33:54.202406+00:00'
+    source: auto-discovery:rss
+  crunchbase unicorn board:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:01.492498+00:00'
+    updated_at: '2026-08-25T23:33:53.620323+00:00'
+    source: auto-discovery:rss
+  figure:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:01.543884+00:00'
+    updated_at: '2026-08-25T23:40:15.586100+00:00'
+    source: auto-discovery:hackernews
+  exceeds:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:01.599154+00:00'
+    updated_at: '2026-08-25T23:33:54.247859+00:00'
+    source: auto-discovery:rss
+  new:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:01.654201+00:00'
+    updated_at: '2026-08-25T23:57:30.949585+00:00'
+    source: auto-discovery:techcrunch
+  unicorns:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:01.709674+00:00'
+    updated_at: '2026-08-25T23:35:11.019824+00:00'
+    source: auto-discovery:crunchbase-news
+  recorded:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:01.761709+00:00'
+    updated_at: '2026-08-15T19:22:01.761709+00:00'
+    source: auto-discovery:rss
+  this figure:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-15T19:22:01.825050+00:00'
+    updated_at: '2026-08-15T19:22:01.825050+00:00'
+    source: auto-discovery:rss

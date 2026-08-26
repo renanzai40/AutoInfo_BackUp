@@ -1,0 +1,24 @@
+{
+  "id": "049dde13814cbd2e",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/deals/macys-citrine-and-diamond-accent-pendant-necklace-macys-sale",
+  "title": "Macy's $850 2-carat pendant necklace is 71% off in 5 colors",
+  "content": "A matching ring and earrings are also on sale.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-22T17:03:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "839ea70e-58c7-4507-b342-553f1674fac8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,22 @@
+{
+  "id": "67539b9bd13fe88f",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/best-apple-watch-bands/",
+  "title": "5 Best Apple Watch Bands: Nike, Nomad, and Hermés (2026)",
+  "content": "We’ve been testing bands since the first Apple Watch launched in 2015. From silicone sports straps to leather bands, I’ve rounded up the best for every occasion.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-15T09:33:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "01b0e078-5b81-49b6-bc56-9882a476aa46"
+}

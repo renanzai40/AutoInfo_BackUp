@@ -1,0 +1,24 @@
+{
+  "id": "af8d80b8973bdc10",
+  "source_name": "duolingo-blog",
+  "source_type": "rss",
+  "source_url": "https://blog.duolingo.com/how-to-use-the-verb-to-be-in-english/",
+  "title": "How to use the verb “to be” in English",
+  "content": "*To be* confident using the English verb *to be*, you’ll need this handy guide!",
+  "content_type": "text",
+  "source_platform": "duolingo-blog",
+  "collected_at": "2026-08-06T12:00:00+00:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://blog.duolingo.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1a2b20cc-673a-4621-bb80-ec91e513bb7a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

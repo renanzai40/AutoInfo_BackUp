@@ -1,0 +1,24 @@
+{
+  "id": "9d7d8a377fe5f1bf",
+  "source_name": "lobsters",
+  "source_type": "rss",
+  "source_url": "https://www.crowdsupply.com/mnt-research/mnt-station",
+  "title": "MNT Station - A modular, open hardware desktop computer and server",
+  "content": "<p><a href=\"https://lobste.rs/s/jjspxh/mnt_station_modular_open_hardware\">Comments</a></p>",
+  "content_type": "text",
+  "source_platform": "lobsters",
+  "collected_at": "2026-08-25T06:16:01-05:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://lobste.rs/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7645a870-ce3b-42ed-bcbf-cae5c019a4d9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

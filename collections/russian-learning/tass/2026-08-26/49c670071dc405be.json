@@ -1,0 +1,24 @@
+{
+  "id": "49c670071dc405be",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/proisshestviya/28044197",
+  "title": "Полицейский спецназ задержал подозреваемых в причастности к убийству Юшваева",
+  "content": "Их отправили на допрос",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T20:32:50+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c30b30f8-b6f6-4100-96b7-c6bd2ce089fd",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "3172c7e414c067ca",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/motori/news/24_maggio_02/xiaomi-su7-continua-macinare-record-prodotti-10-mila-pezzi-un-mese-prezzi-a786024c-06f5-11ef-aa44-0f4afc4013d4.shtml",
+  "title": "La Xiaomi SU7 continua a macinare record: prodotti 10 mila pezzi in un mese. I prezzi",
+  "content": "<p><img alt=\"La Xiaomi SU7 continua a macinare record: prodotti 10 mila pezzi in un mese. I prezzi\" src=\"https://images2.corriereobjects.it/methode_image/2024/04/30/Motori/Foto%20Motori%20-%20Trattate/xiaomi-su7-kOE--656x492@Corriere-Web-Sezioni.jpeg\" title=\"La Xiaomi SU7 continua a macinare record: prodotti 10 mila pezzi in un mese. I prezzi\" /><p>Il produttore cinese di telefonini, dopo aver stupito con la sua prima auto elettrica, campione di vendite, fa segnare un nuovo primato e sembra già intenzionata a venderla in Spagna</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-06T11:28:00+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "374998fc-0d20-4a58-af37-232d5289c9ba",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

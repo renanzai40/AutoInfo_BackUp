@@ -1,0 +1,19 @@
+[92m09:01:13 - LiteLLM:WARNING[0m: get_model_cost_map.py:271 - LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: The read operation timed out. Falling back to local backup.
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article instructs to group a set of knowledge base entries into 3–5 thematic categories, specifying that each entry must belong to exactly one theme with a short, semantic title. It 
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping eight knowledge base entries into three to five themes with specific semantic naming criteria. It lists entries covering topics from politi
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article presents a set of diverse knowledge base entries and instructs them to be grouped into 3–5 semantic themes without using catch-all names. Topics range from tragic personal in
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions for grouping multiple knowledge base entries into 3-5 distinct themes. The entries cover diverse topics such as political meetings, international confl
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping Italian-language knowledge base entries into 3–5 thematic categories, with specific guidelines for naming themes uniquely and examples cove
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article presents a collection of Italian learning entries covering diverse topics such as fashion, celebrity interviews, health advice, and automotive news. It includes instructions
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article presents a collection of diverse knowledge base entries covering topics such as airport security technology, personal relationships, political history, food quality, luxury e
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping knowledge base entries into 3-5 themes with semantic titles, emphasizing no catch-all names and a structured JSON output. It lists eight en

@@ -1,0 +1,24 @@
+{
+  "id": "1e412c36495aa96e",
+  "source_name": "inside-higher-ed",
+  "source_type": "rss",
+  "source_url": "https://www.insidehighered.com/news/quick-takes/2026/08/25/broward-college-reaches-separation-agreement-president",
+  "title": "Broward College President Agrees to Step Down",
+  "content": "<span>Broward College President Agrees to Step Down</span>\n\n            <div class=\"field field--name-field-featured-image field--type-entity-reference field--label-hidden field__item\">  <img alt=\"Broward College sign in front of palm tree, grass, pond and puffy white clouds\" height=\"1320\" src=\"https://www.insidehighered.com/sites/default/files/2026-08/GettyImages-986231960.jpg\" width=\"1980\" />\n\n</div>\n      \n<span><span>Susan H. Greenberg</span></span>\n\n<span><time datetime=\"2026-08-25T19:25:00-04:00\" title=\"Tuesday, August 25, 2026 - 07:25 PM\">Tue, 08/25/2026 - 07:25 PM</time>\n</span>\n\n  <div class=\"field field--name-field-authors field--type-entity-reference field--label-inline clearfix\">\n    <div class=\"field__label\">Byline(s)</div>\n          <div class=\"field__items\">\n              <div class=\"field__item\"><a href=\"https://www.insidehighered.com/node/4229\" hreflang=\"en\">Josh Moody</a></div>\n              </div>\n      </div>",
+  "content_type": "text",
+  "source_platform": "inside-higher-ed",
+  "collected_at": "2026-08-25T23:25:00+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.insidehighered.com/rss.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "eda16af9-f14c-4194-bbe1-72ffc64e85c8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

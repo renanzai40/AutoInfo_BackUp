@@ -1,0 +1,24 @@
+{
+  "id": "e312e769ab62be65",
+  "source_name": "duolingo-blog",
+  "source_type": "rss",
+  "source_url": "https://blog.duolingo.com/7th-grade-math/",
+  "title": "A guide to 7th grade math topics",
+  "content": "See what 7th grade math has in store for your student!",
+  "content_type": "text",
+  "source_platform": "duolingo-blog",
+  "collected_at": "2026-07-14T12:05:00+00:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://blog.duolingo.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "dabf272e-288a-4d6b-b7d6-57ca08171033",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "e7202c3f2bed08d8",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/hardware/processors/redditor-sent-empty-box-instead-of-ryzen-5-9600x-from-amazon-twice/",
+  "title": "Redditor sent empty box instead of Ryzen 5 9600X from Amazon... twice",
+  "content": "They call it the 9600X ghost edition.",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-25T10:35:20+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a5f0cd24-6245-427f-8114-ed62baf8f0d1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "f3b45a224ce61e7b",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-23/T-rkiye-Israel-tensions-deepen-over-Syria-Netanyahu-Interpol-request-1PPOBoerg2Y/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Türkiye-Israel tensions deepen over Syria, Netanyahu Interpol request",
+  "content": "Tensions between Türkiye and Israel have intensified following Ankara's request for an Interpol Red Notice against Israeli Prime Minister Benjamin Netanyahu, days after Israeli strikes on a Syrian airbase near the Turkish border.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-23T02:58:42+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "66568e60-ac0a-4330-83e0-df2cd2413978",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

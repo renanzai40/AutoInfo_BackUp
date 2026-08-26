@@ -1,0 +1,601 @@
+keywords:
+  sophie adenot:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.061481+00:00'
+    updated_at: '2026-08-26T04:36:03.001471+00:00'
+    source: auto-discovery:france24-fr
+  space:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.067378+00:00'
+    updated_at: '2026-08-26T04:36:03.137520+00:00'
+    source: auto-discovery:france24-fr
+  spacewalk:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.076234+00:00'
+    updated_at: '2026-08-26T04:36:03.046726+00:00'
+    source: auto-discovery:france24-fr
+  communication antenna:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.085641+00:00'
+    updated_at: '2026-08-26T04:36:03.090690+00:00'
+    source: auto-discovery:france24-fr
+  sophie:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.094361+00:00'
+    updated_at: '2026-08-26T04:41:59.960898+00:00'
+    source: auto-discovery:le-figaro
+  adenot:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.103700+00:00'
+    updated_at: '2026-08-26T04:36:03.232949+00:00'
+    source: auto-discovery:france24-fr
+  her:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.113235+00:00'
+    updated_at: '2026-08-26T04:40:29.418632+00:00'
+    source: auto-discovery:le-figaro
+  second:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.123917+00:00'
+    updated_at: '2026-08-26T04:36:03.368515+00:00'
+    source: auto-discovery:france24-fr
+  spacewalk.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.134898+00:00'
+    updated_at: '2026-08-26T04:36:03.278237+00:00'
+    source: auto-discovery:france24-fr
+  adenot her:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.145156+00:00'
+    updated_at: '2026-08-26T02:41:28.528015+00:00'
+    source: auto-discovery:france24-fr
+  her second:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.156904+00:00'
+    updated_at: '2026-08-26T04:36:03.461336+00:00'
+    source: auto-discovery:france24-fr
+  second spacewalk.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.168333+00:00'
+    updated_at: '2026-08-26T04:31:05.388541+00:00'
+    source: auto-discovery:france24-fr
+  sophie adenot her:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.180148+00:00'
+    updated_at: '2026-08-26T02:41:28.615066+00:00'
+    source: auto-discovery:france24-fr
+  adenot her second:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.192257+00:00'
+    updated_at: '2026-08-26T02:41:28.660036+00:00'
+    source: auto-discovery:france24-fr
+  her second spacewalk.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.205125+00:00'
+    updated_at: '2026-08-26T04:31:05.830305+00:00'
+    source: auto-discovery:france24-fr
+  replace:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.218505+00:00'
+    updated_at: '2026-08-26T04:29:52.107492+00:00'
+    source: auto-discovery:france24-fr
+  communication:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.231403+00:00'
+    updated_at: '2026-08-26T04:36:03.506528+00:00'
+    source: auto-discovery:france24-fr
+  antenna.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.245468+00:00'
+    updated_at: '2026-08-26T04:36:03.552242+00:00'
+    source: auto-discovery:france24-fr
+  objective replace:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.259673+00:00'
+    updated_at: '2026-08-26T02:41:28.839511+00:00'
+    source: auto-discovery:france24-fr
+  replace communication:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.273878+00:00'
+    updated_at: '2026-08-26T04:29:52.286106+00:00'
+    source: auto-discovery:france24-fr
+  communication antenna.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.288201+00:00'
+    updated_at: '2026-08-26T04:36:03.610573+00:00'
+    source: auto-discovery:france24-fr
+  the objective replace:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.303603+00:00'
+    updated_at: '2026-08-25T21:24:06.303603+00:00'
+    source: auto-discovery:france24-fr
+  objective replace communication:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.319833+00:00'
+    updated_at: '2026-08-26T02:41:28.975849+00:00'
+    source: auto-discovery:france24-fr
+  replace communication antenna.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.336318+00:00'
+    updated_at: '2026-08-26T04:29:52.376223+00:00'
+    source: auto-discovery:france24-fr
+  mission:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.352515+00:00'
+    updated_at: '2026-08-26T04:36:03.415276+00:00'
+    source: auto-discovery:france24-fr
+  initially:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.368973+00:00'
+    updated_at: '2026-08-25T21:24:06.368973+00:00'
+    source: auto-discovery:france24-fr
+  started:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.385730+00:00'
+    updated_at: '2026-08-25T21:24:06.385730+00:00'
+    source: auto-discovery:france24-fr
+  incomplete:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.403267+00:00'
+    updated_at: '2026-08-26T04:29:52.420779+00:00'
+    source: auto-discovery:france24-fr
+  week:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.420381+00:00'
+    updated_at: '2026-08-26T04:41:36.541319+00:00'
+    source: auto-discovery:le-figaro
+  prior.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.438709+00:00'
+    updated_at: '2026-08-26T04:29:52.510726+00:00'
+    source: auto-discovery:france24-fr
+  the mission:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.456266+00:00'
+    updated_at: '2026-08-26T04:29:52.555942+00:00'
+    source: auto-discovery:france24-fr
+  mission was:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.474441+00:00'
+    updated_at: '2026-08-25T22:04:19.461686+00:00'
+    source: auto-discovery:france24-fr
+  was initially:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.492905+00:00'
+    updated_at: '2026-08-25T21:24:06.492905+00:00'
+    source: auto-discovery:france24-fr
+  initially started:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.511928+00:00'
+    updated_at: '2026-08-25T21:24:06.511928+00:00'
+    source: auto-discovery:france24-fr
+  started but:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.531703+00:00'
+    updated_at: '2026-08-25T21:24:06.531703+00:00'
+    source: auto-discovery:france24-fr
+  but incomplete:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.551024+00:00'
+    updated_at: '2026-08-25T21:24:06.551024+00:00'
+    source: auto-discovery:france24-fr
+  incomplete from:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.571568+00:00'
+    updated_at: '2026-08-25T22:00:21.409599+00:00'
+    source: auto-discovery:france24-fr
+  from week:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.592664+00:00'
+    updated_at: '2026-08-26T02:44:03.062596+00:00'
+    source: auto-discovery:france24-fr
+  week prior.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.613443+00:00'
+    updated_at: '2026-08-26T04:29:52.601462+00:00'
+    source: auto-discovery:france24-fr
+  the mission was:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.634609+00:00'
+    updated_at: '2026-08-25T22:04:19.505576+00:00'
+    source: auto-discovery:france24-fr
+  mission was initially:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.657379+00:00'
+    updated_at: '2026-08-25T21:24:06.657379+00:00'
+    source: auto-discovery:france24-fr
+  was initially started:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.679194+00:00'
+    updated_at: '2026-08-25T21:24:06.679194+00:00'
+    source: auto-discovery:france24-fr
+  initially started but:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.701943+00:00'
+    updated_at: '2026-08-25T21:24:06.701943+00:00'
+    source: auto-discovery:france24-fr
+  started but incomplete:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.725811+00:00'
+    updated_at: '2026-08-25T21:24:06.725811+00:00'
+    source: auto-discovery:france24-fr
+  but incomplete from:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.749760+00:00'
+    updated_at: '2026-08-25T21:24:06.749760+00:00'
+    source: auto-discovery:france24-fr
+  incomplete from week:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.773529+00:00'
+    updated_at: '2026-08-25T21:24:06.773529+00:00'
+    source: auto-discovery:france24-fr
+  from week prior.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.797269+00:00'
+    updated_at: '2026-08-25T21:24:06.797269+00:00'
+    source: auto-discovery:france24-fr
+  duration:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.841494+00:00'
+    updated_at: '2026-08-26T04:36:03.656311+00:00'
+    source: auto-discovery:france24-fr
+  hours.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.896595+00:00'
+    updated_at: '2026-08-26T04:36:03.703549+00:00'
+    source: auto-discovery:france24-fr
+  the spacewalk:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.922539+00:00'
+    updated_at: '2026-08-26T04:31:05.965678+00:00'
+    source: auto-discovery:france24-fr
+  spacewalk duration:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:06.985257+00:00'
+    updated_at: '2026-08-25T22:04:19.950777+00:00'
+    source: auto-discovery:france24-fr
+  duration about:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:07.047460+00:00'
+    updated_at: '2026-08-26T04:36:03.751752+00:00'
+    source: auto-discovery:france24-fr
+  the spacewalk duration:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:07.106589+00:00'
+    updated_at: '2026-08-25T22:04:19.995016+00:00'
+    source: auto-discovery:france24-fr
+  spacewalk duration about:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:07.193873+00:00'
+    updated_at: '2026-08-25T21:24:07.193873+00:00'
+    source: auto-discovery:france24-fr
+  performed:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.076155+00:00'
+    updated_at: '2026-08-26T04:31:05.077411+00:00'
+    source: auto-discovery:france24-fr
+  adenot performed:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.193921+00:00'
+    updated_at: '2026-08-26T04:31:05.256032+00:00'
+    source: auto-discovery:france24-fr
+  performed her:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.222330+00:00'
+    updated_at: '2026-08-26T04:31:05.300950+00:00'
+    source: auto-discovery:france24-fr
+  sophie adenot performed:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.313093+00:00'
+    updated_at: '2026-08-26T04:31:05.431818+00:00'
+    source: auto-discovery:france24-fr
+  adenot performed her:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.343108+00:00'
+    updated_at: '2026-08-26T04:31:05.478281+00:00'
+    source: auto-discovery:france24-fr
+  performed her second:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.373909+00:00'
+    updated_at: '2026-08-26T04:31:05.732830+00:00'
+    source: auto-discovery:france24-fr
+  became:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.432993+00:00'
+    updated_at: '2026-08-25T22:01:02.787744+00:00'
+    source: auto-discovery:france24-fr
+  first:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.463482+00:00'
+    updated_at: '2026-08-26T04:41:59.873436+00:00'
+    source: auto-discovery:le-figaro
+  french:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.494300+00:00'
+    updated_at: '2026-08-26T04:41:16.821064+00:00'
+    source: auto-discovery:le-figaro
+  woman:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.525310+00:00'
+    updated_at: '2026-08-26T04:31:06.053771+00:00'
+    source: auto-discovery:france24-fr
+  conduct:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.557004+00:00'
+    updated_at: '2026-08-26T04:31:06.097913+00:00'
+    source: auto-discovery:france24-fr
+  she became:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.589057+00:00'
+    updated_at: '2026-08-25T22:01:03.022846+00:00'
+    source: auto-discovery:france24-fr
+  became the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.621286+00:00'
+    updated_at: '2026-08-25T22:01:03.067537+00:00'
+    source: auto-discovery:france24-fr
+  the first:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.654116+00:00'
+    updated_at: '2026-08-26T04:41:59.917587+00:00'
+    source: auto-discovery:le-figaro
+  first french:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.688347+00:00'
+    updated_at: '2026-08-26T04:31:06.186099+00:00'
+    source: auto-discovery:france24-fr
+  french woman:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.722092+00:00'
+    updated_at: '2026-08-26T04:31:06.230117+00:00'
+    source: auto-discovery:france24-fr
+  woman conduct:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.755969+00:00'
+    updated_at: '2026-08-26T04:31:06.273940+00:00'
+    source: auto-discovery:france24-fr
+  conduct spacewalk.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.789297+00:00'
+    updated_at: '2026-08-26T04:31:06.317966+00:00'
+    source: auto-discovery:france24-fr
+  she became the:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.823745+00:00'
+    updated_at: '2026-08-25T22:01:03.338507+00:00'
+    source: auto-discovery:france24-fr
+  became the first:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.859016+00:00'
+    updated_at: '2026-08-25T22:01:03.401482+00:00'
+    source: auto-discovery:france24-fr
+  the first french:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.895168+00:00'
+    updated_at: '2026-08-26T04:31:06.361752+00:00'
+    source: auto-discovery:france24-fr
+  first french woman:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.929156+00:00'
+    updated_at: '2026-08-26T04:31:06.406282+00:00'
+    source: auto-discovery:france24-fr
+  french woman conduct:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.964923+00:00'
+    updated_at: '2026-08-26T04:31:06.450646+00:00'
+    source: auto-discovery:france24-fr
+  woman conduct spacewalk.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:12.999825+00:00'
+    updated_at: '2026-08-26T04:31:06.495865+00:00'
+    source: auto-discovery:france24-fr
+  two:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.036534+00:00'
+    updated_at: '2026-08-26T04:38:55.700090+00:00'
+    source: auto-discovery:le-figaro
+  spacewalks:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.073453+00:00'
+    updated_at: '2026-08-25T21:24:13.073453+00:00'
+    source: auto-discovery:france24-fr
+  occurred:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.111674+00:00'
+    updated_at: '2026-08-26T04:41:11.326747+00:00'
+    source: auto-discovery:le-figaro
+  within:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.148992+00:00'
+    updated_at: '2026-08-26T02:47:21.600199+00:00'
+    source: auto-discovery:le-figaro
+  short:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.186695+00:00'
+    updated_at: '2026-08-25T21:24:13.186695+00:00'
+    source: auto-discovery:france24-fr
+  interval:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.223993+00:00'
+    updated_at: '2026-08-25T21:24:13.223993+00:00'
+    source: auto-discovery:france24-fr
+  one:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.262035+00:00'
+    updated_at: '2026-08-26T04:39:47.189705+00:00'
+    source: auto-discovery:le-figaro
+  week.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.301527+00:00'
+    updated_at: '2026-08-25T22:00:01.919300+00:00'
+    source: auto-discovery:france24-fr
+  the two:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.343369+00:00'
+    updated_at: '2026-08-26T02:40:51.052182+00:00'
+    source: auto-discovery:france24-fr
+  two spacewalks:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.386104+00:00'
+    updated_at: '2026-08-25T21:24:13.386104+00:00'
+    source: auto-discovery:france24-fr
+  spacewalks occurred:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.425295+00:00'
+    updated_at: '2026-08-25T21:24:13.425295+00:00'
+    source: auto-discovery:france24-fr
+  occurred within:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.464993+00:00'
+    updated_at: '2026-08-25T21:24:13.464993+00:00'
+    source: auto-discovery:france24-fr
+  within short:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.507118+00:00'
+    updated_at: '2026-08-25T21:24:13.507118+00:00'
+    source: auto-discovery:france24-fr
+  short interval:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.549572+00:00'
+    updated_at: '2026-08-25T21:24:13.549572+00:00'
+    source: auto-discovery:france24-fr
+  interval one:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.592049+00:00'
+    updated_at: '2026-08-25T21:24:13.592049+00:00'
+    source: auto-discovery:france24-fr
+  one week.:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.634111+00:00'
+    updated_at: '2026-08-25T22:00:02.006650+00:00'
+    source: auto-discovery:france24-fr
+  the two spacewalks:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.676340+00:00'
+    updated_at: '2026-08-25T21:24:13.676340+00:00'
+    source: auto-discovery:france24-fr
+  two spacewalks occurred:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.719033+00:00'
+    updated_at: '2026-08-25T21:24:13.719033+00:00'
+    source: auto-discovery:france24-fr
+  spacewalks occurred within:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.761890+00:00'
+    updated_at: '2026-08-25T21:24:13.761890+00:00'
+    source: auto-discovery:france24-fr
+  occurred within short:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.804642+00:00'
+    updated_at: '2026-08-25T21:24:13.804642+00:00'
+    source: auto-discovery:france24-fr
+  within short interval:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.854463+00:00'
+    updated_at: '2026-08-25T21:24:13.854463+00:00'
+    source: auto-discovery:france24-fr
+  short interval one:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T21:24:13.898871+00:00'
+    updated_at: '2026-08-25T21:24:13.898871+00:00'
+    source: auto-discovery:france24-fr

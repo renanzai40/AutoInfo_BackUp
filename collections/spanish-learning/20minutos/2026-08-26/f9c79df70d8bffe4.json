@@ -1,0 +1,24 @@
+{
+  "id": "f9c79df70d8bffe4",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/cataluna/barcelona/barcelona-rehabilitara-por-completo-antigua-fabrica-escocesa-poblenou-72-viviendas-nuevos-usos-para-2029_7029158_0.html",
+  "title": "Barcelona rehabilitará por completo la antigua fábrica de La Escocesa del Poblenou: 72 viviendas y nuevos usos",
+  "content": "El proyecto, con una inversión de 51,8 millones de euros, combinará las viviendas con espacios de economía social, creación artística e innovación alimentaria.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T13:41:20+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5df4238f-7693-4a59-8a67-7433b989b724",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

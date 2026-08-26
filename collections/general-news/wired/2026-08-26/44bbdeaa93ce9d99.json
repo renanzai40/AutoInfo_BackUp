@@ -1,0 +1,24 @@
+{
+  "id": "44bbdeaa93ce9d99",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/food-safety-gear-salmonella/",
+  "title": "The Best Kitchen Gadget to Prevent Salmonella Is a Good Meat Probe",
+  "content": "Salmonella outbreaks are seemingly everywhere right now. A good temperature probe is the last and best line of defense.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-24T20:22:35+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7c005b6d-30d3-48f2-b58c-12e68e25b2e8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

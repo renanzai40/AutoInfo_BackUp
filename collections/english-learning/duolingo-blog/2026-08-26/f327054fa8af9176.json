@@ -1,0 +1,24 @@
+{
+  "id": "f327054fa8af9176",
+  "source_name": "duolingo-blog",
+  "source_type": "rss",
+  "source_url": "https://blog.duolingo.com/production-ready-ai-agent-platform/",
+  "title": "Making production-ready agents the default: building Duolingo’s agent platform",
+  "content": "See how we made AI agents easy to build, run, and improve in production.",
+  "content_type": "text",
+  "source_platform": "duolingo-blog",
+  "collected_at": "2026-08-04T12:00:00+00:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://blog.duolingo.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a48ca3f2-4b31-4e77-b392-69bc490f70e0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

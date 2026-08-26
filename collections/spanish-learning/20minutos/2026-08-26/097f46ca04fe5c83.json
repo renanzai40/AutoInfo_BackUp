@@ -1,0 +1,24 @@
+{
+  "id": "097f46ca04fe5c83",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/salud/psicologia/fabula-china-que-recuerda-que-no-siempre-sabemos-que-es-buena-mala-suerte_7015659_0.html",
+  "title": "La fábula que recuerda que no siempre sabemos qué es la buena o la mala suerte",
+  "content": "La vida rara vez sigue una línea recta, y muchas veces los desvíos que tanto nos frustran terminan llevándonos a lugares que nunca habríamos alcanzado por el camino previsto.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T12:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3bf6e71f-938f-4067-ba24-527ba69008d0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "055599d48f761c8e",
+  "source_name": "lobsters",
+  "source_type": "rss",
+  "source_url": "https://lobste.rs/s/0typpq/i_cannot_survive_from_burnout",
+  "title": "I cannot survive from burnout",
+  "content": "<p>I burned out two years ago, went through a divorce, and relocated to a new city. I live alone now and care for seven cats.</p>\n<p>Over the last two years, I’ve tried forcing discipline, making detailed plans, and restarting over and over. Despite this, I’m still carrying significant debt.</p>\n<p>My main struggle is staying focused on paid work. I’m constantly building and working on my own side projects, but I struggle to put time into client work. Because of my experience, finding clients isn't hard, but I tend to lose them after a few months due to low throughput. I deliver high-quality code and solve their core problems, but I can only bring myself to work on client tasks for about 5–6 hours a week.</p>\n<p>I’m struggling to survive day-to-day and losing hope that this will change, though some days are good and I can get solid work done. I’ve tried all the standard advice for burnout with little success. At this point, I wonder if burnout has become a habit, an excuse, or a form of self-sabotage.</p>\n<p>I’m posting here to see if anyone who has experienced something similar found a practical way out or a working routine that stuck.</p>",
+  "content_type": "text",
+  "source_platform": "lobsters",
+  "collected_at": "2026-08-24T11:04:45-05:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://lobste.rs/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a23bf137-060e-4470-913a-e34fd3bef15f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

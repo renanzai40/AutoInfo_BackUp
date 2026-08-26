@@ -1,0 +1,24 @@
+{
+  "id": "2c8b716c96582557",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/obschestvo/28044307",
+  "title": "В Петербурге проводят проверку после ДТП с пятью пострадавшими",
+  "content": "Получивших травмы госпитализировали в состоянии средней степени тяжести",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T22:06:50+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9a02cb79-1d8d-4cb5-a6f5-9073ac589f3d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

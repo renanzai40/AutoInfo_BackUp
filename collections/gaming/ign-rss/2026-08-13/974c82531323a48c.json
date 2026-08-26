@@ -1,0 +1,22 @@
+{
+  "id": "974c82531323a48c",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/cd-projekt-confirms-layoffs-on-the-witcher-multiplayer-spinoff-issues-statement",
+  "title": "CD Projekt Confirms Layoffs on The Witcher Multiplayer Spinoff, Issues Statement",
+  "content": "CD Projekt has confirmed layoffs on The Witcher multiplayer spinoff, codenamed Project Sirius.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-12T16:31:24+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c8811827-bcae-41c1-bc4d-09336b3f3f3e"
+}

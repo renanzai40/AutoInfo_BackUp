@@ -1,0 +1,24 @@
+{
+  "id": "ea9ac52751c9f735",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/vox/monde/renaud-girard-en-europe-sommes-nous-en-train-de-marcher-vers-la-troisieme-guerre-mondiale-comme-des-somnambules-20260825",
+  "title": "Renaud Girard : « En Europe, sommes-nous en train de marcher vers la troisième guerre mondiale comme des somnambules ? »",
+  "content": "CHRONIQUE - Alors que l’est du continent est confronté à une dangereuse montée aux extrêmes depuis quatre ans et demi, avec la guerre en Ukraine, nous devons nous poser la même question qu’en 1914.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T14:00:00+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ab9e6bf8-7922-4271-ba4f-be53c262b079",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

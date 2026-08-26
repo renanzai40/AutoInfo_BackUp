@@ -1,0 +1,24 @@
+{
+  "id": "4a9642e4ee459e5b",
+  "source_name": "MarketWatch Markets (DJ)",
+  "source_type": "rss",
+  "source_url": "https://www.marketwatch.com/story/am-i-too-old-for-roth-conversions-im-84-and-my-wife-is-77-we-have-8-million-saved-fb08fccd?mod=mw_rss_topstories",
+  "title": "Am I too old for Roth conversions? I’m 84 and my wife is 77. We have $8 million saved.",
+  "content": "“We are reluctant to pay a financial adviser 2% of assets — roughly $160,000 per year.”",
+  "content_type": "text",
+  "source_platform": "MarketWatch Markets (DJ)",
+  "collected_at": "2026-08-25T15:05:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.marketwatch.com/marketwatch/topstories/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "07362c9b-64de-44b8-8366-8212bc0060a5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

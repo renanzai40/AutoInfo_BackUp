@@ -1,0 +1,53 @@
+---
+title: 'Présidentielle 2027 : «Il n''y a plus de favori» dans le bloc central, assure Attal après la chute de Philippe dans
+  un sondage'
+domain: french-learning
+tier: 01-Raw
+entry_id: french-learning-general-pr-sidentielle-2027-il-n-y-a-plus-de-favori-dans-le-bloc-central-assure-attal-apr-s-la-chute-de-philippe-dans-un-sondage
+source_url: https://www.lefigaro.fr/elections/presidentielles/presidentielle-2027-il-n-y-a-plus-de-favori-dans-le-bloc-central-assure-attal-apres-la-chute-de-philippe-dans-un-sondage-20260825
+source_type: rss
+source_platform: le-figaro
+collected_at: '2026-08-25T22:14:41+02:00'
+summary: The article discusses a poll by Harris Interactive/Toluna showing Édouard Philippe's decline in the 2027 French presidential
+  race, with Gabriel Attal stating there is no longer a favorite in the central political bloc. Attal's entourage suggests
+  Philippe is losing ground.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: fr
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 66a8637c-7ce7-4c03-a11a-833aa6997212
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+Après la publication de l’étude Harris Interactive/Toluna, l’entourage de Gabriel Attal avait déjà estimé lundi qu’Édouard Philippe «est en train de perdre son pari».
+
+## Summary
+The article discusses a poll by Harris Interactive/Toluna showing Édouard Philippe's decline in the 2027 French presidential race, with Gabriel Attal stating there is no longer a favorite in the central political bloc. Attal's entourage suggests Philippe is losing ground.
+
+## Key Points
+- A new poll indicates Édouard Philippe's popularity has dropped.
+- Gabriel Attal asserts no clear favorite exists in the central bloc for the 2027 election.
+- Attal's team comments that Philippe is 'losing his bet'.
+- The poll was conducted by Harris Interactive/Toluna.
+- The context is the upcoming 2027 French presidential election.
+
+
+## Entities
+- **Gabriel Attal** (person, relevance=)
+- **Édouard Philippe** (person, relevance=)
+- **Harris Interactive/Toluna** (org, relevance=)

@@ -1,0 +1,24 @@
+{
+  "id": "598a170dee5cbc5f",
+  "source_name": "duolingo-blog",
+  "source_type": "rss",
+  "source_url": "https://blog.duolingo.com/6th-grade-math/",
+  "title": "A guide to 6th grade math topics",
+  "content": "See how Duolingo is easing 6th graders into a new year of math!",
+  "content_type": "text",
+  "source_platform": "duolingo-blog",
+  "collected_at": "2026-07-14T12:04:00+00:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://blog.duolingo.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6fd54751-4396-4b3e-9b12-d8be18953ec2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

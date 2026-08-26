@@ -1,0 +1,24 @@
+{
+  "id": "88991633cf9d6d80",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/nacional/mapa-totalidad-eclipse-solar-municipio-consulta-como-se-vera-12-agosto_7007682_0.html",
+  "title": "Mapa del eclipse solar total por municipio: consulta cómo se verá en tu ciudad el fenómeno",
+  "content": "España se prepara para el evento astronómico del siglo y 20minutos ha recopilado los datos del Instituto Geográfico Nacional para mostrar mediante un mapa interactivo cómo verás el eclipse desde donde sea que estes.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-07-13T05:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "33b5563a-adfd-4962-a4ca-1db958d371a9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

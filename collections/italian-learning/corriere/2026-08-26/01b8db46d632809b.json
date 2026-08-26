@@ -1,0 +1,24 @@
+{
+  "id": "01b8db46d632809b",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/economia/casa/24_aprile_14/case-green-detrazioni-e-bonus-selettivi-come-cambieranno-le-agevolazioni-le-ipotesi-e82d440e-cd19-4c3c-a769-bb0db8311xlk.shtml",
+  "title": "Case green, detrazioni e bonus selettivi: come cambieranno le agevolazioni, le ipotesi",
+  "content": "<p><img alt=\"Case green, detrazioni e bonus selettivi: come cambieranno le agevolazioni, le ipotesi\" src=\"https://images2.corriereobjects.it/methode_image/2024/04/13/Economia/Foto%20Economia%20-%20Trattate/66179eb2757bc_ori_crop_MASTER__0x0.jpeg\" title=\"Case green, detrazioni e bonus selettivi: come cambieranno le agevolazioni, le ipotesi\" /><p>L’80% degli edifici in Italia ha bisogno di interventi di riqualificazione per aumentare la classe energetica. Il rapporto dell’Enea, dalle caldaie a condensazione agli infissiL’80% degli edifici in Italia ha bisogno di interventi di riqualificazione per aumentare la classe energetica. Il rapporto dell’Enea, dalle caldaie a condensazione agli infissi</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-04-15T08:10:24+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c17b3c38-43f2-43c4-bddd-5b7c2f20f0c4",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

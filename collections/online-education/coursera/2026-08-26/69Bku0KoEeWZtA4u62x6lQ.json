@@ -1,0 +1,27 @@
+{
+  "id": "69Bku0KoEeWZtA4u62x6lQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Gamification",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "69Bku0KoEeWZtA4u62x6lQ",
+    "slug": "gamification",
+    "name": "Gamification"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "043f46aa-fda8-42d8-b3fb-0941eb9269ac",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

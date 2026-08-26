@@ -1,0 +1,121 @@
+---
+title: The Asus ROG Xbox Ally X20 Costs $1,300, And The OLED Screen Better Be Worth It
+domain: gaming
+tier: 01-Raw
+entry_id: gaming-general-the-asus-rog-xbox-ally-x20-costs-1-300-and-the-oled-screen-better-be-worth-it
+source_url: https://www.gamespot.com/articles/the-asus-rog-xbox-ally-x20-costs-1300-and-the-oled-screen-better-be-worth-it/
+source_type: rss
+source_platform: gamespot
+collected_at: '2026-08-25T14:20:33+00:00'
+summary: Asus releases the ROG Ally X20, an upgraded handheld gaming PC with a 7.4-inch 1080p OLED 120Hz HDR display, improved
+  internals, and a redesigned layout, starting at $1,300. The high price is attributed to global component shortages. A $2,500
+  bundle including accessories is also available.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: unique
+source_score: 90.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: c4419de6-ceab-45ad-a523-b97a8c0f390e
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: false
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<p class="wp-block-paragraph">Almost a year after launch, the Asus Xbox ROG Ally is getting an upgrade--and a hefty price increase--in the form of the X20 model. Revealed earlier this year as part of a bundle sold with a set of XR glasses, Asus has opened preorders for the handheld gaming PC, with prices starting at an eye-watering $1,300 from the official <a href="https://eshop.asus.com/us/rog/rog-xbox-ally-x20-2026.html" rel="noreferrer noopener" target="_blank">Asus online store</a> and <a href="https://www.bestbuy.com/site/promo/rog-ally-2026" rel="noreferrer noopener" target="_blank">Best Buy</a>.</p>
+
+
+
+<p class="wp-block-paragraph">What does an extra $300 get you? The biggest draw is the screen, as Asus has equipped this model with a 7.4‑inch 1080p OLED 120Hz HDR display. The shell is also constructed from translucent plastic so you can see the inner workings of the ROG Ally X20, and those internals include an 80Wh battery, 1TB of storage capacity, 24GB of DDR5 RAM, and Wi-Fi 6 connectivity. The X20 also features a redesigned layout meant to improve airflow and thermal efficiency, as these units can get hot while running demanding games.</p>
+
+
+
+<figure class="wp-block-gallery has-nested-images columns-2 is-cropped wp-block-gallery-1 is-layout-flex wp-block-gallery-is-layout-flex">
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-1861468" src="https://www.gamespot.com/wp-content/uploads/2026/08/Asus-XS20-11.jpg" style="cursor: zoom-in;" /></figure>
+
+
+
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-1861467" src="https://www.gamespot.com/wp-content/uploads/2026/08/Asus-XS20-10.jpg" style="cursor: zoom-in;" /></figure>
+
+
+
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-1861459" src="https://www.gamespot.com/wp-content/uploads/2026/08/Asus-XS20-2.jpg" style="cursor: zoom-in;" /></figure>
+
+
+
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-1861466" src="https://www.gamespot.com/wp-content/uploads/2026/08/Asus-XS20-3.jpg" style="cursor: zoom-in;" /></figure>
+
+
+
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-1861463" src="https://www.gamespot.com/wp-content/uploads/2026/08/Asus-XS20-4.jpg" style="cursor: zoom-in;" /></figure>
+
+
+
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-1861460" src="https://www.gamespot.com/wp-content/uploads/2026/08/Asus-XS20-5.jpg" style="cursor: zoom-in;" /></figure>
+
+
+
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-1861462" src="https://www.gamespot.com/wp-content/uploads/2026/08/Asus-XS20-6.jpg" style="cursor: zoom-in;" /></figure>
+
+
+
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-1861461" src="https://www.gamespot.com/wp-content/uploads/2026/08/Asus-XS20-7.jpg" style="cursor: zoom-in;" /></figure>
+
+
+
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-1861465" src="https://www.gamespot.com/wp-content/uploads/2026/08/Asus-XS20-8.jpg" style="cursor: zoom-in;" /></figure>
+
+
+
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-1861464" src="https://www.gamespot.com/wp-content/uploads/2026/08/Asus-XS20-9.jpg" style="cursor: zoom-in;" /></figure>
+</figure>
+
+
+
+<p class="wp-block-paragraph">Asus added that it has improved the D-pad and installed TMR magnetic induction analog sticks. The unit still runs on the AMD Ryzen AI Z2 Extreme processor, which is capable of handling modern games smoothly. If you've got $2,500 to spare, you can also grab a bundle deal that includes the ROG Ally X20, a pair of 240Hz ROG XReal X1 glasses, a Dbrand Killswitch protective case set, and a Pelican case to store everything in.</p>
+
+
+
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+https://www.youtube.com/watch?v=XiYNNGR4uLo
+</div></figure>
+
+
+
+<p class="wp-block-paragraph">That's a lot of dough for a handheld, but it's not too surprising. The global shortage of memory driven by AI has seen component prices skyrocket, and several manufacturers of handheld gaming PCs have had to adjust their prices. Earlier this year, <a href="https://www.gamespot.com/articles/the-rampocalypse-is-already-claiming-its-first-pc-gaming-handheld/1100-6538982/" rel="noreferrer noopener" target="_blank">AyaNeo suspended preorders</a> and early-bird sales of its Next 2 handheld in response to rapidly rising costs, while <a href="https://www.gamespot.com/articles/the-console-market-has-gone-from-bad-to-worse-as-the-prices-continue-to-rise-and-the-audience-shifts-towards-other-gaming-experiences/" rel="noreferrer noopener" target="_blank">console prices are also feeling the pinch</a>. The silver lining is that the makers of retro handhelds are filling the gap for affordable gaming on the go, and these cheap units <a href="https://www.gamespot.com/articles/why-cheap-retro-handhelds-make-more-sense-than-ever-in-2026/" rel="noreferrer noopener" target="_blank">make more sense than ever </a>in 2026.</p>
+
+
+
+<p class="wp-block-paragraph">Pricing for the $1,000 Xbox ROG Ally X and its smaller-specced $600 sibling hasn't increased (<em>yet</em>), and both machines are a pretty great option for playing PC and Xbox games on the go--if you can afford them. While both devices <a href="https://www.gamespot.com/articles/rog-xbox-ally-is-good-hardware-let-down-by-annoying-software/1100-6535471/" rel="noreferrer noopener" target="_blank">did have some teething issues</a> with their software, recent updates have smoothed out these problems, and the Xbox app works well as a platform for users to launch games from Microsoft's store, Steam, and more.</p>
+
+## Summary
+Asus releases the ROG Ally X20, an upgraded handheld gaming PC with a 7.4-inch 1080p OLED 120Hz HDR display, improved internals, and a redesigned layout, starting at $1,300. The high price is attributed to global component shortages. A $2,500 bundle including accessories is also available.
+
+## Key Points
+- Asus ROG Ally X20 priced at $1,300 with preorders open
+- Features 7.4-inch 1080p OLED 120Hz HDR display and translucent shell
+- Upgraded internals: 80Wh battery, 1TB storage, 24GB DDR5 RAM, Wi-Fi 6
+- $2,500 bundle includes X20, ROG XReal X1 glasses, protective cases, and more
+
+
+## Entities
+- **Asus** (org, relevance=)
+- **ROG Ally X20** (technology, relevance=)
+- **OLED** (technology, relevance=)
+- **AMD Ryzen AI Z2 Extreme** (technology, relevance=)
+- **Best Buy** (org, relevance=)
+- **AyaNeo** (org, relevance=)
+- **Xbox** (technology, relevance=)
+- **Steam** (technology, relevance=)
+- **Microsoft** (org, relevance=)

@@ -1,0 +1,24 @@
+{
+  "id": "7a663af7cae60127",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0604/c1002-40493990.html",
+  "title": "外交部：愿同韩方一道共同推动中韩战略合作伙伴关系不断向前发展",
+  "content": "<p style=\"text-indent: 2em;\">新华社北京6月4日电（记者许可）韩国总统李在明4日正式宣誓就职。外交部发言人林剑4日表示，习近平主席已经向李在明总统致贺电，祝贺他当选韩国总统。中方高度重视中韩关系，愿同韩方一道，共同推动中韩战略合作伙伴关系不断向前发展。</p> <p style=\"text-indent: 2em;\">当日例行记者会上，有记者问：据报道，4日，韩国中央选举管理委员会公布总统选举计票结果，韩国共同民主党候选人李在明当选韩新任总统。中方对此有何评论，对下一步中韩关系发展有何期待？</p> <p style=\"text-indent: 2em;\">林剑表示，中韩互为重要近邻和合作伙伴。中方高度重视中韩关系，愿同韩方一道，坚守建交初心，坚定睦邻友好方向，坚持互利共赢目标，共同推动中韩战略合作伙伴关系不断向前发展，更好造福两国和两国人民。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-04T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "df0e7921-81b8-42a6-bc7c-76d0a9033761",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

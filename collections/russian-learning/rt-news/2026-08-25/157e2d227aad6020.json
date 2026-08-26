@@ -1,0 +1,24 @@
+{
+  "id": "157e2d227aad6020",
+  "source_name": "rt-news",
+  "source_type": "rss",
+  "source_url": "https://www.rt.com/news/644639-eu-buries-plan-steal-russia-assets/?utm_source=rss&utm_medium=rss&utm_campaign=RSS",
+  "title": "EU buries plan to steal Russian assets for Ukraine – EurActiv",
+  "content": "<img align=\"left\" alt=\"Preview\" src=\"https://mf.b37mrtl.ru/files/2026.08/thumbnail/6a8d987085f5405f7637c98d.jpg\" style=\"margin-right: 10px;\" /> EU officials see no path to revive a Russian asset seizure plan for Ukraine due to Belgium’s opposition, EurActiv reports <br /><a href=\"https://www.rt.com/news/644639-eu-buries-plan-steal-russia-assets/?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=RSS\">Read Full Article at RT.com</a>",
+  "content_type": "text",
+  "source_platform": "rt-news",
+  "collected_at": "2026-08-25T14:09:57+00:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.rt.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "aa33d35f-6e9a-4273-b29a-2b0b7244d4f4",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

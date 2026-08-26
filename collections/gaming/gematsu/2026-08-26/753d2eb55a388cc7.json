@@ -1,0 +1,24 @@
+{
+  "id": "753d2eb55a388cc7",
+  "source_name": "gematsu",
+  "source_type": "rss",
+  "source_url": "https://www.gematsu.com/2026/08/thatgamecompany-establishes-thatgamepublisher",
+  "title": "thatgamecompany establishes thatgamepublisher",
+  "content": "<img src=\"https://www.gematsu.com/wp-content/uploads/2026/08/thatgamepublisher-Ann_08-25-26.jpg\" /> Journey and Sky: Children of the Light developer thatgamecompany has announced the establishment of publishing &hellip;",
+  "content_type": "text",
+  "source_platform": "gematsu",
+  "collected_at": "2026-08-25T15:45:54+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.gematsu.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "37e73ece-5c78-43f8-a480-e6d2959086ec",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

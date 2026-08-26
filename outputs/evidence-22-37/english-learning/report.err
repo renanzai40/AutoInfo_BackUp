@@ -1,0 +1,4 @@
+LLM returned only 1 theme group(s), retrying with stricter prompt
+LLM returned None content — empty response
+Strict retry returned only 1 group(s), falling back to deterministic grouping
+LLM groups matched only 0/8 entries, falling back to deterministic grouping

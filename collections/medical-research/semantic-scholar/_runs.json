@@ -1,0 +1,34 @@
+[
+  {
+    "collection_id": "col-20260815T183153-49591d6e",
+    "timestamp": "2026-08-15T18:32:01.236191+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Semantic Scholar API rate-limited (HTTP 429) without an API key — set AUTOINFO_S2_API_KEY for a higher rate limit",
+        "source_failed": true,
+        "reason": "Semantic Scholar API rate-limited (HTTP 429) without an API key — set AUTOINFO_S2_API_KEY for a higher rate limit"
+      }
+    ],
+    "duration_ms": 6608.0
+  },
+  {
+    "collection_id": "col-20260818T063541-d6022cb5",
+    "timestamp": "2026-08-18T06:35:49.955196+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Semantic Scholar API rate-limited (HTTP 429) without an API key — set AUTOINFO_S2_API_KEY for a higher rate limit",
+        "source_failed": true,
+        "reason": "Semantic Scholar API rate-limited (HTTP 429) without an API key — set AUTOINFO_S2_API_KEY for a higher rate limit"
+      }
+    ],
+    "duration_ms": 502.0
+  }
+]

@@ -1,0 +1,34 @@
+LLM returned None content — empty response
+LLM returned None content — empty response
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides a set of Spanish-language knowledge base entries and instructs to group them into 3-5 themes with short semantic titles, covering topics like crime, entertainment, t
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This content includes multiple news entries tagged for Spanish learning, covering diverse topics such as a celebrity incident, an Ebola outbreak, musician arrests, new technology, career
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions to group eight Spanish news entries into thematic categories, covering topics such as international relations, automotive industry trends, travel servic
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions for categorizing eight news entries into 3-5 semantic themes, with guidelines for theme naming and JSON output format. The entries cover diverse topics
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions to group a set of knowledge base entries into 3-5 themes with short semantic titles. It lists eight entries covering diverse topics such as medical cond
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping a set of knowledge base entries into 3–5 semantic themes, with each entry assigned to exactly one theme. It specifies that themes should ha
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions and a list of knowledge base entries to be grouped into 3-5 themes without using catch-all names. It includes diverse entries covering topics from liter
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping eight knowledge base entries into 3–5 thematic categories based on their content. Each entry is summarized and must be assigned to a single
+LLM returned None content — empty response
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+LLM returned None content — empty response
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+Failed to parse LLM response as JSON: {
+  "tl_dr":
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article instructs the grouping of eight diverse knowledge base entries into 3–5 semantic themes, covering topics like youth social trends, cultural heritage, political commentary, h
+LLM returned only 1 theme group(s), retrying with stricter prompt
+Strict retry returned only 1 group(s), falling back to deterministic grouping

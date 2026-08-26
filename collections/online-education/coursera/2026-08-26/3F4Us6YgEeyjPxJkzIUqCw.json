@@ -1,0 +1,27 @@
+{
+  "id": "3F4Us6YgEeyjPxJkzIUqCw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "University Studies for Student Veterans",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "3F4Us6YgEeyjPxJkzIUqCw",
+    "slug": "university-studies-for-student-veterans",
+    "name": "University Studies for Student Veterans"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a5c838ea-5cd2-4dd0-a64b-f9cfa97d7596",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

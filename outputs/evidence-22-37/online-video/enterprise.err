@@ -1,0 +1,16 @@
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions to group a set of online video knowledge base entries into 3-5 themes with semantic titles and return them in JSON format. It includes eight entries cov
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides a set of knowledge base entries and instructs to group them into 3-5 semantic themes with descriptive titles. Entries cover diverse topics such as culinary events, f
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping a set of knowledge base entries into 3-5 thematic categories, with guidelines for creating descriptive theme titles and a specified JSON re
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+LLM returned None content — empty response
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions for grouping a set of knowledge base entries related to online videos into 3-5 distinct themes with concise semantic titles. The entries cover diverse 

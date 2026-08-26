@@ -1,0 +1,22 @@
+{
+  "id": "564f8a188a6dfd66",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://news.crunchbase.com/public/ai-ipo-results-lp-liquidity-gershfeld-flint/",
+  "title": "The Biggest Consequence Of An AI IPO Isn’t The IPO Itself. It’s What Happens Afterward.",
+  "content": "A wave of major AI IPOs could return significant liquidity to limited partners, fueling a new venture fundraising cycle rather than simply affecting public-market valuations. That capital is likely to flow disproportionately to the largest, established VC firms, writes guest author Andrew Gershfeld of Flint Capital, creating a concentration flywheel that could reshape fundraising, startup financing and power across the venture ecosystem.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-10T11:00:36+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://news.crunchbase.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d7e6444f-7043-415e-bd62-f4d80b441006"
+}

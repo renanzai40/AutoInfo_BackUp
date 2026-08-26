@@ -1,0 +1,24 @@
+{
+  "id": "909aeabbf31c6ffc",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/deals/cloudfoam-flex-slounge-shoes-adidas-sale",
+  "title": "Adidas marked down its popular sneakers that feel like you're 'walking on a cloud' to just $36",
+  "content": "\"These are the best walking shoes I’ve ever purchased!\"",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T15:30:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "79267449-972f-482f-9ff2-24089885ebfe",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "2a0c41bd623701ee",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/cataluna/tarragona/los-mossos-detienen-un-menor-conduciendo-un-coche-por-ap-7-altura-l-aldea-sin-carnet_7029303_0.html",
+  "title": "Los Mossos detienen a un menor conduciendo un coche por la AP-7 en l'Aldea",
+  "content": "El vehículo, ocupado por cuatro personas, fue parado en un control.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T18:32:16+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "11d682d1-edea-4a6c-9acd-840e4796763f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

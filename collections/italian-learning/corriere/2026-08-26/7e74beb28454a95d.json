@@ -1,0 +1,24 @@
+{
+  "id": "7e74beb28454a95d",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.iodonna.it/oroscopo/oggi/?intcmp=iod_hpcor_articolo",
+  "title": "Le previsioni per la giornata per lei e per lui e la pagella dell’umore per i 12 segni",
+  "content": "<p><img alt=\"Le previsioni per la giornata per lei e per lui e la pagella dell’umore per i 12 segni\" src=\"https://images2.corriereobjects.it/methode_image/2024/04/20/IoDonna/Foto%20IoDonna%20-%20Trattate/oroscopo-mensile-GettyImages-1217658884-slider-kakF-U34701829889561kmF-656x492@Corriere-Web-Sezioni.jpg\" title=\"Le previsioni per la giornata per lei e per lui e la pagella dell’umore per i 12 segni\" /><p>Che giornata attende lei, lui, il barometro dell’umore per tutti i segni zodiacali, il colore delle emozioni, e la pagellina del giorno: sentimenti, attività, finanze, benessereChe giornata attende lei, lui, il barometro dell’umore per tutti i segni zodiacali, il colore delle emozioni, e la pagellina del giorno: sentimenti, attività, finanze, benessere</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-06T10:54:20+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "91da66a8-3cc5-4547-9253-d6304ea341d9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

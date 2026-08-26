@@ -1,0 +1,24 @@
+{
+  "id": "3d0df2c6a131ae2d",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/Xi-holds-welcome-ceremony-for-Jordan-s-king-1PS0WbHWUdW/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Xi holds welcome ceremony for Jordan's king",
+  "content": "Chinese President Xi Jinping on Monday afternoon held a welcome ceremony for King of the Hashemite Kingdom of Jordan Abdullah II ibn Al Hussein, who is on a state visit to China, at the Great Hall of the People in Beijing.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T09:12:07+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6c8ffa1f-3cd3-421d-850c-5d271753b0b4",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,49 @@
+{
+  "id": 36930820,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/36930820/post-http-localhost3000-api-signup-400-bad-request",
+  "title": "POST http://localhost:3000/api/signup 400 (Bad Request)",
+  "content": "POST http://localhost:3000/api/signup 400 (Bad Request)",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-25T16:04:55.317906+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "javascript",
+      "angularjs",
+      "json",
+      "node.js",
+      "http-headers"
+    ],
+    "owner": {
+      "account_id": 8346216,
+      "reputation": 1,
+      "user_id": 6269851,
+      "user_type": "registered",
+      "profile_image": "https://www.gravatar.com/avatar/08432c379e850fd30654ce6782304053?s=256&d=identicon&r=PG&f=y&so-version=2",
+      "display_name": "alex",
+      "link": "https://stackoverflow.com/users/6269851/alex"
+    },
+    "is_answered": false,
+    "view_count": 28644,
+    "answer_count": 4,
+    "score": 2,
+    "last_activity_date": 1787673775,
+    "creation_date": 1461910466,
+    "question_id": 36930820,
+    "content_license": "CC BY-SA 3.0",
+    "link": "https://stackoverflow.com/questions/36930820/post-http-localhost3000-api-signup-400-bad-request",
+    "title": "POST http://localhost:3000/api/signup 400 (Bad Request)"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2f6d3281-95c7-408d-a48e-af6791d7eb5c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

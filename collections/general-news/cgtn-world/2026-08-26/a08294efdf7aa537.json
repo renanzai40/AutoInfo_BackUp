@@ -1,0 +1,24 @@
+{
+  "id": "a08294efdf7aa537",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://newsaf.cgtn.com/news/2026-08-25/Kenya-plans-maize-imports-as-drought-hits-key-growing-areas-1PSm2KqL93W/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Kenya plans maize imports as drought hits key growing areas",
+  "content": "A poor harvest there could have consequences far beyond farming communities, potentially putting pressure on maize supplies and pushing up the price of maize flour, a staple for millions of households.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T17:03:01+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4603490e-d95d-4d23-a04d-f3df36ffacea",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

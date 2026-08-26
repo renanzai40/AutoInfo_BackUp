@@ -1,0 +1,24 @@
+{
+  "id": "b78d5affe7c7f5d8",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/world/story/us-sanctions-india-trump-administration-oil-trade-petrochemical-import-ntc-amkr-dskc-2630006-2026-08-26?utm_source=rssfeed",
+  "title": "ईरान के साथ तेल डील... भारत आधारित 4 कंपनियों पर अमेरिकी प्रतिबंध",
+  "content": "ईरान के तेल और पेट्रोकेमिकल व्यापार से जुड़ी इंडिया-बेस्ड कंपनियों पर अमेरिका ने प्रतिबंध लगा दिए हैं. वहीं, तीन भारतीय नागरिकों को भी निशाना बनाया गया है.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-26T03:05:08+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5b04634d-2b9f-4344-9e8b-781959846fe1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

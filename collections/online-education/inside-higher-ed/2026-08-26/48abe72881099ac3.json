@@ -1,0 +1,24 @@
+{
+  "id": "48abe72881099ac3",
+  "source_name": "inside-higher-ed",
+  "source_type": "rss",
+  "source_url": "https://www.insidehighered.com/news/global/international-students-us/2026/08/26/new-student-visas-dropped-23-2025",
+  "title": "New Student Visas Dropped 23% in 2025",
+  "content": "<span>New Student Visas Dropped 23% in 2025</span>\n\n            <div class=\"field field--name-field-featured-image field--type-entity-reference field--label-hidden field__item\">  <img alt=\"A illustration of an night time illuminated map showing North America and parts of Europe, Africa and South America with the United States blacked out. \" height=\"800\" src=\"https://www.insidehighered.com/sites/default/files/2026-08/US_lights_turned_off.jpg\" width=\"1200\" />\n\n</div>\n      \n<span><span>Johanna Alonso</span></span>\n\n<span><time datetime=\"2026-08-26T03:00:00-04:00\" title=\"Wednesday, August 26, 2026 - 03:00 AM\">Wed, 08/26/2026 - 03:00 AM</time>\n</span>\n<p>Countries impacted by Trump’s travel ban are among those with the fewest student visas issued in 2025, though China and India, typically the two largest suppliers of international students to the U.S., were also hit hard.</p>\n  <div class=\"field field--name-field-authors field--type-entity-reference field--label-inline clearfix\">\n    <div class=\"field__label\">Byline(s)</div>\n          <div class=\"field__items\">\n              <div class=\"field__item\"><a href=\"https://www.insidehighered.com/author/johanna-alonso\" hreflang=\"en\">Johanna Alonso</a></div>\n              </div>\n      </div>",
+  "content_type": "text",
+  "source_platform": "inside-higher-ed",
+  "collected_at": "2026-08-26T07:00:00+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.insidehighered.com/rss.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c3ca5ec0-c0f9-47ee-9b20-1d0d93540aaf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

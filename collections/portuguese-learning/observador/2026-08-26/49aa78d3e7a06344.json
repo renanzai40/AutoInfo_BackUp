@@ -1,0 +1,24 @@
+{
+  "id": "49aa78d3e7a06344",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/programas/noticiario/as-noticias-das-22h-1852/",
+  "title": "22h. INEM em guerra interna. Ministra tenta mediar conflito",
+  "content": "Sindicato convocou greve e vai apresentar queixa contra o presidente do INEM. Ministra da Saúde marcou reunião com ambas as partes Ainda, Ucrânia concorda suspender ataques a Moscovo",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T22:15:27+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0589ba55-ba0a-4ab3-9c45-42cec7de0984",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

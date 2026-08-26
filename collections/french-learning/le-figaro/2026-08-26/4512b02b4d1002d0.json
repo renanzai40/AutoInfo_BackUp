@@ -1,0 +1,24 @@
+{
+  "id": "4512b02b4d1002d0",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/elections/presidentielles/deux-tours-tarif-entre-10-et-15-euros-scrutin-electronique-le-parti-socialiste-valide-l-accord-sur-sa-primaire-d-octobre-20260825",
+  "title": "Deux tours, tarif entre 10 et 15 euros, scrutin électronique... Le Parti socialiste et Place publique valident l'accord sur leur primaire d’octobre",
+  "content": "Alors que les candidats devront se déclarer entre le 1er et le 15 septembre, quatre figures ont déjà annoncé qu’ils souhaitaient participer : Raphaël Glucksmann, les socialistes Philippe Brun et Jérôme Guedj, ainsi que l’ex-candidate à la présidentielle Ségolène Royal.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T23:06:45+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f7063ef1-8c9b-4621-b806-565954a4a4d6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

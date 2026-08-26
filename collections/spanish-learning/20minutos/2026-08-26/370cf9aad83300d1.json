@@ -1,0 +1,24 @@
+{
+  "id": "370cf9aad83300d1",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/ceuta/delegacion-gobierno-ceuta-respalda-version-marlaska-niega-haber-recibido-avisos-entrada-masiva_7029334_0.html",
+  "title": "La Delegación del Gobierno en Ceuta respalda la versión de Marlaska y niega haber recibido avisos de la entrada masiva de migrantes",
+  "content": "La institución asegura que solo recibió información sobre el aumento progresivo de las llegadas por mar y sostiene que ningún informe permitía anticipar la magnitud de lo ocurrido el 30 de julio.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T20:31:15+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ba551e33-5291-4fec-8086-81f02cf06af6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

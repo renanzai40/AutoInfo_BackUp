@@ -1,0 +1,24 @@
+{
+  "id": "fa7f3f9dbcd12e73",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/viajes/destinos/impresionante-iglesia-romanica-milenio-historia-volver-visitar-agosto_7027113_0.html",
+  "title": "La impresionante iglesia románica con un milenio de historia que puedes visitar",
+  "content": "Este impresionante templo lleva ocultándose más de 1.000 años entre las cumbres de los Pirineos y ha abierto de nuevo sus puertas este verano.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T18:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a8358fb7-53bd-4ad5-ac22-e77c495dfef5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

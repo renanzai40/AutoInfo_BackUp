@@ -1,0 +1,24 @@
+{
+  "id": "48e320aef6a87419",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/que-fue-chris-owen-sherminator-american-pie-camarero-que-busca-su-sitio-cine_7012409_0.html",
+  "title": "Qué fue de Chris Owen, el \"Sherminator\" de 'American Pie': el camarero que busca su sitio en el cine",
+  "content": "Tiempo después de American Pie, el actor fue noticia al descubrirse que trabajaba como camarero en un restaurante de sushi para pagar las facturas mientras seguía haciendo castings",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T07:34:13+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c877d5df-b1fb-4b6c-ae17-3742b048371c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

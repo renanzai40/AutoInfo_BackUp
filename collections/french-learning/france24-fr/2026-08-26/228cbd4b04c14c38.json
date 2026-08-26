@@ -1,0 +1,24 @@
+{
+  "id": "228cbd4b04c14c38",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/moyen-orient/20260825-gaza-conseil-de-paix-met-en-garde-hamas-utilisation-cerfs-volants-israel-etats-unis",
+  "title": "Le \"Conseil de paix\" pour Gaza met en garde le Hamas contre l'utilisation de cerfs-volants",
+  "content": "Un responsable du \"Conseil de paix\" pour Gaza a demandé mardi que cesse \"toute activité militante à Gaza\", \"y compris le fait de faire voler des cerfs-volants\". Israël avait menacé dimanche le Hamas d'intensifier ses opérations militaires si les lancements de cerfs-volants, de drones et de ballons vers son territoire se poursuivaient. Le Hamas, de son côté, assure qu'il ne s'agit que de l'activité d'enfants innocents.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T21:32:17+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "344762a3-5b12-4af8-9ebc-b92f7e900527",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "60565ac8a3dd40c0",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/games/fps/nearly-500k-players-showed-up-for-the-wardogs-beta-the-reaction-from-the-fps-community-has-been-insane/",
+  "title": "Nearly 500k players showed up for the Wardogs beta: 'The reaction from the FPS community has been insane'",
+  "content": "That's a big beta for such a complex FPS.",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-24T23:11:55+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "90eff65a-2b84-483a-a58e-0541809304c4",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

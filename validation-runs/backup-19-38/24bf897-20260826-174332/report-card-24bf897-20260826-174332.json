@@ -1,0 +1,1457 @@
+{
+  "schema_version": 2,
+  "tool": "autoinfo validate --matrix",
+  "generated_at": "2026-08-26T09:43:32Z",
+  "commit": "24bf897",
+  "batch_id": "24bf897-20260826-174332",
+  "products": [
+    {
+      "domain": "general-news",
+      "product": "digest",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "digest",
+          "details": "first line='# Weekly Magazine Digest — general-news'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "digest",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "digest",
+          "details": "no References section"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "digest",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "digest",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "digest",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "digest",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "digest",
+          "details": "not a report/column product"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "general-news",
+          "product": "digest",
+          "details": "no Sections metadata"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "digest",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "digest",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "digest",
+          "details": "9191 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "digest",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "digest",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "digest",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "digest",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "digest",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "digest",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "digest",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    },
+    {
+      "domain": "general-news",
+      "product": "report",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "report",
+          "details": "first line='# general-news — Report'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "report",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "report",
+          "details": "numbers=[1, 2, 3, 4, 5]"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "report",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "report",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "report",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "report",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "report",
+          "details": "Sections=4"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "general-news",
+          "product": "report",
+          "details": "metadata=4 actual=4"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "report",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "report",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "report",
+          "details": "6584 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "report",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "report",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "report",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "report",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "report",
+          "details": "substantive analysis present"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "report",
+          "details": "no generic risk labels"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "report",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    },
+    {
+      "domain": "general-news",
+      "product": "column",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "column",
+          "details": "first line='# general-news — Column'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "column",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "column",
+          "details": "no References section"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "column",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "column",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "column",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "column",
+          "details": "subsections=2"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "column",
+          "details": "Sections=2"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "general-news",
+          "product": "column",
+          "details": "metadata=2 actual=2"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "column",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "column",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "column",
+          "details": "5454 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "column",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "column",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "column",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "column",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "column",
+          "details": "substantive analysis present"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "column",
+          "details": "no generic risk labels"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "column",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    },
+    {
+      "domain": "general-news",
+      "product": "premium-briefing",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "premium-briefing",
+          "details": "first line='# general-news — Premium Briefing'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "premium-briefing",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "premium-briefing",
+          "details": "numbers=[1, 2, 3, 4, 5]"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "premium-briefing",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": false,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "premium-briefing",
+          "details": "placeholders=_No implication captured for this takeaway._, _No material risks or opportunities identified for this takeaway._, _No follow-up actions suggested._"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "premium-briefing",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "premium-briefing",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "premium-briefing",
+          "details": "not a report/column product"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "general-news",
+          "product": "premium-briefing",
+          "details": "no Sections metadata"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "premium-briefing",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "premium-briefing",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "premium-briefing",
+          "details": "6599 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "premium-briefing",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "premium-briefing",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "premium-briefing",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "premium-briefing",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": false,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "premium-briefing",
+          "details": "takeaway 3 so-what is weak; takeaway 4 so-what is weak; takeaway 4 risk is weak; takeaway 4 actions is weak"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "premium-briefing",
+          "details": "no generic risk labels"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "premium-briefing",
+          "details": "analysis adds beyond heading"
+        }
+      ]
+    },
+    {
+      "domain": "general-news",
+      "product": "enterprise-briefing",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "enterprise-briefing",
+          "details": "first line='# general-news — Enterprise Briefing'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "enterprise-briefing",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "enterprise-briefing",
+          "details": "numbers=[1, 2, 3, 4, 5]"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "enterprise-briefing",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "enterprise-briefing",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "enterprise-briefing",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "enterprise-briefing",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "enterprise-briefing",
+          "details": "not a report/column product"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "general-news",
+          "product": "enterprise-briefing",
+          "details": "no Sections metadata"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "enterprise-briefing",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "enterprise-briefing",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "enterprise-briefing",
+          "details": "7042 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "enterprise-briefing",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "enterprise-briefing",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "enterprise-briefing",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "enterprise-briefing",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "enterprise-briefing",
+          "details": "substantive analysis present"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "enterprise-briefing",
+          "details": "no generic risk labels"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "enterprise-briefing",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    },
+    {
+      "domain": "general-news",
+      "product": "magazine-digest",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "magazine-digest",
+          "details": "first line='# Weekly Magazine Digest — general-news'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "magazine-digest",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "magazine-digest",
+          "details": "no References section"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "magazine-digest",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "magazine-digest",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "magazine-digest",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "magazine-digest",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "magazine-digest",
+          "details": "not a report/column product"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "general-news",
+          "product": "magazine-digest",
+          "details": "no Sections metadata"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "magazine-digest",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "magazine-digest",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "magazine-digest",
+          "details": "9191 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "magazine-digest",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "magazine-digest",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "magazine-digest",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "magazine-digest",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "magazine-digest",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "magazine-digest",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "magazine-digest",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    },
+    {
+      "domain": "general-news",
+      "product": "tutorial",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "tutorial",
+          "details": "first line='# Understanding Contemporary Issues: From Politics to Techno'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "tutorial",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "tutorial",
+          "details": "no References section"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "tutorial",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "tutorial",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "tutorial",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "tutorial",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "tutorial",
+          "details": "not a report/column product"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "general-news",
+          "product": "tutorial",
+          "details": "no Sections metadata"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "tutorial",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "tutorial",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "tutorial",
+          "details": "8357 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "tutorial",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "tutorial",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "tutorial",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "tutorial",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "tutorial",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "tutorial",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "tutorial",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    },
+    {
+      "domain": "general-news",
+      "product": "presentation",
+      "status": "ok",
+      "assertions": [
+        {
+          "assertion": "_title_first",
+          "passed": true,
+          "issue": "#318",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "presentation",
+          "details": "first line='# Global News Weekly: Strategic Briefing'"
+        },
+        {
+          "assertion": "_no_error_leak",
+          "passed": true,
+          "issue": "#328",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "presentation",
+          "details": "clean header"
+        },
+        {
+          "assertion": "_references_numbered",
+          "passed": true,
+          "issue": "#322",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "presentation",
+          "details": "no References section"
+        },
+        {
+          "assertion": "_source_labels_specific",
+          "passed": true,
+          "issue": "#325",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "presentation",
+          "details": "no RSS label"
+        },
+        {
+          "assertion": "_no_placeholder",
+          "passed": true,
+          "issue": "#329",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "presentation",
+          "details": "none"
+        },
+        {
+          "assertion": "_no_internal_leak",
+          "passed": true,
+          "issue": "#338",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "presentation",
+          "details": "none"
+        },
+        {
+          "assertion": "_column_deep_dive",
+          "passed": true,
+          "issue": "#316",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "presentation",
+          "details": "not a column product"
+        },
+        {
+          "assertion": "_report_sections",
+          "passed": true,
+          "issue": "#311",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "presentation",
+          "details": "not a report/column product"
+        },
+        {
+          "assertion": "_metadata_consistency",
+          "passed": true,
+          "issue": "—",
+          "severity": "P2",
+          "domain": "general-news",
+          "product": "presentation",
+          "details": "no Sections metadata"
+        },
+        {
+          "assertion": "_no_cross_domain_noise",
+          "passed": true,
+          "issue": "#319",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "presentation",
+          "details": "not ai-commercial"
+        },
+        {
+          "assertion": "_no_financial_dilution",
+          "passed": true,
+          "issue": "—",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "presentation",
+          "details": "not financial"
+        },
+        {
+          "assertion": "_not_empty",
+          "passed": true,
+          "issue": "#294",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "presentation",
+          "details": "8369 chars"
+        },
+        {
+          "assertion": "_no_year_hallucination",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "presentation",
+          "details": "no year issues"
+        },
+        {
+          "assertion": "_no_code_or_key_leak",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "presentation",
+          "details": "no code/key shapes"
+        },
+        {
+          "assertion": "_no_broken_reference",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "presentation",
+          "details": "no broken references"
+        },
+        {
+          "assertion": "_no_external_error_text",
+          "passed": true,
+          "issue": "#351",
+          "severity": "P0",
+          "domain": "general-news",
+          "product": "presentation",
+          "details": "no external error text"
+        },
+        {
+          "assertion": "_so_what_substantive",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "presentation",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_recommendation_relevant",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "presentation",
+          "details": "not a paid-analysis product"
+        },
+        {
+          "assertion": "_analysis_not_mere_repeat",
+          "passed": true,
+          "issue": "#357",
+          "severity": "P1",
+          "domain": "general-news",
+          "product": "presentation",
+          "details": "not a premium-briefing product"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "batch_id": "24bf897-20260826-174332",
+    "domains": [
+      "general-news"
+    ],
+    "products": [
+      "digest",
+      "report",
+      "column",
+      "premium-briefing",
+      "enterprise-briefing",
+      "magazine-digest",
+      "tutorial",
+      "presentation"
+    ],
+    "total_products": 8,
+    "total_asserts": 152,
+    "failures": 2,
+    "failing_assertions": 2,
+    "missing_products": 0,
+    "error_products": 0,
+    "skipped_products": [],
+    "raw_counts": {}
+  }
+}

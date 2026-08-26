@@ -1,0 +1,13 @@
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+LLM returned None content — empty response
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping eight knowledge base entries into three to five semantic themes, emphasizing concise, unique titles and ensuring each entry is assigned to 
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides a list of online video entries covering diverse entertainment news, including film premieres, legal disputes, TV series updates, and music releases, and instructs to
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions to group eight knowledge base entries related to online videos and entertainment news into 3–5 themes with specific naming guidelines. The entries cover
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions for grouping a set of knowledge base entries into 3–5 thematic categories, with each entry assigned to exactly one theme. The entries cover entertainme
+LLM returned None content — empty response

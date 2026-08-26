@@ -1,0 +1,96 @@
+{
+  "id": "42561521",
+  "source_name": "pubmed",
+  "source_type": "api",
+  "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42561521&retmode=xml",
+  "title": "Association of urinary organic ultraviolet filters with ovarian reserve and in vitro fertilization-embryo transfer outcomes: A prospective cohort study.",
+  "content": "BACKGROUND: Organic ultraviolet filters (OUVFs) are emerging pollutants with widespread exposure and potential reproductive and endocrine toxicity, but evidence regarding the associations of OUVF exposure with female ovarian reserve and IVF‑ET outcomes remains sparse.\nMETHODS: This prospective cohort study included 616 women undergoing IVF‑ET. Thirteen urinary OUVFs were quantified by UPLC‑MS/MS. Associations of OUVF exposures with ovarian reserve and IVF‑ET outcomes were assessed using generalized linear models, quantile g‑computation (qgcomp), and mediation models.\nRESULTS: Eight OUVFs exhibited detection frequencies exceeding 90%. EHMC was linked to reductions in metaphase II oocyte count (MIIC), fertilization count (FC), two-pronuclear zygote count (2PNC), and usable blastocyst count (UBC). Similar reductions were noted for BP-2 (MIIC, FC, 2PNC, and UBC). The qgcomp analysis identified EHMC, 4-MBC, and BP-2 as the primary contributors to the mixture effects. Additionally, AMH was identified as a significant mediator in the EHMC exposure pathway, accounting for 24.31-36.48% of the total effects. In contrast, progesterone (P) mediated 7.04-12.74% of the associations of BP-2 with these outcomes.\nCONCLUSIONS: Exposure to OUVFs, particularly EHMC and BP‑2, is associated with diminished ovarian reserve and poorer IVF‑ET outcomes. The EHMC‑associated effects were mediated by AMH, and the BP‑2‑associated effects by progesterone.",
+  "content_type": "text",
+  "source_platform": "pubmed",
+  "collected_at": "2026 Aug 06",
+  "language": "",
+  "domain": "medical-research",
+  "topic_tags": [
+    "BP‑2",
+    "EHMC",
+    "In vitro fertilization‑embryo transfer",
+    "Mixture exposure",
+    "Organic ultraviolet filters",
+    "Ovarian reserve"
+  ],
+  "quality_tier": 1,
+  "raw_data": {
+    "pmid": "42561521",
+    "pmc_id": "",
+    "authors": [
+      {
+        "lastname": "Guo",
+        "firstname": "Xu",
+        "initials": "X"
+      },
+      {
+        "lastname": "Zhao",
+        "firstname": "Xiangkai",
+        "initials": "X"
+      },
+      {
+        "lastname": "Gu",
+        "firstname": "Baoxia",
+        "initials": "B"
+      },
+      {
+        "lastname": "Gu",
+        "firstname": "Zhiguang",
+        "initials": "Z"
+      },
+      {
+        "lastname": "Liu",
+        "firstname": "Yan",
+        "initials": "Y"
+      },
+      {
+        "lastname": "Guo",
+        "firstname": "Jingwen",
+        "initials": "J"
+      },
+      {
+        "lastname": "Yan",
+        "firstname": "Juntong",
+        "initials": "J"
+      },
+      {
+        "lastname": "Zhang",
+        "firstname": "Yuerui",
+        "initials": "Y"
+      },
+      {
+        "lastname": "Zhao",
+        "firstname": "Yuxin",
+        "initials": "Y"
+      },
+      {
+        "lastname": "Yang",
+        "firstname": "Xinyu",
+        "initials": "X"
+      },
+      {
+        "lastname": "Wang",
+        "firstname": "Wei",
+        "initials": "W"
+      },
+      {
+        "lastname": "Wang",
+        "firstname": "Pengpeng",
+        "initials": "P"
+      }
+    ],
+    "journal": "Ecotoxicology and environmental safety",
+    "pub_date": "2026 Aug 06",
+    "doi": "10.1016/j.ecoenv.2026.120621",
+    "mesh_terms": []
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a73a4cb7-c2a5-436e-907e-4d22a0da903c"
+}

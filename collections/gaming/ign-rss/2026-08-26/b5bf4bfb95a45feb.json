@@ -1,0 +1,24 @@
+{
+  "id": "b5bf4bfb95a45feb",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/grand-theft-auto-6-an-extended-look-global-release-times-confirmed",
+  "title": "Grand Theft Auto 6: An Extended Look Global Release Times Confirmed",
+  "content": "Here's when you'll be able to watch Grand Theft Auto 6: An Extended Look as soon as it debuts on Netflix, and when it will arrive on YouTube.",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T11:10:02+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c475dd2b-6ae3-431d-9f71-15962ec23924",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

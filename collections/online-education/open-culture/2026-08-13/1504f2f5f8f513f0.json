@@ -1,0 +1,22 @@
+{
+  "id": "1504f2f5f8f513f0",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.openculture.com/2026/08/the-most-controversial-ancient-philosophy-epicureanism.html",
+  "title": "The Most Controversial Ancient Philosophy: Epicureanism",
+  "content": "Over the years, you’ve probably heard at least a few people casually describe themselves as Epicureans. As used today, the label can refer to as little as enjoying the occasional expensive restaurant meal. The bar was a bit higher in the second century, as explained by ancient-history YouTuber Garrett Ryan in the new video above [&#8230;]",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-12T13:57:06+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.openculture.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "46904e4c-a6bc-416f-b556-f1f36cfaf47b"
+}

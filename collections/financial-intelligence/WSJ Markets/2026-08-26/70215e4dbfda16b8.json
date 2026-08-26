@@ -1,0 +1,24 @@
+{
+  "id": "70215e4dbfda16b8",
+  "source_name": "WSJ Markets",
+  "source_type": "rss",
+  "source_url": "https://www.wsj.com/articles/china-cryptocurrency-market-trading-restrictions-3e050cd9?mod=rss_markets_main",
+  "title": "In China, a Cat-and-Mouse Game to Rein In Crypto",
+  "content": "Recent court cases reveal how middlemen are facilitating a booming trade, eluding a crackdown.",
+  "content_type": "text",
+  "source_platform": "WSJ Markets",
+  "collected_at": "2025-01-26T00:01:00-05:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6e0119eb-6120-4c06-91c6-5b946968298f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

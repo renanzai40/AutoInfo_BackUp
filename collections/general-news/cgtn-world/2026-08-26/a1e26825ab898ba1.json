@@ -1,0 +1,24 @@
+{
+  "id": "a1e26825ab898ba1",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-22/China-s-rising-imports-open-new-doors-for-global-businesses-1PP2PePR5GU/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "China's rising imports open new doors for global businesses",
+  "content": "China is increasingly opening its vast market to goods from around the world, with imports growing at a faster pace than exports and playing a greater role in driving global trade.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-22T15:03:59+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6e28a7f7-b789-40f1-98a0-d43f5de3b024",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

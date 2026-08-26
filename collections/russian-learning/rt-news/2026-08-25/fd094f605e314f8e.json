@@ -1,0 +1,24 @@
+{
+  "id": "fd094f605e314f8e",
+  "source_name": "rt-news",
+  "source_type": "rss",
+  "source_url": "https://www.rt.com/russia/644632-mudraya-corruption-bail-hearing/?utm_source=rss&utm_medium=rss&utm_campaign=RSS",
+  "title": "Bail set for ex-Zelensky aide accused of money laundering",
+  "content": "<img align=\"left\" alt=\"Preview\" src=\"https://mf.b37mrtl.ru/files/2026.08/thumbnail/6a8d9e4a85f540160b647dac.jpg\" style=\"margin-right: 10px;\" /> Ukraine’s top anti-corruption court has set bail at about $450,000 for accused money launderer Irina Mudraya <br /><a href=\"https://www.rt.com/russia/644632-mudraya-corruption-bail-hearing/?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=RSS\">Read Full Article at RT.com</a>",
+  "content_type": "text",
+  "source_platform": "rt-news",
+  "collected_at": "2026-08-25T14:47:45+00:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.rt.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8983de85-85ab-456f-a512-41001706a7a1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

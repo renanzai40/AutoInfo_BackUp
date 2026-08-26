@@ -1,0 +1,22 @@
+{
+  "id": "8a5697c5f0c42a0f",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://techcrunch.com/2026/08/12/lovable-confirms-new-13-3b-valuation-raises-another-400m/",
+  "title": "Lovable confirms new $13.3B valuation, raises another $400M",
+  "content": "This new funding comes after Lovable hit $500 million in annualized run rate revenue in June, the startup told TechCrunch.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-12T16:04:27+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://techcrunch.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "98213c0c-d275-4c61-b9d5-a1b2cb1ab522"
+}

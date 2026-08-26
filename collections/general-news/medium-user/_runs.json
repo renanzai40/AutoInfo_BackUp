@@ -1,0 +1,82 @@
+[
+  {
+    "collection_id": "col-20260815T181643-4debb52e",
+    "timestamp": "2026-08-15T18:17:47.270398+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://medium.com/feed/@user: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://medium.com/feed/@user: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30099.0
+  },
+  {
+    "collection_id": "col-20260815T183257-c51a6793",
+    "timestamp": "2026-08-15T18:33:28.397820+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://medium.com/feed/@user: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://medium.com/feed/@user: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30650.0
+  },
+  {
+    "collection_id": "col-20260825T151905-c85b90e7",
+    "timestamp": "2026-08-25T15:20:38.380873+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://medium.com/feed/@user: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://medium.com/feed/@user: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30060.0
+  },
+  {
+    "collection_id": "col-20260825T153025-acb4a6c3",
+    "timestamp": "2026-08-25T15:31:29.941331+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://medium.com/feed/@user: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://medium.com/feed/@user: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30104.0
+  },
+  {
+    "collection_id": "col-20260825T154628-1c0c3b07",
+    "timestamp": "2026-08-25T15:47:31.443410+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://medium.com/feed/@user: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://medium.com/feed/@user: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30048.0
+  }
+]

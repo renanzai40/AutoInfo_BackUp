@@ -1,0 +1,22 @@
+{
+  "id": "391c92902e675a61",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://newsletter.pragmaticengineer.com/p/inside-anthropic",
+  "title": "How building software is changing at Anthropic",
+  "content": "A deepdive on what&#8217;s changed in how the leading AI lab makes software. Ever more code review and testing is done by AI, two-pizza teams very much alive, and more. Details from inside of Anthropic",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-07-28T15:49:30+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://newsletter.pragmaticengineer.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9c8daaec-9822-4d75-9384-a580fb9d3cbb"
+}

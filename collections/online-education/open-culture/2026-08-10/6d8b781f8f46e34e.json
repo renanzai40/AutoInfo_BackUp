@@ -1,0 +1,22 @@
+{
+  "id": "6d8b781f8f46e34e",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.openculture.com/2026/08/how-ada-lovelace-wrote-the-first-computer-program-in-1842.html",
+  "title": "How Ada Lovelace, Daughter of Lord Byron, Wrote the First Computer Program in 1842–a Century Before the First Computer",
+  "content": "I’ve never quite understood why the phrase “revisionist history” became purely pejorative. Of course, it has its Orwellian dark side, but all knowledge has to be revised periodically, as we acquire new information and, ideally, discard old prejudices and narrow frames of reference. A failure to do so seems fundamentally regressive, not only in political [&#8230;]",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-05T08:00:13+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.openculture.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1a150e9e-3642-4463-a2cc-6d252ed49484"
+}

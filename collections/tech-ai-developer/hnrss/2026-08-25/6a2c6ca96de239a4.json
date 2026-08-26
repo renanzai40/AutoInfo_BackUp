@@ -1,0 +1,24 @@
+{
+  "id": "6a2c6ca96de239a4",
+  "source_name": "hnrss",
+  "source_type": "rss",
+  "source_url": "https://github.com/NAEOS-foundation/naeos",
+  "title": "What if AI coding agents had an engineering constitution?",
+  "content": "<p>Article URL: <a href=\"https://github.com/NAEOS-foundation/naeos\">https://github.com/NAEOS-foundation/naeos</a></p>\n<p>Comments URL: <a href=\"https://news.ycombinator.com/item?id=49435773\">https://news.ycombinator.com/item?id=49435773</a></p>\n<p>Points: 1</p>\n<p># Comments: 0</p>",
+  "content_type": "text",
+  "source_platform": "hnrss",
+  "collected_at": "2026-08-25T15:26:30+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://hnrss.org/newest"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "aa24da31-7339-4eb3-8a7a-00e89f0aec3d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

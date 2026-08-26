@@ -1,0 +1,24 @@
+{
+  "id": "23e731dea491abf0",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/Fukushima-nuclear-wastewater-discharge-marks-three-years-amid-concerns-1PRSQuRVAru/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Fukushima nuclear wastewater discharge marks three years amid concerns",
+  "content": "It has now been three years since the Japanese government began to discharge contaminated wastewater from the Fukushima Daiichi nuclear power station into the Pacific Ocean despite strong opposition and concerns at home and abroad.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T07:55:19+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c026a91b-45e3-4fcb-8301-aadb84c93901",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

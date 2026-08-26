@@ -1,0 +1,27 @@
+{
+  "id": "bsMe2X7KEfC2OhKwGgKtJw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Advanced DAX and Performance Optimization",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "bsMe2X7KEfC2OhKwGgKtJw",
+    "slug": "advanced-dax-and-performance-optimization",
+    "name": "Advanced DAX and Performance Optimization"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c6b20ef1-121e-4160-a420-91f6d82b6b27",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

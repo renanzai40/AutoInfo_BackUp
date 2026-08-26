@@ -1,0 +1,20 @@
+[92m05:45:04 - LiteLLM:WARNING[0m: get_model_cost_map.py:271 - LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: The read operation timed out. Falling back to local backup.
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions for grouping gaming-related knowledge base entries into 3-5 semantic themes. It includes entries covering game discounts, leaks, developer opinions, ha
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article outlines a task for grouping gaming-related knowledge base entries into semantic themes, featuring announcements from Nintendo, partnerships in game publishing, and product 
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article outlines instructions for grouping gaming knowledge base entries into 3-5 themes with semantic titles, ensuring each entry is assigned to one theme without using catch-all ca
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping gaming-related knowledge base entries into 3-5 semantic themes and lists several entries covering game releases, sales metrics, leaks, and 
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions to group a set of gaming knowledge base entries into 3–5 thematic categories with descriptive semantic titles. Each entry must be assigned to exactly on
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This content outlines several recent developments in the gaming industry, including game development closures, event announcements, market sales declines, and workplace initiatives. It i
+LLM returned None content — empty response
+LLM returned None content — empty response
+LLM returned only 1 theme group(s), retrying with stricter prompt
+Strict retry returned only 1 group(s), falling back to deterministic grouping

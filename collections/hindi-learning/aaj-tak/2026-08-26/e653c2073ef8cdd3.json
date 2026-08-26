@@ -1,0 +1,24 @@
+{
+  "id": "e653c2073ef8cdd3",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/short-videos/video/shamlaji-murder-case-gujarat-aravalli-crime-husband-kills-wife-domestic-dispute-murder-mmtc-2629944-2026-08-25?utm_source=rssfeed",
+  "title": "गुजरात में घरेलू कलह के कारण पति ने की पत्नी की हत्या",
+  "content": "गुजरात के अरावली जिले के शामलपुर में घरेलू विवाद के दौरान पति ने पत्नी के सिर पर कुल्हाड़ी से वार कर दिया, जिससे उसकी मौत हो गई। घटना के बाद आरोपी मौके से फरार हो गया।",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T21:50:16+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7a82d072-0a7b-47d7-82d8-2197e639752a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

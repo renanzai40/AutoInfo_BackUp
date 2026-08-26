@@ -1,0 +1,24 @@
+{
+  "id": "d1c66a465673e0d5",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gastronomia/recetas/3-recetas-veganas-practicamente-no-encender-fogon_7025164_0.html",
+  "title": "Recetas veganas en las que, prácticamente, no tienes que encender ni un solo fogón",
+  "content": "Son rápidas, perfectas para el verano y con ese punto saludable que muchas veces buscamos. ¡Esperemos que las disfrutes!",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-15T12:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d9b29b9a-9050-4557-aa58-0a29fe1148fe",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

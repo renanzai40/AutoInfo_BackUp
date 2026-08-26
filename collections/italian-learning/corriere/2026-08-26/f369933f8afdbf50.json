@@ -1,0 +1,24 @@
+{
+  "id": "f369933f8afdbf50",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://video.corriere.it/spettacoli/eurovision-troppa-euforia-per-la-vittoria-nemo-rompe-il-trofeo-di-cristallo-e-si-fa-male-al-dito/f34877b7-811f-4e7e-b64b-becf5d231xlk",
+  "title": "Eurovision: troppa euforia per la vittoria, Nemo rompe il trofeo di cristallo e si fa male al dito",
+  "content": "<p><img alt=\"Eurovision: troppa euforia per la vittoria, Nemo rompe il trofeo di cristallo e si fa male al dito\" src=\"https://images2.corriereobjects.it/methode_image/Video/2024/05/12/Spettacoli/Foto%20Spettacoli%20-%20Trattate/nemo_vid-U430103957160986JD--656x492@Corriere-Web.jpg\" title=\"Eurovision: troppa euforia per la vittoria, Nemo rompe il trofeo di cristallo e si fa male al dito\" /><p>Il cantante svizzeo ha mostrato il pollice incerottatoIl cantante svizzero ha mostrato poi il pollice incerottatoIl cantante svizzeo ha mostrato il pollice incerottato</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-12T22:13:06+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "757e5fd4-e261-4a2b-8eac-e908835458e1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

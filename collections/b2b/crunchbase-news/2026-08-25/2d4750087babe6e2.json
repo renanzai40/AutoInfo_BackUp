@@ -1,0 +1,24 @@
+{
+  "id": "2d4750087babe6e2",
+  "source_name": "crunchbase-news",
+  "source_type": "rss",
+  "source_url": "https://news.crunchbase.com/liquidity/ai-ipo-ma-secondaries-haslett-equityzen/",
+  "title": "Inside The Private-Market Divide: EquityZen’s Phil Haslett On AI, SaaS And Secondaries",
+  "content": "The market for private-company shares has become a much bigger part of the startup ecosystem. In this Crunchbase News Q&#038;A, EquityZen co-founder Phil Haslett discusses why startups are offering employees and investors liquidity earlier, and why secondary prices can be more revealing than headline valuations.",
+  "content_type": "text",
+  "source_platform": "crunchbase-news",
+  "collected_at": "2026-08-25T11:00:33+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://news.crunchbase.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "40ef5a37-2648-44a0-913f-5f8e5cf41a1d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

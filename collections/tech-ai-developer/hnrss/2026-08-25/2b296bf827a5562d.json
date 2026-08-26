@@ -1,0 +1,24 @@
+{
+  "id": "2b296bf827a5562d",
+  "source_name": "hnrss",
+  "source_type": "rss",
+  "source_url": "https://alexjacobs08.github.io/poople-bench/",
+  "title": "Meta's Muse Tops Poople Bench",
+  "content": "<p>Article URL: <a href=\"https://alexjacobs08.github.io/poople-bench/\">https://alexjacobs08.github.io/poople-bench/</a></p>\n<p>Comments URL: <a href=\"https://news.ycombinator.com/item?id=49435919\">https://news.ycombinator.com/item?id=49435919</a></p>\n<p>Points: 1</p>\n<p># Comments: 0</p>",
+  "content_type": "text",
+  "source_platform": "hnrss",
+  "collected_at": "2026-08-25T15:36:11+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://hnrss.org/newest"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f21c1cc4-bc66-49a2-bde5-c04eff2426a2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

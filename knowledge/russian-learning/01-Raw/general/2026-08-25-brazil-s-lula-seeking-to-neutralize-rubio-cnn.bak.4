@@ -1,0 +1,53 @@
+---
+title: Brazil’s Lula seeking to ‘neutralize’ Rubio – CNN
+domain: russian-learning
+tier: 01-Raw
+entry_id: russian-learning-general-brazil-s-lula-seeking-to-neutralize-rubio-cnn
+source_url: https://www.rt.com/news/644621-brazil-lula-neutralize-rubio/?utm_source=rss&utm_medium=rss&utm_campaign=RSS
+source_type: rss
+source_platform: rt-news
+collected_at: '2026-08-25T09:04:49+00:00'
+summary: Brazil's President Lula is seeking direct contact with former President Trump to bypass Senator Rubio. Lula has criticized
+  Rubio as 'anti-Latin America,' aiming to neutralize his influence in bilateral relations.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 13e6f9a2-fe53-4ad6-abb0-430c18af20a2
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<img align="left" alt="Preview" src="https://mf.b37mrtl.ru/files/2026.08/thumbnail/6a8d59f12030276aa113d4d7.jpg" style="margin-right: 10px;" /> Brazil’s Lula is seeking to establish direct contact with Trump to bypass Rubio, who he called “anti-Latin America” <br /><a href="https://www.rt.com/news/644621-brazil-lula-neutralize-rubio/?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=RSS">Read Full Article at RT.com</a>
+
+## Summary
+Brazil's President Lula is seeking direct contact with former President Trump to bypass Senator Rubio. Lula has criticized Rubio as 'anti-Latin America,' aiming to neutralize his influence in bilateral relations.
+
+## Key Points
+- Lula is attempting to establish direct communication with Trump.
+- The goal is to circumvent Senator Rubio in diplomatic channels.
+- Lula has labeled Rubio as 'anti-Latin America.'
+- This move could strain US-Brazil relations and highlight regional political tensions.
+- It reflects strategic positioning in Latin American foreign policy.
+
+
+## Entities
+- **Lula** (person, relevance=)
+- **Rubio** (person, relevance=)
+- **Trump** (person, relevance=)
+- **Brazil** (org, relevance=)
+- **Latin America** (concept, relevance=)

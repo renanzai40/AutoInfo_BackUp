@@ -1,0 +1,24 @@
+{
+  "id": "5291777bcc660492",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/muere-los-102-anos-abuela-paterna-gerard-pique_7029302_0.html",
+  "title": "Muere a los 102 años la abuela de Gerard Piqué",
+  "content": "La fallecida, Lina Rovira, era madre de su padre, Joan Piqué.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T19:05:24+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f81c00ba-5d12-45cf-89ca-ecfbf45085a5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

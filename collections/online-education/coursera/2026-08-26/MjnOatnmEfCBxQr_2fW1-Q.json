@@ -1,0 +1,27 @@
+{
+  "id": "MjnOatnmEfCBxQr_2fW1-Q",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Adobe Dreamweaver CC (2017): Part 1",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "MjnOatnmEfCBxQr_2fW1-Q",
+    "slug": "adobe-dreamweaver-cc-2017-lo092005",
+    "name": "Adobe Dreamweaver CC (2017): Part 1"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a83b4e06-1358-4f0b-b74b-c0fadb650b30",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

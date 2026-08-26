@@ -1,0 +1,24 @@
+{
+  "id": "ad67a0589e44e8e7",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/politique/en-charente-maritime-glucksmann-met-en-scene-le-renfort-de-jadot-et-joue-la-carte-ecolo-20260825",
+  "title": "En Charente-Maritime, Glucksmann met en scène le renfort de Jadot et joue la carte «écolo»",
+  "content": "REPORTAGE - Pour son premier déplacement de candidat officiellement déclaré, le social-démocrate s’est affiché ce mardi aux côtés de son nouvel allié écologiste, plaçant la cause climatique au cœur de sa campagne.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T22:00:00+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "742da1eb-b9c3-4765-a6a5-108eed0dacdf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

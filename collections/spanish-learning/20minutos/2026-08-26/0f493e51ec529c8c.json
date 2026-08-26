@@ -1,0 +1,24 @@
+{
+  "id": "0f493e51ec529c8c",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/viajes/estos-destinos-luna-miel-estan-sobrevalorados-donde-viajar-su-lugar_7025588_1.html",
+  "title": "Estos son los destinos de luna de miel que están sobrevalorados",
+  "content": "A la hora de plantear un viaje hay una serie de lugares que salen rápidamente a la palestra y que concentran millones de turistas cada año. Algo que se multiplica cuando pensamos en una luna de miel. Sin embargo, en el mundo hay otros destinos que pueden tener una mejor relación calidad-precio, menos masificación o una experiencia más especial. Te los contamos.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T04:33:30+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "98da4707-67d9-42e2-b08b-8ef5d3dd75c0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

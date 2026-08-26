@@ -1,0 +1,24 @@
+{
+  "id": "e6bd3cdac8d22141",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/music/music-news/harry-styles-showers-after-shows-surprisingly-deep-reason-1236323794/",
+  "title": "Harry Styles Reveals the Surprisingly Deep Reason He Takes a Shower Immediately After Every Show",
+  "content": "It's not just about hygiene for the singer (although that's important, too).",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T15:29:05+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ac9238f0-5601-49af-892e-d1128ceac156",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

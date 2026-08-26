@@ -1,0 +1,24 @@
+{
+  "id": "7bd1c9afcbd9e826",
+  "source_name": "Substack RSS (tech) — Pragmatic Engineer",
+  "source_type": "rss",
+  "source_url": "https://newsletter.pragmaticengineer.com/p/from-chrome-devtools-to-ai-engineering",
+  "title": "From Chrome DevTools to AI Engineering, with Addy Osmani",
+  "content": "Addy Osmani shares lessons from 14 years at Google and how AI agents are reshaping software engineering, developer workflows, and the skills engineers need to succeed.",
+  "content_type": "text",
+  "source_platform": "Substack RSS (tech) — Pragmatic Engineer",
+  "collected_at": "2026-08-19T16:53:57+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://newsletter.pragmaticengineer.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a404e7fc-9344-4794-8e12-db877849b17c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

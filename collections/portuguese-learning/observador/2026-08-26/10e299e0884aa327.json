@@ -1,0 +1,24 @@
+{
+  "id": "10e299e0884aa327",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/o-genio-de-felix-salvou-a-estreia-para-esquecer-de-um-miudo-ronaldo-sai-ao-intervalo-mas-al-nassr-consegue-reviravolta-no-minuto-90/",
+  "title": "O génio de Félix salvou a estreia para esquecer de um miúdo",
+  "content": "João Félix não marcou mas fez duas assistências em três minutos antes do 3-2 de Sadio Mané em cima do minuto 90 que carimbou a reviravolta do Al Nassr",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T21:31:53+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ca32d78d-7d25-4d30-ad4f-330412cbe158",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

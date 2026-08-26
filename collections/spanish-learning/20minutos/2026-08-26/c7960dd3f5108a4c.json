@@ -1,0 +1,24 @@
+{
+  "id": "c7960dd3f5108a4c",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/ofertas-descuentos/tonifica-todo-tu-cuerpo-vuelve-coger-ritmo-sin-salir-casa-maquina-remo-silenciosa-cecotec_7029080_0.html",
+  "title": "Tonifica todo tu cuerpo y vuelve a coger el ritmo sin salir de casa: la máquina de remo silenciosa de Cecotec",
+  "content": "Rema hacia tus objetivos de la forma más optimizada",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T14:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f31eb9dc-6388-4bcc-89e8-02c4ffa3be9d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

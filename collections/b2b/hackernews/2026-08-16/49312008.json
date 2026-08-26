@@ -1,0 +1,36 @@
+{
+  "id": "49312008",
+  "source_name": "hackernews",
+  "source_type": "hackernews",
+  "source_url": "https://news.ycombinator.com/item?id=49312008",
+  "title": "A controversial Alzheimer's surgery is said to reverse symptoms",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "hackernews",
+  "collected_at": "2026-08-15T18:36:18.466672+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "by": "jeffreyrogers",
+    "descendants": 27,
+    "id": 49312008,
+    "kids": [
+      49312550,
+      49312555,
+      49312441,
+      49312888,
+      49312500
+    ],
+    "score": 77,
+    "time": 1786811914,
+    "title": "A controversial Alzheimer's surgery is said to reverse symptoms",
+    "type": "story",
+    "url": "https://www.nature.com/articles/d41586-026-02448-x"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0e5b86ff-f56e-4f50-858e-b70bd6b70af8"
+}

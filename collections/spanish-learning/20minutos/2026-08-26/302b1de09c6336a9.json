@@ -1,0 +1,24 @@
+{
+  "id": "302b1de09c6336a9",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/ceuta/policia-usa-gas-lacrimogeno-durante-reparto-alimentos-los-migrantes-playa-ceuti-trampolin_7029355_0.html",
+  "title": "Crece la tensión en Ceuta: la Policía usa gas lacrimógeno en el reparto de alimentos a migrantes en El Trampolín",
+  "content": "Varios enfrentamientos han obligado a desplegar un dispositivo para contener los disturbios.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T22:42:14+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e11da0f4-e57c-45a2-9fe0-def21fc3b6d1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "733cfaa471a39864",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/retail/starbucks-job-cuts-layoffs-nashville-expansion-2-billion-overhaul",
+  "title": "Starbucks cuts more jobs as $2 billion turnaround expands",
+  "content": "The coffee giant is also stepping up operations in a Southern U.S. city.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T21:37:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8a2ac2e9-57af-4978-bd38-2775f750f595",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "3b3a9c60e857efcc",
+  "source_name": "b2b-news-network",
+  "source_type": "rss",
+  "source_url": "https://www.b2bnn.com/2026/08/why-mold-prevention-should-be-part-of-every-workplace-safety-plan/",
+  "title": "Why Mold Prevention Should Be Part of Every Workplace Safety Plan",
+  "content": "Most workplace safety plans skip mold entirely. Fire drills, chemical storage rules, and equipment checks all get reviewed every year, but mold rarely makes the list, even though it grows quietly in the same buildings where every other hazard gets tracked. By the time someone notices a musty smell near the break room or a [&#8230;]",
+  "content_type": "text",
+  "source_platform": "b2b-news-network",
+  "collected_at": "2026-08-25T10:45:37+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://b2bnn.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "99e43ea3-89ac-471c-9432-c9343f8be3e9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "bd5fb44a4216d562",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0605/c1002-40494437.html",
+  "title": "欧盟官员：美国上调钢铝关税无助于美欧谈判",
+  "content": "<p>　　新华社布鲁塞尔6月4日电（记者康逸　张兆卿）欧盟委员会负责贸易和经济安全等事务的委员马罗什·谢夫乔维奇4日在法国巴黎表示，针对美国将进口钢铁和铝的关税从25%上调至50%，欧盟方面已与美国贸易代表格里尔进行了讨论，并向美方指出此举无助于欧美正在进行的谈判。</p> <p>　　“我们对美国这一最新决定深表遗憾。”谢夫乔维奇说，“这显然无助于当前正在进行的谈判。”</p> <p>　　谢夫乔维奇当天在一场新闻发布会上说，欧盟和美国合计约占全球贸易的30%。如果双方关系无法维持正常，将对全球贸易体系造成负面影响。欧盟认为，应以最严肃的态度、投入最大的努力来解决这些问题。</p> <p>　　谢夫乔维奇说，如果一切努力都失败了，“我们已做好准备捍卫自身利益，并将尽最大努力重新平衡我们的贸易关系”。“在走到这一步之前，我们会尽全力探索所有谈判选项和一切可能，通过协商和互利的协议解决问题。”</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-05T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bd953d82-0499-4ab8-8011-1d98f75f61b1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

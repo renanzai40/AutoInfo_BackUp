@@ -1,0 +1,24 @@
+{
+  "id": "5a47fb4f0077f6e4",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/lists/reading-leeds-artists-to-see-2026-lineup/",
+  "title": "Fontaines D.C., Charli XCX, RAYE & More: 10 Unmissable Reading & Leeds Festival Sets",
+  "content": "The dual-festival features four first-time headliners.",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T16:48:43+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "08880d8f-cb4b-4b40-925a-79219caad1ce",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

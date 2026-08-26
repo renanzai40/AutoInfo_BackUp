@@ -1,0 +1,24 @@
+{
+  "id": "2e433c6c40c82a48",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/ester-exposito-descubre-junto-mbappe-que-amor-no-tiene-por-que-doler-ni-ser-tormentoso_7029153_0.html",
+  "title": "Ester Expósito descubre junto a Mbappé que \"el amor no tiene por qué doler \"",
+  "content": "La intérprete ha hablado en una entrevista para 'GQ' sobre su nueva forma de entender este afecto y cómo sus relaciones anteriores han influido en sus vínculos sentimentales.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T13:17:38+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9d389596-cc4c-4a85-8c9c-725163e52fb4",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

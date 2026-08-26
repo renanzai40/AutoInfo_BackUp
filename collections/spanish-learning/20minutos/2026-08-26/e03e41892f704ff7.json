@@ -1,0 +1,24 @@
+{
+  "id": "e03e41892f704ff7",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/lainformacion/economia-y-finanzas/operacion-retorno-llega-con-las-gasolinas-un-21-mas-caras-que-cuando-arrancaron-las-vacaciones_7028899_0.html",
+  "title": "'Operación retorno' con las gasolinas un 21% más caras que antes de las vacaciones",
+  "content": "Los conductores emprenderán la vuelta a casa con el diésel en cifras superiores incluso a las de 2022 y con la gasolina en máximos en cuatro años para un mes de agosto.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T05:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3a604476-36c7-4541-8f70-a6cd8ba97e82",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

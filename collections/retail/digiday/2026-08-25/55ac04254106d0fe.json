@@ -1,0 +1,24 @@
+{
+  "id": "55ac04254106d0fe",
+  "source_name": "digiday",
+  "source_type": "rss",
+  "source_url": "https://digiday.com/media-buying/ad-tech-briefing-ai-advertisings-measurement-problem-is-really-a-governance-problem/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss",
+  "title": "Ad Tech Briefing: AI advertising’s measurement problem is really a governance problem",
+  "content": "As OpenAI accelerates its ad ambitions, efforts to establish common measurement standards  become more urgent.",
+  "content_type": "text",
+  "source_platform": "digiday",
+  "collected_at": "2026-08-25T04:01:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://digiday.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b8b8a61b-504f-44b7-9781-61fb218a6738",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

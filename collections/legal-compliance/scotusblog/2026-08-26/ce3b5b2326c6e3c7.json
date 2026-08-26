@@ -1,0 +1,24 @@
+{
+  "id": "ce3b5b2326c6e3c7",
+  "source_name": "scotusblog",
+  "source_type": "rss",
+  "source_url": "https://www.scotusblog.com/2026/08/scotus-sides-with-trump-administration-in-mail-in-voting-dispute/",
+  "title": "SCOTUS sides with Trump administration in mail-in voting dispute",
+  "content": "Plus, what Justice Thomas said on Sen. Ted Cruz’s podcast.",
+  "content_type": "text",
+  "source_platform": "scotusblog",
+  "collected_at": "2026-08-25T13:00:00+00:00",
+  "language": "",
+  "domain": "legal-compliance",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.scotusblog.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "590cec7b-b69c-459b-b958-eb9b5a0102aa",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

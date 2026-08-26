@@ -1,0 +1,24 @@
+{
+  "id": "255ead5ee843d04a",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/politika/28044227",
+  "title": "Путин поздравил первого вице-президента Азербайджана с днем рождения",
+  "content": "Президент России пожелал Мехрибан Алиевой здоровья, счастья, благополучия и успехов в государственной деятельности",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T20:54:24+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9f1d0b25-9c70-4c3b-9d01-34a52af6a815",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

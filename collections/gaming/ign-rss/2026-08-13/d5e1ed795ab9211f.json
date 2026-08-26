@@ -1,0 +1,22 @@
+{
+  "id": "d5e1ed795ab9211f",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/best-deals-for-august-12-2026",
+  "title": "Today’s Top Deals: Marvel Cosmic Invasion for Switch, LEGO Animal Crossing, and Switch 2 Console",
+  "content": "And don’t miss discounts on an RTX 5070 Ti gaming PC, Bose headphones, and more.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-12T17:50:00+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3c7deb0d-5e8e-4bae-84db-52537ce16aab"
+}

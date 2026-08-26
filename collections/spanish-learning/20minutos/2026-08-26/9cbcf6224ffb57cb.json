@@ -1,0 +1,24 @@
+{
+  "id": "9cbcf6224ffb57cb",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/viva-caida-influencers_7028473_3.html",
+  "title": "¡Viva la caída de los influencers!",
+  "content": "La autoestima de los jóvenes peligra desde que en las redes sociales se pueden seguir las falsas vidas idílicas de los influencers.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-24T05:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8354c3fe-f21d-4a26-85c0-13bc6a8295d1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

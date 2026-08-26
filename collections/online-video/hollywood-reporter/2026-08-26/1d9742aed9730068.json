@@ -1,0 +1,24 @@
+{
+  "id": "1d9742aed9730068",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/movies/movie-news/oldenburg-career-honor-for-director-neil-labute-1236680567/",
+  "title": "Neil LaBute to Receive Career Honor at Oldenburg Film Festival",
+  "content": "'Murderous,' the new film from the director of 'In the Company of Men,' 'Your Friends &#38; Neighbors' and 'Nurse Betty,' will have its world premiere at the German indie festival.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T16:37:39+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b0da3c22-d67d-40a1-98ba-6f128676b7a2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

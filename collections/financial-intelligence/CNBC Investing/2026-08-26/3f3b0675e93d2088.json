@@ -1,0 +1,24 @@
+{
+  "id": "3f3b0675e93d2088",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/25/stanley-druckenmiller-leads-doubters-who-think-bessents-bond-ploys-will-fail.html",
+  "title": "Stanley Druckenmiller leads doubters who think Bessent's bond ploys will fail",
+  "content": "The bond market interventions have generated a modest decline in yields along with a growing chorus of derision.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-25T17:15:50+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "07b2bf4d-fe8f-40b8-847b-49fd43bfd0e6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

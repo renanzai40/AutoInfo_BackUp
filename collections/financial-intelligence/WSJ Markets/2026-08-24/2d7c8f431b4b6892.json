@@ -1,0 +1,24 @@
+{
+  "id": "2d7c8f431b4b6892",
+  "source_name": "WSJ Markets",
+  "source_type": "rss",
+  "source_url": "https://www.wsj.com/articles/heard-on-the-streets-stock-picking-series-98f04640?mod=rss_markets_main",
+  "title": "Heard on the Street's Stock-Picking Series",
+  "content": "Check out the stocks Heard on the Street writers favor in their eighth annual stock-picking contest.",
+  "content_type": "text",
+  "source_platform": "WSJ Markets",
+  "collected_at": "2025-01-26T22:33:00-05:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c67b37cd-00f1-4be9-9911-dc17cd45aac7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

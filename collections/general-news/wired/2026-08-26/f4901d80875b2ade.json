@@ -1,0 +1,24 @@
+{
+  "id": "f4901d80875b2ade",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/best-multi-use-air-purifiers/",
+  "title": "The Best Multiuse Air Purifier for Home in 2026: BlueAir, Rabbit Air, Dreame",
+  "content": "These WIRED-tested dual-purpose air purifiers also function as heaters, fans, art pieces, and more, offering the best of both worlds.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-24T10:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "44ec5aa7-96cc-42f6-9b11-fe2cbf821477",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

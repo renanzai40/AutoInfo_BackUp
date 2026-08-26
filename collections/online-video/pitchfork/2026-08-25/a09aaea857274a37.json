@@ -1,0 +1,24 @@
+{
+  "id": "a09aaea857274a37",
+  "source_name": "pitchfork",
+  "source_type": "rss",
+  "source_url": "https://pitchfork.com/story/amy-winehouses-back-to-black-expanded-for-20th-anniversary-reissue/",
+  "title": "Amy Winehouse’s Back to Black Expanded for 20th Anniversary Reissue",
+  "content": "The new edition includes four unreleased demos and a full live album",
+  "content_type": "text",
+  "source_platform": "pitchfork",
+  "collected_at": "2026-08-25T12:39:03+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://pitchfork.com/feed/feed-news/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "592e20e1-6ebd-4f12-9997-c10c3de1f63a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

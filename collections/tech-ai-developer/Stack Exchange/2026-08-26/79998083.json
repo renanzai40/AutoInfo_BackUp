@@ -1,0 +1,48 @@
+{
+  "id": 79998083,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/79998083/django-db-utils-notsupportederror-mariadb-10-11-or-later-is-required-found-10",
+  "title": "django.db.utils.NotSupportedError: MariaDB 10.11 or later is required (found 10.6.22)",
+  "content": "django.db.utils.NotSupportedError: MariaDB 10.11 or later is required (found 10.6.22)",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-26T00:53:25.798577+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "python",
+      "django",
+      "mariadb"
+    ],
+    "owner": {
+      "account_id": 2775296,
+      "reputation": 33,
+      "user_id": 2388995,
+      "user_type": "registered",
+      "profile_image": "https://www.gravatar.com/avatar/3ad526c701f9fbdfe42c27431b8b71b8?s=256&d=identicon&r=PG",
+      "display_name": "Pierre",
+      "link": "https://stackoverflow.com/users/2388995/pierre"
+    },
+    "is_answered": false,
+    "view_count": 72,
+    "answer_count": 1,
+    "score": -1,
+    "last_activity_date": 1787702803,
+    "creation_date": 1787660498,
+    "last_edit_date": 1787667753,
+    "question_id": 79998083,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/79998083/django-db-utils-notsupportederror-mariadb-10-11-or-later-is-required-found-10",
+    "title": "django.db.utils.NotSupportedError: MariaDB 10.11 or later is required (found 10.6.22)"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "36b50216-9f60-4fc6-b00c-cf9cfddb8324",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

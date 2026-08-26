@@ -1,0 +1,24 @@
+{
+  "id": "fcd11a46c741ab6e",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/nba-2k27-is-teasing-a-gta-6-themed-event-in-collaboration-with-rockstar-games",
+  "title": "NBA 2K27 Is Teasing a GTA 6-Themed Event in Collaboration with Rockstar Games",
+  "content": "NBA 2K27 is teasing a crossover with Rockstar Games, seemingly to promote Grand Theft Auto 6.",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T16:07:15+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2c847d98-732f-4432-ab12-24c4ab5bbf85",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

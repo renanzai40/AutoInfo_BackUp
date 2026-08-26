@@ -1,0 +1,24 @@
+{
+  "id": "3ab2f9df578514eb",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/investing/ai-agents-are-about-to-change-finance-fidelity-has-warning",
+  "title": "AI agents are about to change finance, and Fidelity has a warning",
+  "content": "Fidelity's research on AI and financial markets raises a question most investors haven't thought to ask.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T13:17:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2becbc29-8659-4dd8-ac66-441046c8ecaf",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

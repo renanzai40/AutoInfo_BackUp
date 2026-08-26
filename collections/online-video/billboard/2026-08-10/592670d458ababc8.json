@@ -1,0 +1,22 @@
+{
+  "id": "592670d458ababc8",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/music/concerts/laneway-festival-skip-adelaide-perth-2027-return-1236312403/",
+  "title": "Laneway Festival to Skip Adelaide and Perth for 2027 Return",
+  "content": "\"Adelaide and Perth, we love you! This isn't goodbye, just see you soon,\" the festival organizer's statement read.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-10T04:28:13+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a3769fbf-7b8d-4985-8427-2eed0ef8edc7"
+}

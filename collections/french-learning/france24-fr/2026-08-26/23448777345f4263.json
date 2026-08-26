@@ -1,0 +1,24 @@
+{
+  "id": "23448777345f4263",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/france/20260825-france-presidentielle-2027-melenchon-glucksmann-tondelier-et-les-autres-combien-de-candidats-a-gauche",
+  "title": "Mélenchon, Glucksmann, Tondelier et les autres : combien de candidats à la présidentielle à gauche ?",
+  "content": "L’entrée dans la course à l’Élysée de Raphaël Glucksmann dans le cadre de la primaire socialiste, peut-être bientôt suivie par celles d’Olivier Faure et de Boris Vallaud, et par la candidature hors primaire du communiste Fabien Roussel illustrent la difficulté de s’y retrouver face à la pléthore de candidatures à gauche. France 24 fait le point.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T15:40:52+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4105a4ba-33db-42ec-b382-b2d1485ac31f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

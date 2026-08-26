@@ -1,0 +1,51 @@
+---
+title: How the AIDS crisis helped create a multibillion-dollar death-speculation market
+domain: english-learning
+tier: 01-Raw
+entry_id: english-learning-general-how-the-aids-crisis-helped-create-a-multibillion-dollar-death-speculation-market
+source_url: https://www.npr.org/sections/planet-money/2026/08/25/g-s1-139946/how-the-aids-crisis-helped-create-a-multibillion-dollar-death-speculation-market
+source_type: rss
+source_platform: npr-news
+collected_at: '2026-08-25T06:30:00-04:00'
+summary: The AIDS crisis spurred the creation of a multibillion-dollar market where investors buy life insurance policies
+  from individuals and collect the payout upon their death. This practice, known as death-speculation, involves financial
+  speculation on mortality and life expectancy.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 589b51dd-44d2-45c6-95e4-561bbb8063b3
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: true
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+Investors will buy your life insurance policy today — and collect the payout when you die.
+
+## Summary
+The AIDS crisis spurred the creation of a multibillion-dollar market where investors buy life insurance policies from individuals and collect the payout upon their death. This practice, known as death-speculation, involves financial speculation on mortality and life expectancy.
+
+## Key Points
+- The AIDS crisis catalyzed the development of a death-speculation market.
+- Investors purchase life insurance policies from individuals for speculative financial gains.
+- The market is valued in the billions of dollars.
+- The mechanism involves collecting death benefits after the policyholder dies.
+
+
+## Entities
+- **AIDS crisis** (concept, relevance=)
+- **death-speculation market** (concept, relevance=)
+- **life insurance policy** (concept, relevance=)

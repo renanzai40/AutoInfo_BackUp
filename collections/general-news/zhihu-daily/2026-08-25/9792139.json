@@ -1,0 +1,33 @@
+{
+  "id": 9792139,
+  "source_name": "zhihu-daily",
+  "source_type": "api",
+  "source_url": "https://daily.zhihu.com/story/9792139",
+  "title": "Space X 的发射台下为啥不能做成深井来吸收烈焰回收散热水？",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "zhihu-daily",
+  "collected_at": "2026-08-25T15:19:36.905466+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "image_hue": "0x3b2935",
+    "title": "Space X 的发射台下为啥不能做成深井来吸收烈焰回收散热水？",
+    "url": "https://daily.zhihu.com/story/9792139",
+    "hint": "太空僧 · 3 分钟阅读",
+    "ga_prefix": "082507",
+    "images": [
+      "https://pic1.zhimg.com/v2-f2c316494f45c00cb4164aac9cc41fb2.jpg?source=8673f162"
+    ],
+    "type": 0,
+    "id": 9792139
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "40cbd999-8111-44b5-8ff3-31e3144e08b2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

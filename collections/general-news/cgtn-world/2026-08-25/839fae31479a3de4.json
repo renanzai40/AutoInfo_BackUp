@@ -1,0 +1,24 @@
+{
+  "id": "839fae31479a3de4",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/Graphics-China-SCO-trade-volume-increases-over-40-fold-in-25-years-1PRFZbWTN84/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Graphics: China-SCO trade volume increases over 40-fold in 25 years",
+  "content": "Graphics: China-SCO trade volume increases over 40-fold in 25 years",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T03:52:23+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "172443af-deca-4f36-b8b6-33393239ae69",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

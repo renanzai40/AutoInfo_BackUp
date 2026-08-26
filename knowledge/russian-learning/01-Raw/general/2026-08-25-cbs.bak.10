@@ -1,0 +1,55 @@
+---
+title: CBS сообщил о прибытии в Россию директора ЦРУ для переговоров
+domain: russian-learning
+tier: 01-Raw
+entry_id: russian-learning-general-cbs
+source_url: https://www.interfax.ru/world/1111204
+source_type: rss
+source_platform: interfax
+collected_at: '2026-08-25T17:32:00+03:00'
+summary: CIA Director John Ratcliffe has arrived in Russia for negotiations, as reported by CBS News. He traveled on a Boeing
+  C-17 for meetings in Moscow on Tuesday. This visit suggests ongoing high-level discussions between US and Russian officials.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: ru
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 9c8b70df-2cfd-4ab4-bfa6-c4c86fec76ba
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+Директор ЦРУ Джон Рэтклифф прилетел в Россию на переговоры, сообщает во вторник CBS News со ссылкой на источники."Глава ЦРУ Рэтклифф прибыл в Россию на борту самолета Boeing C-17 для встреч в Москве во вторник, заявили источники", - написала журналист телеканала Дженнифер Джейкобс в соцсети Х.
+
+## Summary
+CIA Director John Ratcliffe has arrived in Russia for negotiations, as reported by CBS News. He traveled on a Boeing C-17 for meetings in Moscow on Tuesday. This visit suggests ongoing high-level discussions between US and Russian officials.
+
+## Key Points
+- CIA Director John Ratcliffe visited Russia for negotiations.
+- The visit was reported by CBS News citing sources.
+- Ratcliffe traveled on a Boeing C-17 aircraft.
+- Meetings were scheduled in Moscow on Tuesday.
+- This indicates diplomatic or intelligence talks between the US and Russia.
+
+
+## Entities
+- **John Ratcliffe** (person, relevance=)
+- **CIA** (org, relevance=)
+- **CBS News** (org, relevance=)
+- **Russia** (concept, relevance=)
+- **Boeing C-17** (technology, relevance=)
+- **Jennifer Jacobs** (person, relevance=)
+- **X** (technology, relevance=)

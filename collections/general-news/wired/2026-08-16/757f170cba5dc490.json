@@ -1,0 +1,22 @@
+{
+  "id": "757f170cba5dc490",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/this-beautifully-weird-necklace-is-secretly-a-usb-drive/",
+  "title": "This Beautifully Weird Necklace Is Secretly a USB Drive",
+  "content": "Noware’s Puff necklace whimsically reimagines flash drives, turning something functional into personalized jewelry.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-15T11:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0c6f58a1-3333-4a44-8eee-4b375a1b43ae"
+}

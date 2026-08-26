@@ -1,0 +1,24 @@
+{
+  "id": "6210bad4e854d34e",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/mezhdunarodnaya-panorama/28044291",
+  "title": "Польскому евродепутату Брауну грозит до трех лет тюрьмы за отрицание Холокоста",
+  "content": "Лидер ультраправой партии \"Конфедерация польской короны\" летом 2025 года оспорил существование газовых камер в концлагере \"Аушвиц-Биркенау\" в Освенциме",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T22:00:44+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c64675ac-0f7d-4aa6-a864-6cf640a4758e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

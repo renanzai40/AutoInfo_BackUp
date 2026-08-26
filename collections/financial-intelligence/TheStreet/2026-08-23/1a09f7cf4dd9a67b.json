@@ -1,0 +1,24 @@
+{
+  "id": "1a09f7cf4dd9a67b",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/investing/stocks/mrvl-marvell-google-custom-chip-deal-warrant",
+  "title": "Marvell investors must carefully consider latest Google deal",
+  "content": "Marvell handed Google a path to a multibillion-dollar stake. The terms decide whether that helps or hurts the stock.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-22T16:13:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9f51b8e5-8b10-4bdc-8055-b5daa1946a8b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

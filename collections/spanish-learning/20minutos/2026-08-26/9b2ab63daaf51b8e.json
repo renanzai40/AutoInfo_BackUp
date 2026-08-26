@@ -1,0 +1,24 @@
+{
+  "id": "9b2ab63daaf51b8e",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/medio-ambiente/temperatura-media-superficie-maritima-bate-su-record-alcanzar-21-1-oc-nino-esta-aportando-calor-sistema_7029314_0.html",
+  "title": "La temperatura media de la superficie marítima bate su récord al alcanzar 21,1 grados: \"El Niño está aportando calor al sistema\"",
+  "content": "Samantha Burgess, responsable estratégica del clima en el Centro Europeo de Previsiones Meteorológicas a Medio Plazo, apuntó que el \"récord es otra señal clara de que el océano está sometido a un estrés cada vez mayor\".",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T19:19:01+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5e0632a5-f8f0-425e-a318-12cfa0e99b8f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

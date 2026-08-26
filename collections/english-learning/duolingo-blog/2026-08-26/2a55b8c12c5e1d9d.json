@@ -1,0 +1,24 @@
+{
+  "id": "2a55b8c12c5e1d9d",
+  "source_name": "duolingo-blog",
+  "source_type": "rss",
+  "source_url": "https://blog.duolingo.com/can-you-learn-a-language-in-6-months/",
+  "title": "Dear Duolingo: Can you learn a language in six months?",
+  "content": "Are there shortcuts for learning a language? How long does it really take?",
+  "content_type": "text",
+  "source_platform": "duolingo-blog",
+  "collected_at": "2026-08-18T12:00:00+00:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://blog.duolingo.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b128b959-302a-4100-bbe5-0addfc07d3a4",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

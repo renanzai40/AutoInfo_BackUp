@@ -1,0 +1,24 @@
+{
+  "id": "78141bc6b163ef22",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0604/c1002-40493511.html",
+  "title": "马斯克批特朗普政府“大而美”法案“令人作呕”",
+  "content": "<p>　　新华社纽约6月3日电（记者徐兴堂）刚离开美国政府效率部负责人岗位的埃隆·马斯克3日在社交媒体上发文，抨击特朗普总统力推的大规模税收与支出的“大而美”法案“令人作呕”。</p> <p>　　“对不起，我实在受不了了。这项规模庞大、荒唐可笑、夹带私货的国会支出法案简直令人作呕。”马斯克写道，“那些投票支持这项法案的人真该感到可耻：你们知道自己做错了。你们自己心里清楚。”</p> <p>　　上月，美国共和党人掌控的国会众议院以一票优势艰难通过被特朗普称为“大而美”的大规模税收与支出法案。该法案目前已提交参议院审议。　</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-04T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d1ee948b-db61-4b4f-85b2-776d6d31ac8f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

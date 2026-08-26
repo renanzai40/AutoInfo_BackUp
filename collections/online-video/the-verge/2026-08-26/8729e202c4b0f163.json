@@ -1,0 +1,24 @@
+{
+  "id": "8729e202c4b0f163",
+  "source_name": "the-verge",
+  "source_type": "rss",
+  "source_url": "https://www.theverge.com/transportation/984390/polestar-blindsided-sales-ban-letter-dealer-trump",
+  "title": "Polestar claims it was blindsided by sales ban",
+  "content": "Polestar said the Trump administration strung it along for months before finally rejecting its request to continue selling its electric vehicles in the US under a rule outlawing vehicles with connected software from China. In an August 18th letter sent to dealers and obtained by The Verge, Polestar said it doesn't have a clear answer [&#8230;]",
+  "content_type": "text",
+  "source_platform": "the-verge",
+  "collected_at": "2026-08-25T12:14:45-04:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.theverge.com/rss/index.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3df0f8e9-55cd-4568-ae94-3c60dfe4b8e8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

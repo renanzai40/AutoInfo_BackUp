@@ -1,0 +1,24 @@
+{
+  "id": "b06278dfd7a8ea2b",
+  "source_name": "hnrss",
+  "source_type": "rss",
+  "source_url": "https://www.sysg.dev/blog/2026-08-21/how-systemg-compares",
+  "title": "Show HN: Systemg compares to other process managers",
+  "content": "<p>Article URL: <a href=\"https://www.sysg.dev/blog/2026-08-21/how-systemg-compares\">https://www.sysg.dev/blog/2026-08-21/how-systemg-compares</a></p>\n<p>Comments URL: <a href=\"https://news.ycombinator.com/item?id=49435594\">https://news.ycombinator.com/item?id=49435594</a></p>\n<p>Points: 1</p>\n<p># Comments: 0</p>",
+  "content_type": "text",
+  "source_platform": "hnrss",
+  "collected_at": "2026-08-25T15:15:05+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://hnrss.org/newest"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4441e8e3-d622-47ac-8b78-6c088e93ca08",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

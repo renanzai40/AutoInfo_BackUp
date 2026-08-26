@@ -1,0 +1,24 @@
+{
+  "id": "e898fe122e3b7181",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/obschestvo/28044249",
+  "title": "Нарисовавшая \"Смешариков\" девочка стала членом Детского совета при тульском минстрое",
+  "content": "Предложение вступить в совет выдвинул губернатор Тульской области",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T21:24:16+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1b428bb1-e556-4230-8018-51da301c7a87",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

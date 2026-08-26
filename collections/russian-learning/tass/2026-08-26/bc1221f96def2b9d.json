@@ -1,0 +1,24 @@
+{
+  "id": "bc1221f96def2b9d",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/proisshestviya/28044297",
+  "title": "В ДНР за сутки от атак ВСУ погиб человек",
+  "content": "Еще семеро пострадали",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T22:04:29+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c49044b5-fc65-40fc-a247-566cf65243ac",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

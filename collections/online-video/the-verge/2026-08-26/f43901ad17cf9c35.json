@@ -1,0 +1,24 @@
+{
+  "id": "f43901ad17cf9c35",
+  "source_name": "the-verge",
+  "source_type": "rss",
+  "source_url": "https://www.theverge.com/transportation/983926/uber-teen-account-live-video-driver-selfie-camera",
+  "title": "Uber is letting parents check in on their teens through drivers’ selfie cameras",
+  "content": "Uber is updating its teen account feature to allow parents to use the selfie cameras on Uber drivers' phones to check in on their teenage children during ridehail trips. Since first launching teen accounts in 2023, Uber has touted the myriad ways parents can keep tabs on their children, from PIN verification to live GPS [&#8230;]",
+  "content_type": "text",
+  "source_platform": "the-verge",
+  "collected_at": "2026-08-25T09:00:00-04:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.theverge.com/rss/index.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "306b0ca5-a434-40f9-8033-af2cad3ba248",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

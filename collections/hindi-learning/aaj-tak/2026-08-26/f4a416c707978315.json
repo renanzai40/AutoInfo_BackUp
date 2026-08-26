@@ -1,0 +1,24 @@
+{
+  "id": "f4a416c707978315",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/cartoon/darasal-25-august-2629088-2026-08-24?utm_source=rssfeed",
+  "title": "दरअसल 25 अगस्त",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T05:06:02+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1a051bd1-9b41-485b-b711-ae540409a51b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

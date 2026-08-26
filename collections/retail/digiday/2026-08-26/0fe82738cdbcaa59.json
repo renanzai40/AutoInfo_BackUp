@@ -1,0 +1,24 @@
+{
+  "id": "0fe82738cdbcaa59",
+  "source_name": "digiday",
+  "source_type": "rss",
+  "source_url": "https://digiday.com/marketing/wtf-are-fandoms-and-why-are-marketers-chasing-them/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss",
+  "title": "WTF are fandoms, and why are marketers chasing them?",
+  "content": "Marketers want more than customers. They're chasing fandom to turn audiences into communities.",
+  "content_type": "text",
+  "source_platform": "digiday",
+  "collected_at": "2026-08-24T04:01:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://digiday.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d716aa61-1082-4329-9f37-31aa3e698e4d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

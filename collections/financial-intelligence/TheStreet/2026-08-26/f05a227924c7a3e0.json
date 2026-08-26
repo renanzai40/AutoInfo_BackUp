@@ -1,0 +1,24 @@
+{
+  "id": "f05a227924c7a3e0",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/investing/stocks/gs-goldman-sachs-partner-and-head-of-marquee-chris-churchman-warns-ai-could-erode-bankers-reasoning-skills",
+  "title": "Goldman Sachs partner sends urgent warning on what AI could destroy",
+  "content": "Goldman Sachs' Chris Churchman warns that overreliance on AI could weaken the analytical skills that Wall Street depends on.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T14:17:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "bfa6a975-4c3e-44cc-8600-0637913a010e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

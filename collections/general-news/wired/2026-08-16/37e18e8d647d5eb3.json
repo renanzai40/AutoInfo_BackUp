@@ -1,0 +1,22 @@
+{
+  "id": "37e18e8d647d5eb3",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/instapaper-the-original-read-it-later-app-just-got-a-huge-upgrade/",
+  "title": "Instapaper, the Original Read-It-Later App, Just Got a Huge Upgrade",
+  "content": "New fonts, better customization, and a whole new layout all make it worth dusting off your Instapaper account.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-15T10:30:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f1c24a84-0443-4625-acdf-bf4242497926"
+}

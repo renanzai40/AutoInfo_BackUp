@@ -1,0 +1,27 @@
+{
+  "id": "afsyuZ0rEfC1CRIgVUe25w",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "SEO Case Study: Analyze, Optimize & Grow",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "afsyuZ0rEfC1CRIgVUe25w",
+    "slug": "seo-case-study-analyze-optimize-grow",
+    "name": "SEO Case Study: Analyze, Optimize & Grow"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "41000ea9-ac73-4224-967f-0a303352934a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

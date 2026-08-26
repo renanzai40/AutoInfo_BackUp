@@ -1,0 +1,24 @@
+{
+  "id": "475c6fc4d26bec6b",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/salud/nutricion/granada-corazon-prometedor-hallazgo-que-mejora-hasta-un-80-funcion-cardiaca-modelos-experimentales_7028697_0.html",
+  "title": "Granada y corazón: así es el prometedor hallazgo que mejora hasta un 80% las funciones del corazón",
+  "content": "“Ningún alimento por sí solo puede prevenir o tratar las enfermedades cardiacas”, ha declarado uno de los autores del estudio para frenar la cautela.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-24T18:51:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "24bffb66-6c26-4372-bf4d-877131a17fc8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,40 @@
+{
+  "id": "49437483",
+  "source_name": "hackernews",
+  "source_type": "hackernews",
+  "source_url": "https://news.ycombinator.com/item?id=49437483",
+  "title": "Run OpenBSD on DigitalOcean for $4/month",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "hackernews",
+  "collected_at": "2026-08-25T19:12:23.929793+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "by": "speckx",
+    "descendants": 12,
+    "id": 49437483,
+    "kids": [
+      49439009,
+      49438779,
+      49437881,
+      49438228,
+      49438712,
+      49437841,
+      49438523
+    ],
+    "score": 40,
+    "time": 1787678587,
+    "title": "Run OpenBSD on DigitalOcean for $4/month",
+    "type": "story",
+    "url": "https://nil.wallyjones.com/run-openbsd-on-digitalocean-for-4month/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "464b23e9-681d-4f86-9d05-02c090c65e7e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

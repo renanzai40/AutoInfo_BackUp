@@ -1,0 +1,24 @@
+{
+  "id": "cc3ac4471d144f73",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/proisshestviya/28044215",
+  "title": "В Новой Москве в ДТП с участием такси погибли два человека",
+  "content": "На месте работают сотрудники Госавтоинспекции и следственно-оперативной группы",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T20:43:14+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f5b3ff72-7fae-419e-a9c2-883d849250be",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

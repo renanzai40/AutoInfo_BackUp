@@ -1,0 +1,125 @@
+[
+  {
+    "collection_id": "col-20260810T060419-ab51f01f",
+    "timestamp": "2026-08-10T06:06:37.547062+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 4049.0,
+    "trace_ids": [
+      "ec69c394-10c3-4e25-af71-b161da9fef1e",
+      "7864074b-56c2-4f06-8a85-7d969d9ae49b",
+      "f2f314f2-d850-4c24-9643-760dc67db851",
+      "f3884578-0982-404a-8440-fc2652bbdad7",
+      "f8a3c968-b5f8-46c1-a949-5b0c236fa611"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T151510-1a39b5d2",
+    "timestamp": "2026-08-25T15:15:44.356946+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 3626.0,
+    "trace_ids": [
+      "047a1330-6151-42d0-b6da-231d7cae98e2",
+      "342d60b8-4c7b-420a-93d3-93eddd059679",
+      "d72cb991-7546-47b6-aa39-28b1b1364fb1",
+      "f261326b-2971-4137-9ad6-e78ba9fe5638",
+      "7369f145-420f-4ea3-84bc-150e0c987013"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T153409-ed01b249",
+    "timestamp": "2026-08-25T15:34:41.374633+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 1075.0,
+    "trace_ids": [
+      "60d9132d-42b2-4afc-80c6-1a6cabac6888",
+      "0648c786-0e5f-49fe-ad78-a06da57ae54e",
+      "4442a0f9-4429-4cbb-ae29-3c3e419b8d22",
+      "d8efe900-e735-443f-b486-2a1f34300097",
+      "19fcfa5c-9ee8-430c-b8a5-2621be9e4856"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T154258-739c21b3",
+    "timestamp": "2026-08-25T15:43:21.888773+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 3762.0,
+    "trace_ids": [
+      "54f3227d-e264-4e9b-89b3-5a901cb8dd6c",
+      "2ea89e33-ba57-43c4-94ae-5f00929d16be",
+      "830832fe-32bd-40b2-9647-66fb6ecd2258",
+      "a0fe23b3-22c1-4887-bf15-437e70dc1278",
+      "6701fb8a-4d9f-4a77-bae2-1a385c3eabb5"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T155753-864e764b",
+    "timestamp": "2026-08-25T15:57:56.197022+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 2883.0,
+    "trace_ids": [
+      "a31eaa1d-94e1-402c-8e3b-258a0bb06004",
+      "a9a7eb9a-d092-4904-b6a6-661f2c4542e6",
+      "1c033b8e-ca57-42d3-bdba-7c176cad95f6",
+      "2570e08f-f427-4bc6-8899-ad5852aa931d",
+      "72298b49-ca59-4ff7-9e92-4d4945f75b09"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T162230-a871c583",
+    "timestamp": "2026-08-25T16:22:34.228460+00:00",
+    "status": "success",
+    "items_found": 10,
+    "items_new": 10,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 3053.0,
+    "trace_ids": [
+      "409e55ab-181b-4973-90a1-db0aa4f55677",
+      "22ef019a-d5d5-435f-9703-ed09666fc003",
+      "dfed7524-7667-4d2b-961d-628bafe15660",
+      "6623aaed-4f7b-4696-913a-8ccd8803a85d",
+      "532d482d-2d28-4f16-8a7d-0075e9b86ea3",
+      "6a6cb297-e88b-43aa-981d-2017f949a498",
+      "232a0bd1-936c-4a3a-8634-9b5b22dce58b",
+      "516363b1-2a75-4e01-8183-bf9f060c88aa",
+      "892fe476-10b3-4777-bbb0-8bb8e95929cf",
+      "0dbabb10-1b49-4863-8d95-40b573902b12"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T181032-c2cad0eb",
+    "timestamp": "2026-08-25T18:10:34.032604+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://variety.com/feed/: Client error '403 Forbidden' for url 'https://variety.com/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://variety.com/feed/: Client error '403 Forbidden' for url 'https://variety.com/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+      }
+    ],
+    "duration_ms": 546.0
+  }
+]

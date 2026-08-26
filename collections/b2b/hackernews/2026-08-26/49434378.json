@@ -1,0 +1,40 @@
+{
+  "id": "49434378",
+  "source_name": "hackernews",
+  "source_type": "hackernews",
+  "source_url": "https://news.ycombinator.com/item?id=49434378",
+  "title": "OpenAI Jalapeño: Better than Nvidia Blackwell",
+  "content": "<a href=\"https:&#x2F;&#x2F;www.bloomberg.com&#x2F;news&#x2F;articles&#x2F;2026-08-25&#x2F;openai-claims-its-new-chips-can-outperform-nvidia-processors-in-tests\" rel=\"nofollow\">https:&#x2F;&#x2F;www.bloomberg.com&#x2F;news&#x2F;articles&#x2F;2026-08-25&#x2F;openai-cl...</a>, <a href=\"https:&#x2F;&#x2F;archive.ph&#x2F;yCTrr\" rel=\"nofollow\">https:&#x2F;&#x2F;archive.ph&#x2F;yCTrr</a>",
+  "content_type": "text",
+  "source_platform": "hackernews",
+  "collected_at": "2026-08-25T19:12:23.929778+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "by": "bmulholland",
+    "descendants": 20,
+    "id": 49434378,
+    "kids": [
+      49438783,
+      49438605,
+      49437932,
+      49438965,
+      49438715,
+      49438653
+    ],
+    "score": 79,
+    "text": "<a href=\"https:&#x2F;&#x2F;www.bloomberg.com&#x2F;news&#x2F;articles&#x2F;2026-08-25&#x2F;openai-claims-its-new-chips-can-outperform-nvidia-processors-in-tests\" rel=\"nofollow\">https:&#x2F;&#x2F;www.bloomberg.com&#x2F;news&#x2F;articles&#x2F;2026-08-25&#x2F;openai-cl...</a>, <a href=\"https:&#x2F;&#x2F;archive.ph&#x2F;yCTrr\" rel=\"nofollow\">https:&#x2F;&#x2F;archive.ph&#x2F;yCTrr</a>",
+    "time": 1787666762,
+    "title": "OpenAI Jalapeño: Better than Nvidia Blackwell",
+    "type": "story",
+    "url": "https://newsletter.semianalysis.com/p/openai-jalapeno-better-than-nvidia"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4a9e3fc9-c4fa-491d-bb27-243c84f4e6a2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

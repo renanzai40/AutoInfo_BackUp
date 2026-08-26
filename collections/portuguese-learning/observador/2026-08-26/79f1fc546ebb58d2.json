@@ -1,0 +1,24 @@
+{
+  "id": "79f1fc546ebb58d2",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/ip3-cortado-de-noite-entre-quarta-e-sexta-em-tondela-por-obras-de-duplicacao-e-requalificacao-da-via-entre-santa-comba-dao-e-viseu/",
+  "title": "Tondela. IP3 cortado nas noites de quarta, quinta e sexta",
+  "content": "O trânsito será desviado pela antiga EN2 em ambos os sentidos",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T19:44:36+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2ea7ed59-b665-4510-8f8b-5ee23845d582",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

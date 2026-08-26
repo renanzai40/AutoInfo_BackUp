@@ -1,0 +1,10 @@
+[92m13:08:25 - LiteLLM:WARNING[0m: get_model_cost_map.py:271 - LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: The read operation timed out. Falling back to local backup.
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions to group a set of knowledge base entries into 3–5 semantic themes. The entries cover diverse topics including geopolitical conflicts, cultural news, po
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions for grouping a set of knowledge base entries into 3-5 thematic categories. It emphasizes using concise semantic titles for themes and assigns each entr
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article instructs to group a list of news-based knowledge base entries into 3-5 themes with specific semantic title guidelines. It provides 8 entries covering diverse international t
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions for grouping a set of knowledge base entries into 3 to 5 thematic categories, with specific guidelines for theme titles and assignment rules. The entri

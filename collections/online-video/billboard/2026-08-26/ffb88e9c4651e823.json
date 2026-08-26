@@ -1,0 +1,24 @@
+{
+  "id": "ffb88e9c4651e823",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/pro/gabz-landman-executive-vp-ar-warner-chappell-music/",
+  "title": "Gabz Landman Named Executive VP of A&R at Warner Chappell Music",
+  "content": "Landman's signings include Laufey, Madison Beer, The Chainsmokers and Diplo.",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T16:42:00+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c151840f-0ceb-4db0-a5bf-3374c10f4894",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

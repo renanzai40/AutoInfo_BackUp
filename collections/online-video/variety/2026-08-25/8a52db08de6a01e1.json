@@ -1,0 +1,24 @@
+{
+  "id": "8a52db08de6a01e1",
+  "source_name": "variety",
+  "source_type": "rss",
+  "source_url": "https://variety.com/2026/tv/columns/andy-cohen-real-housewives-nashville-chicago-tracy-tutor-rhobh-and-rosie-odonnell-1236841806/",
+  "title": "Andy Cohen on Looking for Housewives in Nashville and Chicago, Tracy Tutor Joining ‘RHOBH’ and Rosie O’Donnell’s Possible Return to Talk Show Television",
+  "content": "Andy Cohen is having a nice end of the summer. I’m not only chatting with him over Zoom from his beach house in the tony Hamptons enclave of Amagansett (did you see the photos and write-up of the home in Architectural Digest?), but he’s just returned to the States from a vacation in Greece. Now [&#8230;]",
+  "content_type": "text",
+  "source_platform": "variety",
+  "collected_at": "2026-08-25T15:00:00+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://variety.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d72cb991-7546-47b6-aa39-28b1b1364fb1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "8429e61a22e96720",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/ucrania-zelensky-agradece-a-seguro-e-montenegro-apoio-nos-35-anos-da-independencia/",
+  "title": "Zelensky agradece apoio de Seguro e Montenegro",
+  "content": "Esta terça-feira celebra-se na Ucrânia o 35.º aniversário da independência do país",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T22:12:25+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d6d3746a-6ecc-4425-a76e-e560227ed090",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

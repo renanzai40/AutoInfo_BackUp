@@ -1,0 +1,24 @@
+{
+  "id": "0d0010082961c2d7",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/nuria-roca-juan-val-se-despiden-su-hija-olivia-que-se-marcha-eeuu-ahora-que-hago-yo_7029009_0.html",
+  "title": "Nuria Roca y Juan del Val se despiden de su hija Olivia, que se marcha a EEUU: \"¿Y ahora qué hago yo?\"",
+  "content": "A punto de cumplir 16 años, la joven ha decidido estudiar un año en EEUU siguiendo los pasos de sus hermanos y de su madre.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T09:08:35+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f684a020-b3a1-4a1c-9540-15be8261d0e9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

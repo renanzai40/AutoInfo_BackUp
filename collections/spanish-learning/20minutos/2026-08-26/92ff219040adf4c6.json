@@ -1,0 +1,24 @@
+{
+  "id": "92ff219040adf4c6",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/tecnologia/aplicaciones/netflix-sigue-pasos-prime-video-quiere-integrar-otras-plataformas-streaming-app_7028974_0.html",
+  "title": "Netflix sigue los pasos de Prime Video: quiere integrar a otras plataformas de streaming en su aplicación",
+  "content": "Netflix podría actuar como un escaparate desde el que los usuarios pudieran contratar servicios de terceros y acceder a ellos sin salir de la aplicación.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T07:55:10+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d9f8bcbb-2dff-49bc-b4c2-f8f56d86f66f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

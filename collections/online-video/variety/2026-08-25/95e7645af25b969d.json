@@ -1,0 +1,24 @@
+{
+  "id": "95e7645af25b969d",
+  "source_name": "variety",
+  "source_type": "rss",
+  "source_url": "https://variety.com/2026/artisans/news/helen-mirren-seth-rogen-adam-pietkiewicz-tiff-honorees-1236842392/",
+  "title": "Seth Rogen, Helen Mirren and Cinematographer Adam Pietkiewicz Added to TIFF Tribute Awards Honorees",
+  "content": "&#8220;Angh&#8221; cinematographer Adam Pietkiewicz will receive the TIFF Variety Artisan Award at this year&#8217;s Toronto International Film Festival. Also being honored are Helen Mirren, who will receive the TIFF Share Her Journey Groundbreaker Award, presented by Joanna Griffiths. Seth Rogen will be presented with the TIFF Norman Jewison Career Achievement Award, presented by The Budman [&#8230;]",
+  "content_type": "text",
+  "source_platform": "variety",
+  "collected_at": "2026-08-25T15:30:27+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://variety.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0648c786-0e5f-49fe-ad78-a06da57ae54e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

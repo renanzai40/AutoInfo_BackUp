@@ -1,0 +1,24 @@
+{
+  "id": "4c46f3616e9c4063",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/gaming-industry/events-conferences/gamescom-opening-night-live-2026-how-to-watch/",
+  "title": "How to watch Gamescom Opening Night Live 2026",
+  "content": "Here's when and where to watch the live showcase opener to this year's Gamescom event.",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-25T10:00:00+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1613a263-f823-4c0e-bc9a-c2cf95f8d0d9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

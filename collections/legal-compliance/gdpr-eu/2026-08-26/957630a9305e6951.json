@@ -1,0 +1,24 @@
+{
+  "id": "957630a9305e6951",
+  "source_name": "gdpr-eu",
+  "source_type": "rss",
+  "source_url": "https://gdpr.eu/italy-gdpr-fine/",
+  "title": "What the first Italian GDPR fine reveals about data security liabilities for processors",
+  "content": "<p>Rousseau, the online voter consultation platform that the Italian political party 5 Star Movement uses, was fined €50,000 for leaving its users’ data vulnerable to attackers. The Italian Data...</p>\n<p>The post <a href=\"https://gdpr.eu/italy-gdpr-fine/\">What the first Italian GDPR fine reveals about data security liabilities for processors</a> appeared first on <a href=\"https://gdpr.eu\">GDPR.eu</a>.</p>",
+  "content_type": "text",
+  "source_platform": "gdpr-eu",
+  "collected_at": "2019-05-17T11:34:35+00:00",
+  "language": "",
+  "domain": "legal-compliance",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://gdpr.eu/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "15399bed-db08-4923-9907-fd20f9ae3b18",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

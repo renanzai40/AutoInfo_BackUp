@@ -1,0 +1,24 @@
+{
+  "id": "9a8c1fc85e65a13a",
+  "source_name": "gematsu",
+  "source_type": "rss",
+  "source_url": "https://www.gematsu.com/2026/08/rollercoaster-tycoon-wonderworks-announced-for-consoles-pc",
+  "title": "RollerCoaster Tycoon Wonderworks announced for consoles, PC",
+  "content": "<img src=\"https://www.gematsu.com/wp-content/uploads/2026/08/RollerCoaster-Tycoon-Wonderworks_2026_08-25-26_011.jpg\" /> Publisher Atari and developer Springloaded have announced RollerCoaster Tycoon Wonderworks, a new entry in the &hellip;",
+  "content_type": "text",
+  "source_platform": "gematsu",
+  "collected_at": "2026-08-25T17:39:26+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.gematsu.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7b2be0cf-dee7-4c9d-b034-99a93e1d0dbd",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

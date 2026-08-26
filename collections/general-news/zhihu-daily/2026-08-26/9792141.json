@@ -1,0 +1,33 @@
+{
+  "id": 9792141,
+  "source_name": "zhihu-daily",
+  "source_type": "api",
+  "source_url": "https://daily.zhihu.com/story/9792141",
+  "title": "我们平时在餐桌上吃的香菜，原本的学名是什么？",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "zhihu-daily",
+  "collected_at": "2026-08-25T16:22:31.876275+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "image_hue": "0x737d57",
+    "title": "我们平时在餐桌上吃的香菜，原本的学名是什么？",
+    "url": "https://daily.zhihu.com/story/9792141",
+    "hint": "大宝 · 2 分钟阅读",
+    "ga_prefix": "082507",
+    "images": [
+      "https://pic1.zhimg.com/v2-9a6fb625c674784b9889a1bdbe40c45d.jpg?source=8673f162"
+    ],
+    "type": 0,
+    "id": 9792141
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7d5e5c90-cbc1-4046-956c-1ebbb7a87324",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

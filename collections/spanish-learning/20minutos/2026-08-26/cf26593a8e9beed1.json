@@ -1,0 +1,24 @@
+{
+  "id": "cf26593a8e9beed1",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/mujer/belleza/rejuvenecimiento-facial-natural-por-que-los-mini-liftings-son-tendencia-2026_6972987_0.html",
+  "title": "Rejuvenecimiento facial natural: por qué los mini liftings se han convertido en la gran tendencia de este año",
+  "content": "Una experta explica por qué los mini-liftings se han convertido en una de las técnicas más buscadas para rejuvenecer el rostro sin perder naturalidad",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-24T18:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c2a9af15-664e-4e30-bb97-8bd0dcf6271c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,41 @@
+{
+  "id": "49312845",
+  "source_name": "hackernews",
+  "source_type": "hackernews",
+  "source_url": "https://news.ycombinator.com/item?id=49312845",
+  "title": "AI Isn't Outthinking Mathematicians. It's Out-Remembering Them",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "hackernews",
+  "collected_at": "2026-08-15T18:36:18.466652+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "by": "rzk",
+    "descendants": 21,
+    "id": 49312845,
+    "kids": [
+      49312956,
+      49312914,
+      49312963,
+      49313002,
+      49312902,
+      49312998,
+      49312899,
+      49312992,
+      49312916,
+      49312975
+    ],
+    "score": 40,
+    "time": 1786817582,
+    "title": "AI Isn't Outthinking Mathematicians. It's Out-Remembering Them",
+    "type": "story",
+    "url": "https://davidepiffer.com/p/ai-isnt-outthinking-mathematicians"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "28752616-f686-4a2f-bca2-060e03b60664"
+}

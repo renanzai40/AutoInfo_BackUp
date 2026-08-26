@@ -1,0 +1,2727 @@
+[
+  {
+    "collection_id": "col-20260807T200520-040ec2c1",
+    "timestamp": "2026-08-07T20:05:21.942614+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "errors": [],
+    "duration_ms": 1354.0,
+    "trace_ids": [
+      "174de04f-eb4b-478d-8031-fea6bf5ddc70"
+    ]
+  },
+  {
+    "collection_id": "col-20260808T112633-2ffe0e22",
+    "timestamp": "2026-08-08T11:26:34.390695+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260808T112634-0629be0e",
+    "timestamp": "2026-08-08T11:26:34.877869+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "errors": [],
+    "duration_ms": 34.0,
+    "trace_ids": [
+      "f533e7da-7e50-49cc-81c4-ed286fa8be38"
+    ]
+  },
+  {
+    "collection_id": "col-20260808T115647-42e4c7a3",
+    "timestamp": "2026-08-08T11:56:47.835713+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260808T115647-a108b0fb",
+    "timestamp": "2026-08-08T11:56:48.327294+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "errors": [],
+    "duration_ms": 39.0,
+    "trace_ids": [
+      "426f68e5-18dc-46bf-9966-00c7a35e0a73"
+    ]
+  },
+  {
+    "collection_id": "col-20260808T122149-6a8fc9e7",
+    "timestamp": "2026-08-08T12:21:49.612995+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260808T122149-d1c5a7bb",
+    "timestamp": "2026-08-08T12:21:50.107366+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "errors": [],
+    "duration_ms": 38.0,
+    "trace_ids": [
+      "59febe57-b91b-435e-bd49-56b7f71bda95"
+    ]
+  },
+  {
+    "collection_id": "col-20260809T071517-a10654e7",
+    "timestamp": "2026-08-09T07:15:18.195885+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260809T071518-02e3d40f",
+    "timestamp": "2026-08-09T07:15:18.663762+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "errors": [],
+    "duration_ms": 35.0,
+    "trace_ids": [
+      "377ef898-a2b8-4989-90b9-0f252141f9b1"
+    ]
+  },
+  {
+    "collection_id": "col-20260809T071734-2d028881",
+    "timestamp": "2026-08-09T07:17:34.516638+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260809T071734-8b5e05eb",
+    "timestamp": "2026-08-09T07:17:34.997043+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "errors": [],
+    "duration_ms": 35.0,
+    "trace_ids": [
+      "8916db65-3a27-443d-9fd3-5a1537abb3b5"
+    ]
+  },
+  {
+    "collection_id": "col-20260810T164921-8e90d744",
+    "timestamp": "2026-08-10T16:49:21.878504+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T164921-52c1eb27",
+    "timestamp": "2026-08-10T16:49:22.526394+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 92.0,
+    "trace_ids": [
+      "8dc5d7c4-f9ec-478a-b9a0-9793a1238fb8"
+    ]
+  },
+  {
+    "collection_id": "col-20260810T165147-bb21e1d0",
+    "timestamp": "2026-08-10T16:51:47.936528+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260810T165148-3df7677d",
+    "timestamp": "2026-08-10T16:51:48.652302+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 90.0,
+    "trace_ids": [
+      "950b12f5-b665-48a7-986c-0f8de576bdcb"
+    ]
+  },
+  {
+    "collection_id": "col-20260810T180016-5d5a8062",
+    "timestamp": "2026-08-10T18:00:16.415431+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T180016-29018336",
+    "timestamp": "2026-08-10T18:00:16.931533+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 66.0,
+    "trace_ids": [
+      "de6e3101-29c1-4315-807a-4a294f0eaf39"
+    ]
+  },
+  {
+    "collection_id": "col-20260810T180217-17698970",
+    "timestamp": "2026-08-10T18:02:18.336859+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T180218-5e2727c8",
+    "timestamp": "2026-08-10T18:02:18.859660+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 67.0,
+    "trace_ids": [
+      "695fd0de-8f85-4c46-b4c5-9e418813a012"
+    ]
+  },
+  {
+    "collection_id": "col-20260810T184540-495eadfe",
+    "timestamp": "2026-08-10T18:45:41.305634+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T184541-1dd3cb09",
+    "timestamp": "2026-08-10T18:45:41.873113+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 68.0,
+    "trace_ids": [
+      "641b2da6-1122-4a77-830e-cd46b88169af"
+    ]
+  },
+  {
+    "collection_id": "col-20260810T184724-24d34aa7",
+    "timestamp": "2026-08-10T18:47:25.033057+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T184725-129aab07",
+    "timestamp": "2026-08-10T18:47:25.571573+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 73.0,
+    "trace_ids": [
+      "aa59a163-3e8e-4b83-8819-fe3210467102"
+    ]
+  },
+  {
+    "collection_id": "col-20260810T190314-d85c3aea",
+    "timestamp": "2026-08-10T19:03:14.894501+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T190314-053baa73",
+    "timestamp": "2026-08-10T19:03:15.410555+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 66.0,
+    "trace_ids": [
+      "043c89ec-d8ee-433f-88d5-0708d71cd833"
+    ]
+  },
+  {
+    "collection_id": "col-20260810T190458-b3854718",
+    "timestamp": "2026-08-10T19:04:58.607076+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T190458-53b1b66e",
+    "timestamp": "2026-08-10T19:04:59.250798+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 67.0,
+    "trace_ids": [
+      "9875e1b2-576b-4b71-af65-ed2f9b4f1ed4"
+    ]
+  },
+  {
+    "collection_id": "col-20260810T193322-740fc07e",
+    "timestamp": "2026-08-10T19:33:22.816468+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T193322-51983365",
+    "timestamp": "2026-08-10T19:33:23.341770+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 68.0,
+    "trace_ids": [
+      "fd42c64e-0558-4bc6-adad-4fc2df1ca105"
+    ]
+  },
+  {
+    "collection_id": "col-20260810T193405-32aa0ebd",
+    "timestamp": "2026-08-10T19:34:05.699599+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T193405-4bc056ea",
+    "timestamp": "2026-08-10T19:34:06.240582+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 69.0,
+    "trace_ids": [
+      "7b0e7ef5-2cf8-40ea-8e35-118e0b21e335"
+    ]
+  },
+  {
+    "collection_id": "col-20260810T200959-3f9044d0",
+    "timestamp": "2026-08-10T20:10:06.016436+00:00",
+    "status": "success",
+    "items_found": 20,
+    "items_new": 20,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 6370.0,
+    "trace_ids": [
+      "e457cccd-0e04-4d33-94d7-362c274a3abc",
+      "52157043-60e2-4f75-9eb2-34d7ab13b300",
+      "064e314f-b72d-4768-ad32-541e5bf04056",
+      "74fad146-b2b3-4548-8e0e-db926673c038",
+      "e71174a9-c941-452f-8ddc-bfd81d7476d5",
+      "6b3554cb-5e2e-4abd-ad6b-f34306120848",
+      "a5753689-140f-4d60-b546-b7f6346f19c1",
+      "9870a560-5277-4e13-8c30-4132946800bb",
+      "3e349f64-0e36-4b41-bdc8-20235b954ceb",
+      "cf7cc09c-a93e-491d-a85b-a177ef998906",
+      "c860a295-4074-4a97-ab65-895c3d3a9b30",
+      "eb5e2ed2-c609-4af6-b7b7-714dce8f5ffb",
+      "7fe81689-1d86-4f6b-9285-3229bb2d50bf",
+      "a799dbd1-f2eb-49f3-ad36-b5c976bf55d8",
+      "0d4bd61a-b434-444f-b675-23eb4ff7fba3",
+      "258e2185-dded-49d8-ac8f-94e5234a3266",
+      "e32b7ee3-784c-4528-b7ff-1c4b68d2b8ab",
+      "a73a4cb7-c2a5-436e-907e-4d22a0da903c",
+      "97500ff1-fe2d-4962-b7d6-66c1b2221f3a",
+      "f39bccc5-765c-4c97-b037-c66e1d26b7a6"
+    ]
+  },
+  {
+    "collection_id": "col-20260810T202930-58e67974",
+    "timestamp": "2026-08-10T20:29:31.025970+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T202931-b39eb3b5",
+    "timestamp": "2026-08-10T20:29:31.735327+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 70.0,
+    "trace_ids": [
+      "b5dca805-1714-4fb3-9ee0-1be0dc3e98b3"
+    ]
+  },
+  {
+    "collection_id": "col-20260810T203115-2a6e4812",
+    "timestamp": "2026-08-10T20:31:15.771684+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T203115-6910fab4",
+    "timestamp": "2026-08-10T20:31:16.462652+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 65.0,
+    "trace_ids": [
+      "5cf54611-5e4c-42f1-8be6-d1b39ad3d529"
+    ]
+  },
+  {
+    "collection_id": "col-20260810T215156-d1a03860",
+    "timestamp": "2026-08-10T21:51:56.858116+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T215156-7a86ac70",
+    "timestamp": "2026-08-10T21:51:57.563182+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 69.0,
+    "trace_ids": [
+      "447a2c36-a7d1-46bc-a9d2-fe1eabb4a36a"
+    ]
+  },
+  {
+    "collection_id": "col-20260810T220141-036d371f",
+    "timestamp": "2026-08-10T22:01:42.418279+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T220142-f4d6b275",
+    "timestamp": "2026-08-10T22:01:43.121803+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 70.0,
+    "trace_ids": [
+      "8f188da8-d121-41de-84fc-b66c169e6f26"
+    ]
+  },
+  {
+    "collection_id": "col-20260810T230449-ca749816",
+    "timestamp": "2026-08-10T23:04:56.174689+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: [Errno 111] Connection refused",
+        "source_failed": true,
+        "reason": "[Errno 111] Connection refused"
+      }
+    ],
+    "duration_ms": 6103.0
+  },
+  {
+    "collection_id": "col-20260810T230507-a4fddfa9",
+    "timestamp": "2026-08-10T23:05:13.670983+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: [Errno 111] Connection refused",
+        "source_failed": true,
+        "reason": "[Errno 111] Connection refused"
+      }
+    ],
+    "duration_ms": 6066.0
+  },
+  {
+    "collection_id": "col-20260810T230627-6a8b298f",
+    "timestamp": "2026-08-10T23:06:34.504802+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: [Errno 111] Connection refused",
+        "source_failed": true,
+        "reason": "[Errno 111] Connection refused"
+      }
+    ],
+    "duration_ms": 6051.0
+  },
+  {
+    "collection_id": "col-20260810T231327-ca38508e",
+    "timestamp": "2026-08-10T23:13:28.095459+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T231328-46c6c7e4",
+    "timestamp": "2026-08-10T23:13:28.778400+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 66.0,
+    "trace_ids": [
+      "1a60c94f-6475-430a-8013-2fc0b9c8d036"
+    ]
+  },
+  {
+    "collection_id": "col-20260810T231514-809e2b55",
+    "timestamp": "2026-08-10T23:15:15.080878+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T231515-e7f6129e",
+    "timestamp": "2026-08-10T23:15:15.826275+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 68.0,
+    "trace_ids": [
+      "2756615f-a07a-431d-aa4b-674e90564326"
+    ]
+  },
+  {
+    "collection_id": "col-20260810T233230-bd692bdb",
+    "timestamp": "2026-08-10T23:32:31.561340+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T233231-e60999e6",
+    "timestamp": "2026-08-10T23:32:32.273726+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 67.0,
+    "trace_ids": [
+      "deb9d95f-c70a-4f16-80fa-5c38f2181bd7"
+    ]
+  },
+  {
+    "collection_id": "col-20260810T233417-d9c9c04e",
+    "timestamp": "2026-08-10T23:34:17.596227+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260810T233417-ed224d7c",
+    "timestamp": "2026-08-10T23:34:18.322218+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 65.0,
+    "trace_ids": [
+      "0ed52e96-a1f5-40c4-a607-229233aed50c"
+    ]
+  },
+  {
+    "collection_id": "col-20260811T062743-2144d8ec",
+    "timestamp": "2026-08-11T06:27:43.768535+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260811T062743-5eb82b71",
+    "timestamp": "2026-08-11T06:27:44.718181+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 101.0,
+    "trace_ids": [
+      "d1765fcd-9bca-4cfa-9c99-200e925f0af8"
+    ]
+  },
+  {
+    "collection_id": "col-20260811T063002-036c1026",
+    "timestamp": "2026-08-11T06:30:03.115150+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260811T063003-ee61c246",
+    "timestamp": "2026-08-11T06:30:04.048515+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 90.0,
+    "trace_ids": [
+      "3164ae24-490a-4da3-840a-a7867c9adb23"
+    ]
+  },
+  {
+    "collection_id": "col-20260811T175256-ad9f0873",
+    "timestamp": "2026-08-11T17:52:56.920898+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260811T175257-1932294d",
+    "timestamp": "2026-08-11T17:52:57.642516+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 73.0,
+    "trace_ids": [
+      "a127f11c-5b17-4214-a61b-48db77060f15"
+    ]
+  },
+  {
+    "collection_id": "col-20260811T175458-60c10696",
+    "timestamp": "2026-08-11T17:54:58.775936+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260811T175458-c7a343d7",
+    "timestamp": "2026-08-11T17:54:59.522401+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 73.0,
+    "trace_ids": [
+      "5f97b943-7281-4a6e-8538-7186c953beb5"
+    ]
+  },
+  {
+    "collection_id": "col-20260811T182009-32d26f78",
+    "timestamp": "2026-08-11T18:20:09.615270+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260811T182009-cd1d9624",
+    "timestamp": "2026-08-11T18:20:10.343512+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 73.0,
+    "trace_ids": [
+      "7a35c65c-5720-4a52-9f17-5418cdf34cf0"
+    ]
+  },
+  {
+    "collection_id": "col-20260811T182228-5d5aa48a",
+    "timestamp": "2026-08-11T18:22:28.622235+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260811T182228-26fb3c7b",
+    "timestamp": "2026-08-11T18:22:29.380097+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 74.0,
+    "trace_ids": [
+      "b4c16421-985f-44ed-8293-f8d0e2b62b71"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T045657-786238da",
+    "timestamp": "2026-08-12T04:56:58.063400+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T045658-d186f71e",
+    "timestamp": "2026-08-12T04:56:58.892070+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 77.0,
+    "trace_ids": [
+      "07ff8d1f-a9e3-4a50-82f5-200dbba7d912"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T045914-684cce08",
+    "timestamp": "2026-08-12T04:59:14.823725+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T045914-d3b30fdc",
+    "timestamp": "2026-08-12T04:59:15.648647+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 88.0,
+    "trace_ids": [
+      "a07a01e6-d7ef-4439-84f8-8ca09302aed3"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T053158-3c1674d7",
+    "timestamp": "2026-08-12T05:31:58.735288+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260812T053158-903b992a",
+    "timestamp": "2026-08-12T05:31:59.579821+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 84.0,
+    "trace_ids": [
+      "ee8502f4-e6db-4891-9a25-5b489ac618c0"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T053453-2edac5aa",
+    "timestamp": "2026-08-12T05:34:54.325145+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T053454-dc42d55b",
+    "timestamp": "2026-08-12T05:34:55.212289+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 96.0,
+    "trace_ids": [
+      "978bd182-bd19-4e87-9072-c85d99443037"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T062252-950e15e0",
+    "timestamp": "2026-08-12T06:22:53.544413+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T062253-c87d437e",
+    "timestamp": "2026-08-12T06:22:54.302067+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 76.0,
+    "trace_ids": [
+      "5c1190d7-760f-4f4f-ae6c-b423d6b1a667"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T063838-be0dba26",
+    "timestamp": "2026-08-12T06:38:38.740228+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T063838-b618dc56",
+    "timestamp": "2026-08-12T06:38:39.498955+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 75.0,
+    "trace_ids": [
+      "f77fff3a-7675-49b9-b7d4-8aef90b2f3ee"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T064344-123fe24a",
+    "timestamp": "2026-08-12T06:43:44.900415+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T064344-98834ee5",
+    "timestamp": "2026-08-12T06:43:45.625103+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 72.0,
+    "trace_ids": [
+      "f87fc71f-da03-46e2-9b5f-2257ba33ebe1"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T065027-c3cc149e",
+    "timestamp": "2026-08-12T06:50:27.792428+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T065027-eb1874de",
+    "timestamp": "2026-08-12T06:50:28.574025+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 76.0,
+    "trace_ids": [
+      "c26a0810-5d1c-4cb9-92fa-587c85fdf624"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T065538-0bc5e42e",
+    "timestamp": "2026-08-12T06:55:39.026707+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T065539-7fbed26e",
+    "timestamp": "2026-08-12T06:55:39.848727+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 81.0,
+    "trace_ids": [
+      "a9de088f-93d9-4bbb-8564-3a4929b1feb2"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T072643-6fca100e",
+    "timestamp": "2026-08-12T07:26:43.714271+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T072643-5813f086",
+    "timestamp": "2026-08-12T07:26:44.522232+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 83.0,
+    "trace_ids": [
+      "a54113db-2a74-4cdd-af3c-c8a55ac73a11"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T073521-39703813",
+    "timestamp": "2026-08-12T07:35:22.102751+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T073522-7ddaf7a4",
+    "timestamp": "2026-08-12T07:35:22.858593+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 78.0,
+    "trace_ids": [
+      "c2a54042-f78d-49d3-8728-3c38f9e08a3c"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T074216-ac35d8bb",
+    "timestamp": "2026-08-12T07:42:16.702669+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T074216-ab6f99de",
+    "timestamp": "2026-08-12T07:42:17.501555+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 81.0,
+    "trace_ids": [
+      "17820e7e-1537-48c9-b827-fcfed418688b"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T074918-15911e57",
+    "timestamp": "2026-08-12T07:49:19.101883+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T074919-267007cd",
+    "timestamp": "2026-08-12T07:49:20.058801+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 80.0,
+    "trace_ids": [
+      "8141ca93-77c8-4207-a3fd-d02ef640caee"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T075724-ba10a73c",
+    "timestamp": "2026-08-12T07:57:24.662659+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T075724-667c77e5",
+    "timestamp": "2026-08-12T07:57:25.519695+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 84.0,
+    "trace_ids": [
+      "2455e385-60c1-42dc-84ab-0bb3fe8f5424"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T113221-b691f53a",
+    "timestamp": "2026-08-12T11:32:21.814999+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T113221-aa59c56e",
+    "timestamp": "2026-08-12T11:32:22.644445+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 76.0,
+    "trace_ids": [
+      "ffb517dd-121a-4bbb-a690-efc1c88ea5b5"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T113727-6faf8988",
+    "timestamp": "2026-08-12T11:37:27.744004+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T113727-f94e070a",
+    "timestamp": "2026-08-12T11:37:28.434647+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 68.0,
+    "trace_ids": [
+      "28c0b28c-4ec6-4389-97ee-3cc823e4ee57"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T120458-5ea6a642",
+    "timestamp": "2026-08-12T12:04:59.423718+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T120459-f43f66fc",
+    "timestamp": "2026-08-12T12:05:00.160349+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 71.0,
+    "trace_ids": [
+      "b6b04316-5d5f-454e-a3c3-26d400abfc92"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T120548-62b54125",
+    "timestamp": "2026-08-12T12:05:49.517726+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T120549-f0ce8780",
+    "timestamp": "2026-08-12T12:05:50.226357+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 75.0,
+    "trace_ids": [
+      "3917236e-22e5-4f2c-85c6-0259c385777d"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T121058-a71c0ffa",
+    "timestamp": "2026-08-12T12:10:59.248052+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260812T121059-b0046080",
+    "timestamp": "2026-08-12T12:10:59.953415+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 70.0,
+    "trace_ids": [
+      "e032cf11-9a75-41fd-8082-4e886f9f00f5"
+    ]
+  },
+  {
+    "collection_id": "col-20260812T182650-e3939898",
+    "timestamp": "2026-08-12T18:26:55.258881+00:00",
+    "status": "success",
+    "items_found": 6,
+    "items_new": 6,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 4080.0,
+    "trace_ids": [
+      "eb3ad4cb-eec8-4318-bbbc-1d1d80db854a",
+      "aa9f56a6-703b-45fe-9619-59c153815b48",
+      "ea08867b-f297-4d57-bbbd-26b3bae9acf6",
+      "fa51fe0e-f872-4981-b01d-ddeebb087cdd",
+      "a56668b4-3e9b-4192-a1dc-55902fd1448d",
+      "567a4b50-3406-4a61-94ee-fe0a61714945"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T051349-89c70689",
+    "timestamp": "2026-08-13T05:13:50.606389+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260813T051350-a51b0c72",
+    "timestamp": "2026-08-13T05:13:51.838418+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 186.0,
+    "trace_ids": [
+      "fc476791-71fd-448e-a556-2279f7b47a33"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T052044-a80f1c32",
+    "timestamp": "2026-08-13T05:20:45.095190+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260813T052045-5a948d21",
+    "timestamp": "2026-08-13T05:20:46.228789+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 166.0,
+    "trace_ids": [
+      "2ca93894-f41e-4ed5-bdeb-a7ee89440273"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T052622-c071dbcf",
+    "timestamp": "2026-08-13T05:26:23.129870+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260813T052623-1e78ce4f",
+    "timestamp": "2026-08-13T05:26:24.309289+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 114.0,
+    "trace_ids": [
+      "178c6b59-78ab-4531-9f5b-d47ef140fe80"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T065626-17a0cd13",
+    "timestamp": "2026-08-13T06:56:27.199892+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 4.0
+  },
+  {
+    "collection_id": "col-20260813T065627-627afa46",
+    "timestamp": "2026-08-13T06:56:28.561246+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 199.0,
+    "trace_ids": [
+      "6447ec4f-f645-4ec9-a820-caa65650382b"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T070237-53c709af",
+    "timestamp": "2026-08-13T07:02:38.431027+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260813T070238-ce5e3ed5",
+    "timestamp": "2026-08-13T07:02:39.628409+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 104.0,
+    "trace_ids": [
+      "97ec8a22-d54a-4373-a8e6-b707d5bbb46a"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T072705-4ebacb1c",
+    "timestamp": "2026-08-13T07:27:06.880484+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 4.0
+  },
+  {
+    "collection_id": "col-20260813T072707-9a2ad448",
+    "timestamp": "2026-08-13T07:27:08.349570+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 221.0,
+    "trace_ids": [
+      "e99f6c4a-282a-4791-a423-4a419704281f"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T073258-b0abcfba",
+    "timestamp": "2026-08-13T07:32:59.678551+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 4.0
+  },
+  {
+    "collection_id": "col-20260813T073259-8068e1c6",
+    "timestamp": "2026-08-13T07:33:01.000931+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 105.0,
+    "trace_ids": [
+      "feacee8d-b14e-4c3f-91aa-556cabb1dfa6"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T100905-05b799b8",
+    "timestamp": "2026-08-13T10:09:06.294133+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260813T100906-c09e8d91",
+    "timestamp": "2026-08-13T10:09:07.331807+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 85.0,
+    "trace_ids": [
+      "f05780b9-dfa1-4c2d-80b6-3612e5fbc1e9"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T101436-3ef36605",
+    "timestamp": "2026-08-13T10:14:37.500340+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260813T101437-8b57a330",
+    "timestamp": "2026-08-13T10:14:38.618776+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 96.0,
+    "trace_ids": [
+      "db358bad-93c7-422d-994a-28175323dfcf"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T121908-b0420277",
+    "timestamp": "2026-08-13T12:19:08.981475+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260813T121909-df78828f",
+    "timestamp": "2026-08-13T12:19:10.261987+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 103.0,
+    "trace_ids": [
+      "1aa18a6a-655e-460b-a360-ce0109df73dc"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T122452-15dde197",
+    "timestamp": "2026-08-13T12:24:53.808463+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260813T122453-68ecad57",
+    "timestamp": "2026-08-13T12:24:55.072947+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 101.0,
+    "trace_ids": [
+      "7c2ffd48-09e1-49c1-b8ad-97e6a110be27"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T130951-b04a0a5c",
+    "timestamp": "2026-08-13T13:09:52.343599+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 9.0
+  },
+  {
+    "collection_id": "col-20260813T130952-ae8190dd",
+    "timestamp": "2026-08-13T13:09:54.965517+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 284.0,
+    "trace_ids": [
+      "94c34533-e25b-4708-bf9e-44f296c48039"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T132032-3842d997",
+    "timestamp": "2026-08-13T13:20:33.988626+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260813T132034-202ac1cd",
+    "timestamp": "2026-08-13T13:20:35.432679+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 108.0,
+    "trace_ids": [
+      "197a2a56-d42e-4904-95f1-89514b7e0a86"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T133140-210075e3",
+    "timestamp": "2026-08-13T13:31:41.901685+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260813T133142-e823396a",
+    "timestamp": "2026-08-13T13:31:43.277191+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 113.0,
+    "trace_ids": [
+      "3a4e970b-60f6-4e79-9963-8c8be6060057"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T133939-1f610776",
+    "timestamp": "2026-08-13T13:39:40.920648+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 4.0
+  },
+  {
+    "collection_id": "col-20260813T133941-58190494",
+    "timestamp": "2026-08-13T13:39:42.463824+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 133.0,
+    "trace_ids": [
+      "6c1cc595-df33-4042-9747-4eab036e25b4"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T140136-37261b1e",
+    "timestamp": "2026-08-13T14:01:37.636056+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 6.0
+  },
+  {
+    "collection_id": "col-20260813T140137-ee4a8d9e",
+    "timestamp": "2026-08-13T14:01:39.401186+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 138.0,
+    "trace_ids": [
+      "7f717e2c-b985-4ac6-92e2-2e1f9e56ea32"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T144542-9491d240",
+    "timestamp": "2026-08-13T14:45:47.381099+00:00",
+    "status": "success",
+    "items_found": 3,
+    "items_new": 3,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 4112.0,
+    "trace_ids": [
+      "28eb94ae-e8a9-45f9-9b25-54f22c9e6ebc",
+      "2eb32cc2-3fde-4609-9f69-414e8cea8a06",
+      "eb54872f-9a65-4479-9ddf-f228508b42a9"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T192046-07f316b7",
+    "timestamp": "2026-08-13T19:20:47.861735+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260813T192047-26c30b16",
+    "timestamp": "2026-08-13T19:20:49.022215+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 82.0,
+    "trace_ids": [
+      "cc02eac4-c169-4fd0-b9e4-e41e1cc81b0d"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T192618-94d9c86b",
+    "timestamp": "2026-08-13T19:26:18.969732+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260813T192619-817b2838",
+    "timestamp": "2026-08-13T19:26:20.123689+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 87.0,
+    "trace_ids": [
+      "df08e4cb-3473-418f-939e-28a95ebc88c7"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T193555-f2b23e7a",
+    "timestamp": "2026-08-13T19:35:56.687383+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260813T193556-8076e3b2",
+    "timestamp": "2026-08-13T19:35:58.018952+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 87.0,
+    "trace_ids": [
+      "2dd942ae-0af6-4959-aa93-236ff150d5ea"
+    ]
+  },
+  {
+    "collection_id": "col-20260813T194128-3adffe66",
+    "timestamp": "2026-08-13T19:41:29.781882+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260813T194129-a41e6b98",
+    "timestamp": "2026-08-13T19:41:31.050940+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 83.0,
+    "trace_ids": [
+      "72201bf7-a1cd-475b-b5e8-b67a90525985"
+    ]
+  },
+  {
+    "collection_id": "col-20260815T185242-a7e32caf",
+    "timestamp": "2026-08-15T18:52:43.518750+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260815T185243-6d58b31c",
+    "timestamp": "2026-08-15T18:52:44.737571+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 131.0,
+    "trace_ids": [
+      "36aeb553-a679-4e30-86e8-cee9c3ae461e"
+    ]
+  },
+  {
+    "collection_id": "col-20260815T190500-2d8f3ce0",
+    "timestamp": "2026-08-15T19:05:01.142799+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260815T190501-0d0ba19d",
+    "timestamp": "2026-08-15T19:05:02.123610+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 80.0,
+    "trace_ids": [
+      "56ae7827-5107-49f1-8cac-c6437876ab62"
+    ]
+  },
+  {
+    "collection_id": "col-20260815T192824-fc2e33c7",
+    "timestamp": "2026-08-15T19:28:25.030723+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260815T192825-595c7ec1",
+    "timestamp": "2026-08-15T19:28:26.070077+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 95.0,
+    "trace_ids": [
+      "2ab01850-01d6-49f1-b326-db31dec61402"
+    ]
+  },
+  {
+    "collection_id": "col-20260815T193345-0d80da0c",
+    "timestamp": "2026-08-15T19:33:46.646819+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260815T193346-80cc11f0",
+    "timestamp": "2026-08-15T19:33:47.628892+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 84.0,
+    "trace_ids": [
+      "cfdd71d2-7ca6-437e-bf33-93e6b34db1e5"
+    ]
+  },
+  {
+    "collection_id": "col-20260817T114022-ff1835f0",
+    "timestamp": "2026-08-17T11:40:23.263979+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260817T114023-7fe8576c",
+    "timestamp": "2026-08-17T11:40:24.458404+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 102.0,
+    "trace_ids": [
+      "ee649d30-3abe-43b3-835e-1ff899a6ad69"
+    ]
+  },
+  {
+    "collection_id": "col-20260817T114326-d7f03f30",
+    "timestamp": "2026-08-17T11:43:27.649650+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260817T114327-6b3583b2",
+    "timestamp": "2026-08-17T11:43:28.719313+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 93.0,
+    "trace_ids": [
+      "9b9a1f48-631a-413a-8679-ad54c910347e"
+    ]
+  },
+  {
+    "collection_id": "col-20260817T155546-6c269ee6",
+    "timestamp": "2026-08-17T15:55:47.146705+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260817T155547-c1f00469",
+    "timestamp": "2026-08-17T15:55:48.537043+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 113.0,
+    "trace_ids": [
+      "2ac59166-a5e4-4d6b-883a-d526211fe224"
+    ]
+  },
+  {
+    "collection_id": "col-20260817T155803-207ba70d",
+    "timestamp": "2026-08-17T15:58:04.536970+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260817T155804-eb8b40d9",
+    "timestamp": "2026-08-17T15:58:05.903989+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 155.0,
+    "trace_ids": [
+      "3301e700-54d6-4cea-82e2-74e43f248f7b"
+    ]
+  },
+  {
+    "collection_id": "col-20260817T155959-94186cab",
+    "timestamp": "2026-08-17T16:00:00.516750+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 4.0
+  },
+  {
+    "collection_id": "col-20260817T160000-74215bd2",
+    "timestamp": "2026-08-17T16:00:02.034578+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 113.0,
+    "trace_ids": [
+      "c3aefa73-693f-4391-ad60-f477a7aec388"
+    ]
+  },
+  {
+    "collection_id": "col-20260817T160234-b3b95597",
+    "timestamp": "2026-08-17T16:02:35.038845+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260817T160235-45780126",
+    "timestamp": "2026-08-17T16:02:36.532314+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 166.0,
+    "trace_ids": [
+      "2bd24fd2-ebcb-4adb-851f-11a06b1d4cdc"
+    ]
+  },
+  {
+    "collection_id": "col-20260817T160443-0c845be8",
+    "timestamp": "2026-08-17T16:04:44.300965+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260817T160444-3061a983",
+    "timestamp": "2026-08-17T16:04:45.700452+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 103.0,
+    "trace_ids": [
+      "a2d3d110-5226-4ade-b7ef-75ed48da9b4a"
+    ]
+  },
+  {
+    "collection_id": "col-20260817T161635-4319d293",
+    "timestamp": "2026-08-17T16:16:36.670837+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260817T161636-1e49e50f",
+    "timestamp": "2026-08-17T16:16:37.802171+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 94.0,
+    "trace_ids": [
+      "fdce5de9-45bd-4f8a-b695-fa2f87a5ba02"
+    ]
+  },
+  {
+    "collection_id": "col-20260817T162205-4dae7066",
+    "timestamp": "2026-08-17T16:22:06.687349+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260817T162206-4161c109",
+    "timestamp": "2026-08-17T16:22:07.750565+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 83.0,
+    "trace_ids": [
+      "35689e41-3c2b-4c04-ab7a-18db42596ec3"
+    ]
+  },
+  {
+    "collection_id": "col-20260817T162656-3a8c6c1f",
+    "timestamp": "2026-08-17T16:26:57.390110+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260817T162657-88b5ea72",
+    "timestamp": "2026-08-17T16:26:58.385460+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 85.0,
+    "trace_ids": [
+      "731e5438-7a13-4369-b2a4-6b15042e16ff"
+    ]
+  },
+  {
+    "collection_id": "col-20260818T054335-5c5ec587",
+    "timestamp": "2026-08-18T05:43:36.389338+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260818T054336-01d6ea8a",
+    "timestamp": "2026-08-18T05:43:37.576039+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 103.0,
+    "trace_ids": [
+      "1e536321-52c2-4bfb-bd26-0e1fe537025a"
+    ]
+  },
+  {
+    "collection_id": "col-20260818T054859-73b337ed",
+    "timestamp": "2026-08-18T05:49:00.294259+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260818T054900-92edf7a8",
+    "timestamp": "2026-08-18T05:49:01.482821+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 94.0,
+    "trace_ids": [
+      "8f337eef-3155-4865-afc7-5a74d32fb4e0"
+    ]
+  },
+  {
+    "collection_id": "col-20260818T062252-b8cc5503",
+    "timestamp": "2026-08-18T06:22:53.107660+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260818T062253-a6637ccd",
+    "timestamp": "2026-08-18T06:22:54.287218+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 102.0,
+    "trace_ids": [
+      "e22b56cc-dbca-49a9-9657-4ff78a6c0591"
+    ]
+  },
+  {
+    "collection_id": "col-20260820T055524-056c2ebd",
+    "timestamp": "2026-08-20T05:55:25.405812+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260820T055525-c8c1fa33",
+    "timestamp": "2026-08-20T05:55:26.351474+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 81.0,
+    "trace_ids": [
+      "d8048a13-9e16-488a-8053-88db1233daa6"
+    ]
+  },
+  {
+    "collection_id": "col-20260820T055729-a05ec6d8",
+    "timestamp": "2026-08-20T05:57:30.402453+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260820T055730-806dde12",
+    "timestamp": "2026-08-20T05:57:31.317773+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 75.0,
+    "trace_ids": [
+      "760ac31d-c372-4e58-8f0a-a48ad12b2c03"
+    ]
+  },
+  {
+    "collection_id": "col-20260824T051829-fec2cc4d",
+    "timestamp": "2026-08-24T05:18:30.018251+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260824T051830-652a013c",
+    "timestamp": "2026-08-24T05:18:31.271302+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 102.0,
+    "trace_ids": [
+      "f7eb2566-f198-49ef-b7b8-d5c7fd07e66d"
+    ]
+  },
+  {
+    "collection_id": "col-20260824T053837-cca099bd",
+    "timestamp": "2026-08-24T05:38:38.685245+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 2.0
+  },
+  {
+    "collection_id": "col-20260824T053838-2fbf581c",
+    "timestamp": "2026-08-24T05:38:40.009364+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 109.0,
+    "trace_ids": [
+      "5cb2ef7e-7fed-444f-8d16-3203c3a6be0a"
+    ]
+  },
+  {
+    "collection_id": "col-20260824T054654-e4f3a7d4",
+    "timestamp": "2026-08-24T05:46:56.039143+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "Fetch failed: PubMed down!",
+        "source_failed": true,
+        "reason": "PubMed down!"
+      }
+    ],
+    "duration_ms": 3.0
+  },
+  {
+    "collection_id": "col-20260824T054656-033e42ba",
+    "timestamp": "2026-08-24T05:46:57.342137+00:00",
+    "status": "success",
+    "items_found": 1,
+    "items_new": 1,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 113.0,
+    "trace_ids": [
+      "29424be1-927a-401a-8d73-8ede77686c30"
+    ]
+  }
+]

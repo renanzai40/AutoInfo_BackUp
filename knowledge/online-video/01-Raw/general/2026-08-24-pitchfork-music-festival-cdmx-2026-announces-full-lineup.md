@@ -1,0 +1,52 @@
+---
+title: Pitchfork Music Festival CDMX 2026 Announces Full Lineup
+domain: online-video
+tier: 01-Raw
+entry_id: online-video-general-pitchfork-music-festival-cdmx-2026-announces-full-lineup
+source_url: https://pitchfork.com/story/pitchfork-music-festival-cdmx-2026-announces-full-lineup/
+source_type: rss
+source_platform: pitchfork
+collected_at: '2026-08-24T18:12:12+00:00'
+summary: The Pitchfork Music Festival CDMX 2026 has announced its full lineup, featuring acts such as Wendy Eisenberg, Safety
+  Trance, and Tygapaw. This event highlights a diverse musical selection for the upcoming festival in Mexico City. Fans can
+  expect a varied lineup of musical performances.
+tags: []
+quality_tier: 2
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 70.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 6ea6db9c-571b-40b5-8515-e3520dfa0819
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+Wendy Eisenberg, Safety Trance, and Tygapaw are among this year’s acts
+
+## Summary
+The Pitchfork Music Festival CDMX 2026 has announced its full lineup, featuring acts such as Wendy Eisenberg, Safety Trance, and Tygapaw. This event highlights a diverse musical selection for the upcoming festival in Mexico City. Fans can expect a varied lineup of musical performances.
+
+## Key Points
+- Pitchfork Music Festival CDMX 2026 lineup announced
+- Featured acts include Wendy Eisenberg, Safety Trance, and Tygapaw
+- Event showcases diverse musical selections in Mexico City
+
+
+## Entities
+- **Pitchfork Music Festival CDMX 2026** (event, relevance=)
+- **Wendy Eisenberg** (person, relevance=)
+- **Safety Trance** (person/group, relevance=)
+- **Tygapaw** (person, relevance=)
+- **Mexico City** (location, relevance=)

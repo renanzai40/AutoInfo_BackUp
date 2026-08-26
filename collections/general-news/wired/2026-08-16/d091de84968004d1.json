@@ -1,0 +1,22 @@
+{
+  "id": "d091de84968004d1",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/review/auk-mini-2-indoor-smart-garden/",
+  "title": "Auk Mini 2 Indoor Smart Garden Review: Better Where It Counts",
+  "content": "Auk’s Mini 2 improves on the original model with better lights, a sleeker design, and fun new colors.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-15T10:01:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "da1387c1-c22a-429f-aadd-9fe025db07ed"
+}

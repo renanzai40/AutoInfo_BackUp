@@ -1,0 +1,24 @@
+{
+  "id": "f8a168e09d23c09d",
+  "source_name": "duolingo-blog",
+  "source_type": "rss",
+  "source_url": "https://blog.duolingo.com/8th-grade-math/",
+  "title": "A guide to 8th grade math topics",
+  "content": "Help your learner get ready for 8th grade math!",
+  "content_type": "text",
+  "source_platform": "duolingo-blog",
+  "collected_at": "2026-07-14T12:06:00+00:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://blog.duolingo.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "759abb98-5bbf-47fd-ac68-53ec362ad2ca",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,25 @@
+{
+  "id": "YLO0oGSUEeyIUg4Qv2RsBQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "كيفية استعمال التطبيق هووتسويت",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-15T18:57:52.556920+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "YLO0oGSUEeyIUg4Qv2RsBQ",
+    "slug": "getting-started-with-hootsuite-ar",
+    "name": "كيفية استعمال التطبيق هووتسويت"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "978afefa-08ae-4cd7-99a7-ceccab7b7061"
+}

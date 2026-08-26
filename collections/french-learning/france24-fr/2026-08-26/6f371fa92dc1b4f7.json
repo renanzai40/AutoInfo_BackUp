@@ -1,0 +1,24 @@
+{
+  "id": "6f371fa92dc1b4f7",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/am%C3%A9riques/20260825-primaires-r%C3%A9publicaines-apr%C3%A8s-plusieurs-revers-donald-trump-confort%C3%A9-en-caroline-du-sud",
+  "title": "Primaires républicaines : après plusieurs revers, Donald Trump conforté en Caroline du Sud",
+  "content": "La victoire de Darline Graham, protégée de Donald Trump et sœur du sénateur décédé Lindsey Graham, à la primaire républicaine de Caroline du Sud, mardi, offre une bouffée d'air au président américain alors que dix de ses candidats ont été battus lors de primaires récentes et que certains sondages annoncent une défaite des conservateurs aux élections de début novembre.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T15:01:15+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "99dd2961-18ea-4037-8362-459778e336cc",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "66a768fc10a04f4b",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/idosa-de-101-anos-detida-no-sudoeste-da-nigeria-por-vender-ilegalmente-canabis-em-pequenas-saquetas/",
+  "title": "Idosa de 101 anos detida por venda de canábis",
+  "content": "Detenção de Esther Ogunmabo faz parte de diversas operações anunciadas pela agência antidroga nas fronteiras terrestres e marítimas do país da África Ocidental",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T18:53:30+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a11eba77-6916-4e3e-8be7-79a6f0edfbe2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "1d78623810232dfd",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/investing/stocks/bmo-sets-micron-mu-stock-target-1300-outperform",
+  "title": "Finance giant sets aggressive Micron stock target after earnings",
+  "content": "BMO Capital started coverage on Micron with a standout conviction call, and the number is turning heads.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T19:33:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "37dbef7f-68be-4e9e-a268-9480d55c8ea7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

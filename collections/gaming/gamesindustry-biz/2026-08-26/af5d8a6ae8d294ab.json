@@ -1,0 +1,24 @@
+{
+  "id": "af5d8a6ae8d294ab",
+  "source_name": "gamesindustry-biz",
+  "source_type": "rss",
+  "source_url": "https://www.gamesindustry.biz/us-physical-game-sales-drop-to-lowest-monthly-total-since-1995-us-monthly-charts",
+  "title": "US physical game sales drop to lowest monthly total since 1995 | US Monthly Charts",
+  "content": "<img src=\"https://assetsio.gnwcdn.com/physical-games-storefont.jpg?width=690&amp;quality=85&amp;format=jpg&amp;auto=webp\" /> <p>US physical software sales fell to $85 million in July, the lowest monthly total since Circana began tracking in 1995.</p> <p><a href=\"https://www.gamesindustry.biz/us-physical-game-sales-drop-to-lowest-monthly-total-since-1995-us-monthly-charts\">Read more</a></p>",
+  "content_type": "text",
+  "source_platform": "gamesindustry-biz",
+  "collected_at": "2026-08-20T15:20:49+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.gamesindustry.biz/feed/news"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ca1c6972-5d05-46a3-a407-6c69c1d082b8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

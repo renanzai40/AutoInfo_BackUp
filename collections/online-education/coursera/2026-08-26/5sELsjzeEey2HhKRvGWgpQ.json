@@ -1,0 +1,27 @@
+{
+  "id": "5sELsjzeEey2HhKRvGWgpQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Cómo empezar con Facebook Commerce Manager",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "5sELsjzeEey2HhKRvGWgpQ",
+    "slug": "facebook-commerce",
+    "name": "Cómo empezar con Facebook Commerce Manager"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "26a68ea2-c364-43b7-b2d1-c2f689773371",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

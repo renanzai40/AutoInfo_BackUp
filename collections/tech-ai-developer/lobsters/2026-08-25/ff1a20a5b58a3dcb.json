@@ -1,0 +1,24 @@
+{
+  "id": "ff1a20a5b58a3dcb",
+  "source_name": "lobsters",
+  "source_type": "rss",
+  "source_url": "https://vincent.bernat.ch/en/blog/2026-spanning-tree",
+  "title": "An interactive introduction to the spanning tree protocol",
+  "content": "<p><a href=\"https://lobste.rs/s/ivr1bw/interactive_introduction_spanning_tree\">Comments</a></p>",
+  "content_type": "text",
+  "source_platform": "lobsters",
+  "collected_at": "2026-08-25T07:06:16-05:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://lobste.rs/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d66c7372-efc6-44a1-867c-e38b67c4f429",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

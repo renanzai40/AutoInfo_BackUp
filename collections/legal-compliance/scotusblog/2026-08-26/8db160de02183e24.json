@@ -1,0 +1,24 @@
+{
+  "id": "8db160de02183e24",
+  "source_name": "scotusblog",
+  "source_type": "rss",
+  "source_url": "https://www.scotusblog.com/2026/08/trump-v-carroll-and-the-ten-commandments/",
+  "title": "Trump v. Carroll and the Ten Commandments",
+  "content": "Plus, the role of national security in the White House ballroom battle",
+  "content_type": "text",
+  "source_platform": "scotusblog",
+  "collected_at": "2026-08-18T13:00:00+00:00",
+  "language": "",
+  "domain": "legal-compliance",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.scotusblog.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "59538c9e-0a06-4606-b240-0533bd521182",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

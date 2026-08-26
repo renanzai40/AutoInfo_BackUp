@@ -1,0 +1,24 @@
+{
+  "id": "a58e9b0906d490ec",
+  "source_name": "pitchfork",
+  "source_type": "rss",
+  "source_url": "https://pitchfork.com/story/14-new-albums-you-should-listen-to-now-lambchop-julia-holter-and-more/",
+  "title": "14 New Albums You Should Listen to Now: Lambchop, Julia Holter, and More",
+  "content": "Stream new releases from Lambchop, Julia Holter, GB, Denzel Curry, and Weezer",
+  "content_type": "text",
+  "source_platform": "pitchfork",
+  "collected_at": "2026-08-21T13:06:22+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://pitchfork.com/feed/feed-news/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a438dc64-bcf2-42d9-8f4d-b52c65f7cd72",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "0fa5f4a198371b0d",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0604/c1002-40493499.html",
+  "title": "阿吉亚尔-布兰科再次当选葡萄牙议会议长",
+  "content": "<p>　　新华社里斯本6月3日电（记者荀伟）葡萄牙新一届议会3日举行首次会议，社民党议员若泽·佩德罗·阿吉亚尔-布兰科再次当选议长。</p> <p>　　在议会当天举行的选举中，阿吉亚尔-布兰科获得202票支持，取得压倒性多数，顺利当选。葡萄牙议会共有230个席位，根据相关规定，候选人需至少获得116票赞成才能当选。</p> <p>　　在葡萄牙议会去年举行的议长选举中，阿吉亚尔-布兰科经历了四轮投票才以160票艰难当选。为避免类似局面重演，社民党此次积极协调。社民党2日下午宣布再次提名阿吉亚尔-布兰科担任议长后，反对党中最大的两个政党“够了”党与社会党均表态不会阻挠其连任。</p> <p>　　在葡萄牙5月18日举行的提前议会选举中，社民党领导的民主联盟赢得最多席位，但未获绝对多数。社会党与“够了”党的领导人5月29日在与葡萄牙总统德索萨会晤后均公开表态，支持由民主联盟组建新政府。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-04T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1ab82073-de7f-46f2-9803-cf4c40e3fe80",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

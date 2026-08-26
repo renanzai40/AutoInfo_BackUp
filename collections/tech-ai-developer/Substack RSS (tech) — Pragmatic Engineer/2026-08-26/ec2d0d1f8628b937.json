@@ -1,0 +1,24 @@
+{
+  "id": "ec2d0d1f8628b937",
+  "source_name": "Substack RSS (tech) — Pragmatic Engineer",
+  "source_type": "rss",
+  "source_url": "https://newsletter.pragmaticengineer.com/p/stop-being-skeptical-about-ai-for",
+  "title": "Stop being skeptical about AI for development with Charity Majors",
+  "content": "In 2025, it was rational to be skeptical about AI. In 2026, it's not, anymore. With Charity Majors, CTO and co-founder of Honeycomb.",
+  "content_type": "text",
+  "source_platform": "Substack RSS (tech) — Pragmatic Engineer",
+  "collected_at": "2026-08-12T16:45:07+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://newsletter.pragmaticengineer.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9ab604fa-dc39-48b7-8faf-f6b2af1855c5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

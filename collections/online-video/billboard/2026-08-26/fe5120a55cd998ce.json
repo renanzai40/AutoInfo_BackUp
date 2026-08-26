@@ -1,0 +1,24 @@
+{
+  "id": "fe5120a55cd998ce",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/culture/product-recommendations/hadestown-musical-digital-blu-ray-official-release-2026-1236323489/",
+  "title": "Tony-Winning ‘Hadestown’ Musical Arrives on Digital Ahead of Blu-ray & DVD Release",
+  "content": "Anaïs Mitchell’s acclaimed musical, which won eight Tony Awards, including Best Musical, is making its way from the stage to the home screen.",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T15:35:30+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "fa6caff4-b2a7-44e0-9b06-83efd2cf3313",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

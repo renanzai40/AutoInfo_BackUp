@@ -1,0 +1,24 @@
+{
+  "id": "a5d90a2809bef9e0",
+  "source_name": "b2b-news-network",
+  "source_type": "rss",
+  "source_url": "https://www.b2bnn.com/2026/08/why-can-tax-rates-in-texas-change-while-your-home-stays-the-same/",
+  "title": "Why Can Tax Rates in Texas Change While Your Home Stays the Same?",
+  "content": "A house can stay unchanged across a decade. The tax rate attached to that address still changes each year. Local budgets drive the shift, never the condition of the home. Every taxing unit resets its rate through a public vote each fall. The&#160;property tax rate Texas&#160;owners pay comes from several local units. School districts carry [&#8230;]",
+  "content_type": "text",
+  "source_platform": "b2b-news-network",
+  "collected_at": "2026-08-24T06:48:00+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://b2bnn.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f0f4aee5-da7a-4916-892a-e484317caae5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

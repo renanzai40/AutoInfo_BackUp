@@ -1,0 +1,24 @@
+{
+  "id": "2cc1615ecd3d1e6c",
+  "source_name": "hollywood-reporter",
+  "source_type": "rss",
+  "source_url": "https://www.hollywoodreporter.com/tv/tv-news/rhea-seehorn-failed-auditions-pluribus-awards-chatter-1236680340/",
+  "title": "Rhea Seehorn on Failed Auditions, “Likability” and Finally Topping a Call Sheet With ‘Pluribus’",
+  "content": "The revered actress, who is Emmy-nominated and has already won Golden Globe and Critics Choice awards for her work on Vince Gilligan's post-apocalyptic Apple TV show, spoke with THR at Chapman University.",
+  "content_type": "text",
+  "source_platform": "hollywood-reporter",
+  "collected_at": "2026-08-25T18:02:59+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.hollywoodreporter.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ae2281c1-d1ef-444e-9f3f-56dad7ee016b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

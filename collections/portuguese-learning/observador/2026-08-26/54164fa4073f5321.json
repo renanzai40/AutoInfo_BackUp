@@ -1,0 +1,24 @@
+{
+  "id": "54164fa4073f5321",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/programas/gabinete-de-guerra/este-secretismo-pode-estar-relacionado-com-medo/",
+  "title": "\"Este secretismo pode estar relacionado com medo\"",
+  "content": "João Albuquerque considera que sigilo no envio de mísseis Patriot visa evitar retaliações russas. O especialista avisa que o Irão nunca abdicará de usar o Estreito de Ormuz como moeda de troca.",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T20:18:07+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a98a1968-c2ab-4d34-a17b-a2a8fc5be815",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

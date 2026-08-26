@@ -1,0 +1,27 @@
+{
+  "id": "9eCUdfR9Ee-iuhIbetE9yw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Creating Engaging Content for YouTube",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "9eCUdfR9Ee-iuhIbetE9yw",
+    "slug": "creating-engaging-content-for-youtube",
+    "name": "Creating Engaging Content for YouTube"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f34f0408-4e40-4164-8f08-93161e1e502b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

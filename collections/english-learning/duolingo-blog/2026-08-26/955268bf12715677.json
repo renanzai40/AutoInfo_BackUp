@@ -1,0 +1,24 @@
+{
+  "id": "955268bf12715677",
+  "source_name": "duolingo-blog",
+  "source_type": "rss",
+  "source_url": "https://blog.duolingo.com/ser-vs-estar/",
+  "title": "Ser vs. estar: What’s the difference?",
+  "content": "In Spanish, both verbs mean “to be.” Here are 2 tricks for knowing when to use them!",
+  "content_type": "text",
+  "source_platform": "duolingo-blog",
+  "collected_at": "2026-08-13T12:00:00+00:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://blog.duolingo.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2b6ffbaa-7392-4552-96c6-ece8af413f5f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

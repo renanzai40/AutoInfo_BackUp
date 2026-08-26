@@ -1,0 +1,140 @@
+{
+  "id": "42567468",
+  "source_name": "pubmed",
+  "source_type": "api",
+  "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42567468&retmode=xml",
+  "title": "Fertility Equity in Practice: Black Women's Support Needs and Recommendations for Infertility Care.",
+  "content": "OBJECTIVE: To identify the specific support needs of Black women navigating infertility care and generate strategies to improve access, patient experience, and outcomes.\nDESIGN: Mixed-methods observational study SUBJECTS: Black women aged 18-45 years in the US who were currently seeking or had recently sought infertility care EXPOSURE: Online survey and semi-structured interviews MAIN OUTCOME MEASURE: Quantitative data on demographics and fertility care experiences; qualitative data on perceived support needs and recommended solutions RESULTS: 176 women responded to the online survey; of these, 41 women provided consent to participate in semi-structured interviews with the study team. Most participants (74.3%) were 35-45 years of age, married or partnered, held an advanced degree, worked full-time, and had insurance that covered some or all fertility services. 25.5% of participants reported feeling under-supported by friends, family, doctors, or others during their infertility journey, with 31.3% identifying this lack of support as a barrier to initiating treatment. Participants described feelings of loneliness and isolation, with few affirming spaces or communities to find resources and connect with other Black women with infertility. They also shared examples of racism, discrimination, and a lack of compassionate care that led to dismissal of health concerns and delays in referral to reproductive endocrinologists that complicated their infertility journeys. Study participants provided several suggestions for clinics and providers to improve the support of Black women seeking infertility care, from enhancing patient-centered care to increasing access to Black reproductive medicine and mental health providers.\nCONCLUSION: Understanding the specific support needs of Black women seeking infertility care will inform patient-centered, compassionate, and culturally responsive care that improves the patient's experience and outcomes.",
+  "content_type": "text",
+  "source_platform": "pubmed",
+  "collected_at": "2026 Aug 07",
+  "language": "",
+  "domain": "medical-research",
+  "topic_tags": [
+    "Black women",
+    "Disparities",
+    "Fertility Equity",
+    "Patient-Centered",
+    "Support Needs"
+  ],
+  "quality_tier": 1,
+  "raw_data": {
+    "pmid": "42567468",
+    "pmc_id": "",
+    "authors": [
+      {
+        "lastname": "Clarke",
+        "firstname": "Lasha",
+        "initials": "L"
+      },
+      {
+        "lastname": "Morgan",
+        "firstname": "Isabel",
+        "initials": "I"
+      },
+      {
+        "lastname": "Charles",
+        "firstname": "Dannelle",
+        "initials": "D"
+      },
+      {
+        "lastname": "Suarez",
+        "firstname": "Angie",
+        "initials": "A"
+      },
+      {
+        "lastname": "Jellerette-Nolan",
+        "firstname": "Teru",
+        "initials": "T"
+      },
+      {
+        "lastname": "Dawkins",
+        "firstname": "Cameron",
+        "initials": "C"
+      },
+      {
+        "lastname": "Kue Ndukwe",
+        "firstname": "Jessie",
+        "initials": "J"
+      },
+      {
+        "lastname": "Kumar",
+        "firstname": "Anchal",
+        "initials": "A"
+      },
+      {
+        "lastname": "Thirkill",
+        "firstname": "Maya",
+        "initials": "M"
+      },
+      {
+        "lastname": "Jackson-Bey",
+        "firstname": "Tia",
+        "initials": "T"
+      },
+      {
+        "lastname": "Harris",
+        "firstname": "Benjamin",
+        "initials": "B"
+      },
+      {
+        "lastname": "Choi",
+        "firstname": "Janet",
+        "initials": "J"
+      },
+      {
+        "lastname": "Jones",
+        "firstname": "Leah",
+        "initials": "L"
+      },
+      {
+        "lastname": "Dugan",
+        "firstname": "Jorie",
+        "initials": "J"
+      },
+      {
+        "lastname": "Ikor",
+        "firstname": "Agbo",
+        "initials": "A"
+      },
+      {
+        "lastname": "Thomas",
+        "firstname": "Michael",
+        "initials": "M"
+      },
+      {
+        "lastname": "Butts",
+        "firstname": "Samantha",
+        "initials": "S"
+      },
+      {
+        "lastname": "Morris",
+        "firstname": "Jerrine R",
+        "initials": "JR"
+      },
+      {
+        "lastname": "Thorton",
+        "firstname": "Kim",
+        "initials": "K"
+      },
+      {
+        "lastname": "Feinberg",
+        "firstname": "Eve",
+        "initials": "E"
+      },
+      {
+        "lastname": "Richard-Davis",
+        "firstname": "Gloria",
+        "initials": "G"
+      }
+    ],
+    "journal": "Fertility and sterility",
+    "pub_date": "2026 Aug 07",
+    "doi": "10.1016/j.fertnstert.2026.07.031",
+    "mesh_terms": []
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3e349f64-0e36-4b41-bdc8-20235b954ceb"
+}

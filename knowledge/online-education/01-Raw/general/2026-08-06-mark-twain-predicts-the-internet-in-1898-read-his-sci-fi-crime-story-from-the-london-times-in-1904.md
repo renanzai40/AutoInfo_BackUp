@@ -1,0 +1,52 @@
+---
+title: 'Mark Twain Predicts the Internet in 1898: Read His Sci-Fi Crime Story, “From The ‘London Times’ in 1904”'
+domain: online-education
+tier: 01-Raw
+entry_id: online-education-general-mark-twain-predicts-the-internet-in-1898-read-his-sci-fi-crime-story-from-the-london-times-in-1904
+source_url: https://www.openculture.com/2026/08/mark-twain-predicts-the-internet-in-1898.html
+source_type: rss
+source_platform: rss
+collected_at: '2026-08-06T07:01:42+00:00'
+summary: Mark Twain, renowned for his classic novels, also wrote science fiction. His 1898 story 'From The 'London Times'
+  in 1904' is highlighted for its remarkable prediction of the internet and future technologies.
+tags: []
+quality_tier: 2
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 70.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 7a4d3724-52c1-4e80-b532-8f11b50ea6fa
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: true
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+Most people know that Mark Twain wrote about Jim and Huckleberry Finn navigating down the Mississippi. Less well known is that he occasionally dabbled in the burgeoning genre of science fiction. His 1898 short story “The Great Dark” is about a ship that sails across a drop of water on a microscope slide. His novel [&#8230;]
+
+## Summary
+Mark Twain, renowned for his classic novels, also wrote science fiction. His 1898 story 'From The 'London Times' in 1904' is highlighted for its remarkable prediction of the internet and future technologies.
+
+## Key Points
+- Mark Twain authored science fiction in addition to his well-known works.
+- The story 'From The 'London Times' in 1904' is a crime narrative set in a future era.
+- It uncannily predicts the internet, demonstrating Twain's foresight into technological advancements.
+- This lesser-known work showcases his versatility and imaginative vision beyond traditional literature.
+
+
+## Entities
+- **Mark Twain** (person, relevance=)
+- **science fiction** (concept, relevance=)
+- **internet** (technology, relevance=)
+- **crime story** (concept, relevance=)
+- **From The 'London Times' in 1904** (concept, relevance=)

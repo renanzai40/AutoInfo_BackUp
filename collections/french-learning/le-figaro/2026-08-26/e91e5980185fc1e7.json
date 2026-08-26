@@ -1,0 +1,24 @@
+{
+  "id": "e91e5980185fc1e7",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/international/l-administration-trump-evoque-une-possible-demolition-du-kennedy-center-si-le-nom-du-president-americain-disparait-20260825",
+  "title": "L'administration Trump évoque une possible démolition du Kennedy Center si le nom du président américain disparaît",
+  "content": "Le gouvernement de Donald Trump menace de faire démolir le Kennedy Center si la justice s’oppose au retour du nom du président sur la façade. L’administration du président affirme que l’institution risque de se dégrader jusqu’à devenir «dangereuse et délabrée».",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T23:58:43+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "12005014-82e8-451f-9d94-67ddacb16b4b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

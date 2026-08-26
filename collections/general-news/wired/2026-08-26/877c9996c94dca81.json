@@ -1,0 +1,24 @@
+{
+  "id": "877c9996c94dca81",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/the-unlikely-place-at-the-center-of-chinas-ai-boom/",
+  "title": "The Unlikely Place at the Center of China’s AI Boom",
+  "content": "Cheap energy, abundant land, and proximity to Beijing have turned a city in Inner Mongolia into a crucial hub for data centers.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-21T23:25:32+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "90b86e6a-1edf-4255-a008-0b62ad70511f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

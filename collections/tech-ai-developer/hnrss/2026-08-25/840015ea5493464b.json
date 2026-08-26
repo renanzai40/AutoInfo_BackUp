@@ -1,0 +1,24 @@
+{
+  "id": "840015ea5493464b",
+  "source_name": "hnrss",
+  "source_type": "rss",
+  "source_url": "https://www.youtube.com/watch?v=tj7ckn8WhEM",
+  "title": "Why Kids Can't Read Anymore [video]",
+  "content": "<p>Article URL: <a href=\"https://www.youtube.com/watch?v=tj7ckn8WhEM\">https://www.youtube.com/watch?v=tj7ckn8WhEM</a></p>\n<p>Comments URL: <a href=\"https://news.ycombinator.com/item?id=49435914\">https://news.ycombinator.com/item?id=49435914</a></p>\n<p>Points: 1</p>\n<p># Comments: 0</p>",
+  "content_type": "text",
+  "source_platform": "hnrss",
+  "collected_at": "2026-08-25T15:35:43+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://hnrss.org/newest"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c681963f-9d53-498e-8b72-8a8173c102ae",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

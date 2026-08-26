@@ -1,0 +1,24 @@
+{
+  "id": "ad9ec19cf7a6355b",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/sandisks-zelda-themed-1tb-microsd-card-is-on-sale-for-its-lowest-price-all-year",
+  "title": "SanDisk's Zelda-Themed 1TB MicroSD Card Is on Sale for Its Lowest Price All Year",
+  "content": "If you hurry, you can pick up a Zelda-themed 1TB microSD card from SanDisk on sale for just $129.99, the lowest price it's been all year, by far.",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T13:16:50+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "eebc33e1-394d-4d8a-ada1-71be8d7512c8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

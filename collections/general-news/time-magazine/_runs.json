@@ -1,0 +1,66 @@
+[
+  {
+    "collection_id": "col-20260815T181643-4debb52e",
+    "timestamp": "2026-08-15T18:19:49.177330+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://time.com/feed/: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://time.com/feed/: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30089.0
+  },
+  {
+    "collection_id": "col-20260815T183528-d47c1ff7",
+    "timestamp": "2026-08-15T18:35:58.839125+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://time.com/feed/: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://time.com/feed/: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30650.0
+  },
+  {
+    "collection_id": "col-20260825T153025-acb4a6c3",
+    "timestamp": "2026-08-25T15:33:34.567584+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://time.com/feed/: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://time.com/feed/: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30092.0
+  },
+  {
+    "collection_id": "col-20260825T154628-1c0c3b07",
+    "timestamp": "2026-08-25T15:49:36.273081+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://time.com/feed/: [Errno 101] Network is unreachable",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://time.com/feed/: [Errno 101] Network is unreachable"
+      }
+    ],
+    "duration_ms": 30062.0
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "id": "c75e2e6256571e84",
+  "source_name": "the-verge",
+  "source_type": "rss",
+  "source_url": "https://www.theverge.com/tech/984463/instagram-first-draft-edit-reels",
+  "title": "Instagram’s ‘First Draft’ trims your Reels clips for you",
+  "content": "Instagram is launching a new Reels-editing feature that automatically trims your video clips to focus on the highlights. The feature, called First Draft, is rolling out to Instagram's iPhone app and provides a \"starting point\" that you can build upon with other edits, according to an announcement on Tuesday. An example shared by Instagram shows [&#8230;]",
+  "content_type": "text",
+  "source_platform": "the-verge",
+  "collected_at": "2026-08-25T13:12:31-04:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.theverge.com/rss/index.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8eaa5ac2-b74c-4738-ba92-43602ed5f84e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

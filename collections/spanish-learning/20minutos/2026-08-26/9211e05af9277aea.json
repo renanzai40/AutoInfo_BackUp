@@ -1,0 +1,24 @@
+{
+  "id": "9211e05af9277aea",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/pais-vasco/menos-32-afectados-por-un-brote-salmonelosis-un-bar-eibar-por-huevos-procedentes-aragon_7029295_0.html",
+  "title": "Al menos 32 afectados por un brote de salmonelosis en un bar de Eibar por huevos procedentes de Aragón",
+  "content": "La investigación detectó deficiencias relacionadas con la trazabilidad de los huevos, la limpieza y desinfección de utensilios, la conservación de las tortillas a temperatura ambiente y la prevención de contaminaciones cruzadas.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T18:24:39+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "94e1415a-77c4-4348-923e-d5dc756ca78e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

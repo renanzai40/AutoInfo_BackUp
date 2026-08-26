@@ -1,0 +1,24 @@
+{
+  "id": "535beef467af5c06",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/actriz-rachel-lee-demanda-culpa-disney-haber-sido-violada-por-un-empleado-los-14-anos_7029207_0.html",
+  "title": "La actriz Rachel Lee demanda y culpa a Disney de haber sido violada por un empleado a los 14 años",
+  "content": "La intérprete, que apareció en The Amanda Show y Los Proud, asegura que el ambiente en el set era de acoso sexual e incitación al alcohol.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T15:11:12+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a1298109-ebc2-41a3-b274-15a3e317c772",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

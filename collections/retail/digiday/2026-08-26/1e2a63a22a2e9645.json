@@ -1,0 +1,24 @@
+{
+  "id": "1e2a63a22a2e9645",
+  "source_name": "digiday",
+  "source_type": "rss",
+  "source_url": "https://digiday.com/media/the-iab-is-developing-a-framework-to-tackle-ai-advertising-measurement/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss",
+  "title": "The IAB is developing a framework to tackle AI advertising measurement",
+  "content": "The IAB is developing a framework to solve a big challenge in advertising: how to measure and assign credit when ads influence AI agents.",
+  "content_type": "text",
+  "source_platform": "digiday",
+  "collected_at": "2026-08-24T04:01:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://digiday.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "cc0805ea-dd50-4556-9418-2a74e614590a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

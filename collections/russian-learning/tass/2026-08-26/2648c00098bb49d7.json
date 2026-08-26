@@ -1,0 +1,24 @@
+{
+  "id": "2648c00098bb49d7",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/obschestvo/28043899",
+  "title": "Эксперт Мусакин: в отелях Петербурга мало отмен брони в дни концерта Канье Уэста",
+  "content": "По словам вице-президента Российской гостиничной ассоциации и Российского союза туриндустрии, ситуация вокруг концертов вряд ли окажет на отели значительный экономический эффект",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T18:47:56+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "92def4ca-7c17-4103-9797-bd6873e4644b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

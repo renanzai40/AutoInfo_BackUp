@@ -1,0 +1,27 @@
+{
+  "id": "cdLlrD7FEe6U4g7a-RyA1w",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Data Management and Sharing for NIH Proposals",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "cdLlrD7FEe6U4g7a-RyA1w",
+    "slug": "nih-data-sharing",
+    "name": "Data Management and Sharing for NIH Proposals"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8faadd50-0013-4417-8f60-4a77a8fb0e10",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

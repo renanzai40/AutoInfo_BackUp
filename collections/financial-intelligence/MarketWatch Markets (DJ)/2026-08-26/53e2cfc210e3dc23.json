@@ -1,0 +1,24 @@
+{
+  "id": "53e2cfc210e3dc23",
+  "source_name": "MarketWatch Markets (DJ)",
+  "source_type": "rss",
+  "source_url": "https://www.marketwatch.com/story/my-father-in-law-passed-away-leaving-a-house-with-tenants-do-i-evict-them-f974428c?mod=mw_rss_topstories",
+  "title": "My father-in-law passed away, leaving a house with tenants. Do I evict them?",
+  "content": "“We don’t know whether they have signed leases or are renting month to month.”",
+  "content_type": "text",
+  "source_platform": "MarketWatch Markets (DJ)",
+  "collected_at": "2026-08-25T15:30:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.marketwatch.com/marketwatch/topstories/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "cc209d34-dfc3-4376-b495-ef314ee3b1d0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,64 @@
+{
+  "id": "42571055",
+  "source_name": "pubmed",
+  "source_type": "api",
+  "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42571055&retmode=xml",
+  "title": "Protocol for Evaluating The Effect of Pelvic Physiotherapy on Uterine Blood Flow: A Single-Center, Two-Arm, Parallel, Randomized, Clinical Trial.",
+  "content": "OBJECTIVE: Repeated implantation failure (RIF) is a major challenge in \nMATERIALS AND METHODS: Eligibility criteria include women with a history of at least two RIF events and inadequate uterine blood flow (pulsatility index (PI)> 1.95). The primary aim of this protocol is to evaluate uterine blood flow, endometrial thickness, and endometrial pattern, while secondary outcomes will include sexual function, depression, quality of life, pregnancy and implantation rates, fetal growth up to 12 weeks of gestation, ectopic pregnancy, and miscarriage. Following approval from the relevant ethics committee, this protocol will initially be implemented in a pilot phase involving 22 participants at Al-Zahra Hospital, Tabriz University of Medical Sciences.\nRESULTS: As of the protocol submission date, the pilot phase is planned but not yet completed. No participant data have been analyzed. Therefore, no results on uterine blood flow, endometrial thickness, implantation rates, or secondary outcomes are available at this stage. Upon completion of the pilot phase and subsequent full-scale trial, the findings will be reported separately.\nCONCLUSION: The findings of the forthcoming trial are expected to contribute to establishing evidence-based physiotherapy approaches for improving uterine perfusion and implantation outcomes in infertile women with RIF (registration number: IRCT20230206057338N1).",
+  "content_type": "text",
+  "source_platform": "pubmed",
+  "collected_at": "2026 Jul 27",
+  "language": "",
+  "domain": "medical-research",
+  "topic_tags": [
+    "Clinical Trial Protoco",
+    "Electric Stimulation Therapy",
+    "Infertility",
+    "Physiotherapy"
+  ],
+  "quality_tier": 1,
+  "raw_data": {
+    "pmid": "42571055",
+    "pmc_id": "",
+    "authors": [
+      {
+        "lastname": "Chakeri",
+        "firstname": "Zahra",
+        "initials": "Z"
+      },
+      {
+        "lastname": "Hamdi",
+        "firstname": "Kobra",
+        "initials": "K"
+      },
+      {
+        "lastname": "Eghbali",
+        "firstname": "Elham",
+        "initials": "E"
+      },
+      {
+        "lastname": "Adigozali",
+        "firstname": "Hakimeh",
+        "initials": "H"
+      },
+      {
+        "lastname": "Amirshakeri",
+        "firstname": "Bahram",
+        "initials": "B"
+      },
+      {
+        "lastname": "Ghaderi",
+        "firstname": "Fariba",
+        "initials": "F"
+      }
+    ],
+    "journal": "International journal of fertility & sterility",
+    "pub_date": "2026 Jul 27",
+    "doi": "10.22074/ijfs.2025.2054039.1836",
+    "mesh_terms": []
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "064e314f-b72d-4768-ad32-541e5bf04056"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "6def3b02b06b4069",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/obschestvo/28044239",
+  "title": "Дагестан в ближайшие два года получит около 400 автобусов",
+  "content": "Мера поддержки запланирована на 2026-2028 годы",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T21:14:21+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "269d2141-0946-4d7f-9c35-20dddf12b62a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

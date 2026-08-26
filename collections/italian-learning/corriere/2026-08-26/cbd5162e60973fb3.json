@@ -1,0 +1,24 @@
+{
+  "id": "cbd5162e60973fb3",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/alessandro-d-avenia-ultimo-banco/24_maggio_13/via-tramonto-c2e6bfcd-1b0e-4e91-95b5-0e470f5cexlk.shtml",
+  "title": "201. La via del tramonto",
+  "content": "<p><img alt=\"201. La via del tramonto\" src=\"https://images2.corriereobjects.it/methode_image/2024/05/12/Cultura/Foto%20Cultura%20-%20Trattate/alessandro-davenia_ori_crop_MASTER__0x0.jpg\" title=\"201. La via del tramonto\" /><p></p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-13T08:03:15+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "10fbc905-7ce6-4fb3-903d-0d893b41b6b3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

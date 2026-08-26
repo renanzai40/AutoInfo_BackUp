@@ -1,0 +1,24 @@
+{
+  "id": "6fa9acc8c9b5fe82",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/steelseries-arctis-nova-3p-august-2026/",
+  "title": "My Daily Driver Gaming Headset Is Super Cheap Right Now",
+  "content": "I love this multi-device headset, and right now it’s cheaper than what I paid for it in March.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-24T17:46:18+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e51032f0-feca-4820-8050-15c81bc1790a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

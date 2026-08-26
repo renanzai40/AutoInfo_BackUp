@@ -1,0 +1,24 @@
+{
+  "id": "5dc0750da0bd0372",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/100-inch-hisense-qd7-4k-tv-deal-labor-day",
+  "title": "Why Even Consider a Projector When Costco Has an Excellent 100\" Hisense 4K TV for Just $1,500?",
+  "content": "This massive TV even comes with an extended 5 year warranty.",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T17:10:00+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "33a2b6fe-6cbf-45eb-b1e6-078042cc558c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

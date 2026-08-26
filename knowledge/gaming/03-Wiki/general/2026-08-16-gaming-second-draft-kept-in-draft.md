@@ -1,0 +1,62 @@
+---
+title: gaming second draft (kept in Draft)
+domain: gaming
+tier: 02-Draft
+entry_id: gaming-draft-gaming-second-draft-kept-in-draft
+source_url: https://www.gcores.com/articles/218276
+source_type: rss
+source_platform: rss
+collected_at: '2026-08-16'
+summary: ''
+tags: []
+quality_tier: 2
+relevance_score: 100.0
+dedup_status: unique
+source_score: 70.0
+language: unknown
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: ''
+author: ''
+source_ids:
+- gaming-general-2-ps
+status: active
+related_concepts: []
+linked_entries: []
+promotion_source: agent
+promoted_by: digest
+promoted_at: '2026-08-18T16:45:22.165745+00:00'
+---
+
+_Compiled from: gaming-general-2-ps_
+
+## Source 1: 《绝地潜兵2》现已加入PS+二档畅玩库，“自由入寂”更新同步实装
+
+## Original Content
+<img src="https://image.gcores.com/7b5fc1f124a9d6c685915e3b566f4d3d-766-400.jpg?x-oss-process=image/resize,limit_1,m_fill,w_626,h_292/quality,q_90" /><p>《绝地潜兵 2》现已加入PlayStation Plus畅玩游戏库，包括港服在内的升级（二档）及高级（三档）会员即日起即可畅玩。与此同时，超级地球武装部队（S.E.A.F.）在  “自由入寂”版本更新中正式加入银河战争。小队领袖、步枪手、特种兵、医疗兵四个兵种将在战斗中与玩家并肩作战。</p><div>
+<figure><p>&lt;内嵌内容，请前往机核查看&gt;</p></figure></div><div>
+<figure><img alt="" src="https://image.gcores.com/71d14dfe568783df16ef76163bdf47f9-1000-563.webp?x-oss-process=image/resize,limit_1,m_lfit,w_700,h_2000/quality,q_90/watermark,image_d2F0ZXJtYXJrLnBuZw,g_se,x_10,y_10" /></figure></div><p>光能者用卑劣的手段操纵时空，制造出了寂域。工程兵即将在里尔加湾建成寂域曲速中继站，用于在超光速航行期间保护舰队的船体。然而，首次校准测试导致大量光能者的骇人造物从通路中涌出，威胁到了中继站的施工安全。</p><div>
+<figure><img alt="" src="https://image.gcores.com/1bfd3e0e4323fe373963c6a615bb2895-1052-1052.jpg?x-oss-process=image/resize,limit_1,m_lfit,w_700,h_2000/quality,q_90/watermark,image_d2F0ZXJtYXJrLnBuZw,g_se,x_10,y_10" /></figure></div><p>绝地潜兵必须守住里尔加湾，阻止这些畸形变异体四处扩散，收集至关重要的711元素，为中继站提供动力。 寂域的扩张也催生了两类新敌。其中包括由残肢拼凑而成、需攻击四肢方可击倒的窃票者，以及能够持续再生、必须火力不断压制的粉碎者。 </p><div>
+<figure><p>&lt;内嵌内容，请前往机核查看&gt;</p></figure></div><div>
+<figure><img alt="" src="https://image.gcores.com/e0ac87d2202e587372402d10868ab7fd-1052-1052.jpg?x-oss-process=image/resize,limit_1,m_lfit,w_700,h_2000/quality,q_90/watermark,image_d2F0ZXJtYXJrLnBuZw,g_se,x_10,y_10" /></figure></div><p>此外，与《战锤40K》联动的传奇战争债券也同步推出。在这场史诗级的联动中，孤注一掷，为超级地球而战。  </p>
+
+## Summary
+《绝地潜兵2》现已加入PlayStation Plus升级（二档）及高级（三档）会员游戏库，港服玩家即日起可畅玩。同步上线的“自由入寂”更新加入了S.E.A.F.四个兵种、新敌人及与《战锤40K》的联动战争债券。
+
+## Key Points
+- 《绝地潜兵2》加入PS+二档/三档畅玩库，港服即刻可用。
+- “自由入寂”更新为游戏引入S.E.A.F.武装部队，含小队领袖、步枪手、特种兵、医疗兵四个兵种。
+- 新版本新增寂域设定、里尔加湾中继站任务、711元素收集，以及两种新敌人：窃票者和粉碎者。
+- 与《战锤40K》联动的传奇战争债券同步推出。
+
+
+## Entities
+- **绝地潜兵2** (concept, relevance=)
+- **PlayStation Plus** (org, relevance=)
+- **自由入寂** (concept, relevance=)
+- **S.E.A.F.** (org, relevance=)
+- **战锤40K** (concept, relevance=)
+
+

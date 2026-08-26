@@ -1,0 +1,24 @@
+{
+  "id": "916b0f81b480af94",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/21/us-brands-china-competition.html",
+  "title": "Why some of America's biggest brands are losing ground in China",
+  "content": "Nike, Starbucks and GM have lost ground in China as domestic rivals, geopolitics and changing consumer preferences reshape the market.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-21T18:31:41+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "869ce36c-bb13-4c18-b696-57e51ca71756",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

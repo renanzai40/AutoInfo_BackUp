@@ -1,0 +1,52 @@
+---
+title: प्याज के दामों में लगी आग, एक्शन में आई सरकार, देखें जमीनी हालात
+domain: hindi-learning
+tier: 01-Raw
+entry_id: hindi-learning-general-
+source_url: https://www.aajtak.in/india/news/video/onion-prices-hike-government-in-action-mode-ground-report-vdoj-2629668-2026-08-25?utm_source=rssfeed
+source_type: rss
+source_platform: aaj-tak
+collected_at: '2026-08-25T14:53:04+05:30'
+summary: The article reports on the sharp increase in prices of onions and sugar in India during the festival season, causing
+  distress to the common man. Sugar prices have reached 70 rupees per kilogram, and onion prices are around 60 rupees per
+  kilogram. The government has intervened to take action against these price hikes.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: unique
+source_score: 90.0
+language: hi
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 4d2bb23e-f1e2-4be7-b0fe-6a6cbcfbf79d
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: false
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+एक तरफ चीनी के भाव बढ़े हैं तो दूसरी तरफ प्याज भी लोगों को रुलाने लगा है. त्योहारी सीजन में इन दो अहम चीजों की कीमतें बढ़ने से आम आदमी परेशान हो उठा है. चीनी के बाद अब प्याज़ की क़ीमतों में आग लगी हुई है. चीनी के भाव फिलहाल खुदरा मार्केट में 70 रूपये किलो तक पहुंच चुके हैं तो दूसरी ओर प्याज का भाव खुदरा मार्केट में 60 के पास जा पहुंचा है.
+
+## Summary
+The article reports on the sharp increase in prices of onions and sugar in India during the festival season, causing distress to the common man. Sugar prices have reached 70 rupees per kilogram, and onion prices are around 60 rupees per kilogram. The government has intervened to take action against these price hikes.
+
+## Key Points
+- Onion prices have risen to approximately 60 rupees per kilogram in retail markets.
+- Sugar prices have increased to up to 70 rupees per kilogram.
+- The festival season has exacerbated price hikes, affecting common people.
+- The government has stepped in to address the situation.
+- Both essential commodities are becoming unaffordable for many.
+
+
+## Entities
+- **Onion** (concept, relevance=)
+- **Sugar** (concept, relevance=)
+- **Government** (org, relevance=)

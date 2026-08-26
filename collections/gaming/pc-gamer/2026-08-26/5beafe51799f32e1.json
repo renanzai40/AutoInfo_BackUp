@@ -1,0 +1,24 @@
+{
+  "id": "5beafe51799f32e1",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/hardware/gaming-keyboards/be-quiet-light-mount-tkl-review/",
+  "title": "Be Quiet! Light Mount TKL review",
+  "content": "A very welcome TKL update that didn't quite leave me speechless.",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-25T11:00:00+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c5a9e803-4d4c-4d56-87ac-27beb5c6fe33",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

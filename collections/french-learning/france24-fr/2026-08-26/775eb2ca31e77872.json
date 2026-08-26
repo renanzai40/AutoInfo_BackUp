@@ -1,0 +1,24 @@
+{
+  "id": "775eb2ca31e77872",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/culture/20260825-mort-de-la-star-am%C3%A9ricaine-dolly-parton-reine-populaire-de-la-musique-country",
+  "title": "Mort de la star américaine Dolly Parton, reine populaire de la musique country",
+  "content": "Dolly Parton, légende de la country et icône populaire américaine, est décédée mardi à 80 ans. En mai, la chanteuse, qui aura sorti des dizaines d'albums et écoulé plus de 100 millions de disques tout au long de sa carrière, avait annoncé le report de plusieurs concerts, évoquant des problèmes de santé.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T19:10:26+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "245d129c-b3db-419b-b8f2-06d2711dde72",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

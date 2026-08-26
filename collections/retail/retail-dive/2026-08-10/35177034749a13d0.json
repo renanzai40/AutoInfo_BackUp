@@ -1,0 +1,22 @@
+{
+  "id": "35177034749a13d0",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.retaildive.com/news/qvc-exits-chapter-11-ceo-steps-down/827314/",
+  "title": "QVC Group exits Chapter 11, CEO steps down",
+  "content": "<p>Mike George, who once led the company when it was Qurate Retail Group, has been named interim chief executive officer.</p>",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-07T11:45:00-04:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.retaildive.com/feeds/news/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2c24d59a-b557-4050-9bc2-6a7cf27e5305"
+}

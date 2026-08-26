@@ -1,0 +1,24 @@
+{
+  "id": "b929cef13252f4b0",
+  "source_name": "b2b-news-network",
+  "source_type": "rss",
+  "source_url": "https://www.b2bnn.com/2026/08/why-b2b-trade-shows-still-beat-digital-for-face-to-face-lead-generation/",
+  "title": "Why B2B Trade Shows Still Beat Digital for Face-to-Face Lead Generation",
+  "content": "Your last LinkedIn campaign generated 400 clicks. Your last trade show generated 38 conversations with people who had budget, authority, and a decision to make before Q3. Those two numbers are not comparable, and treating them like they are is costing B2B companies real pipeline. The case for in-person exhibiting is not nostalgic. It is [&#8230;]",
+  "content_type": "text",
+  "source_platform": "b2b-news-network",
+  "collected_at": "2026-08-24T16:36:58+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://b2bnn.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "45de06a7-fbf6-4e68-a340-1e720122d764",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

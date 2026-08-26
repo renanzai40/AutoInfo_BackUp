@@ -1,0 +1,24 @@
+{
+  "id": "c7fa391ae5f9deec",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/science/photo/super-el-nino-record-temperature-global-warming-2629843-2026-08-25?utm_source=rssfeed",
+  "title": "अल-नीनो ने तोड़े पुराने रिकॉर्ड, 2027 में पड़ेगी और भयानक गर्मी",
+  "content": "सुपर अल-नीनो ने रिकॉर्ड स्तर की गर्मी बढ़ा दी है. वैज्ञानिकों के मुताबिक यह अभी पीक पर भी नहीं पहुंचा है. इसकी बढ़ती ताकत 2026-27 में वैश्विक तापमान, मौसम और भारत समेत कई देशों में बारिश के पैटर्न को प्रभावित कर सकती है.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T18:29:44+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4ed7401c-1697-4c03-97c4-08fcc546ad8b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,49 @@
+---
+title: Montenapoleone, lo scontrino medio sale a 2.379 euro (ma aumentano anche gli affitti)
+domain: italian-learning
+tier: 01-Raw
+entry_id: italian-learning-general-montenapoleone-lo-scontrino-medio-sale-a-2-379-euro-ma-aumentano-anche-gli-affitti
+source_url: https://www.corriere.it/economia/consumi/24_maggio_11/via-montenapoleone-lo-scontrino-medio-nella-via-del-lusso-sale-a-2-379-euro-ma-aumentano-anche-gli-affitti-145135df-36ae-4c60-aea6-3f9169dcaxlk.shtml
+source_type: rss
+source_platform: corriere
+collected_at: '2024-05-11T19:40:01+02:00'
+summary: The average spending per transaction on Via Montenapoleone in Milan has risen to 2,379 euros. This increase is accompanied
+  by higher rental rates for shops in the luxury district, highlighting its status as a premier shopping area.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: unique
+source_score: 90.0
+language: it
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 2d16de14-9464-4f08-9845-092de14b01ff
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: false
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<p><img alt="Montenapoleone, lo scontrino medio sale a 2.379 euro (ma aumentano anche gli affitti)" src="https://images2.corriereobjects.it/methode_image/2024/04/26/Economia/Foto%20Economia%20-%20Trattate/662e8d9c7dae2_ori_crop_MASTER__0x0.jpeg" title="Montenapoleone, lo scontrino medio sale a 2.379 euro (ma aumentano anche gli affitti)" /><p>La via al centro del «Quadrilatero del lusso» di Milano non fa solo registrare i canoni di affitto più alti al mondo per i negozi: alle stelle anche le spese dei clientiLa via al centro del «Quadrilatero del lusso» di Milano non fa solo registrare i canoni di affitto più alti al mondo per i negozi: alle stelle anche le spese dei clientiLa via al centro del «Quadrilatero del lusso» di Milano non fa solo registrare i canoni di affitto più alti al mondo per i negozi: alle stelle anche le spese dei clienti</p>
+
+## Summary
+The average spending per transaction on Via Montenapoleone in Milan has risen to 2,379 euros. This increase is accompanied by higher rental rates for shops in the luxury district, highlighting its status as a premier shopping area.
+
+## Key Points
+- Average customer spending on Via Montenapoleone has increased to 2,379 euros per transaction.
+- Rental rates for retail spaces in the area are among the highest in the world.
+- Via Montenapoleone is a key component of Milan's 'Quadrilatero del lusso' luxury shopping district.
+
+
+## Entities
+- **Via Montenapoleone** (concept, relevance=)
+- **Quadrilatero del lusso** (concept, relevance=)
+- **Milano** (concept, relevance=)

@@ -1,0 +1,24 @@
+{
+  "id": "f632049be0890e2f",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/home-composters-buying-guide/",
+  "title": "I Tested Kitchen Composters for 2 Years. These Are the Ones I’d Buy (2026)",
+  "content": "After years of smells, strange noises, and “tea,” these are the composters and food recyclers I’d actually recommend.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-25T11:30:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "72a14433-1526-4343-9681-5a2c9d83ee3a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

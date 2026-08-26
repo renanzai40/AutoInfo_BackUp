@@ -1,0 +1,24 @@
+{
+  "id": "20f89f0dd8569cbb",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/ekonomika/28044205",
+  "title": "Эксперт Мангазеев развеял опасения о контроле переводов СБП",
+  "content": "По его словам, закон дает Росфинмониторингу право безвозмездно получать у Национальной системы платежных карт \"как оператора универсального платежного кода, СБП и платежных карт информацию об операциях через эти каналы\"",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T20:44:16+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d6ea155c-f795-4ae1-8c3f-a37b1bef3d12",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

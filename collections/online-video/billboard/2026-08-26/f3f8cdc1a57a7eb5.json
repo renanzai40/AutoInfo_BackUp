@@ -1,0 +1,24 @@
+{
+  "id": "f3f8cdc1a57a7eb5",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/music/music-news/olivia-rodrigo-daisy-chain-fields-radio-specials-1236323880/",
+  "title": "Olivia Rodrigo to Guest Host on iHeartRadio One Day Before Her Inaugural Daisy Chain Fields Festival",
+  "content": "iHeart will also exclusively broadcast sets from the festival.",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T17:54:11+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "33107be6-eaf6-4c6f-a296-ffd1e5ecccf2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

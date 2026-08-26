@@ -1,0 +1,24 @@
+{
+  "id": "9817ee70b0f32797",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/nacional/calendario-laboral-2026-festivos-puentes-que-quedan-hasta-navidad_6947678_0.html",
+  "title": "Calendario laboral 2026: estos son todos los festivos y puentes que quedan hasta Navidad",
+  "content": "Tras el verano, habrá que esperar al 12 de octubre para volver a disfrutar de un puente.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-24T18:30:53+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "752005bf-32b4-459c-936d-ebfb2ecbdbe2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

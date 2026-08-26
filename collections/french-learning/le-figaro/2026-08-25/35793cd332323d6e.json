@@ -1,0 +1,24 @@
+{
+  "id": "35793cd332323d6e",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/international/un-avion-militaire-americain-vole-vers-moscou-depuis-la-lettonie-selon-le-site-flightradar24-20260825",
+  "title": "Guerre en Ukraine : le patron de la CIA en visite ce mardi à Moscou, selon la presse américaine",
+  "content": "Selon les données du site Flightradar24, un avion militaire a d’abord volé dimanche de la base aérienne d’Andrews, située près de Washington et utilisée pour des déplacements de hauts responsables, jusqu’à Riga, la capitale de la Lettonie.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T17:21:25+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b41d6ce0-1cb3-4fda-8a82-72c20c24d367",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

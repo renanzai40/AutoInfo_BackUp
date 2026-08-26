@@ -1,0 +1,51 @@
+---
+title: Amy Winehouse ‘Back to Black’ 20th Anniversary Edition to Feature Unreleased Demos, Rare B-Sides, Full 2007 Concert
+domain: online-video
+tier: 01-Raw
+entry_id: online-video-general-amy-winehouse-back-to-black-20th-anniversary-edition-to-feature-unreleased-demos-rare-b-sides-full-2007-concert
+source_url: https://www.billboard.com/music/pop/amy-winehouse-20th-anniversary-back-to-black-demos-b-sides-1236323791/
+source_type: rss
+source_platform: billboard
+collected_at: '2026-08-25T15:01:43+00:00'
+summary: A 20th-anniversary edition of Amy Winehouse's 'Back to Black' will be released as 3LP/3CD sets, featuring unreleased
+  demos, rare B-sides, a full 2007 concert, alternate cover art, and new liner notes from Mark Ronson and Salaam Remi.
+tags: []
+quality_tier: 2
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 70.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 7040fa0a-2a94-43f5-848c-e1a1302931b2
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+The 3LP/3CD sets will also feature alternate cover art and new liner notes by producers Mark Ronson and Salaam Remi.
+
+## Summary
+A 20th-anniversary edition of Amy Winehouse's 'Back to Black' will be released as 3LP/3CD sets, featuring unreleased demos, rare B-sides, a full 2007 concert, alternate cover art, and new liner notes from Mark Ronson and Salaam Remi.
+
+## Key Points
+- 20th-anniversary edition of 'Back to Black' announced
+- Includes unreleased demos and rare B-sides
+- Features full 2007 concert content and alternate cover art
+- New liner notes by producers Mark Ronson and Salaam Remi
+
+
+## Entities
+- **Amy Winehouse** (person, relevance=)
+- **Back to Black** (concept, relevance=)
+- **Mark Ronson** (person, relevance=)
+- **Salaam Remi** (person, relevance=)

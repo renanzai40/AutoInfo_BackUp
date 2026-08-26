@@ -1,0 +1,24 @@
+{
+  "id": "7e821190933ba3a1",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/defence-news/story/operation-sindoor-former-cds-gen-anil-chauhan-lower-airspace-strategy-rpti-2629869-2026-08-25?utm_source=rssfeed",
+  "title": "ऑपरेशन सिंदूर को लेकर पूर्व CDS अनिल चौहान का बड़ा खुलासा",
+  "content": "पूर्व सीडीएस जनरल अनिल चौहान ने ऑपरेशन सिंदूर की रणनीति बताई. सेनाओं ने लोअर एयरस्पेस का इस्तेमाल किया ताकि संघर्ष का स्तर कम रहे, सफलता सुनिश्चित हो और दुश्मन को सरप्राइज मिले.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T19:25:25+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "973219b6-ade9-4d18-b06b-82a0e5989fb3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

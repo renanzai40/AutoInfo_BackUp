@@ -1,0 +1,24 @@
+{
+  "id": "55e6faeac8ec8f08",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/musica/dos-musicos-cubanos-entre-ellos-grammy-latino-degnis-bofill-detenidos-eeuu-por-ice_7029285_0.html",
+  "title": "El ICE detiene a dos músicos cubanos, entre ellos un ganador del Grammy Latino",
+  "content": "La mujer de Bofill ha abierto una campaña para recaudar fondos que ayuden a su representación legal y liberación.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T18:08:48+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1164eb7f-82d7-4a46-a0ad-c08843798cac",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

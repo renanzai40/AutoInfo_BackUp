@@ -1,0 +1,24 @@
+{
+  "id": "e2de7c03225d0aca",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/ceuta/cientos-vecinos-ceuta-protestan-ante-delegacion-gobierno-contra-alojamiento-migrantes_7029328_0.html",
+  "title": "Cientos de vecinos de Ceuta protestan ante la Delegación del Gobierno contra el alojamiento de migrantes",
+  "content": "La movilización comenzó en la zona del Fischer y se desplazó hasta la plaza de los Reyes, donde los manifestantes reclamaron información, garantías de seguridad y rechazaron que la ciudad \"se convierta en un CETI\".",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T20:00:25+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "857a8d28-d022-4763-9e07-c47476b1d14f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

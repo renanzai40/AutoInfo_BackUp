@@ -1,0 +1,24 @@
+{
+  "id": "6ed56de75e74bb5f",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/mezhdunarodnaya-panorama/28044309",
+  "title": "Экс-глава МИД Абхазии: Грузия сама поставила точку в отношениях с республикой",
+  "content": "Это произошло после того, как Тбилиси развязал войну против Сухума и Цхинвала, отметил Сергей Шамба",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T22:16:44+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f47a078d-b18b-48fc-9fa1-299844ef1322",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

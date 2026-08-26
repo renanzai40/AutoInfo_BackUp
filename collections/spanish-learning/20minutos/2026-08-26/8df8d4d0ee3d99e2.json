@@ -1,0 +1,24 @@
+{
+  "id": "8df8d4d0ee3d99e2",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/motor/juan-jose-ebenezer-mecanico-para-coche-aire-acondicionado-puesto-esta-mal_7028158_0.html",
+  "title": "Ebenezer, mecánico: \"Casi todos detienen el coche con el aire acondicionado puesto y en la mayoría está mal\"",
+  "content": "El experto ha compartido en sus redes un truco para ahorrar dinero con el aire acondicionado del coche.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-21T16:40:41+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c3c4170d-37cd-4685-934c-44fabf9f3387",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

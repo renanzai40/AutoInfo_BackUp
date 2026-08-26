@@ -1,0 +1,66 @@
+[
+  {
+    "collection_id": "col-20260825T151427-00fe4839",
+    "timestamp": "2026-08-25T15:15:08.439493+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.retailwire.com/feed: Client error '403 Forbidden' for url 'https://www.retailwire.com/feed'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.retailwire.com/feed: Client error '403 Forbidden' for url 'https://www.retailwire.com/feed'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+      }
+    ],
+    "duration_ms": 1829.0
+  },
+  {
+    "collection_id": "col-20260825T153557-a43a7bbf",
+    "timestamp": "2026-08-25T15:36:35.710364+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.retailwire.com/feed: Client error '403 Forbidden' for url 'https://www.retailwire.com/feed'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.retailwire.com/feed: Client error '403 Forbidden' for url 'https://www.retailwire.com/feed'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+      }
+    ],
+    "duration_ms": 3021.0
+  },
+  {
+    "collection_id": "col-20260825T154219-f899f7d6",
+    "timestamp": "2026-08-25T15:42:55.732413+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.retailwire.com/feed: Client error '403 Forbidden' for url 'https://www.retailwire.com/feed'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.retailwire.com/feed: Client error '403 Forbidden' for url 'https://www.retailwire.com/feed'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+      }
+    ],
+    "duration_ms": 2014.0
+  },
+  {
+    "collection_id": "col-20260825T155208-030d0475",
+    "timestamp": "2026-08-25T15:52:48.415034+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://www.retailwire.com/feed: Client error '403 Forbidden' for url 'https://www.retailwire.com/feed'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://www.retailwire.com/feed: Client error '403 Forbidden' for url 'https://www.retailwire.com/feed'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403"
+      }
+    ],
+    "duration_ms": 1590.0
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "id": "c336ba79458d9e84",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/afrique/20260825-au-nigeria-un-nouveau-kidnapping-de-masse-d%C3%A9clenche-une-op%C3%A9ration-de-sauvetage",
+  "title": "Au Nigeria, un kidnapping de masse dans une mosquée déclenche une opération de sauvetage",
+  "content": "Le président nigérian, Bola ⁠Tinubu, a ordonné, ​mardi, à l'armée et aux autres forces de sécurité de lancer une opération de sauvetage après le kidnapping de dizaines de personnes lors d'une attaque contre une mosquée dans l'État de Niger, dans l'ouest du pays, la semaine dernière. Selon des habitants, 600 femmes, enfants et personnes âgées ont été enlevés. ⁠",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T17:03:05+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8c2416a2-e2f0-4717-9e56-a5a6e199d57d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

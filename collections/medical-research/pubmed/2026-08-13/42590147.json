@@ -1,0 +1,80 @@
+{
+  "id": "42590147",
+  "source_name": "pubmed",
+  "source_type": "api",
+  "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42590147&retmode=xml",
+  "title": "Does Gut-Endometrial Immunomodulation Promote Pregnancy in IVF Patients with Recurrent Implantation Failure and Chronic Endometritis Following ",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "pubmed",
+  "collected_at": "2026 Aug 03",
+  "language": "",
+  "domain": "medical-research",
+  "topic_tags": [
+    "Enterobacteriaceae",
+    "Escherichia coli Nissle 1917",
+    "IVF",
+    "Rome IV",
+    "chronic endometritis",
+    "endometrial microbiota",
+    "gut microbiota",
+    "intestinal dysbiosis",
+    "mucosal medicine",
+    "recurrent implantation failure"
+  ],
+  "quality_tier": 1,
+  "raw_data": {
+    "pmid": "42590147",
+    "pmc_id": "",
+    "authors": [
+      {
+        "lastname": "Caruso",
+        "firstname": "Flora",
+        "initials": "F"
+      },
+      {
+        "lastname": "Manzi",
+        "firstname": "Alfonso",
+        "initials": "A"
+      },
+      {
+        "lastname": "Vigilante",
+        "firstname": "Luigi",
+        "initials": "L"
+      },
+      {
+        "lastname": "Strina",
+        "firstname": "Ida",
+        "initials": "I"
+      },
+      {
+        "lastname": "Gallo",
+        "firstname": "Alessandra",
+        "initials": "A"
+      },
+      {
+        "lastname": "Di Spiezio Sardo",
+        "firstname": "Attilio",
+        "initials": "A"
+      },
+      {
+        "lastname": "Fantuz",
+        "firstname": "Maria Rosaria",
+        "initials": "MR"
+      },
+      {
+        "lastname": "Savarese",
+        "firstname": "Giovanni",
+        "initials": "G"
+      }
+    ],
+    "journal": "Journal of clinical medicine",
+    "pub_date": "2026 Aug 03",
+    "doi": "10.3390/jcm15156045",
+    "mesh_terms": []
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2eb32cc2-3fde-4609-9f69-414e8cea8a06"
+}

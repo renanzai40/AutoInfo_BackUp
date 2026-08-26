@@ -1,0 +1,24 @@
+{
+  "id": "daa911c8acee66e0",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/is-expensive-bottled-water-actually-better-for-you/",
+  "title": "Is Expensive Bottled Water Actually Better for You?",
+  "content": "Luxury water can contain different minerals and taste noticeably different. But a remote source, alkaline pH, and high price do not necessarily mean better hydration.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-23T09:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e91e932b-5f67-4dc2-9f23-6e45202ec6b9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

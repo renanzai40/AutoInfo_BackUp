@@ -1,0 +1,24 @@
+{
+  "id": "e3d106819e837c1c",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/rosalia-regala-1-000-euros-un-fan-que-vendia-souvenirs-ella-mexico_7029299_0.html",
+  "title": "Rosalía regala 1.000 euros a uno de sus fans que vendía 'souvenirs' de ella en México",
+  "content": "El joven le contó que su objetivo era tener un gimnasio para ayudar a que la gente se sienta cómoda con su cuerpo. Ella aplaudió su sueño y le dio dinero para conseguirlo.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T18:39:19+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "60dea536-fe87-48f7-8f97-fb16bb423afe",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

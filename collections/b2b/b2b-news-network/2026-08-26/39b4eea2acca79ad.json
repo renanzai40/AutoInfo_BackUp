@@ -1,0 +1,24 @@
+{
+  "id": "39b4eea2acca79ad",
+  "source_name": "b2b-news-network",
+  "source_type": "rss",
+  "source_url": "https://www.b2bnn.com/2026/08/how-assisted-living-can-reduce-household-stress-for-families/",
+  "title": "How Assisted Living Can Reduce Household Stress for Families",
+  "content": "Stress within a household often builds slowly when an older adult needs meals, medication reminders, mobility help, or overnight supervision. During the peak of Covid, I experienced this myself while travelling to Florida with my mom to spend a few weeks looking after her as her dementia progressed. Relatives may carry love, duty, paid work, [&#8230;]",
+  "content_type": "text",
+  "source_platform": "b2b-news-network",
+  "collected_at": "2026-08-25T12:07:14+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://b2bnn.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0c5a05ec-15b6-47dc-9fca-f08c88f4a94d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

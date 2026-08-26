@@ -1,0 +1,24 @@
+{
+  "id": "42c77249a5b16e13",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/lists/katseye-phoebe-bridgers-chart-highlights-aug-29-2026/",
+  "title": "KATSEYE, Phoebe Bridgers, Ella Langley & More: Highlights of This Week’s Billboard Charts",
+  "content": "All of <em>Billboard</em>’s charts update each Tuesday.",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T16:09:44+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "46224050-c60b-41b5-b3be-7eccfe70fbce",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

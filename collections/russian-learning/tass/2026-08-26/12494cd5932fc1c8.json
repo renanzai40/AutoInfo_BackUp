@@ -1,0 +1,24 @@
+{
+  "id": "12494cd5932fc1c8",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/kultura/28044437",
+  "title": "Кинофестиваль Ferrum’26 откроется в Железноводске",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-26T00:05:42+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "672ac5a5-5b2e-4d4a-b5f0-7c7f2c603ff0",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

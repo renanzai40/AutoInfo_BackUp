@@ -1,0 +1,24 @@
+{
+  "id": "7f42f1eaabcc1730",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/mezhdunarodnaya-panorama/28044427",
+  "title": "В Ливане заявили о росте числа жертв атак Израиля с начала эскалации до 4 350",
+  "content": "Число раненых увеличилось до 12 310, сообщили в ливанском Минздраве",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T23:52:59+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e837cbfc-ab19-496d-9341-baa6351c75d9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

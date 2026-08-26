@@ -1,0 +1,22 @@
+{
+  "id": "7c4226056dc36f68",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/music/music-news/usher-clone-tour-chris-brown-1236312389/",
+  "title": "Usher Reacts to Clone Conspiracy Theory Brewing After New Jersey Show With Chris Brown",
+  "content": "Claims that Usher was replaced with a clone on stage kept the R&#38;B star busy in the comments section.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-10T02:48:06+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4ef8daec-b2a3-4260-af1a-949ebb9e349b"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "e33ce55797d78eec",
+  "source_name": "open-culture",
+  "source_type": "rss",
+  "source_url": "https://www.openculture.com/2026/08/the-daily-routine-of-marcus-aurelius-how-to-live-like-a-stoic.html",
+  "title": "The Daily Routine of Marcus Aurelius: How to Live Like a Stoic",
+  "content": "Marcus Aurelius did not have a smartphone. In fact, he didn’t have a phone of any kind, owing to the fact that he lived in the second century, though we can be reasonably certain that he commanded more than enough messengers to keep himself informed around the clock. That’s because he was the Roman emperor [&#8230;]",
+  "content_type": "text",
+  "source_platform": "open-culture",
+  "collected_at": "2026-08-24T09:00:07+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.openculture.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7ff6bdc2-44e2-4623-9c4b-06bfadd8f4a5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

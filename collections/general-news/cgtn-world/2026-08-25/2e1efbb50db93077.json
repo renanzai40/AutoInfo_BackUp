@@ -1,0 +1,24 @@
+{
+  "id": "2e1efbb50db93077",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-23/Canada-to-impose-dollar-for-dollar-tariffs-on-US-goods-Carney-says-1PPJvozu46Y/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Carney: Canada now 'at war,' to impose retaliatory tariffs on US goods",
+  "content": "Canadian Prime Minister Mark Carney said on Saturday that Canada was \"at war\" over trade with the United States and that, starting September 8, the country would impose tariffs on imports of US steel, electronics and other products in retaliation for US President Donald Trump's new 50% tariffs that took effect at midnight.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-23T01:04:25+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "690a4cc1-c067-4ee8-95db-2b08fcd3027c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

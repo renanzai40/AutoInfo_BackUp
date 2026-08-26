@@ -1,0 +1,24 @@
+{
+  "id": "9ff8c423e6ba82bd",
+  "source_name": "retail-dive",
+  "source_type": "rss",
+  "source_url": "https://www.retaildive.com/spons/how-peak-design-freed-its-finance-team-from-manual-ar/828116/",
+  "title": "How peak design freed its finance team from manual AR",
+  "content": "<p>There are manual approaches to accounts receivable, and then there&rsquo;s how Peak Design used to do it.</p>",
+  "content_type": "text",
+  "source_platform": "retail-dive",
+  "collected_at": "2026-08-24T05:00:00-04:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.retaildive.com/feeds/news/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9fddea68-24ca-4b78-9790-1a8f68e67b8a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

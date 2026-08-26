@@ -1,0 +1,24 @@
+{
+  "id": "d5efe8ee3897349a",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/early-tech-labor-day-sales-2026/",
+  "title": "Best Early Tech Labor Day Sales I’d Shop Myself (2026): AirTags, Dyson, and More",
+  "content": "From the best Dyson vacuum to the best wireless headphones and earbuds we’ve tested, you can get some great gadgets on sale already ahead of Labor Day.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-21T09:37:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b0a355b2-15bd-4635-9695-5a8a19904616",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

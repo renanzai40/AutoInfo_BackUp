@@ -1,0 +1,24 @@
+{
+  "id": "9eeed5a5b589a9f0",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/%C3%A9co-tech/20260825-en-direct-sophie-adenot-sortie-espace-deuxieme-fois",
+  "title": "🔴 En direct : Sophie Adenot et son coéquipier ont terminé leur mission avec succès et retournent dans l'ISS",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T19:05:23+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "62cdfca9-6569-42ef-9bf8-a05e192a70fb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

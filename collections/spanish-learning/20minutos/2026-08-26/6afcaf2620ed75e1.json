@@ -1,0 +1,24 @@
+{
+  "id": "6afcaf2620ed75e1",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/amaia-montero-mas-feliz-que-nunca-sus-50-anos-todo-que-no-sea-vital-me-importa-un-bledo_7029310_0.html",
+  "title": "Amaia Montero, más feliz que nunca a sus 50 años: \"Todo lo que no sea vital me importa un bledo\"",
+  "content": "La intérprete, que cumple este 26 de agosto, ha vuelto a los escenarios con su grupo de siempre, La Oreja de Van Gogh.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T18:55:09+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "22158265-ad66-43fd-b605-16f1f54ed3c5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

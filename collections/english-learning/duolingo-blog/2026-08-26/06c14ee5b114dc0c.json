@@ -1,0 +1,24 @@
+{
+  "id": "06c14ee5b114dc0c",
+  "source_name": "duolingo-blog",
+  "source_type": "rss",
+  "source_url": "https://blog.duolingo.com/chess-insults/",
+  "title": "5 insults to know for your next chess match",
+  "content": "We hope you don’t need to use any of these!",
+  "content_type": "text",
+  "source_platform": "duolingo-blog",
+  "collected_at": "2026-07-30T12:00:35+00:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://blog.duolingo.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "62e5e864-880b-48ab-b50f-2e6a07744eff",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "45f6ebea6c5678e1",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/nacional/crisis-migratoria-ceuta-directo-gobierno-se-reune-para-declarar-situacion-interes-para-seguridad-nacional_7029041_6.html",
+  "title": "Robles pide disculpas a los ceutíes que se \"sintieron abandonados\" y señala que tanto Ceuta como Melilla son \"intocables\"",
+  "content": "Última hora sobre la crisis migratoria en Ceuta y la declaración de 'situación de interés para la seguridad nacional' en la ciudad autónoma.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T10:24:31+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "69300118-0a69-4845-b253-8faea06ed90a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

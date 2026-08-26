@@ -1,0 +1,114 @@
+[
+  {
+    "collection_id": "col-20260825T151510-1a39b5d2",
+    "timestamp": "2026-08-25T15:16:05.507466+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 3674.0,
+    "trace_ids": [
+      "64e2abdc-fa7e-483b-b0f3-25c5cd623bad",
+      "234e6902-97cf-4e30-a114-f62432a54e39",
+      "08333f14-0361-48b7-8fa4-ef4f5d463ccb",
+      "5d8ff367-8c08-48f9-bdff-6ba70df20cb6",
+      "66632963-f7fc-4e32-bb70-669a9a1014e2"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T153409-ed01b249",
+    "timestamp": "2026-08-25T15:35:00.052735+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 3539.0,
+    "trace_ids": [
+      "fbc08771-42ca-4d83-886b-040904ac656d",
+      "3861003c-6230-45f5-98c5-391763012f29",
+      "d39dddc7-48ec-4f7d-bfbe-29ccdc1ac282",
+      "81e12acb-807f-4a29-b82d-8f2d383081d9",
+      "ea171943-5b19-41ff-a724-5b11d88ef21f"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T154258-739c21b3",
+    "timestamp": "2026-08-25T15:43:38.778289+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 1371.0,
+    "trace_ids": [
+      "c3e4de5a-3f6e-444d-98a8-429ca7421761",
+      "0d3b7d02-0bae-49a8-becc-5bc90dda7c9c",
+      "ac30d7a0-0cf6-451b-9b57-cbbc3485a678",
+      "6f2b0215-b6c7-4c77-992a-13e7c71bb0c0",
+      "2793587a-fb08-414e-b637-0813206c7820"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T155753-864e764b",
+    "timestamp": "2026-08-25T15:58:07.356471+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 1441.0,
+    "trace_ids": [
+      "3fe62c59-4d42-45fa-a69a-d090a8180edb",
+      "5faef364-e01b-4150-ad51-8ac47ac8c0c6",
+      "513fa297-efd2-44ca-815a-587de04989ad",
+      "1f4131e4-0135-41a1-9d29-8274c1409d42",
+      "9b0730c3-27cd-4f28-bd24-0badca280af8"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T162230-a871c583",
+    "timestamp": "2026-08-25T16:22:44.028085+00:00",
+    "status": "success",
+    "items_found": 10,
+    "items_new": 10,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 1703.0,
+    "trace_ids": [
+      "3df0f8e9-55cd-4568-ae94-3c60dfe4b8e8",
+      "682b167e-a469-46b8-a010-c6038890146e",
+      "de4f1441-405d-47e9-8d02-735979002f2c",
+      "3c182844-30f1-40c8-b731-bb5dbfd4d22d",
+      "8035246f-73a8-4b61-96f6-a3d30dafe84c",
+      "d619463c-c5f6-4c07-9aaa-b009ae0b9c12",
+      "306b0ca5-a434-40f9-8033-af2cad3ba248",
+      "98e2365d-3cde-4e6d-b4df-ce6740a6b988",
+      "01578bb2-bf8f-4122-887c-1883e12aa199",
+      "26f1f315-20e2-4e8a-8986-6a18c2881b76"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T181032-c2cad0eb",
+    "timestamp": "2026-08-25T18:10:46.843058+00:00",
+    "status": "success",
+    "items_found": 10,
+    "items_new": 10,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 1146.0,
+    "trace_ids": [
+      "6734c675-7cf1-4459-8e84-a1eb380052b1",
+      "abd957fa-8eea-461f-99eb-62386f59d722",
+      "8eaa5ac2-b74c-4738-ba92-43602ed5f84e",
+      "f9583838-931e-4d10-83f8-c33e061ff49a",
+      "29ec8dfb-2716-4896-8607-aacdaa2f8c08",
+      "0dc2ae51-7c79-4566-829e-e1b444aaa479",
+      "27c83981-aa83-4a93-94ff-c287b0c6c62e",
+      "e32bc691-7fc0-401b-95d2-e5f0e884698b",
+      "ad2f3696-9811-4c21-a009-12f2efb57b2a",
+      "e164ddfa-4635-4d21-9859-402534da9e6c"
+    ]
+  }
+]

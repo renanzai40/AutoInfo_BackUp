@@ -1,0 +1,24 @@
+{
+  "id": "a28808f836f1b006",
+  "source_name": "open-culture",
+  "source_type": "rss",
+  "source_url": "https://www.openculture.com/2026/08/how-the-us-mail-was-delivered-underground.html",
+  "title": "When the US Mail Was Delivered Underground at 35 MPH Through a Network of Pneumatic Tubes (1893–1953)",
+  "content": "Twenty years ago, United States senator Ted Stevens drew long-lasting online ridicule by describing the internet as “a series of tubes.” While some commentators noted that the analogy wasn’t quite as outlandish as it seemed, most reacted with nothing more than amused bafflement. Where had Stevens come up with that image? Given that he was [&#8230;]",
+  "content_type": "text",
+  "source_platform": "open-culture",
+  "collected_at": "2026-08-13T13:32:09+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.openculture.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "fc1d872c-9bcf-4c98-9b35-46006f1b34f9",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

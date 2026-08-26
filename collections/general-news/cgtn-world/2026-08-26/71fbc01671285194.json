@@ -1,0 +1,24 @@
+{
+  "id": "71fbc01671285194",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/China-India-to-hold-25th-round-of-talks-on-boundary-question-1PRVNw7SZmU/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "China, India to hold 25th round of talks on boundary question",
+  "content": "China and India will hold the 25th round of talks between their special representatives on the boundary question in Beijing on Tuesday, the Chinese Foreign Ministry announced on Monday.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T07:55:33+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6e26cb13-204f-4274-a4d9-1ae9dd34c59a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

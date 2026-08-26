@@ -1,0 +1,27 @@
+{
+  "id": "5zjIsJq-EeW_wArffOXkOw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Vital Signs: Understanding What the Body Is Telling Us",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "5zjIsJq-EeW_wArffOXkOw",
+    "slug": "vital-signs",
+    "name": "Vital Signs: Understanding What the Body Is Telling Us"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f2a41d9a-f140-4572-8076-93090c1e821a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

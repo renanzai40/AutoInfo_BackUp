@@ -1,0 +1,24 @@
+{
+  "id": "3ae920e010be89f2",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/technology/tech-news/story/delhi-swine-flu-h1n1-prevention-gadgets-prym-dskc-2629868-2026-08-25?utm_source=rssfeed",
+  "title": "दिल्ली में बढ़ रहा स्वाइन फ्लू का खतरा! रखें ये जरूरी गैजेट्स",
+  "content": "दिल्ली में H1N1 स्वाइन फ्लू के मामले तेजी से बढ़ रहे हैं. ऐसे में डिजिटल थर्मामीटर, पल्स ऑक्सीमीटर, एयर क्वालिटी मॉनिटर और स्मार्ट मास्क जैसे गैजेट्स घर में मददगार हो सकते हैं.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T21:22:02+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d1a1f28a-5bd3-4145-a3c6-00966d566c0d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,363 @@
+[
+  {
+    "collection_id": "col-20260807T200520-040ec2c1",
+    "timestamp": "2026-08-07T20:05:23.218886+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio"
+      }
+    ],
+    "duration_ms": 1269.0
+  },
+  {
+    "collection_id": "col-20260808T061832-89ae304e",
+    "timestamp": "2026-08-08T06:18:36.092309+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio"
+      }
+    ],
+    "duration_ms": 1471.0
+  },
+  {
+    "collection_id": "col-20260808T061851-ab1d28cd",
+    "timestamp": "2026-08-08T06:18:54.840061+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio"
+      }
+    ],
+    "duration_ms": 1457.0
+  },
+  {
+    "collection_id": "col-20260808T083449-9a567a14",
+    "timestamp": "2026-08-08T08:34:53.244970+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio"
+      }
+    ],
+    "duration_ms": 1323.0
+  },
+  {
+    "collection_id": "col-20260808T083509-dd241ca8",
+    "timestamp": "2026-08-08T08:35:12.101521+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio"
+      }
+    ],
+    "duration_ms": 1083.0
+  },
+  {
+    "collection_id": "col-20260808T090128-7a03b860",
+    "timestamp": "2026-08-08T09:01:33.642997+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio"
+      }
+    ],
+    "duration_ms": 2628.0
+  },
+  {
+    "collection_id": "col-20260808T090154-92877d25",
+    "timestamp": "2026-08-08T09:01:57.129925+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio"
+      }
+    ],
+    "duration_ms": 1127.0
+  },
+  {
+    "collection_id": "col-20260810T175345-f3c7e366",
+    "timestamp": "2026-08-10T17:53:48.933025+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio"
+      }
+    ],
+    "duration_ms": 1208.0
+  },
+  {
+    "collection_id": "col-20260810T175359-64ea7c65",
+    "timestamp": "2026-08-10T17:54:02.365745+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio"
+      }
+    ],
+    "duration_ms": 1005.0
+  },
+  {
+    "collection_id": "col-20260810T200959-3f9044d0",
+    "timestamp": "2026-08-10T20:10:07.273207+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio"
+      }
+    ],
+    "duration_ms": 1246.0
+  },
+  {
+    "collection_id": "col-20260810T202557-2e9a8cf6",
+    "timestamp": "2026-08-10T20:26:01.438455+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio"
+      }
+    ],
+    "duration_ms": 1291.0
+  },
+  {
+    "collection_id": "col-20260810T230449-ca749816",
+    "timestamp": "2026-08-10T23:04:56.199174+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://rss.arxiv.org/rss/bio (bozo): <urlopen error [Errno 111] Connection refused>",
+        "source_failed": true,
+        "reason": "RSS parse error for https://rss.arxiv.org/rss/bio (bozo): <urlopen error [Errno 111] Connection refused>"
+      }
+    ],
+    "duration_ms": 13.0
+  },
+  {
+    "collection_id": "col-20260810T230507-a4fddfa9",
+    "timestamp": "2026-08-10T23:05:13.696416+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS parse error for https://rss.arxiv.org/rss/bio (bozo): <urlopen error [Errno 111] Connection refused>",
+        "source_failed": true,
+        "reason": "RSS parse error for https://rss.arxiv.org/rss/bio (bozo): <urlopen error [Errno 111] Connection refused>"
+      }
+    ],
+    "duration_ms": 14.0
+  },
+  {
+    "collection_id": "col-20260810T231350-d22b38c3",
+    "timestamp": "2026-08-10T23:13:53.721514+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio"
+      }
+    ],
+    "duration_ms": 1162.0
+  },
+  {
+    "collection_id": "col-20260810T231404-a4334687",
+    "timestamp": "2026-08-10T23:14:07.576552+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio"
+      }
+    ],
+    "duration_ms": 1052.0
+  },
+  {
+    "collection_id": "col-20260811T065048-e73d720d",
+    "timestamp": "2026-08-11T06:50:52.338237+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio"
+      }
+    ],
+    "duration_ms": 1217.0
+  },
+  {
+    "collection_id": "col-20260811T065106-22880550",
+    "timestamp": "2026-08-11T06:51:11.773936+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio"
+      }
+    ],
+    "duration_ms": 1075.0
+  },
+  {
+    "collection_id": "col-20260812T182650-e3939898",
+    "timestamp": "2026-08-12T18:26:56.539306+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio",
+        "source_failed": true,
+        "reason": "RSS feed returned HTTP 400 for https://rss.arxiv.org/rss/bio"
+      }
+    ],
+    "duration_ms": 1267.0
+  },
+  {
+    "collection_id": "col-20260813T144542-9491d240",
+    "timestamp": "2026-08-13T14:45:49.100597+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://rss.arxiv.org/rss/bio: Client error '400 Bad Request' for url 'https://rss.arxiv.org/rss/bio'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://rss.arxiv.org/rss/bio: Client error '400 Bad Request' for url 'https://rss.arxiv.org/rss/bio'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400"
+      }
+    ],
+    "duration_ms": 1695.0
+  },
+  {
+    "collection_id": "col-20260815T180909-38ee5cdf",
+    "timestamp": "2026-08-15T18:09:14.585391+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://rss.arxiv.org/rss/bio: Client error '400 Bad Request' for url 'https://rss.arxiv.org/rss/bio'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://rss.arxiv.org/rss/bio: Client error '400 Bad Request' for url 'https://rss.arxiv.org/rss/bio'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400"
+      }
+    ],
+    "duration_ms": 1248.0
+  },
+  {
+    "collection_id": "col-20260815T181139-e25b0e0e",
+    "timestamp": "2026-08-15T18:11:44.306997+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://rss.arxiv.org/rss/bio: Client error '400 Bad Request' for url 'https://rss.arxiv.org/rss/bio'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://rss.arxiv.org/rss/bio: Client error '400 Bad Request' for url 'https://rss.arxiv.org/rss/bio'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400"
+      }
+    ],
+    "duration_ms": 1165.0
+  },
+  {
+    "collection_id": "col-20260815T183204-315dfcf5",
+    "timestamp": "2026-08-15T18:32:07.701067+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://rss.arxiv.org/rss/bio: Client error '400 Bad Request' for url 'https://rss.arxiv.org/rss/bio'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://rss.arxiv.org/rss/bio: Client error '400 Bad Request' for url 'https://rss.arxiv.org/rss/bio'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400"
+      }
+    ],
+    "duration_ms": 2025.0
+  },
+  {
+    "collection_id": "col-20260815T184803-20e9972d",
+    "timestamp": "2026-08-15T18:48:06.380053+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS feed returned zero entries: https://rss.arxiv.org/rss/q-bio",
+        "source_failed": true,
+        "reason": "RSS feed returned zero entries: https://rss.arxiv.org/rss/q-bio"
+      }
+    ],
+    "duration_ms": 1484.0
+  }
+]

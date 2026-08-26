@@ -1,0 +1,24 @@
+{
+  "id": "5d1ca64593af93fd",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/Why-more-people-feel-safe-in-China-The-role-of-law-and-governance-1PSjt8qJ1Cg/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Why more people feel safe in China: The role of law and governance",
+  "content": "From combating organized crime to improving legislation and expanding access to legal services, China's approach to the rule of law is increasingly reflected in people's everyday lives. Rather than being a slogan, the rule of law has become a series of concrete measures designed to protect people's rights and provide a stable and predictable environment for them to live, work and thrive.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T13:29:48+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "36f523dc-819b-4a8d-8adf-86d262b92a49",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

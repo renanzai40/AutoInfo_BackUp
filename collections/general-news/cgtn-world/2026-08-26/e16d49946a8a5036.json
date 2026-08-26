@@ -1,0 +1,24 @@
+{
+  "id": "e16d49946a8a5036",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-22/Wang-Yi-China-Indonesia-cooperation-sets-example-for-Global-South-1POIBUoaSIg/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Wang Yi: China-Indonesia cooperation sets example for Global South",
+  "content": "Chinese Foreign Minister Wang Yi said on Saturday that stronger friendship and cooperation between China and Indonesia have not only promoted their respective development but also set an example of mutually beneficial cooperation among Global South countries.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-22T11:00:07+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "745dea73-0590-4e74-896a-e890882b0ccb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

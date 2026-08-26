@@ -1,0 +1,24 @@
+{
+  "id": "efdd8bfdee0c8d6c",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/the-best-electric-toothbrush-for-healthier-teeth-and-gums/",
+  "title": "5 Best Electric Toothbrushes (2026): Philips, Oral-B, Quip, More",
+  "content": "After two years of testing, these are the electric toothbrushes that impressed WIRED staffers the most.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-21T10:31:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e2df04ad-af47-405b-b7b8-efce6b8740f1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

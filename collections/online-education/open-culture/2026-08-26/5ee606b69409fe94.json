@@ -1,0 +1,24 @@
+{
+  "id": "5ee606b69409fe94",
+  "source_name": "open-culture",
+  "source_type": "rss",
+  "source_url": "https://www.openculture.com/2026/08/the-rijksmuseum-in-amsterdam-has-digitized-818000-works-of-art.html",
+  "title": "The Rijksmuseum in Amsterdam Has Digitized 840,000 Works of Art, Including Great Works by Rembrandt and Vermeer",
+  "content": "Art may seem inessential to those who make the big decisions in times of crisis. But it never seemed more necessary to artists working in the time of plague. So it was 366 years ago when Rembrandt painted a portrait of his son, Titus, in a monk’s robe in 1660. Eight years later, Titus was [&#8230;]",
+  "content_type": "text",
+  "source_platform": "open-culture",
+  "collected_at": "2026-08-17T08:00:01+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.openculture.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d57ac68a-36bb-4421-a4f1-ed59884aeb9e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

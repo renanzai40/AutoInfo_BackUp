@@ -1,0 +1,50 @@
+{
+  "id": 79816825,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/79816825/why-does-python-get-a-red-carpet-to-vsphere-while-java-gets-a-captcha-and-a-shru",
+  "title": "Why does Python get a red carpet to vSphere while Java gets a CAPTCHA and a shrug?",
+  "content": "Why does Python get a red carpet to vSphere while Java gets a CAPTCHA and a shrug?",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-25T15:28:07.504011+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "python",
+      "java",
+      "vmware",
+      "pyvmomi"
+    ],
+    "owner": {
+      "account_id": 1635224,
+      "reputation": 1727,
+      "user_id": 1508913,
+      "user_type": "registered",
+      "accept_rate": 76,
+      "profile_image": "https://www.gravatar.com/avatar/a78dbe91f0a346ebc940c22665c490f7?s=256&d=identicon&r=PG",
+      "display_name": "MD TAHMID HOSSAIN",
+      "link": "https://stackoverflow.com/users/1508913/md-tahmid-hossain"
+    },
+    "is_answered": false,
+    "view_count": 207,
+    "answer_count": 2,
+    "score": -2,
+    "last_activity_date": 1787671245,
+    "creation_date": 1762874973,
+    "last_edit_date": 1787671245,
+    "question_id": 79816825,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/79816825/why-does-python-get-a-red-carpet-to-vsphere-while-java-gets-a-captcha-and-a-shru",
+    "title": "Why does Python get a red carpet to vSphere while Java gets a CAPTCHA and a shrug?"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b2a1a3fd-4981-45c1-a685-83a0abfbf4f5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

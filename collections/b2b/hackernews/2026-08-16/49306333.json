@@ -1,0 +1,33 @@
+{
+  "id": "49306333",
+  "source_name": "hackernews",
+  "source_type": "hackernews",
+  "source_url": "https://news.ycombinator.com/item?id=49306333",
+  "title": "2D Gaussian Splatting for Bézier Spline Line Art Vectorization",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "hackernews",
+  "collected_at": "2026-08-15T18:36:18.466677+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "by": "Jimmc414",
+    "descendants": 4,
+    "id": 49306333,
+    "kids": [
+      49311624,
+      49306346
+    ],
+    "score": 31,
+    "time": 1786754161,
+    "title": "2D Gaussian Splatting for Bézier Spline Line Art Vectorization",
+    "type": "story",
+    "url": "https://studios.disneyresearch.com/2026/07/16/2d-gaussian-splatting-for-bezier-spline-line-art-vectorization/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "49ae1ab9-b4a5-4350-878b-0fa9c640826e"
+}

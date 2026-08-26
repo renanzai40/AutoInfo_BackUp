@@ -1,0 +1,24 @@
+{
+  "id": "a600ff27bd073958",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/music/chart-beat/shelley-fabares-johnny-angel-billboard-number-one-hit-1236323066/",
+  "title": "Forever No. 1: Shelley Fabares, ‘Johnny Angel’",
+  "content": "When she dethroned Connie Francis, it marked the first time female singers had back-to-back No. 1s on the Hot 100.",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T16:30:42+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "915e48fa-236b-4b43-acb8-546eb2ef5335",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

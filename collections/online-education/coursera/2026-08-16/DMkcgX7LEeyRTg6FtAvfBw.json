@@ -1,0 +1,25 @@
+{
+  "id": "DMkcgX7LEeyRTg6FtAvfBw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Intégrer des applications dans votre Dashboard Hootsuite",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-15T18:57:52.556920+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "DMkcgX7LEeyRTg6FtAvfBw",
+    "slug": "integrer-applications-dashboard-hootsuite",
+    "name": "Intégrer des applications dans votre Dashboard Hootsuite"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4a0956a2-7d44-4bc1-bdfa-767dff8e61e9"
+}

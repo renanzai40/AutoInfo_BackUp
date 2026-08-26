@@ -1,0 +1,44 @@
+{
+  "id": 45959148,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/45959148/how-to-display-image-from-database-on-rdlc-report",
+  "title": "How to display image from database on RDLC report",
+  "content": "How to display image from database on RDLC report",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-25T16:04:55.317906+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "c#",
+      "asp.net",
+      "reporting-services",
+      "rdlc"
+    ],
+    "owner": {
+      "user_type": "does_not_exist",
+      "display_name": "user8509858"
+    },
+    "is_answered": false,
+    "view_count": 15269,
+    "answer_count": 2,
+    "score": 0,
+    "last_activity_date": 1787673775,
+    "creation_date": 1504092352,
+    "last_edit_date": 1504093195,
+    "question_id": 45959148,
+    "content_license": "CC BY-SA 3.0",
+    "link": "https://stackoverflow.com/questions/45959148/how-to-display-image-from-database-on-rdlc-report",
+    "title": "How to display image from database on RDLC report"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "16f345f1-4804-4264-b006-39425c82db20",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

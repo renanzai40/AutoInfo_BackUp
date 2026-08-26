@@ -1,0 +1,48 @@
+{
+  "id": 74168466,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/74168466/mikro-orm-with-nestjs-does-not-load-entities-automatically",
+  "title": "Mikro Orm with nestjs does not load entities automatically",
+  "content": "Mikro Orm with nestjs does not load entities automatically",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-25T15:45:11.611974+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "nest",
+      "mikro-orm"
+    ],
+    "owner": {
+      "account_id": 9453937,
+      "reputation": 2206,
+      "user_id": 7029796,
+      "user_type": "registered",
+      "accept_rate": 95,
+      "profile_image": "https://i.sstatic.net/lKDyl.png?s=256",
+      "display_name": "junep",
+      "link": "https://stackoverflow.com/users/7029796/junep"
+    },
+    "is_answered": true,
+    "view_count": 2043,
+    "accepted_answer_id": 74274631,
+    "answer_count": 3,
+    "score": 1,
+    "last_activity_date": 1787672489,
+    "creation_date": 1666495512,
+    "question_id": 74168466,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/74168466/mikro-orm-with-nestjs-does-not-load-entities-automatically",
+    "title": "Mikro Orm with nestjs does not load entities automatically"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d96a7adb-3235-4f00-8378-e6f9437b7388",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

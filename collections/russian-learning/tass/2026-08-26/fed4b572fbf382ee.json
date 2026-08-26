@@ -1,0 +1,24 @@
+{
+  "id": "fed4b572fbf382ee",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/obschestvo/28043865",
+  "title": "Пострадавшая из обстрелянного ВСУ дома в Мелитополе лечится амбулаторно",
+  "content": "До этого женщине оказали помощь в больнице",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T19:02:22+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "06e0679c-f33f-4c48-afda-4f2a0b220c8b",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "13c83c40a5d430a8",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/adventure-time-complete-series-blu-ray-where-to-buy",
+  "title": "Adventure Time Is Finally Getting the Full Blu-ray Treatment",
+  "content": "The full Adventure Time Blu-ray set is now up for preorder with a release date of October 20, and the best deal is getting it directly through Gruv.",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T17:48:13+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "89a1bf07-c665-415f-af1e-11a0e1da6363",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

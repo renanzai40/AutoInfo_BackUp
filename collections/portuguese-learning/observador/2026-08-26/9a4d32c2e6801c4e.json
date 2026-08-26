@@ -1,0 +1,24 @@
+{
+  "id": "9a4d32c2e6801c4e",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/morreu-dolly-parton-icone-da-musica-country-cantora-tinha-80-anos/",
+  "title": "Morreu Dolly Parton, ícone da música country. Tinha 80 anos",
+  "content": "Uma das mais celebradas cantoras dos EUA, voz de \"Jolene\" e \"9 to 5\", Parton tinha admitido recentemente estar a padecer de problemas de saúde, mas que ainda tinha \"muitas coisas por alcançar\".",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T19:03:13+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c7ae8432-527f-4f4b-82ec-3a9a00784a02",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

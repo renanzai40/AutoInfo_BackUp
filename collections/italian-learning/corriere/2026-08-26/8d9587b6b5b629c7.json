@@ -1,0 +1,24 @@
+{
+  "id": "8d9587b6b5b629c7",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://www.corriere.it/cultura/24_maggio_05/morto-frank-stella-maestro-minimalismo-segno-l-arte-900-d5ecc8e2-0aa5-11ef-a292-58df6595675e.shtml",
+  "title": "Morto Frank Stella, maestro del minimalismo. Segnò l’arte del 900",
+  "content": "<p><img alt=\"Morto Frank Stella, maestro del minimalismo. Segnò l’arte del 900\" src=\"https://images2.corriereobjects.it/methode_image/2024/05/05/Cultura/Foto%20Cultura%20-%20Trattate/b139060ba98b45edbb3306ae9216aeac--0--4d228b8aa8054fcab830d511268dc5f8-kgiF-U348088691905Lf-656x492@Corriere-Web-Sezioni.jpg\" title=\"Morto Frank Stella, maestro del minimalismo. Segnò l’arte del 900\" /><p>Pittore, scultore, incisore americano, avrebbe compiuto 88 anni il 12 maggio. Tra i suoi tratti distintivi l’uso di motivi geometrici su tele e statue. Ha lavorato fino all’ultimo</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-05T19:29:40+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d68126e7-25df-40d8-af1d-65d9a7d06bf1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

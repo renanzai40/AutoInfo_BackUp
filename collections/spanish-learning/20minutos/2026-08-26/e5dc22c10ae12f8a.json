@@ -1,0 +1,24 @@
+{
+  "id": "e5dc22c10ae12f8a",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/tecnologia/aplicaciones/whatsapp-trabaja-nueva-funcion-competir-bizum-podras-enviar-dinero-desde-app_7029182_0.html",
+  "title": "WhatsApp trabaja en una nueva función para competir con Bizum: así podrás enviar dinero",
+  "content": "La aplicación de mensajería instantánea permitirá a los usuarios realizar transacciones. Por el momento, la función sigue en fase de desarrollo.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T14:10:01+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "63b08d25-6f96-4546-beff-3b72f40fc0dc",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

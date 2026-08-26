@@ -1,0 +1,24 @@
+{
+  "id": "9cfbd51e09d6d17b",
+  "source_name": "MarketWatch Markets (DJ)",
+  "source_type": "rss",
+  "source_url": "https://www.marketwatch.com/story/are-older-americans-spoiling-the-economy-for-everyone-else-064b5820?mod=mw_rss_topstories",
+  "title": "Are older Americans spoiling the economy for everyone else?",
+  "content": "How to get seniors to spend $12 trillion in home equity.",
+  "content_type": "text",
+  "source_platform": "MarketWatch Markets (DJ)",
+  "collected_at": "2026-08-26T01:41:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.marketwatch.com/marketwatch/topstories/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f3e00973-213f-43b2-8a48-92b004ff5d13",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

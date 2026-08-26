@@ -1,0 +1,47 @@
+---
+title: Fans Choose Stray Kids ‘This & That’ as This Week’s Favorite New Music
+domain: online-video
+tier: 01-Raw
+entry_id: online-video-general-fans-choose-stray-kids-this-that-as-this-week-s-favorite-new-music
+source_url: https://www.billboard.com/music/music-news/stray-kids-this-and-that-best-new-music-poll-results-1236312374/
+source_type: rss
+source_platform: rss
+collected_at: '2026-08-10T01:29:40+00:00'
+summary: Stray Kids' mini album 'This & That' wins favorite new music content of the week with over 85% of the fan vote.
+tags: []
+quality_tier: 2
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 70.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: e7102837-1e41-41ff-8135-4cd4555e69a3
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+The mini album brought in more than 85% of the vote this week.
+
+## Summary
+Stray Kids' mini album 'This & That' wins favorite new music content of the week with over 85% of the fan vote.
+
+## Key Points
+- Stray Kids' 'This & That' is the favorite new music content of the week.
+- The mini album received more than 85% of the total vote.
+- The vote was determined by fan choice.
+
+
+## Entities
+- **Stray Kids** (org, relevance=)
+- **This & That** (concept, relevance=)

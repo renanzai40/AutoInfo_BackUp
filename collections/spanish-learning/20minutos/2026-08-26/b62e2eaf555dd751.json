@@ -1,0 +1,24 @@
+{
+  "id": "b62e2eaf555dd751",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/nacional/gobierno-defiende-que-situacion-ceuta-seria-misma-hoy-haber-adoptado-mando-unico-tras-asalto-los-migrantes_7029229_0.html",
+  "title": "El Ejecutivo defiende que la situación en Ceuta sería la misma hoy de haber adoptado el mando único tras la entrada de los inmigrantes",
+  "content": "Moncloa asegura que la coordinación entre administraciones \"nunca\" ha sido un problema en el mes que está a punto de cumplirse de la entrada masiva de 80.000 inmigrantes irregulares en la ciudad.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T17:41:09+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "17aa9205-714a-4ee4-b4cc-92b63451a8bb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "5a9e4c804548a0d0",
+  "source_name": "corriere",
+  "source_type": "rss",
+  "source_url": "https://video.corriere.it/roma/la-notte-di-massenzio-danza-teatro-e-reading-fuori-dal-centro-di-roma/44a002a9-ba55-4a47-88fb-e116d6430xlk",
+  "title": "La notte di Massenzio: danza, teatro e reading fuori dal centro di Roma",
+  "content": "<p><img alt=\"La notte di Massenzio: danza, teatro e reading fuori dal centro di Roma\" src=\"https://images2.corriereobjects.it/methode_image/Video/2024/05/10/Roma/Foto%20Roma%20-%20Trattate/663e8f0e9741d.r_d.315-79-0_ori_crop_MASTER__0x0.jpeg\" title=\"La notte di Massenzio: danza, teatro e reading fuori dal centro di Roma\" /><p>Villa aperta tutti i sabato e la prima domenica del meseLa villa sull'Appia Antica sarà aperta la seraLa villa sull'Appia Antica sarà aperta la sera</p>",
+  "content_type": "text",
+  "source_platform": "corriere",
+  "collected_at": "2024-05-12T22:49:18+02:00",
+  "language": "",
+  "domain": "italian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://xml.corriereobjects.it/rss/homepage.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a7102954-48ab-4288-abcc-2ba7ed3c64fa",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

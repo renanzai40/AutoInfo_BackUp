@@ -1,0 +1,22 @@
+{
+  "id": "b258dedfaeea0396",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://pitchfork.com/story/11-new-albums-you-should-listen-to-now-ravyn-lenae-karol-g/",
+  "title": "11 New Albums You Should Listen to Now: Ravyn Lenae, Karol G, and More",
+  "content": "Stream new releases from Ravyn Lenae, Karol G, Flo, and more",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-07T14:29:14+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://pitchfork.com/feed/feed-news/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "09340563-0dfa-4831-92ba-7d90ff6d242e"
+}

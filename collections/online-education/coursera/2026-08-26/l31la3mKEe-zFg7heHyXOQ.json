@@ -1,0 +1,27 @@
+{
+  "id": "l31la3mKEe-zFg7heHyXOQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Getting started with the Vertex AI Gemini 1.5 Pro Model",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "l31la3mKEe-zFg7heHyXOQ",
+    "slug": "googlecloud-getting-started-with-the-vertex-ai-gemini-1-5-pro-model-i43mr",
+    "name": "Getting started with the Vertex AI Gemini 1.5 Pro Model"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d100b91a-e0fb-4981-b872-bf72a5f7b6aa",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

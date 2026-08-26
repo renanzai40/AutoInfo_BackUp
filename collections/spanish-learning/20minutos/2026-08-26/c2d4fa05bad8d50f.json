@@ -1,0 +1,24 @@
+{
+  "id": "c2d4fa05bad8d50f",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gonzoo/farmear-aura-asi-es-nueva-moda-viral-entre-los-jovenes-como-surgio-que-consiste-como-se-lucha-por-ser-mas-guay_7028692_0.html",
+  "title": "Farmear aura, así es la nueva moda viral entre los jóvenes: cómo se lucha por ser guay",
+  "content": "Tras arrasar en Latinoamérica, han llegado a nuestras calles estas batallas donde gestos y movimientos deben demostrar cuánto encanto y carisma derrochamos.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-24T12:49:21+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "324fa3ef-69dc-4967-b441-effcfe74c059",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

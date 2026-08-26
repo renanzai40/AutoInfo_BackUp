@@ -1,0 +1,24 @@
+{
+  "id": "57e7a767498d878d",
+  "source_name": "hnrss",
+  "source_type": "rss",
+  "source_url": "https://argoproj.github.io/argo-events/",
+  "title": "Argo Events – The Event-Driven Workflow Automation Framework",
+  "content": "<p>Article URL: <a href=\"https://argoproj.github.io/argo-events/\">https://argoproj.github.io/argo-events/</a></p>\n<p>Comments URL: <a href=\"https://news.ycombinator.com/item?id=49435770\">https://news.ycombinator.com/item?id=49435770</a></p>\n<p>Points: 1</p>\n<p># Comments: 0</p>",
+  "content_type": "text",
+  "source_platform": "hnrss",
+  "collected_at": "2026-08-25T15:26:20+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://hnrss.org/newest"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "21c50e31-bc61-4286-99db-c8e1f4a4cbaa",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

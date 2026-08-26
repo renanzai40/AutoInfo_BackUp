@@ -1,0 +1,24 @@
+{
+  "id": "e9c3aee1ffe41176",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/condenan-un-youtuber-surcoreano-que-destapaba-injusticias-siete-anos-carcel-por-fraude-extorsion_7029129_0.html",
+  "title": "Condenan al 'youtuber' que \"destapaba\" injusticias a siete años de cárcel",
+  "content": "Emmanuel, con medio millón de seguidores en YouTube, habría obtenido más de tres millones de euros en su negocio fraudulento de alquiler de vehículos.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T15:53:47+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1eff0c78-92b3-49af-b656-c77fa1ad57a2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

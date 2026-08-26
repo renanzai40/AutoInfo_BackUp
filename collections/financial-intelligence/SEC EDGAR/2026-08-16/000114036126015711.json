@@ -1,0 +1,31 @@
+{
+  "id": "000114036126015711",
+  "source_name": "SEC EDGAR",
+  "source_type": "sec_edgar",
+  "source_url": "https://www.sec.gov/Archives/edgar/data/320193/000114036126015711/ef20071035_8k.htm",
+  "title": "8-K Apple Inc. (2026-04-20)",
+  "content": "{\"form\": \"8-K\", \"company\": \"Apple Inc.\", \"ticker\": \"AAPL\", \"date\": \"2026-04-20\", \"report_date\": \"2026-04-17\", \"accession\": \"0001140361-26-015711\", \"source_url\": \"https://www.sec.gov/Archives/edgar/data/320193/000114036126015711/ef20071035_8k.htm\"}",
+  "content_type": "text",
+  "source_platform": "sec_edgar",
+  "collected_at": "2026-08-15T19:04:53.042405+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "form": "8-K",
+    "company": "Apple Inc.",
+    "ticker": "AAPL",
+    "cik": "320193",
+    "date": "2026-04-20",
+    "report_date": "2026-04-17",
+    "accession": "0001140361-26-015711",
+    "primary_document": "ef20071035_8k.htm",
+    "title": "8-K Apple Inc. (2026-04-20)",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/320193/000114036126015711/ef20071035_8k.htm"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3fc6d9d5-91ff-4543-86b4-f03481bcf05c"
+}

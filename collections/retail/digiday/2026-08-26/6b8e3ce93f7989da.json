@@ -1,0 +1,24 @@
+{
+  "id": "6b8e3ce93f7989da",
+  "source_name": "digiday",
+  "source_type": "rss",
+  "source_url": "https://digiday.com/media-buying/media-buying-briefing-legal-woes-can-hurt-a-holdco-but-will-it-matter-to-clients/?utm_campaign=digidaydis&utm_medium=rss&utm_source=general-rss",
+  "title": "Media Buying Briefing: Legal woes can hurt a holdco, but will it matter to clients?",
+  "content": "WPP is feeling the heat from several directions in courts of law. But will clients actually care, or think of leaving? Possibly not.",
+  "content_type": "text",
+  "source_platform": "digiday",
+  "collected_at": "2026-08-24T04:01:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://digiday.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "cd1043c6-0356-43d3-aa66-8e34d36be1ea",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

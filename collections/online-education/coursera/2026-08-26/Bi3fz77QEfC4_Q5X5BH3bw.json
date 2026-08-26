@@ -1,0 +1,27 @@
+{
+  "id": "Bi3fz77QEfC4_Q5X5BH3bw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Negotiation: Remember Levers and Record Notes",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "Bi3fz77QEfC4_Q5X5BH3bw",
+    "slug": "negotiation-remember-levers--record-notes",
+    "name": "Negotiation: Remember Levers and Record Notes"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "656c44f6-ccb0-4696-a7e5-cf11643ca98c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "cd5a1b1c040e68fe",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/amor-prueba-distancia-presion-mediatica-protagonizado-por-jude-bellingham-ashlyn-castro_7026571_0.html",
+  "title": "El amor a prueba de distancia y presión mediática protagonizado por Bellingham y Ashlyn Castro",
+  "content": "Su romance, marcado por la discreción y los viajes entre España y Estados Unidos, se mantiene firme pese a los desafíos de estos dos años juntos.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T07:40:26+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f1f7c882-8207-429f-98fa-035a94da2b1f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

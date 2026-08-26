@@ -1,0 +1,24 @@
+{
+  "id": "9a43cd11587e4df6",
+  "source_name": "ars-technica",
+  "source_type": "rss",
+  "source_url": "https://arstechnica.com/gadgets/2026/08/ads-and-tracking-infiltrated-tvs-now-theyre-coming-for-monitors/",
+  "title": "Ads and tracking infiltrated TVs. Now they're coming for monitors.",
+  "content": "Monitor vendors are playing with fire.",
+  "content_type": "text",
+  "source_platform": "ars-technica",
+  "collected_at": "2026-08-24T20:17:41+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.arstechnica.com/arstechnica/index"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "51a2b168-92a8-4c92-967d-a4e898b1c815",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

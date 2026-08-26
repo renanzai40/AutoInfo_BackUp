@@ -1,0 +1,31 @@
+{
+  "id": 9791905,
+  "source_name": "zhihu-daily",
+  "source_type": "api",
+  "source_url": "https://daily.zhihu.com/story/9791905",
+  "title": "古人为什么喜欢赏月，月亮不就那样吗?",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "zhihu-daily",
+  "collected_at": "2026-08-15T18:57:45.089039+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "image_hue": "0x999991",
+    "title": "古人为什么喜欢赏月，月亮不就那样吗?",
+    "url": "https://daily.zhihu.com/story/9791905",
+    "hint": "晴耕雨读的浣熊君 · 3 分钟阅读",
+    "ga_prefix": "081507",
+    "images": [
+      "https://pic1.zhimg.com/v2-bedefc43159539343cdb4d61283dec91.jpg?source=8673f162"
+    ],
+    "type": 0,
+    "id": 9791905
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "140c857c-476e-468d-8e8d-7cb0286e8ee8"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "ea6ab9421e57956c",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/religion/rashiphal/video/singh-rashifal-26-august-2026-leo-daily-horoscope-today-2629612-2026-08-26?utm_source=rssfeed",
+  "title": "सिंह राशि",
+  "content": "किसी बात को लेकर मन में चिंता रहेगी, कुछ नया करने की योजना बनेगी, कार्यक्षेत्र में सफलता मिलेगी, सरकार से संबंधित काम बनेंगे, कुछ नया करने की योजना बन...",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-26T02:02:01+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "03834af1-d293-4a55-b3d9-717202d4da62",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,27 @@
+{
+  "id": "WFanvtoSEeedbRLwgi9a7A",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "FinTech Disruptive Innovation: Implications for Society",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "WFanvtoSEeedbRLwgi9a7A",
+    "slug": "fintech-disruption",
+    "name": "FinTech Disruptive Innovation: Implications for Society"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d2031b61-6482-4343-9741-5ca25e5e5ab4",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

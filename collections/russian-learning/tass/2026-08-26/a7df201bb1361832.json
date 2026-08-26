@@ -1,0 +1,24 @@
+{
+  "id": "a7df201bb1361832",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/proisshestviya/28044211",
+  "title": "В двух районах Литвы из-за последствий бури объявили экстремальную ситуацию",
+  "content": "Как отметил мэр Биржайского района Кестутис Книзикявичюс, в некоторых населенных пунктах нет воды, по-прежнему лишены электроэнергии более 1,5 тыс. потребителей",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T20:42:16+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8aa6ff7b-7b78-49f8-973f-a18c69249dc6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

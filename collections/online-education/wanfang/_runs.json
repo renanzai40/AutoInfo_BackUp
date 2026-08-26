@@ -1,0 +1,50 @@
+[
+  {
+    "collection_id": "col-20260825T151610-cba0a08f",
+    "timestamp": "2026-08-25T15:17:28.769254+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://api.wanfangdata.com.cn/openwanfang/getQuery (source: wanfang): Illegal header value b'APPCODE '",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://api.wanfangdata.com.cn/openwanfang/getQuery (source: wanfang): Illegal header value b'APPCODE '"
+      }
+    ],
+    "duration_ms": 106.0
+  },
+  {
+    "collection_id": "col-20260825T152636-120b9e36",
+    "timestamp": "2026-08-25T15:27:51.015716+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://api.wanfangdata.com.cn/openwanfang/getQuery (source: wanfang): Illegal header value b'APPCODE '",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://api.wanfangdata.com.cn/openwanfang/getQuery (source: wanfang): Illegal header value b'APPCODE '"
+      }
+    ],
+    "duration_ms": 92.0
+  },
+  {
+    "collection_id": "col-20260825T154343-63f4c25e",
+    "timestamp": "2026-08-25T15:44:55.786078+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://api.wanfangdata.com.cn/openwanfang/getQuery (source: wanfang): Illegal header value b'APPCODE '",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://api.wanfangdata.com.cn/openwanfang/getQuery (source: wanfang): Illegal header value b'APPCODE '"
+      }
+    ],
+    "duration_ms": 122.0
+  }
+]

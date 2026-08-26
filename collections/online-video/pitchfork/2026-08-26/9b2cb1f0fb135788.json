@@ -1,0 +1,24 @@
+{
+  "id": "9b2cb1f0fb135788",
+  "source_name": "pitchfork",
+  "source_type": "rss",
+  "source_url": "https://pitchfork.com/story/pitchfork-music-festival-cdmx-2026-announces-full-lineup/",
+  "title": "Pitchfork Music Festival CDMX 2026 Announces Full Lineup",
+  "content": "Wendy Eisenberg, Safety Trance, and Tygapaw are among this year’s acts",
+  "content_type": "text",
+  "source_platform": "pitchfork",
+  "collected_at": "2026-08-24T18:12:12+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://pitchfork.com/feed/feed-news/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6ea6db9c-571b-40b5-8515-e3520dfa0819",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

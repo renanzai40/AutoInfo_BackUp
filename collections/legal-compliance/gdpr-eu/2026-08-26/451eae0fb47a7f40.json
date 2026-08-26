@@ -1,0 +1,24 @@
+{
+  "id": "451eae0fb47a7f40",
+  "source_name": "gdpr-eu",
+  "source_type": "rss",
+  "source_url": "https://gdpr.eu/2019-small-business-survey/",
+  "title": "Millions of small businesses aren’t GDPR compliant, our survey finds",
+  "content": "<p>We asked 716 small business leaders in Europe about their GDPR compliance. Their answers suggest widespread ignorance about data security tools and loose adherence to the law’s key privacy...</p>\n<p>The post <a href=\"https://gdpr.eu/2019-small-business-survey/\">Millions of small businesses aren’t GDPR compliant, our survey finds</a> appeared first on <a href=\"https://gdpr.eu\">GDPR.eu</a>.</p>",
+  "content_type": "text",
+  "source_platform": "gdpr-eu",
+  "collected_at": "2019-05-20T09:21:49+00:00",
+  "language": "",
+  "domain": "legal-compliance",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://gdpr.eu/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "71853bad-e06b-45c2-8a44-36423d7b672f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

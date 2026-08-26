@@ -1,0 +1,24 @@
+{
+  "id": "baa0044dc42a3a06",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/vox/economie/l-editorial-de-gaetan-de-capele-les-entreprises-veulent-plus-que-des-slogans-20260825",
+  "title": "L’éditorial de Gaëtan de Capèle : « Les entreprises veulent plus que des slogans »",
+  "content": "À l’exception de l’extrême gauche mélenchoniste, tous les candidats à l’élection présidentielle leur promettront sans doute un soutien sans faille jeudi devant les patrons.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T20:00:00+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "5a33089d-c187-4266-907f-c017682e5d2f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

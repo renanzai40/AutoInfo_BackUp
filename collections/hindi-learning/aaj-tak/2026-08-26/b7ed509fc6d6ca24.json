@@ -1,0 +1,24 @@
+{
+  "id": "b7ed509fc6d6ca24",
+  "source_name": "aaj-tak",
+  "source_type": "rss",
+  "source_url": "https://www.aajtak.in/crime/news/story/rajasthan-pti-recruitment-2022-fake-bped-degree-scam-sog-arrests-pvzs-rpti-2629895-2026-08-25?utm_source=rssfeed",
+  "title": "फर्जी डिग्री से सरकारी नौकरी का खेल! कुलपति समेत 3 गिरफ्तार",
+  "content": "राजस्थान PTI भर्ती-2022 के फर्जी B.P.Ed डिग्री मामले में SOG ने यूनिवर्सिटी के कुलपति समेत 3 लोगों को गिरफ्तार किया है. इस सिलसिले में 66 अभ्यर्थियों की डिग्रियां जांच के घेरे में हैं. जानें क्या है ये पूरा मामला.",
+  "content_type": "text",
+  "source_platform": "aaj-tak",
+  "collected_at": "2026-08-25T20:15:14+05:30",
+  "language": "",
+  "domain": "hindi-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.aajtak.in/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e3724bd5-63cd-4074-a2ed-28ff2fe167b8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

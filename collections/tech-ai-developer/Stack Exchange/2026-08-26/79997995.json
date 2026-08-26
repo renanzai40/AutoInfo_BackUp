@@ -1,0 +1,50 @@
+{
+  "id": 79997995,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/79997995/testing-email-sending-with-mutiny-retry-mocking-instance-missing-in-the-next-re",
+  "title": "Testing email sending with mutiny retry, Mocking instance missing in the next retries",
+  "content": "Testing email sending with mutiny retry, Mocking instance missing in the next retries",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-25T16:04:55.317906+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "quarkus",
+      "junit5",
+      "mutiny",
+      "quarkus-testing"
+    ],
+    "owner": {
+      "account_id": 5851066,
+      "reputation": 497,
+      "user_id": 4609725,
+      "user_type": "registered",
+      "accept_rate": 43,
+      "profile_image": "https://www.gravatar.com/avatar/7bcc5c9f9afbddfb706ddffde17145f0?s=256&d=identicon&r=PG&f=y&so-version=2",
+      "display_name": "robyp7",
+      "link": "https://stackoverflow.com/users/4609725/robyp7"
+    },
+    "is_answered": false,
+    "view_count": 50,
+    "answer_count": 0,
+    "score": 0,
+    "last_activity_date": 1787673791,
+    "creation_date": 1787642293,
+    "last_edit_date": 1787673791,
+    "question_id": 79997995,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/79997995/testing-email-sending-with-mutiny-retry-mocking-instance-missing-in-the-next-re",
+    "title": "Testing email sending with mutiny retry, Mocking instance missing in the next retries"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b55ba752-6ecf-42c0-aaaf-b2aa843d5775",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

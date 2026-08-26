@@ -1,0 +1,24 @@
+{
+  "id": "0678a1bb162c52e2",
+  "source_name": "talktomeinkorean",
+  "source_type": "rss",
+  "source_url": "https://talktomeinkorean.com/what-is-gak/",
+  "title": "What does 각 mean in Korean? (Korean slang)",
+  "content": "What does the Korean word 각 mean?",
+  "content_type": "text",
+  "source_platform": "talktomeinkorean",
+  "collected_at": "2023-06-24T23:22:44+00:00",
+  "language": "",
+  "domain": "korean-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://talktomeinkorean.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "73759610-0e24-4e26-9831-51d30d9d807a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

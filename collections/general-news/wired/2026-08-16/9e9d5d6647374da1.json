@@ -1,0 +1,22 @@
+{
+  "id": "9e9d5d6647374da1",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/puerto-rico-is-rationing-water-it-could-avoid-it-by-harvesting-rainwater/",
+  "title": "Puerto Rico Is Rationing Water. It Could’ve Avoided It by Harvesting Rainwater",
+  "content": "The island could capture billions of gallons of water a year if it implemented systems to catch it as it falls from the sky.",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2026-08-15T09:30:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e2d8fbe8-1c3b-40e4-b489-9776fdbb4591"
+}

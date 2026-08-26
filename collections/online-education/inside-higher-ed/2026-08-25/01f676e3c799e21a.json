@@ -1,0 +1,24 @@
+{
+  "id": "01f676e3c799e21a",
+  "source_name": "inside-higher-ed",
+  "source_type": "rss",
+  "source_url": "https://www.insidehighered.com/news/quick-takes/2026/08/25/university-utah-close-sandy-campus",
+  "title": "University of Utah to Close Satellite Campus After More Than 25 Years",
+  "content": "<span>University of Utah to Close Satellite Campus After More Than 25 Years</span>\n\n            <div class=\"field field--name-field-featured-image field--type-entity-reference field--label-hidden field__item\">  <img alt=\"The University of Utah campus as seen from the top of the stadium\" height=\"683\" src=\"https://www.insidehighered.com/sites/default/files/2025-08/GettyImages-2180837372.jpg\" width=\"1024\" />\n\n</div>\n      \n<span><span>Olivia.sanchez</span></span>\n\n<span><time datetime=\"2026-08-25T03:00:00-04:00\" title=\"Tuesday, August 25, 2026 - 03:00 AM\">Tue, 08/25/2026 - 03:00 AM</time>\n</span>\n\n  <div class=\"field field--name-field-authors field--type-entity-reference field--label-inline clearfix\">\n    <div class=\"field__label\">Byline(s)</div>\n          <div class=\"field__items\">\n              <div class=\"field__item\"><a href=\"https://www.insidehighered.com/author/olivia-sanchez\" hreflang=\"en\">Olivia Sanchez</a></div>\n              </div>\n      </div>",
+  "content_type": "text",
+  "source_platform": "inside-higher-ed",
+  "collected_at": "2026-08-25T07:00:00+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.insidehighered.com/rss.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3d8d1886-a2f0-4d9b-8e7c-ac00cd49aa0d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

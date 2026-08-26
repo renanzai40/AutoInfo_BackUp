@@ -1,0 +1,86 @@
+[
+  {
+    "collection_id": "col-20260825T151736-8d727bf1",
+    "timestamp": "2026-08-25T15:18:54.381481+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 2921.0,
+    "trace_ids": [
+      "aaca1209-105f-40b9-8b70-459074cb6535",
+      "4441e8e3-d622-47ac-8b78-6c088e93ca08",
+      "2d1d54d1-2264-4e06-8211-c88e930d49dc",
+      "2daa3ce0-fea3-48ec-b69c-66e161a22e08",
+      "ffbb1e1e-8ec0-4e83-a8e4-5722b0f8a688"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T152759-a5735dcd",
+    "timestamp": "2026-08-25T15:30:11.796068+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 10802.0,
+    "trace_ids": [
+      "690416bb-4fbf-49cc-83c7-f95810ffaa6c",
+      "aa24da31-7339-4eb3-8a7a-00e89f0aec3d",
+      "21c50e31-bc61-4286-99db-c8e1f4a4cbaa",
+      "321f9db9-a1e3-436f-a01c-f21625276a39",
+      "eec924a7-eb16-44fa-a746-bd625bfba6b3"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T154503-37309faa",
+    "timestamp": "2026-08-25T15:46:14.688028+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 5923.0,
+    "trace_ids": [
+      "140b8cba-2c23-4dbe-a5c3-1362b0a8ba70",
+      "7c0eaffc-8224-4b4f-9f5c-49132a704a7b",
+      "f21c1cc4-bc66-49a2-bde5-c04eff2426a2",
+      "c681963f-9d53-498e-8b72-8a8173c102ae",
+      "d8f8f866-6757-486e-87ad-3fa806b0b38d"
+    ]
+  },
+  {
+    "collection_id": "col-20260825T155828-563b1ce3",
+    "timestamp": "2026-08-25T15:59:36.288330+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://hnrss.org/newest: [Errno 104] Connection reset by peer",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://hnrss.org/newest: [Errno 104] Connection reset by peer"
+      }
+    ],
+    "duration_ms": 5520.0
+  },
+  {
+    "collection_id": "col-20260825T160450-cf75c2c1",
+    "timestamp": "2026-08-25T16:05:32.723705+00:00",
+    "status": "success",
+    "items_found": 5,
+    "items_new": 5,
+    "items_filtered": 0,
+    "errors": [],
+    "duration_ms": 1612.0,
+    "trace_ids": [
+      "783fa41d-7045-48a6-8d95-bac4daac562b",
+      "bd6d76aa-9e01-4523-b51a-da3332012c03",
+      "8aa58e97-7ece-4932-be77-3274c8dffcfd",
+      "f8b08823-9cb4-4282-94f9-09c93d4c6be5",
+      "44cb600c-7f67-4f47-89c0-a80eabe89648"
+    ]
+  }
+]

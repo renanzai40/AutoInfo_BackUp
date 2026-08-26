@@ -1,0 +1,14 @@
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article compiles gaming news entries that need to be categorized into themes, covering collaborations, physical releases, hardware support, subscriptions, and content policies. It p
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions to categorize knowledge base entries into 3-5 thematic groups. It lists several gaming-related entries covering new game announcements, hardware deals, 
+LLM returned None content — empty response
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping gaming knowledge base entries into 3-5 themes, covering various news items. It lists entries related to game updates, legal controversies, 
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions for grouping gaming-related knowledge base entries into 3-5 semantic themes with concise, descriptive titles. It lists eight entries covering gaming ne
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides a list of gaming knowledge base entries and instructs to group them into 3–5 themes with short semantic titles, returning the grouping in a JSON format with theme na
+LLM returned None content — empty response
+LLM groups matched only 0/8 entries, falling back to deterministic grouping

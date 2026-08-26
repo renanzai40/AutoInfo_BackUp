@@ -1,0 +1,40 @@
+{
+  "id": "49437049",
+  "source_name": "hackernews",
+  "source_type": "hackernews",
+  "source_url": "https://news.ycombinator.com/item?id=49437049",
+  "title": "Show HN: LatticeDB – Like SQLite but for graph databases",
+  "content": "We have been using graph DBs more and more at work. I found them painful to work with locally and decided to try and build something better.",
+  "content_type": "text",
+  "source_platform": "hackernews",
+  "collected_at": "2026-08-25T19:12:23.929811+00:00",
+  "language": "",
+  "domain": "b2b",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "by": "smiths1999",
+    "descendants": 8,
+    "id": 49437049,
+    "kids": [
+      49438317,
+      49438124,
+      49437666,
+      49438937,
+      49437050,
+      49438139
+    ],
+    "score": 39,
+    "text": "We have been using graph DBs more and more at work. I found them painful to work with locally and decided to try and build something better.",
+    "time": 1787676725,
+    "title": "Show HN: LatticeDB – Like SQLite but for graph databases",
+    "type": "story",
+    "url": "https://github.com/jeffhajewski/latticedb"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "503ea73e-f0c1-4b34-a200-4628199d49a8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

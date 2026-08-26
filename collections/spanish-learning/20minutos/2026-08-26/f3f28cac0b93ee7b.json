@@ -1,0 +1,24 @@
+{
+  "id": "f3f28cac0b93ee7b",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/internacional/eeuu-planea-regreso-los-diplomaticos-evacuados-oriente-medio-por-guerra-segun-the-new-york-times_7029241_0.html",
+  "title": "EEUU planea el regreso de los diplomáticos evacuados de Oriente Medio por la guerra, según 'The New York Times'",
+  "content": "Washington prepara la vuelta de su personal a varias embajadas de la región, una decisión que apunta a que no prevé una nueva escalada del conflicto.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T16:48:10+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f6c9c92a-de2e-4b27-b26a-36f91b5d11b3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

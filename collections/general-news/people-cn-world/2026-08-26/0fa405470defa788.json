@@ -1,0 +1,24 @@
+{
+  "id": "0fa405470defa788",
+  "source_name": "people-cn-world",
+  "source_type": "rss",
+  "source_url": "http://world.people.com.cn/n1/2025/0604/c1002-40493497.html",
+  "title": "卡塔尔宣布向叙利亚提供电力和财政支持",
+  "content": "<p>　　新华社多哈6月3日电（记者汪强）据卡塔尔通讯社3日报道，卡塔尔首相兼外交大臣穆罕默德当天在多哈会见到访的叙利亚外交部门负责人希巴尼。双方会见后发表联合声明说，卡塔尔将向叙利亚提供电力和财政支持。</p> <p>　　声明说，双方就深化能源、经济、贸易、金融、旅游等领域的双边合作进行了深入探讨。卡塔尔将向叙利亚提供电力支持，卡塔尔与沙特阿拉伯将共同协助解决叙利亚对世界银行的债务问题，并将联合提供财政支持，用于支付叙利亚公共部门员工为期三个月的工资。</p> <p>　　声明还说，希巴尼代表叙利亚方面高度赞赏卡塔尔在支持叙利亚重建进程中所作出的积极努力。</p>",
+  "content_type": "text",
+  "source_platform": "people-cn-world",
+  "collected_at": "2025-06-04T00:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "http://www.people.com.cn/rss/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7ffc80ea-1fe4-46ee-b3f3-b7f4762d8c91",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

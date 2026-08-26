@@ -1,0 +1,24 @@
+{
+  "id": "2cb35ac8cd26d6a3",
+  "source_name": "billboard",
+  "source_type": "rss",
+  "source_url": "https://www.billboard.com/pro/justin-bieber-beauty-and-a-beat-still-global/",
+  "title": "Justin Bieber’s ‘Beauty and a Beat’ Is Still One of the Biggest Songs in the World – Four Months After Coachella",
+  "content": "The early 2010s hit has been a fixture of the top 10 on both of Billboard's global charts since April.",
+  "content_type": "text",
+  "source_platform": "billboard",
+  "collected_at": "2026-08-25T15:18:52+00:00",
+  "language": "",
+  "domain": "online-video",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.billboard.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "2bf6e148-f348-4fb5-bcbb-8e815f9c8f67",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

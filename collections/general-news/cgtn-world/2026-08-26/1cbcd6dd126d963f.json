@@ -1,0 +1,24 @@
+{
+  "id": "1cbcd6dd126d963f",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-24/Meet-the-Chinese-woman-who-battled-the-desert-with-an-American-s-help-1PRFssLFGfe/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Meet the Chinese woman who battled the desert with an American's help",
+  "content": "Yin Yuzhen, a Chinese environmentalist, spent 26 years looking for an American teacher. They finally met each other again on Sunday.",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T07:26:52+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "21f67d52-a7ce-4caa-a7a0-1f527dd0ea8d",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

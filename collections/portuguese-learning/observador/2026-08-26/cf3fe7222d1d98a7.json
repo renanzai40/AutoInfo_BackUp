@@ -1,0 +1,24 @@
+{
+  "id": "cf3fe7222d1d98a7",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/seis-cisternas-de-gas-para-a-madeira-carregadas-durante-greve-na-ren-atlantico-chegam-quinta-feira-ao-canical/",
+  "title": "Gás para a Madeira chega quinta-feira apesar da greve",
+  "content": "Em 2025, foram descarregados na Madeira 1.795 contentores cisterna com gás natural",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T23:14:08+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "511c8590-5a28-4f4d-8596-63756ae19439",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

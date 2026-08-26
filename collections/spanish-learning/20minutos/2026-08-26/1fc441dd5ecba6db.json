@@ -1,0 +1,24 @@
+{
+  "id": "1fc441dd5ecba6db",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/internacional/identifican-una-victima-11s-gracias-una-nueva-tecnica-forense-que-permite-resolver-casos-cerrados_7028992_0.html",
+  "title": "Identifican a una víctima del 11S gracias a una nueva técnica forense que permite resolver casos cerrados",
+  "content": "Se trata de la víctima identificada número 1.654, la primera empleando la técnica de genealogía genética forense investigativa (FIGG)",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T08:35:29+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a620c468-0392-47dd-9465-f134caadd5ae",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

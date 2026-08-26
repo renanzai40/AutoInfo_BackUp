@@ -1,0 +1,24 @@
+{
+  "id": "2d21b2c408693d93",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/madrid/los-test-f3-madring-desatan-las-quejas-vecinales-por-ruido-ayuntamiento-esgrime-que-son-pruebas-imprescindibles_7029308_0.html",
+  "title": "Los test en Madring desatan las quejas por el ruido y el Ayuntamiento dice que son pruebas \"imprescindibles\"",
+  "content": "El Consistorio asegura que durante el Gran Premio no habrá tanta contaminación acústica porque los coches de Fórmula 1 son menos ruidosos.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T18:48:38+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "b61a26bb-4d60-4735-a19f-f33e61ad14c3",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

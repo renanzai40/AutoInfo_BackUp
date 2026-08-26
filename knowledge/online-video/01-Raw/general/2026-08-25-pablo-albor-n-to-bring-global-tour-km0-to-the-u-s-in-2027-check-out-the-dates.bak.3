@@ -1,0 +1,52 @@
+---
+title: 'Pablo Alborán To Bring ‘Global Tour KM0’ to the U.S. in 2027: Check Out the Dates'
+domain: online-video
+tier: 01-Raw
+entry_id: online-video-general-pablo-albor-n-to-bring-global-tour-km0-to-the-u-s-in-2027-check-out-the-dates
+source_url: https://www.billboard.com/music/latin/pablo-alboran-global-tour-km0-us-2027-dates-1236323811/
+source_type: rss
+source_platform: billboard
+collected_at: '2026-08-25T15:13:06+00:00'
+summary: Pablo Alborán is set to bring his 'Global Tour KM0' to the U.S. in 2027, with tour dates announced. This comes after
+  the artist recovered from severe pneumonia, which previously caused the cancellation of a concert in Spain.
+tags: []
+quality_tier: 2
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 70.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: 8b59fa80-2aa2-43da-8542-11bc83c64398
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+The announcement comes as the artist recovers from "severe pneumonia" that led him to cancel a recent concert in Spain.
+
+## Summary
+Pablo Alborán is set to bring his 'Global Tour KM0' to the U.S. in 2027, with tour dates announced. This comes after the artist recovered from severe pneumonia, which previously caused the cancellation of a concert in Spain.
+
+## Key Points
+- Pablo Alborán's 'Global Tour KM0' is scheduled for the U.S. in 2027
+- Tour dates have been announced
+- The announcement follows the artist's recovery from severe pneumonia
+- A recent concert in Spain was cancelled due to the illness
+
+
+## Entities
+- **Pablo Alborán** (person, relevance=)
+- **Global Tour KM0** (concept, relevance=)
+- **U.S.** (org, relevance=)
+- **severe pneumonia** (concept, relevance=)
+- **Spain** (org, relevance=)

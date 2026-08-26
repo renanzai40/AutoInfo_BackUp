@@ -1,0 +1,24 @@
+{
+  "id": "88f9ffe8a6a96e35",
+  "source_name": "coursera-blog",
+  "source_type": "rss",
+  "source_url": "https://blog.coursera.org/introducing-admin-ai/",
+  "title": "Introducing Conversational Analytics with Admin AI: Helping Learning Leaders Move from Data to Decisions",
+  "content": "<p>Today, we’re launching the pilot of Admin AI, a purpose-built agentic experience designed to reduce the burden of manual data analysis. </p>\n<p>The post <a href=\"https://blog.coursera.org/introducing-admin-ai/\">Introducing Conversational Analytics with Admin AI: Helping Learning Leaders Move from Data to Decisions</a> appeared first on <a href=\"https://blog.coursera.org\">Coursera Blog</a>.</p>",
+  "content_type": "text",
+  "source_platform": "coursera-blog",
+  "collected_at": "2026-06-15T13:00:00+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://blog.coursera.org/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "18aa10d1-d290-4898-90dd-5ad77bde762a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

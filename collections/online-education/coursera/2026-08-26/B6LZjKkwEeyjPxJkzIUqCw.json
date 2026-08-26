@@ -1,0 +1,27 @@
+{
+  "id": "B6LZjKkwEeyjPxJkzIUqCw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Debugging Apps on Google Kubernetes Engine",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "B6LZjKkwEeyjPxJkzIUqCw",
+    "slug": "googlecloud-debugging-apps-on-google-kubernetes-engine-8pzmb",
+    "name": "Debugging Apps on Google Kubernetes Engine"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "cfffade4-9470-4b6e-84cf-9ee9c0e87f0c",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

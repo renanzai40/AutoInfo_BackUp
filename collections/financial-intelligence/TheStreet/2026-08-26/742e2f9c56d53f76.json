@@ -1,0 +1,24 @@
+{
+  "id": "742e2f9c56d53f76",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/deals/llapuil-modular-sectional-sofa-walmart-mp-sale",
+  "title": "Walmart's $500 velvet sectional sofa is on sale for $199",
+  "content": "It requires no assembly.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-26T01:30:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "614fb9b2-a7e3-40fd-9db1-56c1e9816949",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

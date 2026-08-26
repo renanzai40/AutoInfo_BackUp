@@ -1,0 +1,24 @@
+{
+  "id": "b85802afc725e54d",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/international/missiles-de-croisiere-planeurs-hypersoniques-portee-de-plus-de-2000-kilometres-le-plan-a-12-milliards-de-l-allemagne-pour-dissuader-la-russie-20260825",
+  "title": "Missiles de croisière, planeurs hypersoniques, portée de plus de 2000 kilomètres... Le plan à 12 milliards de l’Allemagne pour dissuader la Russie",
+  "content": "Berlin entend doter son armée d’un arsenal de frappe à longue portée pour faire face à la menace russe aux frontières de l’Otan, selon des documents secret défense consultés par le média américain Politico.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T14:29:37+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d90e9a55-184a-49f9-8cfe-610b25793036",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

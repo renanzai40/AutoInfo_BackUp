@@ -1,0 +1,24 @@
+{
+  "id": "11dc1a67c87795f6",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/employment/mark-cuban-strong-message-company-equity-americas-workers",
+  "title": "Mark Cuban just sent a strong message to America's workers",
+  "content": "On the \"What It Takes\" podcast, Cuban said something notable about wealth and workers.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T14:07:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8a1c3ab5-0dc5-49fa-9d1f-1f70683cbe33",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

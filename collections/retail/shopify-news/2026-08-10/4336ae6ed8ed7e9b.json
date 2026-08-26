@@ -1,0 +1,22 @@
+{
+  "id": "4336ae6ed8ed7e9b",
+  "source_name": "rss",
+  "source_type": "rss",
+  "source_url": "https://shopify.com/news/here-come-the-late-holiday-shoppers-our-survey-reveals-who-they-are",
+  "title": "Here come the late holiday shoppers – our survey reveals who they are",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "rss",
+  "collected_at": "2023-12-07T10:00:00+00:00",
+  "language": "",
+  "domain": "retail",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.shopify.com/news/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ee924702-bf47-4484-a118-a26119f417db"
+}

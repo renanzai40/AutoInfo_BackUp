@@ -1,0 +1,24 @@
+{
+  "id": "03cc5f1c5e7d6ef3",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gastronomia/restaurantes/hasta-ano-carcel-servir-sorbete-hormigas-postre-restaurante-dos-estrellas-michelin_7027177_0.html",
+  "title": "Hasta un año de cárcel por servir un sorbete con hormigas como postre en un restaurante con dos estrellas Michelin",
+  "content": "Las leyes de Corea del Sur regulan los insectos que están permitidos en los platos de los establecimientos comerciales.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-19T12:04:48+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6740c394-607b-4b0a-98af-2e96889823e7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

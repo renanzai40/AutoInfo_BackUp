@@ -1,0 +1,50 @@
+---
+title: Рубль во вторник отыграл дневное падение и повысился в паре с юанем
+domain: russian-learning
+tier: 01-Raw
+entry_id: russian-learning-general-
+source_url: https://www.interfax.ru/business/1111220
+source_type: rss
+source_platform: interfax
+collected_at: '2026-08-25T19:26:00+03:00'
+summary: The Russian ruble recovered from its daily decline and strengthened against the Chinese yuan on Tuesday. The Chinese
+  yuan lost its earlier gains and slightly declined on the Moscow Exchange at the end of trading.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: unique
+source_score: 90.0
+language: ru
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: b0e53880-5483-4950-aafb-0c004c155ef4
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: false
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+Китайский юань растерял рост первой половины дня и немного опустился на Московской бирже по итогам торгов во вторник.
+
+## Summary
+The Russian ruble recovered from its daily decline and strengthened against the Chinese yuan on Tuesday. The Chinese yuan lost its earlier gains and slightly declined on the Moscow Exchange at the end of trading.
+
+## Key Points
+- The ruble recovered its daily drop on Tuesday.
+- The ruble increased in value against the Chinese yuan.
+- The yuan lost growth from the first half of the day.
+- The yuan slightly declined on the Moscow Exchange by the end of trading.
+
+
+## Entities
+- **Russian ruble** (concept, relevance=)
+- **Chinese yuan** (concept, relevance=)
+- **Moscow Exchange** (org, relevance=)

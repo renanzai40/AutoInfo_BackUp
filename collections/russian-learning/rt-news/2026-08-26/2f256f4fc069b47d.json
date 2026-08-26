@@ -1,0 +1,24 @@
+{
+  "id": "2f256f4fc069b47d",
+  "source_name": "rt-news",
+  "source_type": "rss",
+  "source_url": "https://www.rt.com/russia/644602-europe-ukraine-russia-drones/?utm_source=rss&utm_medium=rss&utm_campaign=RSS",
+  "title": "Is Europe ready for Ukraine’s defeat?",
+  "content": "<img align=\"left\" alt=\"Preview\" src=\"https://mf.b37mrtl.ru/files/2026.08/thumbnail/6a8d5b8420302762ed3c7add.jpg\" style=\"margin-right: 10px;\" /> Europe hailed AI-guided drones as Ukraine’s new game changer. But technology cannot replace troops, air defenses or diplomacy <br /><a href=\"https://www.rt.com/russia/644602-europe-ukraine-russia-drones/?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=RSS\">Read Full Article at RT.com</a>",
+  "content_type": "text",
+  "source_platform": "rt-news",
+  "collected_at": "2026-08-25T09:09:20+00:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.rt.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3d06ee5d-2589-486f-adec-a4d57a8aed58",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

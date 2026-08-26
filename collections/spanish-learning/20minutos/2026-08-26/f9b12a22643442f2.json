@@ -1,0 +1,24 @@
+{
+  "id": "f9b12a22643442f2",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/television/tania-llasera-se-disculpa-por-sus-palabras-sobre-lindsay-clancy-que-mato-sus-tres-hijos-acepto-enfado-gente_7029006_0.html",
+  "title": "Tania Llasera se disculpa en redes por sus palabras sobre Lindsay Clancy, que mató a sus tres hijos",
+  "content": "Tania Llasera se disculpa por sus palabras sobre Lindsay Clancy, que mató a sus tres hijos: \"Acepto el enfado de la gente\"",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T09:29:08+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c02448aa-8151-4623-b4c3-d6648dfe5ef7",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,50 @@
+{
+  "id": 79998123,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/79998123/should-i-populate-the-foreign-key-value-manually-or-let-sql-server-do-it-automa",
+  "title": "Should I populate the foreign key value manually, or let SQL Server do it automatically?",
+  "content": "Should I populate the foreign key value manually, or let SQL Server do it automatically?",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-25T15:17:44.244583+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "best-practices",
+      "asp.net",
+      "sql-server",
+      "model",
+      "foreign-keys"
+    ],
+    "owner": {
+      "account_id": 29315671,
+      "reputation": 113,
+      "user_id": 22460493,
+      "user_type": "registered",
+      "profile_image": "https://lh3.googleusercontent.com/a/AAcHTtd-DfRXt-ZzLaARdi3uNojBdsG_8DTnX87iifQf9MFZAw=k-s256",
+      "display_name": "abd klaib",
+      "link": "https://stackoverflow.com/users/22460493/abd-klaib"
+    },
+    "is_answered": false,
+    "view_count": 36,
+    "answer_count": 0,
+    "score": 0,
+    "last_activity_date": 1787670378,
+    "creation_date": 1787667160,
+    "last_edit_date": 1787670378,
+    "question_id": 79998123,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/79998123/should-i-populate-the-foreign-key-value-manually-or-let-sql-server-do-it-automa",
+    "title": "Should I populate the foreign key value manually, or let SQL Server do it automatically?"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f04e60a4-6f54-4555-a912-ed15df3bc405",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

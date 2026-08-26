@@ -1,0 +1,50 @@
+{
+  "id": 79997840,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/79997840/how-to-extract-valid-python-code-from-ipynb-cells",
+  "title": "How to extract valid Python code from .ipynb cells",
+  "content": "How to extract valid Python code from .ipynb cells",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-26T00:53:25.798577+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "python",
+      "parsing",
+      "jupyter-notebook",
+      "abstract-syntax-tree",
+      "ipynb"
+    ],
+    "owner": {
+      "account_id": 25533517,
+      "reputation": 83,
+      "user_id": 19321073,
+      "user_type": "registered",
+      "profile_image": "https://lh3.googleusercontent.com/a-/AOh14GhtT1eGLakvRGB3y6qIgyzFOKfVNsjD5NSWxHzu=k-s256",
+      "display_name": "ArianNa",
+      "link": "https://stackoverflow.com/users/19321073/arianna"
+    },
+    "is_answered": true,
+    "view_count": 92,
+    "accepted_answer_id": 79997859,
+    "answer_count": 2,
+    "score": 2,
+    "last_activity_date": 1787704466,
+    "creation_date": 1787587862,
+    "question_id": 79997840,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/79997840/how-to-extract-valid-python-code-from-ipynb-cells",
+    "title": "How to extract valid Python code from .ipynb cells"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "13b84ee2-d14c-41ee-94ab-ff781fd54948",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

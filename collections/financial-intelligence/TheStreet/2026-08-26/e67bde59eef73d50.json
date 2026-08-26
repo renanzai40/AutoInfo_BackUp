@@ -1,0 +1,24 @@
+{
+  "id": "e67bde59eef73d50",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/economy/why-bessents-iran-strategy-looks-like-a-work-in-progress",
+  "title": "Bessent's Iran complex strategy, requires time",
+  "content": "The Treasury secretary's campaign to beat Iran will need time to work.",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T19:17:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3591472e-3219-4ac8-baf6-3bef32030752",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": 9791918,
+  "source_name": "zhihu-daily",
+  "source_type": "api",
+  "source_url": "https://daily.zhihu.com/story/9791918",
+  "title": "绝对零度为什么是零下 273.15 摄氏度？目前工程上能实现的最低温度是多少？",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "zhihu-daily",
+  "collected_at": "2026-08-15T18:57:45.089039+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "image_hue": "0xa87248",
+    "title": "绝对零度为什么是零下 273.15 摄氏度？目前工程上能实现的最低温度是多少？",
+    "url": "https://daily.zhihu.com/story/9791918",
+    "hint": "黄河边儿 · 2 分钟阅读",
+    "ga_prefix": "081507",
+    "images": [
+      "https://picx.zhimg.com/v2-dcfffa1d449f36927d3e1fe3ec8f9553.jpg?source=8673f162"
+    ],
+    "type": 0,
+    "id": 9791918
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "ca603eed-dce9-4e5e-af09-2127229483bb"
+}

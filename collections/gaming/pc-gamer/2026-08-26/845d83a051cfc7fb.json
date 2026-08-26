@@ -1,0 +1,24 @@
+{
+  "id": "845d83a051cfc7fb",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/gaming-industry/hideo-kojima-wants-to-continue-to-focus-on-making-games-at-63-even-as-the-time-i-have-decreases/",
+  "title": "Hideo Kojima wants to 'continue to focus on making games' at 63, even as 'the time I have decreases'",
+  "content": "\"I need to constantly scrutinize how I use my time and how I live my life.\"",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-25T14:35:25+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c5c0991f-462c-482e-afac-96b08690f57e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

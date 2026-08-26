@@ -1,0 +1,24 @@
+{
+  "id": "37ce744ed9ff43bf",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/andalucia/cadiz/rescatados-dos-migrantes-que-trataban-alcanzar-costa-una-tabla-paddle-surf_7029240_0.html",
+  "title": "Rescatados dos migrantes que trataban de alcanzar la costa en una tabla de paddle surf en la costa de Cádiz",
+  "content": "Los hombres fueron localizados a unas nueve millas al este de Punta Europa, en el Estrecho de Gibraltar.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T16:36:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "77692fef-485d-4830-9e72-2b63fc3d7c1e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

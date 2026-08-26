@@ -1,0 +1,24 @@
+{
+  "id": "5e6feb99ba9d7e1d",
+  "source_name": "le-figaro",
+  "source_type": "rss",
+  "source_url": "https://www.lefigaro.fr/international/moscou-accuse-les-candidats-a-la-presidentielle-en-france-d-agiter-la-menace-russe-sans-raison-20260825",
+  "title": "Moscou accuse les candidats à la présidentielle en France d'agiter la «menace russe» sans raison",
+  "content": "Une série d’opérations de déstabilisation, attribuées à des réseaux prorusses, ont visé plusieurs candidats à la présidentielle ces derniers mois, selon la France.",
+  "content_type": "text",
+  "source_platform": "le-figaro",
+  "collected_at": "2026-08-25T17:14:08+02:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.lefigaro.fr/rss/figaro_actualites.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1e37347b-f720-429a-b8f2-4c4d7638b515",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

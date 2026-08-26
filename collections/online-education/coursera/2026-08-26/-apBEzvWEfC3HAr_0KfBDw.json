@@ -1,0 +1,27 @@
+{
+  "id": "-apBEzvWEfC3HAr_0KfBDw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "The Linux Essentials",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "-apBEzvWEfC3HAr_0KfBDw",
+    "slug": "packt-the-linux-essentials-yafiq",
+    "name": "The Linux Essentials"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "36efacdd-b707-42ce-8af4-cb848953e975",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

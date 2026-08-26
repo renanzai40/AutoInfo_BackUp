@@ -1,0 +1,50 @@
+[
+  {
+    "collection_id": "col-20260825T151736-8d727bf1",
+    "timestamp": "2026-08-25T15:17:45.489609+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://api.producthunt.com/v2/api/graphql (source: ProductHunt): Client error '404 Not Found' for url 'https://api.producthunt.com/v2/api/graphql'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://api.producthunt.com/v2/api/graphql (source: ProductHunt): Client error '404 Not Found' for url 'https://api.producthunt.com/v2/api/graphql'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 1030.0
+  },
+  {
+    "collection_id": "col-20260825T152759-a5735dcd",
+    "timestamp": "2026-08-25T15:28:08.692607+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://api.producthunt.com/v2/api/graphql (source: ProductHunt): Client error '404 Not Found' for url 'https://api.producthunt.com/v2/api/graphql'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://api.producthunt.com/v2/api/graphql (source: ProductHunt): Client error '404 Not Found' for url 'https://api.producthunt.com/v2/api/graphql'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 996.0
+  },
+  {
+    "collection_id": "col-20260825T154503-37309faa",
+    "timestamp": "2026-08-25T15:45:14.063765+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "HTTP API fetch failed for https://api.producthunt.com/v2/api/graphql (source: ProductHunt): Client error '404 Not Found' for url 'https://api.producthunt.com/v2/api/graphql'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "HTTP API fetch failed for https://api.producthunt.com/v2/api/graphql (source: ProductHunt): Client error '404 Not Found' for url 'https://api.producthunt.com/v2/api/graphql'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 2250.0
+  }
+]

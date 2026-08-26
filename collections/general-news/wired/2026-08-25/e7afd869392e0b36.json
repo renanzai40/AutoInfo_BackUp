@@ -1,0 +1,24 @@
+{
+  "id": "e7afd869392e0b36",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/story/the-supreme-courts-mail-in-ballot-ruling-is-a-step-toward-chaos-in-the-midterms/",
+  "title": "The Supreme Court’s Mail-In Ballot Ruling Is a Step Toward Chaos in the Midterms",
+  "content": "The Supreme Court has removed one roadblock from the Trump administration’s attempts to impose severe restrictions on voting.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-25T15:16:36+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d2bed9a3-4de1-4a46-b0ae-f51b43a0aea8",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "22dd8131536eeeca",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/lainformacion/empresas/fiebre-por-los-bloques-lego-dispara-su-beneficio-un-32-un-nuevo-record-primer-semestre_7029039_0.html",
+  "title": "Fiebre por los bloques: Lego dispara su beneficio un 32% a un nuevo récord durante el primer semestre del año",
+  "content": "Los ingresos del fabricante danés de juguetes sumaron 41.900 millones de coronas (5.604 millones de euros) hasta junio",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T10:27:22+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c7029508-02ea-4b0a-b034-099c2921820a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

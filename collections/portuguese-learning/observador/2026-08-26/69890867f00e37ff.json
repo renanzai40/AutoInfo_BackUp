@@ -1,0 +1,24 @@
+{
+  "id": "69890867f00e37ff",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/para-o-padre-ronaldo-um-abraco-capelao-que-tera-dado-bencao-a-cris-e-gio-recebeu-camisola-autografada/",
+  "title": "De Ronaldo para Ronaldo. Cris ofereceu camisola a padre",
+  "content": "Depois do casamento civil, oficializado na mansão em Cascais a 11 de agosto, Cristiano Ronaldo e Georgina Rodriguez foram recebidos pelo padre Ronaldo Araújo numa capela em Fátima",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T18:55:50+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "f703b76f-4692-4965-8bbd-a054d06a19ac",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "289c02f1f0891663",
+  "source_name": "rt-news",
+  "source_type": "rss",
+  "source_url": "https://www.rt.com/news/644616-lessons-russia-learned-asia/?utm_source=rss&utm_medium=rss&utm_campaign=RSS",
+  "title": "These are the lessons Russia learned from Asia",
+  "content": "<img align=\"left\" alt=\"Preview\" src=\"https://mf.b37mrtl.ru/files/2026.08/thumbnail/6a8d5cc42030276ed37482c4.jpg\" style=\"margin-right: 10px;\" /> Japan’s rupture with Moscow and North Korea’s rise as a Russian ally show how US power is reshaping the security order across Northeast Asia <br /><a href=\"https://www.rt.com/news/644616-lessons-russia-learned-asia/?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=RSS\">Read Full Article at RT.com</a>",
+  "content_type": "text",
+  "source_platform": "rt-news",
+  "collected_at": "2026-08-25T11:24:18+00:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.rt.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4cc28d7d-2d04-4607-906b-fb9eb75407aa",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

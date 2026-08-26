@@ -1,0 +1,29 @@
+---
+title: Validation Import Entry
+domain: medical-research
+tier: 01-Raw
+entry_id: medical-research-general-validation-import-entry
+source_url: https://example.com/validation-import
+source_type: web
+source_platform: ''
+collected_at: '2026-08-05T09:10:34.129688+00:00'
+summary: ''
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: unique
+source_score: 0.0
+language: ''
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: ''
+deleted: true
+deleted_at: '2026-08-12T04:46:23.086974+00:00'
+---
+
+## Original Content
+# Validation Import Entry
+
+This entry was imported by the kb-import-export validation scenario.

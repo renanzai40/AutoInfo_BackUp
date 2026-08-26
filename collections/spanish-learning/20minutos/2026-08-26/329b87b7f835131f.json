@@ -1,0 +1,24 @@
+{
+  "id": "329b87b7f835131f",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/tecnologia/moviles-dispositivos/samsung-galaxy-s27-ultra-estrenar-diseno-ser-mas-caro-todo-sabemos_7028801_0.html",
+  "title": "El Samsung Galaxy S27 Ultra podría estrenar diseño y ser más caro: esto es todo lo que sabemos por ahora",
+  "content": "Samsung planea retomar un rediseño perdido para su serie Galaxy S27.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T05:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8a2c6c44-2745-411d-87bb-cf6f0bcb31eb",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

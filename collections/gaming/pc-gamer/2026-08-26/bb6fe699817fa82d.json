@@ -1,0 +1,24 @@
+{
+  "id": "bb6fe699817fa82d",
+  "source_name": "pc-gamer",
+  "source_type": "rss",
+  "source_url": "https://www.pcgamer.com/gaming-industry/heres-how-to-watch-the-future-games-show-at-gamescom-2026/",
+  "title": "Here's how to watch the Future Games Show at Gamescom 2026",
+  "content": "This year's showcase will be hosted by the dynamic zombie-killing duo of Nick Apostolides and Angela Sant'Albano.",
+  "content_type": "text",
+  "source_platform": "pc-gamer",
+  "collected_at": "2026-08-25T16:51:09+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.pcgamer.com/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c0463733-b373-437d-9ac4-21f0e29279e5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

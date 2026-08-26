@@ -1,0 +1,23 @@
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping a set of entertainment and music-related entries into 3-5 themes, with specific guidelines for theme titles and entry assignment. It emphas
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions to group knowledge base entries about entertainment news into thematic categories. It lists eight entries covering topics such as MCU casting, streamin
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article instructs to group eight knowledge base entries into 3-5 thematic categories. The entries cover diverse topics including celebrity ventures, music trends, literary adaptatio
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article instructs on grouping knowledge base entries related to online video into 3–5 thematic categories, covering entertainment topics such as award shows, streaming content, musi
+LLM returned None content — empty response
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions for grouping a set of knowledge base entries into 3–5 thematic categories, with specific guidelines for naming themes. It lists various entries related
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides guidelines for grouping online video entries related to entertainment news into 3-5 semantic themes. It lists entries covering awards ceremonies, film and TV release
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions for grouping a set of online video knowledge base entries into 3–5 themes with short semantic titles. It includes eight entries covering diverse enterta
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This content provides instructions for grouping knowledge base entries into 3–5 semantic themes, with a focus on creating short, descriptive titles and avoiding generic names. It include
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article provides instructions to group technical knowledge base entries from Netflix's blog into 3-5 semantic themes, covering innovations in distributed systems, AI recommendations,
+LLM groups matched only 0/8 entries, falling back to deterministic grouping

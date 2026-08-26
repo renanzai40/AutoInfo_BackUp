@@ -1,0 +1,24 @@
+{
+  "id": "f5021e7ec615a68e",
+  "source_name": "open-culture",
+  "source_type": "rss",
+  "source_url": "https://www.openculture.com/2026/08/why-americans-stopped-reading-books.html",
+  "title": "Why Americans Stopped Reading Books",
+  "content": "The kids can’t read. Such has been the implication, even the declaration, made by a wave of articles in recent years. But the statement needs some qualification: the kids in question are American; what they can’t read is entire books, especially literary fiction; and it isn’t just the kids in the first place. It would [&#8230;]",
+  "content_type": "text",
+  "source_platform": "open-culture",
+  "collected_at": "2026-08-21T08:00:22+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.openculture.com/feed"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "4bef7cad-5e0b-4d31-9bc0-0f1fc5b1bbda",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "31a7d289d9e98645",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/theluxonomist/lifestyle/secreto-un-rostro-luminoso-sofisticado-empieza-con-unas-gotas-colorete-liquido-lujo_7018671_0.html",
+  "title": "El secreto de un rostro sofisticado empieza con unas gotas de colorete líquido (de lujo)",
+  "content": "Hubo un tiempo en el que el colorete era el último paso del maquillaje. Hoy, sin embargo, se ha convertido en el auténtico protagonista",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T07:00:00+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "864ecf1d-e0e2-45da-b98a-a0f3550d1908",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

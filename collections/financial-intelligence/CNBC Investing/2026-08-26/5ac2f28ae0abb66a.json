@@ -1,0 +1,24 @@
+{
+  "id": "5ac2f28ae0abb66a",
+  "source_name": "CNBC Investing",
+  "source_type": "rss",
+  "source_url": "https://www.cnbc.com/2026/08/24/paramount-ceo-david-ellison-wbd-acquisition-final-hurdle.html",
+  "title": "Paramount CEO David Ellison is at the final hurdle before buying WBD. So far, he can't clear it",
+  "content": "An antitrust challenge by a group of state attorneys general has left Paramount CEO David Ellison hunting for avenues to get his deal for WBD done.",
+  "content_type": "text",
+  "source_platform": "CNBC Investing",
+  "collected_at": "2026-08-25T17:48:55+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "6eeef4ba-1ba5-4cf4-bd94-f359c86c5fe6",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

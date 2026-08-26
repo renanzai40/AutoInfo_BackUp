@@ -1,0 +1,18 @@
+[92m06:38:28 - LiteLLM:WARNING[0m: get_model_cost_map.py:271 - LiteLLM: Failed to fetch remote model cost map from https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json: The read operation timed out. Falling back to local backup.
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+LLM groups matched only 0/8 entries, falling back to deterministic grouping
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides a set of knowledge base entries covering various entertainment news topics, including new TV shows, casting debates, show cancellations, and industry obituaries, wh
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions for categorizing online video entries into 3–5 distinct themes, emphasizing unique, semantic titles without catch-all names. It lists eight entertainme
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article instructs on grouping a set of online video entries into 3-5 distinct themes based on their content, covering topics from music and literature to television deals and film s
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article presents a collection of online video news entries covering diverse entertainment industry updates, including film premieres, music hits, television productions, and legal di
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions to categorize a list of entertainment and online video news entries into 3-5 semantic themes. The entries cover diverse topics including creator earnin
+Failed to parse LLM response as JSON: {
+  "tl_dr": "The article presents a list of knowledge base entries related to online videos, covering topics such as music albums, movie box office performance, political satire, and film productions
+Failed to parse LLM response as JSON: {
+  "tl_dr": "This article provides instructions to group knowledge base entries related to Netflix technologies and one music album recommendation entry into thematic categories. The entries cover to
+LLM returned None content — empty response

@@ -1,0 +1,601 @@
+keywords:
+  latvian cabinet of ministers:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.430116+00:00'
+    updated_at: '2026-08-25T18:45:35.268944+00:00'
+    source: auto-discovery:interfax
+  russia:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.437314+00:00'
+    updated_at: '2026-08-25T21:18:16.098647+00:00'
+    source: auto-discovery:rt-news
+  belarus:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.449967+00:00'
+    updated_at: '2026-08-25T21:11:34.941445+00:00'
+    source: auto-discovery:interfax
+  latvian:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.462713+00:00'
+    updated_at: '2026-08-25T21:09:47.642550+00:00'
+    source: auto-discovery:interfax
+  government:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.475876+00:00'
+    updated_at: '2026-08-25T21:11:34.985373+00:00'
+    source: auto-discovery:interfax
+  bans:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.489783+00:00'
+    updated_at: '2026-08-25T18:45:35.508367+00:00'
+    source: auto-discovery:interfax
+  import:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.503721+00:00'
+    updated_at: '2026-08-25T19:53:05.604045+00:00'
+    source: auto-discovery:interfax
+  certain:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.518060+00:00'
+    updated_at: '2026-08-25T21:09:46.940419+00:00'
+    source: auto-discovery:interfax
+  russian/belarusian:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.533390+00:00'
+    updated_at: '2026-08-25T16:07:28.533390+00:00'
+    source: auto-discovery:interfax
+  goods:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.549845+00:00'
+    updated_at: '2026-08-25T21:15:43.827432+00:00'
+    source: auto-discovery:interfax
+  sep:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.564851+00:00'
+    updated_at: '2026-08-25T16:07:28.564851+00:00'
+    source: auto-discovery:interfax
+  latvian government:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.581673+00:00'
+    updated_at: '2026-08-25T18:45:35.689997+00:00'
+    source: auto-discovery:interfax
+  government bans:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.600879+00:00'
+    updated_at: '2026-08-25T18:45:35.754429+00:00'
+    source: auto-discovery:interfax
+  bans import:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.618813+00:00'
+    updated_at: '2026-08-25T18:45:35.808078+00:00'
+    source: auto-discovery:interfax
+  import certain:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.639137+00:00'
+    updated_at: '2026-08-25T16:07:28.639137+00:00'
+    source: auto-discovery:interfax
+  certain russian/belarusian:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.658654+00:00'
+    updated_at: '2026-08-25T16:07:28.658654+00:00'
+    source: auto-discovery:interfax
+  russian/belarusian goods:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.678461+00:00'
+    updated_at: '2026-08-25T16:07:28.678461+00:00'
+    source: auto-discovery:interfax
+  goods from:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.699547+00:00'
+    updated_at: '2026-08-25T19:53:05.741075+00:00'
+    source: auto-discovery:interfax
+  from sep:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.723609+00:00'
+    updated_at: '2026-08-25T16:07:28.723609+00:00'
+    source: auto-discovery:interfax
+  latvian government bans:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.745482+00:00'
+    updated_at: '2026-08-25T18:45:36.000852+00:00'
+    source: auto-discovery:interfax
+  government bans import:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.766845+00:00'
+    updated_at: '2026-08-25T18:45:36.124662+00:00'
+    source: auto-discovery:interfax
+  bans import certain:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.788355+00:00'
+    updated_at: '2026-08-25T16:07:28.788355+00:00'
+    source: auto-discovery:interfax
+  import certain russian/belarusian:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.811395+00:00'
+    updated_at: '2026-08-25T16:07:28.811395+00:00'
+    source: auto-discovery:interfax
+  certain russian/belarusian goods:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.837182+00:00'
+    updated_at: '2026-08-25T16:07:28.837182+00:00'
+    source: auto-discovery:interfax
+  russian/belarusian goods from:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.866077+00:00'
+    updated_at: '2026-08-25T16:07:28.866077+00:00'
+    source: auto-discovery:interfax
+  goods from sep:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.892734+00:00'
+    updated_at: '2026-08-25T16:07:28.892734+00:00'
+    source: auto-discovery:interfax
+  ban:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.919287+00:00'
+    updated_at: '2026-08-25T21:11:35.028524+00:00'
+    source: auto-discovery:interfax
+  includes:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.943391+00:00'
+    updated_at: '2026-08-25T21:12:28.968227+00:00'
+    source: auto-discovery:interfax
+  printed:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.969892+00:00'
+    updated_at: '2026-08-25T21:11:35.117576+00:00'
+    source: auto-discovery:interfax
+  materials,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:28.996445+00:00'
+    updated_at: '2026-08-25T21:09:47.030383+00:00'
+    source: auto-discovery:interfax
+  clothing,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.024090+00:00'
+    updated_at: '2026-08-25T21:11:35.161414+00:00'
+    source: auto-discovery:interfax
+  textiles,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.053152+00:00'
+    updated_at: '2026-08-25T21:09:47.124426+00:00'
+    source: auto-discovery:interfax
+  footwear,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.081499+00:00'
+    updated_at: '2026-08-25T21:09:47.246265+00:00'
+    source: auto-discovery:interfax
+  toys/sports:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.109398+00:00'
+    updated_at: '2026-08-25T18:42:00.829367+00:00'
+    source: auto-discovery:interfax
+  equipment:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.138850+00:00'
+    updated_at: '2026-08-25T19:25:06.317271+00:00'
+    source: auto-discovery:interfax
+  ban includes:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.169632+00:00'
+    updated_at: '2026-08-25T18:14:36.597073+00:00'
+    source: auto-discovery:interfax
+  includes printed:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.199145+00:00'
+    updated_at: '2026-08-25T16:07:29.199145+00:00'
+    source: auto-discovery:interfax
+  printed materials,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.228523+00:00'
+    updated_at: '2026-08-25T21:09:47.329582+00:00'
+    source: auto-discovery:interfax
+  materials, clothing,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.259674+00:00'
+    updated_at: '2026-08-25T21:09:47.374622+00:00'
+    source: auto-discovery:interfax
+  clothing, textiles,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.291588+00:00'
+    updated_at: '2026-08-25T21:09:47.419024+00:00'
+    source: auto-discovery:interfax
+  textiles, footwear,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.323311+00:00'
+    updated_at: '2026-08-25T21:09:47.463368+00:00'
+    source: auto-discovery:interfax
+  footwear, and:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.354966+00:00'
+    updated_at: '2026-08-25T19:25:06.219858+00:00'
+    source: auto-discovery:interfax
+  and toys/sports:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.388943+00:00'
+    updated_at: '2026-08-25T18:42:01.142334+00:00'
+    source: auto-discovery:interfax
+  toys/sports equipment:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.422675+00:00'
+    updated_at: '2026-08-25T18:42:01.186588+00:00'
+    source: auto-discovery:interfax
+  ban includes printed:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.454543+00:00'
+    updated_at: '2026-08-25T16:07:29.454543+00:00'
+    source: auto-discovery:interfax
+  includes printed materials,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.488817+00:00'
+    updated_at: '2026-08-25T16:07:29.488817+00:00'
+    source: auto-discovery:interfax
+  printed materials, clothing,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.523256+00:00'
+    updated_at: '2026-08-25T21:09:47.507816+00:00'
+    source: auto-discovery:interfax
+  materials, clothing, textiles,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.557843+00:00'
+    updated_at: '2026-08-25T21:09:47.552172+00:00'
+    source: auto-discovery:interfax
+  clothing, textiles, footwear,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.593016+00:00'
+    updated_at: '2026-08-25T21:09:47.596627+00:00'
+    source: auto-discovery:interfax
+  textiles, footwear, and:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.628133+00:00'
+    updated_at: '2026-08-25T19:19:59.005389+00:00'
+    source: auto-discovery:interfax
+  footwear, and toys/sports:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.666935+00:00'
+    updated_at: '2026-08-25T18:42:01.410382+00:00'
+    source: auto-discovery:interfax
+  and toys/sports equipment:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:29.705691+00:00'
+    updated_at: '2026-08-25T18:42:01.454988+00:00'
+    source: auto-discovery:interfax
+  tuladron (ano npc bas):
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:33.528854+00:00'
+    updated_at: '2026-08-25T16:09:57.443914+00:00'
+    source: auto-discovery:interfax
+  central district court of tula:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:33.569368+00:00'
+    updated_at: '2026-08-25T20:06:25.125880+00:00'
+    source: auto-discovery:interfax
+  tula, russia:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:33.610731+00:00'
+    updated_at: '2026-08-25T18:12:49.084639+00:00'
+    source: auto-discovery:interfax
+  director:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:33.654285+00:00'
+    updated_at: '2026-08-25T21:16:37.093512+00:00'
+    source: auto-discovery:interfax
+  tuladron:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:33.695181+00:00'
+    updated_at: '2026-08-25T19:44:07.590169+00:00'
+    source: auto-discovery:interfax
+  (ano:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:33.739827+00:00'
+    updated_at: '2026-08-25T19:19:13.182059+00:00'
+    source: auto-discovery:interfax
+  npc:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:33.840251+00:00'
+    updated_at: '2026-08-25T19:50:53.926384+00:00'
+    source: auto-discovery:interfax
+  bas):
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:33.949125+00:00'
+    updated_at: '2026-08-25T16:09:57.787102+00:00'
+    source: auto-discovery:interfax
+  arrested:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:34.018436+00:00'
+    updated_at: '2026-08-25T21:15:50.229276+00:00'
+    source: auto-discovery:interfax
+  director tuladron:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:34.064904+00:00'
+    updated_at: '2026-08-25T19:19:13.275833+00:00'
+    source: auto-discovery:interfax
+  tuladron (ano:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:34.114712+00:00'
+    updated_at: '2026-08-25T19:19:13.362896+00:00'
+    source: auto-discovery:interfax
+  (ano npc:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:34.230020+00:00'
+    updated_at: '2026-08-25T16:07:34.230020+00:00'
+    source: auto-discovery:interfax
+  npc bas):
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:34.375805+00:00'
+    updated_at: '2026-08-25T16:09:58.130478+00:00'
+    source: auto-discovery:interfax
+  bas) arrested:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:34.427353+00:00'
+    updated_at: '2026-08-25T16:09:58.229407+00:00'
+    source: auto-discovery:interfax
+  director tuladron (ano:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:34.475478+00:00'
+    updated_at: '2026-08-25T19:19:13.411266+00:00'
+    source: auto-discovery:interfax
+  tuladron (ano npc:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:34.528334+00:00'
+    updated_at: '2026-08-25T16:07:34.528334+00:00'
+    source: auto-discovery:interfax
+  (ano npc bas):
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:34.582073+00:00'
+    updated_at: '2026-08-25T16:07:34.582073+00:00'
+    source: auto-discovery:interfax
+  npc bas) arrested:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:34.633036+00:00'
+    updated_at: '2026-08-25T16:09:58.351613+00:00'
+    source: auto-discovery:interfax
+  'charges:':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:34.690732+00:00'
+    updated_at: '2026-08-25T18:51:20.373376+00:00'
+    source: auto-discovery:interfax
+  large-scale:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:34.751160+00:00'
+    updated_at: '2026-08-25T21:15:50.272746+00:00'
+    source: auto-discovery:interfax
+  fraud:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:34.808805+00:00'
+    updated_at: '2026-08-25T21:15:50.318147+00:00'
+    source: auto-discovery:interfax
+  (embezzlement):
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:34.875454+00:00'
+    updated_at: '2026-08-25T16:09:58.759070+00:00'
+    source: auto-discovery:interfax
+  'charges: large-scale':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:34.933561+00:00'
+    updated_at: '2026-08-25T18:51:20.467573+00:00'
+    source: auto-discovery:interfax
+  large-scale fraud:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:34.999152+00:00'
+    updated_at: '2026-08-25T21:15:50.361680+00:00'
+    source: auto-discovery:interfax
+  fraud (embezzlement):
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:35.061402+00:00'
+    updated_at: '2026-08-25T16:09:59.086604+00:00'
+    source: auto-discovery:interfax
+  'charges: large-scale fraud':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:35.122384+00:00'
+    updated_at: '2026-08-25T16:09:59.151910+00:00'
+    source: auto-discovery:interfax
+  large-scale fraud (embezzlement):
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:35.180546+00:00'
+    updated_at: '2026-08-25T16:09:59.216096+00:00'
+    source: auto-discovery:interfax
+  'authority:':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:35.238727+00:00'
+    updated_at: '2026-08-25T16:07:35.238727+00:00'
+    source: auto-discovery:interfax
+  central:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:35.305223+00:00'
+    updated_at: '2026-08-25T21:15:50.500115+00:00'
+    source: auto-discovery:interfax
+  district:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:35.368736+00:00'
+    updated_at: '2026-08-25T21:15:50.589300+00:00'
+    source: auto-discovery:interfax
+  court:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:35.430777+00:00'
+    updated_at: '2026-08-25T21:15:50.632848+00:00'
+    source: auto-discovery:interfax
+  tula,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:35.499132+00:00'
+    updated_at: '2026-08-25T21:10:00.386125+00:00'
+    source: auto-discovery:interfax
+  'authority: central':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:35.626543+00:00'
+    updated_at: '2026-08-25T16:07:35.626543+00:00'
+    source: auto-discovery:interfax
+  central district:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:35.687162+00:00'
+    updated_at: '2026-08-25T21:15:50.680386+00:00'
+    source: auto-discovery:interfax
+  district court:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:35.749399+00:00'
+    updated_at: '2026-08-25T21:15:50.730099+00:00'
+    source: auto-discovery:interfax
+  court tula,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:35.811845+00:00'
+    updated_at: '2026-08-25T21:10:00.516879+00:00'
+    source: auto-discovery:interfax
+  'authority: central district':
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:35.870690+00:00'
+    updated_at: '2026-08-25T16:07:35.870690+00:00'
+    source: auto-discovery:interfax
+  central district court:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:35.931362+00:00'
+    updated_at: '2026-08-25T21:15:50.814876+00:00'
+    source: auto-discovery:interfax
+  district court tula,:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:35.994950+00:00'
+    updated_at: '2026-08-25T21:10:00.605091+00:00'
+    source: auto-discovery:interfax
+  court tula, russia:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:36.066988+00:00'
+    updated_at: '2026-08-25T16:07:36.066988+00:00'
+    source: auto-discovery:interfax
+  john ratcliffe:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:36.176890+00:00'
+    updated_at: '2026-08-25T21:16:36.958577+00:00'
+    source: auto-discovery:interfax
+  cia:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:36.241702+00:00'
+    updated_at: '2026-08-25T21:16:37.003811+00:00'
+    source: auto-discovery:interfax
+  boeing c-17:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:36.373954+00:00'
+    updated_at: '2026-08-25T21:16:37.049251+00:00'
+    source: auto-discovery:interfax
+  john:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:36.505837+00:00'
+    updated_at: '2026-08-25T21:16:37.137349+00:00'
+    source: auto-discovery:interfax
+  ratcliffe:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:36.572934+00:00'
+    updated_at: '2026-08-25T21:16:37.182793+00:00'
+    source: auto-discovery:interfax
+  traveled:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:36.638303+00:00'
+    updated_at: '2026-08-25T21:16:37.356783+00:00'
+    source: auto-discovery:interfax
+  cia director:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:36.701175+00:00'
+    updated_at: '2026-08-25T21:16:37.269739+00:00'
+    source: auto-discovery:interfax
+  director john:
+    state: auto_added
+    aliases: []
+    created_at: '2026-08-25T16:07:36.772051+00:00'
+    updated_at: '2026-08-25T21:16:37.313182+00:00'
+    source: auto-discovery:interfax

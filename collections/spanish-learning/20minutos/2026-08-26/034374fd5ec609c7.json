@@ -1,0 +1,24 @@
+{
+  "id": "034374fd5ec609c7",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/tecnologia/moviles-dispositivos/nuevo-sony-xperia-10-viii-llega-dos-dias-autonomia-boton-exclusivo-hacer-fotos_7029204_0.html",
+  "title": "El nuevo Sony Xperia 10 VIII llega con dos días de autonomía y un botón exclusivo para hacer fotos",
+  "content": "Sony presenta el Xperia 10 VIII, un móvil de gama media con pantalla OLED, cámara de 50 MP y dos días de autonomía por 599 euros.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T14:55:35+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "7d002d9c-89e8-4e44-b7b4-262072280a26",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

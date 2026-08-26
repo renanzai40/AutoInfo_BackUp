@@ -1,0 +1,52 @@
+---
+title: 거제 폭염주의보 때 일하던 조선소 하청업체 노동자 사망
+domain: korean-learning
+tier: 01-Raw
+entry_id: korean-learning-general-
+source_url: https://www.hani.co.kr/arti/area/yeongnam/1274668.html
+source_type: rss
+source_platform: hankyoreh
+collected_at: '2026-08-26T08:07:05.924038+00:00'
+summary: A subcontracted worker at a shipyard in Geoje died during a heatwave warning, likely due to heat-related illness.
+  The incident highlights the severe risks of extreme heat in occupational settings and the need for enhanced workplace safety
+  measures.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: unique
+source_score: 90.0
+language: ko
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: a7565892-b218-4dbd-8b8c-ffc2e3ee6a5a
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: false
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: true
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+<table border="0px" cellpadding="0px" cellspacing="0px" width="107px"><tr><td bgcolor="#DDDDDD" style="padding: 1px;"><table border="0px" cellpadding="0px" cellspacing="0px" height="84px" width="105px"><tr><td align="center" bgcolor="#FFFFFF" style="padding: 3px;"><img border="0" src="https://flexible.img.hani.co.kr/flexible/normal/300/180/imgdb/child/2026/0807/53_17861013571149_20260807502072.webp" /></td></tr></table></td><td nowrap="nowrap" width="13px"></td></tr></table>
+
+## Summary
+A subcontracted worker at a shipyard in Geoje died during a heatwave warning, likely due to heat-related illness. The incident highlights the severe risks of extreme heat in occupational settings and the need for enhanced workplace safety measures.
+
+## Key Points
+- A worker at a subcontracted shipyard in Geoje died during a heatwave warning.
+- The death is presumed to be caused by heatstroke or related conditions.
+- This incident raises concerns about labor safety and protection for subcontracted workers in high-risk environments.
+- It underscores the importance of heat safety protocols in industries exposed to extreme weather.
+
+
+## Entities
+- **Geoje** (concept, relevance=)
+- **Shipyard** (org, relevance=)
+- **Heatwave** (concept, relevance=)
+- **Worker** (person, relevance=)

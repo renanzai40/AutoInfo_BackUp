@@ -1,0 +1,24 @@
+{
+  "id": "78277d8422c9dfa5",
+  "source_name": "npr-news",
+  "source_type": "rss",
+  "source_url": "https://www.npr.org/sections/planet-money/2026/08/25/g-s1-139946/how-the-aids-crisis-helped-create-a-multibillion-dollar-death-speculation-market",
+  "title": "How the AIDS crisis helped create a multibillion-dollar death-speculation market",
+  "content": "Investors will buy your life insurance policy today — and collect the payout when you die.",
+  "content_type": "text",
+  "source_platform": "npr-news",
+  "collected_at": "2026-08-25T06:30:00-04:00",
+  "language": "",
+  "domain": "english-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://feeds.npr.org/1001/rss.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "c3fde64d-e8bd-46de-9c0d-3bce3fc0a34e",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,49 @@
+---
+title: Suspeito de agredir pai atingido a tiro na Amadora
+domain: portuguese-learning
+tier: 01-Raw
+entry_id: portuguese-learning-general-suspeito-de-agredir-pai-atingido-a-tiro-na-amadora
+source_url: https://observador.pt/2026/08/25/suspeito-de-violencia-domestica-contra-o-pai-foge-pela-janela-e-atira-pedras-a-psp-e-acaba-baleado-numa-perna/
+source_type: rss
+source_platform: observador
+collected_at: '2026-08-25T16:13:26+01:00'
+summary: A suspect was shot in Amadora after allegedly attacking their father. The suspect is currently hospitalized at the
+  Hospital Professor Doutor Fernando Fonseca for treatment.
+tags: []
+quality_tier: 1
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 90.0
+language: pt
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: bbd80d09-c9bc-4a4a-8391-39f13ca552a1
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: true
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+O suspeito encontra-se no Hospital Professor Doutor Fernando Fonseca
+
+## Summary
+A suspect was shot in Amadora after allegedly attacking their father. The suspect is currently hospitalized at the Hospital Professor Doutor Fernando Fonseca for treatment.
+
+## Key Points
+- A suspect is accused of assaulting their father.
+- The suspect was shot in an incident in Amadora.
+- The suspect is receiving medical care at a specific hospital.
+
+
+## Entities
+- **Suspect** (person, relevance=)
+- **Father** (person, relevance=)
+- **Hospital Professor Doutor Fernando Fonseca** (org, relevance=)

@@ -1,0 +1,24 @@
+{
+  "id": "3dc90624cf2f9d6a",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/cinemania/series/amiga-estupenda-arrasa-television-espanola-fechas-plan-emision_7028739_0.html",
+  "title": "'La amiga estupenda' arrasa en la televisión española 8 años después de su estreno: fechas y plan de emisión en La 2",
+  "content": "Tras su estreno en HBO en 2018, el fenómeno italiano regresa a través de la televisión pública con una emisión semanal triple.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T17:35:33+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "863b0da4-acbb-4752-a13a-9900e600541a",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

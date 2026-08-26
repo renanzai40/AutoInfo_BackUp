@@ -1,0 +1,24 @@
+{
+  "id": "29e7bd531b2bd465",
+  "source_name": "TheStreet",
+  "source_type": "rss",
+  "source_url": "https://www.thestreet.com/investing/schd-etf-679-million-inflows-dividend-rotation-2026",
+  "title": "Schwab SCHD draws $679M as dividend ETF climbs 2.39%",
+  "content": "Three catalysts, one reshuffling, and a Fed that refuses to move",
+  "content_type": "text",
+  "source_platform": "TheStreet",
+  "collected_at": "2026-08-25T14:33:00+00:00",
+  "language": "",
+  "domain": "financial-intelligence",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.thestreet.com/.rss/feed/a4a58455-5a41-4dfa-899c-86c49b653ed8.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "fe4af275-caf6-4116-bb4e-85d06de58574",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

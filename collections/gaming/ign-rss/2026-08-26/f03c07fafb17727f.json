@@ -1,0 +1,24 @@
+{
+  "id": "f03c07fafb17727f",
+  "source_name": "ign-rss",
+  "source_type": "rss",
+  "source_url": "https://www.ign.com/articles/gamescom-opening-night-live-2026-everything-announced",
+  "title": "gamescom Opening Night Live 2026: Everything Announced",
+  "content": "Opening Night Live 2026 is upon us, and with it comes the promise of big new gameplay reveals, plenty of new trailers, and a long list of announcements. Check out IGN's live report, direct from gamescom.",
+  "content_type": "text",
+  "source_platform": "ign-rss",
+  "collected_at": "2026-08-25T17:10:51+00:00",
+  "language": "",
+  "domain": "gaming",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://feeds.ign.com/ign/all"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "79a66089-88c2-454c-b3f9-26fd683ee6be",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

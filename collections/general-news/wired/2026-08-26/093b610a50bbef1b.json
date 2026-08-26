@@ -1,0 +1,24 @@
+{
+  "id": "093b610a50bbef1b",
+  "source_name": "wired",
+  "source_type": "rss",
+  "source_url": "https://www.wired.com/review/asus-rog-swift-rgb-stripe-oled-pg27ucwm/",
+  "title": "Asus ROG Swift RGB Stripe OLED Review: Clarity King",
+  "content": "The Asus PG27UCWM brings a new sub-pixel layout to the world of OLED gaming monitors, and in my testing, I appreciated the improvements it brings to the table.",
+  "content_type": "text",
+  "source_platform": "wired",
+  "collected_at": "2026-08-23T13:00:00+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.wired.com/feed/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "9fac4958-daa9-4b11-bd4d-8e2d91327973",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "df9892fbad2c5fef",
+  "source_name": "inside-higher-ed",
+  "source_type": "rss",
+  "source_url": "https://www.insidehighered.com/opinion/columns/small-world/2026/08/26/building-cabinet",
+  "title": "Building a Cabinet",
+  "content": "<span>Building a Cabinet</span>\n\n            <div class=\"field field--name-field-featured-image field--type-entity-reference field--label-hidden field__item\">  <img alt=\"Text message bubbles reading, &quot;I'm here to teach you, grasshopper. I mean, Gordon.&quot;\" height=\"800\" src=\"https://www.insidehighered.com/sites/default/files/2026-05/Text_bubble_conversation_grasshopper.jpg\" width=\"1200\" />\n\n</div>\n      \n<span><span>rachel.toor</span></span>\n\n<span><time datetime=\"2026-08-26T03:00:00-04:00\" title=\"Wednesday, August 26, 2026 - 03:00 AM\">Wed, 08/26/2026 - 03:00 AM</time>\n</span>\n<p>Gordon talks to Rachel about hiring upper-level administrators.</p>\n  <div class=\"field field--name-field-authors field--type-entity-reference field--label-inline clearfix\">\n    <div class=\"field__label\">Byline(s)</div>\n          <div class=\"field__items\">\n              <div class=\"field__item\"><a href=\"https://www.insidehighered.com/author/rachel-toor\" hreflang=\"en\">Rachel Toor</a></div>\n          <div class=\"field__item\"><a href=\"https://www.insidehighered.com/node/6982\" hreflang=\"en\">E. Gordon Gee</a></div>\n              </div>\n      </div>",
+  "content_type": "text",
+  "source_platform": "inside-higher-ed",
+  "collected_at": "2026-08-26T07:00:00+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.insidehighered.com/rss.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "83bf3266-0eb9-4fc2-a73f-0266f15e7ea1",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

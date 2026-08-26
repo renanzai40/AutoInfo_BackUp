@@ -1,0 +1,24 @@
+{
+  "id": "62369cdc3373670e",
+  "source_name": "tass",
+  "source_type": "rss",
+  "source_url": "https://tass.ru/ekonomika/28044059",
+  "title": "Red Wings рассматривает возможность запуска прямых рейсов из Москвы в Улан-Батор",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "tass",
+  "collected_at": "2026-08-25T19:04:52+03:00",
+  "language": "",
+  "domain": "russian-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://tass.ru/rss/v2.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "8f239956-0a6a-4e18-a1af-c7c6239c3aa2",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

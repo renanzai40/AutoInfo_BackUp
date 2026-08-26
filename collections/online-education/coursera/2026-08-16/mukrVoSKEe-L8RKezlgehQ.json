@@ -1,0 +1,25 @@
+{
+  "id": "mukrVoSKEe-L8RKezlgehQ",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Securing Compute Engine Applications and Resources using Chrome Enterprise Premium",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-15T18:57:52.556920+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "mukrVoSKEe-L8RKezlgehQ",
+    "slug": "googlecloud-securing-compute-engine-applications-and-resources-using-chrom-or1ml",
+    "name": "Securing Compute Engine Applications and Resources using Chrome Enterprise Premium"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "cffbb111-1657-4f93-a7eb-f54617cd0b9a"
+}

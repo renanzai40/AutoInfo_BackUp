@@ -1,0 +1,24 @@
+{
+  "id": "915816238f990b1d",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/brasil-multa-dona-do-tiktok-em-2557-milhoes-de-euros-por-falha-na-protecao-de-dados/",
+  "title": "Dona do TikTok multada em 25 milhões de euros no Brasil",
+  "content": "Na prática, a rede social deverá aplicar automaticamente as configurações mais restritivas de privacidade às contas de menores de 16 anos, que só poderão ser alteradas com autorização dos responsáveis",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T16:47:33+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "d0d98a7f-2e1e-4c69-aa8d-92288e19ba86",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

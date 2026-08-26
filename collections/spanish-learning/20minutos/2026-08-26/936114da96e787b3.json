@@ -1,0 +1,24 @@
+{
+  "id": "936114da96e787b3",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/internacional/rey-marruecos-indulta-mas-630-personas-incluyendo-sentenciados-por-extremismo-terrorismo_7029083_0.html",
+  "title": "El rey de Marruecos indulta a 630 personas, incluyendo a varios sentenciados por \"extremismo y terrorismo\"",
+  "content": "La cartera ha indicado que la medida deja un total de 634 beneficiarios, algunos de los cuales ya están en libertad, incluidos 449 que verán reducida sus penas de cárcel.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T11:31:58+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "82020706-22d5-48bb-82f7-f3e241293e9f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "3f883269724f0dcd",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/julia-janeiro-da-razon-belen-esteban-mi-padre-no-estuvo-su-casa-que-estuve-fui-yo_7029253_0.html",
+  "title": "Julia Janeiro da la razón a Belén Esteban: \"Mi padre no estuvo en su casa, fui yo\"",
+  "content": "La 'influencer' ha hablado con la prensa en plena calle, donde ha dicho que quiere mucho a su hermana Andrea, hija también de Jesulín.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T17:04:13+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0abf65d8-4781-4bb8-aa6d-24fc0f8086c5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

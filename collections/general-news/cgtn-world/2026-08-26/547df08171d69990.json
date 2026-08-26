@@ -1,0 +1,24 @@
+{
+  "id": "547df08171d69990",
+  "source_name": "cgtn-world",
+  "source_type": "rss",
+  "source_url": "https://news.cgtn.com/news/2026-08-25/news-1PT1ILk5gGs/p.html?UTM_Source=cgtn&UTM_Medium=rss&UTM_Campaign=World",
+  "title": "Canada to unveil retaliatory measures against US after talks collapse",
+  "content": "Canada to unveil retaliatory measures against US after talks collapse",
+  "content_type": "text",
+  "source_platform": "cgtn-world",
+  "collected_at": "2026-08-24T23:07:28+00:00",
+  "language": "",
+  "domain": "general-news",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.cgtn.com/subscribe/rss/section/world.xml"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "98224c6a-193e-448f-8640-46ee432aaf42",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

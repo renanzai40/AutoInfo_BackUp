@@ -1,0 +1,24 @@
+{
+  "id": "347f92d6139ddcba",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/fabricante-chines-de-robos-unitree-cai-45-desde-sessao-de-estreia-em-bolsa/",
+  "title": "Unitree Robotics perde 45% em bolsa em menos de uma semana",
+  "content": "A Unitree desenvolve robôs quadrúpedes e humanoides",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T23:52:49+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "1e5f1c1b-e727-492a-8c93-8ce761751175",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

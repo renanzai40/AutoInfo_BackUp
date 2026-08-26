@@ -1,0 +1,27 @@
+{
+  "id": "lDHhgquQEey44Q4AsVOVkw",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Consulting Presentations and Storytelling",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "lDHhgquQEey44Q4AsVOVkw",
+    "slug": "management-consulting-presentations",
+    "name": "Consulting Presentations and Storytelling"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "54025a43-c580-4507-ba52-f92314045b97",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

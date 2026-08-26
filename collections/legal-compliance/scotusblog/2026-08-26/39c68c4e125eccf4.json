@@ -1,0 +1,24 @@
+{
+  "id": "39c68c4e125eccf4",
+  "source_name": "scotusblog",
+  "source_type": "rss",
+  "source_url": "https://www.scotusblog.com/2026/08/trump-administration-awaits-emergency-docket-decisions/",
+  "title": "Trump administration awaits emergency docket decisions",
+  "content": "Plus, an update on the ripple effects of the Supreme Court’s TPS ruling.",
+  "content_type": "text",
+  "source_platform": "scotusblog",
+  "collected_at": "2026-08-19T13:00:00+00:00",
+  "language": "",
+  "domain": "legal-compliance",
+  "topic_tags": [],
+  "quality_tier": 2,
+  "raw_data": {
+    "feed_url": "https://www.scotusblog.com/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "0abbc73b-3440-4ee0-a42f-5242c52370ac",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

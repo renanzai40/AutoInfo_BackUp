@@ -1,0 +1,48 @@
+{
+  "id": 2171177,
+  "source_name": "Stack Exchange",
+  "source_type": "api",
+  "source_url": "https://stackoverflow.com/questions/2171177/what-is-an-application-binary-interface-abi",
+  "title": "What is an application binary interface (ABI)?",
+  "content": "What is an application binary interface (ABI)?",
+  "content_type": "text",
+  "source_platform": "Stack Exchange",
+  "collected_at": "2026-08-15T19:01:40.189009+00:00",
+  "language": "",
+  "domain": "tech-ai-developer",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "tags": [
+      "compiler-construction",
+      "abi"
+    ],
+    "owner": {
+      "account_id": 65909,
+      "reputation": 54934,
+      "user_id": 193653,
+      "user_type": "registered",
+      "accept_rate": 84,
+      "profile_image": "https://www.gravatar.com/avatar/49b121b7da7281a5526c95ba95a90e5f?s=256&d=identicon&r=PG&f=y&so-version=2",
+      "display_name": "claws",
+      "link": "https://stackoverflow.com/users/193653/claws"
+    },
+    "is_answered": true,
+    "view_count": 266419,
+    "protected_date": 1609855287,
+    "accepted_answer_id": 2456882,
+    "answer_count": 18,
+    "score": 875,
+    "last_activity_date": 1786819681,
+    "creation_date": 1264930224,
+    "last_edit_date": 1609464903,
+    "question_id": 2171177,
+    "content_license": "CC BY-SA 4.0",
+    "link": "https://stackoverflow.com/questions/2171177/what-is-an-application-binary-interface-abi",
+    "title": "What is an application binary interface (ABI)?"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "fcdde862-e1cb-4f7d-92c3-00664999167e"
+}

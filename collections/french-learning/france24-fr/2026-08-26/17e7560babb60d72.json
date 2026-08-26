@@ -1,0 +1,24 @@
+{
+  "id": "17e7560babb60d72",
+  "source_name": "france24-fr",
+  "source_type": "rss",
+  "source_url": "https://www.france24.com/fr/vid%C3%A9o/20260825-mali-alg%C3%A9rie-abdoulaye-ma%C3%AFga-%C3%A0-alger-pour-relancer-les-relations",
+  "title": "Mali - Algérie : Abdoulaye Maïga à Alger pour relancer les relations",
+  "content": "Le chef du gouvernement malien, Abdoulaye Maïga, s'est rendu en Algérie ce lundi pour une visite de travail. Il a été reçu par le président Abdelmadjid Tebboune, dans un contexte de rapprochement après plusieurs années de tensions entre les deux pays. Correspondance de Serge Daniel.",
+  "content_type": "text",
+  "source_platform": "france24-fr",
+  "collected_at": "2026-08-25T15:32:23+00:00",
+  "language": "",
+  "domain": "french-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.france24.com/fr/rss"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "47767c2b-dfb6-4d6d-9d82-404ae7e202e5",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

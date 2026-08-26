@@ -1,0 +1,24 @@
+{
+  "id": "3ebeceb4bb1d8bf8",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/gente/isaac-torres-lobo-lidlt-va-ser-padre-nuevo-asi-anuncio-que-espera-un-bebe-junto-su-novia-dana-garcia_7029054_0.html",
+  "title": "Isaac Torres, el 'Lobo' de 'LIDLT', va a ser padre de nuevo: así anunció que espera un bebé con su novia",
+  "content": "El 'influencer', conocido como Lobo, ya es padre de una hija de tres años, fruto de su relación con Lucía Sánchez, de 'La isla de las tentaciones 3'.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T12:31:55+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "3691a2a1-7ccb-4237-99c8-a74c24f9ddae",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

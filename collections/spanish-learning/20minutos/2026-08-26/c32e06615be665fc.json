@@ -1,0 +1,24 @@
+{
+  "id": "c32e06615be665fc",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/salud/desarrollan-un-analisis-sangre-que-podria-facilitar-deteccion-temprana-regreso-cancer-mama_7028888_0.html",
+  "title": "Desarrollan un análisis de sangre que podría facilitar la detección temprana en el regreso del cáncer de mama",
+  "content": "Para lograrlo, los investigadores se centraron en analizar los nucleosomas, fragmentos del ADN que se enrollan alrededor de proteínas llamadas histonas.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-24T18:44:16+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "99d855b2-8c14-49bf-bb8c-ef1a024f7d40",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

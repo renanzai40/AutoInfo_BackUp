@@ -1,0 +1,24 @@
+{
+  "id": "b531fac60d2ada8a",
+  "source_name": "20minutos",
+  "source_type": "rss",
+  "source_url": "https://www.20minutos.es/internacional/trump-lamenta-muerte-dolly-parton-decreta-luto-durante-una-semana-su-honor-mundo-te-quiere_7029342_0.html",
+  "title": "Trump lamenta la muerte de Dolly Parton y decreta luto durante una semana en su honor: \"El mundo te quiere\"",
+  "content": "El presidente de EEUU ha ordenado que se bajen las banderas a media asta.",
+  "content_type": "text",
+  "source_platform": "20minutos",
+  "collected_at": "2026-08-25T21:30:07+02:00",
+  "language": "",
+  "domain": "spanish-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://www.20minutos.es/rss/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "657af7c9-4645-4a81-a3f7-c7462c6568ce",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

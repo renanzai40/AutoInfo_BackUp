@@ -1,0 +1,27 @@
+{
+  "id": "hwvdsk86Eem0lhKc4vCNig",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Social Network Analysis",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "hwvdsk86Eem0lhKc4vCNig",
+    "slug": "social-network-analysis",
+    "name": "Social Network Analysis"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "a7b29d83-aebe-492a-aace-5b01605471b4",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

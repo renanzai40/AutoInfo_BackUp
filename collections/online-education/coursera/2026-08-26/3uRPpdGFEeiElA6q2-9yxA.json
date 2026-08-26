@@ -1,0 +1,27 @@
+{
+  "id": "3uRPpdGFEeiElA6q2-9yxA",
+  "source_name": "coursera",
+  "source_type": "api",
+  "source_url": "https://api.coursera.org/api/courses.v1",
+  "title": "Researcher Management and Leadership Training",
+  "content": "",
+  "content_type": "text",
+  "source_platform": "coursera",
+  "collected_at": "2026-08-26T00:12:04.592658+00:00",
+  "language": "",
+  "domain": "online-education",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "courseType": "v2.ondemand",
+    "id": "3uRPpdGFEeiElA6q2-9yxA",
+    "slug": "researcher-management-leadership-training",
+    "name": "Researcher Management and Leadership Training"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "06308061-da83-476c-9376-056c4d4c661f",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

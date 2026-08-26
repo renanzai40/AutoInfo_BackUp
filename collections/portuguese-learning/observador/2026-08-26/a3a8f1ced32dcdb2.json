@@ -1,0 +1,24 @@
+{
+  "id": "a3a8f1ced32dcdb2",
+  "source_name": "observador",
+  "source_type": "rss",
+  "source_url": "https://observador.pt/2026/08/25/sindicato-vai-impugnar-transferencia-compulsiva-de-nove-guardas-prisionais-de-odemira-para-tires/",
+  "title": "Sindicato irá impugnar transferência de guardas prisionais",
+  "content": "As reestruturações nos estabelecimentos prisionais acontecem numa altura de pressão com o aumento da população prisional, que Frederico Morais disse estar a aproximar-se dos 14 mil presos",
+  "content_type": "text",
+  "source_platform": "observador",
+  "collected_at": "2026-08-25T18:41:59+01:00",
+  "language": "",
+  "domain": "portuguese-learning",
+  "topic_tags": [],
+  "quality_tier": 1,
+  "raw_data": {
+    "feed_url": "https://observador.pt/feed/"
+  },
+  "version": 1,
+  "previous_version": 0,
+  "supersedes": "",
+  "trace_id": "e938a028-1d54-4c30-b88c-b194e24844dd",
+  "_cefr_classification": null,
+  "_detected_language": null
+}

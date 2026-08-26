@@ -1,0 +1,50 @@
+---
+title: Clementine Douglas Announces Debut Australian Headline Shows
+domain: online-video
+tier: 01-Raw
+entry_id: online-video-general-clementine-douglas-announces-debut-australian-headline-shows
+source_url: https://www.billboard.com/music/concerts/clementine-douglas-debut-australian-headline-tour-1236312396/
+source_type: rss
+source_platform: rss
+collected_at: '2026-08-10T04:25:24+00:00'
+summary: Clementine Douglas announces her debut headline shows in Australia, following her recent performance at Madison Square
+  Garden with Dom Dolla.
+tags: []
+quality_tier: 2
+relevance_score: 0.0
+dedup_status: duplicate
+source_score: 70.0
+language: en
+user_id: ''
+version: 1
+previous_version: 0
+supersedes: ''
+trace_id: c5b20461-f6b8-43f2-8f51-39544d3a5d43
+quality_flags:
+  G0-SchemaIntegrity: false
+  G1-SourceAuthority: false
+  G1-TosCompliance: false
+  G2-Dedup: true
+  G3-RelevanceScoring: true
+  G4-SummaryFactual: false
+tos_compliant: true
+tos_classification: open
+---
+
+## Original Content
+Earlier this year, Douglas made her Madison Square Garden debut alongside Dom Dolla.
+
+## Summary
+Clementine Douglas announces her debut headline shows in Australia, following her recent performance at Madison Square Garden with Dom Dolla.
+
+## Key Points
+- Clementine Douglas to headline shows in Australia for the first time
+- Recent notable performance at Madison Square Garden
+- Shared bill with artist Dom Dolla at Madison Square Garden
+
+
+## Entities
+- **Clementine Douglas** (person, relevance=)
+- **Australia** (org, relevance=)
+- **Madison Square Garden** (org, relevance=)
+- **Dom Dolla** (person, relevance=)
