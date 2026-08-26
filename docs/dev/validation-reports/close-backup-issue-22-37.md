@@ -14,22 +14,22 @@ Every issue card's source set is configured, verified reachable on the local net
 
 | Domain | Issue | 01-Raw | ≥50 | 8 products |
 |---|---|---|---|---|
-| b2b | #22 | 145 | ✅ | ✅ 8/8 |
-| gaming | #23 | 190 | ✅ | ✅ 8/8 |
-| retail | #24 | 54 | ✅ | ✅ 8/8 |
-| online-video | #25 | 168 | ✅ | ✅ 8/8 |
-| online-education | #26 | grinding | ⏳ | ✅ 8/8 |
-| tech-ai-developer | #27 | 101 | ✅ | ✅ 8/8 |
-| general-news | #28 | 108 | ✅ | ✅ 8/8 |
-| legal-compliance | #29 | grinding | ⏳ | ✅ 8/8 |
-| russian-learning | #30 | 53 | ✅ | ✅ 8/8 |
-| spanish-learning | #31 | 193 | ✅ | ✅ 8/8 |
-| hindi-learning | #32 | 53 | ✅ | ✅ 8/8 |
-| italian-learning | #33 | 69 | ✅ | ✅ 8/8 |
-| french-learning | #34 | 54 | ✅ | ✅ 8/8 |
-| korean-learning | #35 | grinding | ⏳ | ✅ 8/8 |
-| portuguese-learning | #36 | 90 | ✅ | ✅ 8/8 |
-| english-learning | #37 | grinding | ⏳ | ✅ 8/8 |
+| b2b | 145 | ✅ | ✅ 8/8 | ✅ 8/8 |
+| gaming | 190 | ✅ | ✅ 8/8 | ✅ 8/8 |
+| retail | 54 | ✅ | ✅ 8/8 | ✅ 8/8 |
+| online-video | 168 | ✅ | ✅ 8/8 | ✅ 8/8 |
+| online-education | 47 | ⏳ | ✅ 8/8 | ✅ 8/8 |
+| tech-ai-developer | 101 | ✅ | ✅ 8/8 | ✅ 8/8 |
+| general-news | 108 | ✅ | ✅ 8/8 | ✅ 8/8 |
+| legal-compliance | 40 | ⏳ | ✅ 8/8 | ✅ 8/8 |
+| russian-learning | 53 | ✅ | ✅ 8/8 | ✅ 8/8 |
+| spanish-learning | 193 | ✅ | ✅ 8/8 | ✅ 8/8 |
+| hindi-learning | 53 | ✅ | ✅ 8/8 | ✅ 8/8 |
+| italian-learning | 69 | ✅ | ✅ 8/8 | ✅ 8/8 |
+| french-learning | 54 | ✅ | ✅ 8/8 | ✅ 8/8 |
+| korean-learning | 56 | ✅ | ✅ 8/8 | ✅ 8/8 |
+| portuguese-learning | 90 | ✅ | ✅ 8/8 | ✅ 8/8 |
+| english-learning | 27 | ⏳ | ✅ 8/8 | ✅ 8/8 |
 
 W4 evidence: `outputs/evidence-22-37/<domain>/{digest,report,column,premium-briefing,enterprise-briefing,magazine-digest,tutorial,presentation}.md` — **16/16 domains × 8/8 products generated; empty-state marker sweep: 0 issues across all 128 products.** Digest/magazine render with `--include-stale` where the corpus predates the weekly window (Corriere 2024-05 pubDates, people.cn 2025-06) — a `generate_digest` date-window relax (commit `59ff3fe`) handles the zh-corpus edge for general-news (12.4KB digest with 12 entries after the fix).
 
