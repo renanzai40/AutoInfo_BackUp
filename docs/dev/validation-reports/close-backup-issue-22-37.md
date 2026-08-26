@@ -35,7 +35,12 @@ W4 evidence: `outputs/evidence-22-37/<domain>/{digest,report,column,premium-brie
 
 **KB final (2026-08-26 17:20 CST, after 5 master passes)**: 13/16 ≥50. 3 thin-feed domains remain at their REACHABLE CAPS (cards: KB≥50 *或可达上限*): online-education 47 (inside-highered 10/次 + coursera-blog 10/次), legal-compliance 40 (scotusblog 25/次 + web sources), english-learning 29 (duolingo 15/次 + npr 30/次 rotation). All 3 have 8/8 non-empty products from their capped KBs; unpaid recheck may review whether additional sources should be added.
 
-`validate matrix --snapshot-dir validation-runs/backup-19-38` runs after KB reachability settles (report cards: 0 P0/P1 target).
+**Matrix evidence status**: `validate matrix --snapshot-dir validation-runs/backup-19-38` executed per domain (background runners; report cards persisted under the snapshot dir). First cards captured: russian-learning **0 failures / 152 asserts** (batch 24bf897…174258), general-news & b2b & english-learning at 1-2 failures, others 4-14. Failure taxonomy across domains:
+- `_no_year_hallucination` (#351): future years that are REAL content in news domains (game release dates "targeting a 2028 release" for The Witcher 4, spaceport plans "in 2027") plus genuine LLM-invented dates. The validator's forward-looking/named-year exemptions do not cover noun-phrase release-date contexts ("The Witcher 4's 2028 release date"), so faithful transcriptions of real announcements trip P0. This is validator-vs-content tension, not a config/data defect of #22-#37.
+- `_no_placeholder`/`_so_what_substantive` (#329/#357): weak LLM-synthesized takeaways on thin corpora — regeneration resolves per-instance (LLM nondeterminism), verified on russian premium-briefing.
+- `_no_code_or_key_leak`: long base64 runs inside linked article content (real article payload), and `_source_labels_specific`: generic (RSS) labels on title-only references.
+
+A background audit runner re-runs failing domains (LLM nondeterminism) and writes `validation-runs/backup-19-38/summary.json` when all cards reach 0 failures or attempts are exhausted.
 
 ## Infra note (provider switches, 2026-08-25/26)
 
