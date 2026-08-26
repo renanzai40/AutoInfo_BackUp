@@ -10,30 +10,30 @@ Every issue card's source set is configured, verified reachable on the local net
 - 8 new learning domains created from cards + imported: russian/spanish/hindi/italian/french/korean/portuguese/english-learning (21 domains total now).
 - Compliance: every source carries `tos_classification`, `rate_limit`, identifying UA; process runs `--check-factual`; no paywalled/anti-scrape sources beyond the card lists; retailwire excluded from runtime despite card listing (curl 200 vs httpx 403 — TLS-fingerprint block, documented).
 
-## KB progress (01-Raw, live from SQLite `entries`)
+## KB progress + W4 evidence (live from SQLite `entries` + `outputs/evidence-22-37/`)
 
-| Domain | Issue | 01-Raw | ≥50 |
-|---|---|---|---|
-| russian-learning | #30 | 53 | ✅ |
-| gaming | #23 | 190 | ✅ |
-| online-video | #25 | 168 | ✅ |
-| general-news | #28 | 55 | ✅ |
-| medical-research | (reference) | 73 | ✅ |
-| portuguese-learning | #36 | 47 | processing… |
-| financial-intelligence | (reference) | 42 | — |
-| italian-learning | #33 | 20 | grinding |
-| hindi-learning | #32 | 19 | grinding |
-| korean-learning | #35 | 15 | grinding |
-| english-learning | #37 | 23 | grinding |
-| b2b | #22 | 8 | grinding |
-| tech-ai-developer | #27 | 8 | grinding |
-| retail | #24 | 20 | grinding |
-| online-education | #26 | 10 | grinding |
-| legal-compliance | #29 | 10 | grinding |
-| spanish-learning | #31 | 4 | grinding |
-| french-learning | #34 | 0 | queued |
+| Domain | Issue | 01-Raw | ≥50 | 8 products |
+|---|---|---|---|---|
+| b2b | #22 | 145 | ✅ | ✅ 8/8 |
+| gaming | #23 | 190 | ✅ | ✅ 8/8 |
+| retail | #24 | 54 | ✅ | ✅ 8/8 |
+| online-video | #25 | 168 | ✅ | ✅ 8/8 |
+| online-education | #26 | grinding | ⏳ | pending |
+| tech-ai-developer | #27 | 101 | ✅ | ✅ 8/8 |
+| general-news | #28 | 108 | ✅ | ✅ 8/8 |
+| legal-compliance | #29 | grinding | ⏳ | pending |
+| russian-learning | #30 | 53 | ✅ | ✅ 8/8 |
+| spanish-learning | #31 | 193 | ✅ | ✅ 8/8 |
+| hindi-learning | #32 | 53 | ✅ | ✅ 8/8 |
+| italian-learning | #33 | 69 | ✅ | ✅ 8/8 |
+| french-learning | #34 | 54 | ✅ | ✅ 8/8 |
+| korean-learning | #35 | grinding | ⏳ | pending |
+| portuguese-learning | #36 | 90 | ✅ | ✅ 8/8 |
+| english-learning | #37 | grinding | ⏳ | pending |
 
-Progress is bottlenecked by free-tier LLM provider capacity (see infra note below): the sequential master runner (`/tmp/opencode/master.sh`) processes one domain at a time, `AUTOINFO_LLM_MAX_CONCURRENCY=4`, `--check-factual`.
+W4 evidence: `outputs/evidence-22-37/<domain>/{digest,report,column,premium-briefing,enterprise-briefing,magazine-digest,tutorial,presentation}.md` — all 8 product types non-empty (empty-state marker sweep: 0 issues across all generated products). Digest/magazine render with `--include-stale` where the corpus predates the weekly window (Corriere 2024-05 pubDates, people.cn 2025-06) — a `generate_digest` date-window relax (commit `59ff3fe`) handles the zh corpus edge for general-news.
+
+`validate matrix --snapshot-dir validation-runs/backup-19-38` runs in progress for the completed domains (report cards: 0 P0/P1 target).
 
 ## Infra note (provider switches, 2026-08-25/26)
 
