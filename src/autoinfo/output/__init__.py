@@ -5007,7 +5007,18 @@ def generate_digest(
     )
     llm_synthesis: dict[str, Any] = {}
     if entries:
-        prompt = _build_digest_llm_prompt(entries, product_family=digest_family)
+        # Issue #46: prune the LLM-synthesis candidate list the same way #42
+        # prunes References — low-value promo/obituary/celebrity entries must
+        # not reach the Executive Summary's leading enumeration.  Clean
+        # entries always stay; flagged entries are dropped for non-language
+        # domains with >= _REF_LOW_VALUE_MIN_REAL_ENTRIES clean candidates and
+        # demoted to the tail otherwise (language-learning keeps them as
+        # teaching material).  Deterministic, no LLM.  The full *entries* list
+        # still flows to References unchanged below.
+        synthesis_entries = _sorted_ref_entries(entries, domain=domain)
+        prompt = _build_digest_llm_prompt(
+            synthesis_entries, product_family=digest_family
+        )
         if custom_instructions:
             prompt += f"\n\nAdditional instructions: {custom_instructions}"
         audience = _normalize_report_audience(target_audience)

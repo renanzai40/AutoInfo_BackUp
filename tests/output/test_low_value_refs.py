@@ -17,13 +17,15 @@ domains.  The fix re-ranks/drops low-value entries inside
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
+from unittest.mock import MagicMock, patch
 
 from autoinfo.output import (
     _REF_LOW_VALUE_MIN_REAL_ENTRIES,
     _low_value_signal_penalty,
     _normalize_digest_product_context,
     _sorted_ref_entries,
+    generate_digest,
 )
 
 PROMO_TITLE = (
@@ -231,3 +233,91 @@ class TestDigestPathLowValueRelegation:
         ref_titles = [r["title"] for r in flat["references"]]
         assert SKI_TITLE in ref_titles
         assert ref_titles[-1] == SKI_TITLE
+
+
+# ---------------------------------------------------------------------------
+# (d) Issue #46 — Executive Summary synthesis candidates are pruned
+# ---------------------------------------------------------------------------
+# #42 filters References, but the Executive Summary is LLM-synthesized from a
+# candidate entry list that was NOT filtered — so a low-value obituary could
+# still lead the summary's first line.  The synthesis-prompt candidate list
+# now goes through the SAME ``_sorted_ref_entries`` relegation, while the full
+# ``entries`` list still flows to References unchanged.
+
+OBIT_TITLE = "Dolly Parton has died at age 80, family confirms"
+
+
+def _obit_entry(domain: str = "b2b") -> dict[str, Any]:
+    return _entry(
+        "obit-46",
+        OBIT_TITLE,
+        "Country music legend passes away surrounded by family.",
+        99.0,
+        domain=domain,
+    )
+
+
+class TestSynthesisPromptLowValueFilter:
+    """End-to-end through ``generate_digest``: the LLM synthesis prompt's
+    entry list is pruned/demoted exactly like References (#42), while the
+    full entries list still reaches the rendered References section."""
+
+    def _capture(self, entries: list[dict[str, Any]], domain: str) -> tuple[str, str]:
+        captured: dict[str, Any] = {}
+
+        def _store(*_args: Any, **_kwargs: Any) -> MagicMock:
+            store = MagicMock()
+            store.list_entries.return_value = entries
+            return store
+
+        def _llm(prompt: str, config: Any = None) -> dict[str, Any]:
+            captured["prompt"] = prompt
+            return {
+                "executive_summary": "Synthesis.",
+                "key_findings": [],
+                "recommendations": [],
+            }
+
+        with (
+            patch("autoinfo.output.KBStore", side_effect=_store),
+            patch("autoinfo.output._call_llm_for_digest", side_effect=_llm),
+        ):
+            result = generate_digest(domain=domain, period="weekly")
+        assert isinstance(result, str)
+        return cast(str, captured["prompt"]), result
+
+    def test_b2b_synthesis_candidates_exclude_obituary(self) -> None:
+        """>= MIN_REAL clean b2b entries -> the obituary is dropped from the
+        synthesis candidates (not in the prompt at all).  The full entries
+        list still flows to the rendered body for traceability (issue #46:
+        only the synthesis candidates — and References via #42 — are pruned;
+        entries are never deleted)."""
+        entries = _clean_entries(_REF_LOW_VALUE_MIN_REAL_ENTRIES)
+        entries.append(_obit_entry("b2b"))
+        prompt, result = self._capture(entries, "b2b")
+        assert OBIT_TITLE not in prompt
+        assert "Real story 20: quarterly growth across the sector" in prompt
+        assert OBIT_TITLE in result
+
+    def test_b2b_synthesis_keeps_obituary_at_tail_when_few_entries(self) -> None:
+        """< MIN_REAL clean b2b entries -> the obituary survives in the
+        synthesis candidates ONLY at the tail (never in the leading
+        enumeration)."""
+        entries = _clean_entries(5)
+        entries.append(_obit_entry("b2b"))
+        prompt, _ = self._capture(entries, "b2b")
+        assert OBIT_TITLE in prompt
+        assert prompt.index(OBIT_TITLE) > prompt.rindex("Real story ")
+
+    def test_lang_learning_synthesis_demotes_obituary_to_tail(self) -> None:
+        """Language-learning keeps teaching material: the obituary stays in the
+        synthesis candidates but demoted below every clean entry."""
+        entries = _clean_entries(
+            _REF_LOW_VALUE_MIN_REAL_ENTRIES, domain="english-learning"
+        )
+        entries.append(_obit_entry("english-learning"))
+        prompt, result = self._capture(entries, "english-learning")
+        assert OBIT_TITLE in prompt
+        obit_idx = prompt.index(OBIT_TITLE)
+        assert "Real story " not in prompt[obit_idx:]
+        assert OBIT_TITLE in result
