@@ -25,6 +25,7 @@ Covers:
 
 from __future__ import annotations
 
+import re
 from typing import Any
 from unittest.mock import MagicMock, patch
 
@@ -517,6 +518,51 @@ class TestColumnValueDrain:
             assert str(section["title"]) in implications, (
                 f"Implications misses section {i} title {section['title']!r}"
             )
+
+    def test_implications_fallback_never_leaks_internal_count(self) -> None:
+        """#49: the no-implication fallback never exposes ``(N item(s))``.
+
+        Pre-#49 the template fell back to ``Covered in the Deep Dive (N
+        item(s)); watch for follow-up developments next period.`` when the
+        synthesis gave no implication for a section — an internal render
+        count in reader-facing text.  The fallback must carry no count.
+        """
+        sections = [
+            {
+                "title": f"Deep dive subsection {i}",
+                "content": f"Analysis block {i}.",
+                "entries": [
+                    {
+                        "title": f"Entry {i}-{j}",
+                        "summary": f"Summary {i}-{j}.",
+                    }
+                    for j in range(1, 4)
+                ],
+            }
+            for i in range(1, 9)
+        ]
+        flat = _normalize_digest_product_context(
+            self._context(
+                {
+                    **_SAMPLE_LLM_SYNTHESIS_WITH_SECTIONS,
+                    "sections": sections,
+                }
+            ),
+            "medical-research",
+            product_family="column",
+        )
+        assert flat["implications"] == [], (
+            "hermetic setup: synthesis carries no implications"
+        )
+        out = _render_column_template(flat)
+
+        implications, _ = _section_block(out, "## Implications & Outlook")
+        assert "Covered in the Deep Dive; watch for follow-up developments next period." in implications, (
+            f"natural fallback missing from Implications:\n{implications}"
+        )
+        assert not re.search(r"\(\d+ item\(s\)\)", out), (
+            f"internal item count leaked into reader text:\n{out}"
+        )
 
     def test_implications_uses_synthesis_implications_when_present(self) -> None:
         """Synthesis ``implications`` (so-what phrasing) is preferred."""

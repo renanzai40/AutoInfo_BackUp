@@ -63,7 +63,7 @@ _No developments this week._
 ## Implications & Outlook
 
 {% for sec in sections %}
-{% set _impl = implications[loop.index0] if (implications and implications[loop.index0] is defined and implications[loop.index0]) else ("Covered in the Deep Dive (" ~ (sec.entries|length) ~ " item(s)); watch for follow-up developments next period.") %}
+{% set _impl = implications[loop.index0] if (implications and implications[loop.index0] is defined and implications[loop.index0]) else ("Covered in the Deep Dive; watch for follow-up developments next period.") %}
 - **{{ sec.title }}** — {{ _impl }}
 {% else %}
 _No outlook sections available._

@@ -13,11 +13,11 @@ numbered reference (~half the product surface).  This locks the fix:
   build site).
 - ``ref_limit`` precedence: explicit param > ``OutputConfig.ref_limit``
   (config.py) > default 60.
-- Enterprise ``selected N of M`` label-inversion hole (decision a): the
-  product's ``key_findings`` in the render context is ALSO capped at
-  ``min(_DEDICATED_PRODUCT_PROMPT_MAX_FINDINGS, len(references))`` for the
-  premium/enterprise families, so the label can never render ``selected 9
-  of 8``.
+- Enterprise ``N key findings selected · M source references`` label-inversion
+  hole (decision a): the product's ``key_findings`` in the render context is
+  ALSO capped at ``min(_DEDICATED_PRODUCT_PROMPT_MAX_FINDINGS,
+  len(references))`` for the premium/enterprise families, so the label can
+  never render ``9 key findings selected · 8 source references``.
 """
 
 from __future__ import annotations
@@ -302,10 +302,12 @@ class TestDigestPathReferenceCap:
 
 
 # ---------------------------------------------------------------------------
-# (d) Enterprise ``selected N of M`` label: k findings (1 <= k <= 12) and m
-#     entries (12 <= m <= 60) always render ``selected k of m``; the
-#     discriminating ``ref_limit=8`` with 9 findings case renders ``8 of 8``
-#     (decision a: key_findings min-capped), NEVER ``9 of 8``.
+# (d) Enterprise ``N key findings selected · M source references`` label:
+#     k findings (1 <= k <= 12) and m entries (12 <= m <= 60) always render
+#     ``k key findings selected · m source references``; the discriminating
+#     ``ref_limit=8`` with 9 findings case renders ``8 key findings selected ·
+#     8 source references`` (decision a: key_findings min-capped), NEVER
+#     ``9 key findings selected · 8 source references``.
 # ---------------------------------------------------------------------------
 
 
@@ -330,7 +332,8 @@ class TestEnterpriseSelectedLabel:
         m: int,
     ) -> None:
         """With k <= 12 <= m (m within the default 60 cap), the label stays
-        ``selected k of m`` — no key_findings cap ever fires."""
+        ``k key findings selected · m source references`` — no key_findings
+        cap ever fires."""
         entries = _make_plain_entries(m)
         mock_synthesis.return_value = _synthesis(k)
         mock_group.return_value = []
@@ -339,8 +342,9 @@ class TestEnterpriseSelectedLabel:
             domain="medical-research", period="weekly", format="markdown",
             product_template=_registry_template("enterprise-briefing"),
         ))
-        assert f"selected {k} of {m}" in out
-        assert f"selected {m} of {k}" not in out  # never inverted
+        assert f"{k} key findings selected · {m} source references" in out
+        assert f"{m} key findings selected · {k} source references" not in out  # never inverted
+        assert re.search(rf"of {m} key findings", out) is None
 
     @patch("autoinfo.output.KBStore")
     @patch("autoinfo.output._group_by_theme")
@@ -349,8 +353,9 @@ class TestEnterpriseSelectedLabel:
         self, mock_synthesis: MagicMock, mock_group: MagicMock, mock_kb: MagicMock
     ) -> None:
         """The discriminating case: ``ref_limit=8`` with 9 LLM findings must
-        render ``selected 8 of 8`` (key_findings min-capped to
-        min(12, len(references))), NEVER ``selected 9 of 8``."""
+        render ``8 key findings selected · 8 source references`` (key_findings
+        min-capped to min(12, len(references))), NEVER ``9 key findings
+        selected · 8 source references``."""
         entries = _make_plain_entries(8)
         mock_synthesis.return_value = _synthesis(9)
         mock_group.return_value = []
@@ -360,9 +365,9 @@ class TestEnterpriseSelectedLabel:
             product_template=_registry_template("enterprise-briefing"),
             ref_limit=8,
         ))
-        assert "selected 8 of 8 key findings" in out
-        assert "8 source references listed" in out
-        assert "selected 9 of 8" not in out
+        assert "8 key findings selected · 8 source references" in out
+        assert "of 8 key findings" not in out
+        assert "9 key findings selected" not in out
 
     def test_digest_path_ref_limit_8_with_9_findings_renders_selected_8_of_8(
         self,
@@ -392,9 +397,9 @@ class TestEnterpriseSelectedLabel:
         out = _registry_template("enterprise-briefing").render(
             "enterprise-briefing", "md", flat
         )
-        assert "selected 8 of 8 key findings" in out
-        assert "8 source references listed" in out
-        assert "selected 9 of 8" not in out
+        assert "8 key findings selected · 8 source references" in out
+        assert "of 8 key findings" not in out
+        assert "9 key findings selected" not in out
 
     def test_key_findings_cap_never_exceeds_references_for_k_le_12(self) -> None:
         """General invariant: after normalization the enterprise flat context
