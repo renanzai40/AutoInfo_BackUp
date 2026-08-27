@@ -454,3 +454,111 @@ def test_judgment_tasks_constant_unchanged() -> None:
     """
     assert JUDGMENT_TASKS == frozenset({"g4_factual", "g5_translation", "llm_judge"})
     assert JUDGMENT_MODEL == "openai/stealth/ox-alpha"
+
+
+# ---------------------------------------------------------------------------
+# llm.judgment_model — deployment override of the judgment model (#45)
+# ---------------------------------------------------------------------------
+
+
+def test_judgment_model_override_wins_when_set(config_dir: Path) -> None:
+    """``llm.judgment_model`` set → judgment tasks resolve to the override,
+    never to a drifted ``llm.tasks`` entry."""
+    cfg = {
+        "project": {"name": "test", "created_at": ""},
+        "llm": {
+            "provider": "openai",
+            "model": "deepseek-v4-flash",
+            "judgment_model": "deepseek-v4-flash",
+            "tasks": {
+                "g4_factual": {"model": "evil-judge"},
+                "g5_translation": {"model": "evil-judge"},
+                "llm_judge": {"model": "evil-judge"},
+            },
+        },
+        "domains": [],
+    }
+    path = Path(config_dir) / "config.yaml"
+    path.write_text(yaml.safe_dump(cfg, sort_keys=False), encoding="utf-8")
+
+    loaded = load_config(path)
+    assert loaded.llm.judgment_model == "deepseek-v4-flash"
+    for task_name in ("g4_factual", "g5_translation", "llm_judge"):
+        effective = _resolve_task_llm_config(loaded, task_name)
+        assert effective.model == "deepseek-v4-flash", (
+            f"{task_name} must resolve to the judgment_model override, "
+            f"got {effective.model}"
+        )
+
+
+def test_judgment_model_default_when_unset(config_dir: Path) -> None:
+    """No ``llm.judgment_model`` → judgment tasks resolve to the release
+    default ``JUDGMENT_MODEL`` (backward compat)."""
+    cfg = {
+        "project": {"name": "test", "created_at": ""},
+        "llm": {
+            "provider": "openai",
+            "model": "deepseek-v4-flash",
+            "tasks": {
+                "g4_factual": {"model": "evil-judge"},
+            },
+        },
+        "domains": [],
+    }
+    path = Path(config_dir) / "config.yaml"
+    path.write_text(yaml.safe_dump(cfg, sort_keys=False), encoding="utf-8")
+
+    loaded = load_config(path)
+    assert loaded.llm.judgment_model == ""
+    effective = _resolve_task_llm_config(loaded, "g4_factual")
+    assert effective.model == JUDGMENT_MODEL
+    assert JUDGMENT_MODEL == "openai/stealth/ox-alpha"
+
+    # Non-judgment task still routes through its task config.
+    extraction = _resolve_task_llm_config(loaded, "extraction")
+    assert extraction.model == "deepseek-v4-flash"
+
+
+def test_judgment_model_override_not_touched_by_tasks_clear(config_dir: Path) -> None:
+    """``llm.judgment_model`` survives a configure_llm ``llm_tasks={}`` clear."""
+    cfg = {
+        "project": {"name": "test", "created_at": ""},
+        "llm": {
+            "provider": "openai",
+            "model": "deepseek-v4-flash",
+            "judgment_model": "deepseek-v4-flash",
+        },
+        "domains": [],
+    }
+    path = Path(config_dir) / "config.yaml"
+    path.write_text(yaml.safe_dump(cfg, sort_keys=False), encoding="utf-8")
+
+    result = _handle_configure_llm(llm_tasks={})
+    assert result["success"] is True
+
+    loaded = load_config(path)
+    assert loaded.llm.judgment_model == "deepseek-v4-flash"
+    assert _resolve_task_llm_config(loaded, "g4_factual").model == "deepseek-v4-flash"
+
+
+def test_judgment_model_override_idempotent_round_trip(config_dir: Path) -> None:
+    """The override survives a save→load→save round trip (config_to_dict)."""
+    cfg = {
+        "project": {"name": "test", "created_at": ""},
+        "llm": {
+            "provider": "openai",
+            "model": "deepseek-v4-flash",
+            "judgment_model": "deepseek-v4-flash",
+        },
+        "domains": [],
+    }
+    path = Path(config_dir) / "config.yaml"
+    path.write_text(yaml.safe_dump(cfg, sort_keys=False), encoding="utf-8")
+    loaded = load_config(path)
+
+    from autoinfo.config import save_config
+
+    save_config(loaded, path)
+    reloaded = load_config(path)
+    assert reloaded.llm.judgment_model == "deepseek-v4-flash"
+    assert _resolve_task_llm_config(reloaded, "llm_judge").model == "deepseek-v4-flash"
