@@ -25,7 +25,11 @@ _No executive summary available for this period._
 {% endif %}
 
 {% if key_findings %}
-> **Scope**: selected {{ key_findings|length }} of {{ references|length }} key findings · {{ references|length }} source references listed.
+{% if references %}
+> **Scope**: {{ key_findings|length }} key findings selected · {{ references|length }} source references.
+{% else %}
+> **Scope**: {{ key_findings|length }} key findings selected · no source references.
+{% endif %}
 {% endif %}
 
 {% if key_findings %}

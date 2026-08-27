@@ -13,11 +13,11 @@ Fix has two parts (both asserted here):
    ``_REPORT_PRODUCT_BASE_SECTIONS``) MUST instruct the model to name
    exactly the number of Key Findings it writes, never a larger count.
 2. Render-level determinism: the enterprise-briefing template labels the
-   selection scope deterministically — ``selected N of M key findings · M
-   source references listed`` (single-language, no CJK template leak, #8
-   residual) — so even a stale summary claim is visibly scoped, on BOTH
-   flat-context paths (report ``_report_data_to_dict`` and digest
-   ``_normalize_digest_product_context``).
+   selection scope deterministically — ``N key findings selected · M source
+   references`` (single-language, no CJK template leak, #8 residual; and no
+   awkward ``of M key findings`` counting syntax, #49) — so even a stale
+   summary claim is visibly scoped, on BOTH flat-context paths (report
+   ``_report_data_to_dict`` and digest ``_normalize_digest_product_context``).
 """
 
 from __future__ import annotations
@@ -142,8 +142,8 @@ class TestEnterpriseTemplateScopeLabel:
         out = _registry_template("enterprise-briefing").render(
             "enterprise-briefing", "md", flat
         )
-        assert "selected 9 of 20 key findings" in out
-        assert "20 source references listed" in out
+        assert "9 key findings selected · 20 source references" in out
+        assert "of 20 key findings" not in out
         # The deterministic label sits between the summary and the findings.
         assert out.index("> **Scope**:") < out.index("## Key Findings")
 
@@ -155,8 +155,8 @@ class TestEnterpriseTemplateScopeLabel:
         out = _registry_template("enterprise-briefing").render(
             "enterprise-briefing", "md", flat
         )
-        assert "selected 9 of 20 key findings" in out
-        assert "20 source references listed" in out
+        assert "9 key findings selected · 20 source references" in out
+        assert "of 20 key findings" not in out
 
     def test_scope_label_absent_when_no_findings(self) -> None:
         """No key findings -> no scope label (empty-state unchanged)."""
@@ -166,6 +166,17 @@ class TestEnterpriseTemplateScopeLabel:
         )
         assert "精选" not in out
         assert "**Scope**" not in out
+
+    def test_scope_label_degrades_when_no_references(self) -> None:
+        """Findings without references never expose an "N of 0" counting
+        syntax — the references clause degrades to "no source references"."""
+        flat = _report_data_to_dict(_make_report_data(3, 0))
+        out = _registry_template("enterprise-briefing").render(
+            "enterprise-briefing", "md", flat
+        )
+        assert "3 key findings selected · no source references" in out
+        assert "of 0" not in out
+        assert "key findings selected · 0 source references" not in out
 
 
 class TestScopeLabelSingleLanguageNoCjk:
@@ -185,9 +196,10 @@ class TestScopeLabelSingleLanguageNoCjk:
         )
 
     def test_scope_label_counts_match_references(self) -> None:
-        """The scope label's ``selected N`` equals the rendered Key Findings
-        bullets and ``of M`` equals the rendered References — no "items
-        detailed below" claim the flat References list cannot support."""
+        """The scope label's ``N key findings selected · M source references``
+        equals the rendered Key Findings bullets and the rendered References —
+        no "items detailed below" claim the flat References list cannot support,
+        and never an "of M key findings" counting syntax (issue #49)."""
         flat = _report_data_to_dict(_make_report_data(3, 60))
         out = _registry_template("enterprise-briefing").render(
             "enterprise-briefing", "md", flat
@@ -195,9 +207,13 @@ class TestScopeLabelSingleLanguageNoCjk:
         scope_m = re.search(r"> \*\*Scope\*\*: (.+)$", out, re.MULTILINE)
         assert scope_m, f"scope line missing from render:\n{out}"
         scope_line = scope_m.group(1)
-        count_m = re.search(r"selected (\d+) of (\d+)", scope_line)
-        assert count_m, f"selected N of M counts missing from scope line:\n{scope_line}"
+        count_m = re.search(r"(\d+) key findings selected · (\d+) source references", scope_line)
+        assert count_m, (
+            f"N key findings selected · M source references counts missing "
+            f"from scope line:\n{scope_line}"
+        )
         n, m = int(count_m.group(1)), int(count_m.group(2))
+        assert "of key findings" not in scope_line
         findings_m = re.search(
             r"## Key Findings\n(.*?)(?:\n## |\Z)", out, re.DOTALL
         )
