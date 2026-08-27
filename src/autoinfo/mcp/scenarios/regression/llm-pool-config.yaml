@@ -9,8 +9,10 @@
 #      by kind: mcp scenario steps, so without this step test_llm_connection
 #      falls into `missing` and the 146/146 coverage assertion fails.
 #   5. judgment tasks (g4_factual/g5_translation/llm_judge) still resolve to
-#      the release-pinned JUDGMENT_MODEL — a drifted llm.tasks entry can never
-#      change what model judges content (config.py _resolve_task_llm_config).
+#      the effective judgment model — the deployment override
+#      ``llm.judgment_model`` when set, else the release-pinned JUDGMENT_MODEL
+#      (config.py _resolve_task_llm_config, issue #45).  A drifted llm.tasks
+#      entry can never change what model judges content.
 #
 # The test_llm_connection step is env-agnostic via the recovery pattern
 # (mirrors llm-failure-recovery.yaml): without a key it asserts the
@@ -23,7 +25,7 @@ category: regression
 regression: true
 regression_issue: "#model-pool"
 requires_env: []
-min_passing: 5
+min_passing: 6
 steps:
   - name: "configure_llm writes fallback chain"
     tool: configure_llm
@@ -89,3 +91,32 @@ steps:
       success: true
       exit_code: 0
       stdout_has: ["JUDGMENT_PINNED"]
+
+  - name: "llm.judgment_model override wins over the release pin"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.config import (
+          Config, LLMConfig, LLMTaskConfig,
+          JUDGMENT_MODEL, JUDGMENT_TASKS, _resolve_task_llm_config,
+      )
+      c = Config()
+      c.llm = LLMConfig(
+          provider="openai",
+          model="deepseek-v4-flash",
+          judgment_model="deepseek-v4-flash",
+      )
+      c.llm.tasks = {
+          "g4_factual": LLMTaskConfig(model="drift-model-a"),
+          "extraction": LLMTaskConfig(model="extraction-model"),
+      }
+      for t in sorted(JUDGMENT_TASKS):
+          assert _resolve_task_llm_config(c, t).model == "deepseek-v4-flash", t
+      assert _resolve_task_llm_config(c, "extraction").model == "extraction-model"
+      assert _resolve_task_llm_config(c, "g4_factual").model != JUDGMENT_MODEL
+      print("JUDGMENT_OVERRIDE")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["JUDGMENT_OVERRIDE"]

@@ -27,6 +27,7 @@ import time
 from typing import Any, Optional
 
 from autoinfo.config import (
+    JUDGMENT_TASKS,
     Config,
     _resolve_task_llm_config,
     get_config_path,
@@ -781,6 +782,21 @@ def call_with_fallback(
             len(attempted),
             len(chain),
             entry_error,
+        )
+
+    # Judgment gate calls (G4/G5/llm_judge) must NEVER fail silently: when
+    # every chain model is exhausted, raise the error to ERROR level so a
+    # broken judgment gate is visible instead of quietly passing entries
+    # through.  The RuntimeError still propagates to the caller, which
+    # decides gate policy.
+    if task in JUDGMENT_TASKS:
+        logger.error(
+            "Judgment task %r failed after exhausting all %d model(s) "
+            "[%s] — G4/G5 gate may be impaired. Last error: %s",
+            task,
+            len(attempted),
+            ", ".join(attempted),
+            last_exception,
         )
 
     raise RuntimeError(

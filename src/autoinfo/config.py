@@ -156,6 +156,12 @@ class LLMConfig:
     max_tokens: int | None = None
     fallback: list[LLMConfig] = field(default_factory=list)
     tasks: dict[str, LLMTaskConfig] = field(default_factory=dict)
+    # Deployment override for the judgment model (G4/G5/llm_judge).  When
+    # set via ``llm.judgment_model`` in config.yaml, judgment tasks resolve
+    # to this value; when empty the release-pinned :data:`JUDGMENT_MODEL` is
+    # used (backward compat).  ``llm.tasks[<judgment>].model`` is NEVER
+    # honored (drift guardrail — see :func:`_resolve_task_llm_config`).
+    judgment_model: str = ""
 
     def resolve_model(self, default_provider: str | None = None) -> str:
         """Return the fully-qualified model string for LiteLLM.
@@ -816,6 +822,7 @@ default_language=str(d.get("default_language", "")),
             max_tokens=int(llm_raw["max_tokens"]) if llm_raw.get("max_tokens") else None,
             fallback=fallback,
             tasks=tasks,
+            judgment_model=str(llm_raw.get("judgment_model", "")),
         ),
         domains=domains,
         cefr=CEFRConfig(
@@ -1053,6 +1060,8 @@ def config_to_dict(config: Config) -> dict[str, Any]:
         },
         "domains": [],
     }
+    if config.llm.judgment_model:
+        raw["llm"]["judgment_model"] = config.llm.judgment_model
     # Only include project_name when non-empty (backward compat)
     if config.project.project_name:
         raw["project"]["project_name"] = config.project.project_name
@@ -1272,9 +1281,10 @@ def _resolve_task_llm_config(config: Config, task_name: str = "") -> LLMConfig:
     2. Base ``llm`` configuration
 
     Judgment task names (see :data:`JUDGMENT_TASKS`) are exempt from task
-    overrides: their model ALWAYS resolves to the release-pinned
-    :data:`JUDGMENT_MODEL`, so a drifted ``llm.tasks`` entry can never
-    change what model judges content.
+    overrides: their model ALWAYS resolves to the effective judgment model —
+    the deployment override ``llm.judgment_model`` when set, else the
+    release-pinned :data:`JUDGMENT_MODEL` — so a drifted ``llm.tasks``
+    entry can never change what model judges content.
 
     Returns a new ``LLMConfig`` with task-level fields merged on top of
     the base config.  Falls back to the base ``LLMConfig`` when
@@ -1282,9 +1292,14 @@ def _resolve_task_llm_config(config: Config, task_name: str = "") -> LLMConfig:
     """
     base = config.llm
     if task_name in JUDGMENT_TASKS:
+        # Judgment model: deployment override (``llm.judgment_model``) wins;
+        # otherwise the release-pinned :data:`JUDGMENT_MODEL`.  Never a
+        # ``llm.tasks[<task>].model`` drift — judgment calls must NOT move
+        # with per-task config.
+        judgment_model = base.judgment_model or JUDGMENT_MODEL
         return LLMConfig(
             provider=base.provider,
-            model=JUDGMENT_MODEL,
+            model=judgment_model,
             api_key=base.api_key,
             base_url=base.base_url,
             json_mode=base.json_mode,
