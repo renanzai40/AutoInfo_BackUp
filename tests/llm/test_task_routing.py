@@ -24,7 +24,10 @@ Coverage (plan todo 9):
 from __future__ import annotations
 
 import json
+import logging
 from unittest.mock import MagicMock, patch
+
+import pytest
 
 from autoinfo.config import (
     JUDGMENT_MODEL,
@@ -252,6 +255,118 @@ class TestJudgmentDriftGuardrail:
         # JUDGMENT_MODEL is litellm-qualified (e.g. openai/stealth/ox-alpha),
         # so the boundary captures it verbatim — no double prefix.
         assert _captured_model(mock_litellm) == JUDGMENT_MODEL
+
+
+class TestJudgmentModelOverride:
+    """llm.judgment_model (#45): deployment override of the judgment model."""
+
+    def test_resolve_returns_override_when_set(self) -> None:
+        """`llm.judgment_model` set -> g4_factual resolves to the override."""
+        config = Config(
+            llm=LLMConfig(
+                provider="openai",
+                model="deepseek-v4-flash",
+                judgment_model="deepseek-v4-flash",
+                tasks={"g4_factual": LLMTaskConfig(model="drifted-model")},
+            )
+        )
+        resolved = _resolve_task_llm_config(config, "g4_factual")
+        assert resolved.model == "deepseek-v4-flash"
+
+    def test_resolve_returns_release_default_when_unset(self) -> None:
+        """No llm.judgment_model -> g4_factual resolves to JUDGMENT_MODEL."""
+        config = Config(
+            llm=LLMConfig(
+                provider="openai",
+                model="deepseek-v4-flash",
+                tasks={"g4_factual": LLMTaskConfig(model="drifted-model")},
+            )
+        )
+        resolved = _resolve_task_llm_config(config, "g4_factual")
+        assert resolved.model == JUDGMENT_MODEL
+
+    def test_call_with_fallback_judgment_override_at_boundary(self) -> None:
+        """The override reaches the completion boundary (not silent)."""
+        config = Config(
+            llm=LLMConfig(
+                provider="openai",
+                model="deepseek-v4-flash",
+                judgment_model="deepseek-v4-flash",
+            )
+        )
+        mock_litellm = _mock_litellm(json.dumps({"ok": True}))
+        with patch.object(LLMExtractor, "_get_litellm", return_value=mock_litellm):
+            call_with_fallback(
+                messages=[{"role": "user", "content": "judge this"}],
+                task="g4_factual",
+                config=config,
+            )
+
+        # `deepseek-v4-flash` is bare; resolve_model() prepends the provider.
+        assert _captured_model(mock_litellm) == "openai/deepseek-v4-flash"
+
+
+class TestJudgmentFailureNotSilent:
+    """Judgment LLM exhaustion must surface (ERROR / propagate), never trample
+    entries through a broken G4/G5 gate (#45)."""
+
+    def test_judgment_exhaustion_propagates_runtime_error(
+        self, caplog
+    ) -> None:
+        """All chain models fail -> RuntimeError propagates + ERROR logged."""
+        config = Config(
+            llm=LLMConfig(
+                provider="openai",
+                model="deepseek-v4-flash",
+                judgment_model="deepseek-v4-flash",
+            )
+        )
+        mock_litellm = MagicMock()
+        mock_litellm.completion.side_effect = RuntimeError(
+            "Model openai/stealth/ox-alpha is not supported"
+        )
+
+        with caplog.at_level("ERROR", logger="autoinfo.llm"):
+            with patch.object(LLMExtractor, "_get_litellm", return_value=mock_litellm):
+                with pytest.raises(RuntimeError) as exc_info:
+                    call_with_fallback(
+                        messages=[{"role": "user", "content": "judge this"}],
+                        task="g4_factual",
+                        config=config,
+                    )
+
+        assert "not supported" in str(exc_info.value)
+        assert "Judgment task" in caplog.text
+        assert "g4_factual" in caplog.text
+        assert any("Judgment task" in record.message for record in caplog.records)
+
+    def test_non_judgment_exhaustion_is_not_judgment_error(self, caplog) -> None:
+        """Non-judgment task failure keeps WARNING-level signals, no
+        judgment ERROR banner (no false alarm on ordinary pipeline calls)."""
+        config = Config(
+            llm=LLMConfig(
+                provider="openai",
+                model="deepseek-v4-flash",
+            )
+        )
+        mock_litellm = MagicMock()
+        mock_litellm.completion.side_effect = RuntimeError("boom")
+
+        with caplog.at_level("ERROR", logger="autoinfo.llm"):
+            with patch.object(LLMExtractor, "_get_litellm", return_value=mock_litellm):
+                with pytest.raises(RuntimeError):
+                    call_with_fallback(
+                        messages=[{"role": "user", "content": "extract this"}],
+                        task="extraction",
+                        config=config,
+                    )
+
+        assert "Judgment task" not in caplog.text
+        assert not any(
+            record.levelno >= logging.ERROR
+            for record in caplog.records
+            if "extraction" in record.message
+        )
 
 
 class TestDefaultsPreserved:
