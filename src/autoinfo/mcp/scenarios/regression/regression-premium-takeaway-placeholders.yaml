@@ -76,9 +76,11 @@ steps:
           ]
           for ph in forbidden:
               assert ph not in out, f"placeholder present: {ph!r}\n{out[:1500]}"
-          # Real derived content must be present.
-          assert "Monitor developments around" in out, "derived implication missing"
-          assert "Track AI funding round" in out, "derived action missing"
+          # Real derived content must be present (issue #54: the fallback is
+          # honest — "no differentiated signal", never a fabricated analysis).
+          assert "No differentiated signal captured for" in out, "derived implication missing"
+          assert "Revisit AI funding round" in out, "derived action missing"
+          assert "Uncertain trajectory for" not in out, "pre-#54 fake risk leaked"
           print("PREMIUM_TAKEAWAY_PLACEHOLDER_OK")
       finally:
           os.chdir(old)

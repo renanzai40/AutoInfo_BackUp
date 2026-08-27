@@ -161,3 +161,17 @@ exclude_keywords:
 - B2C
 - personal gadgets
 - fast food
+# Issue #56 (paid review): drop B2B-domain noise that leaks into products —
+# Show HN / Product Hunt launch self-promotion, native-ad / sponsored posts,
+# and cross-domain death announcements that are not B2B intelligence.
+- Show HN
+- Product Hunt
+- launch your product
+- "has died"
+- "passed away"
+- obituary
+- sponsored
+- "native ad"
+- "paid post"
+- webinar promotion
+- "sign up now"

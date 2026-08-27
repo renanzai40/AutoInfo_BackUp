@@ -138,7 +138,7 @@ extract_fields:
   description: Brief summary of the case, ruling, or regulatory development and its
     implications
   required: true
-default_language: zh
+default_language: en
 exclude_keywords:
 - celebrity trial gossip
 - local trivial case
