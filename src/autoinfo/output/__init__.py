@@ -3029,23 +3029,150 @@ def _output_config_ref_limit() -> int:
     return 60
 
 
-def _sorted_ref_entries(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Return *entries* sorted by (has non-empty summary desc, relevance desc).
+def _ref_sort_key(e: dict[str, Any]) -> tuple[bool, float]:
+    """Deterministic References sort key: (has summary desc, relevance desc)."""
+    return (
+        bool(str(e.get("summary") or "").strip()),
+        float(e.get("relevance_score") or 0.0),
+    )
+
+
+# --- Low-value reference relegation (issue #42) ------------------------------
+# Paid-user audit flagged References entries that are URL-valid + real but
+# off-domain noise for commercial domains: promos / ticket sales (``save up to
+# $300 on a TechCrunch Disrupt pass``), obituaries (``Dolly Parton ... has died
+# at age 80``), and celebrity/entertainment fluff.  These entries are NOT
+# deleted (traceability stays in Raw) — they are re-ranked to the tail of the
+# References list and, for non-language-learning domains with enough real
+# entries, dropped from References entirely.
+#
+# Signals are PHRASE-SHAPED (issue #42 Do-NOT): bare words like ``died`` /
+# ``discount`` are deliberately NOT used, so a legit sentence ("pricing models
+# to promote value", "discounts up to 10% in regions") never fires.
+
+_REF_LANG_LEARNING_DOMAINS: frozenset[str] = frozenset({
+    "language-learning",
+    "english-learning", "french-learning", "spanish-learning",
+    "hindi-learning", "korean-learning", "portuguese-learning",
+    "russian-learning", "italian-learning",
+})
+
+_REF_LOW_VALUE_PATTERNS: dict[str, tuple[str, ...]] = {
+    "promo": (
+        r"save up to",
+        r"save\s+\$",
+        r"\blast chance\b",
+        r"\bdisrupt pass\b",
+        r"\bregister now\b",
+        r"\bearly access\b",
+        r"\bgiveaway",
+        r"\bsale ends\b",
+        r"\bcoupon\b",
+        r"\bdeal of the (?:day|week)\b",
+        r"\btickets? (?:on sale|available|now|remaining)\b",
+        r"(?:buy|book|purchase|grab|secure|get) (?:your )?tickets?",
+        r"\bdiscount (?:code|coupon|offer|of \d+%?|\d+%? off)\b",
+        r"\d+%?\s*discount\b",
+    ),
+    "obituary": (
+        r"\bdied\b",
+        r"\bhas died\b",
+        r"\bdied at age\b",
+        r"\bdies at\b",
+        r"\bdeath of\b",
+        r"\bobituary\b",
+        r"\bfuneral\b",
+        r"\bin memoriam\b",
+    ),
+    "celebrity": (
+        r"\bcelebrity\b",
+        r"\bdolly parton\b",
+        r"\bdavid bowie\b",
+        r"\bfilm star\b",
+        r"\bhollywood\b",
+        r"\bpop star\b",
+        r"\breality tv\b",
+    ),
+}
+
+_COMPILED_LOW_VALUE_PATTERNS: dict[str, list[re.Pattern[str]]] = {
+    category: [re.compile(p, re.IGNORECASE) for p in patterns]
+    for category, patterns in _REF_LOW_VALUE_PATTERNS.items()
+}
+
+_REF_LOW_VALUE_CONTEXT_CHARS = 200
+_REF_LOW_VALUE_MIN_REAL_ENTRIES = 20
+
+
+def _is_lang_learning_domain(domain: str) -> bool:
+    """True when *domain* is a language-learning umbrella or sub-domain."""
+    return domain in _REF_LANG_LEARNING_DOMAINS
+
+
+def _low_value_signal_penalty(entry: dict[str, Any]) -> int:
+    """Score *entry* on the phrase-shaped low-value signals (issue #42).
+
+    Returns the number of distinct low-value categories (promo / obituary /
+    celebrity) matched across the title + first ~200 chars of the
+    summary/content.  0 = clean.  Deterministic: no LLM, no randomness.
+    """
+    haystack = " ".join(filter(None, (
+        str(entry.get("title") or ""),
+        str(entry.get("summary") or "")[:_REF_LOW_VALUE_CONTEXT_CHARS],
+        str(entry.get("content") or "")[:_REF_LOW_VALUE_CONTEXT_CHARS],
+    )))
+    return sum(
+        1
+        for patterns in _COMPILED_LOW_VALUE_PATTERNS.values()
+        if any(p.search(haystack) for p in patterns)
+    )
+
+
+def _sorted_ref_entries(
+    entries: list[dict[str, Any]], domain: str | None = None
+) -> list[dict[str, Any]]:
+    """Return *entries* ordered for the References list (issues #11, #42).
 
     Issue #11: the references context list is capped at ``ref_limit``, so the
     sort MUST run on the full ``entries`` list BEFORE the ref dicts are built
     (ref dicts drop ``relevance_score``/``summary``).  Title-only entries
     (empty summary — e.g. ProductHunt) de-prioritize below summary-bearing
     ones; the deterministic tiebreak is ``relevance_score`` desc.
+
+    Issue #42: entries carrying low-value signals (promo / obituary /
+    celebrity — see :func:`_low_value_signal_penalty`) are re-ranked AFTER
+    the clean entries, so they only surface when the domain has very few real
+    entries.  Language-learning domains keep their cultural/historical
+    teaching material: flagged entries always stay in the returned list, at
+    the tail (reduce, don't delete).  For non-language-learning domains,
+    flagged entries are dropped from References entirely when the domain still
+    has at least ``_REF_LOW_VALUE_MIN_REAL_ENTRIES`` clean candidates;
+    otherwise a few survive at the tail rather than leaving the list sparse.
+    Entries are never deleted from the KB — this only affects References
+    ordering.  Deterministic: same input → same output, no LLM calls.
     """
-    return sorted(
-        entries,
-        key=lambda e: (
-            bool(str(e.get("summary") or "").strip()),
-            float(e.get("relevance_score") or 0.0),
-        ),
-        reverse=True,
+    lang_mode = domain is None or _is_lang_learning_domain(domain or "")
+    clean: list[dict[str, Any]] = []
+    lang_flagged: list[dict[str, Any]] = []
+    commercial_flagged: list[dict[str, Any]] = []
+    for entry in entries:
+        if _low_value_signal_penalty(entry) == 0:
+            clean.append(entry)
+            continue
+        entry_domain = str(entry.get("domain") or domain or "")
+        if _is_lang_learning_domain(entry_domain):
+            lang_flagged.append(entry)
+        else:
+            commercial_flagged.append(entry)
+    clean_sorted = sorted(clean, key=_ref_sort_key, reverse=True)
+    drop_commercial = (
+        commercial_flagged and not lang_mode
+        and len(clean) >= _REF_LOW_VALUE_MIN_REAL_ENTRIES
     )
+    kept = lang_flagged + ([] if drop_commercial else commercial_flagged)
+    if not kept:
+        return clean_sorted
+    return clean_sorted + sorted(kept, key=_ref_sort_key, reverse=True)
 
 
 def _cap_product_key_findings(
@@ -4364,7 +4491,7 @@ def _normalize_digest_product_context(
     _src_configs = _get_domain_source_configs(domain)
     flat["references"] = []
     for e in _sorted_ref_entries(
-        [e for e in entries_list if isinstance(e, dict)]
+        [e for e in entries_list if isinstance(e, dict)], domain=domain
     )[:_ref_limit]:
         _label = _derive_source_label(
             e, e.get("domain", domain), source_configs=_src_configs,
@@ -5408,7 +5535,7 @@ def generate_report(
     _ref_limit = ref_limit if ref_limit is not None else _output_config_ref_limit()
     _src_configs = _get_domain_source_configs(domain)
     references = []
-    for e in _sorted_ref_entries(entries)[:_ref_limit]:
+    for e in _sorted_ref_entries(entries, domain=domain)[:_ref_limit]:
         _label = _derive_source_label(
             e, e.get("domain", domain), source_configs=_src_configs,
         )
