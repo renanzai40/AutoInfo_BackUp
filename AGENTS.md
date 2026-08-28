@@ -4,7 +4,7 @@
 
 AutoInfo is a **universal information tracking and knowledge base platform**. You configure sources and topics; AutoInfo handles collection, LLM-based structured extraction, summarization, and builds a queryable knowledge base.
 
-**Key principle**: Domain-agnostic. The thirteen demo domains (medical-research, ai-commercial, financial-intelligence, tech-ai-developer, language-learning, online-video, financial-news, online-education, legal-compliance, general-news, gaming, b2b, retail) are configurations, not hardcoded features. Users define their own domains.
+**Key principle**: Domain-agnostic. The 21 demo domains (medical-research, ai-commercial, financial-intelligence, tech-ai-developer, language-learning, online-video, financial-news, online-education, legal-compliance, general-news, gaming, b2b, retail, english-learning, french-learning, hindi-learning, italian-learning, korean-learning, portuguese-learning, russian-learning, spanish-learning) are configurations, not hardcoded features. Users define their own domains.
 
 ## Agent Operating Model
 
@@ -196,7 +196,7 @@ Category → key-tool mapping is maintained in the README, not duplicated here.
 **Discovery flow**: `health_check()` → `tools/list` (MCP auto-discovery) → `list_domains()` → `get_domain_schema(domain)` → `list_available_models()` → `list_output_templates(domain)`.
 
 **Validation**: `list_validation_scenarios` / `run_validation_scenario` — 124 scenarios
-(65 functional + 59 regression in `scenarios/regression/`); per-scenario timeout,
+(65 functional + 59 regression in `src/autoinfo/mcp/scenarios/regression/`); per-scenario timeout,
 recovery_steps + partial-pass, per-step trace + root-cause report, regression flywheel;
 env-gated steps report `unconfigured` (never silently pass); `llm_assert` runs a real
 model call. Scenario authoring contract: `docs/dev/validation-scenario-contract.md`.
@@ -299,7 +299,7 @@ Key counts the agent must know without opening README:
 | CLI command groups | **28 command groups** |
 | Delivery channels | **13 channels** |
 | Validation scenarios | **124 scenarios** (65 functional + 59 regression) |
-| Demo domains | **13 demo domains** |
+| Demo domains | **21 demo domains** |
 | LLM-required tools | **16 LLM-required tools** |
 | Test suite | **~4345 tests** |
 

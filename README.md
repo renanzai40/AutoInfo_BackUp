@@ -61,7 +61,7 @@ LLM-based structured extraction, summarization, and a queryable knowledge base.
 - **Email config MCP tool** — `email_config` MCP tool for email configuration management
 - **Cache cleanup MCP tool** — `clean_cache` MCP tool for temporary artifact cleanup
 - **BYOK** — Bring your own LLM keys. Multi-provider via LiteLLM/OpenRouter.
-- **Domain-agnostic** — 13 demo domains (medical, AI commercial, financial/business intelligence, tech/AI/developer, language learning, online video, financial news, online education, legal compliance, general news, gaming, B2B, retail). Any field with paying customers.
+- **Domain-agnostic** — 21 demo domains (medical, AI commercial, financial/business intelligence, tech/AI/developer, language learning, online video, financial news, online education, legal compliance, general news, gaming, B2B, retail — plus 8 per-language learning variants: english, french, hindi, italian, korean, portuguese, russian, spanish). Any field with paying customers.
 - **Subscription-ready** — Stripe integration with webhook endpoint (signature verification), stripe-mock dev setup, freemium gating, and usage metering
 - **Subscription tiers** — Free, Premium, and Enterprise tiers with per-tier channels, domains, products, and platform limits on the Subscription model
 - **Access control** — `check_access()` fast path gates content by tier (free always allowed, premium/enterprise require active paid subscription). Freemium gating (G15).
@@ -86,7 +86,7 @@ LLM-based structured extraction, summarization, and a queryable knowledge base.
 - **Podcast RSS publishing (C11)** — RSS 2.0 delivery channel with `<enclosure>` + `itunes:*` namespace for podcast feed generation; audio output auto-persists MP3 to disk
 - **Validated source types** — `VALID_SOURCE_TYPES` frozenset (29 types) as single source of truth for source type validation across MCP and CLI
 - **Agent-native validation** — `list_validation_scenarios` / `run_validation_scenario` MCP tools execute validation scenarios through the MCP surface (plus CLI subprocess and REST HTTP steps): each step makes a real call and asserts on the `{success, data}` envelope; env-gated steps report `unconfigured` (never silently skipped), and `llm_assert` runs a real model call for semantic checks. 124 scenarios (65 functional + 59 regression). Per-step `timeout_seconds` guards runaway steps; failed steps can declare `recovery_steps` (run after the primary failure); scenarios support partial-pass via `min_passing` (int) / `pass_ratio` (float); `requires_http` gates steps that need a live REST server (reports `unconfigured` when offline). Results carry a per-step execution trace (step_index/duration/arguments/trace_id + llm_meta model/tokens/duration); `run_validation_scenario` output includes a root-cause report with `## Blockers` and `## Per-step trace` sections.
-- **Validation regression flywheel** — `scenarios/regression/` subdirectory (59 regression scenarios, `regression: true` key) auto-loads via recursive glob; `coverage_audit.py` prints a "Regression scenarios: N (issues: ...)" metric; `.github/ISSUE_TEMPLATE/bug_report.md` carries a mandatory 回归场景 (regression scenario) field so every bug ships with a scenario.
+- **Validation regression flywheel** — `src/autoinfo/mcp/scenarios/regression/` subdirectory (59 regression scenarios, `regression: true` key) auto-loads via recursive glob; `coverage_audit.py` prints a "Regression scenarios: N (issues: ...)" metric; `.github/ISSUE_TEMPLATE/bug_report.md` carries a mandatory 回归场景 (regression scenario) field so every bug ships with a scenario.
 - **Validation delivery packaging** — `scripts/validation_delivery.py` builds 01-RAW / 02-PROCESSED / 03-KB / 04-MATRIX / 06-REJECTED plus `validation-report.md` and `manifest.json` with per-file authenticity, D1-D3 delivery gates, and UX metrics (UX_OK/completion_rate ≥ 0.8). Output scenarios persist `collect_artifacts` for post-run inspection.
 - **End-user coverage matrix (E8)** — `scripts/coverage_matrix.py` generates the end-user feature coverage matrix from `docs/dev/specs/end-user-matrix.yaml` (v3: 8 products × 8 formats × 13 domains, 29 source platforms, 14 channels, 15 capabilities); surfaced as the 04-MATRIX section in validation delivery plus Oracle R8 unconfigured-vs-gap analysis. Scenario library currently exercises 8/8 products, 8/8 formats, 28/29 source platforms (email_imap not yet covered).
 - **End-user journey validation** — `enduser-journey.yaml` scenario drives the full B1 lifecycle with UX metrics (UX_OK/completion_rate ≥ 0.8) measured in validation packaging; the error-boundary scenario asserts the `actionable` field of the error envelope.
@@ -171,11 +171,11 @@ LLM-based structured extraction, summarization, and a queryable knowledge base.
 | Email config MCP | ✅ email_config MCP tool |
 | Cost dashboard MCP | ✅ cost_dashboard MCP tool |
 | Cost allocation MCP | ✅ cost_allocation MCP tool |
-| Demo domains | ✅ medical-research, ai-commercial, financial-intelligence, tech-ai-developer, language-learning, online-video, financial-news, online-education, legal-compliance, general-news, gaming, b2b, retail |
+| Demo domains | ✅ 21 demo domains (medical-research, ai-commercial, financial-intelligence, tech-ai-developer, language-learning, online-video, financial-news, online-education, legal-compliance, general-news, gaming, b2b, retail, plus english/french/hindi/italian/korean/portuguese/russian/spanish-learning) |
 | Delivery schedules | ✅ add_delivery_schedule, list_delivery_schedules, remove_delivery_schedule MCP tools, cron-integrated |
-| Validation scenarios | ✅ 124 scenarios (65 functional + 59 regression in `scenarios/regression/`, `regression: true` key, recursive-glob auto-load) |
+| Validation scenarios | ✅ 124 scenarios (65 functional + 59 regression in `src/autoinfo/mcp/scenarios/regression/`, `regression: true` key, recursive-glob auto-load) |
 | Validation execution | ✅ Per-step `timeout_seconds`; per-step `recovery_steps` + partial-pass (`min_passing`/`pass_ratio`); per-step trace (step_index/duration/arguments/trace_id + llm_meta); root-cause report (`## Blockers` / `## Per-step trace` / `## Regression failures`) |
-| Regression flywheel | ✅ `scenarios/regression/` (59 regression scenarios) + `coverage_audit.py` "Regression scenarios: N" metric + `.github/ISSUE_TEMPLATE/bug_report.md` mandatory 回归场景 field |
+| Regression flywheel | ✅ `src/autoinfo/mcp/scenarios/regression/` (59 regression scenarios) + `coverage_audit.py` "Regression scenarios: N" metric + `.github/ISSUE_TEMPLATE/bug_report.md` mandatory 回归场景 field |
 | Validation delivery | ✅ `scripts/validation_delivery.py` builds 01-RAW/02-PROCESSED/03-KB/04-MATRIX/06-REJECTED + validation-report.md + manifest.json (per-file authenticity + D1-D3 gates + UX metrics UX_OK/completion_rate ≥ 0.8) |
 | End-user coverage matrix (E8) | ✅ `scripts/coverage_matrix.py` + `docs/dev/specs/end-user-matrix.yaml`; surfaced as 04-MATRIX + coverage-gaps.json |
 | End-user journey validation | ✅ `enduser-journey.yaml` scenario + UX metrics; error-boundary asserts `actionable` field |
@@ -381,7 +381,7 @@ autoinfo summaries list|flag|show   # Browse summaries
 autoinfo sources add|list|remove|test  # Source management
 autoinfo topics add|list|remove     # Topic management
 autoinfo topic-group add|remove     # Topic grouping (MCP topic_group_add/remove parity)
-autoinfo domain add|list|show|remove|activate|deactivate|import  # Domain management (import --from-demo supports all 13 demo domains)
+autoinfo domain add|list|show|remove|activate|deactivate|import  # Domain management (import --from-demo supports all 21 demo domains)
 autoinfo audit query                # Query immutable audit log
 autoinfo kb search|create-draft|promote|reject-draft|list-tiers|reindex
 autoinfo output digest|report|tutorial|presentation|export|translate|list-templates  # digest/report accept --product; report accepts --type --domains
@@ -459,6 +459,14 @@ autoinfo agent-callback add|list|remove  # Agent push callbacks (MCP parity)
 | **Gaming** | IGN RSS, GamesIndustry.biz, 机核网 gcores, GameSpot, PC Gamer, Eurogamer | 🟢 P2 | ✅ Implemented (6 curated sources; Polygon/游研社-via-GoogleNews disabled) |
 | **B2B / Enterprise** | ProductHunt, TechCrunch, Crunchbase News, HackerNews, SaaStr | 🟢 P2 | ✅ Implemented (5 curated sources; a16z feed 404, disabled) |
 | **Retail / E-commerce** | Retail Dive, Modern Retail, Shopify News, Digiday | 🟢 P2 | ✅ Implemented (4 curated sources; 亿邦-via-GoogleNews disabled) |
+| **English Learning** | Duolingo Blog (RSS), NPR News (RSS) | 🟢 P2 | ✅ Implemented (2 curated sources) |
+| **French Learning** | France24 (RSS), Le Figaro (RSS) | 🟢 P2 | ✅ Implemented (2 curated sources) |
+| **Hindi Learning** | Aaj Tak (RSS) | 🟢 P2 | ✅ Implemented (1 curated source) |
+| **Italian Learning** | Corriere (RSS) | 🟢 P2 | ✅ Implemented (1 curated source) |
+| **Korean Learning** | Hankyoreh (RSS), Talk To Me In Korean (RSS) | 🟢 P2 | ✅ Implemented (2 curated sources) |
+| **Portuguese Learning** | Observador (RSS) | 🟢 P2 | ✅ Implemented (1 curated source) |
+| **Russian Learning** | TASS (RSS), RT News (RSS), Interfax (RSS) | 🟢 P2 | ✅ Implemented (3 curated sources) |
+| **Spanish Learning** | 20 Minutos (RSS) | 🟢 P2 | ✅ Implemented (1 curated source) |
 
 ## Development
 
