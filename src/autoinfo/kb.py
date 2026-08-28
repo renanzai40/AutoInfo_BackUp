@@ -2651,6 +2651,7 @@ class KBStore:
         quality_results: dict[str, QualityResult] | None = None,
         tier: str = "01-Raw",
         user_id: str | None = None,
+        topic_keywords: list[str] | None = None,
     ) -> KBEntry | None:
         """Create a Markdown KB entry for *item* and index it in SQLite.
 
@@ -2670,6 +2671,14 @@ class KBStore:
         tier:
             KB pipeline tier (default "01-Raw").  Set to "02-Draft" for
             agent-created Draft entries.
+        topic_keywords:
+            Optional keyword list for tag derivation (issue #68).  When the
+            collector set no ``item.topic_tags``, tags are derived from the
+            topic keywords that appear (case-insensitively) in the CLEANED
+            TITLE, capped at 5.  ``None`` (the api/routes.py create_entry
+            path) keeps the legacy empty-tags behavior.  Derivation is pure
+            and O(keywords × title length) — it runs under ``_STORAGE_LOCK``
+            in parallel workers, so it never touches the DB or the filesystem.
 
         Returns
         -------
@@ -2759,6 +2768,22 @@ class KBStore:
         summary = extraction.tl_dr if extraction and extraction.tl_dr else ""
         summary = _decode_html_entities(str(summary))
         tags = [_decode_html_entities(str(tag)) for tag in item.topic_tags]
+        # Issue #68: collectors often set no topic_tags, leaving the digest
+        # "Tags" column empty.  Derive tags from the title-matching topic
+        # keywords (title-hit only — body-only matches are noise), capped at
+        # 5, coerced via str().  Pure O(keywords × title-length) — no DB/IO —
+        # and item.topic_tags is never mutated.
+        if not tags and topic_keywords:
+            title_low = cleaned_title.lower()
+            derived: list[str] = []
+            for kw in topic_keywords:
+                if not kw:
+                    continue
+                if str(kw).lower() in title_low:
+                    derived.append(str(kw))
+                    if len(derived) == 5:
+                        break
+            tags = derived
 
         # Issue #182 audit-feedback:
         # 1) collected_at must never be empty at rest — fall back to the
