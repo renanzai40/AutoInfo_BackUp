@@ -725,8 +725,12 @@ _PROPER_NOUN_RE = re.compile(r"\b[A-Z][a-zA-Z0-9'\-]+(?:\s+[A-Z][a-zA-Z0-9'\-]+)
 # a different story.
 _NEAR_DUP_WINDOW_DAYS = 3
 
-# Minimum title character-similarity for the "same-language rewrite" signal.
-_NEAR_DUP_CHAR_SIM = 0.5
+# Char-similarity band for the "paraphrase of the same story" signal: fires
+# only in [0.5, 0.85).  ≥0.85 is G2Dedup's territory (its fuzzy-title gate
+# flags those as duplicates, so the stored dedup_status signal covers them);
+# <0.5 means genuinely different stories that merely share a name.
+_NEAR_DUP_CHAR_SIM_MIN = 0.5
+_NEAR_DUP_CHAR_SIM_MAX = 0.85
 
 
 def _extract_proper_nouns(title: str) -> list[str]:
@@ -760,7 +764,8 @@ def _converge_near_duplicates(entries: list[dict[str, Any]]) -> list[dict[str, A
     distinctive proper-noun phrase (≥2-word capitalized sequence) within
     :data:`_NEAR_DUP_WINDOW_DAYS` days AND carry at least one secondary
     signal — an already-stored ``dedup_status == "duplicate"``, a second
-    shared proper noun, or ≥50% title character similarity.  Identical
+    shared proper noun, or title character similarity in the [0.5, 0.85)
+    paraphrase band.  Identical
     ``source_url`` is never merged (syndication is intentional).
 
     The representative is the highest ``relevance_score`` entry of the
@@ -829,7 +834,8 @@ def _converge_near_duplicates(entries: list[dict[str, Any]]) -> list[dict[str, A
         if a and b:
             from difflib import SequenceMatcher  # noqa: PLC0415
 
-            if SequenceMatcher(None, a, b).ratio() >= _NEAR_DUP_CHAR_SIM:
+            ratio = SequenceMatcher(None, a, b).ratio()
+            if _NEAR_DUP_CHAR_SIM_MIN <= ratio < _NEAR_DUP_CHAR_SIM_MAX:
                 return True
         return False
 
