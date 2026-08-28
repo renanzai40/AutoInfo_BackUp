@@ -272,7 +272,7 @@ topics:
   - crisis
   - latest
   - just in
-default_language: zh
+default_language: en
 exclude_keywords:
 - entertainment gossip
 - sports highlights

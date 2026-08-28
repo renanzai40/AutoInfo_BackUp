@@ -7,6 +7,7 @@ whose detected ``language`` doesn't match — no zh/en interleave.
 
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 from typing import Any
 from unittest.mock import MagicMock, patch
@@ -14,6 +15,7 @@ from unittest.mock import MagicMock, patch
 from autoinfo.output import (
     DeliveryOutput,
     _filter_entries_by_language,
+    _filter_entries_by_language_product_safe,
     _normalize_lang,
     _resolve_effective_language,
     generate_digest,
@@ -467,3 +469,92 @@ class TestAiCommercialEmptyAfterFilter:
         assert "This edition has no curated items yet." in body
         assert "中文" not in body
         assert "Overview." not in body
+
+
+# ---------------------------------------------------------------------------
+# Issue #53: anti-collapse safety net for the product-level language filter
+# ---------------------------------------------------------------------------
+# A stale resolved language (seed/config) that mismatches the domain's real
+# data distribution (e.g. a was-`zh` seed on the English general-news /
+# legal-compliance sources) must NEVER silently collapse a healthy corpus into
+# an empty/near-empty shell.  The product-safe filter falls back to the full
+# unfiltered input + warning when it would keep <= 1 entries from >= 3 inputs;
+# tiny inputs (< 3) stay on the plain filter (keeps the pinned #8
+# ai-commercial two-entry enforcement intact).
+
+
+class TestLanguageCollapseGuardIssue53:
+    def _en_entry(self, eid: str, lang: str = "en", title: str | None = None) -> dict[str, Any]:
+        return {
+            "entry_id": eid,
+            "title": title or f"English news {eid}",
+            "domain": "general-news",
+            "tier": "01-Raw",
+            "source_url": f"https://example.com/{eid}",
+            "source_type": "rss",
+            "source_platform": "rss",
+            "language": lang,
+            "collected_at": "2026-08-25T00:00:00+00:00",
+            "summary": f"summary-{eid}",
+            "tags": "[]",
+            "quality_tier": 1,
+            "relevance_score": 80.0,
+        }
+
+    # --- Unit: _filter_entries_by_language_product_safe ----------------------
+
+    def test_collapse_falls_back_unfiltered_and_warns(self, caplog: Any) -> None:
+        """5 en entries filtered by a stale 'zh' collapse -> full input back."""
+        entries = [self._en_entry(f"en-{i}") for i in range(1, 6)]
+        with caplog.at_level(logging.WARNING, logger="autoinfo.output"):
+            kept, collapsed = _filter_entries_by_language_product_safe(entries, "zh")
+        assert collapsed is True
+        assert kept == entries
+        assert any("issue #53" in rec.message for rec in caplog.records), caplog.text
+
+    def test_healthy_filter_passes_through_untouched(self) -> None:
+        """Filter that keeps the corpus passes through (no fallback)."""
+        entries = [self._en_entry(f"en-{i}") for i in range(1, 6)]
+        kept, collapsed = _filter_entries_by_language_product_safe(entries, "en")
+        assert collapsed is False
+        assert kept == entries
+
+    def test_small_input_keeps_plain_filter(self) -> None:
+        """< 3 inputs are too small to judge — the plain filter applies
+        (a zh filter on 2 en entries drops them, no fallback)."""
+        entries = [self._en_entry("en-1"), self._en_entry("en-2")]
+        kept, collapsed = _filter_entries_by_language_product_safe(entries, "zh")
+        assert collapsed is False
+        assert kept == []
+
+    # --- End-to-end: digest with a stale zh seed on en data ------------------
+
+    @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._call_llm_for_digest")
+    @patch("autoinfo.output._seed_domain_default_language", return_value="zh")
+    def test_digest_stale_zh_seed_en_data_never_empty_shell(
+        self, mock_seed: MagicMock, mock_llm: MagicMock, mock_kb_store: MagicMock,
+        tmp_path: Path,
+    ) -> None:
+        """Config declares the domain WITHOUT ``default_language`` so the seed
+        fallback resolves ``zh``; the corpus is English — the digest must ship
+        the en corpus (fall back unfiltered), never an empty/near-empty shell
+        (backup-repo #53 evidence: legal/general news collapsed to 1 entry)."""
+        cfg_path = _write_tmp_config(
+            tmp_path, "  - name: general-news\n    active: true\n"
+        )
+        entries = [self._en_entry(f"en-{i}") for i in range(1, 6)]
+        mock_llm.return_value = {
+            "executive_summary": "Synthesis.",
+            "key_findings": [],
+            "recommendations": [],
+        }
+        mock_kb_store.return_value = _digest_mock_store(entries)
+        with patch("autoinfo.output.get_config_path", return_value=cfg_path):
+            body = _as_text(generate_digest(
+                domain="general-news", period="weekly", format="markdown",
+            ))
+        assert "English news en-1" in body, (
+            "en corpus must survive a stale zh seed (anti-collapse fallback)"
+        )
+        assert "This edition has no curated items yet." not in body

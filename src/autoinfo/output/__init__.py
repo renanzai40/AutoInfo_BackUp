@@ -733,6 +733,52 @@ def _filter_entries_by_language(
     return kept
 
 
+# Issue #53: a stale seed/config ``default_language`` that mismatches the real
+# data distribution (e.g. a ``zh`` seed on an English domain) can collapse a
+# healthy product input to an empty/near-empty shell.  ``_LANGUAGE_COLLAPSE_*``
+# bound the anti-collapse safety net in
+# :func:`_filter_entries_by_language_product_safe`: input of at least
+# ``_LANGUAGE_COLLAPSE_MIN_INPUT`` entries that filters down to at most
+# ``_LANGUAGE_COLLAPSE_MAX_KEPT`` is treated as a stale-language collapse.
+_LANGUAGE_COLLAPSE_MIN_INPUT = 3
+_LANGUAGE_COLLAPSE_MAX_KEPT = 1
+
+
+def _filter_entries_by_language_product_safe(
+    entries: list[dict[str, Any]], language: str
+) -> tuple[list[dict[str, Any]], bool]:
+    """Language filter with an anti-collapse safety net (issue #53).
+
+    Applying *language* at the product level must never silently wipe out a
+    domain's primary corpus: when the plain filter would keep at most
+    ``_LANGUAGE_COLLAPSE_MAX_KEPT`` entries out of an input of
+    ``>= _LANGUAGE_COLLAPSE_MIN_INPUT`` — a resolved (seed or configured)
+    language that no longer matches the domain's actual data distribution —
+    fall back to the FULL unfiltered input and log a warning instead of
+    shipping an empty/near-empty product.
+
+    Returns ``(entries, collapsed)``: ``collapsed`` True means *entries* is the
+    unfiltered input (the safety net already fired and logged); False means
+    *entries* is the plain filtered result.  Inputs smaller than
+    ``_LANGUAGE_COLLAPSE_MIN_INPUT`` are too small to judge and pass through
+    the plain filter untouched (keeps the pinned #8 ai-commercial two-entry
+    enforcement intact).
+    """
+    filtered = _filter_entries_by_language(entries, language)
+    if (
+        len(entries) >= _LANGUAGE_COLLAPSE_MIN_INPUT
+        and len(filtered) <= _LANGUAGE_COLLAPSE_MAX_KEPT
+    ):
+        logger.warning(
+            "Language filter '%s' would reduce %d inputs to %d — treating the "
+            "resolved language as stale and falling back to unfiltered input "
+            "(issue #53)",
+            language, len(entries), len(filtered),
+        )
+        return entries, True
+    return filtered, False
+
+
 def _resolve_effective_language(
     language: str, domain: str, *, cross_domain: bool = False
 ) -> str:
@@ -4105,8 +4151,7 @@ def _deterministic_synthesis_fallback(
 
     title_line = ", ".join(str(e["title"]).strip() for e in titled[:8])
     executive_summary = (
-        f"{summary_prefix} {len(titled)} knowledge base "
-        f"entr{'y' if len(titled) == 1 else 'ies'}: {title_line}."
+        f"{summary_prefix} the latest developments this period: {title_line}."
     )
     key_findings: list[Any] = []
     for e in titled[:8]:
@@ -4406,14 +4451,6 @@ def _deterministic_column_sections(
     return sections
 
 
-def _entry_text(e: dict[str, Any], maxlen: int = 140) -> str:
-    """Short readable text for an entry (title — summary) for derivation."""
-    title = str(e.get("title") or "this entry").strip()
-    summary = str(e.get("summary") or "").strip()
-    body = summary or title
-    return f"{title}: {body}"[:maxlen]
-
-
 def _deterministic_takeaway_fields(
     entries: list[dict[str, Any]],
     domain: str = "",
@@ -4425,6 +4462,13 @@ def _deterministic_takeaway_fields(
     carries no (or too few) per-takeaway implication/risk/action entries,
     derive them one-per-ranked-entry from the actual KB entries so the
     premium template never renders the ``_No ..._`` empty-state placeholders.
+
+    Issue #54 (paid review): the fallback must be HONEST, never impersonate
+    real analysis.  Pre-#54 it fabricated ``Uncertain trajectory for …`` +
+    ``likelihood medium / impact medium`` for every entry — indistinguishable
+    from genuine LLM risk analysis and a value inversion against enterprise.
+    The fallback now states plainly that NO differentiated signal was captured
+    this period and rates likelihood/impact as ``n/a`` (nothing fabricated).
 
     Returns ``(implications, risks, action_required)`` — index-aligned lists
     (one item per entry) in the same shape the premium-briefing template
@@ -4444,23 +4488,24 @@ def _deterministic_takeaway_fields(
             continue
         url = str(e.get("source_url") or "").strip()
         implications.append(
-            f"Monitor developments around {title} for follow-up "
-            f"implications across the tracked source set ("
-            f"{_entry_text(e, 60)})."
+            f"No differentiated signal captured for {title} this period — "
+            "revisit next period for follow-up developments."
         )
         risks.append(
             {
-                "title": f"Uncertain trajectory for {title}",
-                "likelihood": "medium",
-                "impact": "medium",
+                "title": "No differentiated risk signal this period — "
+                "revisit next period.",
+                "likelihood": "n/a",
+                "impact": "n/a",
                 "mitigation": (
-                    "Validate against additional sources and "
-                    "revisit next period."
+                    "Revisit next period and validate against additional "
+                    "sources before rating."
                 ),
             }
         )
         action_required.append(
-            f"Track {title} ({url}) for validation in the next period."
+            f"Revisit {title} ({url}) next period for a differentiated "
+            "assessment."
         )
     return implications, risks, action_required
 
@@ -5051,24 +5096,37 @@ def generate_digest(
         language, domain, cross_domain=is_cross_domain_digest
     )
     if effective_language:
-        filtered_entries = _filter_entries_by_language(entries, effective_language)
-        if not filtered_entries and entries and not period_was_empty and not is_cross_domain_digest:
-            # The period window held entries in OTHER languages while the
-            # domain's default-language corpus is fully out-of-window (e.g. a
-            # zh domain whose people.cn corpus is dated months ago + fresh en
-            # in-window).  Relax the DATE window (keep the language filter) so
-            # the digest is never an empty shell (backup-repo #28 evidence).
-            logger.info(
-                "No '%s'-language entries in the '%s' window for domain '%s' "
-                "- relaxing the date window, keeping the language filter",
-                effective_language, period, domain,
-            )
-            relaxed = store.list_entries(domain=domain, limit=query_limit)
-            if relaxed:
-                filtered_entries = _filter_entries_by_language(
-                    relaxed, effective_language
+        filtered_entries, collapsed = _filter_entries_by_language_product_safe(
+            entries, effective_language
+        )
+        if collapsed:
+            # Issue #53: the resolved language collapsed the domain's primary
+            # corpus (stale seed/config), the safety net already fell back to
+            # the unfiltered input and logged — use it as-is.
+            entries = filtered_entries
+        else:
+            if (
+                not filtered_entries
+                and entries
+                and not period_was_empty
+                and not is_cross_domain_digest
+            ):
+                # The period window held entries in OTHER languages while the
+                # domain's default-language corpus is fully out-of-window (e.g. a
+                # zh domain whose people.cn corpus is dated months ago + fresh en
+                # in-window).  Relax the DATE window (keep the language filter) so
+                # the digest is never an empty shell (backup-repo #28 evidence).
+                logger.info(
+                    "No '%s'-language entries in the '%s' window for domain '%s' "
+                    "- relaxing the date window, keeping the language filter",
+                    effective_language, period, domain,
                 )
-        entries = filtered_entries
+                relaxed = store.list_entries(domain=domain, limit=query_limit)
+                if relaxed:
+                    filtered_entries = _filter_entries_by_language(
+                        relaxed, effective_language
+                    )
+            entries = filtered_entries
 
     # --- Per-domain exclude_keywords filter (issue #319) ---------------------
     # Cross-domain noise guard: drop entries whose title/summary/tags match a
@@ -5645,7 +5703,9 @@ def generate_report(
         language, domain, cross_domain=is_cross_domain
     )
     if effective_language:
-        entries = _filter_entries_by_language(entries, effective_language)
+        entries, _ = _filter_entries_by_language_product_safe(
+            entries, effective_language
+        )
 
     # --- Per-domain exclude_keywords filter (issue #319) ---------------------
     # Cross-domain noise guard: drop entries matching their own domain's
@@ -9450,7 +9510,9 @@ def generate_presentation(
     # fills in.
     effective_language = _resolve_effective_language(language, domain)
     if effective_language:
-        entries = _filter_entries_by_language(entries, effective_language)
+        entries, _ = _filter_entries_by_language_product_safe(
+            entries, effective_language
+        )
 
     # --- Staleness filter (backup #60) ---------------------------------------
     # Teaching-layer products must never silently regenerate from an old

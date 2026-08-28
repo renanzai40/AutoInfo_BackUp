@@ -216,9 +216,50 @@ class TestDefaultUsablePathUnchanged:
         for slot in impl + actions:
             assert "_No " not in slot
             assert slot.strip()
-        assert "Track Startup A" in actions[0]
+        # Issue #54: the fallback is honest — it never fabricates a fake
+        # "medium/medium" risk or an "Uncertain trajectory" pseudo-analysis.
+        assert "Revisit Startup A" in actions[0]
         assert impl[1] == "Real implication"
-        assert risks[0]["title"] and "Uncertain trajectory" in risks[0]["title"]
+        assert "No differentiated risk signal" in risks[0]["title"]
+        assert risks[0]["likelihood"] == "n/a" and risks[0]["impact"] == "n/a"
+        assert "medium" not in str(risks[0]).lower()
+
+
+# ===================================================================
+# (e) Issue #54: honest deterministic fallback (no fabricated analysis)
+# ===================================================================
+
+
+class TestIssue54HonestFallback:
+    """#54 paid review: the premium deterministic fallback must never
+    impersonate real analysis.  It states plainly that no differentiated
+    signal was captured this period and rates risk likelihood/impact as
+    ``n/a`` — never a fake ``Uncertain trajectory for …`` + medium/medium."""
+
+    def test_deterministic_fields_are_honest(self) -> None:
+        impl, risks, actions = _deterministic_takeaway_fields(
+            _PREMIUM_ENTRIES, "ai-commercial"
+        )
+        assert len(impl) == len(risks) == len(actions) == 2
+        for text in impl:
+            assert "No differentiated signal captured for" in text, text
+            assert "revisit next period" in text.lower(), text
+        for text in actions:
+            assert text.startswith("Revisit "), text
+            assert "differentiated" in text, text
+        for r in risks:
+            assert "No differentiated risk signal" in r["title"]
+            assert r["likelihood"] == "n/a", r
+            assert r["impact"] == "n/a", r
+            assert "medium" not in str(r).lower(), r
+            assert "Uncertain trajectory" not in str(r), r
+        # No pre-#54 formulaic boilerplate anywhere in the fallback.
+        rendered = "\n".join(
+            [*impl, *map(str, actions), *map(str, risks)]
+        )
+        assert "Monitor developments around" not in rendered
+        assert "Uncertain trajectory for" not in rendered
+        assert "for validation in the next period" not in rendered
 
 
 # ===================================================================

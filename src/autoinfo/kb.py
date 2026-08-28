@@ -16,6 +16,7 @@ collected content plus any LLM-extracted summary / key points.
 from __future__ import annotations
 
 import hashlib
+import html
 import json
 import logging
 import os
@@ -176,6 +177,32 @@ def _slugify(text: str, max_len: int = 255) -> str:
     slug = re.sub(r"[^a-z0-9]+", "-", slug)
     slug = slug.strip("-")
     return slug[:max_len].rstrip("-")
+
+
+def _decode_html_entities(text: str) -> str:
+    """Decode residual HTML entities in *text* (issue #55).
+
+    Collectors leave raw entities in titles / summaries / content — ``&#039;``,
+    ``&apos;``, ``&quot;``, ``&#8217;``, ``&amp;``, ``&lt;``, ``&gt;`` … (hindi
+    140x ``&#039;``, online-video ``&#8217;``, tech-ai ``&amp;``).  Applied at
+    the STORAGE layer (``store_entry``) so every downstream render surface
+    (digest / report / column / agent / …) reads clean text instead of each
+    renderer re-decoding independently (and inconsistently).
+
+    ``html.unescape`` runs iteratively (bounded) so double-encoded entities
+    (``&amp;lt;`` -> ``&lt;`` -> ``<``) collapse too; decoding ``&amp;`` falls
+    out LAST by construction because each pass only widens a literal ``&``
+    from an already-decoded ``&amp;``.  Idempotent — safe to run twice.
+    """
+    if not text:
+        return text
+    cleaned = text
+    for _ in range(3):
+        decoded = html.unescape(cleaned)
+        if decoded == cleaned:
+            break
+        cleaned = decoded
+    return cleaned
 
 
 def calculate_freshness_score(entry: dict[str, Any], ttl_days: int = 90) -> float:
@@ -2726,8 +2753,12 @@ class KBStore:
                 pass  # No config available — stay with empty user_id
 
         # --- build KBEntry -----------------------------------------------------
+        # Issue #55: decode residual HTML entities at the storage layer so
+        # every downstream surface (title / summary / tags / body) is clean.
+        cleaned_title = _decode_html_entities(str(item.title or ""))
         summary = extraction.tl_dr if extraction and extraction.tl_dr else ""
-        tags = item.topic_tags[:]
+        summary = _decode_html_entities(str(summary))
+        tags = [_decode_html_entities(str(tag)) for tag in item.topic_tags]
 
         # Issue #182 audit-feedback:
         # 1) collected_at must never be empty at rest — fall back to the
@@ -2751,7 +2782,7 @@ class KBStore:
 
         entry = KBEntry(
             entry_id=entry_id,
-            title=item.title,
+            title=cleaned_title,
             domain=domain,
             tier=tier,
             source_url=item.source_url,
@@ -4940,26 +4971,29 @@ def _build_body(
         ## Key Points
         - <key_point_1>
         - <key_point_2>
+
+    Issue #55: every text field is run through :func:`_decode_html_entities`
+    so collector-residual entities never reach the stored/rendered surface.
     """
     parts: list[str] = []
 
     parts.append("## Original Content\n")
-    parts.append(item.content)
+    parts.append(_decode_html_entities(str(item.content or "")))
 
     if extraction:
         if extraction.tl_dr:
             parts.append("\n\n## Summary\n")
-            parts.append(extraction.tl_dr)
+            parts.append(_decode_html_entities(str(extraction.tl_dr)))
 
         if extraction.key_points:
             parts.append("\n\n## Key Points\n")
             for kp in extraction.key_points:
-                parts.append(f"- {kp}\n")
+                parts.append(f"- {_decode_html_entities(str(kp))}\n")
 
         if extraction.entities:
             parts.append("\n\n## Entities\n")
             for ent in extraction.entities:
-                name = ent.get("name", "")
+                name = _decode_html_entities(str(ent.get("name", "")))
                 etype = ent.get("type", "")
                 rel = ent.get("relevance", "")
                 parts.append(f"- **{name}** ({etype}, relevance={rel})\n")

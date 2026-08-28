@@ -392,10 +392,14 @@ class TestPremiumBriefingDigestPath:
         for slot in impl + actions:
             assert "_No " not in slot, f"placeholder leaked: {slot!r}"
             assert slot.strip(), f"empty slot leaked: {slot!r}"
-        assert "Track Startup A" in actions[0], actions
+        assert "Revisit Startup A" in actions[0], actions
         # Substantive LLM values are preserved, not clobbered.
         assert impl[1] == "Real implication", impl
-        assert risks[0]["title"] and "Uncertain trajectory" in risks[0]["title"]
+        # Issue #54: the fallback risk is honest — no fabricated medium/medium
+        # or "Uncertain trajectory" pseudo-analysis.
+        assert "No differentiated risk signal" in risks[0]["title"]
+        assert risks[0]["likelihood"] == "n/a" and risks[0]["impact"] == "n/a"
+        assert "medium" not in str(risks[0]).lower()
 
     def test_enterprise_briefing_renders_flat_keys_non_empty(self) -> None:
         """The enterprise template reads the same flat contract on the digest path."""
