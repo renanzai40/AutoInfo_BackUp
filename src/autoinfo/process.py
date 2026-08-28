@@ -141,6 +141,7 @@ def _store_entry_with_retry(
     extraction: ExtractionResult | None,
     quality_results: dict[str, QualityResult] | None,
     *,
+    topic_keywords: list[str] | None = None,
     max_attempts: int = _DB_LOCK_MAX_ATTEMPTS,
     sleep: Callable[[float], None] = time.sleep,
 ) -> KBEntry | None:
@@ -158,6 +159,16 @@ def _store_entry_with_retry(
     for attempt in range(max_attempts):
         try:
             with _STORAGE_LOCK:
+                if topic_keywords:
+                    return kb_store.store_entry(
+                        item,
+                        extraction,
+                        quality_results,
+                        topic_keywords=topic_keywords,
+                    )
+                # An empty/None list carries no derivation signal — omit the
+                # kwarg so legacy 3-arg store_entry mocks keep working, with
+                # behavior identical either way.
                 return kb_store.store_entry(item, extraction, quality_results)
         except sqlite3.OperationalError as exc:
             if not _is_db_locked_error(exc):
@@ -885,6 +896,30 @@ def run_processing(
                     if t.name == topic:
                         topic_keywords = t.keywords
                         break
+    elif config and not topic:
+        # Issue #68: an omitted topic silently produced no keywords, so G3
+        # degraded to 0 ("Relevance —/100" in every digest).  When the domain
+        # HAS configured topics, fall back to the UNION of all their keyword
+        # lists (dedup preserving order).  A domain with no topics at all
+        # keeps topic_keywords=[] — the G3 empty-keywords→score-0 contract
+        # (quality.py:818-835) is sacrosanct.
+        for d in config.domains:
+            if d.name == domain and d.topics:
+                seen: set[str] = set()
+                for t in d.topics:
+                    for kw in t.keywords:
+                        if kw not in seen:
+                            seen.add(kw)
+                            topic_keywords.append(kw)
+                if topic_keywords:
+                    logger.warning(
+                        "topic omitted for domain '%s' — G3 topic_keywords "
+                        "resolved from the union of %d configured topic(s) "
+                        "(issue #68)",
+                        domain,
+                        len(d.topics),
+                    )
+                break
 
     # Resolve gate config: merge global defaults with domain overrides
     gate_config: dict[str, QualityGateConfig] = {}
@@ -1400,7 +1435,11 @@ def run_processing(
             # immediately.  On retry exhaustion the original error propagates
             # to the except handler below (item logged + counted as today).
             entry = _store_entry_with_retry(
-                kb_store, item, extraction, quality_results
+                kb_store,
+                item,
+                extraction,
+                quality_results,
+                topic_keywords=topic_keywords,
             )
             if entry is None:
                 # Issue #182: entry rejected by KB (content too short) —

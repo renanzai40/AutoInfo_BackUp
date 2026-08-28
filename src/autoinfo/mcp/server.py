@@ -8147,6 +8147,14 @@ async def list_tools() -> list[Tool]:
                         "type": "string",
                         "description": "Domain name (e.g. medical-research)",
                     },
+                    "topic": {
+                        "type": "string",
+                        "description": (
+                            "Optional topic name whose keywords seed the G3 "
+                            "relevance gate. When omitted, G3 defaults to the "
+                            "union of all the domain's topic keywords."
+                        ),
+                    },
                     "model": {
                         "type": "string",
                         "description": (

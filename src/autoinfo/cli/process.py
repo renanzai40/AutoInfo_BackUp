@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """Process CLI — LLM extraction and quality gates pipeline.
 
 Usage::
@@ -7,6 +5,7 @@ Usage::
     autoinfo process --domain medical-research [--model deepseek/deepseek-chat] [--json]
 """
 
+from __future__ import annotations
 
 import json
 
@@ -20,6 +19,15 @@ app = typer.Typer()
 @app.callback(invoke_without_command=True)
 def process(
     domain: str = typer.Option(..., "--domain", help="Domain to process"),
+    topic: str | None = typer.Option(
+        None,
+        "--topic",
+        help=(
+            "Topic name whose keywords seed the G3 relevance gate. When "
+            "omitted, G3 falls back to the union of all the domain's topic "
+            "keywords."
+        ),
+    ),
     model: str = typer.Option(
         None, "--model", help="LLM model override (e.g. deepseek/deepseek-chat)"
     ),
@@ -44,6 +52,7 @@ def process(
     try:
         result = run_processing(
             domain=domain,
+            topic=topic,
             model=model,
             batch_size=batch_size,
             check_factual=check_factual,
