@@ -470,6 +470,7 @@ class TestBatchCli:
         assert result.exit_code == 0
         mock_proc.assert_called_once_with(
             domain="test-domain",
+            topic=None,
             model=None,
             batch_size=2,
             check_factual=False,
