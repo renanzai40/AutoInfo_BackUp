@@ -186,6 +186,17 @@ class DeliveryOutput:
     warnings: list[str] = field(default_factory=list)
 
 
+class StaleSourceError(ValueError):
+    """Raised when freshness filtering removes all candidate entries for a
+    digest/report, so the product would be an empty shell.
+
+    Subclasses :class:`ValueError` so the CLI and MCP layers (which catch
+    ``ValueError`` around ``generate_digest`` / ``generate_report``) surface a
+    clean, actionable error instead of silently producing a product with no
+    content (backup issue #52).
+    """
+
+
 # ---------------------------------------------------------------------------
 # Content-ready notification helper
 # ---------------------------------------------------------------------------
@@ -4990,6 +5001,26 @@ def generate_digest(
                 domain,
             )
         entries = active_entries
+
+    # --- Stale-source guard (backup issue #52) --------------------------------
+    if not include_stale and excluded_stale_count > 0 and not entries:
+        stale_count = excluded_stale_count
+        stale_msg = (
+            f"All candidate entries for domain '{domain}' are stale "
+            f"(excluded {stale_count} entr{'y' if stale_count == 1 else 'ies'} "
+            f"older than the freshness threshold). "
+            f"Refusing to generate an empty-shell product. "
+            f"Re-run collection to refresh the source, or pass include_stale=true."
+        )
+        if delivery_gate_configs is not None:
+            return DeliveryOutput(
+                output="",
+                gate_results={},
+                delivery_blocked=True,
+                delivery_format=format,
+                warnings=[f"STALE_SOURCE: {stale_msg}"],
+            )
+        raise StaleSourceError(stale_msg)
 
     # --- LLM synthesis -------------------------------------------------------
     # Resolve the product template family up front (spec §2.4, todo 7) so the
