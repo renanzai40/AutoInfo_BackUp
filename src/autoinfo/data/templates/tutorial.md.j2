@@ -41,6 +41,26 @@ This edition has no learning objectives yet. Check back after the next collectio
 
 {% endfor %}
 
+{% if vocabulary %}
+## Vocabulary
+
+{% for word in vocabulary %}
+- {{ word }}
+{% else %}
+This edition has no vocabulary list yet. Check back after the next collection run.
+{% endfor %}
+{% endif %}
+
+{% if grammar %}
+## Grammar
+
+{% for point in grammar %}
+- {{ point }}
+{% else %}
+This edition has no grammar points yet. Check back after the next collection run.
+{% endfor %}
+{% endif %}
+
 ---
 
 ## Exercises
