@@ -674,6 +674,195 @@ def _filter_product_entries(entries: list[dict[str, Any]]) -> list[dict[str, Any
     return kept
 
 
+# ---------------------------------------------------------------------------
+# Near-duplicate convergence (backup issue #69)
+# ---------------------------------------------------------------------------
+# Cross-language / cross-source same-event duplicates (e.g. "Dolly Parton
+# has died" vs "Mort de la star américaine Dolly Parton") are invisible to
+# the char-level G2Dedup similarity gate, so the same event can be ingested
+# many times across domains/languages and flood every product that consumes
+# the KB.  This product-layer convergence clusters entries that share a
+# distinctive proper-noun signature within a short time window and keeps ONE
+# representative per cluster — non-destructive (entries stay in the KB; only
+# the product picks a representative) and deterministic (no LLM).
+# ---------------------------------------------------------------------------
+
+# Common geopolitical/institutional phrases whose shared presence is NOT a
+# same-event signal (e.g. two unrelated "New York"-mentioning stories).
+# People names ("Dolly Parton", "Donald Trump") are intentionally absent —
+# a shared person name within a short window IS the event signal.
+_PROPER_NOUN_STOPLIST: frozenset[str] = frozenset({
+    "New York",
+    "United States",
+    "White House",
+    "European Union",
+    "Silicon Valley",
+    "Wall Street",
+    "Los Angeles",
+    "Hong Kong",
+    "San Francisco",
+    "South Korea",
+    "North Korea",
+    "Middle East",
+    "United Nations",
+    "World Health",
+    "Prime Minister",
+    "Federal Reserve",
+    "New York City",
+    "World War",
+    "International Space",
+    "Golden Globe",
+    "Grammy Award",
+})
+
+# ≥2-word capitalized sequence — language-agnostic proper-noun extraction
+# ("Dolly Parton", "Donald Trump", "Le Figaro").  Single capitalized words
+# are too ambiguous to be an event signature on their own.
+_PROPER_NOUN_RE = re.compile(r"\b[A-Z][a-zA-Z0-9'\-]+(?:\s+[A-Z][a-zA-Z0-9'\-]+)+\b")
+
+# Time window (days) inside which a shared proper noun is treated as the
+# same event.  Deaths/crises/launches cluster within days; a month apart is
+# a different story.
+_NEAR_DUP_WINDOW_DAYS = 3
+
+# Minimum title character-similarity for the "same-language rewrite" signal.
+_NEAR_DUP_CHAR_SIM = 0.5
+
+
+def _extract_proper_nouns(title: str) -> list[str]:
+    """Return distinctive ≥2-word proper-noun phrases from *title*.
+
+    Deterministic, language-agnostic: a capitalized multi-word sequence
+    ("Dolly Parton") survives translation/rewriting, unlike char-level
+    similarity.  Phrases equal to — or containing — a stoplisted
+    geopolitical/institutional phrase are dropped ("New York Stock
+    Exchange" contains "New York").  Results are deduplicated preserving
+    order.
+    """
+    if not title:
+        return []
+    found: list[str] = []
+    seen: set[str] = set()
+    for match in _PROPER_NOUN_RE.findall(title):
+        if match in seen:
+            continue
+        seen.add(match)
+        if any(stop in match for stop in _PROPER_NOUN_STOPLIST):
+            continue
+        found.append(match)
+    return found
+
+
+def _converge_near_duplicates(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Collapse same-event near-duplicates to one representative per cluster.
+
+    Cluster rule: two entries belong to the same event when they share a
+    distinctive proper-noun phrase (≥2-word capitalized sequence) within
+    :data:`_NEAR_DUP_WINDOW_DAYS` days AND carry at least one secondary
+    signal — an already-stored ``dedup_status == "duplicate"``, a second
+    shared proper noun, or ≥50% title character similarity.  Identical
+    ``source_url`` is never merged (syndication is intentional).
+
+    The representative is the highest ``relevance_score`` entry of the
+    cluster (tie-break: earliest ``collected_at``, then ``entry_id``) — the
+    order in which candidates are promoted to representatives.  Returns a
+    NEW list; input dicts are never mutated and never dropped from the KB.
+    """
+    if not entries:
+        return []
+    nouns_by_key: dict[int, set[str]] = {}
+    for idx, entry in enumerate(entries):
+        nouns_by_key[idx] = set(_extract_proper_nouns(str(entry.get("title") or "")))
+
+    def _sort_key(entry: dict[str, Any]) -> tuple[float, str, str]:
+        relevance = float(entry.get("relevance_score") or 0.0)
+        collected = str(entry.get("collected_at") or "")
+        eid = str(entry.get("entry_id") or "")
+        return (-relevance, collected, eid)
+
+    def _parse_dt(value: str | None) -> datetime | None:
+        if not value:
+            return None
+        try:
+            return datetime.fromisoformat(str(value))
+        except (ValueError, TypeError):
+            return None
+
+    def _within_window(rep: dict[str, Any], entry: dict[str, Any]) -> bool:
+        rep_dt = _parse_dt(rep.get("collected_at"))
+        entry_dt = _parse_dt(entry.get("collected_at"))
+        if rep_dt is None or entry_dt is None:
+            # Unparseable/missing dates: skip the window clause (conservative —
+            # allow merge on the other signals).
+            return True
+        return abs((entry_dt - rep_dt).days) <= _NEAR_DUP_WINDOW_DAYS
+
+    def _shares_noun(rep_idx: int, entry_idx: int) -> bool:
+        rep_nouns = nouns_by_key.get(rep_idx, set())
+        entry_nouns = nouns_by_key.get(entry_idx, set())
+        if rep_nouns & entry_nouns:
+            return True
+        # Phrase subsumption: "Muere Dolly Parton" contains "Dolly Parton"
+        # as a whole-word substring — same signature, different leading verb
+        # (title-initial capitalized verb in Romance languages).
+        for a in rep_nouns:
+            for b in entry_nouns:
+                if a in b or b in a:
+                    return True
+        return False
+
+    def _secondary_signal(rep: dict[str, Any], entry: dict[str, Any]) -> bool:
+        if str(entry.get("dedup_status") or "").lower() == "duplicate":
+            return True
+        rep_idx = next(
+            (i for i, e in enumerate(entries) if e is rep), -1
+        )
+        entry_idx = next(
+            (i for i, e in enumerate(entries) if e is entry), -1
+        )
+        if rep_idx >= 0 and entry_idx >= 0:
+            shared = nouns_by_key.get(rep_idx, set()) & nouns_by_key.get(entry_idx, set())
+            if len(shared) >= 2:
+                return True
+        a = (str(rep.get("title") or "")).lower()
+        b = (str(entry.get("title") or "")).lower()
+        if a and b:
+            from difflib import SequenceMatcher  # noqa: PLC0415
+
+            if SequenceMatcher(None, a, b).ratio() >= _NEAR_DUP_CHAR_SIM:
+                return True
+        return False
+
+    reps: list[dict[str, Any]] = []
+    dropped = 0
+    for entry in sorted(entries, key=_sort_key):
+        entry_idx = entries.index(entry)
+        merged = False
+        for rep in reps:
+            rep_idx = entries.index(rep)
+            if str(rep.get("source_url") or "") == str(entry.get("source_url") or ""):
+                continue  # syndication — never merge identical URLs
+            if not _shares_noun(rep_idx, entry_idx):
+                continue
+            if not _within_window(rep, entry):
+                continue
+            if not _secondary_signal(rep, entry):
+                continue
+            merged = True
+            dropped += 1
+            logger.info(
+                "Converged near-duplicate entry '%s' into representative '%s'",
+                entry.get("title", "")[:60],
+                rep.get("title", "")[:60],
+            )
+            break
+        if not merged:
+            reps.append(entry)
+    if dropped:
+        logger.info("Converged %d near-duplicate entries in product input", dropped)
+    return reps
+
+
 _LANG_ALIASES: dict[str, str] = {
     "zh-cn": "zh",
     "zh-hans": "zh",
@@ -5086,6 +5275,10 @@ def generate_digest(
     # (issue #326) so their column Deep Dive / report Sections are never an
     # empty shell from real KB data.
     entries = _filter_product_entries(_enrich_product_entries(entries))
+    # Near-duplicate convergence (issue #69): collapse same-event entries
+    # that char-level G2 dedup could not see (cross-language) BEFORE the
+    # language filter so a cross-language cluster converges to one rep.
+    entries = _converge_near_duplicates(entries)
 
     # --- Language filter (issue #309 / #317) --------------------------------
     # When a user requests a specific language (or a domain declares a
@@ -5695,6 +5888,8 @@ def generate_report(
     # first enriched (issue #326) so the report Sections are never an empty
     # shell from real KB data.
     entries = _filter_product_entries(_enrich_product_entries(entries))
+    # Near-duplicate convergence (issue #69) — see generate_digest.
+    entries = _converge_near_duplicates(entries)
 
     # --- Language filter (issue #309 / #317) --------------------------------
     # An explicit param wins; otherwise the domain default fills in;
