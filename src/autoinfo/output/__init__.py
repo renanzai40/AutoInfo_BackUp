@@ -757,6 +757,70 @@ def _extract_proper_nouns(title: str) -> list[str]:
     return found
 
 
+# Cross-language EVENT-WORD lexicon for the death/obituary news class
+# (backup issue #73).  Multi-angle reports of the SAME event visibly rewrite
+# the headline ("Mort de Dolly Parton", "Dolly Parton ... est morte à l'âge de
+# 80 ans"), so title character-similarity drops out of the G2-invisible
+# [0.5, 0.85) band and they never carry a second shared noun — yet they ARE
+# the same event.  These canonical headline/predicate forms per language give
+# those pairs a deterministic secondary signal so they converge.
+# Forms are deliberately the FULL headline constructions (lead "mort de",
+# predicate "est morte", formal obituary "décédé(e)") rather than bare
+# participles/adjectives: "morte"/"dead" alone appear appositionally in
+# tribute/feature titles ("... l'icône de la country morte à 80 ans") that must
+# NOT dissolve into the obituary cluster.
+_DEATH_EVENT_WORDS: dict[str, tuple[str, ...]] = {
+    "en": (
+        "died", "has died", "dies", "death of", "death", "deaths", "dead",
+        "passed away", "passes away", "obituary",
+    ),
+    "fr": (
+        "mort de", "est mort", "est morte", "morte à l'âge", "mort à l'âge",
+        "décédé", "décédée", "décès", "est décédé", "est décédée",
+        "s'éteint", "s'est éteint", "s'est éteinte",
+    ),
+    "es": (
+        "muere", "murió", "ha muerto", "muerte de", "fallece", "falleció",
+        "fallecimiento de", "fallecimiento",
+    ),
+    "pt": (
+        "morre", "morreu", "morte de", "falece", "faleceu",
+        "falecimento de",
+    ),
+    "it": (
+        "è morta", "è morto", "morte di", "muore", "deceduto", "deceduta",
+        "decesso",
+    ),
+    "de": (
+        "gestorben", "tod von", "stirbt", "verstorben", "todesfall",
+    ),
+    "zh": ("逝世", "去世", "病逝"),
+}
+
+# Union of every language's forms — fallback lexicon for entries whose
+# language tag is unknown/empty (best-effort; still canonical forms only).
+_ALL_DEATH_EVENT_WORDS: tuple[str, ...] = tuple(
+    word for words in _DEATH_EVENT_WORDS.values() for word in words
+)
+
+
+def _has_death_event_word(title: str, language: str | None) -> bool:
+    """True when *title* carries a canonical death/obituary event word.
+
+    Language-keyed via the entry's ``language`` (normalised with
+    :func:`_normalize_lang`); an unknown/empty tag scans the union of every
+    lexicon language (best-effort).  Co-occurrence with the shared proper noun
+    in the same title is enforced by the caller.
+    """
+    if not title:
+        return False
+    lowered = title.lower()
+    words = _DEATH_EVENT_WORDS.get(_normalize_lang(language or ""))
+    if words is None:
+        words = _ALL_DEATH_EVENT_WORDS
+    return any(word in lowered for word in words)
+
+
 def _converge_near_duplicates(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Collapse same-event near-duplicates to one representative per cluster.
 
@@ -764,8 +828,10 @@ def _converge_near_duplicates(entries: list[dict[str, Any]]) -> list[dict[str, A
     distinctive proper-noun phrase (≥2-word capitalized sequence) within
     :data:`_NEAR_DUP_WINDOW_DAYS` days AND carry at least one secondary
     signal — an already-stored ``dedup_status == "duplicate"``, a second
-    shared proper noun, or title character similarity in the [0.5, 0.85)
-    paraphrase band.  Identical
+    shared proper noun, title character similarity in the [0.5, 0.85)
+    paraphrase band, or (backup issue #73) a canonical death/obituary event
+    word in BOTH titles, each co-occurring with the shared proper noun in its
+    own title.  Identical
     ``source_url`` is never merged (syndication is intentional).
 
     The representative is the highest ``relevance_score`` entry of the
@@ -816,6 +882,50 @@ def _converge_near_duplicates(entries: list[dict[str, Any]]) -> list[dict[str, A
                     return True
         return False
 
+    def _death_event_signal(rep: dict[str, Any], entry: dict[str, Any]) -> bool:
+        """Death/obituary event-word co-occurrence signal (backup issue #73).
+
+        Two reworded reports of the SAME death event each carry a canonical
+        death event word in their own title, in the language of that title,
+        and each event word co-occurs with a shared proper noun in the same
+        title.  Requiring the word in BOTH titles — not either — keeps a
+        tribute/feature title that merely mentions the deceased out of the
+        obituary cluster.
+        """
+        rep_title = str(rep.get("title") or "").strip()
+        entry_title = str(entry.get("title") or "").strip()
+        if not rep_title or not entry_title:
+            return False
+        rep_idx = next(
+            (i for i, e in enumerate(entries) if e is rep), -1
+        )
+        entry_idx = next(
+            (i for i, e in enumerate(entries) if e is entry), -1
+        )
+        if rep_idx < 0 or entry_idx < 0:
+            return False
+        rep_nouns = nouns_by_key.get(rep_idx, set())
+        entry_nouns = nouns_by_key.get(entry_idx, set())
+        shared: set[str] = set(rep_nouns) & set(entry_nouns)
+        for a in rep_nouns:
+            for b in entry_nouns:
+                if a in b:
+                    shared.add(a)
+                if b in a:
+                    shared.add(b)
+        if not shared:
+            return False
+        # The event word must co-occur with the shared proper noun in the
+        # same title — satisfied when a shared phrase is a substring of both.
+        if not any(noun in rep_title for noun in shared):
+            return False
+        if not any(noun in entry_title for noun in shared):
+            return False
+        return (
+            _has_death_event_word(rep_title, rep.get("language"))
+            and _has_death_event_word(entry_title, entry.get("language"))
+        )
+
     def _secondary_signal(rep: dict[str, Any], entry: dict[str, Any]) -> bool:
         if str(entry.get("dedup_status") or "").lower() == "duplicate":
             return True
@@ -837,7 +947,7 @@ def _converge_near_duplicates(entries: list[dict[str, Any]]) -> list[dict[str, A
             ratio = SequenceMatcher(None, a, b).ratio()
             if _NEAR_DUP_CHAR_SIM_MIN <= ratio < _NEAR_DUP_CHAR_SIM_MAX:
                 return True
-        return False
+        return _death_event_signal(rep, entry)
 
     reps: list[dict[str, Any]] = []
     dropped = 0
