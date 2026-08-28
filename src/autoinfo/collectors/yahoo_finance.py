@@ -17,6 +17,7 @@ import feedparser
 
 from autoinfo.collectors.base import BaseHandler
 from autoinfo.models import Item
+from autoinfo.textutil import clean_feed_text
 
 logger = logging.getLogger(__name__)
 
@@ -93,7 +94,10 @@ class YahooFinanceHandler(BaseHandler):
                 items.append(item)
             except Exception as exc:
                 logger.warning(
-                    "Skipping entry %d in %s: %s", i, feed_url, exc,
+                    "Skipping entry %d in %s: %s",
+                    i,
+                    feed_url,
+                    exc,
                 )
                 continue
 
@@ -106,9 +110,9 @@ class YahooFinanceHandler(BaseHandler):
     @classmethod
     def _entry_to_item(cls, entry: dict[str, Any], feed_url: str) -> Item:
         """Convert a feedparser entry ``dict`` into an :class:`Item`."""
-        title = entry.get("title", "")
+        title = clean_feed_text(entry.get("title", ""))
         link = entry.get("link", feed_url)
-        summary = (
+        summary = clean_feed_text(
             entry.get("summary")
             or entry.get("description")
             or entry.get("content", [{}])[0].get("value", "")

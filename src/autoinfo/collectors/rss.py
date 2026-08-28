@@ -18,6 +18,7 @@ import httpx
 from autoinfo.collectors.base import BaseHandler, SourceFailure
 from autoinfo.collectors.web import WebHandler
 from autoinfo.models import Item
+from autoinfo.textutil import clean_feed_text
 
 # feedparser 6.x has no timeout support; fetch over httpx with a bounded
 # timeout first so a hung feed cannot stall the whole collect run.
@@ -91,9 +92,7 @@ class RSSHandler(BaseHandler):
             # bounded timeout — feedparser itself has no timeout and can
             # hang on a dead feed. file:// paths may carry URL-encoded
             # characters (e.g. %E8 for non-ASCII) — decode before isfile.
-            local_path = (
-                urllib.parse.unquote(url[7:]) if url.startswith("file://") else url
-            )
+            local_path = urllib.parse.unquote(url[7:]) if url.startswith("file://") else url
             if os.path.isfile(local_path):
                 with open(local_path, "rb") as fh:
                     parsed = feedparser.parse(fh.read(), agent=_RSS_USER_AGENT)
@@ -127,9 +126,7 @@ class RSSHandler(BaseHandler):
                 url,
                 bozo_exception or "unknown",
             )
-            raise SourceFailure(
-                f"RSS parse error for {url} (bozo): {bozo_exception or 'unknown'}"
-            )
+            raise SourceFailure(f"RSS parse error for {url} (bozo): {bozo_exception or 'unknown'}")
 
         # -- Ensure we have entries ---------------------------------------
         if not parsed.entries:
@@ -146,7 +143,10 @@ class RSSHandler(BaseHandler):
                 items.append(item)
             except Exception as exc:
                 logger.warning(
-                    "Skipping entry %d in %s: %s", i, url, exc,
+                    "Skipping entry %d in %s: %s",
+                    i,
+                    url,
+                    exc,
                 )
                 continue
 
@@ -172,9 +172,9 @@ class RSSHandler(BaseHandler):
         -------
         Item
         """
-        title = entry.get("title", "")
+        title = clean_feed_text(entry.get("title", ""))
         link = entry.get("link", feed_url)
-        summary = (
+        summary = clean_feed_text(
             entry.get("summary")
             or entry.get("description")
             or entry.get("content", [{}])[0].get("value", "")
