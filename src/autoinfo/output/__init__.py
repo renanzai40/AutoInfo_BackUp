@@ -186,6 +186,175 @@ class DeliveryOutput:
     warnings: list[str] = field(default_factory=list)
 
 
+class StaleSourceError(ValueError):
+    """Raised when freshness filtering removes all candidate entries for a
+    digest/report, so the product would be an empty shell.
+
+    Subclasses :class:`ValueError` so the CLI and MCP layers (which catch
+    ``ValueError`` around ``generate_digest`` / ``generate_report``) surface a
+    clean, actionable error instead of silently producing a product with no
+    content (backup issue #52).
+    """
+
+
+# ---------------------------------------------------------------------------
+# Language-teaching topic guard (backup #63)
+# ---------------------------------------------------------------------------
+# A language-learning domain's entries must not include content that teaches
+# a language OTHER than the domain's ``default_language`` — e.g. a Spanish
+# grammar post on blog.duolingo.com leaking into english-learning (the list
+# is about the topic, so the language filter cannot catch it).  This is a
+# deterministic title/summary heuristic that drops entries whose text
+# combines a non-target language name with a language-teaching signal.
+
+_LANG_TEACHING_SIGNALS: tuple[str, ...] = (
+    " mean ",
+    "means",
+    "meaning",
+    "grammar",
+    "vocabulary",
+    "conjugation",
+    "pronunciation",
+    "how to say",
+    "how do you say",
+)
+
+
+_LANGUAGE_NAMES: frozenset[str] = frozenset(
+    {
+        "arabic",
+        "chinese",
+        "czech",
+        "danish",
+        "dutch",
+        "english",
+        "finnish",
+        "french",
+        "german",
+        "greek",
+        "hebrew",
+        "hindi",
+        "hungarian",
+        "indonesian",
+        "italian",
+        "japanese",
+        "korean",
+        "mandarin",
+        "norwegian",
+        "polish",
+        "portuguese",
+        "russian",
+        "spanish",
+        "swedish",
+        "turkish",
+        "ukrainian",
+        "vietnamese",
+    }
+)
+
+# ISO-639-1 code -> human-readable language name, used to phrase the
+# language-learning prompt ("for Russian" instead of "for ru").
+_LANG_DISPLAY_NAMES: dict[str, str] = {
+    "ar": "Arabic",
+    "zh": "Chinese",
+    "cs": "Czech",
+    "da": "Danish",
+    "nl": "Dutch",
+    "en": "English",
+    "fi": "Finnish",
+    "fr": "French",
+    "de": "German",
+    "el": "Greek",
+    "he": "Hebrew",
+    "hi": "Hindi",
+    "hu": "Hungarian",
+    "id": "Indonesian",
+    "it": "Italian",
+    "ja": "Japanese",
+    "ko": "Korean",
+    "no": "Norwegian",
+    "pl": "Polish",
+    "pt": "Portuguese",
+    "ru": "Russian",
+    "es": "Spanish",
+    "sv": "Swedish",
+    "tr": "Turkish",
+    "uk": "Ukrainian",
+    "vi": "Vietnamese",
+}
+
+
+def _lang_display_name(lang: str) -> str:
+    """Return a human-readable language name for an ISO code/alias."""
+    code = _normalize_lang(lang)
+    return _LANG_DISPLAY_NAMES.get(code, lang or "the target language")
+
+
+def _filter_foreign_language_teaching_entries(
+    entries: list[dict[str, Any]],
+    target_language: str,
+) -> list[dict[str, Any]]:
+    """Drop language-learning entries that teach a language other than
+    *target_language* (backup issue #63).
+
+    Deterministic: an entry is dropped only when its title+summary contains a
+    non-target language name **and** a teaching signal phrase
+    (``means`` / ``grammar`` / ``vocabulary`` / …).  Plain news that merely
+    names a country or language is never dropped; non-language-learning
+    domains (``target_language == ""``) pass through unchanged.
+    """
+    if not target_language:
+        return entries
+    target_norm = target_language.strip().lower()
+    # Language names that are NOT the target (teaching *another* language).
+    foreign_names = {name for name in _LANGUAGE_NAMES if name != target_norm}
+    if not foreign_names:
+        return entries
+
+    kept: list[dict[str, Any]] = []
+    dropped = 0
+    for entry in entries:
+        haystack = " ".join(
+            filter(
+                None,
+                (
+                    str(entry.get("title") or ""),
+                    str(entry.get("summary") or ""),
+                ),
+            )
+        ).lower()
+        if not haystack:
+            kept.append(entry)
+            continue
+        hit = False
+        for name in foreign_names:
+            if name not in haystack:
+                continue
+            for signal in _LANG_TEACHING_SIGNALS:
+                if signal in haystack:
+                    hit = True
+                    break
+            if hit:
+                break
+        if hit:
+            dropped += 1
+            logger.info(
+                "Excluded foreign-language teaching entry from %s tutorial "
+                "(teaches '%s' ≠ default_language)",
+                target_language,
+                next((n for n in foreign_names if n in haystack), "?"),
+            )
+        else:
+            kept.append(entry)
+    if dropped:
+        logger.info(
+            "Excluded %d foreign-language teaching entries (target '%s')",
+            dropped,
+            target_language,
+        )
+    return kept
+
+
 # ---------------------------------------------------------------------------
 # Content-ready notification helper
 # ---------------------------------------------------------------------------
@@ -4936,7 +5105,12 @@ def generate_digest(
             # the unfiltered input and logged — use it as-is.
             entries = filtered_entries
         else:
-            if not filtered_entries and entries and not period_was_empty and not is_cross_domain_digest:
+            if (
+                not filtered_entries
+                and entries
+                and not period_was_empty
+                and not is_cross_domain_digest
+            ):
                 # The period window held entries in OTHER languages while the
                 # domain's default-language corpus is fully out-of-window (e.g. a
                 # zh domain whose people.cn corpus is dated months ago + fresh en
@@ -5043,6 +5217,26 @@ def generate_digest(
                 domain,
             )
         entries = active_entries
+
+    # --- Stale-source guard (backup issue #52) --------------------------------
+    if not include_stale and excluded_stale_count > 0 and not entries:
+        stale_count = excluded_stale_count
+        stale_msg = (
+            f"All candidate entries for domain '{domain}' are stale "
+            f"(excluded {stale_count} entr{'y' if stale_count == 1 else 'ies'} "
+            f"older than the freshness threshold). "
+            f"Refusing to generate an empty-shell product. "
+            f"Re-run collection to refresh the source, or pass include_stale=true."
+        )
+        if delivery_gate_configs is not None:
+            return DeliveryOutput(
+                output="",
+                gate_results={},
+                delivery_blocked=True,
+                delivery_format=format,
+                warnings=[f"STALE_SOURCE: {stale_msg}"],
+            )
+        raise StaleSourceError(stale_msg)
 
     # --- LLM synthesis -------------------------------------------------------
     # Resolve the product template family up front (spec §2.4, todo 7) so the
@@ -8300,6 +8494,61 @@ _VALID_AUDIENCES = frozenset(_VALID_REPORT_AUDIENCES)
 _AUDIENCE_DESCRIPTIONS: dict[str, str] = dict(_REPORT_AUDIENCE_DESCRIPTIONS)
 
 
+def _filter_stale_entries(
+    entries: list[dict[str, Any]],
+    domain: str,
+    *,
+    include_stale: bool = False,
+    product: str = "product",
+) -> list[dict[str, Any]]:
+    """Drop entries older than the domain's freshness threshold (TTL).
+
+    Mirrors the digest staleness filter (F51) so teaching-layer products
+    (tutorial/presentation) never silently regenerate from an old corpus
+    after a source swap (backup issue #60).
+
+    Returns a NEW list containing only non-stale entries (TTL resolution
+    from config, defaults ``ttl_days=90`` / ``freshness_threshold=0.5``).
+    """
+    if include_stale:
+        return list(entries)
+    ttl_days = 90
+    freshness_threshold = 0.5
+    try:
+        from autoinfo.config import get_config_path, load_config  # noqa: PLC0415
+
+        config_path = get_config_path()
+        if config_path and config_path.is_file():
+            cfg = load_config(config_path)
+            for dc in cfg.domains:
+                if dc.name == domain:
+                    ttl_days = dc.ttl_days
+                    freshness_threshold = dc.freshness_threshold
+                    break
+    except Exception:
+        pass
+
+    from autoinfo.kb import calculate_freshness_score  # noqa: PLC0415
+
+    active: list[dict[str, Any]] = []
+    excluded = 0
+    for entry in entries:
+        entry_freshness = calculate_freshness_score(entry, ttl_days)
+        entry["freshness_score"] = round(entry_freshness, 4)
+        if entry_freshness < freshness_threshold:
+            entry["is_stale"] = True
+            excluded += 1
+        else:
+            entry["is_stale"] = False
+            active.append(entry)
+    if excluded:
+        logger.info(
+            "Excluded %d stale entries from %s for domain '%s'",
+            excluded, product, domain,
+        )
+    return active
+
+
 def generate_tutorial(
     domain: str,
     collection_id: str | None = None,
@@ -8309,6 +8558,7 @@ def generate_tutorial(
     user_id: str = "",
     delivery_gate_configs: dict[str, dict[str, Any]] | _DeliveryGatesBypass | None = None,
     llm_config: Config | None = None,
+    include_stale: bool = False,
 ) -> str | DeliveryOutput:
     """Generate a structured tutorial for *domain*, adapted to *target_audience*.
 
@@ -8393,6 +8643,51 @@ def generate_tutorial(
     # exclude_keywords blacklist BEFORE LLM synthesis / KB-derived sections.
     entries = _filter_entries_by_domain_exclusions(entries, domain)
 
+    # --- Language-learning wiring (backup #59/#61/#63) -----------------------
+    # Language-learning domains (default_language set) get: (1) a topic-level
+    # guard dropping entries that teach a language OTHER than the domain's
+    # target (#63, e.g. a Spanish grammar post in english-learning — the
+    # language filter cannot catch English-written posts about another
+    # language), and (2) a language-teaching tutorial prompt instead of the
+    # generic news-structure prompt (#59/#61).
+    lang_learning = _is_lang_learning_domain(domain)
+    target_language = (
+        (
+            _resolve_effective_language(language="", domain=domain)
+            or _seed_domain_default_language(domain)
+        )
+        if lang_learning
+        else ""
+    )
+    if lang_learning and target_language:
+        entries = _filter_foreign_language_teaching_entries(entries, target_language)
+
+    # --- Staleness filter (backup #60) ---------------------------------------
+    # Teaching-layer products must never silently regenerate from an old
+    # corpus (e.g. 2024 Corriere after a source swap to ANSA).  Mirror the
+    # digest freshness filter; all-stale raises StaleSourceError (plain path)
+    # or blocks delivery (DeliveryOutput path) instead of shipping a stale
+    # empty-shell product.
+    prior_count = len(entries)
+    entries = _filter_stale_entries(
+        entries, domain, include_stale=include_stale, product="tutorial"
+    )
+    if not include_stale and prior_count > 0 and not entries:
+        stale_msg = (
+            f"All {prior_count} candidate entries for domain '{domain}' are stale. "
+            f"Refusing to generate an empty-shell tutorial from old corpus. "
+            f"Re-run collection to refresh the source, or pass include_stale=true."
+        )
+        if delivery_gate_configs is not None:
+            return DeliveryOutput(
+                output="",
+                gate_results={},
+                delivery_blocked=True,
+                delivery_format=format,
+                warnings=[f"STALE_SOURCE: {stale_msg}"],
+            )
+        raise StaleSourceError(stale_msg)
+
     if not entries:
         if format == "agent":
             return json.dumps(
@@ -8439,11 +8734,21 @@ def generate_tutorial(
 
     if format == "agent":
         prompt = _build_tutorial_json_prompt(
-            target_audience, audience_desc, entry_summaries, custom_instructions
+            target_audience,
+            audience_desc,
+            entry_summaries,
+            custom_instructions,
+            lang_learning=lang_learning,
+            target_language=target_language,
         )
     else:
         prompt = _build_tutorial_markdown_prompt(
-            target_audience, audience_desc, entry_summaries, custom_instructions
+            target_audience,
+            audience_desc,
+            entry_summaries,
+            custom_instructions,
+            lang_learning=lang_learning,
+            target_language=target_language,
         )
 
     llm_result = _call_llm_for_tutorial(prompt)
@@ -8468,7 +8773,9 @@ def generate_tutorial(
                 domain,
             )
         llm_result = _ensure_tutorial_complete(
-            llm_result, domain, entries, target_audience
+            llm_result, domain, entries, target_audience,
+            lang_learning=lang_learning,
+            target_language=target_language,
         )
 
     # -- Build template context -------------------------------------------
@@ -8508,6 +8815,8 @@ def generate_tutorial(
         "summary": llm_result.get("summary", ""),
         "further_reading": llm_result.get("further_reading", []),
         "generated_at": generated_at,
+        "vocabulary": llm_result.get("vocabulary", []),
+        "grammar": llm_result.get("grammar", []),
     }
 
     # -- Agent-native JSON-LD format ----------------------------------------
@@ -8670,8 +8979,17 @@ def _build_tutorial_json_prompt(
     audience_desc: str,
     entry_summaries: str,
     custom_instructions: str,
+    *,
+    lang_learning: bool = False,
+    target_language: str = "",
 ) -> str:
-    """Build the structured-JSON tutorial prompt (agent-native format path)."""
+    """Build the structured-JSON tutorial prompt (agent-native format path).
+
+    For language-learning domains (*lang_learning* + *target_language*),
+    the schema gains ``vocabulary`` and ``grammar`` arrays and the content is
+    required to be written in the target language (backup #59/#61).  A
+    no-fabricated-causal-attribution constraint is always appended (#62).
+    """
     prompt = (
         f"You are a tutorial designer creating content for a {target_audience} "
         f"audience ({audience_desc}). "
@@ -8702,6 +9020,32 @@ def _build_tutorial_json_prompt(
         "Return all fields in a single JSON object. Adapt depth, terminology, "
         f"and examples specifically for a {target_audience} audience."
     )
+    if lang_learning and target_language:
+        lang_label = _lang_display_name(target_language)
+        prompt += (
+            f"\n\nThis is a LANGUAGE-LEARNING tutorial for {lang_label}. "
+            "Write the tutorial as a language course, not a news summary:\n"
+            "- \"objectives\" MUST be language-ability goals for learners of "
+            f"{lang_label} (e.g. \"Understand how to report on current "
+            "events in the target language\"), NOT copies of the KB entry titles.\n"
+            f"- \"content\" sections MUST be written IN {lang_label} "
+            "(target-language prose adapted to a graded learner level), not "
+            "an English retelling.\n"
+            '- add two extra keys to the JSON: "vocabulary" (array of objects '
+            'with "word" (in target language), "pos" (part of speech), '
+            '"translation", "example" (a sentence in the target language)) '
+            'and "grammar" (array of objects with "point" (grammar rule name), '
+            '"explanation", "example" (target-language example)).\n'
+            f'- "exercises" MUST be {lang_label} exercises (fill-in-the-blank, '
+            f"translation, sentence construction in {lang_label}), not "
+            "English comprehension questions.\n"
+        )
+    prompt += (
+        "\nDo NOT add causal attributions, motivations, or explanations (e.g. "
+        "'due to COVID-19 concerns', 'likely because of') that the source "
+        "entries do not explicitly state. Only restate causes actually present "
+        "in the source material."
+    )
     if custom_instructions:
         prompt += f"\n\nAdditional instructions: {custom_instructions}"
     return prompt
@@ -8712,12 +9056,20 @@ def _build_tutorial_markdown_prompt(
     audience_desc: str,
     entry_summaries: str,
     custom_instructions: str,
+    *,
+    lang_learning: bool = False,
+    target_language: str = "",
 ) -> str:
     """Build the flat-markdown tutorial prompt (robust markdown render path).
 
     Plain markdown with fixed heading markers is far more reliably emitted by
     the default model than the nested tutorial JSON schema, and the response is
     parsed by heading instead of ``json.loads``.
+
+    For language-learning domains (*lang_learning* + *target_language*), the
+    required structure gains ``## Vocabulary`` and ``## Grammar`` sections and
+    the body/exercises must be written in the target language (backup #59/#61).
+    A no-fabricated-causal-attribution constraint is always appended (#62).
     """
     prompt = (
         f"You are a tutorial designer creating content for a {target_audience} "
@@ -8754,6 +9106,34 @@ def _build_tutorial_markdown_prompt(
         "Adapt depth, terminology, and examples specifically for a "
         f"{target_audience} audience."
     )
+    if lang_learning and target_language:
+        lang_label = _lang_display_name(target_language)
+        prompt += (
+            f"\n\nThis is a LANGUAGE-LEARNING tutorial for {lang_label}. "
+            "Write the tutorial as a language course, not a news summary:\n"
+            f"- Learning Objectives MUST be language-ability goals for learners "
+            f"of {lang_label} (e.g. \"Understand how to report on current "
+            "events in the target language\"), NOT copies of the KB article titles.\n"
+            f"- The tutorial body MUST be written in the target language "
+            f"({lang_label}); target-language prose adapted to a graded "
+            "learner level, not an English retelling. Only technical terms may "
+            "stay in the source language.\n"
+            "- Add a '## Vocabulary' section listing 6-10 target-language words "
+            "from the entries, each bullet: '<word> — <part of speech> — "
+            "<translation> — <example sentence in the target language>'.\n"
+            "- Add a '## Grammar' section listing 2-3 grammar points relevant "
+            "to the content, each bullet: '<grammar point> — <rule> — "
+            "<example in the target language>'.\n"
+            f"- Exercises MUST be written in the target language "
+            f"(fill-in-the-blank, translation, sentence construction in "
+            f"{lang_label}), not English comprehension questions.\n"
+        )
+    prompt += (
+        "\nDo NOT add causal attributions, motivations, or explanations (e.g. "
+        "'due to COVID-19 concerns', 'likely because of') that the source "
+        "entries do not explicitly state. Only restate causes actually present "
+        "in the source material."
+    )
     if custom_instructions:
         prompt += f"\n\nAdditional instructions: {custom_instructions}"
     return prompt
@@ -8780,6 +9160,8 @@ def _parse_tutorial_markdown(content: str) -> dict[str, Any]:
         "exercises": [],
         "summary": "",
         "further_reading": [],
+        "vocabulary": [],
+        "grammar": [],
     }
     current_section = ""
     content_heading = ""
@@ -8884,6 +9266,18 @@ def _parse_tutorial_markdown(content: str) -> dict[str, Any]:
             elif stripped and not line.startswith(("---", "***")):
                 result["further_reading"].append(stripped)
             continue
+        if current_section in ("Vocabulary", "Key Vocabulary", "Word List"):
+            if is_bullet(stripped):
+                item = bullet_text(stripped)
+                if item:
+                    result["vocabulary"].append(item)
+            continue
+        if current_section in ("Grammar", "Grammar Points", "Grammar Notes"):
+            if is_bullet(stripped):
+                item = bullet_text(stripped)
+                if item:
+                    result["grammar"].append(item)
+            continue
     flush_content()
     flush_exercise()
     return result
@@ -8896,8 +9290,16 @@ def _tutorial_has_content(result: dict[str, Any]) -> bool:
 
 def _entry_derived_sections(
     entries: list[dict[str, Any]],
+    *,
+    lang_learning: bool = False,
+    target_language: str = "",
 ) -> tuple[list[str], list[dict[str, str]], list[dict[str, str]], list[str]]:
-    """Derive objectives/content/exercises/further-reading from KB entries."""
+    """Derive objectives/content/exercises/further-reading from KB entries.
+
+    For language-learning domains (*lang_learning* + *target_language*), the
+    KB-derived fallback exercises become target-language writing practice
+    instead of English "key finding" questions (backup #59).
+    """
     objectives: list[str] = []
     content: list[dict[str, str]] = []
     exercises: list[dict[str, str]] = []
@@ -8912,8 +9314,17 @@ def _entry_derived_sections(
         if url:
             body += f" (Source: {url})"
         content.append({"heading": title, "body": body})
+        lang_label = target_language or "the target language"
         exercises.append(
             {
+                "title": f"Write a {len(body.split()):d}-word summary",
+                "description": (
+                    f"Read '{title}' and write a short summary in {lang_label}. "
+                    "Use at least 3 words or phrases from the article."
+                ),
+            }
+            if lang_learning
+            else {
                 "title": f"What is the key finding in '{title}'?",
                 "description": (
                     f"Summarize the main finding or conclusion of the entry "
@@ -8931,6 +9342,9 @@ def _ensure_tutorial_complete(
     domain: str,
     entries: list[dict[str, Any]],
     target_audience: str,
+    *,
+    lang_learning: bool = False,
+    target_language: str = "",
 ) -> dict[str, Any]:
     """Guarantee the markdown tutorial never renders the all-empty template.
 
@@ -8938,7 +9352,11 @@ def _ensure_tutorial_complete(
     content, …) and fills any missing or empty section from the KB entries,
     so a domain that HAS entries always produces a complete tutorial.
     """
-    objectives, content, exercises, further_reading = _entry_derived_sections(entries)
+    objectives, content, exercises, further_reading = _entry_derived_sections(
+        entries,
+        lang_learning=lang_learning,
+        target_language=target_language,
+    )
     return {
         "title": llm_result.get("title") or f"{domain} — Tutorial",
         "duration": llm_result.get("duration") or f"{len(entries)} minutes",
@@ -8952,6 +9370,8 @@ def _ensure_tutorial_complete(
             f"for a {target_audience} audience."
         ),
         "further_reading": llm_result.get("further_reading") or further_reading,
+        "vocabulary": llm_result.get("vocabulary") or [],
+        "grammar": llm_result.get("grammar") or [],
     }
 
 
@@ -8979,6 +9399,7 @@ def generate_presentation(
     delivery_gate_configs: dict[str, dict[str, Any]] | _DeliveryGatesBypass | None = None,
     llm_config: Config | None = None,
     language: str = "",
+    include_stale: bool = False,
 ) -> str | DeliveryOutput:
     """Generate a slide-based presentation for *topic* within *domain*.
 
@@ -9091,6 +9512,20 @@ def generate_presentation(
     if effective_language:
         entries, _ = _filter_entries_by_language_product_safe(
             entries, effective_language
+        )
+
+    # --- Staleness filter (backup #60) ---------------------------------------
+    # Teaching-layer products must never silently regenerate from an old
+    # corpus after a source swap; mirror the digest freshness filter.
+    prior_count = len(entries)
+    entries = _filter_stale_entries(
+        entries, domain, include_stale=include_stale, product="presentation"
+    )
+    if not include_stale and prior_count > 0 and not entries and not allow_empty:
+        raise StaleSourceError(
+            f"All {prior_count} candidate entries for domain '{domain}' are stale. "
+            f"Refusing to generate an empty-shell presentation from old corpus. "
+            f"Re-run collection to refresh the source, or pass include_stale=true."
         )
 
     # Filter entries by topic relevance (title/summary contains topic terms)

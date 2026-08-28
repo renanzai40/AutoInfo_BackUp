@@ -18,7 +18,7 @@ sources:
   enabled: true
 - name: rt-news
   type: rss
-  url: https://www.rt.com/rss/
+  url: https://russian.rt.com/rss
   quality_tier: 1
   frequency: daily
   access: free

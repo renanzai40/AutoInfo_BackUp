@@ -91,9 +91,7 @@ class TestRSSParsing:
 class TestAtomParsing:
     """Verify Atom feed parsing produces valid ``Item`` instances."""
 
-    def test_atom_fetch_returns_items(
-        self, handler: RSSHandler, atom_feed_path: str
-    ) -> None:
+    def test_atom_fetch_returns_items(self, handler: RSSHandler, atom_feed_path: str) -> None:
         """Fetching a valid Atom feed returns items."""
         items = handler.fetch(atom_feed_path)
         assert len(items) == 2, f"Expected 2 items, got {len(items)}"
@@ -116,9 +114,7 @@ class TestAtomParsing:
         item = items[1]  # second entry has no <published>, only <updated>
 
         assert item.title == "Atom Entry Two"
-        assert item.collected_at, (
-            "Should fall back to <updated> when <published> is absent"
-        )
+        assert item.collected_at, "Should fall back to <updated> when <published> is absent"
 
 
 # ---------------------------------------------------------------------------
@@ -190,8 +186,7 @@ class TestErrorHandling:
         """A feed with zero entries returns an empty list."""
         # Minimal valid RSS feed with no items
         empty_feed = (
-            '<?xml version="1.0"?><rss version="2.0">'
-            "<channel><title>Empty</title></channel></rss>"
+            '<?xml version="1.0"?><rss version="2.0"><channel><title>Empty</title></channel></rss>'
         )
         # feedparser can parse strings directly via `feedparser.parse()`,
         # but via our handler it goes through URL; we test via direct call
@@ -214,9 +209,7 @@ class TestErrorHandling:
 class TestRSSFulltext:
     """Verify ``fetch_depth="fulltext"`` fetches article bodies via the web.py path."""
 
-    def test_fulltext_fetch_carries_article_body(
-        self, atom_feed_path: str
-    ) -> None:
+    def test_fulltext_fetch_carries_article_body(self, atom_feed_path: str) -> None:
         """A fulltext item carries the fetched article body as content."""
         from unittest import mock
 
@@ -240,9 +233,7 @@ class TestRSSFulltext:
 
         assert items[0].content == body
 
-    def test_default_depth_keeps_summary_and_skips_fetch(
-        self, atom_feed_path: str
-    ) -> None:
+    def test_default_depth_keeps_summary_and_skips_fetch(self, atom_feed_path: str) -> None:
         """Without ``fetch_depth`` the summary is unchanged and no fetch occurs."""
         from unittest import mock
 
@@ -314,3 +305,71 @@ class TestEdgeCases:
         id1 = _make_item_id("https://example.com/feed", "https://example.com/1")
         id2 = _make_item_id("https://example.com/feed", "https://example.com/1")
         assert id1 == id2, "Item IDs should be deterministic"
+
+
+class TestFeedTextSanitization:
+    """Backup issue #51: feed title/summary must be HTML-sanitized.
+
+    Regression: RSS titles/summaries may contain leftover HTML tags and
+    entities (e.g. ``V<em>Benchmark</em>``). The collector must strip them
+    before they reach the KB, otherwise the residue leaks into products
+    (the ``V<Benchmark>`` placeholder-form defect).
+    """
+
+    def test_entry_title_html_is_sanitized(self, handler: RSSHandler) -> None:
+        xml = (
+            b'<?xml version="1.0"?>'
+            b'<rss version="2.0"><channel><title>t</title>'
+            b"<item>"
+            b"<title>Launching V<em>Benchmark</em> by Megaton</title>"
+            b"<link>https://megaton.ai/v-benchmark</link>"
+            b"<description>Megaton &amp; Co <b>launch</b> today</description>"
+            b"</item>"
+            b"</channel></rss>"
+        )
+
+        class _Resp:
+            content = xml
+
+            def raise_for_status(self) -> None:
+                pass
+
+        with patch("httpx.get", return_value=_Resp()):
+            items = handler.fetch("https://megaton.ai/feed.xml")
+
+        assert len(items) == 1
+        item = items[0]
+        assert item.title == "Launching VBenchmark by Megaton", (
+            f"HTML tags should be stripped from title, got: {item.title!r}"
+        )
+        assert "<" not in item.title, f"residual tag in title: {item.title!r}"
+        assert "<" not in item.content, f"residual tag in content: {item.content!r}"
+        assert "&amp;" not in item.content, (
+            f"entities should be decoded in content: {item.content!r}"
+        )
+        assert "Megaton & Co launch today" in item.content, (
+            f"decoded entities + stripped tags expected, got: {item.content!r}"
+        )
+
+    def test_entry_title_plain_text_unchanged(self, handler: RSSHandler) -> None:
+        """Plain text with no markup must be returned as-is (no false cleaning)."""
+        xml = (
+            b'<?xml version="1.0"?>'
+            b'<rss version="2.0"><channel><title>t</title>'
+            b"<item><title>Hello World: A Plain Title</title>"
+            b"<link>https://example.com/1</link>"
+            b"<description>Just a normal summary.</description>"
+            b"</item></channel></rss>"
+        )
+
+        class _Resp:
+            content = xml
+
+            def raise_for_status(self) -> None:
+                pass
+
+        with patch("httpx.get", return_value=_Resp()):
+            items = handler.fetch("https://example.com/feed.xml")
+
+        assert items[0].title == "Hello World: A Plain Title"
+        assert items[0].content == "Just a normal summary."
