@@ -452,3 +452,57 @@ def test_multi_callback_event_filtering(ac_module, monkeypatch):
     # Only the new_digest subscriber is POSTed; the other is untouched.
     assert set(captured) == {url_b}
     assert _CALLBACK_URL not in captured
+
+
+# ---------------------------------------------------------------------------
+# 5. High-concurrency outbox writes (backup issue #67)
+# ---------------------------------------------------------------------------
+
+
+def test_concurrent_outbox_writes_no_lost_events(ac_module, monkeypatch):
+    """N threads writing distinct events to the same outbox DB lose none.
+
+    Issue #67: parallel product generation (multi-domain × high LLM
+    concurrency) hit ``sqlite3.OperationalError: database is locked`` on the
+    outbox INSERT because ``_connect()`` set no ``busy_timeout`` — SQLite's
+    default 0 makes a write fail immediately under WAL contention, and
+    ``enqueue_agent_notification`` swallows the error returning 0, silently
+    dropping the event.  With the KB pipeline's busy_timeout applied, the
+    writers wait for the lock instead.
+    """
+    import threading
+
+    # ac_module already patches _default_db_path to tmp_path/autoinfo.db.
+    n_events = 16
+    results: list[int] = []
+    lock = threading.Lock()
+
+    def _writer(i: int) -> None:
+        row_id = ac_module.enqueue_agent_notification(
+            event="new_digest",
+            payload={"writer": i},
+            trace_id=f"conc-{i}",
+            product_id=f"writer-{i}",
+        )
+        with lock:
+            results.append(row_id)
+
+    threads = [threading.Thread(target=_writer, args=(i,)) for i in range(n_events)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+
+    # Every writer must have persisted its row (row_id > 0) — zero dropped.
+    assert len(results) == n_events
+    assert all(r > 0 for r in results), (
+        f"{sum(1 for r in results if r <= 0)} of {n_events} events dropped "
+        f"(database is locked without busy_timeout)"
+    )
+
+    # All rows present, distinct, correctly tagged.
+    with ac_module._connect() as conn:
+        rows = conn.execute("SELECT event, product_id FROM agent_outbox").fetchall()
+    by_product = {r["product_id"] for r in rows}
+    assert len(rows) == n_events, f"expected {n_events} rows, got {len(rows)}"
+    assert by_product == {f"writer-{i}" for i in range(n_events)}
