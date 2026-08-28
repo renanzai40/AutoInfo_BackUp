@@ -158,6 +158,7 @@ class TestConvergeNearDuplicates:
                 relevance_score=40.0,
                 collected_at="2026-08-24T12:00:00",
                 dedup_status="duplicate",
+                language="en",
             ),
             _mk_entry(
                 entry_id="high",
@@ -181,6 +182,7 @@ class TestConvergeNearDuplicates:
                 relevance_score=50.0,
                 collected_at="2026-08-24T12:00:00",
                 dedup_status="duplicate",
+                language="en",
             ),
             _mk_entry(
                 entry_id="late",
@@ -210,6 +212,146 @@ class TestConvergeNearDuplicates:
                 source_url="https://example.com/new",
                 collected_at="2026-08-25T12:00:00",
                 dedup_status="duplicate",
+            ),
+        ]
+        result = _converge_near_duplicates(entries)
+        assert len(result) == 2
+
+    # ------------------------------------------------------------------
+    # Backup issue #73 — EVENT-WORD signal for multi-angle same-event
+    # obituaries.  The same death event is reported with heavily reworded
+    # headlines ("Mort de Dolly Parton" vs "... est morte à l'âge de 80 ans"):
+    # char-similarity is low, each carries only ONE shared proper noun, and
+    # G2Dedup stores both as "unique" — none of the other secondary signals
+    # fire.  A canonical death-word co-occurring with the shared proper noun
+    # in BOTH titles closes that gap.
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _char_ratio(a: str, b: str) -> float:
+        from difflib import SequenceMatcher  # noqa: PLC0415
+
+        return SequenceMatcher(None, a.lower(), b.lower()).ratio()
+
+    _OBIT_TRUMP = (
+        "Mort de Dolly Parton : Donald Trump fait mettre les drapeaux en berne, "
+        "émotion unanime dans une Amérique divisée"
+    )
+    _OBIT_AGE = "Dolly Parton, reine de la musique country, est morte à l’âge de 80 ans"
+    _TRIBUTE_FAUX = "Dolly Parton : celle qui portait du faux et du vrai"
+    _TRIBUTE_SONGS = (
+        "Jolene, I Will Always Love You, 9 to 5... Les dix titres iconiques de "
+        "Dolly Parton, l’icône de la country morte à 80 ans"
+    )
+
+    def test_french_obituary_variants_merge_via_event_word(self) -> None:
+        """(a) Two reworded reports of the SAME death event merge to one — all
+        pre-#73 secondary signals absent (both unique, one shared noun, char
+        similarity outside the [0.5, 0.85) band)."""
+        entries = [
+            _mk_entry(
+                entry_id="obit-1",
+                title=self._OBIT_TRUMP,
+                source_url="https://www.lefigaro.fr/musique/obit-1",
+                language="fr",
+                dedup_status="unique",
+                relevance_score=90.0,
+                collected_at="2026-08-25T23:46:43+02:00",
+            ),
+            _mk_entry(
+                entry_id="obit-2",
+                title=self._OBIT_AGE,
+                source_url="https://www.lefigaro.fr/musique/obit-2",
+                language="fr",
+                dedup_status="unique",
+                relevance_score=70.0,
+                collected_at="2026-08-25T22:26:38+02:00",
+            ),
+        ]
+        assert len(_extract_proper_nouns(entries[0]["title"])) == 2
+        assert len(_extract_proper_nouns(entries[1]["title"])) == 1
+        assert not (
+            0.5 <= self._char_ratio(entries[0]["title"], entries[1]["title"]) < 0.85
+        )
+        result = _converge_near_duplicates(entries)
+        assert len(result) == 1
+        assert result[0]["entry_id"] == "obit-1"
+
+    def test_cross_language_obituaries_merge_via_event_word(self) -> None:
+        """Same death event reported in two languages merges via the event
+        word — both unique, one shared noun, ratio outside the char band."""
+        entries = [
+            _mk_entry(
+                entry_id="de-obit",
+                title="Dolly Parton ist gestorben im Alter von 80 Jahren",
+                source_url="https://example.com/de",
+                language="de",
+                dedup_status="unique",
+                relevance_score=70.0,
+            ),
+            _mk_entry(
+                entry_id="es-obit",
+                title="Muere Dolly Parton, la reina del country",
+                source_url="https://example.com/es",
+                language="es",
+                dedup_status="unique",
+                relevance_score=60.0,
+            ),
+        ]
+        assert len(_extract_proper_nouns(entries[0]["title"])) == 1
+        assert len(_extract_proper_nouns(entries[1]["title"])) == 1
+        assert not (
+            0.5 <= self._char_ratio(entries[0]["title"], entries[1]["title"]) < 0.85
+        )
+        result = _converge_near_duplicates(entries)
+        assert len(result) == 1
+        assert result[0]["entry_id"] == "de-obit"
+
+    def test_obituary_not_merged_with_death_word_free_tribute(self) -> None:
+        """(b) A death-variant + a feature/tribute title sharing the name do
+        NOT merge when the tribute carries no event word."""
+        entries = [
+            _mk_entry(
+                entry_id="obit",
+                title=self._OBIT_TRUMP,
+                source_url="https://www.lefigaro.fr/musique/obit",
+                language="fr",
+                dedup_status="unique",
+                relevance_score=90.0,
+            ),
+            _mk_entry(
+                entry_id="feature",
+                title=self._TRIBUTE_FAUX,
+                source_url="https://www.lefigaro.fr/industrie-mode/feature",
+                language="fr",
+                dedup_status="unique",
+                relevance_score=50.0,
+            ),
+        ]
+        result = _converge_near_duplicates(entries)
+        assert len(result) == 2
+
+    def test_obituary_not_merged_with_songlist_tribute(self) -> None:
+        """A song-list tribute whose title contains a bare appositional
+        \"morte à 80 ans\" must NOT collapse into the obituary cluster — the
+        event word \"morte\" there is not a canonical headline/predicate form
+        (no \"mort de\"/\"est morte\"/\"à l'âge\")."""
+        entries = [
+            _mk_entry(
+                entry_id="obit",
+                title=self._OBIT_TRUMP,
+                source_url="https://www.lefigaro.fr/musique/obit",
+                language="fr",
+                dedup_status="unique",
+                relevance_score=95.0,
+            ),
+            _mk_entry(
+                entry_id="songs",
+                title=self._TRIBUTE_SONGS,
+                source_url="https://www.lefigaro.fr/musique/songs",
+                language="fr",
+                dedup_status="unique",
+                relevance_score=90.0,
             ),
         ]
         result = _converge_near_duplicates(entries)
@@ -411,7 +553,16 @@ class TestDigestConvergence:
     def test_generate_digest_converges_dolly_duplicates(
         self, mock_llm: MagicMock, mock_kb: MagicMock
     ) -> None:
-        """A Dolly-Parton-flooded KB renders a digest with ≤2 references."""
+        """A Dolly-Parton-flooded KB renders a digest without the full flood.
+
+        The digest must NOT re-cite the death event 18× — the obituary
+        cluster collapses to one representative while the distinct non-death
+        stories (fr-3 "nous a quittés", fr-4 "Adieu", edu-1 biography, ...)
+        legitimately remain.  Exact rendering count is covered by the
+        deterministic `test_dolly_18_converges_to_obit_cluster_plus_distinct
+        _stories` (8 clusters); this is a sanity bound that the flood never
+        leaks through wholesale.
+        """
         mock_llm.return_value = {
             "executive_summary": "Weekly summary of the news.",
             "key_findings": [{"topic": "Culture", "detail": "Readings"}],
@@ -428,4 +579,30 @@ class TestDigestConvergence:
             domain="french-learning", period="weekly", format="markdown"
         )
         assert isinstance(body, str)
-        assert body.count("Dolly") <= 2
+        # 18 flood entries -> obit cluster (1) + 7 distinct stories.  Rendered
+        # "Dolly" mentions stay well under the flood count (18) and above 0.
+        assert 1 <= body.count("Dolly") <= 9
+
+    def test_dolly_18_converges_to_obit_cluster_plus_distinct_stories(self) -> None:
+        """The 18-entry cross-domain flood collapses the death-event cluster
+        to one representative while retaining genuinely different stories.
+
+        Under the dedup-fast-path + death-event-word signals (no char-sim
+        band), the 18 entries converge to 8: one obituary cluster (all
+        canonical-death-word titles: fr-2/fr-5/fr-6/en-1..3/es-1/2/pt-1/2)
+        plus the distinct non-death stories — the "nous a quittés" euphemism,
+        the "Adieu" farewell, and the b2b licensing / gaming / edu stories
+        that merely share the name.  This locks the #69/#73 regression guard
+        against the second over-merge path (char-sim band dissolving
+        different-event stories that share a proper noun).
+        """
+        result = _converge_near_duplicates(_DOLLY_18)
+        assert len(result) == 8
+        survivors = {e["entry_id"] for e in result}
+        # The obituary cluster's representative is the unique fr entry.
+        assert "fr-rep" in survivors
+        # Distinct-event / euphemistic stories must survive the collapse.
+        assert {"fr-3", "fr-4", "b2b-1", "b2b-2", "gaming-1", "gaming-2", "edu-1"} <= survivors
+        # The remaining 10 canonical-death-word entries collapsed into fr-rep.
+        collapsed = {e["entry_id"] for e in _DOLLY_18} - survivors
+        assert "fr-2" in collapsed and "en-1" in collapsed and "pt-2" in collapsed
