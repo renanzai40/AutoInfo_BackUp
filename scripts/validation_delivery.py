@@ -1240,6 +1240,140 @@ def _package(artifacts: list[dict[str, Any]], results: list[dict[str, Any]], out
     return zip_path
 
 
+# ---------------------------------------------------------------------------
+# #70 packaging gates: unrendered-template leak scan + README honesty check
+# ---------------------------------------------------------------------------
+
+# Unrendered Python template expressions, anchored on Python-expression
+# signatures (NOT bare braces) so legit Markdown ``{keyword}`` placeholders
+# and JSON ``{{"a": 1}}`` never trigger.
+_TEMPLATE_LEAK_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\{[a-zA-Z_][a-zA-Z0-9_.\[\]]*\("),
+    re.compile(r"datetime\.(?:now|utcnow)"),
+    re.compile(r"\.isoformat\("),
+    re.compile(r"\.now\(\)"),
+)
+
+# "Clean" claims in the README that must be backed by the delivered artifacts.
+_CLEAN_CLAIM_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"152/152", re.IGNORECASE),
+    re.compile(r"全部干净"),
+    re.compile(r"全部通过"),
+    re.compile(r"\b\d+/\d+\s*(clean|干净|pass)", re.IGNORECASE),
+    re.compile(r"\ball\s+(clean|pass)", re.IGNORECASE),
+    re.compile(r"\bno issues\b", re.IGNORECASE),
+    re.compile(r"\b0 issues\b", re.IGNORECASE),
+)
+
+# Placeholder / residual patterns that contradict a "clean" claim.
+_PLACEHOLDER_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"Relevance —/100"),
+    re.compile(r"Tags —"),
+    re.compile(r"relevance 0\.0/100"),
+    re.compile(r"—/100"),
+)
+
+_RESIDUAL_HTML_TAG_RE = re.compile(r"<[a-zA-Z][a-zA-Z0-9]*[ >]")
+
+
+def _template_leak_scan(text: str, source: str = "<text>") -> list[str]:
+    """Scan *text* for UNRENDERED Python template expressions.
+
+    Detects lines matching any of: ``{identifier(...)`` inside braces,
+    ``datetime.(now|utcnow)``, ``.isoformat(``, ``.now()``.  Returns
+    ``"source:line: <matched snippet>"`` strings for human consumption.
+    """
+    findings: list[str] = []
+    for lineno, line in enumerate(text.splitlines(), start=1):
+        for pattern in _TEMPLATE_LEAK_PATTERNS:
+            if pattern.search(line):
+                snippet = line.strip()
+                if len(snippet) > 120:
+                    snippet = snippet[:120] + "..."
+                findings.append(f"{source}:{lineno}: {snippet}")
+                break
+    return findings
+
+
+def _honesty_gate(readme_text: str, artifact_texts: dict[str, str]) -> list[str]:
+    """Cross-check a README's "clean" claim against delivered artifact texts.
+
+    If the README makes a cleanliness claim (``152/152``, ``全部干净``,
+    ``all clean``, ``no issues``, ...) and any artifact still carries
+    placeholder / residual patterns (``Relevance —/100``, ``Tags —``,
+    ``relevance 0.0/100``, ``—/100``, residual HTML tags in ``.md``), returns
+    failure strings carrying per-file counts.  Without a claim, returns [].
+    """
+    has_claim = any(pattern.search(readme_text) for pattern in _CLEAN_CLAIM_PATTERNS)
+    if not has_claim:
+        return []
+    failures: list[str] = []
+    for name, content in artifact_texts.items():
+        for pattern in _PLACEHOLDER_PATTERNS:
+            count = len(pattern.findall(content))
+            if count:
+                failures.append(
+                    f"honesty: README claims clean but {name} has {count} "
+                    f"'{pattern.pattern}' placeholders"
+                )
+        if name.lower().endswith(".md"):
+            tag_count = len(_RESIDUAL_HTML_TAG_RE.findall(content))
+            if tag_count:
+                failures.append(
+                    f"honesty: README claims clean but {name} has {tag_count} "
+                    "residual HTML tags"
+                )
+    return failures
+
+
+def _run_readme_gates(readme_path: Path) -> list[str]:
+    """Run both #70 gates for a README plus its sibling product artifacts.
+
+    Sibling ``*.md`` / ``*.json`` / ``*.html`` files are read as
+    ``artifact_texts`` for the honesty cross-check.
+    """
+    readme = readme_path.read_text(encoding="utf-8", errors="replace")
+    findings = _template_leak_scan(readme, source=readme_path.name)
+    artifact_texts: dict[str, str] = {}
+    for sibling in sorted(readme_path.parent.iterdir()):
+        if sibling == readme_path or not sibling.is_file():
+            continue
+        if sibling.suffix.lower() not in (".md", ".json", ".html"):
+            continue
+        artifact_texts[sibling.name] = sibling.read_text(encoding="utf-8", errors="replace")
+    findings.extend(_honesty_gate(readme, artifact_texts))
+    return findings
+
+
+def _scan_package_zip(zip_path: Path) -> list[str]:
+    """Run both #70 gates over a produced delivery zip.
+
+    Reads ``validation-report.md`` (falling back to ``README.md``) as the
+    report to scan for unrendered template expressions, and the remaining
+    ``*.md`` / ``*.json`` / ``*.html`` members as product artifacts for the
+    honesty cross-check.
+    """
+    findings: list[str] = []
+    with zipfile.ZipFile(zip_path) as zf:
+        names = set(zf.namelist())
+        report_name = (
+            "validation-report.md"
+            if "validation-report.md" in names
+            else ("README.md" if "README.md" in names else None)
+        )
+        if report_name is None:
+            return findings
+        report_text = zf.read(report_name).decode("utf-8", errors="replace")
+        findings.extend(_template_leak_scan(report_text, source=report_name))
+        artifact_texts: dict[str, str] = {}
+        for name in sorted(names):
+            if name == report_name or not name.endswith((".md", ".json", ".html")):
+                continue
+            artifact_texts[name] = zf.read(name).decode("utf-8", errors="replace")
+        findings.extend(_honesty_gate(report_text, artifact_texts))
+    return findings
+
+
 async def main() -> None:
     parser = argparse.ArgumentParser(description="Package validation artifacts")
     parser.add_argument("--scenarios-dir", type=Path,
@@ -1247,7 +1381,21 @@ async def main() -> None:
     parser.add_argument("--out", type=Path, default=Path("validation-deliveries"))
     parser.add_argument("--skip-llm-scenarios", action="store_true",
                         help="Skip scenarios that require an LLM key (faster smoke run)")
+    parser.add_argument("--check-readme", type=Path,
+                        help="Run template-leak + honesty gates on a README and its "
+                             "sibling artifacts, then exit (no scenario execution)")
     args = parser.parse_args()
+
+    # #70: standalone gate run — short-circuits BEFORE scenario execution so
+    # no LLM key is required. Exit 1 on any finding, 0 on pass.
+    if args.check_readme is not None:
+        findings = _run_readme_gates(args.check_readme)
+        if findings:
+            for finding in findings:
+                print(f"FINDING: {finding}", file=sys.stderr)
+            sys.exit(1)
+        print(f"CHECK-README OK: {args.check_readme} (no leaks, no unbacked claims)")
+        sys.exit(0)
 
     # Load LLM key from Hermes env (mirrors other validation scripts) so the
     # delivery run can execute LLM-gated scenarios without shell exports.
@@ -1291,6 +1439,16 @@ async def main() -> None:
     )
     print(f"DELIVERY: {zip_path}")
     print(f"scenarios={len(results)} artifacts={len(artifacts)}")
+
+    # #70: gate the produced package before handing it off — scan the report
+    # for unrendered Python template expressions and cross-check any "clean"
+    # claim against the delivered products. Block delivery on findings.
+    findings = _scan_package_zip(zip_path)
+    if findings:
+        print("VALIDATION DELIVERY GATE FAILED (#70):", file=sys.stderr)
+        for finding in findings:
+            print(f"  FINDING: {finding}", file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
