@@ -13,9 +13,9 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 
 | Metric | Value |
 |--------|-------|
-| Total files | 86 |
-| Total lines | 30136 |
-| Active files | 59 |
+| Total files | 90 |
+| Total lines | 30372 |
+| Active files | 63 |
 | Archived files | 27 |
 | Category — archive | 27 files / 8627 lines |
 | Category — known-limitations | 1 files / 288 lines |
@@ -23,7 +23,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | Category — skills | 3 files / 785 lines |
 | Category — adr | 9 files / 424 lines |
 | Category — specs | 12 files / 8815 lines |
-| Category — validation-reports | 10 files / 2950 lines |
+| Category — validation-reports | 14 files / 3186 lines |
 | Category — docs/dev | 19 files / 7789 lines |
 | Category — docs/root | 1 files / 61 lines |
 
@@ -96,7 +96,10 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/validation-governance.md` | 75 | docs/dev | active | — |
 | `dev/validation-loop-log.md` | 62 | docs/dev | active | — |
 | `dev/validation-reports/README.md` | 59 | validation-reports | active | — |
+| `dev/validation-reports/close-backup-issue-19-20.md` | 37 | validation-reports | active | — |
+| `dev/validation-reports/close-backup-issue-22-37.md` | 77 | validation-reports | active | — |
 | `dev/validation-reports/close-backup-issue-3.md` | 51 | validation-reports | active | — |
+| `dev/validation-reports/close-backup-issue-38.md` | 60 | validation-reports | active | — |
 | `dev/validation-reports/close-backup-issue-4.md` | 85 | validation-reports | active | — |
 | `dev/validation-reports/close-backup-issue-6-7.md` | 75 | validation-reports | active | closure-evidence |
 | `dev/validation-reports/close-backup-issue-8-11.md` | 392 | validation-reports | active | closure-evidence |
@@ -105,6 +108,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/validation-reports/evidence-2026-08-12/ac5-digest-weekly.md` | 144 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-report-standard.md` | 813 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-tutorial-student.md` | 501 | validation-reports | active | — |
+| `dev/validation-reports/final-report-backup-issues-19-38.md` | 62 | validation-reports | active | — |
 | `dev/validation-scenario-contract.md` | 782 | docs/dev | active | — |
 | `dev/workflow-charter.md` | 67 | docs/dev | active | workflow-charter |
 | `dev/七阶段AI开发流程-用CodingAgent交付成品的方法论.md` | 234 | docs/dev | active | methodology |
