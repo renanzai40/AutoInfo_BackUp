@@ -35,6 +35,7 @@ import xml.etree.ElementTree as ET
 import zipfile
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta, timezone
+from difflib import SequenceMatcher
 from email.utils import format_datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Callable, Final, Literal, cast
@@ -725,11 +726,11 @@ _PROPER_NOUN_RE = re.compile(r"\b[A-Z][a-zA-Z0-9'\-]+(?:\s+[A-Z][a-zA-Z0-9'\-]+)
 # a different story.
 _NEAR_DUP_WINDOW_DAYS = 3
 
-# Char-similarity band for the "paraphrase of the same story" signal: fires
-# only in [0.5, 0.85).  ≥0.85 is G2Dedup's territory (its fuzzy-title gate
-# flags those as duplicates, so the stored dedup_status signal covers them);
-# <0.5 means genuinely different stories that merely share a name.
-_NEAR_DUP_CHAR_SIM_MIN = 0.5
+# G2Dedup's fuzzy-title threshold (quality.py): title similarity >=0.85 is
+# flagged duplicate at ingest.  The stored dedup_status fast-path below only
+# trusts the flag when the two titles actually meet this bar — a bare
+# dedup_status alone is not a same-event signal (a re-collection can flag
+# every entry, and multi-angle reports of one event may all carry it).
 _NEAR_DUP_CHAR_SIM_MAX = 0.85
 
 
@@ -760,10 +761,10 @@ def _extract_proper_nouns(title: str) -> list[str]:
 # Cross-language EVENT-WORD lexicon for the death/obituary news class
 # (backup issue #73).  Multi-angle reports of the SAME event visibly rewrite
 # the headline ("Mort de Dolly Parton", "Dolly Parton ... est morte à l'âge de
-# 80 ans"), so title character-similarity drops out of the G2-invisible
-# [0.5, 0.85) band and they never carry a second shared noun — yet they ARE
-# the same event.  These canonical headline/predicate forms per language give
-# those pairs a deterministic secondary signal so they converge.
+# 80 ans"), so title character-similarity is low, they never carry a second
+# shared noun, and a bare dedup flag (G2 fuzzy-title) cannot see them — yet
+# they ARE the same event.  These canonical headline/predicate forms per
+# language give those pairs a deterministic secondary signal so they converge.
 # Forms are deliberately the FULL headline constructions (lead "mort de",
 # predicate "est morte", formal obituary "décédé(e)") rather than bare
 # participles/adjectives: "morte"/"dead" alone appear appositionally in
@@ -827,9 +828,10 @@ def _converge_near_duplicates(entries: list[dict[str, Any]]) -> list[dict[str, A
     Cluster rule: two entries belong to the same event when they share a
     distinctive proper-noun phrase (≥2-word capitalized sequence) within
     :data:`_NEAR_DUP_WINDOW_DAYS` days AND carry at least one secondary
-    signal — an already-stored ``dedup_status == "duplicate"``, a second
-    shared proper noun, title character similarity in the [0.5, 0.85)
-    paraphrase band, or (backup issue #73) a canonical death/obituary event
+    signal — an already-stored ``dedup_status == "duplicate"`` **corroborated
+    by ≥0.85 title similarity** (G2Dedup's fuzzy-title threshold — a bare
+    dedup flag alone is not a same-event signal), a second
+    shared proper noun, or (backup issue #73) a canonical death/obituary event
     word in BOTH titles, each co-occurring with the shared proper noun in its
     own title.  Identical
     ``source_url`` is never merged (syndication is intentional).
@@ -927,7 +929,24 @@ def _converge_near_duplicates(entries: list[dict[str, Any]]) -> list[dict[str, A
         )
 
     def _secondary_signal(rep: dict[str, Any], entry: dict[str, Any]) -> bool:
-        if str(entry.get("dedup_status") or "").lower() == "duplicate":
+        a = (str(rep.get("title") or "")).lower()
+        b = (str(entry.get("title") or "")).lower()
+        # The stored dedup_status fast-path is ONLY trustworthy when it
+        # corroborates its own G2 premise: dedup_status="duplicate" is set by
+        # G2Dedup for URL/PMID/DOI/fuzzy-title matches, and the fuzzy-title
+        # verdict fires at >=0.85 title similarity (quality.py G2Dedup).  A
+        # bare dedup_status alone is NOT a same-event signal — a re-collection
+        # can flag every entry duplicate, and multi-angle reports of one event
+        # (obituary + tribute + song-list) may all carry the flag while being
+        # distinct stories.  Requiring >=0.85 similarity confines the fast-path
+        # to true near-identical duplicates and forces multi-angle merges
+        # through the noun/event-word signals instead (backup issues #69/#73).
+        if (
+            a
+            and b
+            and str(entry.get("dedup_status") or "").lower() == "duplicate"
+            and SequenceMatcher(None, a, b).ratio() >= _NEAR_DUP_CHAR_SIM_MAX
+        ):
             return True
         rep_idx = next(
             (i for i, e in enumerate(entries) if e is rep), -1
@@ -938,14 +957,6 @@ def _converge_near_duplicates(entries: list[dict[str, Any]]) -> list[dict[str, A
         if rep_idx >= 0 and entry_idx >= 0:
             shared = nouns_by_key.get(rep_idx, set()) & nouns_by_key.get(entry_idx, set())
             if len(shared) >= 2:
-                return True
-        a = (str(rep.get("title") or "")).lower()
-        b = (str(entry.get("title") or "")).lower()
-        if a and b:
-            from difflib import SequenceMatcher  # noqa: PLC0415
-
-            ratio = SequenceMatcher(None, a, b).ratio()
-            if _NEAR_DUP_CHAR_SIM_MIN <= ratio < _NEAR_DUP_CHAR_SIM_MAX:
                 return True
         return _death_event_signal(rep, entry)
 

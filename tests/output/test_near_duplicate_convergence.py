@@ -158,6 +158,7 @@ class TestConvergeNearDuplicates:
                 relevance_score=40.0,
                 collected_at="2026-08-24T12:00:00",
                 dedup_status="duplicate",
+                language="en",
             ),
             _mk_entry(
                 entry_id="high",
@@ -181,6 +182,7 @@ class TestConvergeNearDuplicates:
                 relevance_score=50.0,
                 collected_at="2026-08-24T12:00:00",
                 dedup_status="duplicate",
+                language="en",
             ),
             _mk_entry(
                 entry_id="late",
@@ -219,10 +221,10 @@ class TestConvergeNearDuplicates:
     # Backup issue #73 — EVENT-WORD signal for multi-angle same-event
     # obituaries.  The same death event is reported with heavily reworded
     # headlines ("Mort de Dolly Parton" vs "... est morte à l'âge de 80 ans"):
-    # char-similarity drops out of the [0.5, 0.85) band, each carries only
-    # ONE shared proper noun, and G2Dedup stores both as "unique" — none of
-    # the pre-#73 secondary signals fire.  A canonical death-word co-occurring
-    # with the shared proper noun in BOTH titles closes that gap.
+    # char-similarity is low, each carries only ONE shared proper noun, and
+    # G2Dedup stores both as "unique" — none of the other secondary signals
+    # fire.  A canonical death-word co-occurring with the shared proper noun
+    # in BOTH titles closes that gap.
     # ------------------------------------------------------------------
 
     @staticmethod
@@ -551,7 +553,16 @@ class TestDigestConvergence:
     def test_generate_digest_converges_dolly_duplicates(
         self, mock_llm: MagicMock, mock_kb: MagicMock
     ) -> None:
-        """A Dolly-Parton-flooded KB renders a digest with ≤2 references."""
+        """A Dolly-Parton-flooded KB renders a digest without the full flood.
+
+        The digest must NOT re-cite the death event 18× — the obituary
+        cluster collapses to one representative while the distinct non-death
+        stories (fr-3 "nous a quittés", fr-4 "Adieu", edu-1 biography, ...)
+        legitimately remain.  Exact rendering count is covered by the
+        deterministic `test_dolly_18_converges_to_obit_cluster_plus_distinct
+        _stories` (8 clusters); this is a sanity bound that the flood never
+        leaks through wholesale.
+        """
         mock_llm.return_value = {
             "executive_summary": "Weekly summary of the news.",
             "key_findings": [{"topic": "Culture", "detail": "Readings"}],
@@ -568,4 +579,30 @@ class TestDigestConvergence:
             domain="french-learning", period="weekly", format="markdown"
         )
         assert isinstance(body, str)
-        assert body.count("Dolly") <= 2
+        # 18 flood entries -> obit cluster (1) + 7 distinct stories.  Rendered
+        # "Dolly" mentions stay well under the flood count (18) and above 0.
+        assert 1 <= body.count("Dolly") <= 9
+
+    def test_dolly_18_converges_to_obit_cluster_plus_distinct_stories(self) -> None:
+        """The 18-entry cross-domain flood collapses the death-event cluster
+        to one representative while retaining genuinely different stories.
+
+        Under the dedup-fast-path + death-event-word signals (no char-sim
+        band), the 18 entries converge to 8: one obituary cluster (all
+        canonical-death-word titles: fr-2/fr-5/fr-6/en-1..3/es-1/2/pt-1/2)
+        plus the distinct non-death stories — the "nous a quittés" euphemism,
+        the "Adieu" farewell, and the b2b licensing / gaming / edu stories
+        that merely share the name.  This locks the #69/#73 regression guard
+        against the second over-merge path (char-sim band dissolving
+        different-event stories that share a proper noun).
+        """
+        result = _converge_near_duplicates(_DOLLY_18)
+        assert len(result) == 8
+        survivors = {e["entry_id"] for e in result}
+        # The obituary cluster's representative is the unique fr entry.
+        assert "fr-rep" in survivors
+        # Distinct-event / euphemistic stories must survive the collapse.
+        assert {"fr-3", "fr-4", "b2b-1", "b2b-2", "gaming-1", "gaming-2", "edu-1"} <= survivors
+        # The remaining 10 canonical-death-word entries collapsed into fr-rep.
+        collapsed = {e["entry_id"] for e in _DOLLY_18} - survivors
+        assert "fr-2" in collapsed and "en-1" in collapsed and "pt-2" in collapsed
