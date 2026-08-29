@@ -1149,11 +1149,42 @@ def _package(artifacts: list[dict[str, Any]], results: list[dict[str, Any]], out
             report.append(f"- `{rj['file']}` — {rj['reason']} (from {rj['source']})")
     report.append("")
 
+    # Issue #94: a configured domain that produced ZERO artifacts must be
+    # flagged in the manifest (fail-loud) — a domain must never silently
+    # vanish from a delivery package.
+    configured = _configured_domains()
+    delivered_domains = set()
+    for m in manifest:
+        parts = m.get("file", "").split("/")
+        if parts and parts[0] in configured:
+            delivered_domains.add(parts[0])
+    missing_domains = sorted(set(configured) - delivered_domains)
+    if missing_domains:
+        report.append("## Missing Domains")
+        report.append("")
+        report.append(
+            "Configured domains with zero delivered artifacts — investigate "
+            "collection/generation failures before shipping:"
+        )
+        report.append("")
+        for d in missing_domains:
+            report.append(f"- `{d}`")
+        report.append("")
+        print(
+            f"WARNING: missing domains in delivery (zero artifacts): "
+            f"{', '.join(missing_domains)}",
+            file=sys.stderr,
+        )
+
     # E8 (#131): base manifest first — the staged package's own manifest is
     # the primary evidence for the coverage matrix scan.
     (stage / "manifest.json").write_text(
         json.dumps(
-            {"files": manifest, "rejected": rejected},
+            {
+                "files": manifest,
+                "rejected": rejected,
+                "missing_domains": missing_domains,
+            },
             ensure_ascii=False,
             indent=2,
             default=str,
