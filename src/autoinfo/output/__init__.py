@@ -10702,7 +10702,16 @@ def _render_markdown(context: dict[str, Any]) -> str:
     """Render the Jinja2 digest template to Markdown."""
     env = _get_jinja_env()
     template = env.get_template("digest.md.j2")
-    return template.render(**context)
+    rendered = template.render(**context)
+    # Issue #78: R4-uniform final decode — a single post-render pass strips
+    # any residual HTML entities (&#039;/&amp;/&#8217;/...) that reached the
+    # product despite the storage-layer decode (pre-#51 entries, bypassed
+    # paths).  _decode_html_entities is idempotent (bounded iterative
+    # html.unescape), so a legitimate literal "&amp;" becomes "&" — correct
+    # for a consumer product.
+    from autoinfo.kb import _decode_html_entities  # noqa: PLC0415
+
+    return _decode_html_entities(rendered)
 
 
 def _digest_chapters(context: dict[str, Any]) -> list[tuple[str, str]]:
@@ -10824,7 +10833,7 @@ def _render_digest_html(context: dict[str, Any]) -> str:
     )
     structured_data = f'<script type="application/ld+json">\n{ld}\n</script>'
 
-    return template.render(
+    rendered = template.render(
         title=context.get("title", ""),
         domain_name=context.get("domain", ""),
         period=period_str,
@@ -10836,6 +10845,11 @@ def _render_digest_html(context: dict[str, Any]) -> str:
         entries=html_entries,
         structured_data=structured_data,
     )
+    # Issue #78: R4-uniform final decode for the HTML surface (see
+    # _render_markdown).
+    from autoinfo.kb import _decode_html_entities  # noqa: PLC0415
+
+    return _decode_html_entities(rendered)
 
 
 def _render_json(context: dict[str, Any]) -> str:
