@@ -871,7 +871,18 @@ class G3RelevanceScoring:
                 )
                 details["total_keywords"] = len(keywords)
             if action == "archive":
-                details["archive"] = True
+                # Issue #79: with a broad union keyword set (issue #68), a
+                # relevant item may hit only 1-2 of N keywords → lexical
+                # score 8-15 < threshold → previously archived → excluded
+                # from digests → empty shells.  Archive only on ZERO lexical
+                # evidence (score == 0, no keyword hits at all) — genuine
+                # negative signal; weak relevance (1-29 with some hits) is
+                # flagged, not archived, so valid content survives.
+                if scoring_method != "lexical" or score_val == 0:
+                    details["archive"] = True
+                else:
+                    details["archive"] = False
+                    details["archived_as_flag"] = True
 
             return QualityResult(
                 gate_name="G3-RelevanceScoring",
