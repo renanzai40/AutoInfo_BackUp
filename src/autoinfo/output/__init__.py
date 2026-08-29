@@ -990,6 +990,30 @@ def _converge_near_duplicates(entries: list[dict[str, Any]]) -> list[dict[str, A
     return reps
 
 
+def _filter_digest_entries(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Run the digest's content filter chain over a candidate entry set.
+
+    Archive/deprecated exclusion, test/empty-entry filtering and
+    near-duplicate convergence — the same chain the digest applies to a
+    window query, shared so the #83 full-domain fallback runs identical
+    filters over its candidate set (only non-archived active content is
+    ever recovered).  Deterministic, no LLM.
+    """
+    active: list[dict[str, Any]] = []
+    for entry in entries:
+        cf = entry.get("custom_fields") or "{}"
+        try:
+            cf_dict = json.loads(cf) if isinstance(cf, str) else dict(cf)
+        except (json.JSONDecodeError, TypeError):
+            cf_dict = {}
+        if cf_dict.get("status") in ("archived", "deprecated"):
+            continue
+        active.append(entry)
+    return _converge_near_duplicates(
+        _filter_product_entries(_enrich_product_entries(active))
+    )
+
+
 _LANG_ALIASES: dict[str, str] = {
     "zh-cn": "zh",
     "zh-hans": "zh",
@@ -5400,31 +5424,30 @@ def generate_digest(
                 domain=domain,
                 limit=query_limit,
             )
+            period_was_empty = not entries
 
-    # --- Archive/deprecated exclusion ----------------------------------------
-    digest_active: list[dict[str, Any]] = []
-    for entry in entries:
-        cf = entry.get("custom_fields") or "{}"
-        try:
-            cf_dict = json.loads(cf) if isinstance(cf, str) else dict(cf)
-        except (json.JSONDecodeError, TypeError):
-            cf_dict = {}
-        if cf_dict.get("status") in ("archived", "deprecated"):
-            continue
-        digest_active.append(entry)
-    entries = digest_active
+    # --- Archive/deprecated exclusion + test/empty filter + convergence ------
+    # Shared chain (see _filter_digest_entries) so the #83 full-domain
+    # fallback below runs identical filters over its candidate set.
+    entries = _filter_digest_entries(entries)
 
-    # --- Test/empty entry filtering (issue #298 — layer 1) -------------------
-    # Drop empty/test/placeholder entries BEFORE synthesis and BEFORE render so
-    # both the LLM input and the rendered body are clean.  Real Draft/Wiki
-    # entries with an empty DB summary but file content are first enriched
-    # (issue #326) so their column Deep Dive / report Sections are never an
-    # empty shell from real KB data.
-    entries = _filter_product_entries(_enrich_product_entries(entries))
-    # Near-duplicate convergence (issue #69): collapse same-event entries
-    # that char-level G2 dedup could not see (cross-language) BEFORE the
-    # language filter so a cross-language cluster converges to one rep.
-    entries = _converge_near_duplicates(entries)
+    # Issue #83: the window query returned rows but they were ALL dropped by
+    # the archive/deprecated/test filters — the digest would be an empty
+    # shell even though valid out-of-window content exists.  Recover the
+    # full-domain set (same relaxation as the zero-row fallback above) and
+    # re-run the identical filter chain.  Only non-archived active content
+    # survives, so archived/low-quality entries are never resurrected.
+    # Single-domain only — the cross-domain path has no window fallback.
+    if not entries and not period_was_empty and not is_cross_domain_digest:
+        logger.info(
+            "In-window entries for domain '%s' all dropped by archive/test "
+            "filters — falling back to full domain set",
+            domain,
+        )
+        entries = _filter_digest_entries(
+            store.list_entries(domain=domain, limit=query_limit)
+        )
+        period_was_empty = not entries
 
     # --- Language filter (issue #309 / #317) --------------------------------
     # When a user requests a specific language (or a domain declares a
