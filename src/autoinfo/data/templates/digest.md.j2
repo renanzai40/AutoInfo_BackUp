@@ -43,13 +43,7 @@
 {% for entry in entries %}
 ### {{ loop.index }}. {% if source_tier_badge and entry.source_tier %}[{{ entry.source_tier }}] {% endif %}{{ entry.title }}
 
-| Field | Value |
-|-------|-------|
-| **Source** | {{ entry.source_label or entry.source_platform | platform_name }} |
-| **Type** | {{ entry.source_type or "—" }} |
-| **Collected** | {{ entry.collected_at }} |
-| **Relevance** | {{ entry.relevance_score or "—" }}/100 |
-| **Tags** | {{ entry.tags or "—" }} |
+**Source**: {{ entry.source_label or entry.source_platform | platform_name }}
 
 {% if entry.summary %}
 **Summary**: {{ entry.summary }}

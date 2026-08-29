@@ -452,11 +452,15 @@ class TestGenerateDigest:
             domain="medical-research", period="weekly", format="markdown"
         )
         body = cast(str, result)
-        assert "**Tags** |" in body
-        assert "**Tags** | —" not in body
+        # Issue #91 (R2): the entry renders its title, summary, source — but
+        # the internal Field|Value metadata table (Tags/Relevance/Type/
+        # Collected) is stripped from the user-facing product.
+        assert "**Tags**" not in body
+        assert "| 70.0/100" not in body
         assert "ai" in body
         assert "funding" in body
-        assert "| 70.0/100" in body
+        assert "AI startup raises Series A" in body
+        assert "**Source**: pubmed" in body
 
 
 # ---------------------------------------------------------------------------

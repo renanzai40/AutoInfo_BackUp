@@ -46,7 +46,7 @@
 > {{ entry.summary }}
 {% endif %}
 
-*{{ entry.source_label or entry.source_platform | platform_name }}* {% if entry.relevance_score is not none %}· relevance {{ entry.relevance_score }}/100{% endif %} {% if entry.collected_at %}· {{ entry.collected_at }}{% endif %}
+*{{ entry.source_label or entry.source_platform | platform_name }}*
 
 {% if entry.source_url %}
 [Read the full article]({{ entry.source_url }})
