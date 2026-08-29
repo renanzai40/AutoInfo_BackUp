@@ -1,0 +1,66 @@
+# Regression #325 (WSJ blind spot): a source whose article links live on a
+# DIFFERENT host than its feed must still derive the specific source label.
+#
+# Before the fix: _derive_source_label matched entry URLs only against the
+# source's own host (exact/subdomain).  WSJ's feed is on feeds.a.dj.com but
+# its articles link to www.wsj.com / online.wsj.com — a feed-host mismatch
+# with NO subdomain relationship — so a stale wsj.com entry with a generic
+# platform stayed "(RSS)".
+#
+# After the fix: a source can declare its article hosts via
+# settings.article_hosts (config-driven, no hardcoded special cases), and
+# entries whose URL host matches one of them derive the source name.
+#
+# Deterministic (requires_env: []): exercises _derive_source_label directly
+# on synthetic entries — no LLM, no network.
+name: regression-source-label-wsj-feed-host-mismatch
+description: "Regression #325: article_hosts config resolves feed-host mismatch (WSJ feeds.a.dj.com -> www.wsj.com label)"
+category: regression
+regression: true
+regression_issue: "#325"
+requires_env: []
+steps:
+  - name: "WSJ article-host entries derive WSJ Markets label"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.output import _derive_source_label
+
+      # Feed host is feeds.a.dj.com; articles live on www.wsj.com / online.wsj.com.
+      # With article_hosts configured, a generic-platform entry on the article
+      # host must derive the specific source name.
+      for url in (
+          "https://www.wsj.com/articles/foo-123",
+          "https://online.wsj.com/market-data",
+      ):
+          label = _derive_source_label(
+              {"source_platform": "rss", "source_url": url},
+              "financial-intelligence",
+          )
+          assert label == "WSJ Markets", f"{url}: label={label!r}, expected WSJ Markets"
+      print("WSJ_FEED_HOST_MISMATCH_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["WSJ_FEED_HOST_MISMATCH_OK"]
+
+  - name: "unmatched host stays generic (no false positive)"
+    kind: cli
+    command: |-
+      python3 -c '
+      from autoinfo.output import _derive_source_label
+
+      # A host that matches no configured source (nor any article_hosts)
+      # keeps its generic platform — never fabricates a source name.
+      label = _derive_source_label(
+          {"source_platform": "rss", "source_url": "https://example.com/article"},
+          "financial-intelligence",
+      )
+      assert label == "rss", f"label={label!r}, expected rss"
+      print("WSJ_UNMATCHED_HOST_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["WSJ_UNMATCHED_HOST_OK"]

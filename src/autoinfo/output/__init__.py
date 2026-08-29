@@ -4639,6 +4639,19 @@ def _derive_source_label(
         # bare substring.
         if _host_matches_source(url_host, sc_host):
             return sc.name.strip() or platform
+        # Feed-host mismatch (issue #325 WSJ blind spot): the article links
+        # live on a DIFFERENT host than the feed (WSJ feed on feeds.a.dj.com,
+        # articles on www.wsj.com / online.wsj.com — no subdomain relation).
+        # A source can declare its article hosts via settings.article_hosts;
+        # an entry whose URL host matches one derives the source name.
+        declared_hosts = (sc.settings or {}).get("article_hosts") or []
+        for declared in declared_hosts:
+            try:
+                declared_host = urlsplit(str(declared)).hostname or ""
+            except ValueError:
+                continue
+            if declared_host and _host_matches_source(url_host, declared_host):
+                return sc.name.strip() or platform
     return platform
 
 

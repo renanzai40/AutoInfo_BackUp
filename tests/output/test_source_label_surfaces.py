@@ -591,3 +591,46 @@ class TestSourceLabelDataLayerRecovery:
         """Non-generic stored platforms are returned unchanged."""
         label = self._label("https://eutils.ncbi.nlm.nih.gov/...", platform="pubmed")
         assert label == "pubmed"
+
+    def test_article_hosts_resolves_feed_host_mismatch(self) -> None:
+        """#325 WSJ blind spot: a source declaring settings.article_hosts
+        derives its name for entries whose URL host differs from the feed
+        host (feeds.a.dj.com feed → www.wsj.com / online.wsj.com articles)."""
+        from autoinfo.config import SourceConfig
+
+        sc = SourceConfig(
+            name="WSJ Markets",
+            type="rss",
+            url="https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
+            settings={"article_hosts": [
+                "https://www.wsj.com",
+                "https://online.wsj.com",
+            ]},
+        )
+        for url in (
+            "https://www.wsj.com/articles/foo-123",
+            "https://online.wsj.com/market-data",
+        ):
+            label = self._label(
+                url, domain="financial-intelligence",
+                source_configs=[sc],
+            )
+            assert label == "WSJ Markets", f"{url}: got {label!r}"
+
+    def test_article_hosts_unmatched_stays_generic(self) -> None:
+        """An entry on a host NOT in article_hosts stays generic — no false
+        positive from the declared article hosts."""
+        from autoinfo.config import SourceConfig
+
+        sc = SourceConfig(
+            name="WSJ Markets",
+            type="rss",
+            url="https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
+            settings={"article_hosts": ["https://www.wsj.com"]},
+        )
+        label = self._label(
+            "https://www.example.com/other",
+            domain="financial-intelligence",
+            source_configs=[sc],
+        )
+        assert label == "rss"
