@@ -342,3 +342,75 @@ class TestDigestExcludesArchived:
         rendered = self._digest([legacy])
 
         assert "Zorpzilla legacy digest article" in rendered
+
+
+# ===================================================================
+# T3.4 — re-ingest preserves lifecycle status (backup issue #79)
+# ===================================================================
+
+
+class TestReprocessPreservesDeliverableStatus:
+    """Re-processing re-runs the quality gates over cached items.  A gate
+    deciding 'archive' on a re-run must NOT downgrade an already-delivered
+    entry (active -> archived) — that removes valid content from digests
+    (empty-shell regression).  entry_id is content-derived, so a re-ingest
+    of the same item resolves to the same id: the existing status wins;
+    gates only apply to NEW entries."""
+
+    def _store(self, tmp_path: Path) -> KBStore:
+        return KBStore(base_path=tmp_path / "knowledge", min_content_chars=50)
+
+    def test_active_stays_active_on_reingest_with_archive_gate(
+        self, tmp_path: Path
+    ) -> None:
+        """A delivered (active) entry re-ingested with a gate that says
+        archive stays active — the deliverable is not downgraded."""
+        store = self._store(tmp_path)
+        item = _make_item("reproc-1", "Zorpzilla reingest active article")
+        ext = _make_extraction("reproc-1", item.title, 70.0)
+        first = store.store_entry(item, ext, _g3_active())
+        assert _entry_status(store.get_entry(first.entry_id)) == "active"
+
+        second = store.store_entry(item, ext, _g3_archived())
+        assert _entry_status(store.get_entry(second.entry_id)) == "active"
+
+    def test_archived_stays_archived_on_reingest(self, tmp_path: Path) -> None:
+        """An archived entry stays archived when re-ingested with a passing
+        gate — a reprocess never silently resurrects rejected content."""
+        store = self._store(tmp_path)
+        item = _make_item("reproc-2", "Zorpzilla reingest archived article")
+        ext = _make_extraction("reproc-2", item.title, 5.0)
+        first = store.store_entry(item, ext, _g3_archived())
+        assert _entry_status(store.get_entry(first.entry_id)) == "archived"
+
+        second = store.store_entry(item, ext, _g3_active())
+        assert _entry_status(store.get_entry(second.entry_id)) == "archived"
+
+    def test_new_entry_goes_through_gate(self, tmp_path: Path) -> None:
+        """A brand-new entry (no existing id) still follows the gates —
+        archive applies to first-time ingestion."""
+        store = self._store(tmp_path)
+        item = _make_item("reproc-3", "Zorpzilla brand new article")
+        ext = _make_extraction("reproc-3", item.title, 5.0)
+        entry = store.store_entry(item, ext, _g3_archived())
+        assert _entry_status(store.get_entry(entry.entry_id)) == "archived"
+
+    def test_deprecated_stays_deprecated(self, tmp_path: Path) -> None:
+        """An explicitly-deprecated entry is never resurrected by a
+        reprocess gate decision."""
+        store = self._store(tmp_path)
+        item = _make_item("reproc-4", "Zorpzilla deprecated article")
+        ext = _make_extraction("reproc-4", item.title, 70.0)
+        first = store.store_entry(item, ext, _g3_active())
+        # Explicitly deprecate at the SQLite layer (director deprecation).
+        entry = store.get_entry(first.entry_id)
+        cf = json.loads(entry.get("custom_fields") or "{}")
+        cf["status"] = "deprecated"
+        with store.index._connect() as conn:
+            conn.execute(
+                "UPDATE entries SET custom_fields = ? WHERE entry_id = ?",
+                (json.dumps(cf, ensure_ascii=False), first.entry_id),
+            )
+
+        second = store.store_entry(item, ext, _g3_active())
+        assert _entry_status(store.get_entry(second.entry_id)) == "deprecated"
