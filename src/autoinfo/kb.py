@@ -2741,6 +2741,23 @@ class KBStore:
                     entry_status = "archived"
                     break
 
+        # --- preserve lifecycle status on re-ingest (backup issue #79) ---------
+        # Re-processing re-runs the quality gates over cached items.  A gate
+        # deciding "archive" on a re-run must NOT downgrade an already-delivered
+        # entry (active -> archived) — that removes valid content from digests
+        # (empty-shell regression).  entry_id is content-derived, so a re-ingest
+        # of the same item resolves to the same id: preserve the existing
+        # status when the entry already exists; gates only apply to NEW entries.
+        existing_entry = self.index.get_entry(entry_id)
+        if existing_entry is not None:
+            try:
+                existing_cf = json.loads(existing_entry.get("custom_fields") or "{}")
+            except (json.JSONDecodeError, TypeError):
+                existing_cf = {}
+            existing_status = existing_cf.get("status") or existing_entry.get("status")
+            if existing_status in ("active", "archived", "deprecated"):
+                entry_status = existing_status
+
         # --- resolve user_id ---------------------------------------------------
         resolved_user_id: str = ""
         if user_id is not None:
