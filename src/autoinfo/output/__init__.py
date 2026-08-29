@@ -1443,6 +1443,23 @@ def _clean_skeleton_placeholders(text: str) -> str:
     return "\n".join(cleaned)
 
 
+# Issue #77: internal "Entry N" placeholders the LLM may echo from the prompt
+# ("Source: Entry 1/16/29" in enterprise key-metrics / references).  The
+# prompt now instructs real source names, but a deterministic postprocess is
+# the grep-level guarantee the acceptance scan demands.
+_ENTRY_N_RE = re.compile(r"(?i)Source:\s*Entry\s+\d+(?:\s*/\s*\d+)*")
+
+
+def _strip_entry_placeholders(text: str) -> str:
+    """Replace LLM-echoed internal ``Source: Entry N`` placeholders with a
+    neutral source marker in rendered markdown (backup issue #77).
+
+    Applied only to rendered product text — never to JSON/agent payloads,
+    where such a string would be legitimate structured content.
+    """
+    return _ENTRY_N_RE.sub("Source: (source)", text)
+
+
 def _sections_from_headings(text: str, product_type: str = "report") -> dict[str, str]:
     """Map canonical D1 sections to non-empty heading content (md/html)."""
     found: dict[str, str] = {}
@@ -4213,7 +4230,9 @@ _DIGEST_PRODUCT_BASE_FIELDS: list[str] = [
 
 _DIGEST_ENTERPRISE_METRICS_FIELDS: list[str] = [
     '"key_metrics": [{"metric": "Metric name", "value": "Quantified value", '
-    '"source": "Entry/study/dataset"}], quantified metrics only '
+    '"source": "Publication/source name of the underlying report '
+    '(never placeholder text like Entry N)"}], '
+    "quantified metrics only "
     "(enterprise decision-support table)",
 ]
 
@@ -5645,6 +5664,7 @@ def generate_digest(
         )
         rendered = product_template.render(product_type, variant, pt_context)
         rendered = _clean_skeleton_placeholders(rendered)
+        rendered = _strip_entry_placeholders(rendered)
     elif format == "json":
         rendered = _render_json(context)
     elif format == "html":
@@ -6433,6 +6453,7 @@ def generate_report(
         product_type = report_family
         rendered = product_template.render(product_type, variant, pt_context)
         rendered = _clean_skeleton_placeholders(rendered)
+        rendered = _strip_entry_placeholders(rendered)
     elif format == "json":
         rendered = _render_report_json(report_data, period=period)
     elif format == "html":

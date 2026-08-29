@@ -142,10 +142,10 @@ class TestEnterpriseTemplateScopeLabel:
         out = _registry_template("enterprise-briefing").render(
             "enterprise-briefing", "md", flat
         )
-        assert "9 key findings selected · 20 source references" in out
+        assert "9 key points · drawn from 20 sources" in out
         assert "of 20 key findings" not in out
         # The deterministic label sits between the summary and the findings.
-        assert out.index("> **Scope**:") < out.index("## Key Findings")
+        assert out.index("> **In this briefing**:") < out.index("## Key Findings")
 
     def test_enterprise_digest_path_annotates_too(self) -> None:
         """Digest path: same label through ``_normalize_digest_product_context``."""
@@ -155,7 +155,7 @@ class TestEnterpriseTemplateScopeLabel:
         out = _registry_template("enterprise-briefing").render(
             "enterprise-briefing", "md", flat
         )
-        assert "9 key findings selected · 20 source references" in out
+        assert "9 key points · drawn from 20 sources" in out
         assert "of 20 key findings" not in out
 
     def test_scope_label_absent_when_no_findings(self) -> None:
@@ -174,9 +174,9 @@ class TestEnterpriseTemplateScopeLabel:
         out = _registry_template("enterprise-briefing").render(
             "enterprise-briefing", "md", flat
         )
-        assert "3 key findings selected · no source references" in out
+        assert "3 key points · no source links" in out
         assert "of 0" not in out
-        assert "key findings selected · 0 source references" not in out
+        assert "key points · 0 sources" not in out
 
 
 class TestScopeLabelSingleLanguageNoCjk:
@@ -204,12 +204,12 @@ class TestScopeLabelSingleLanguageNoCjk:
         out = _registry_template("enterprise-briefing").render(
             "enterprise-briefing", "md", flat
         )
-        scope_m = re.search(r"> \*\*Scope\*\*: (.+)$", out, re.MULTILINE)
+        scope_m = re.search(r"> \*\*In this briefing\*\*: (.+)$", out, re.MULTILINE)
         assert scope_m, f"scope line missing from render:\n{out}"
         scope_line = scope_m.group(1)
-        count_m = re.search(r"(\d+) key findings selected · (\d+) source references", scope_line)
+        count_m = re.search(r"(\d+) key points · drawn from (\d+) sources", scope_line)
         assert count_m, (
-            f"N key findings selected · M source references counts missing "
+            f"N key points · M sources counts missing "
             f"from scope line:\n{scope_line}"
         )
         n, m = int(count_m.group(1)), int(count_m.group(2))
