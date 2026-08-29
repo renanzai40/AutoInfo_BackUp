@@ -9399,7 +9399,9 @@ def _build_tutorial_json_prompt(
         '  - "title": tutorial title (string)\n'
         '  - "duration": estimated reading/completion time (string, e.g. "45 minutes")\n'
         '  - "prerequisites": comma-separated prerequisites (string)\n'
-        '  - "objectives": array of 3-5 learning objective strings\n'
+        '  - "objectives": array of 3-5 learning objective strings, each a '
+        'learning-verb goal (Understand / Analyze / Apply / Evaluate), NEVER '
+        'a verbatim copy of a KB entry title\n'
         '  - "content": array of section objects, each with:\n'
         '      - "heading": section heading\n'
         '      - "body": 2-4 paragraph section content\n'
@@ -9684,8 +9686,13 @@ def _parse_tutorial_markdown(content: str) -> dict[str, Any]:
 
 
 def _tutorial_has_content(result: dict[str, Any]) -> bool:
-    """True when a tutorial LLM result carries real objectives and content."""
-    return bool(result.get("objectives")) and bool(result.get("content"))
+    """True when a tutorial LLM result carries real objectives, content and
+    a summary — a shell missing any of the three is not a usable tutorial."""
+    return (
+        bool(result.get("objectives"))
+        and bool(result.get("content"))
+        and bool((result.get("summary") or "").strip())
+    )
 
 
 def _entry_derived_sections(
@@ -9710,7 +9717,9 @@ def _entry_derived_sections(
         title = entry.get("title") or "Untitled entry"
         summary = entry.get("summary") or "(no summary available)"
         if len(objectives) < 5:
-            objectives.append(title)
+            # Issue #92: learning-verb phrasing — never a verbatim copy of
+            # the KB entry title (a title is not a learning objective).
+            objectives.append(f"Understand the key findings in '{title}'")
         body = summary
         url = entry.get("source_url")
         if url:
@@ -9759,11 +9768,73 @@ def _ensure_tutorial_complete(
         lang_learning=lang_learning,
         target_language=target_language,
     )
+    title = llm_result.get("title") or ""
+    # Issue #92: an LLM that returns a digest/report-style title ("Weekly
+    # Digest — <domain>") must not mislabel a Tutorial product — override
+    # with the Tutorial semantic title.
+    if not title or any(
+        marker in title.lower() for marker in ("weekly digest", "digest —", "report —")
+    ):
+        title = f"{domain} — Tutorial"
+
+    # Issue #92: an LLM that copies KB entry titles verbatim as objectives
+    # ("Learning Objectives 照抄文章标题") is not teaching — replace the
+    # objectives with the derived learning-verb phrasing when >= 2 of them
+    # are bare entry-title copies.
+    llm_objectives = llm_result.get("objectives") or []
+    entry_titles = {str(e.get("title") or "").strip() for e in entries}
+    title_copies = sum(
+        1 for o in llm_objectives if str(o).strip() in entry_titles
+    )
+    if title_copies >= 2:
+        llm_objectives = objectives
+
+    # Issue #92: language-learning domains need a real teaching structure.
+    # When the LLM returns no vocabulary/grammar, derive a deterministic
+    # vocabulary list from the target-language summaries (distinctive >=4
+    # char words, capped) and a grammar point from the first summary's
+    # sentence structure — so a lang tutorial is never a bare article dump.
+    llm_vocabulary = llm_result.get("vocabulary") or []
+    llm_grammar = llm_result.get("grammar") or []
+    if lang_learning and not llm_vocabulary:
+        seen: set[str] = set()
+        for e in entries:
+            for token in re.findall(r"[A-Za-zÀ-ÿ'’]{4,}", str(e.get("summary") or "")):
+                low = token.lower()
+                if low in seen:
+                    continue
+                seen.add(low)
+                llm_vocabulary.append(f"{token} — key vocabulary from the article")
+                if len(llm_vocabulary) >= 5:
+                    break
+            if len(llm_vocabulary) >= 5:
+                break
+    if lang_learning and not llm_grammar:
+        first_summary = next(
+            (str(e.get("summary") or "") for e in entries if e.get("summary")), ""
+        )
+        if first_summary:
+            llm_grammar.append(
+                f"Sentence structure — follow the clause order in "
+                f"\"{first_summary.strip()[:60]}\""
+            )
+    # Issue #92: treat placeholder duration/prerequisites ("TBD", "None",
+    # "0 minutes") as empty so a shell LLM result is filled deterministically.
+    raw_duration = str(llm_result.get("duration") or "").strip()
+    if raw_duration.lower() in ("tbd", "none", "0 minutes", "", "n/a"):
+        duration = f"{len(entries)} minutes"
+    else:
+        duration = raw_duration
+    raw_prereq = str(llm_result.get("prerequisites") or "").strip()
+    if raw_prereq.lower() in ("tbd", "none", "", "n/a"):
+        prerequisites = "None (no prior experience required)"
+    else:
+        prerequisites = raw_prereq
     return {
-        "title": llm_result.get("title") or f"{domain} — Tutorial",
-        "duration": llm_result.get("duration") or f"{len(entries)} minutes",
-        "prerequisites": llm_result.get("prerequisites") or "None",
-        "objectives": llm_result.get("objectives") or objectives,
+        "title": title,
+        "duration": duration,
+        "prerequisites": prerequisites,
+        "objectives": llm_objectives or objectives,
         "content": llm_result.get("content") or content,
         "exercises": llm_result.get("exercises") or exercises,
         "summary": llm_result.get("summary") or (
@@ -9772,8 +9843,8 @@ def _ensure_tutorial_complete(
             f"for a {target_audience} audience."
         ),
         "further_reading": llm_result.get("further_reading") or further_reading,
-        "vocabulary": llm_result.get("vocabulary") or [],
-        "grammar": llm_result.get("grammar") or [],
+        "vocabulary": llm_vocabulary,
+        "grammar": llm_grammar,
     }
 
 
