@@ -9671,7 +9671,9 @@ def _entry_derived_sections(
     exercises: list[dict[str, str]] = []
     further_reading: list[str] = []
     for index, entry in enumerate(entries):
-        title = entry.get("title") or f"Entry {index + 1}"
+        # Issue #85: never surface the internal "Entry N" numbering as a
+        # user-facing heading when a title is missing — use a neutral label.
+        title = entry.get("title") or "Untitled entry"
         summary = entry.get("summary") or "(no summary available)"
         if len(objectives) < 5:
             objectives.append(title)
