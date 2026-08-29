@@ -8,10 +8,26 @@ exclude_keywords:
 - deutsch
 - español
 sources:
-- name: corriere
+- name: ANSA Cronaca
   type: rss
-  url: https://xml.corriereobjects.it/rss/homepage.xml
+  url: https://www.ansa.it/sito/notizie/cronaca/cronaca_rss.xml
   quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 60
+  enabled: true
+- name: TGCOM24
+  type: rss
+  url: https://www.tgcom24.mediaset.it/rss/homepage.xml
+  quality_tier: 1
+  frequency: daily
+  access: free
+  rate_limit: 60
+  enabled: true
+- name: Il Post
+  type: rss
+  url: https://www.ilpost.it/feed
+  quality_tier: 2
   frequency: daily
   access: free
   rate_limit: 60
