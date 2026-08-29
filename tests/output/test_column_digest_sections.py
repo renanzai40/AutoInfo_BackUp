@@ -202,12 +202,14 @@ class TestColumnDigestSections:
         assert "_No deep-dive sections available" not in out
 
     def test_sections_metadata_matches_actual_count(self) -> None:
-        """``**Sections**: N`` equals the number of rendered subsections."""
+        """The Deep Dive renders N subsections and NO internal count header
+        (R2: ``**Sections**: N`` must not leak to end users — #85)."""
         out = _render_column_digest(_SAMPLE_LLM_SYNTHESIS_WITH_SECTIONS)
 
         subsections = _deep_dive_subsections(out)
-        assert f"**Sections**: {len(subsections)}" in out
-        assert "**Sections**: 0" not in out
+        assert "**Sections**" not in out
+        assert "**References**: " not in out
+        assert len(subsections) > 0
 
     def test_each_subsection_has_substantive_content(self) -> None:
         """Every ``### `` heading is followed by a substantive paragraph."""
@@ -240,7 +242,7 @@ class TestColumnDigestDeterministicFallback:
         assert "_No deep-dive sections available" not in out
         subsections = _deep_dive_subsections(out)
         assert len(subsections) >= 8
-        assert f"**Sections**: {len(subsections)}" in out
+        assert "**Sections**" not in out
 
     def test_deterministic_sections_carry_substantive_content(self) -> None:
         """Derived sections carry real entry titles + summaries."""
