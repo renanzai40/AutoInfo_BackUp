@@ -1502,6 +1502,31 @@ def _strip_entry_placeholders(text: str) -> str:
     return _ENTRY_N_RE.sub("Source: (source)", text)
 
 
+# Issue #93: presentation provenance fabrication — a (Source: X) citation
+# where X is not a real http(s) URL (e.g. "KB: <title>", "KB-N",
+# "knowledgebase.local", a bare media/person name) is fabricated and must
+# be removed from the rendered deck.  \s* is INSIDE the negative lookahead
+# so a real URL is never consumed (a leading space must not let the
+# lookahead pass); only non-URL citations are stripped.
+_FABRICATED_SOURCE_RE = re.compile(
+    r"\(Source:(?!\s*(?:https?://|\[))[^)\n]*\)", re.IGNORECASE
+)
+
+
+def _sanitize_presentation_sources(text: str) -> str:
+    """Strip fabricated (non-URL) source citations from rendered presentation
+    text (backup issue #93).
+
+    The LLM may substitute human-readable names for URLs ("(Source: Inside
+    Higher Ed)", "(Source: KB-N)", "(Source: knowledgebase.local/x)") even
+    when the prompt demands real URLs.  A deterministic post-pass removes
+    any ``(Source: ...)`` that is not an http(s) URL or markdown link — the
+    grep-level guarantee the acceptance scan demands.  Never applied to
+    JSON/agent payloads.
+    """
+    return _FABRICATED_SOURCE_RE.sub("", text)
+
+
 def _sections_from_headings(text: str, product_type: str = "report") -> dict[str, str]:
     """Map canonical D1 sections to non-empty heading content (md/html)."""
     found: dict[str, str] = {}
@@ -10046,7 +10071,11 @@ def generate_presentation(
         "Return all fields in a single JSON object. Adapt depth and terminology "
         f"specifically for a {target_audience} audience.\n"
         'When a claim comes from a specific KB entry, end that bullet with '
-        '" (Source: <the entry URL>)".'
+        '" (Source: <the exact http(s) entry URL>)". '
+        'NEVER write "Source: KB:", "Source: KB-N", "knowledgebase.local", '
+        '"knowledgebase.example.com", or a bare publication/person name as '
+        'a source — every (Source: ...) must be a real http(s) URL from the '
+        'KB Entries list above.'
     )
 
     if custom_instructions:
@@ -10096,6 +10125,13 @@ def generate_presentation(
         if format == "agent"
         else rendered
     )
+    # Issue #93: strip fabricated (non-URL) source citations from the
+    # rendered markdown/html/mkslides deck — the LLM may substitute names
+    # for URLs even when prompted otherwise.  Agent JSON-LD is untouched
+    # (its sources are real URLs from topic_entries).
+    if format != "agent":
+        rendered = _sanitize_presentation_sources(rendered)
+    rendered_check = _sanitize_presentation_sources(rendered_check)
     if not allow_empty and (len(slides) < 1 or len(rendered_check.strip()) < 500):
         raise ValueError(
             f"Presentation generation produced no usable content for "
