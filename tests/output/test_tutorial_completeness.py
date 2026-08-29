@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from unittest.mock import MagicMock, patch
 
-from autoinfo.output import generate_tutorial
+from autoinfo.output import PRODUCT_TEMPLATES, generate_digest, generate_tutorial
 
 
 def _entry(eid: str, title: str, summary: str, url: str, lang: str = "fr") -> dict[str, object]:
@@ -112,3 +112,62 @@ class TestTutorialCompleteness:
         out = _render(_SHELL, domain="medical-research")
         # Non-lang domain: vocabulary/grammar stay empty (no fabricated list).
         assert "## Vocabulary" not in out or "no vocabulary list yet" in out
+
+
+def _digest_render_tutorial(entries: list[dict[str, object]] | None = None) -> str:
+    """Render the tutorial through the DIGEST path (issue #99).
+
+    The production tutorial artifacts (``autoinfo output digest --product
+    tutorial``) are generated via ``generate_digest`` with the tutorial
+    registry template, NOT via ``generate_tutorial`` — so #92's header fills
+    must also survive on this path.
+    """
+    with (
+        patch("autoinfo.output.KBStore") as mkb,
+        patch("autoinfo.output._call_llm_for_digest", return_value={
+            "executive_summary": "French-learning news roundup for this week.",
+            "key_findings": [
+                {"topic": "Réforme", "detail": "Le gouvernement annonce une réforme."},
+            ],
+            "recommendations": ["Read the full article."],
+        }),
+    ):
+        store = MagicMock()
+        store.list_entries.return_value = entries or _ENTRIES
+        mkb.return_value = store
+        tutorial_template = next(
+            r["template"] for r in PRODUCT_TEMPLATES if r["name"] == "tutorial"
+        )
+        out = generate_digest(
+            domain="french-learning",
+            period="weekly",
+            format="markdown",
+            product_template=tutorial_template,
+        )
+        assert isinstance(out, str)
+        return out
+
+
+class TestDigestPathTutorialH1:
+    """Issue #99 — ``--product tutorial`` renders a Tutorial H1, never Digest.
+
+    Before the fix the digest-path H1 came from ``_PRODUCT_H1_WORDS`` which
+    had no ``tutorial`` entry, so every tutorial artifact rendered
+    ``# Weekly Digest — <domain>``.  After the fix it must render
+    ``# Weekly Tutorial — <domain>`` AND keep the #92 header fills (Target
+    Audience / Duration / Prerequisites / Summary) non-empty on the same
+    path.
+    """
+
+    def test_h1_is_weekly_tutorial_not_digest(self) -> None:
+        out = _digest_render_tutorial()
+        assert "# Weekly Tutorial — french-learning" in out
+        assert "Weekly Digest" not in out
+
+    def test_header_fields_filled_on_digest_path(self) -> None:
+        out = _digest_render_tutorial()
+        assert "**Target Audience**: general audience" in out
+        assert "**Duration**: 2 minutes" in out
+        assert "no prior experience required" in out
+        assert "## Summary" in out
+        assert "walks through 2 knowledge base entries" in out

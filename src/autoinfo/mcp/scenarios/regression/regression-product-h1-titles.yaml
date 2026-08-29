@@ -1,20 +1,22 @@
-# Regression (issue #318): product-specific H1 titles.  Before the fix,
-# generate_digest hardcoded the H1 product word to "Digest"
+# Regression (issue #318, augmented #99): product-specific H1 titles.  Before
+# the fix, generate_digest hardcoded the H1 product word to "Digest"
 # (context["title"] = f"{period_label} Digest — {domain}") regardless of
 # product_template, so every --product rendered "# Weekly Digest — <domain>".
 # generate_report likewise hardcoded "Report" in ReportData.title regardless
 # of product.  Fix: _PRODUCT_H1_WORDS maps each resolved product family to
-# its H1 word (digest→Digest, report→Report, premium-briefing→Premium
-# Briefing, column→Column, magazine-digest→Magazine Digest,
-# enterprise-briefing→Enterprise Briefing); the period label still drives the
-# Daily/Weekly/Monthly prefix.
+# its H1 word (digest→Digest, report→Report, tutorial→Tutorial,
+# presentation→Presentation, premium-briefing→Premium Briefing, column→Column,
+# magazine-digest→Magazine Digest, enterprise-briefing→Enterprise Briefing);
+# the period label still drives the Daily/Weekly/Monthly prefix.  Issue #99:
+# "tutorial" was missing from the map, so --product tutorial rendered
+# "# Weekly Digest — <domain>" — every registry family carries its word now.
 #
 # This scenario drives the DIGEST-PATH invocation of the #156 pattern
 # (generate_digest(domain=..., period=..., format='markdown',
 # product_template=<registry row>)) and asserts:
-#   (a) each of the 6 product families renders an H1 ("# " line) matching
+#   (a) each of the 8 product families renders an H1 ("# " line) matching
 #       "{period_label} {product word} — {domain}",
-#   (b) the 6 H1s are all distinct from each other,
+#   (b) the 8 H1s are all distinct from each other,
 #   (c) period="daily" yields a "Daily" prefix while period="weekly" yields
 #       "Weekly",
 #   (d) the report path (generate_report(product_template=...)) is
@@ -29,13 +31,13 @@
 # try/finally cleanup) so no repo or project config can influence rendering.
 # Failure means the product-aware H1 titles regressed — never a silent skip.
 name: regression-product-h1-titles
-description: "Regression #318: 6 product families render distinct product-aware H1 titles (period prefix + product word + domain) on digest and report paths"
+description: "Regression #318/#99: 8 product families render distinct product-aware H1 titles (period prefix + product word + domain) on digest and report paths"
 category: regression
 regression: true
-regression_issue: "#318"
+regression_issue: "#318/#99"
 requires_env: []
 steps:
-  - name: "digest path renders 6 distinct product-aware H1 titles"
+  - name: "digest path renders 8 distinct product-aware H1 titles"
     kind: cli
     command: |-
       python3 -c '
@@ -66,10 +68,12 @@ steps:
           ],
           "recommendations": ["Support prospective AI validation trials."],
       }
-      # Product family -> expected H1 product word (issue #318).
+      # Product family -> expected H1 product word (issue #318, #99).
       WORDS = {
           "digest": "Digest",
           "report": "Report",
+          "tutorial": "Tutorial",
+          "presentation": "Presentation",
           "premium-briefing": "Premium Briefing",
           "column": "Column",
           "magazine-digest": "Magazine Digest",
@@ -103,8 +107,8 @@ steps:
                   expected = f"# Weekly {word} \u2014 medical-research"
                   assert h1(out) == expected, f"{family}: {h1(out)!r} != {expected!r}"
                   h1s[family] = h1(out)
-          # All 6 H1s distinct (acceptance #318).
-          assert len(set(h1s.values())) == 6, f"duplicate H1s: {h1s}"
+          # All 8 H1s distinct (acceptance #318/#99).
+          assert len(set(h1s.values())) == 8, f"duplicate H1s: {h1s}"
           # Period label drives the prefix.
           with patch("autoinfo.output.KBStore") as kb_cls, \
                patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
@@ -201,11 +205,16 @@ steps:
                                                 report_type="standard")
               column_default = generate_report(domain="medical-research", format="markdown",
                                                report_type="column")
-          for out in (premium, column, enterprise, standard_report, column_default):
+              tutorial = generate_report(domain="medical-research", format="markdown",
+                                         report_type="standard",
+                                         product_template=tmpl("tutorial"))
+          for out in (premium, column, enterprise, tutorial, standard_report, column_default):
               assert isinstance(out, str), type(out)
           assert h1(premium) == "# medical-research \u2014 Premium Briefing", h1(premium)
           assert h1(column) == "# medical-research \u2014 Column", h1(column)
           assert h1(enterprise) == "# medical-research \u2014 Enterprise Briefing", h1(enterprise)
+          # Issue #99: the tutorial family is product-aware on the report path too.
+          assert h1(tutorial) == "# medical-research \u2014 Tutorial", h1(tutorial)
           # Default report paths keep the historical title byte-identical.
           assert h1(standard_report) == "# medical-research \u2014 Report", h1(standard_report)
           assert h1(column_default) == "# medical-research \u2014 Report", h1(column_default)

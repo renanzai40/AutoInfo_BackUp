@@ -8,10 +8,11 @@ f"{period_label} Digest — {domain}"``), so every ``--product`` rendered
 
 Covers:
 
-- The 6 product families (digest, report, premium-briefing, column,
-  magazine-digest, enterprise-briefing) each render a distinct H1 that
-  matches the product name + domain on the digest-with-product-template
-  path (``generate_digest(product_template=<registry row>)``)
+- The 8 product families (digest, report, tutorial, presentation,
+  premium-briefing, column, magazine-digest, enterprise-briefing) each render
+  a distinct H1 that matches the product name + domain on the
+  digest-with-product-template path (``generate_digest(product_template=
+  <registry row>)``)
 - The ``period`` label drives the Daily/Weekly/Monthly prefix
   (``period="daily"`` → ``Daily …``, ``period="weekly"`` → ``Weekly …``)
 - The report path (``generate_report(product_template=…)``) is product-aware
@@ -89,10 +90,13 @@ _SAMPLE_LLM_SYNTHESIS: dict[str, Any] = {
     "recommendations": ["Support prospective AI validation trials."],
 }
 
-# Product family → expected H1 product word (issue #318).
+# Product family → expected H1 product word (issue #318; tutorial +
+# presentation = issue #99 — every registry family carries its word).
 _EXPECTED_H1_WORDS: dict[str, str] = {
     "digest": "Digest",
     "report": "Report",
+    "tutorial": "Tutorial",
+    "presentation": "Presentation",
     "premium-briefing": "Premium Briefing",
     "column": "Column",
     "magazine-digest": "Magazine Digest",
@@ -240,7 +244,7 @@ def _render_report(
 class TestProductH1Word:
     """``_product_h1_word`` maps every resolved family to its H1 word."""
 
-    def test_maps_all_six_product_families(self) -> None:
+    def test_maps_all_product_families(self) -> None:
         """Each family resolves to its product-specific H1 word."""
         for family, word in _EXPECTED_H1_WORDS.items():
             assert _product_h1_word(family) == word
@@ -268,15 +272,15 @@ class TestDigestProductH1Titles:
         expected = f"# Weekly {_EXPECTED_H1_WORDS[family]} \u2014 medical-research"
         assert _h1(result) == expected
 
-    def test_all_six_product_h1s_are_distinct(self) -> None:
-        """The 6 product H1s all differ from each other (acceptance #318)."""
+    def test_all_product_h1s_are_distinct(self) -> None:
+        """The product H1s all differ from each other (acceptance #318/#99)."""
         h1s = {
             family: _h1(
                 _render_digest(product_template=_registry_template(family))
             )
             for family in _EXPECTED_H1_WORDS
         }
-        assert len(set(h1s.values())) == 6
+        assert len(set(h1s.values())) == len(_EXPECTED_H1_WORDS)
         # Each H1 embeds its own product word + the domain.
         for family, h1 in h1s.items():
             assert _EXPECTED_H1_WORDS[family] in h1

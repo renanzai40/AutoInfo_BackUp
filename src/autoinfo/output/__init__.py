@@ -4159,15 +4159,19 @@ PRODUCT_TEMPLATES: list[dict[str, Any]] = [
 ]
 
 
-# Product family → H1 product word (issue #318).  Keyed by the family name
-# resolved by :func:`_resolve_digest_product_type` /
+# Product family → H1 product word (issue #318, augmented #99).  Keyed by
+# the family name resolved by :func:`_resolve_digest_product_type` /
 # :func:`_resolve_report_product_type` (the registry row name when its flat
 # template file exists, else the default family).  The default
 # ``digest``/``report`` families map to their own words so the non-product
-# paths keep their historical titles byte-identical.
+# paths keep their historical titles byte-identical.  Issue #99: tutorial
+# (and presentation) were missing, so ``--product tutorial`` rendered
+# "# Weekly Digest — <domain>" — every registry family carries its word now.
 _PRODUCT_H1_WORDS: dict[str, str] = {
     "digest": "Digest",
     "report": "Report",
+    "tutorial": "Tutorial",
+    "presentation": "Presentation",
     "premium-briefing": "Premium Briefing",
     "column": "Column",
     "magazine-digest": "Magazine Digest",
@@ -5221,6 +5225,28 @@ def _normalize_digest_product_context(
         flat.setdefault("content", _content)
         flat.setdefault("exercises", _exercises)
         flat.setdefault("further_reading", _further)
+        # Issue #99: the digest-path tutorial (``--product tutorial``) renders
+        # the same header fields as ``generate_tutorial`` (#92 fills them via
+        # ``_ensure_tutorial_complete``).  This flat context carries no
+        # audience/duration/prerequisites/summary, so a "Weekly Tutorial"
+        # would ship an empty header + empty Summary.  Fill them with the
+        # same deterministic defaults #92 uses on the generate_tutorial path.
+        audience = str(flat.get("target_audience") or "").strip()
+        if not audience:
+            audience = "general audience"
+        flat["target_audience"] = audience
+        raw_duration = str(flat.get("duration") or "").strip()
+        if raw_duration.lower() in ("tbd", "none", "0 minutes", "", "n/a"):
+            flat["duration"] = f"{len(entries_list)} minutes"
+        raw_prereq = str(flat.get("prerequisites") or "").strip()
+        if raw_prereq.lower() in ("tbd", "none", "", "n/a"):
+            flat["prerequisites"] = "None (no prior experience required)"
+        if not str(flat.get("summary") or "").strip():
+            flat["summary"] = (
+                f"This tutorial walks through {len(entries_list)} knowledge "
+                f"base entries in the {domain} domain, covering the key "
+                f"findings for a {audience} audience."
+            )
 
     return flat
 
@@ -5710,11 +5736,12 @@ def generate_digest(
 
     # --- Build template context ----------------------------------------------
     generated_at = datetime.now(timezone.utc).isoformat()
-    # Issue #318: the H1 product word follows the resolved product family
-    # (digest/report/premium-briefing/column/magazine-digest/enterprise-briefing)
-    # instead of being hardcoded to "Digest"; the period label still drives
-    # the Daily/Weekly/Monthly prefix.  The default digest family keeps the
-    # historical "{period_label} Digest — {domain}" title byte-identical.
+    # Issue #318/#99: the H1 product word follows the resolved product family
+    # (digest/report/tutorial/presentation/premium-briefing/column/
+    # magazine-digest/enterprise-briefing) instead of being hardcoded to
+    # "Digest"; the period label still drives the Daily/Weekly/Monthly prefix.
+    # The default digest family keeps the historical
+    # "{period_label} Digest — {domain}" title byte-identical.
     digest_h1_word = _product_h1_word(digest_family)
     context = {
         "title": f"{period_label} {digest_h1_word} \u2014 {digest_title_domain}",
@@ -6437,11 +6464,11 @@ def generate_report(
         for g in groupings
     ]
 
-    # Issue #318: the report H1 product word follows the resolved product
-    # family when a product template is used (premium-briefing/column/
-    # enterprise-briefing); the default report path (no product_template,
-    # incl. report_type="column" T40) keeps the historical
-    # "{domain} — Report" title byte-identical.
+    # Issue #318/#99: the report H1 product word follows the resolved product
+    # family when a product template is used (tutorial/presentation/
+    # premium-briefing/column/enterprise-briefing); the default report path
+    # (no product_template, incl. report_type="column" T40) keeps the
+    # historical "{domain} — Report" title byte-identical.
     report_h1_word = (
         _product_h1_word(report_family, default="Report")
         if product_template is not None
