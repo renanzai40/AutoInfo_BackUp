@@ -188,6 +188,21 @@ sources:
     access: free
     rate_limit: 30  # requests per minute
 
+  - name: WSJ Markets
+    type: rss
+    url: https://feeds.a.dj.com/rss/RSSMarketsMain.xml
+    quality_tier: 1
+    enabled: true
+    tos_classification: licensed
+    fetch_depth: abstract
+    frequency: hourly
+    access: free
+    rate_limit: 30  # requests per minute
+    settings:
+      article_hosts:
+        - https://www.wsj.com
+        - https://online.wsj.com
+
 topics:
   - name: "Listed Companies & Earnings"
     keywords:
