@@ -539,6 +539,74 @@ class TestG3RelevanceScoring:
         assert result.details["hidden"] is True
         assert result.details["reason"] == "below relevance threshold"
 
+    def test_lexical_partial_hit_flags_not_archives(self, sample_item: Item) -> None:
+        """Issue #79: a relevant item hitting only 1 of N union keywords
+        (score 8-15 < threshold) must be FLAGGED, not archived — archiving it
+        would exclude valid content from digests (empty-shell regression)."""
+        from autoinfo.config import QualityGateConfig
+
+        g3 = G3RelevanceScoring()
+        # 13-keyword union (b2b-like broad set); the item hits only "IVF" in title.
+        keywords = [
+            "IVF", "embryo", "fertility", "startup", "funding", "SaaS",
+            "enterprise", "cloud", "CRM", "marketing", "sales", "procurement",
+            "vendor",
+        ]
+        config = QualityGateConfig(
+            name="G3-RelevanceScoring", category="soft", retries=0,
+            action="archive", threshold=30,
+        )
+        result = g3.check(sample_item, topic_keywords=keywords, threshold=30, gate_config=config)
+
+        assert result.passed is False
+        assert result.score < 30
+        assert result.details["scoring_method"] == "lexical"
+        assert result.details.get("archive") is False
+        assert result.details.get("archived_as_flag") is True
+
+    def test_lexical_zero_hit_still_archives(self, sample_item: Item) -> None:
+        """Issue #79: zero lexical hits (score 0, no keyword evidence at all)
+        still archives — the genuine negative signal keeps its safety net."""
+        from autoinfo.config import QualityGateConfig
+
+        g3 = G3RelevanceScoring()
+        config = QualityGateConfig(
+            name="G3-RelevanceScoring", category="soft", retries=0,
+            action="archive", threshold=30,
+        )
+        result = g3.check(
+            sample_item, topic_keywords=["quantum computing"], threshold=30,
+            gate_config=config,
+        )
+
+        assert result.passed is False
+        assert result.score == 0.0
+        assert result.details["scoring_method"] == "lexical"
+        assert result.details.get("archive") is True
+
+    def test_llm_path_archive_unchanged(self, sample_item: Item) -> None:
+        """Issue #79: the LLM scoring path keeps archive semantics — only the
+        lexical degraded fallback distinguishes zero-hit (archive) from
+        partial-hit (flag)."""
+        from autoinfo.config import QualityGateConfig
+
+        g3 = G3RelevanceScoring()
+        g3.llm_call = lambda **kwargs: type(
+            "R", (), {"choices": [type("C", (), {"message": type(
+                "M", (), {"content": "10"})()})()]}  # noqa: E501
+        )()
+        config = QualityGateConfig(
+            name="G3-RelevanceScoring", category="soft", retries=1,
+            action="archive", threshold=30,
+        )
+        result = g3.check(
+            sample_item, topic_keywords=["IVF", "embryo"], threshold=30,
+            gate_config=config,
+        )
+
+        assert result.details["scoring_method"] == "llm"
+        assert result.details.get("archive") is True
+
     def test_above_threshold_not_hidden(self, sample_item: Item) -> None:
         g3 = G3RelevanceScoring()
         result = g3.check(sample_item, topic_keywords=["IVF"], threshold=30)
