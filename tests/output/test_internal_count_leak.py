@@ -116,3 +116,55 @@ class TestStripEntryPlaceholders:
         joined = " ".join(_DIGEST_ENTERPRISE_METRICS_FIELDS)
         assert "Entry/study/dataset" not in joined
         assert "never placeholder text like Entry N" in joined
+
+
+class TestNoInternalFieldTable:
+    """Issue #91 (R2-wide): the digest/magazine/report products must not
+    render the internal KB metadata table (Field|Value / Type / Collected /
+    Relevance N/100 / Tags) or raw internal platform ids in References."""
+
+    _LEAK_RE = re.compile(
+        r"Field \| Value|Type rss|Collected|Relevance [0-9.]+/100|Tags\["
+    )
+
+    def _entry(self, platform: str = "npr-news") -> dict[str, object]:
+        return {
+            "title": "Test entry",
+            "summary": "Summary.",
+            "source_label": "NPR",
+            "source_platform": platform,
+            "source_type": "rss",
+            "collected_at": "2026-08-25T00:00:00+00:00",
+            "relevance_score": 50.0,
+            "tags": '["ai"]',
+            "source_url": "https://www.npr.org/article/1",
+        }
+
+    def test_digest_no_field_table(self) -> None:
+        out = _render_template("digest.md.j2", {
+            **_DIGEST_CONTEXT,
+            "entries": [self._entry()],
+        })
+        assert self._LEAK_RE.search(out) is None, f"leak in digest:\n{out}"
+
+    def test_magazine_no_relevance_byline(self) -> None:
+        out = _render_template("magazine-digest.md.j2", {
+            **_DIGEST_CONTEXT,
+            "entries": [self._entry()],
+        })
+        assert self._LEAK_RE.search(out) is None, f"leak in magazine:\n{out}"
+        assert "npr-news" not in out
+
+    def test_report_references_no_internal_platform(self) -> None:
+        ref = {
+            "title": "Ref",
+            "source_url": "https://www.npr.org/article/1",
+            "source_label": "NPR",
+            "source_platform": "npr-news",
+        }
+        out = _render_template("report.md.j2", {
+            "title": "R", "domain": "d", "generated_at": "g",
+            "sections": [], "references": [ref],
+        })
+        assert "npr-news" not in out
+        assert "NPR" in out

@@ -465,6 +465,24 @@ def _platform_name(value: Any) -> str:
     return _PLATFORM_DISPLAY_NAMES.get(s.lower(), s)
 
 
+def _user_source_label(ref: dict[str, Any]) -> str:
+    """Return a user-facing source label for a References entry, or "" when
+    none is safe to show (backup issue #91).
+
+    ``ref.source_label`` is the host-derived user-facing name ("NPR",
+    "Observador"); ``ref.source_platform`` is the raw internal feed id
+    ("npr-news", "observador") that must NOT leak to end users.  The label
+    is shown only when it exists and differs from the raw platform (i.e.
+    ``_derive_source_label`` actually re-derived it); a generic/raw
+    platform renders nothing so no internal id leaks.
+    """
+    label = str(ref.get("source_label") or "").strip()
+    platform = str(ref.get("source_platform") or "").strip()
+    if label and label.lower() != platform.lower():
+        return label
+    return ""
+
+
 # ---------------------------------------------------------------------------
 # LLM leak detection (issue #302 — ①)
 # ---------------------------------------------------------------------------
@@ -3914,6 +3932,7 @@ def _get_jinja_env() -> Environment:
         )
         _jinja_env.filters["product_summary"] = lambda v: "" if _is_empty_summary(str(v)) else v
         _jinja_env.filters["platform_name"] = _platform_name
+        _jinja_env.globals["user_source_label"] = _user_source_label
     return _jinja_env
 
 
@@ -4054,6 +4073,8 @@ class ProductTemplate:
         env.filters["product_summary"] = lambda v: "" if _is_empty_summary(str(v)) else v
         # Defense-in-depth for issue #302: map internal platform ids to display names
         env.filters["platform_name"] = _platform_name
+        # Issue #91: never leak raw internal platform ids in References
+        env.globals["user_source_label"] = _user_source_label
         return env
 
 

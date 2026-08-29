@@ -53,7 +53,7 @@ _No developments this week._
 {% set selected = references[:8] %}
 {% endif %}
 {% for ref in selected %}
-- **{{ ref.title }}**{{ (" — " ~ ref.source_url) if ref.source_url else "" }}{{ (" (" ~ ref.source_label | default(ref.source_platform, "") | platform_name ~ ")") if (ref.source_platform or ref.source_label) else "" }}
+- **{{ ref.title }}**{{ (" — " ~ ref.source_url) if ref.source_url else "" }}{{ (" (" ~ user_source_label(ref) ~ ")") if user_source_label(ref) else "" }}
 {% endfor %}
 
 ---

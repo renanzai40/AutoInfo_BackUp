@@ -264,9 +264,6 @@
           {% if entry.source_url %}
           <span>Source: {{ entry.source_url }}</span>
           {% endif %}
-          {% if entry.relevance_score is not none %}
-          <span class="relevance-badge">Relevance: {{ entry.relevance_score }}/100</span>
-          {% endif %}
         </div>
       </li>
       {% endfor %}
