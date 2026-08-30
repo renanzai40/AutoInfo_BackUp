@@ -286,26 +286,33 @@ class TestSynthesisPromptLowValueFilter:
         assert isinstance(result, str)
         return cast(str, captured["prompt"]), result
 
-    def test_b2b_synthesis_candidates_exclude_obituary(self) -> None:
-        """>= MIN_REAL clean b2b entries -> the obituary is dropped from the
+    def test_synthesis_candidates_exclude_obituary(self) -> None:
+        """>= MIN_REAL clean entries -> the obituary is dropped from the
         synthesis candidates (not in the prompt at all).  The full entries
         list still flows to the rendered body for traceability (issue #46:
         only the synthesis candidates — and References via #42 — are pruned;
-        entries are never deleted)."""
-        entries = _clean_entries(_REF_LOW_VALUE_MIN_REAL_ENTRIES)
-        entries.append(_obit_entry("b2b"))
-        prompt, result = self._capture(entries, "b2b")
+        entries are never deleted).
+
+        Uses ``tech-ai-developer``: the b2b demo domain's #56
+        ``exclude_keywords`` (``has died``/``passed away``/``obituary``)
+        removes the obituary BEFORE the low-value logic runs, which would
+        make this test pass for the wrong reason."""
+        entries = _clean_entries(
+            _REF_LOW_VALUE_MIN_REAL_ENTRIES, domain="tech-ai-developer"
+        )
+        entries.append(_obit_entry("tech-ai-developer"))
+        prompt, result = self._capture(entries, "tech-ai-developer")
         assert OBIT_TITLE not in prompt
         assert "Real story 20: quarterly growth across the sector" in prompt
         assert OBIT_TITLE in result
 
-    def test_b2b_synthesis_keeps_obituary_at_tail_when_few_entries(self) -> None:
-        """< MIN_REAL clean b2b entries -> the obituary survives in the
+    def test_synthesis_keeps_obituary_at_tail_when_few_entries(self) -> None:
+        """< MIN_REAL clean entries -> the obituary survives in the
         synthesis candidates ONLY at the tail (never in the leading
         enumeration)."""
-        entries = _clean_entries(5)
-        entries.append(_obit_entry("b2b"))
-        prompt, _ = self._capture(entries, "b2b")
+        entries = _clean_entries(5, domain="tech-ai-developer")
+        entries.append(_obit_entry("tech-ai-developer"))
+        prompt, _ = self._capture(entries, "tech-ai-developer")
         assert OBIT_TITLE in prompt
         assert prompt.index(OBIT_TITLE) > prompt.rindex("Real story ")
 

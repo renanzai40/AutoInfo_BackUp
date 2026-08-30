@@ -119,7 +119,7 @@ class TestPlatformNameFilter:
             / "src" / "autoinfo" / "data" / "templates" / "column.md.j2"
         )
         content = tpl_path.read_text()
-        assert "platform_name" in content
+        assert "user_source_label" in content
 
     def test_report_template_uses_filter(self) -> None:
         from pathlib import Path
@@ -129,7 +129,7 @@ class TestPlatformNameFilter:
             / "src" / "autoinfo" / "data" / "templates" / "report.md.j2"
         )
         content = tpl_path.read_text()
-        assert "platform_name" in content
+        assert "user_source_label" in content
 
     def test_premium_briefing_uses_filter(self) -> None:
         from pathlib import Path
@@ -139,7 +139,7 @@ class TestPlatformNameFilter:
             / "src" / "autoinfo" / "data" / "templates" / "premium-briefing.md.j2"
         )
         content = tpl_path.read_text()
-        assert "platform_name" in content
+        assert "user_source_label" in content
 
     def test_enterprise_briefing_uses_filter(self) -> None:
         from pathlib import Path
@@ -149,7 +149,7 @@ class TestPlatformNameFilter:
             / "src" / "autoinfo" / "data" / "templates" / "enterprise-briefing.md.j2"
         )
         content = tpl_path.read_text()
-        assert "platform_name" in content
+        assert "user_source_label" in content
 
     def test_magazine_digest_uses_filter(self) -> None:
         from pathlib import Path
@@ -226,9 +226,12 @@ class TestReferenceNewlineIntegrity:
         )
         content = tpl_path.read_text()
 
+        from autoinfo.output import _user_source_label
+
         env = Environment(trim_blocks=True, lstrip_blocks=True)
         env.filters["product_summary"] = lambda v: v
         env.filters["platform_name"] = lambda v: v or "\u2014"
+        env.globals["user_source_label"] = _user_source_label
         tmpl = env.from_string(content)
         result = tmpl.render(
             title="Test", domain="test", generated_at="2026-01-01",
@@ -266,9 +269,12 @@ class TestReferenceNewlineIntegrity:
         )
         content = tpl_path.read_text()
 
+        from autoinfo.output import _user_source_label
+
         env = Environment(trim_blocks=True, lstrip_blocks=True)
         env.filters["product_summary"] = lambda v: v
         env.filters["platform_name"] = lambda v: v or "\u2014"
+        env.globals["user_source_label"] = _user_source_label
         tmpl = env.from_string(content)
         result = tmpl.render(
             title="Test", domain="test", generated_at="2026-01-01",

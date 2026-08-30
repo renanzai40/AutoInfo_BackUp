@@ -104,6 +104,7 @@ def _entry(entry_id: str, source_url: str, title: str) -> KBEntry:
         source_url=source_url,
         source_type="api",
         source_platform="pubmed",
+        language="en",
         collected_at=_now(),
         summary="Time-lapse improves live birth rates.",
         tags=["IVF", "time-lapse"],

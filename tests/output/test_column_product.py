@@ -40,6 +40,7 @@ def sample_entries() -> list[dict[str, Any]]:
         {
             "entry_id": "entry-001",
             "title": "Improved IVF outcomes with time-lapse imaging",
+            "language": "en",
             "summary": "Time-lapse imaging improves live birth rates in IVF.",
             "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
             "source_type": "api",
@@ -52,6 +53,7 @@ def sample_entries() -> list[dict[str, Any]]:
         {
             "entry_id": "entry-002",
             "title": "Neuroplasticity in early childhood development",
+            "language": "en",
             "summary": "Early childhood experiences shape brain plasticity.",
             "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654321/",
             "source_type": "rss",

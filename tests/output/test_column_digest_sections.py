@@ -25,6 +25,7 @@ Covers:
 
 from __future__ import annotations
 
+from datetime import date, timedelta
 import re
 from typing import Any
 from unittest.mock import MagicMock, patch
@@ -44,6 +45,7 @@ _SAMPLE_ENTRIES: list[dict[str, Any]] = [
     {
         "entry_id": f"entry-{i:03d}",
         "title": f"Research finding {i} on IVF time-lapse imaging",
+        "language": "en",
         "summary": (
             f"Study {i} reports improved live birth rates with time-lapse "
             "imaging in a prospective cohort."
@@ -54,7 +56,7 @@ _SAMPLE_ENTRIES: list[dict[str, Any]] = [
         "relevance_score": 90.0 - i,
         "tags": '["IVF", "embryo"]',
         "tier": "01-Raw",
-        "collected_at": "2026-07-15T10:00:00Z",
+        "collected_at": (date.today() - timedelta(days=1)).isoformat(),
     }
     for i in range(1, 11)
 ]

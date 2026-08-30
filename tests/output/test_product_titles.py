@@ -48,6 +48,7 @@ _SAMPLE_ENTRIES: list[dict[str, Any]] = [
     {
         "entry_id": "entry-001",
         "title": "Improved IVF outcomes with time-lapse imaging",
+        "language": "en",
         "summary": "Time-lapse imaging improves live birth rates in IVF.",
         "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
         "source_type": "api",
@@ -60,6 +61,7 @@ _SAMPLE_ENTRIES: list[dict[str, Any]] = [
     {
         "entry_id": "entry-002",
         "title": "AI embryo selection: a systematic review",
+        "language": "en",
         "summary": "AI models show promise but lack prospective validation.",
         "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654321/",
         "source_type": "api",

@@ -12,6 +12,7 @@ Covers:
 
 from __future__ import annotations
 
+from datetime import date, timedelta
 from typing import Any
 from unittest.mock import MagicMock, patch
 
@@ -30,6 +31,7 @@ def medical_entries() -> list[dict[str, Any]]:
         {
             "entry_id": "med-001",
             "title": "CRISPR gene editing advances",
+            "language": "en",
             "summary": "New CRISPR techniques reduce off-target effects.",
             "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
             "source_type": "api",
@@ -37,12 +39,13 @@ def medical_entries() -> list[dict[str, Any]]:
             "relevance_score": 92.0,
             "tags": '["crispr", "gene-editing"]',
             "tier": "01-Raw",
-            "collected_at": "2026-07-15T10:00:00Z",
+            "collected_at": (date.today() - timedelta(days=1)).isoformat(),
             "domain": "medical-research",
         },
         {
             "entry_id": "med-002",
             "title": "mRNA vaccine platform improvements",
+            "language": "en",
             "summary": "Improved mRNA delivery for cancer vaccines.",
             "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654321/",
             "source_type": "api",
@@ -50,7 +53,7 @@ def medical_entries() -> list[dict[str, Any]]:
             "relevance_score": 85.0,
             "tags": '["mrna", "vaccine"]',
             "tier": "01-Raw",
-            "collected_at": "2026-07-16T10:00:00Z",
+            "collected_at": (date.today() - timedelta(days=1)).isoformat(),
             "domain": "medical-research",
         },
     ]
@@ -63,6 +66,7 @@ def ai_entries() -> list[dict[str, Any]]:
         {
             "entry_id": "ai-001",
             "title": "OpenAI raises $40B in new funding round",
+            "language": "en",
             "summary": "OpenAI valuation reaches $300B after latest round.",
             "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654322/",
             "source_type": "rss",
@@ -70,7 +74,7 @@ def ai_entries() -> list[dict[str, Any]]:
             "relevance_score": 95.0,
             "tags": '["funding", "openai"]',
             "tier": "01-Raw",
-            "collected_at": "2026-07-17T10:00:00Z",
+            "collected_at": (date.today() - timedelta(days=1)).isoformat(),
             "domain": "ai-commercial",
         },
     ]
@@ -83,6 +87,7 @@ def finance_entries() -> list[dict[str, Any]]:
         {
             "entry_id": "fin-001",
             "title": "Fed maintains interest rates steady",
+            "language": "en",
             "summary": "Federal Reserve holds rates amid inflation concerns.",
             "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654323/",
             "source_type": "api",
@@ -90,7 +95,7 @@ def finance_entries() -> list[dict[str, Any]]:
             "relevance_score": 88.0,
             "tags": '["interest-rates", "fed"]',
             "tier": "01-Raw",
-            "collected_at": "2026-07-18T10:00:00Z",
+            "collected_at": (date.today() - timedelta(days=1)).isoformat(),
             "domain": "financial-intelligence",
         },
     ]

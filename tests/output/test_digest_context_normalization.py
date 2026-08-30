@@ -29,6 +29,7 @@ Regression guards:
 from __future__ import annotations
 
 import json
+from datetime import date, timedelta
 from typing import Any
 from unittest.mock import MagicMock, patch
 
@@ -57,7 +58,7 @@ _SAMPLE_ENTRIES: list[dict[str, Any]] = [
         "relevance_score": 92.0,
         "tags": '["IVF", "embryo"]',
         "tier": "01-Raw",
-        "collected_at": "2026-07-15T10:00:00Z",
+        "collected_at": (date.today() - timedelta(days=1)).isoformat(),
     },
     {
         "entry_id": "entry-002",
@@ -71,7 +72,7 @@ _SAMPLE_ENTRIES: list[dict[str, Any]] = [
         "relevance_score": 85.0,
         "tags": '["AI", "IVF"]',
         "tier": "01-Raw",
-        "collected_at": "2026-07-16T10:00:00Z",
+        "collected_at": (date.today() - timedelta(days=1)).isoformat(),
     },
 ]
 

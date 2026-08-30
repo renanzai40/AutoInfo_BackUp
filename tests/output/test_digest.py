@@ -35,6 +35,7 @@ _SAMPLE_ENTRIES = [
     {
         "entry_id": "med-ivf-001",
         "title": "Improved IVF outcomes with time-lapse embryo imaging",
+        "language": "en",
         "domain": "medical-research",
         "tier": "01-Raw",
         "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
@@ -51,6 +52,7 @@ _SAMPLE_ENTRIES = [
     {
         "entry_id": "med-ivf-002",
         "title": "AI-driven embryo selection: a systematic review",
+        "language": "en",
         "domain": "medical-research",
         "tier": "01-Raw",
         "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654321/",
@@ -430,6 +432,7 @@ class TestGenerateDigest:
             {
                 "entry_id": "tagged-001",
                 "title": "AI startup raises Series A",
+                "language": "en",
                 "domain": "medical-research",
                 "tier": "01-Raw",
                 "source_url": "https://example.com/tagged-001",

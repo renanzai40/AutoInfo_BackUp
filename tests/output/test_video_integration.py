@@ -182,9 +182,37 @@ class TestRenderVideoScaffoldIntegration:
 # Real-render smoke tests (skipped when env unavailable)
 # ---------------------------------------------------------------------------
 
+
+def _hyperframes_chrome_launchable() -> bool:
+    """True when HyperFrames' cached headless Chrome can actually start.
+
+    ``bun``/``ffmpeg`` presence alone is not enough: on WSL boxes the
+    chrome-headless-shell binary is often present but unlaunchable (missing
+    libnss3/libnspr4/libasound system libraries), so the real-render smoke
+    would hard-fail instead of skip.  A launch probe keeps it a skip in
+    that environment (and re-enables on healthy machines automatically).
+    """
+    from pathlib import Path
+
+    candidates = sorted(
+        Path.home().glob(".cache/hyperframes/chrome/**/chrome-headless-shell")
+    )
+    if not candidates:
+        return False
+    try:
+        probe = subprocess.run(
+            [str(candidates[-1]), "--version"],
+            capture_output=True,
+            timeout=10,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+    return probe.returncode == 0
+
+
 pytestmark = pytest.mark.skipif(
-    BUN is None or FFMPEG is None,
-    reason="bun or ffmpeg not on PATH — real HyperFrames render skipped",
+    BUN is None or FFMPEG is None or not _hyperframes_chrome_launchable(),
+    reason="bun/ffmpeg/launchable Chrome not available — real HyperFrames render skipped",
 )
 
 
