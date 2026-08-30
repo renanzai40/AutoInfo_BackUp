@@ -40,6 +40,7 @@ steps:
           "summary": "TechCrunch reports on the funding round.",
           "source_url": "https://techcrunch.com/2026/01/01/ai-startup",
           "source_type": "rss", "source_platform": "rss",
+          "language": "en",
           "relevance_score": 90.0, "tags": "[]", "tier": "01-Raw",
           "collected_at": "2026-08-19T10:00:00Z",
       }
@@ -97,6 +98,7 @@ steps:
           "summary": "TechCrunch reports on the funding round.",
           "source_url": "https://techcrunch.com/2026/01/01/ai-startup",
           "source_type": "rss", "source_platform": "rss",
+          "language": "en",
           "relevance_score": 90.0, "tags": "[]", "tier": "01-Raw",
           "collected_at": "2026-08-19T10:00:00Z",
       }
@@ -161,6 +163,7 @@ steps:
           "summary": "TechCrunch reports on the funding round.",
           "source_url": "https://techcrunch.com/2026/01/01/ai-startup",
           "source_type": "rss", "source_platform": "rss",
+          "language": "en",
           "relevance_score": 90.0, "tags": "[]", "tier": "01-Raw",
           "collected_at": "2026-08-19T10:00:00Z",
       }
@@ -220,6 +223,7 @@ steps:
           "summary": "TechCrunch reports on the funding round.",
           "source_url": "https://techcrunch.com/2026/01/01/ai-startup",
           "source_type": "rss", "source_platform": "rss",
+          "language": "en",
           "relevance_score": 90.0, "tags": "[]", "tier": "01-Raw",
           "collected_at": "2026-08-19T10:00:00Z",
       }
@@ -278,6 +282,7 @@ steps:
           "summary": "TechCrunch reports on the funding round.",
           "source_url": "https://techcrunch.com/2026/01/01/ai-startup",
           "source_type": "rss", "source_platform": "rss",
+          "language": "en",
           "relevance_score": 90.0, "tags": "[]", "tier": "01-Raw",
           "collected_at": "2026-08-19T10:00:00Z",
       }

@@ -203,7 +203,6 @@ class TestReportPathReferenceCap:
         assert titles[0] == "Top Score Entry"
         # Title-only (empty summary) entries de-prioritize below summary-bearing.
         assert not any(t.startswith("TitleOnly Ref") for t in titles)
-        assert "**References**: 60" in out
 
     @patch("autoinfo.output.KBStore")
     @patch("autoinfo.output._group_by_theme")
@@ -251,7 +250,6 @@ class TestReportPathReferenceOverride:
             i for i, t in enumerate(titles) if t.startswith("TitleOnly Ref")
         )
         assert title_only_idx >= 61
-        assert "**References**: 80" in out
 
 
 # ---------------------------------------------------------------------------

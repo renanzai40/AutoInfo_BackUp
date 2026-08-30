@@ -80,7 +80,8 @@ steps:
       import re
 
       from autoinfo.output import (
-          _TEMPLATES_DIR, _derive_source_label, _report_data_to_dict, ReportData,
+          _TEMPLATES_DIR, _derive_source_label, _report_data_to_dict,
+          _user_source_label, ReportData,
       )
       from autoinfo.config import SourceConfig
 
@@ -107,7 +108,9 @@ steps:
               "title": stale["title"],
               "source_url": stale["source_url"],
               "source_type": "rss",
-              "source_platform": derived,
+              # Current contract: raw internal id + derived user-facing label.
+              "source_platform": "rss",
+              "source_label": derived,
               "domain": "ai-commercial",
           }],
           sections=[], appendices=[],
@@ -116,11 +119,14 @@ steps:
       env = Environment(trim_blocks=True, lstrip_blocks=True)
       env.filters["product_summary"] = lambda v: v
       env.filters["platform_name"] = lambda v: v or "\u2014"
+      # The report template renders the user-facing suffix via user_source_label
+      # (registered on the real render env); mirror it here.
+      env.globals["user_source_label"] = _user_source_label
       tmpl = env.from_string(tpl_path.read_text())
       out = tmpl.render(**flat)
       refs_sec = out.split("## References")[1] if "## References" in out else ""
       assert "(RSS)" not in refs_sec, f"(RSS) placeholder in References:\n{refs_sec}"
-      assert "36kr" in refs_sec, f"specific source name missing:\n{refs_sec}"
+      assert "(36kr)" in refs_sec, f"specific source name missing:\n{refs_sec}"
       print("REPORT_TEMPLATE_SOURCE_LABEL_OK")
       '
     expect:
@@ -173,3 +179,81 @@ steps:
       success: true
       exit_code: 0
       stdout_has: ["HOST_MISMATCH_RECOVERED", "NO_FALSE_POSITIVE_OK"]
+
+  - name: "report markdown/JSON/HTML render the derived source name for a stale RSS entry (real generate_report)"
+    kind: cli
+    command: |-
+      python3 -c '
+      import json, os, shutil, tempfile
+      from datetime import date, timedelta
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      import yaml
+      from autoinfo.output import generate_report
+
+      # A stale pre-#323 entry: source_platform="rss" even though the article
+      # belongs to a configured source.  The report ref-builder must stamp a
+      # derived source_label alongside the raw platform id, and every report
+      # surface (markdown user_source_label suffix, json source_platform,
+      # html reference text) must render the DERIVED name — not rss, not "(RSS)".
+      STALE = {
+          "entry_id": "e-325-nd", "title": "AI startup raises $50M",
+          "summary": "TechCrunch reports on the funding round.",
+          "source_url": "https://techcrunch.com/2026/01/01/ai-startup",
+          "source_type": "rss", "source_platform": "rss",
+          "language": "en",
+          "relevance_score": 90.0, "tags": "[]", "tier": "01-Raw",
+          "collected_at": (date.today() - timedelta(days=1)).isoformat(),
+      }
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-325-nd-"))
+      old = os.getcwd()
+      try:
+          cfg_dir = tmp / ".autoinfo"
+          cfg_dir.mkdir(parents=True)
+          cfg = {"project": {"name": "test"},
+                 "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+                 "domains": [{"name": "ai-commercial", "active": True,
+                              "sources": [{"name": "techcrunch", "type": "rss",
+                                           "url": "https://techcrunch.com/feed/"}],
+                              "topics": []}]}
+          (cfg_dir / "config.yaml").write_text(
+              yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False),
+              encoding="utf-8")
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._group_by_theme",
+                     return_value=[{"theme": "AI Funding",
+                                    "description": "Funding rounds.",
+                                    "entries": [STALE]}]), \
+               patch("autoinfo.output._generate_executive_summary",
+                     return_value={"executive_summary": "Overview.",
+                                   "key_findings": [], "recommendations": []}):
+              kb = MagicMock()
+              kb.list_entries.return_value = [STALE]
+              kb_cls.return_value = kb
+              md = generate_report(domain="ai-commercial", period="weekly",
+                                   format="markdown")
+              js = generate_report(domain="ai-commercial", period="weekly",
+                                   format="json")
+              html = generate_report(domain="ai-commercial", period="weekly",
+                                     format="html")
+          # markdown: References render the user-facing " (techcrunch)" suffix.
+          assert "(techcrunch)" in md, f"markdown refs lost derived label: {md[-300:]!r}"
+          assert "(RSS)" not in md, "(RSS) residue in report markdown"
+          # json: the reference entry carries the derived source_platform.
+          data = json.loads(js)
+          assert any(e.get("source_platform") == "techcrunch"
+                     for e in data["entries"]), data["entries"]
+          # html: the reference text is "Title (techcrunch)".
+          assert "(techcrunch)" in html, f"html refs lost derived label: {html[-300:]!r}"
+          assert "(RSS)" not in html, "(RSS) residue in report html"
+          print("REPORT_SURFACES_SOURCE_LABEL_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["REPORT_SURFACES_SOURCE_LABEL_OK"]

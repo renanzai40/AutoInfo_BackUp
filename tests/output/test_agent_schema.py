@@ -57,6 +57,7 @@ SCHEMA_EXPORT = _load_schema("knowledge-base-export")
 _CJK_ENTRY: dict[str, Any] = {
     "entry_id": "cjk-001",
     "title": "量子コンピューティングの最新動向",
+    "language": "en",
     "summary": (
         "量子コンピューティングの研究は加速しており、"
         "バイオ医薬品の分子シミュレーション応用が期待されています。"
@@ -74,6 +75,7 @@ _CJK_ENTRY: dict[str, Any] = {
 _ENGLISH_ENTRY: dict[str, Any] = {
     "entry_id": "eng-001",
     "title": "CRISPR gene editing advances",
+    "language": "en",
     "summary": "New CRISPR techniques reduce off-target effects significantly.",
     "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654321/",
     "source_type": "api",

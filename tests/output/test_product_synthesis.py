@@ -22,6 +22,7 @@ Default standard/report synthesis stays unchanged (no product fields).
 
 from __future__ import annotations
 
+from datetime import date, timedelta
 from typing import Any, cast
 from unittest.mock import MagicMock, patch
 
@@ -49,6 +50,7 @@ _SAMPLE_ENTRIES: list[dict[str, Any]] = [
     {
         "entry_id": "entry-001",
         "title": "Improved IVF outcomes with time-lapse imaging",
+        "language": "en",
         "summary": "Time-lapse imaging improves live birth rates in IVF.",
                     "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
         "source_type": "api",
@@ -57,11 +59,12 @@ _SAMPLE_ENTRIES: list[dict[str, Any]] = [
         "relevance_score": 92.0,
         "tags": '["IVF", "embryo"]',
         "tier": "01-Raw",
-        "collected_at": "2026-07-15T10:00:00Z",
+        "collected_at": (date.today() - timedelta(days=1)).isoformat(),
     },
     {
         "entry_id": "entry-002",
         "title": "AI-driven embryo selection: a systematic review",
+        "language": "en",
         "summary": "AI models show promise but lack prospective validation.",
         "source_url": "https://pubmed.ncbi.nlm.nih.gov/87654321/",
         "source_type": "api",
@@ -70,7 +73,7 @@ _SAMPLE_ENTRIES: list[dict[str, Any]] = [
         "relevance_score": 85.0,
         "tags": '["AI", "IVF"]',
         "tier": "01-Raw",
-        "collected_at": "2026-07-16T10:00:00Z",
+        "collected_at": (date.today() - timedelta(days=1)).isoformat(),
     },
 ]
 

@@ -32,6 +32,7 @@ from autoinfo.output import (
 _ENTRY: dict[str, Any] = {
     "entry_id": "entry-001",
     "title": "Acme raises $55B for EA expansion",
+    "language": "en",
     "summary": "Acme announced a $55B capital raise for EA expansion.",
     "source_url": "https://x.com/a",
     "source_type": "api",

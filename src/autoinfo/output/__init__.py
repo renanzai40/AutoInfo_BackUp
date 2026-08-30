@@ -6327,7 +6327,10 @@ def generate_report(
             "title": e.get("title", ""),
             "source_url": e.get("source_url", ""),
             "source_type": e.get("source_type", ""),
-            "source_platform": _label,
+            # Raw internal platform id + derived user-facing label (#325):
+            # user_source_label shows the label only when it differs.
+            "source_platform": e.get("source_platform", ""),
+            "source_label": _label,
             "domain": e.get("domain", domain),
             "description": (
                 str(e.get("summary") or "").strip()
@@ -8298,7 +8301,7 @@ def _render_report_json(report_data: ReportData, period: str = "weekly") -> str:
             "url": url,
             "source_url": url,
             "source_type": ref.get("source_type", ""),
-            "source_platform": ref.get("source_platform", ""),
+            "source_platform": ref.get("source_label", "") or ref.get("source_platform", ""),
             "date": "",
             "domain": ref.get("domain", ""),
         })
@@ -8477,7 +8480,7 @@ def _render_report_html(report_data: ReportData, period: str = "weekly") -> str:
     html_references: list[dict[str, Any]] = []
     for idx, ref in enumerate(report_data.references, 1):
         title = ref.get("title", "")
-        platform = ref.get("source_platform", "")
+        platform = ref.get("source_label", "") or ref.get("source_platform", "")
         url = ref.get("source_url", "") or ""
         text = title
         if platform:

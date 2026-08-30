@@ -746,12 +746,15 @@ class TestDigestFiltersHuanengNoise:
 # ---------------------------------------------------------------------------
 
 
-def _sec_filing_entry(entry_id: str, title: str) -> dict[str, Any]:
+def _sec_filing_entry(
+    entry_id: str, title: str, summary: str = "SEC filing metadata."
+) -> dict[str, Any]:
     """A stale SEC EDGAR filing entry (the #332 KB dilution shape)."""
     return {
         "entry_id": entry_id,
         "title": title,
-        "summary": "SEC filing metadata.",
+        "summary": summary,
+        "language": "en",
         "domain": "financial-intelligence",
         "tier": "01-Raw",
         "source_url": f"https://www.sec.gov/edgar/{entry_id}",
@@ -766,7 +769,14 @@ def _sec_filing_entry(entry_id: str, title: str) -> dict[str, Any]:
 _SEC_FILING_ENTRIES = [
     _sec_filing_entry("sec-8k", "8-K Apple Inc. (2026-07-30)"),
     _sec_filing_entry("sec-10q", "10-Q Apple Inc. (2026-07-31)"),
-    _sec_filing_entry("fin-1", "Fed holds rates steady"),
+    _sec_filing_entry(
+        "fin-1",
+        "Fed holds rates steady",
+        summary=(
+            "The Federal Reserve held the benchmark rate steady and signaled "
+            "patience on further policy moves."
+        ),
+    ),
 ]
 
 
@@ -782,10 +792,9 @@ class TestReportFiltersSecFilingEntries:
         tmp_path: Any,
         monkeypatch: Any,
     ) -> None:
-        """#332 — a report built from SEC 8-K/10-Q filing entries must exclude
-        them via financial-intelligence ``exclude_keywords``.  RED today:
-        financial-intelligence declares no ``exclude_keywords``, so the
-        filing titles flow straight into the rendered report."""
+        """#332 — SEC 8-K/10-Q filing entries are excluded from the rendered
+        report via the financial-intelligence ``exclude_keywords`` seed
+        (sources.yaml), while a substantive market-news entry survives."""
         _write_config(tmp_path, [])
         monkeypatch.chdir(tmp_path)
         mock_kb.return_value = _digest_mock_store(_SEC_FILING_ENTRIES)

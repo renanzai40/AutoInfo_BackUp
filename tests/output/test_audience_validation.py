@@ -41,6 +41,7 @@ _SAMPLE_LLM_SYNTHESIS: dict[str, Any] = {
 _REAL_ENTRY: dict[str, Any] = {
     "entry_id": "real-001",
     "title": "IVF time-lapse imaging improves live birth rates",
+    "language": "en",
     "domain": "medical-research",
     "tier": "01-Raw",
     "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
