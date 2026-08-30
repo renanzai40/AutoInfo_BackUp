@@ -13,9 +13,9 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 
 | Metric | Value |
 |--------|-------|
-| Total files | 90 |
-| Total lines | 30372 |
-| Active files | 63 |
+| Total files | 92 |
+| Total lines | 30664 |
+| Active files | 65 |
 | Archived files | 27 |
 | Category — archive | 27 files / 8627 lines |
 | Category — known-limitations | 1 files / 288 lines |
@@ -24,7 +24,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | Category — adr | 9 files / 424 lines |
 | Category — specs | 12 files / 8815 lines |
 | Category — validation-reports | 14 files / 3186 lines |
-| Category — docs/dev | 19 files / 7789 lines |
+| Category — docs/dev | 21 files / 8081 lines |
 | Category — docs/root | 1 files / 61 lines |
 
 ## Inventory
@@ -67,6 +67,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `archive/migration-v1.9.md` | 58 | archive | archived | — |
 | `archive/remaining-source-gap-verdicts.md` | 116 | archive | archived | verdicts |
 | `archive/reports/global-content-paid-research-report-trae.md` | 973 | archive | archived | — |
+| `dev/2026-08-30-graph-engineering-调研与三项目落地-修正版.md` | 139 | docs/dev | active | — |
 | `dev/acceptance-framework.md` | 494 | docs/dev | active | — |
 | `dev/agent-era-doc-architecture-autoinfo.md` | 94 | docs/dev | active | reference |
 | `dev/agent-era-doc-architecture.md` | 280 | docs/dev | active | instruction |
@@ -78,6 +79,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/founder-expectations.md` | 471 | docs/dev | active | — |
 | `dev/mcp-usage-examples.md` | 324 | docs/dev | active | — |
 | `dev/new-domain-guide.md` | 935 | docs/dev | active | — |
+| `dev/plans/2026-08-30-AutoInfo-GraphEngineering落地实施方案-修正版.md` | 153 | docs/dev | active | — |
 | `dev/plans/README.md` | 50 | docs/dev | active | plan-index |
 | `dev/required-api-keys.md` | 144 | docs/dev | active | — |
 | `dev/research/综合报告-资讯付费与AI触达研究.md` | 702 | docs/dev | active | — |
