@@ -1512,19 +1512,92 @@ _FABRICATED_SOURCE_RE = re.compile(
     r"\(Source:(?!\s*(?:https?://|\[))[^)\n]*\)", re.IGNORECASE
 )
 
+# Backup issue #101: the shape pass above only rejects citations that are
+# NOT URL-shaped.  A well-formed but fabricated URL (e.g.
+# "https://www.news.com/<slug>", "https://example.com/kb/N") still passes.
+# This domain-level backstop cross-checks every rendered (Source: URL)
+# against the real KB source_url whitelist used in the prompt.
+_PRESENTATION_SOURCE_START_RE = re.compile(r"\(Source:", re.IGNORECASE)
+_PRESENTATION_CITATION_URL_RE = re.compile(r"https?://[^)\s]+", re.IGNORECASE)
 
-def _sanitize_presentation_sources(text: str) -> str:
-    """Strip fabricated (non-URL) source citations from rendered presentation
+
+def _source_url_verifiable(url: str, allowed_urls: set[str]) -> bool:
+    """Return True when *url* matches a real KB source_url in *allowed_urls*.
+
+    Fast path is exact equality (the LLM copies the URL we fed it).  Near
+    variants (trailing slash, query, fragment, host-only prefix) count only
+    when the extra suffix is a path-separated boundary — a generic domain
+    root is never accepted as a citation for a specific article.
+    """
+    candidate = url.rstrip(".,;:!?)]").rstrip("/")
+    for real in allowed_urls:
+        real_norm = real.rstrip("/")
+        if candidate == real_norm:
+            return True
+        longer, shorter = (
+            (real_norm, candidate)
+            if len(real_norm) >= len(candidate)
+            else (candidate, real_norm)
+        )
+        boundary = longer[len(shorter) : len(shorter) + 1]
+        if longer.startswith(shorter) and boundary in ("/", "?", "#"):
+            return True
+    return False
+
+
+def _strip_unverifiable_presentation_sources(text: str, allowed_urls: set[str]) -> str:
+    """Drop (Source: URL) citations whose URL is not verifiable against the
+    real KB source_url whitelist (backup issue #101 backstop).
+
+    Only the citation marker is removed — the bullet text stays and the
+    source mechanism itself is preserved for bullets that carry a real URL
+    (deleting the whole Source mechanism is a degradation, #b2b/#french).
+    """
+    if not allowed_urls:
+        return text
+    out: list[str] = []
+    pos = 0
+    for m in _PRESENTATION_SOURCE_START_RE.finditer(text):
+        out.append(text[pos : m.start()])
+        # Scan to the citation's closing paren, allowing one level of nested
+        # parens (markdown link "[text](url)") so the citation is consumed whole.
+        j = m.end()
+        depth = 1
+        while j < len(text) and depth:
+            if text[j] == "(":
+                depth += 1
+            elif text[j] == ")":
+                depth -= 1
+            j += 1
+        citation = text[m.start() : j]
+        urls = _PRESENTATION_CITATION_URL_RE.findall(citation)
+        keep = bool(urls) and all(_source_url_verifiable(u, allowed_urls) for u in urls)
+        out.append(citation if keep else "")
+        pos = j
+    out.append(text[pos:])
+    return "".join(out)
+
+
+def _sanitize_presentation_sources(
+    text: str, allowed_urls: set[str] | None = None
+) -> str:
+    """Strip fabricated source citations from rendered presentation
     text (backup issue #93).
 
     The LLM may substitute human-readable names for URLs ("(Source: Inside
     Higher Ed)", "(Source: KB-N)", "(Source: knowledgebase.local/x)") even
     when the prompt demands real URLs.  A deterministic post-pass removes
     any ``(Source: ...)`` that is not an http(s) URL or markdown link — the
-    grep-level guarantee the acceptance scan demands.  Never applied to
-    JSON/agent payloads.
+    grep-level guarantee the acceptance scan demands.  When *allowed_urls*
+    (the real KB source_url set) is supplied, additionally strips URL-shaped
+    citations that are NOT verifiable against that whitelist — a well-formed
+    but fabricated placeholder never ships (backup issue #101).  Never
+    applied to JSON/agent payloads.
     """
-    return _FABRICATED_SOURCE_RE.sub("", text)
+    text = _FABRICATED_SOURCE_RE.sub("", text)
+    if allowed_urls:
+        text = _strip_unverifiable_presentation_sources(text, allowed_urls)
+    return text
 
 
 def _sections_from_headings(text: str, product_type: str = "report") -> dict[str, str]:
@@ -10075,8 +10148,12 @@ def generate_presentation(
     # emits empty/truncated content (issue #178). 10 representative
     # entries (title + summary) keep the prompt well under the safe
     # threshold while still grounding the deck in domain facts.
+    # Each entry carries its real source_url (mirroring tutorial/report) so
+    # the LLM can only cite verifiable URLs — never fabricated placeholders
+    # (backup issue #101).
     entry_summaries = "\n".join(
         f"- {e.get('title', '?')}: {e.get('summary', '(no summary)')[:220]}"
+        + (f" (Source: {e['source_url']})" if e.get("source_url") else "")
         for e in topic_entries[:10]  # cap entries sent to LLM (#178)
     )
 
@@ -10156,9 +10233,20 @@ def generate_presentation(
     # rendered markdown/html/mkslides deck — the LLM may substitute names
     # for URLs even when prompted otherwise.  Agent JSON-LD is untouched
     # (its sources are real URLs from topic_entries).
+    # Issue #101 backstop: only real KB source_urls may appear in the deck.
+    # Every (Source: URL) is cross-checked against this whitelist so a
+    # well-formed but fabricated placeholder (https://www.news.com/<slug>,
+    # https://example.com/kb/N) never ships.
+    all_source_urls = {
+        str(e["source_url"]).strip()
+        for e in topic_entries
+        if str(e.get("source_url") or "").strip()
+    }
     if format != "agent":
-        rendered = _sanitize_presentation_sources(rendered)
-    rendered_check = _sanitize_presentation_sources(rendered_check)
+        rendered = _sanitize_presentation_sources(rendered, allowed_urls=all_source_urls)
+    rendered_check = _sanitize_presentation_sources(
+        rendered_check, allowed_urls=all_source_urls
+    )
     if not allow_empty and (len(slides) < 1 or len(rendered_check.strip()) < 500):
         raise ValueError(
             f"Presentation generation produced no usable content for "
