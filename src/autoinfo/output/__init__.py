@@ -9250,11 +9250,19 @@ def generate_tutorial(
 
     # -- Build LLM prompt with audience adaptation ------------------------
     audience_desc = _AUDIENCE_DESCRIPTIONS.get(target_audience, "general audience")
+    # Cap KB entries sent to the LLM: DeepSeek-V4-Flash is a reasoning
+    # model — a long prompt burns max_tokens on reasoning_content and
+    # emits empty/truncated content (issue #178 backups). Thick domains
+    # (e.g. medical-research: 602 files) feed every filtered entry
+    # unbounded, blowing the prompt out of the safe window and timing out
+    # at 0B (backup issue #103). 10 representative entries (title +
+    # summary) keep the prompt small while still grounding the tutorial in
+    # domain facts.
     entry_summaries = "\n".join(
         f"- [{e.get('entry_id', '?')}] {e.get('title', '?')}: "
         f"{e.get('summary', '(no summary)')}"
         + (f" (Source: {e['source_url']})" if e.get("source_url") else "")
-        for e in entries
+        for e in entries[:10]  # cap entries sent to LLM (#178 protocol, backup #103)
     )
 
     if format == "agent":
