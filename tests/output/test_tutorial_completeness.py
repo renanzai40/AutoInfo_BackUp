@@ -9,6 +9,7 @@ structure (vocabulary/grammar) for language-learning domains.
 
 from __future__ import annotations
 
+import re
 from unittest.mock import MagicMock, patch
 
 from autoinfo.output import PRODUCT_TEMPLATES, generate_digest, generate_tutorial
@@ -36,12 +37,18 @@ def _entry(eid: str, title: str, summary: str, url: str, lang: str = "fr") -> di
 
 
 _ENTRIES = [
-    _entry("1", "Le gouvernement annonce une réforme",
-           "Le gouvernement a annoncé une réforme importante pour les étudiants.",
-           "https://f24.fr/1"),
-    _entry("2", "La chanteuse donne un concert",
-           "La chanteuse a donné un concert à Paris hier soir.",
-           "https://lefigaro.fr/2"),
+    _entry(
+        "1",
+        "Le gouvernement annonce une réforme",
+        "Le gouvernement a annoncé une réforme importante pour les étudiants.",
+        "https://f24.fr/1",
+    ),
+    _entry(
+        "2",
+        "La chanteuse donne un concert",
+        "La chanteuse a donné un concert à Paris hier soir.",
+        "https://lefigaro.fr/2",
+    ),
 ]
 
 # The exact shell the issue observed: Weekly Digest title, title-copy
@@ -71,9 +78,7 @@ def _render(shell: dict[str, object], domain: str = "french-learning") -> str:
         store.list_entries.return_value = _ENTRIES
         mkb.return_value = store
         mllm.return_value = shell
-        out = generate_tutorial(
-            domain=domain, target_audience="student", format="markdown"
-        )
+        out = generate_tutorial(domain=domain, target_audience="student", format="markdown")
         assert isinstance(out, str)
         return out
 
@@ -124,13 +129,16 @@ def _digest_render_tutorial(entries: list[dict[str, object]] | None = None) -> s
     """
     with (
         patch("autoinfo.output.KBStore") as mkb,
-        patch("autoinfo.output._call_llm_for_digest", return_value={
-            "executive_summary": "French-learning news roundup for this week.",
-            "key_findings": [
-                {"topic": "Réforme", "detail": "Le gouvernement annonce une réforme."},
-            ],
-            "recommendations": ["Read the full article."],
-        }),
+        patch(
+            "autoinfo.output._call_llm_for_digest",
+            return_value={
+                "executive_summary": "French-learning news roundup for this week.",
+                "key_findings": [
+                    {"topic": "Réforme", "detail": "Le gouvernement annonce une réforme."},
+                ],
+                "recommendations": ["Read the full article."],
+            },
+        ),
     ):
         store = MagicMock()
         store.list_entries.return_value = entries or _ENTRIES
@@ -171,3 +179,69 @@ class TestDigestPathTutorialH1:
         assert "no prior experience required" in out
         assert "## Summary" in out
         assert "walks through 2 knowledge base entries" in out
+
+
+class TestTutorialEntryCap:
+    """Backup issue #103 — ``generate_tutorial`` must cap KB entries fed to
+    the LLM at 10 (#178 protocol).
+
+    Before the fix ``entry_summaries`` iterated **all** filtered entries, so
+    thick domains (medical-research: 602 KB files, gaming: 208, korean:
+    162) blew the DeepSeek-V4-Flash reasoning-model prompt out of the safe
+    window and timed out producing a 0B empty shell.  The cap keeps the
+    prompt small while still grounding the tutorial in domain facts — and
+    thin domains (well under 10) must be untouched.
+    """
+
+    @staticmethod
+    def _prompt_entry_ids(n_entries: int) -> tuple[list[str], str]:
+        """Run ``generate_tutorial`` over *n_entries* fake KB entries and
+        return the ``[id]`` markers that reached the LLM prompt.
+        """
+        entries = [
+            _entry(str(i), f"Titre {i}", f"Résumé {i}", f"https://f24.fr/{i}")
+            for i in range(1, n_entries + 1)
+        ]
+        captured: dict[str, str] = {}
+
+        def fake_prompt(
+            audience: str,
+            audience_desc: str,
+            entry_summaries: str,
+            *args: object,
+            **kwargs: object,
+        ) -> str:
+            captured["summaries"] = entry_summaries
+            return "SENTINEL-PROMPT"
+
+        with (
+            patch("autoinfo.output.KBStore") as mkb,
+            patch("autoinfo.output._call_llm_for_tutorial", return_value={}),
+            patch(
+                "autoinfo.output._build_tutorial_markdown_prompt",
+                side_effect=fake_prompt,
+            ),
+        ):
+            store = MagicMock()
+            store.list_entries.return_value = entries
+            mkb.return_value = store
+            out = generate_tutorial(
+                domain="french-learning", target_audience="student", format="markdown"
+            )
+            assert isinstance(out, str)
+        markers = re.findall(r"\[(\d+)\]", captured.get("summaries", ""))
+        return markers, captured.get("summaries", "")
+
+    def test_thick_domain_prompt_capped_at_ten_entries(self) -> None:
+        markers, summaries = self._prompt_entry_ids(15)
+        assert len(markers) == 10, (len(markers), summaries)
+        assert "[11]" not in summaries, "entry #11 leaked past the cap"
+        assert "[15]" not in summaries, "tail entries leaked past the cap"
+
+    def test_capped_entries_carry_real_source_urls(self) -> None:
+        _, summaries = self._prompt_entry_ids(15)
+        assert summaries.count("(Source: https://f24.fr/") == 10, summaries
+
+    def test_thin_domain_under_cap_unchanged(self) -> None:
+        markers, _ = self._prompt_entry_ids(3)
+        assert markers == ["1", "2", "3"], markers

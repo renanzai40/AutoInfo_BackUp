@@ -1,0 +1,125 @@
+# Regression #103: generate_tutorial must cap the KB entries fed to the LLM
+# prompt at 10 (#178 protocol) so thick domains (medical-research: 602 KB
+# files, gaming: 208, korean: 162) never blow the reasoning-model prompt out
+# of the safe window and time out producing a 0B empty shell.
+#
+# Before the fix: `entry_summaries` iterated all filtered entries, so thick
+# domains reached the DeepSeek-V4-Flash reasoning model with a huge prompt,
+# the generation timed out, and the tutorial came back as an empty file.
+# After the fix: exactly the 10 leading representative entries reach the LLM
+# prompt (entry #11 never appears), each entry keeps its (Source: …) URL so
+# the LLM can only cite verifiable URLs (backup #101 convention on
+# tutorials), and thin domains (well under 10) pass all their entries through
+# untouched.
+#
+# Deterministic (requires_env: []): KBStore + LLM seams are patched in the
+# subprocess (same pattern as tests/output/test_tutorial_completeness.py), so
+# the scenario runs in a bare sandbox — no LLM key, no network.  Runs in an
+# ABSOLUTE temp cwd.
+name: regression-tutorial-entry-cap
+description: "Regression #103: generate_tutorial caps KB entries in the LLM prompt at 10 (#178)"
+category: regression
+regression: true
+regression_issue: "#103"
+requires_env: []
+steps:
+  - name: "thick domain: exactly 10 leading entries reach the LLM prompt, entry #11 never"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, re, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import generate_tutorial
+
+      ENTRIES = [
+          {"entry_id": f"e{i}", "title": f"AI funding round {i}",
+           "summary": f"Startup {i} raised $20M.",
+           "source_url": f"https://techcrunch.com/{i}",
+           "source_type": "rss", "source_platform": "techcrunch",
+           "relevance_score": 90 - (i % 10), "tags": "[]",
+           "tier": "01-Raw", "collected_at": "2026-07-15T10:00:00Z"}
+          for i in range(1, 16)
+      ]
+      captured = {}
+
+      def fake_prompt(audience, audience_desc, entry_summaries, *args, **kwargs):
+          captured["summaries"] = entry_summaries
+          return "SENTINEL-PROMPT"
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-103-a-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_tutorial", return_value={}), \
+               patch("autoinfo.output._build_tutorial_markdown_prompt",
+                     side_effect=fake_prompt):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_tutorial(domain="ai-commercial", format="markdown")
+          assert isinstance(out, str), type(out)
+          markers = re.findall(r"\[e(\d+)\]", captured["summaries"])
+          assert len(markers) == 10, (len(markers), captured["summaries"])
+          assert "[e11]" not in captured["summaries"], "entry #11 leaked past the cap"
+          assert "[e15]" not in captured["summaries"], "tail entries leaked past the cap"
+          assert captured["summaries"].count("(Source: https://techcrunch.com/") == 10
+          print("TUTORIAL_CAP_TEN_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["TUTORIAL_CAP_TEN_OK"]
+
+  - name: "thin domain (3 entries << 10): all entries pass through untouched"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import generate_tutorial
+
+      ENTRIES = [
+          {"entry_id": f"e{i}", "title": f"AI funding round {i}",
+           "summary": f"Startup {i} raised $20M.",
+           "source_url": f"https://techcrunch.com/{i}",
+           "source_type": "rss", "source_platform": "techcrunch",
+           "relevance_score": 90 - i, "tags": "[]",
+           "tier": "01-Raw", "collected_at": "2026-07-15T10:00:00Z"}
+          for i in range(1, 4)
+      ]
+      captured = {}
+
+      def fake_prompt(audience, audience_desc, entry_summaries, *args, **kwargs):
+          captured["summaries"] = entry_summaries
+          return "SENTINEL-PROMPT"
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-103-b-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_tutorial", return_value={}), \
+               patch("autoinfo.output._build_tutorial_markdown_prompt",
+                     side_effect=fake_prompt):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_tutorial(domain="ai-commercial", format="markdown")
+          assert isinstance(out, str), type(out)
+          assert "[e1]" in captured["summaries"], "entry #1 dropped from thin domain"
+          assert "[e3]" in captured["summaries"], "entry #3 dropped from thin domain"
+          print("TUTORIAL_CAP_THIN_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["TUTORIAL_CAP_THIN_OK"]
