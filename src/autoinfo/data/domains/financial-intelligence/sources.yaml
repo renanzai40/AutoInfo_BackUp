@@ -192,7 +192,7 @@ sources:
     type: rss
     url: https://feeds.a.dj.com/rss/RSSMarketsMain.xml
     quality_tier: 1
-    enabled: true
+    enabled: false
     tos_classification: licensed
     fetch_depth: abstract
     frequency: hourly
