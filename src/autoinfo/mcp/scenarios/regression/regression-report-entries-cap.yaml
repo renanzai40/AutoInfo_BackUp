@@ -1,0 +1,124 @@
+# Regression #106: generate_report must cap the KB entries fed to thematic
+# grouping / LLM synthesis at 200 (#178 protocol), and _group_by_theme must
+# fall back to deterministic grouping on a chaotic LLM theme burst (>20 themes
+# or >6 single-entry groups).
+#
+# Before the fix: report/column called list_entries(limit=5000) with no entry
+# cap, so thick domains (financial-intelligence: 470 KB entries) fed every
+# entry into _group_by_theme → 59 LLM batches ÷ 4 workers × ~30s+ each → the
+# generation timed out and the report/column came back as an empty 0B file.
+# generate_digest already capped at query_limit=200 and tutorial at 10 (#103) —
+# report was the same gap.  After the fix: exactly the 200 leading entries
+# reach the grouping stage (entry #201 never appears), thin domains (well under
+# 200) pass all entries through untouched, and a chaotic LLM grouping burst
+# falls back to deterministic grouping instead of producing an oversized
+# synthesis prompt that times out.
+#
+# Deterministic (requires_env: []): KBStore + grouping/synthesis seams are
+# patched in the subprocess (same pattern as tests/output/test_report_entries_cap.py),
+# so the scenario runs in a bare sandbox — no LLM key, no network.  Runs in an
+# ABSOLUTE temp cwd.
+name: regression-report-entries-cap
+description: "Regression #106: generate_report caps KB entries at 200 before grouping + grouping chaos guard"
+category: regression
+regression: true
+regression_issue: "#106"
+requires_env: []
+steps:
+  - name: "thick domain: exactly 200 leading entries reach the grouping stage, entry #201 never"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import generate_report
+
+      SOURCE_TYPES = ("rss", "api", "web")
+      ENTRIES = [
+          {"entry_id": f"e{i}", "title": f"AI funding round {i}",
+           "summary": f"Startup {i} raised $20M.",
+           "source_url": f"https://techcrunch.com/{i}",
+           "source_type": SOURCE_TYPES[i % len(SOURCE_TYPES)],
+           "source_platform": "techcrunch",
+           "relevance_score": 90 - (i % 10), "tags": "[]",
+           "tier": "01-Raw", "collected_at": "2026-07-15T10:00:00Z"}
+          for i in range(1, 501)
+      ]
+      captured = {}
+
+      def fake_group(extractor, ents, domain="", domains=None):
+          captured["count"] = len(ents)
+          return [{"theme": "General", "description": "", "entries": list(ents)}]
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-106-a-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._group_by_theme", side_effect=fake_group), \
+               patch("autoinfo.output._generate_executive_summary",
+                     return_value={"executive_summary": "Summary",
+                                   "key_findings": [], "recommendations": []}):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              out = generate_report(domain="medical-research", format="markdown")
+          assert isinstance(out, str), type(out)
+          assert captured["count"] == 200, (captured["count"], "expected 200 cap")
+          print("REPORT_CAP_200_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["REPORT_CAP_200_OK"]
+
+  - name: "chaotic LLM grouping burst (>20 themes) falls back to deterministic grouping"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import _group_by_theme
+
+      SOURCE_TYPES = ("rss", "api", "web")
+      ENTRIES = [
+          {"entry_id": f"e{i}", "title": f"AI funding round {i}",
+           "summary": f"Startup {i} raised $20M.",
+           "source_url": f"https://techcrunch.com/{i}",
+           "source_type": SOURCE_TYPES[i % len(SOURCE_TYPES)],
+           "source_platform": "techcrunch",
+           "relevance_score": 90 - (i % 10), "tags": "[]",
+           "tier": "01-Raw", "collected_at": "2026-07-15T10:00:00Z"}
+          for i in range(1, 26)
+      ]
+      chaos = [
+          {"theme": f"Chaos-Theme-{i}", "description": "", "entries": [ENTRIES[i - 1]]}
+          for i in range(1, 26)
+      ]
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-106-b-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output._run_grouping_batches", return_value=chaos):
+              result = _group_by_theme(MagicMock(), ENTRIES, domain="ai-commercial")
+          assert isinstance(result, list), type(result)
+          assert not any(g["theme"].startswith("Chaos-Theme-") for g in result), (
+              "chaotic burst survived the chaos guard"
+          )
+          total = sum(len(g["entries"]) for g in result)
+          assert total == 25, (total, "deterministic fallback lost entries")
+          print("GROUPING_CHAOS_GUARD_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["GROUPING_CHAOS_GUARD_OK"]

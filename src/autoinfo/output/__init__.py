@@ -6236,6 +6236,14 @@ def generate_report(
     # exclude_keywords blacklist BEFORE thematic grouping / LLM synthesis.
     entries = _filter_entries_by_domain_exclusions(entries, domain)
 
+    # --- Entry cap (issue #106) ----------------------------------------------
+    # Uncapped entries flowing into _group_by_theme blow past the CLI timeout on
+    # heavy reasoning LLMs (470 entries × 8/batch ÷ 4 workers × ~30s+ each).
+    # Align with generate_digest's query_limit default (200) so report generates
+    # reliably on the same LLM as the other products. The grouping chaos-guard is
+    # kept independently and complements this cap.
+    entries = entries[:200]
+
     # --- Source-label enrichment (issue #325) --------------------------------
     # Mirror the digest path: stamp the derived specific source name on every
     # entry so ALL report-path surfaces (markdown references, section entry
@@ -6910,11 +6918,32 @@ def _group_by_theme(
         entries[i : i + batch_size] for i in range(0, len(entries), batch_size)
     ]
 
-    merged = _run_grouping_batches(
-        extractor, batches, domain=domain, domains=domains
+    merged = _merge_theme_groups(
+        _run_grouping_batches(extractor, batches, domain=domain, domains=domains)
     )
 
-    return _ensure_all_entries_grouped(_merge_theme_groups(merged), entries)
+    # -- Chaos guard (issue #106) -------------------------------------------
+    # The LLM sometimes returns an unwieldy burst of mostly garbage themes
+    # (many single-entry groups). A large group count or surplus of
+    # single-entry groups produces an oversized/disordered synthesis prompt
+    # downstream (report/column), which the extractor cannot parse → repeated
+    # retries → timeout / 0-byte output. Treat such results as unreliable and
+    # fall back to deterministic grouping (same sanitization as the ==1-group /
+    # no-group fallback paths).
+    if len(merged) > 20 or sum(
+        1 for g in merged if len(g.get("entries", [])) <= 1
+    ) > 6:
+        logger.warning(
+            "LLM grouping produced %d themes (%d single-entry) — exceeded "
+            "chaos thresholds, falling back to deterministic grouping",
+            len(merged),
+            sum(1 for g in merged if len(g.get("entries", [])) <= 1),
+        )
+        deterministic = _deterministic_grouping(entries, domain=domain)
+        if deterministic is not None:
+            merged = _merge_theme_groups(deterministic)
+
+    return _ensure_all_entries_grouped(merged, entries)
 
 
 def _run_grouping_batches(
