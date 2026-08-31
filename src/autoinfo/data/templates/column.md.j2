@@ -15,7 +15,12 @@
 
 ## Deep Dive
 
+{% if sections and sections[0].marker is defined %}
+{{ sections[0].marker }}
+
+{% endif %}
 {% for section in sections %}
+{% if section.marker is defined %}{% else %}
 ### {{ section.title }}
 
 {{ section.content }}
@@ -26,6 +31,7 @@
 {% for entry in section.entries %}
 | {{ loop.index }} | {{ entry.title }} | {{ entry.summary | product_summary or "—" }} |
 {% endfor %}
+{% endif %}
 {% endif %}
 
 {% else %}
@@ -61,8 +67,10 @@ _No developments this week._
 ## Implications & Outlook
 
 {% for sec in sections %}
+{% if sec.marker is defined %}{% else %}
 {% set _impl = implications[loop.index0] if (implications and implications[loop.index0] is defined and implications[loop.index0]) else ("Covered in the Deep Dive; watch for follow-up developments next period.") %}
 - **{{ sec.title }}** — {{ _impl }}
+{% endif %}
 {% else %}
 _No outlook sections available._
 {% endfor %}
@@ -79,7 +87,9 @@ _No outlook sections available._
 {% endfor %}
 {% else %}
 {% for sec in sections %}
+{% if sec.marker is defined %}{% else %}
 {{ loop.index }}. Review the {{ sec.title }} section for the underlying developments.
+{% endif %}
 {% endfor %}
 {% endif %}
 

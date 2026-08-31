@@ -316,8 +316,14 @@ class TestColumnNormalizeSections:
             product_family="column",
         )
 
-        assert len(flat["sections"]) >= 8
-        for section in flat["sections"]:
+        # #120 (C4): the deterministic fallback prepends the honest "grouped
+        # by source" marker dict as the leading sections entry — the remaining
+        # entries are the real entry-derived sections.
+        _marker = "> *Grouped by source \u2014 not semantic topics*"
+        assert flat["sections"][0]["marker"] == _marker
+        content_sections = [s for s in flat["sections"] if "marker" not in s]
+        assert len(content_sections) >= 8
+        for section in content_sections:
             assert section["title"]
             assert section["content"]
 

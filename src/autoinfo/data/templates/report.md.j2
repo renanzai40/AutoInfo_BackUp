@@ -32,6 +32,10 @@
 ## Sections
 
 {% for section in sections %}
+{% if section.marker is defined %}
+{{ section.marker }}
+
+{% else %}
 ### {{ section.title }}
 
 {{ section.content }}
@@ -42,6 +46,7 @@
 {% for entry in section.entries %}
 | {{ loop.index }} | {% if source_tier_badge and entry.source_tier %}[{{ entry.source_tier }}] {% endif %}{{ entry.title }} | {{ entry.summary | product_summary or "—" }} |
 {% endfor %}
+{% endif %}
 {% endif %}
 
 {% endfor %}

@@ -4893,6 +4893,11 @@ def _deterministic_column_sections(
             return sections
     # One section per entry (title + summary) — real content, never
     # fabricated, and never an empty Deep Dive when entries exist.
+    _log_grouping_degraded(
+        "entry_level", "entry_level",
+        f"deterministic column sections fell back to one section per entry "
+        f"({len(entries)} sections) — <8 theme sections were derivable",
+    )
     sections = []
     for e in entries:
         title = str(e.get("title") or "").strip()
@@ -5238,6 +5243,14 @@ def _normalize_digest_product_context(
         # report product rendered `**Sections**: 0` + an empty shell whenever
         # the LLM synthesis carried no explicit sections).
         sections = _deterministic_column_sections(entries_list, domain)
+        if product_family == "column" and len(sections) > 1:
+            # #120 (C4): entry-level column sections are BY DESIGN, but they
+            # are a degraded (non-semantic) grouping — the rendered Deep Dive
+            # must carry the honest "grouped by source" marker so readers
+            # never mistake one-section-per-entry for semantic topics.
+            sections = [{
+                "marker": _grouping_degradation_marker("entry_level"),
+            }] + sections
     flat["sections"] = sections
 
     # --- Tutorial sections (issue #342) -----------------------------------
@@ -6039,6 +6052,7 @@ class ReportData:
     sections: list[ReportSection] = field(default_factory=list)
     references: list[dict[str, Any]] = field(default_factory=list)
     appendices: list[dict[str, Any]] = field(default_factory=list)
+    grouping_degradation_marker: str = ""
 
 
 def generate_report(
@@ -6383,6 +6397,7 @@ def generate_report(
 
     # -- Thematic grouping via LLM ----------------------------------------
     extractor = LLMExtractor()
+    _reset_grouping_degraded()
     groupings = _group_by_theme(
         extractor, entries, domain=domain,
         domains=report_domains if is_cross_domain else None,
@@ -6593,6 +6608,21 @@ def generate_report(
         else "Report"
     )
 
+    # -- Honest-degradation annotation (issue #120, C4) ---------------------
+    # The rendered report must say "Grouped by source — not semantic topics"
+    # when the grouping degraded (LLM fail / chaos / no groups) instead of
+    # silently presenting source-type/keyword headings as semantic themes.
+    # The digest/column paths annotate at their own seams; the report path
+    # consumes the module-level flag the degradation seams set.
+    report_degraded_reason = (
+        "no_groups" if _single_general_group(groupings) else "llm_failure"
+    ) if _grouping_degraded else ""
+    grouping_degradation_marker = (
+        _grouping_degradation_marker(report_degraded_reason)
+        if report_degraded_reason
+        else ""
+    )
+
     report_data = ReportData(
         title=f"{report_title_domain} \u2014 {report_h1_word}",
         generated_at=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
@@ -6607,6 +6637,7 @@ def generate_report(
         key_metrics=key_metrics,
         sections=sections,
         references=references,
+        grouping_degradation_marker=grouping_degradation_marker,
     )
 
     # -- Build context for delivery gates ----------------------------------
@@ -6887,6 +6918,108 @@ _GROUPING_TARGET_RANGE: Final[tuple[int, int]] = (8, 12)
 # count-nudge merge: pairs below this are distinct topics and stay separate.
 _GROUPING_TARGET_MIN_SIMILARITY: Final[float] = 0.4
 
+# Honest-degradation annotation (issue #120, C4): when grouping degrades (LLM
+# fail/timeout, chaos guard, 0/1-group "General" catch-all, or entry-level
+# column sections), the rendered product must say so plainly instead of
+# silently showing source-type/keyword headings as if they were semantic
+# topics.  The marker is pinned byte-for-byte — tests assert the exact string.
+_GROUPING_DEGRADATION_MARKER: Final[str] = (
+    "> *Grouped by source \u2014 not semantic topics*"
+)
+
+# Module-level degradation flag: set by ``_log_grouping_degraded`` on every
+# degradation path, consumed by ``generate_report`` (after ``_group_by_theme``)
+# to annotate the rendered output.  A module attribute (not a return value)
+# because degraded grouping happens inside worker batch threads.  Always reset
+# before a grouping run so a previous product's degradation cannot leak into
+# the next one.
+_grouping_degraded: bool = False
+
+
+def _reset_grouping_degraded() -> None:
+    """Reset the module-level grouping-degradation flag before a grouping run."""
+    global _grouping_degraded
+    _grouping_degraded = False
+
+
+def _grouping_degradation_marker(reason: str) -> str:
+    """Return the pinned "grouped by source" honesty marker (issue #120, C4).
+
+    The rendered annotation is a single constant string for every degradation
+    path; *reason* (``llm_failure``/``timeout``/``chaos``/``no_groups``/
+    ``entry_level``) is accepted for symmetry with the structured log so the
+    marker helper and the log event stay on the same vocabulary, but the
+    marker itself does not change.  The marker is placed as a leading line of
+    the sections block in the rendered markdown (report, digest, column).
+    """
+    return _GROUPING_DEGRADATION_MARKER
+
+
+def _log_grouping_degraded(
+    reason: str, grouping: str, detail: str
+) -> None:
+    """Structured ``event="grouping_degraded"`` warning (issue #120, C4).
+
+    Emitted on EVERY silent-hop degradation path so operators can observe that
+    a product shipped with a non-semantic grouping without having to diff the
+    rendered output.  ``reason`` is one of ``llm_failure``/``timeout``/
+    ``chaos``/``no_groups``/``entry_level``; ``grouping`` is the kind actually
+    rendered (``source_type``/``keyword``/``general``/``entry_level``).
+
+    Also records the degradation on the module-level flag so the report path
+    (which renders via :class:`ReportData`) can annotate its output even when
+    the grouping happened inside a worker batch thread.
+    """
+    global _grouping_degraded
+    _grouping_degraded = True
+    logger.warning(
+        "grouping_degraded event=%r reason=%r grouping=%r %s",
+        "grouping_degraded",
+        reason,
+        grouping,
+        detail,
+    )
+
+
+def _deterministic_grouping_kind(groups: list[dict[str, Any]] | None) -> str:
+    """Classify the grouping kind ``_deterministic_grouping`` produced.
+
+    Returns ``"keyword"`` when any group name matches a keyword classifier
+    spelling (title-cased topic keyword), ``"source_type"`` when every group
+    maps through ``_SOURCE_TYPE_THEME_LABEL``-derived labels, and
+    ``"general"`` otherwise (a single catch-all).  Used to annotate the
+    structured degradation log with the grouping actually rendered.
+    """
+    if not groups:
+        return "general"
+    source_type_hits = 0
+    for g in groups:
+        theme = str(g.get("theme") or "").strip()
+        if not theme:
+            continue
+        key = theme.lower()
+        if key == "general":
+            return "general"
+        if key == "additional topics":
+            continue
+        if key in {v.lower() for v in _SOURCE_TYPE_THEME_LABELS.values()}:
+            source_type_hits += 1
+            continue
+        return "keyword"
+    if source_type_hits:
+        return "source_type"
+    return "general"
+
+
+def _single_general_group(groups: list[dict[str, Any]] | None) -> bool:
+    """True when *groups* is exactly one "General" catch-all group (the
+    0/1-group no-meaningful-topic collapse)."""
+    return bool(
+        groups
+        and len(groups) == 1
+        and str(groups[0].get("theme") or "").strip().lower() == "general"
+    )
+
 
 def _group_by_theme(
     extractor: LLMExtractor,
@@ -6937,17 +7070,31 @@ def _group_by_theme(
         return []
 
     from autoinfo.output import fault_inject  # noqa: PLC0415
+    _reset_grouping_degraded()
 
     try:
         fault_inject.maybe_fault("group")
-    except Exception:
+    except Exception as fault_exc:
         groups = _deterministic_grouping(entries, domain=domain)
         if groups is not None:
             # Issue #9 (reopened): the deterministic fallback may carry
             # keyword-derived generic themes — run the same blocklist/synonym
             # pass the LLM-grouping path uses so the fault-inject path cannot
             # leak ``### New`` / ``### Year`` labels either.
+            grouping = _deterministic_grouping_kind(groups)
+            _log_grouping_degraded(
+                "timeout" if isinstance(fault_exc, TimeoutError) else "llm_failure",
+                grouping,
+                f"fault-inject {type(fault_exc).__name__} at seam 'group'; "
+                f"deterministic fallback produced {len(groups)} groups",
+            )
             return _merge_theme_groups(groups, target_count=_GROUPING_TARGET_RANGE)
+        _log_grouping_degraded(
+            "timeout" if isinstance(fault_exc, TimeoutError) else "llm_failure",
+            "general",
+            f"fault-inject {type(fault_exc).__name__} at seam 'group'; "
+            "no distinct topics detectable, single General group",
+        )
         return [
             {
                 "theme": "General",
@@ -6984,8 +7131,21 @@ def _group_by_theme(
         )
         deterministic = _deterministic_grouping(entries, domain=domain)
         if deterministic is not None:
+            _log_grouping_degraded(
+                "chaos",
+                _deterministic_grouping_kind(deterministic),
+                f"LLM grouping produced {len(merged)} themes "
+                f"({sum(1 for g in merged if len(g.get('entries', [])) <= 1)} "
+                "single-entry), chaos guard fell back to deterministic "
+                f"grouping with {len(deterministic)} groups",
+            )
             merged = _merge_theme_groups(
                 deterministic, target_count=_GROUPING_TARGET_RANGE
+            )
+        else:
+            _log_grouping_degraded(
+                "chaos", "general", "no distinct topics detectable after "
+                "chaos fallback, single General group",
             )
 
     return _ensure_all_entries_grouped(merged, entries)
@@ -7041,7 +7201,16 @@ def _group_batch_by_theme(
     if not groups_raw:
         groups = _deterministic_grouping(entries, domain=domain)
         if groups is not None:
+            _log_grouping_degraded(
+                "llm_failure", _deterministic_grouping_kind(groups),
+                f"LLM returned no groups for a {len(entries)}-entry batch; "
+                f"deterministic fallback produced {len(groups)} groups",
+            )
             return _merge_theme_groups(groups, target_count=_GROUPING_TARGET_RANGE)
+        _log_grouping_degraded(
+            "no_groups", "general", "no distinct topics detectable for a "
+            f"{len(entries)}-entry batch, single General group",
+        )
         return [
             {
                 "theme": "General",
@@ -7085,7 +7254,17 @@ def _group_batch_by_theme(
         )
         groups = _deterministic_grouping(entries, domain=domain)
         if groups is not None:
+            _log_grouping_degraded(
+                "llm_failure", _deterministic_grouping_kind(groups),
+                f"LLM groups matched only {matched_count}/{len(entries)} "
+                f"entries; deterministic fallback produced {len(groups)} groups",
+            )
             return _merge_theme_groups(groups, target_count=_GROUPING_TARGET_RANGE)
+        _log_grouping_degraded(
+            "no_groups", "general", f"LLM groups matched only "
+            f"{matched_count}/{len(entries)} entries and no distinct topics "
+            "were detectable, single General group",
+        )
         return [
             {
                 "theme": "General",
@@ -8423,6 +8602,7 @@ def _report_data_to_dict(
         ],
         "references": labeled_refs,
         "appendices": report_data.appendices,
+        "grouping_degradation_marker": report_data.grouping_degradation_marker,
     }
 
 
@@ -8546,6 +8726,20 @@ def _render_report_template(report_data: ReportData, source_tier_badge: bool = T
     env = _get_jinja_env()
     template = env.from_string(template_source)
 
+    report_marker = getattr(report_data, "grouping_degradation_marker", "")
+    sections = [
+        {
+            "title": s.title,
+            "content": s.content,
+            "entries": s.items,
+        }
+        for s in report_data.sections
+    ]
+    if report_marker:
+        # #120 (C4): the honest "grouped by source" marker leads the section
+        # list when grouping degraded (LLM fail / chaos / no groups).
+        sections.insert(0, {"marker": report_marker})
+
     return str(
         template.render(
             title=report_data.title,
@@ -8556,14 +8750,7 @@ def _render_report_template(report_data: ReportData, source_tier_badge: bool = T
             key_findings=report_data.key_findings,
             recommendations=report_data.recommendations,
             source_tier_badge=source_tier_badge,
-            sections=[
-                {
-                    "title": s.title,
-                    "content": s.content,
-                    "entries": s.items,
-                }
-                for s in report_data.sections
-            ],
+            sections=sections,
             references=report_data.references,
             appendices=report_data.appendices,
         )
@@ -11200,6 +11387,12 @@ def _render_markdown(context: dict[str, Any]) -> str:
     env = _get_jinja_env()
     template = env.get_template("digest.md.j2")
     rendered = template.render(**context)
+    marker = str(context.get("grouping_degradation_marker") or "")
+    if marker and rendered:
+        # #120 (C4): the honest "grouped by source" marker leads the digest
+        # body when grouping degraded — a blockquote so it is visible but
+        # clearly separate from the entry headings.
+        rendered = f"{marker}\n\n{rendered}"
     # Issue #78: R4-uniform final decode — a single post-render pass strips
     # any residual HTML entities (&#039;/&amp;/&#8217;/...) that reached the
     # product despite the storage-layer decode (pre-#51 entries, bypassed
