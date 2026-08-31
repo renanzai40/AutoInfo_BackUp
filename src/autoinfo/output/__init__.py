@@ -76,7 +76,11 @@ _GENERIC_THEME_LABELS: Final[frozenset[str]] = frozenset({
 # normalizes to.  Applied in ``_normalize_theme_text`` BEFORE the near-dup
 # pass so synonym variants merge in the exact-name pass (e.g. ``Year`` and
 # ``The Year`` collapse onto one group before the blocklist runs).
-_THEME_SYNONYMS: Final[dict[str, str]] = {"year": "the year"}
+_THEME_SYNONYMS: Final[dict[str, str]] = {
+    "year": "the year",
+    "ml": "machine learning",
+    "llm": "large language models",
+}
 
 # Structural catch-all themes the report/product templates render as their
 # own sections.  Exempt from the generic-label blocklist (they are not
@@ -7539,20 +7543,39 @@ def _keyword_group_entries(
     if len(keyword_names) == 1 and not groups.get("__unmatched__"):
         return None
 
+    # #120 (C5): resolve each keyword group to a user-facing label instead of
+    # a bare ``name.title()`` keyword word.  Resolution order: (a) the domain
+    # config's TopicConfig group/name, (b) the curated synonym map, (c) fold
+    # into Additional Topics.  Entries are reassigned, never dropped.
+    topic_labels = _keyword_topic_labels(domain)
     result: list[dict[str, Any]] = []
+    resolved_names: list[str] = []
+    folded: list[dict[str, Any]] = []
     for name, es in groups.items():
         if name == "__unmatched__":
             continue
+        label = topic_labels.get(name)
+        if not label and name in _THEME_SYNONYMS:
+            label = _THEME_SYNONYMS[name].title()
+        if not label:
+            folded.extend(es)
+            continue
+        resolved_names.append(name)
         result.append({
-            "theme": name.title(),
+            "theme": label,
             # #338: the old "N entries related to '<kw>'." description exposed
             # the internal keyword-search/counting to end users — use a
             # user-facing section lead instead.
-            "description": f"Key developments and analysis on {name.title()}.",
+            "description": f"Key developments and analysis on {label}.",
             "entries": es,
         })
 
-    unmatched = groups.get("__unmatched__", [])
+    if not resolved_names:
+        return None
+    if len(resolved_names) == 1 and not groups.get("__unmatched__") and not folded:
+        return None
+
+    unmatched = groups.get("__unmatched__", []) + folded
     if unmatched:
         result.append({
             "theme": "Additional Topics",
@@ -7642,6 +7665,75 @@ def _seed_topic_keywords(domain: str) -> list[str]:
             if isinstance(kw, str) and kw.strip():
                 keywords.append(kw.strip())
     return keywords
+
+
+def _keyword_topic_labels(domain: str) -> dict[str, str]:
+    """Map normalized keyword -> user-facing section label (#120, C5).
+
+    Keyword-group headers must never render as bare ``name.title()`` words
+    ("Apple", "Policy").  Label sources, in priority order:
+
+    1. the domain's CURRENT ``TopicConfig`` (``group`` if set else ``name``,
+       keyed by every topic keyword plus the ``name``/``group`` themselves,
+       all normalized) — reads the live config, never a hardcoded list;
+    2. the demo-domain seed ``topics`` (the same seed
+       :func:`_load_keyword_topics` merges) via ``setdefault`` — config wins;
+    3. ``{}`` — FAIL-OPEN: missing/unreadable config or absent domain falls
+       back to the seed alone; a missing seed yields an empty map and the
+       caller folds keyword groups into ``Additional Topics``.
+    """
+    labels: dict[str, str] = {}
+
+    config_path = get_config_path()
+    if config_path is not None and config_path.is_file():
+        try:
+            config = load_config(config_path)
+        except Exception:
+            config = None
+        if config is not None:
+            for d in config.domains:
+                if d.name == domain:
+                    for t in d.topics:
+                        label = (t.group or t.name or "").strip()
+                        if not label:
+                            continue
+                        for key in (
+                            [t.name, t.group] if t.group else [t.name]
+                        ):
+                            nk = _normalize_text(key)
+                            if nk:
+                                labels[nk] = label
+                        for kw in t.keywords:
+                            nk = _normalize_text(str(kw))
+                            if nk:
+                                labels[nk] = label
+                    break
+
+    seed_path = _DEMO_DOMAINS_DIR / domain / "sources.yaml"
+    if seed_path.is_file():
+        try:
+            with open(seed_path, encoding="utf-8") as f:
+                seed = yaml.safe_load(f) or {}
+        except Exception:
+            seed = {}
+        for topic in seed.get("topics") or []:
+            label = (str(topic.get("group") or "") or
+                     str(topic.get("name") or "")).strip()
+            if not label:
+                continue
+            for key in ([str(topic.get("name"))]
+                        if not str(topic.get("group") or "").strip()
+                        else [str(topic.get("name")),
+                              str(topic.get("group"))]):
+                nk = _normalize_text(key)
+                if nk:
+                    labels.setdefault(nk, label)
+            for kw in topic.get("keywords") or []:
+                nk = _normalize_text(str(kw))
+                if nk:
+                    labels.setdefault(nk, label)
+
+    return labels
 
 
 def _match_keyword(
