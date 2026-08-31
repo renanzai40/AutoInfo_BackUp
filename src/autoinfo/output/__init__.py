@@ -6878,6 +6878,15 @@ _GROUPING_BATCH_SIZE = 8
 # provider-level concurrency stays bounded even when the pool is this wide.
 _GROUPING_MAX_WORKERS = 4
 
+# Degraded-path (deterministic / chaos-guard fallback) topic target: those
+# fallbacks over-split into fine-grained groups, so merge near-duplicates down
+# toward 8-12 topics (reassign, never drop).  LLM happy path is untouched.
+_GROUPING_TARGET_RANGE: Final[tuple[int, int]] = (8, 12)
+
+# Minimum Jaccard similarity (normalized theme tokens) for the degraded-path
+# count-nudge merge: pairs below this are distinct topics and stay separate.
+_GROUPING_TARGET_MIN_SIMILARITY: Final[float] = 0.4
+
 
 def _group_by_theme(
     extractor: LLMExtractor,
@@ -6938,7 +6947,7 @@ def _group_by_theme(
             # keyword-derived generic themes — run the same blocklist/synonym
             # pass the LLM-grouping path uses so the fault-inject path cannot
             # leak ``### New`` / ``### Year`` labels either.
-            return _merge_theme_groups(groups)
+            return _merge_theme_groups(groups, target_count=_GROUPING_TARGET_RANGE)
         return [
             {
                 "theme": "General",
@@ -6975,7 +6984,9 @@ def _group_by_theme(
         )
         deterministic = _deterministic_grouping(entries, domain=domain)
         if deterministic is not None:
-            merged = _merge_theme_groups(deterministic)
+            merged = _merge_theme_groups(
+                deterministic, target_count=_GROUPING_TARGET_RANGE
+            )
 
     return _ensure_all_entries_grouped(merged, entries)
 
@@ -7030,7 +7041,7 @@ def _group_batch_by_theme(
     if not groups_raw:
         groups = _deterministic_grouping(entries, domain=domain)
         if groups is not None:
-            return groups
+            return _merge_theme_groups(groups, target_count=_GROUPING_TARGET_RANGE)
         return [
             {
                 "theme": "General",
@@ -7074,7 +7085,7 @@ def _group_batch_by_theme(
         )
         groups = _deterministic_grouping(entries, domain=domain)
         if groups is not None:
-            return groups
+            return _merge_theme_groups(groups, target_count=_GROUPING_TARGET_RANGE)
         return [
             {
                 "theme": "General",
@@ -7489,11 +7500,19 @@ def _normalize_theme_text(value: str) -> str:
 
 def _merge_theme_groups(
     groups: list[dict[str, Any]],
+    target_count: tuple[int, int] | None = None,
 ) -> list[dict[str, Any]]:
     """Merge groups that share the same normalized theme name.
 
     Entries are deduplicated by ``entry_id`` when merging so the same entry
     is never reported under a theme twice.
+
+    ``target_count`` is a degraded-path-only nudge: when set and the merged
+    count exceeds the upper bound, the most-similar near-duplicate themes are
+    merged until the count lands within ``[min, max]`` (or no similar pair
+    remains) — entries are reassigned, never dropped, and the count is never
+    forced up.  When ``None`` (LLM happy path) the behavior is byte-identical
+    to the pre-nudge code.
     """
     from collections import defaultdict
 
@@ -7589,7 +7608,7 @@ def _merge_theme_groups(
         if _normalize_theme_text(g["theme"]) in _GENERIC_THEME_LABELS
     ]
     if not blocklisted:
-        return survivors
+        return _apply_grouping_target(survivors, target_count)
 
     by_norm: dict[str, dict[str, Any]] = {}
     for g in survivors:
@@ -7637,7 +7656,65 @@ def _merge_theme_groups(
             if eid:
                 seen.add(eid)
             target["entries"].append(e)
-    return survivors
+    return _apply_grouping_target(survivors, target_count)
+
+
+def _apply_grouping_target(
+    groups: list[dict[str, Any]],
+    target_count: tuple[int, int] | None,
+) -> list[dict[str, Any]]:
+    """Nudge *groups* toward the ``[min, max]`` count on the degraded path.
+
+    Optional: with ``target_count=None`` (LLM happy path) returns *groups*
+    unchanged, so the pre-nudge behavior is byte-identical.  When set and the
+    group count exceeds ``max``, repeatedly merge the most-similar pair of
+    near-duplicate themes (by Jaccard on normalized tokens) until the count
+    is within range or no similar pair remains.  Entries are reassigned into
+    the merged group (deduped by ``entry_id``) — never dropped — and the
+    count is never forced upward below ``min``.
+    """
+    if target_count is None or len(groups) <= target_count[1]:
+        return groups
+
+    pending = list(groups)
+    while len(pending) > target_count[1]:
+        best_pair: tuple[int, int, float] | None = None
+        for i in range(len(pending)):
+            i_tokens = set(_normalize_theme_text(pending[i]["theme"]).split())
+            if not i_tokens:
+                continue
+            for j in range(i + 1, len(pending)):
+                j_tokens = set(_normalize_theme_text(pending[j]["theme"]).split())
+                if not j_tokens:
+                    continue
+                union = i_tokens | j_tokens
+                if not union:
+                    continue
+                score = len(i_tokens & j_tokens) / len(union)
+                if best_pair is None or score > best_pair[2]:
+                    best_pair = (i, j, score)
+
+        if best_pair is None or best_pair[2] < _GROUPING_TARGET_MIN_SIMILARITY:
+            break
+
+        i, j, _score = best_pair
+        if len(str(pending[j]["theme"])) > len(str(pending[i]["theme"])):
+            pending[i]["theme"] = pending[j]["theme"]
+        if not pending[i].get("description") and pending[j].get("description"):
+            pending[i]["description"] = pending[j]["description"]
+        seen = {
+            e.get("entry_id", "") for e in pending[i]["entries"] if e.get("entry_id")
+        }
+        for e in pending[j]["entries"]:
+            eid = e.get("entry_id", "")
+            if eid and eid in seen:
+                continue
+            if eid:
+                seen.add(eid)
+            pending[i]["entries"].append(e)
+        del pending[j]
+
+    return pending
 
 
 def _ensure_all_entries_grouped(
