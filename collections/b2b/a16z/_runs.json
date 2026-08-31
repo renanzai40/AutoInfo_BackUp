@@ -94,5 +94,53 @@
       }
     ],
     "duration_ms": 4198.0
+  },
+  {
+    "collection_id": "col-20260831T005216-8d1bd013",
+    "timestamp": "2026-08-31T00:52:37.664616+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://a16z.com/feed/: Client error '404 Not Found' for url 'https://a16z.com/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://a16z.com/feed/: Client error '404 Not Found' for url 'https://a16z.com/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 1370.0
+  },
+  {
+    "collection_id": "col-20260831T005432-e301c180",
+    "timestamp": "2026-08-31T00:54:54.547112+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://a16z.com/feed/: Client error '404 Not Found' for url 'https://a16z.com/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://a16z.com/feed/: Client error '404 Not Found' for url 'https://a16z.com/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 1806.0
+  },
+  {
+    "collection_id": "col-20260831T005756-1921fcd4",
+    "timestamp": "2026-08-31T00:58:18.190985+00:00",
+    "status": "error",
+    "items_found": 0,
+    "items_new": 0,
+    "items_filtered": 0,
+    "errors": [
+      {
+        "message": "RSS fetch failed for https://a16z.com/feed/: Client error '404 Not Found' for url 'https://a16z.com/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "source_failed": true,
+        "reason": "RSS fetch failed for https://a16z.com/feed/: Client error '404 Not Found' for url 'https://a16z.com/feed/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+      }
+    ],
+    "duration_ms": 1515.0
   }
 ]

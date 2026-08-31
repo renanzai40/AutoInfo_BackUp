@@ -60,3 +60,18 @@
 - 任务固有难度低：最终只有 2 个深层 bug（agent D1 误判、TTS 双默认）+ 若干流程坑
 - 6-7 次失败是我的执行问题：① 环境坑反复踩（文档机制从未落实，坑没固化为检查项）；② 修复只修一层（未 grep 全层）；③ 验证假阳性（进程读旧代码，验证的是新代码）
 - 教训：**修复前先扫全实现层 + 验证前确认进程读的代码版本 + 新坑当天进 LOOP-LOG**
+
+## 2026-08-31 循环（跨域去重落地数据层：Dolly + URL 级）
+
+### 关键事件
+- **Dolly 跨域去重落地**：删 5 域 7 条讣告副本（b2b/financial/gaming/online-education/online-video），保留 4 语言学习域语言版本（教学价值）。commit 1a63d49
+- **URL 级跨域去重**：ai-commercial × b2b 配置共享 producthunt/techcrunch/crunchbase 3 源 → 30 组同 URL 跨域重复。删 31 条（b2b 27/tech-ai-developer 3/ai-commercial 内部 1），保留高 rel。commit a78cce5
+- 重生成：Dolly 4 域 × tutorial/presentation + b2b/tech-ai-developer 全 8 产品 = 24 文件，全部 Dolly=0 / clean
+
+### 坑清单追加
+15. **跨域重复有两层：事件级 + URL 级**。#109 只防事件级（跨语言讣告 proper-noun+死亡词+时间窗）；URL 级（同源多域采集）是配置层缺口——ai-commercial/b2b 共享 producthunt/techcrunch/crunchbase 源导致。根因是源配置重叠，正解是源去重归属（每源只归一域），删除数据只是交付物侧缓解。
+16. **产品生成读 SQLite entries 表（KBStore().list_entries），不过滤 dedup_status**——清洗必须 SQLite + 01-Raw 双删，只删文件不够。`list_entries` 默认返回全部条目（含 duplicate），域内靠 `_converge_near_duplicates` 收敛，跨域不收敛。
+17. **producthunt 产品页同 URL 不同 title 会误判**：Google Antigravity 的 IDE Extensions vs Remote Control 是产品页更新导致，判定跨域重复时要看 title 是否实质相同。
+18. **manifest total_domains/total_products 是构建脚本硬编码**——域数变化后可能 stale（18 vs 实际 19）。打包后必须核验 manifest 统计字段与实际一致。
+19. **report/column 厚域超时**（b2b.column exit=124 @400s）：重试 timeout 500 成功。reference 记录过 #106 cap 后仍可能超时，重试即过。
+20. **gh token suspended 期间 git push/fetch 表现不同**：fetch 读正常（匿名/缓存），push 403（写需有效 token）。issue 提不了，先记录等 token 恢复。

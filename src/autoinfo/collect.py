@@ -180,7 +180,9 @@ def run_collection(
 
     # -- Load existing KB entries for dedup --------------------------------
     checker = DedupChecker()
-    existing_entries = checker.load_existing(domain)
+    # Cross-domain: scan every domain's 01-Raw so the SECOND domain's copy of
+    # a shared event is skipped (backup issue #109).
+    existing_entries = checker.load_all_domains_entries()
 
     # -- Per-source collection ---------------------------------------------
     per_source: list[CollectionResult] = []

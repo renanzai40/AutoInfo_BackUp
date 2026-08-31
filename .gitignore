@@ -65,3 +65,5 @@ validation-runs/
 # Local working dirs (not for git — handoff + generated products)
 out/
 handoff/
+_cleanup_backup_20260831/
+autoinfo.db.bak-precrossdom-cleanup-20260831
