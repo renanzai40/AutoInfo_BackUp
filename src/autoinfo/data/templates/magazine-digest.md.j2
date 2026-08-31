@@ -8,7 +8,7 @@
 
 ## {{ period_label }} Magazine Edition
 
-**{{ domain }}** · {{ date_from }} – {{ date_to }} · **{{ entries|length }} articles** from {{ (entries|groupby('source_label', default='General'))|length }} publication{{ "s" if (entries|groupby('source_label', default='General'))|length != 1 else "" }}
+**{{ domain }}** · {{ date_from }} – {{ date_to }}
 
 {% if llm_synthesis and llm_synthesis.executive_summary %}
 > *{{ llm_synthesis.executive_summary }}*
@@ -31,7 +31,7 @@
 ## In This Issue
 
 {% for publication, items in entries|groupby('source_label', default='General') %}
-- **{{ publication }}** — {{ items|length }} article{{ 's' if items|length != 1 else '' }}
+- **{{ publication }}**
 {% endfor %}
 
 ---
@@ -63,4 +63,4 @@ This edition has no curated items yet. Check back after the next collection run.
 
 ---
 
-*AutoInfo Magazine Digest · {{ domain }} · {{ generated_at }}*
+*AutoInfo Magazine Digest · {{ domain }} · {{ generated_at[:10] }}*
