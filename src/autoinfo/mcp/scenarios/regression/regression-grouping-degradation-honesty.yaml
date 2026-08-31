@@ -1,0 +1,293 @@
+# Regression #120: when grouping degrades (LLM fail/timeout/chaos), the
+# rendered product must HONESTLY say so — the pinned marker
+# `> *Grouped by source — not semantic topics*` leads the section list — and
+# keyword-group section headers must resolve via config group labels (or the
+# curated synonym map / "Additional Topics"), NEVER as bare `name.title()`
+# keyword words.
+#
+# Before the fix (#120 C4/C5): a degraded grouping silently presented
+# source-type / keyword headings as if they were semantic topics, and keyword
+# groups rendered bare words ("Funding", "Partnership", "Chips") as `## `
+# headers.
+#
+# Deterministic: the LLM seams are patched in the subprocess.  The grouping
+# degradation is forced with the REAL `AUTOINFO_FAULT_INJECT=group:fail` seam
+# (fault_inject.py) so the deterministic fallback path — the one every silent
+# degradation hop reaches — is what gets asserted.  The report fixture is all
+# one source_type + one domain so `_deterministic_grouping` descends to the
+# KEYWORD classifier (the #120 C5 path); the column-digest fixture exercises
+# the entry-level `_deterministic_column_sections` path.
+#
+# Env-gating: the scenario declares `requires_env: [AUTOINFO_FAULT_INJECT]`.
+# When the seam is unavailable in the executor's environment the whole scenario
+# reports `unconfigured` (the honest state — never a fabricated pass).  The
+# subprocess sets the env var ITSELF for the child, so the assertion is
+# deterministic regardless of the ambient environment.
+name: regression-grouping-degradation-honesty
+description: "Regression #120: group:fail renders the pinned 'Grouped by source — not semantic topics' marker + config-resolved keyword labels, never bare keyword headers"
+category: output
+regression: true
+regression_issue: "#120"
+requires_env:
+  - AUTOINFO_FAULT_INJECT
+steps:
+  - name: "group:fail report renders the pinned degradation marker + config-resolved keyword labels, never bare keyword headers"
+    kind: cli
+    timeout_seconds: 60
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile, yaml
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+
+      from autoinfo.output import generate_report
+
+      MARKER = "> *Grouped by source \u2014 not semantic topics*"
+
+      from datetime import datetime, timezone, timedelta
+
+      FROZEN_NOW = datetime(2026, 8, 28, 12, 0, 0, tzinfo=timezone.utc)
+      import autoinfo.output as output_mod
+
+      class _Frozen:
+          @classmethod
+          def now(cls, tz=None):
+              return FROZEN_NOW
+          @classmethod
+          def fromisoformat(cls, s):
+              return datetime.fromisoformat(s)
+
+      output_mod.datetime = _Frozen
+      import autoinfo.kb as kb_mod
+      kb_mod.datetime = _Frozen
+      output_mod.date = type("_FrozenDate", (), {
+          "today": classmethod(lambda cls: FROZEN_NOW.date())
+      })
+
+      # Config declares ONE rss source (so all entries share source_type/domain
+      # and the deterministic fallback descends to the keyword classifier) and
+      # TWO topics with explicit groups — the config-driven labels the degraded
+      # keyword path must render instead of bare keyword words.
+      CONFIG = {
+          "project": {"name": "regression-degradation", "created_at": "2026-09-01"},
+          "llm": {},
+          "domains": [{
+              "name": "tech-ai-developer",
+              "active": True,
+              "sources": [
+                  {"name": "techcrunch-ai", "type": "rss",
+                   "url": "https://techcrunch.com/category/artificial-intelligence/feed/"},
+              ],
+              "topics": [
+                  {"name": "AI Funding", "keywords": ["funding"],
+                   "group": "Startups & Funding"},
+                  {"name": "Open Source", "keywords": ["open source", "github"],
+                   "group": "Open Source & Dev"},
+              ],
+          }],
+      }
+
+      now_iso = (datetime.now(timezone.utc) - timedelta(days=1)).isoformat()
+
+      def entry(i, title, summary):
+          return {
+              "entry_id": f"e{i}", "title": title, "summary": summary,
+              "domain": "tech-ai-developer", "tier": "01-Raw", "language": "en",
+              "source_url": f"https://techcrunch.com/{i}", "source_type": "rss",
+              "source_platform": "techcrunch-ai",
+              "collected_at": now_iso, "relevance_score": 90.0 - (i % 10),
+              "tags": "[]", "quality_tier": 1, "dedup_status": "unique",
+              "file_path": "", "custom_fields": "{}",
+          }
+
+      ENTRIES = [
+          entry(1, "Funding round closes for AI infrastructure startup",
+                "The AI startup raised $20M in its funding round led by investors."),
+          entry(2, "Series B funding announced",
+                "Company X announced a new funding round this week."),
+          entry(3, "Open source framework released",
+                "A new open source tool is now available on github."),
+          entry(4, "Open source project gains contributors",
+                "The open source community grew this month."),
+      ]
+
+      def stub_summary():
+          return {
+              "executive_summary": "This report covers the tracked developments.",
+              "key_findings": [],
+              "recommendations": [],
+          }
+
+      def store(entries):
+          s = MagicMock()
+          s.list_entries.return_value = list(entries)
+          s.list_kb_tier.return_value = []
+          s.promote_kb_draft.return_value = {}
+          s.flag_for_knowledge_base.return_value = {}
+          return s
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-120-"))
+      cfg_dir = tmp / ".autoinfo"
+      cfg_dir.mkdir()
+      (cfg_dir / "config.yaml").write_text(yaml.safe_dump(CONFIG))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          # Force the degraded grouping path via the REAL fault-inject seam.
+          os.environ["AUTOINFO_FAULT_INJECT"] = "group:fail"
+          try:
+              with (
+                  patch("autoinfo.output.KBStore", return_value=store(ENTRIES)),
+                  patch("autoinfo.output._generate_executive_summary",
+                        return_value=stub_summary()),
+              ):
+                  report = generate_report(domain="tech-ai-developer")
+          finally:
+              os.environ.pop("AUTOINFO_FAULT_INJECT", None)
+          assert isinstance(report, str), type(report)
+
+          # Pinned honesty marker leads the section list.
+          assert MARKER in report, "degraded report missing the Grouped-by-source marker"
+          sections_idx = report.index("## Sections")
+          marker_idx = report.index(MARKER)
+          first_section = report.index("### ", sections_idx)
+          assert sections_idx < marker_idx < first_section, (
+              "marker must lead the section list"
+          )
+          # Config-resolved group labels render; bare keyword words never do.
+          assert "Startups & Funding" in report
+          assert "Open Source & Dev" in report
+          for bare in ("### Funding", "### Partnership", "### Chips",
+                       "## Funding", "## Partnership", "## Chips",
+                       "### Partnership", "### Chips"):
+              assert bare not in report, f"bare keyword header leaked: {bare}"
+          print("GROUPING_DEGRADATION_HONESTY_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["GROUPING_DEGRADATION_HONESTY_OK"]
+
+  - name: "column digest under group:fail carries the pinned marker (entry-level path) with no bare keyword section headers"
+    kind: cli
+    timeout_seconds: 60
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile, yaml
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_digest
+
+      MARKER = "> *Grouped by source \u2014 not semantic topics*"
+
+      from datetime import datetime, timezone, timedelta
+
+      FROZEN_NOW = datetime(2026, 8, 28, 12, 0, 0, tzinfo=timezone.utc)
+      import autoinfo.output as output_mod
+
+      class _Frozen:
+          @classmethod
+          def now(cls, tz=None):
+              return FROZEN_NOW
+          @classmethod
+          def fromisoformat(cls, s):
+              return datetime.fromisoformat(s)
+
+      output_mod.datetime = _Frozen
+      import autoinfo.kb as kb_mod
+      kb_mod.datetime = _Frozen
+      output_mod.date = type("_FrozenDate", (), {
+          "today": classmethod(lambda cls: FROZEN_NOW.date())
+      })
+
+      CONFIG = {
+          "project": {"name": "regression-degradation", "created_at": "2026-09-01"},
+          "llm": {},
+          "domains": [{
+              "name": "tech-ai-developer",
+              "active": True,
+              "sources": [
+                  {"name": "techcrunch-ai", "type": "rss",
+                   "url": "https://techcrunch.com/category/artificial-intelligence/feed/"},
+              ],
+          }],
+      }
+
+      now_iso = (datetime.now(timezone.utc) - timedelta(days=1)).isoformat()
+
+      def entry(i, title, summary):
+          return {
+              "entry_id": f"e{i}", "title": title, "summary": summary,
+              "domain": "tech-ai-developer", "tier": "01-Raw", "language": "en",
+              "source_url": f"https://techcrunch.com/{i}", "source_type": "api",
+              "source_platform": "techcrunch-ai",
+              "collected_at": now_iso, "relevance_score": 90.0 - i,
+              "tags": "[]", "quality_tier": 1, "dedup_status": "unique",
+              "file_path": "", "custom_fields": "{}",
+          }
+
+      # 10 entries: the column digest descends to entry-level sections
+      # (_deterministic_column_sections) when fewer than 8 theme sections are
+      # derivable — the silent-hop path the marker must annotate.
+      ENTRIES = [
+          entry(i, f"Research finding {i} on IVF time-lapse imaging",
+                f"Study {i} reports improved live birth rates with time-lapse imaging.")
+          for i in range(1, 11)
+      ]
+
+      def column_synthesis():
+          return {
+              "executive_summary": "This week\u2019s column covers ten studies on IVF.",
+              "key_findings": [
+                  {"topic": "Time-lapse imaging", "detail": "Live birth rates improved."},
+              ],
+              "trends": ["Time-lapse imaging adoption"],
+              "recommendations": ["Consider time-lapse imaging as standard of care."],
+          }
+
+      def store(entries):
+          s = MagicMock()
+          s.list_entries.return_value = list(entries)
+          s.list_kb_tier.return_value = []
+          s.promote_kb_draft.return_value = {}
+          s.flag_for_knowledge_base.return_value = {}
+          return s
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-120-col-"))
+      cfg_dir = tmp / ".autoinfo"
+      cfg_dir.mkdir()
+      (cfg_dir / "config.yaml").write_text(yaml.safe_dump(CONFIG))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          column = next(
+              r["template"] for r in PRODUCT_TEMPLATES if r["name"] == "column"
+          )
+          with (
+              patch("autoinfo.output.KBStore", return_value=store(ENTRIES)),
+              patch("autoinfo.output._call_llm_for_digest", return_value=column_synthesis()),
+          ):
+              out = generate_digest(
+                  domain="tech-ai-developer", period="weekly", format="markdown",
+                  product_template=column,
+              )
+          assert isinstance(out, str), type(out)
+          assert MARKER in out, "column digest missing the Grouped-by-source marker"
+          assert "## Deep Dive" in out
+          # No bare keyword section headers anywhere in the column render.
+          for bare in ("## Funding", "## Partnership", "## Chips",
+                       "### Funding", "### Partnership", "### Chips"):
+              assert bare not in out, f"bare keyword header leaked: {bare}"
+          print("COLUMN_GROUPING_DEGRADATION_HONESTY_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["COLUMN_GROUPING_DEGRADATION_HONESTY_OK"]

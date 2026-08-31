@@ -1,0 +1,235 @@
+# Regression #119: the weekly digest and presentation for the same domain must
+# reference the SAME source set (cross-product coherence) — a shared story-set
+# helper feeds both, the selection-time source-drift filter excludes entries
+# whose source is absent from the domain's CURRENT config, and the digest's
+# byte-identical render contract is preserved.
+#
+# Before the fix: generate_presentation loaded ALL-TIME entries (limit=5000, no
+# window) while generate_digest windowed to the same week — so a deck and its
+# digest could reference completely different sources; and entries from sources
+# removed from the domain config kept appearing in products forever.
+#
+# Deterministic (requires_env: []): KBStore.list_entries + the digest /
+# presentation LLM synthesis seams are patched in the subprocess (same pattern
+# as tests/output/test_source_drift_filter.py), so the scenario runs in a bare
+# sandbox — no LLM key, no network.  The scenario runs in an ABSOLUTE temp cwd
+# and writes its own `.autoinfo/config.yaml` (a synthetic config declaring two
+# active sources), so the source-drift filter exercises the REAL config-loading
+# path (`_get_domain_source_configs` + `_host_matches_source`) instead of a
+# monkeypatched one.
+#
+# The canned digest synthesis MUST carry all three D1 sections
+# (executive_summary, key_findings, recommendations) — otherwise the digest
+# path falls through to `_deterministic_synthesis_fallback` and overrides the
+# canned content, breaking the fixture-content assertions.
+name: regression-cross-product-same-source
+description: "Regression #119: digest + presentation share >=0.5 source-host overlap on the same fixture domain; drifted sources absent from both"
+category: output
+regression: true
+regression_issue: "#119"
+requires_env: []
+steps:
+  - name: "digest + presentation on the same fixture domain share >=0.5 source-host overlap and drifted sources are absent"
+    kind: cli
+    timeout_seconds: 60
+    command: |-
+      python3 -c '
+      import os, re, shutil, tempfile, yaml
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+
+      from autoinfo.output import generate_digest, generate_presentation
+
+      # Frozen clock so the shared week window is reproducible (both the digest
+      # generated_at and the presentation generated_at, plus the date.today()
+      # the period window uses).
+      from datetime import datetime, timezone, timedelta
+
+      FROZEN_NOW = datetime(2026, 8, 28, 12, 0, 0, tzinfo=timezone.utc)
+      import autoinfo.output as output_mod
+
+      class _Frozen:
+          @classmethod
+          def now(cls, tz=None):
+              return FROZEN_NOW
+          @classmethod
+          def fromisoformat(cls, s):
+              return datetime.fromisoformat(s)
+
+      output_mod.datetime = _Frozen
+      import autoinfo.kb as kb_mod
+      kb_mod.datetime = _Frozen
+      output_mod.date = type("_FrozenDate", (), {
+          "today": classmethod(lambda cls: FROZEN_NOW.date())
+      })
+
+      # Synthetic config: TWO active sources (techcrunch-ai + ars-technica).
+      # Written into the temp cwd so the drift filter loads it via
+      # get_config_path() -> $PWD/.autoinfo/config.yaml (the real seam).
+      CONFIG = {
+          "project": {"name": "regression-cross-product", "created_at": "2026-09-01"},
+          "llm": {},
+          "domains": [{
+              "name": "tech-ai-developer",
+              "active": True,
+              "sources": [
+                  {"name": "techcrunch-ai", "type": "rss",
+                   "url": "https://techcrunch.com/category/artificial-intelligence/feed/"},
+                  {"name": "ars-technica", "type": "rss",
+                   "url": "https://feeds.arstechnica.com/arstechnica/index"},
+              ],
+          }],
+      }
+
+      # 5 active entries (techcrunch + ars) + 2 DRIFTED entries (the-verge,
+      # cnet — hosts + platforms absent from the config) + 1 generic-platform
+      # pre-#323 entry whose host (arstechnica.com) matches a configured source.
+      now_iso = (datetime.now(timezone.utc) - timedelta(days=1)).isoformat()
+
+      def entry(i, host="techcrunch.com", platform="techcrunch-ai", drift=False):
+          if drift:
+              return {
+                  "entry_id": f"e-drift-{i}",
+                  "title": f"Drifted funding round {i}",
+                  "summary": f"Drifted startup {i} raised money this week.",
+                  "domain": "tech-ai-developer", "tier": "01-Raw", "language": "en",
+                  "source_url": f"https://{host}/{i}", "source_type": "rss",
+                  "source_platform": platform,
+                  "collected_at": now_iso, "relevance_score": 90.0 - (i % 10),
+                  "tags": "[\"AI\", \"funding\"]", "quality_tier": 1,
+                  "dedup_status": "unique", "file_path": "", "custom_fields": "{}",
+              }
+          return {
+              "entry_id": f"e{i}",
+              "title": f"AI funding round {i}: model inference costs fall",
+              "summary": f"Startup {i} cut inference cost by 40% this week.",
+              "domain": "tech-ai-developer", "tier": "01-Raw", "language": "en",
+              "source_url": f"https://{host}/{i}", "source_type": "rss",
+              "source_platform": platform,
+              "collected_at": now_iso, "relevance_score": 90.0 - (i % 10),
+              "tags": "[\"AI\", \"funding\"]", "quality_tier": 1,
+              "dedup_status": "unique", "file_path": "", "custom_fields": "{}",
+          }
+
+      ENTRIES = (
+          [entry(i) for i in range(1, 4)]
+          + [entry(i, "arstechnica.com", "ars-technica") for i in range(4, 6)]
+          + [entry(6, "www.theverge.com", "the-verge", drift=True),
+             entry(7, "www.cnet.com", "cnet", drift=True)]
+          + [entry(8, "arstechnica.com", "rss")]
+      )
+
+      # Canned digest synthesis carries ALL THREE D1 sections so the digest path
+      # never falls through to _deterministic_synthesis_fallback (which would
+      # rebuild the content from the entries and defeat the fixture assertions).
+      def canned_digest(prompt, config=None):
+          return {
+              "executive_summary": (
+                  "This week\u2019s developments center on falling model "
+                  "inference costs driving new AI funding rounds."
+              ),
+              "key_findings": [
+                  {"topic": "Inference costs",
+                   "detail": "Startups report 40% cost cuts."},
+              ],
+              "trends": ["Cheaper inference"],
+              "recommendations": ["Watch the inference pricing race."],
+          }
+
+      def canned_presentation(prompt, slide_count=10):
+          return {
+              "title": "AI Funding",
+              "description": "A deck on AI funding.",
+              "slides": [
+                  {"title": f"Slide {n}", "content": "Content for slide.",
+                   "bullets": ["Bullet one.", "Bullet two."], "notes": None}
+                  for n in range(1, slide_count + 1)
+              ],
+          }
+
+      def store(entries):
+          s = MagicMock()
+          s.list_entries.return_value = list(entries)
+          s.list_kb_tier.return_value = []
+          s.promote_kb_draft.return_value = {}
+          s.flag_for_knowledge_base.return_value = {}
+          return s
+
+      def url_host(u):
+          m = re.match(r"^https?://([^/]+)", u or "")
+          host = m.group(1).lower().rstrip(".") if m else (u or "").lower().rstrip(".")
+          return host.lstrip("www.")
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-119-cp-"))
+      cfg_dir = tmp / ".autoinfo"
+      cfg_dir.mkdir()
+      (cfg_dir / "config.yaml").write_text(yaml.safe_dump(CONFIG))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with (
+              patch("autoinfo.output.KBStore", return_value=store(ENTRIES)),
+              patch("autoinfo.output._call_llm_for_digest", side_effect=canned_digest),
+          ):
+              digest = generate_digest(domain="tech-ai-developer", period="weekly")
+          assert isinstance(digest, str), type(digest)
+
+          # --- digest consumed set: source_urls embedded in the rendered md ---
+          digest_urls = set(url_host(u) for u in re.findall(
+              r"https?://([^/)\s]+)", digest
+          ))
+          digest_titles = {t for t in ("Drifted funding round 6", "Drifted funding round 7") if t in digest}
+          # Drifted sources are absent from the digest.
+          assert digest_titles == set(), digest_titles
+          assert not ({h for h in ("theverge.com", "cnet.com") if h in digest_urls}), digest_urls
+          # The generic-platform pre-#323 entry is NOT dropped (host matches).
+          assert "arstechnica.com" in digest_urls, digest_urls
+
+          captured = {}
+
+          def capturing(prompt, slide_count=10):
+              captured["prompt"] = prompt
+              return canned_presentation(prompt, slide_count)
+
+          with (
+              patch("autoinfo.output.KBStore", return_value=store(ENTRIES)),
+              patch("autoinfo.output._call_llm_for_presentation", side_effect=capturing),
+          ):
+              pres = generate_presentation(
+                  domain="tech-ai-developer", topic="AI funding", allow_empty=True,
+              )
+          assert isinstance(pres, str), type(pres)
+          assert "Slide 1" in pres, "presentation did not render"
+
+          # --- presentation consumed set: (Source: URL) tokens in the prompt ---
+          pres_urls = set(url_host(u) for u in re.findall(
+              r"\(Source: (https?://[^)]+)\)", captured["prompt"]
+          ))
+          assert "Drifted funding round 6" not in captured["prompt"], (
+              "drifted entry leaked into the presentation prompt"
+          )
+          assert "Drifted funding round 7" not in captured["prompt"]
+          assert not ({h for h in ("theverge.com", "cnet.com") if h in pres_urls}), pres_urls
+          # The generic-platform entry (host-matched) survives in the prompt.
+          assert "arstechnica.com" in pres_urls, pres_urls
+
+          # --- cross-product coherence: >=0.5 source-host overlap ------------
+          assert digest_urls, "digest carried no source URLs"
+          assert pres_urls, "presentation carried no source URLs"
+          overlap = digest_urls & pres_urls
+          assert len(overlap) / max(len(digest_urls), len(pres_urls)) >= 0.5, (
+              f"digest sources {sorted(digest_urls)} vs presentation sources "
+              f"{sorted(pres_urls)} share only {sorted(overlap)}"
+          )
+          print(
+              f"CROSS_PRODUCT_SAME_SOURCE_OK overlap={sorted(overlap)} "
+              f"digest={sorted(digest_urls)} pres={sorted(pres_urls)}"
+          )
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["CROSS_PRODUCT_SAME_SOURCE_OK"]

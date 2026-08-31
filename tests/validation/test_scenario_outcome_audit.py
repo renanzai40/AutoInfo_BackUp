@@ -48,18 +48,19 @@ def result(outcome_audit):
 
 
 def test_all_116_scenarios_parsed(result: dict[str, Any]) -> None:
-    # 124 = 117 + 6 scenarios from the #8-#18 output-fix wave
-    # (regression-9-generic-theme-blocklist, regression-14-*, #16, #17, #18)
-    # + the #15 presentation language/provenance regression scenario
-    # (regression-15-presentation-language-provenance.yaml).
-    assert result["summary"]["total_scenarios"] == 124
-    assert result["summary"]["regression_scenarios"] == 59
+    # 129 = 124 scenarios from the #14-#18 output-fix wave baseline
+    # (regression-9-generic-theme-blocklist, regression-14-*, #16, #17, #18,
+    # regression-15-presentation-language-provenance) + the #119/#120
+    # cross-product-coherence wave (regression-cross-product-same-source,
+    # regression-grouping-degradation-honesty).
+    assert result["summary"]["total_scenarios"] == 129
+    assert result["summary"]["regression_scenarios"] == 64
 
 
 def test_total_steps(result):
-    # 455 = 448 + 6 steps from the #8-#18 output-fix wave + the #15
-    # regression scenario step (regression-15-presentation-language-provenance.yaml).
-    assert result["summary"]["total_steps"] == 455
+    # 466 = 455 steps from the #14-#18 wave baseline + 11 steps from the
+    # #119/#120 cross-product-coherence wave scenarios.
+    assert result["summary"]["total_steps"] == 466
 
 
 def test_outcome_grading_ratio_high(result):
