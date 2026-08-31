@@ -7048,6 +7048,37 @@ def _llm_group_batch(
     result: list[dict[str, Any]] | None = groups_raw
     return result
 
+_SOURCE_TYPE_THEME_LABELS: dict[str, str] = {
+    "hackernews": "Community & Developer Insights",
+    "rss": "Industry News & Analysis",
+    "api": "Platform & API News",
+    "github": "Open Source & Developer News",
+    "stack": "Engineering & Architecture",
+    "pubmed": "Research & Clinical Updates",
+    "arxiv": "Research & Preprints",
+}
+
+
+def _SOURCE_TYPE_THEME_LABEL(source_type: str) -> str:
+    """Human-readable section title for a deterministic source-type group.
+
+    The chaos-guard fallback (issue #106) groups by ``source_type`` when the
+    LLM theme grouping is unreliable; using the bare machine name
+    (``HACKERNEWS`` / ``RSS`` / ``API``) as the section title leaks an
+    internal label into the delivered product (issue #113). Map known
+    source types to a domain-neutral, user-facing label; unknown types keep
+    a title-cased fallback.
+    """
+    key = (source_type or "").strip().lower()
+    if key in _SOURCE_TYPE_THEME_LABELS:
+        return _SOURCE_TYPE_THEME_LABELS[key]
+    # Unknown type: humanize the machine name (e.g. "api" -> "API",
+    # "hnrss" -> "Hnrss", "unknown" -> "Other Sources").
+    if key == "unknown":
+        return "Other Sources"
+    return source_type.strip().upper() if len(source_type.strip()) <= 6 else source_type.strip().title()
+
+
 def _deterministic_grouping(
     entries: list[dict[str, Any]],
     domain: str = "",
@@ -7071,7 +7102,7 @@ def _deterministic_grouping(
     if len(source_groups) >= 2:
         return [
             {
-                "theme": st.upper(),
+                "theme": _SOURCE_TYPE_THEME_LABEL(st),
                 # #338: user-facing lead, no internal "N entries from" count.
                 "description": f"Updates and analysis from {st} sources.",
                 "entries": es,
