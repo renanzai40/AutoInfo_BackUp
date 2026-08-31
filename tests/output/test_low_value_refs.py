@@ -74,6 +74,15 @@ def _clean_entries(n: int, domain: str = "b2b") -> list[dict[str, Any]]:
     ]
 
 
+def _fail_open_sources(domain: str) -> list[Any]:
+    """FAIL-OPEN (drift filter #119): this fixture KB is synthetic (hosts on
+    example.com, platform "source") — no real config source matches, so
+    declare none active and keep everything (the tests exercise low-value
+    pruning, not source drift)."""
+    del domain
+    return []
+
+
 def _titles(entries: list[dict[str, Any]]) -> list[str]:
     return [str(e.get("title") or "") for e in entries]
 
@@ -281,6 +290,10 @@ class TestSynthesisPromptLowValueFilter:
         with (
             patch("autoinfo.output.KBStore", side_effect=_store),
             patch("autoinfo.output._call_llm_for_digest", side_effect=_llm),
+            patch(
+                "autoinfo.output._get_domain_source_configs",
+                side_effect=_fail_open_sources,
+            ),
         ):
             result = generate_digest(domain=domain, period="weekly")
         assert isinstance(result, str)

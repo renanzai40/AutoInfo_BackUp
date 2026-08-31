@@ -92,6 +92,15 @@ def _digest_mock_store(entries: list[dict[str, Any]]) -> MagicMock:
     return store
 
 
+def _fail_open_sources(domain: str) -> list[Any]:
+    """FAIL-OPEN (drift filter #119): this fixture KB is synthetic (hosts on
+    36kr.com/example.com) — no real config sources match, so declare none
+    active and keep everything (the tests exercise language filtering, not
+    source drift)."""
+    del domain
+    return []
+
+
 _ZHRISH_ENTRIES = [
     {
         "entry_id": "zh-001",
@@ -164,9 +173,10 @@ _ZH_ONLY_ENTRIES = [
 
 class TestDigestLanguageFilter:
     @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._get_domain_source_configs", side_effect=_fail_open_sources)
     @patch("autoinfo.output._call_llm_for_digest")
     def test_zh_filter_keeps_only_zh_entries(
-        self, mock_llm: MagicMock, mock_kb_store: MagicMock
+        self, mock_llm: MagicMock, mock_src, mock_kb_store: MagicMock
     ) -> None:
         mock_llm.return_value = {
             "executive_summary": "Synthesis.",
@@ -183,9 +193,10 @@ class TestDigestLanguageFilter:
         assert "English IVF breakthrough" not in body
 
     @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._get_domain_source_configs", side_effect=_fail_open_sources)
     @patch("autoinfo.output._call_llm_for_digest")
     def test_no_language_includes_both(
-        self, mock_llm: MagicMock, mock_kb_store: MagicMock
+        self, mock_llm: MagicMock, mock_src, mock_kb_store: MagicMock
     ) -> None:
         mock_llm.return_value = {
             "executive_summary": "Synthesis.",
@@ -225,9 +236,10 @@ class TestDigestLanguageWindowFallback:
         }
 
     @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._get_domain_source_configs", side_effect=_fail_open_sources)
     @patch("autoinfo.output._call_llm_for_digest")
     def test_zh_filter_emptied_by_window_relaxes_date_keeps_language(
-        self, mock_llm: MagicMock, mock_kb_store: MagicMock
+        self, mock_llm: MagicMock, mock_src, mock_kb_store: MagicMock
     ) -> None:
         """In-window en entries + out-of-window zh corpus on a zh domain.
 
@@ -261,9 +273,10 @@ class TestDigestLanguageWindowFallback:
         assert "English world news" not in body, "language filter must stay active"
 
     @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._get_domain_source_configs", side_effect=_fail_open_sources)
     @patch("autoinfo.output._call_llm_for_digest")
     def test_period_empty_fallback_still_respects_language(
-        self, mock_llm: MagicMock, mock_kb_store: MagicMock
+        self, mock_llm: MagicMock, mock_src, mock_kb_store: MagicMock
     ) -> None:
         """The pre-existing no-window fallback keeps filtering by language too."""
         mock_llm.return_value = {

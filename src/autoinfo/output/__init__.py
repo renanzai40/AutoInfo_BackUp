@@ -4571,6 +4571,85 @@ _GENERIC_PLATFORMS = frozenset({"", "rss", "web", "api"})
 _MATCHABLE_SOURCE_TYPES = frozenset({"rss", "web", "webhook", "api", "pdf"})
 
 
+def _is_source_active_in_config(entry: dict[str, Any], domain: str) -> bool:
+    """True when *entry*'s source identity exists in the domain's CURRENT
+    config source list (selection-time source-drift filter, #119).
+
+    An entry's source identity is established by EITHER:
+
+    - HOST match: the entry's ``source_url`` host against each configured
+      ``SourceConfig.url`` host via :func:`_host_matches_source` (exact or
+      subdomain — ``arxiv.org`` ⊂ ``rss.arxiv.org``); OR
+    - PLATFORM match: ``source_platform`` against a configured source's
+      ``name``/``type`` — ONLY when the platform is non-generic.  Pre-#323
+      entries carry generic ``source_platform='rss'/'web'/'api'``
+      (:data:`_GENERIC_PLATFORMS`); a generic platform alone never matches
+      and never false-drops an entry whose host matches.
+
+    FAIL-OPEN: when the config is missing/unreadable,
+    :func:`_get_domain_source_configs` returns ``[]`` — the helper returns
+    ``True`` (keep everything, preserve today's output), never drops
+    everything.  Deterministic — no LLM.
+    """
+    source_url = str(entry.get("source_url") or "").strip()
+    platform = str(entry.get("source_platform") or "").strip()
+    configs = _get_domain_source_configs(domain)
+    if not configs:
+        return True
+    url_host = ""
+    if source_url:
+        try:
+            url_host = urlsplit(source_url).hostname or ""
+        except ValueError:
+            url_host = ""
+    for sc in configs:
+        sc_url = str(sc.url or "").strip()
+        if url_host and sc_url:
+            try:
+                sc_host = urlsplit(sc_url).hostname or ""
+            except ValueError:
+                sc_host = ""
+            if sc_host and _host_matches_source(url_host, sc_host):
+                return True
+        if platform and platform.lower() not in _GENERIC_PLATFORMS:
+            if platform.lower() == str(sc.name or "").strip().lower():
+                return True
+            if platform.lower() == str(sc.type or "").strip().lower():
+                return True
+    return False
+
+
+def _filter_drifted_entries(
+    entries: list[dict[str, Any]], domain: str
+) -> list[dict[str, Any]]:
+    """Selection-time source-drift filter over an entry list (digest /
+    presentation paths, #119).
+
+    Entries whose source identity is absent from the domain's current config
+    source list are excluded at selection time — the KB entries themselves are
+    never deleted/archived (Wiki append-only).  FAIL-OPEN: an unreadable config
+    (``[]`` from :func:`_get_domain_source_configs`) excludes nothing.  Logs
+    one ``logger.info`` per excluded source name with the dropped count.
+    """
+    kept: list[dict[str, Any]] = []
+    dropped_by_source: dict[str, int] = {}
+    for entry in entries:
+        if not isinstance(entry, dict) or _is_source_active_in_config(entry, domain):
+            kept.append(entry)
+            continue
+        source_name = _derive_source_label(entry, domain) or str(
+            entry.get("source_platform") or entry.get("source_url") or "unknown"
+        )
+        dropped_by_source[source_name] = dropped_by_source.get(source_name, 0) + 1
+    for source_name, count in sorted(dropped_by_source.items()):
+        logger.info(
+            "Excluded %d drifted entr%s from source '%s' absent from domain "
+            "'%s' config (selection-time source-drift filter)",
+            count, "y" if count == 1 else "ies", source_name, domain,
+        )
+    return kept
+
+
 def _host_matches_source(entry_host: str, sc_host: str) -> bool:
     """True when an entry's URL host belongs to a configured source host.
 
@@ -5448,7 +5527,7 @@ def generate_digest(
             limit=query_limit,
         )
         period_was_empty = not period_entries
-        entries = period_entries
+        entries = _filter_drifted_entries(period_entries, domain)
         # Data-staleness fallback: when no entry falls inside the period
         # window (e.g. collectors last ran weeks ago), the digest would be
         # an empty shell — unacceptable for a paying end user.  Relax the
@@ -5462,9 +5541,12 @@ def generate_digest(
                 "back to full domain set",
                 domain, date_from, date_to,
             )
-            entries = store.list_entries(
-                domain=domain,
-                limit=query_limit,
+            entries = _filter_drifted_entries(
+                store.list_entries(
+                    domain=domain,
+                    limit=query_limit,
+                ),
+                domain,
             )
             period_was_empty = not entries
 
@@ -5487,7 +5569,10 @@ def generate_digest(
             domain,
         )
         entries = _filter_digest_entries(
-            store.list_entries(domain=domain, limit=query_limit)
+            _filter_drifted_entries(
+                store.list_entries(domain=domain, limit=query_limit),
+                domain,
+            )
         )
         period_was_empty = not entries
 
@@ -10046,6 +10131,13 @@ def generate_presentation(
 
     # --- Test/empty entry filtering (issue #298 — layer 1) -------------------
     entries = _filter_product_entries(entries)
+
+    # --- Selection-time source-drift filter (#119) ---------------------------
+    # Entries whose source identity is absent from the domain's CURRENT config
+    # source list are excluded here (before topic relevance), so a removed
+    # source never reaches the LLM prompt nor the KB-derived slides.  FAIL-OPEN
+    # on an unreadable config: excludes nothing.  Never deletes KB entries.
+    entries = _filter_drifted_entries(entries, domain)
 
     # --- Per-domain exclude_keywords filter (issue #319) ---------------------
     # Cross-domain noise guard: drop entries matching their own domain's

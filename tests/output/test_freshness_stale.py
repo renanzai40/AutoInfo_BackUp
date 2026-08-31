@@ -46,10 +46,19 @@ def _mock_store(entries: list[dict[str, Any]]) -> MagicMock:
     return store
 
 
+def _fail_open_sources(domain: str) -> list[Any]:
+    """FAIL-OPEN (drift filter #119): this fixture KB is synthetic (hosts on
+    example.com) — no real config sources match, so declare none active and
+    keep everything (the tests exercise staleness, not source drift)."""
+    del domain
+    return []
+
+
 class TestStaleSourceGuard:
     # --- RED: all entries stale -> plain path raises StaleSourceError --------
     @patch("autoinfo.output.KBStore")
-    def test_all_stale_raises_stalesourceerror(self, mock_kb: MagicMock) -> None:
+    @patch("autoinfo.output._get_domain_source_configs", side_effect=_fail_open_sources)
+    def test_all_stale_raises_stalesourceerror(self, mock_src, mock_kb: MagicMock) -> None:
         mock_kb.return_value = _mock_store(_stale_entries())
         with pytest.raises(StaleSourceError):
             generate_digest(
@@ -60,7 +69,8 @@ class TestStaleSourceGuard:
             )
 
     @patch("autoinfo.output.KBStore")
-    def test_all_stale_is_valueerror_subclass(self, mock_kb: MagicMock) -> None:
+    @patch("autoinfo.output._get_domain_source_configs", side_effect=_fail_open_sources)
+    def test_all_stale_is_valueerror_subclass(self, mock_src, mock_kb: MagicMock) -> None:
         mock_kb.return_value = _mock_store(_stale_entries())
         with pytest.raises(ValueError):
             generate_digest(
@@ -72,9 +82,10 @@ class TestStaleSourceGuard:
 
     # --- GREEN control: at least one fresh entry keeps the digest alive ------
     @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._get_domain_source_configs", side_effect=_fail_open_sources)
     @patch("autoinfo.output._call_llm_for_digest")
     def test_mixed_fresh_and_stale_does_not_raise(
-        self, mock_llm: MagicMock, mock_kb: MagicMock
+        self, mock_llm: MagicMock, mock_src, mock_kb: MagicMock
     ) -> None:
         mock_llm.return_value = {
             "executive_summary": "Synthesis.",
@@ -95,9 +106,10 @@ class TestStaleSourceGuard:
 
     # --- GREEN control: include_stale=True disables the guard ----------------
     @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._get_domain_source_configs", side_effect=_fail_open_sources)
     @patch("autoinfo.output._call_llm_for_digest")
     def test_include_stale_true_keeps_stale_entries(
-        self, mock_llm: MagicMock, mock_kb: MagicMock
+        self, mock_llm: MagicMock, mock_src, mock_kb: MagicMock
     ) -> None:
         mock_llm.return_value = {
             "executive_summary": "Synthesis.",
@@ -116,9 +128,8 @@ class TestStaleSourceGuard:
 
     # --- RED: all entries stale -> DeliveryOutput path blocks ----------------
     @patch("autoinfo.output.KBStore")
-    def test_all_stale_with_delivery_gates_blocks(
-        self, mock_kb: MagicMock
-    ) -> None:
+    @patch("autoinfo.output._get_domain_source_configs", side_effect=_fail_open_sources)
+    def test_all_stale_with_delivery_gates_blocks(self, mock_src, mock_kb: MagicMock) -> None:
         mock_kb.return_value = _mock_store(_stale_entries())
         result = generate_digest(
             domain="medical-research",

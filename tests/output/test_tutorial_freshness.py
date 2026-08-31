@@ -56,6 +56,14 @@ def _mock_store(entries: list[dict[str, Any]]) -> MagicMock:
     return store
 
 
+def _fail_open_sources(domain: str) -> list[Any]:
+    """FAIL-OPEN (drift filter #119): synthetic fixture hosts (example.com)
+    match no real config source — declare none active and keep everything so
+    the staleness guard (not source drift) is what's exercised."""
+    del domain
+    return []
+
+
 class TestTutorialStaleness:
     @patch("autoinfo.output.KBStore")
     def test_all_stale_raises_stalesourceerror(self, mock_kb: MagicMock) -> None:
@@ -110,7 +118,8 @@ class TestTutorialStaleness:
 
 class TestPresentationStaleness:
     @patch("autoinfo.output.KBStore")
-    def test_all_stale_raises_stalesourceerror(self, mock_kb: MagicMock) -> None:
+    @patch("autoinfo.output._get_domain_source_configs", side_effect=_fail_open_sources)
+    def test_all_stale_raises_stalesourceerror(self, mock_src, mock_kb: MagicMock) -> None:
         mock_kb.return_value = _mock_store(_stale_entries())
         with pytest.raises(StaleSourceError):
             generate_presentation(

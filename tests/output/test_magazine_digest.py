@@ -113,6 +113,24 @@ def _mock_list_entries(
     return _SAMPLE_ENTRIES
 
 
+def _mock_source_configs(domain: str) -> list[Any]:
+    """Declare the fixture KB's own sources (drift filter #119).
+
+    The magazine fixture entries live on the-atlantic / wired / time.com —
+    hosts absent from the ambient ``general-news`` config — so the selection
+    must be told the fixture's sources are active, or the #119 drift filter
+    would exclude them.
+    """
+    del domain
+    from autoinfo.config import SourceConfig
+
+    return [
+        SourceConfig(name="the-atlantic", type="rss", url="https://www.theatlantic.com/feed/"),
+        SourceConfig(name="wired", type="rss", url="https://www.wired.com/feed/rss"),
+        SourceConfig(name="time", type="rss", url="https://time.com/feed/"),
+    ]
+
+
 def _magazine_template() -> ProductTemplate:
     """Return the ``magazine-digest`` ProductTemplate row from the registry."""
     for row in PRODUCT_TEMPLATES:
@@ -184,11 +202,15 @@ class TestMagazineRender:
         mock_store.list_entries.side_effect = _mock_list_entries
         mock_kb.return_value = mock_store
 
-        result = generate_digest(
-            domain="general-news",
-            period="weekly",
-            product_template=_magazine_template(),
-        )
+        with patch(
+            "autoinfo.output._get_domain_source_configs",
+            side_effect=_mock_source_configs,
+        ):
+            result = generate_digest(
+                domain="general-news",
+                period="weekly",
+                product_template=_magazine_template(),
+            )
 
         assert isinstance(result, str)
         # Cover-style header markers
@@ -244,12 +266,16 @@ class TestMagazineRender:
         mock_store.list_entries.side_effect = _mock_list_entries
         mock_kb.return_value = mock_store
 
-        result = generate_digest(
-            domain="general-news",
-            period="weekly",
-            product_template=_magazine_template(),
-            user_id="free-user",
-        )
+        with patch(
+            "autoinfo.output._get_domain_source_configs",
+            side_effect=_mock_source_configs,
+        ):
+            result = generate_digest(
+                domain="general-news",
+                period="weekly",
+                product_template=_magazine_template(),
+                user_id="free-user",
+            )
 
         assert isinstance(result, str)
         assert "Access level required" not in result
@@ -315,11 +341,15 @@ class TestMagazineEditorialFeature:
         mock_store.list_entries.side_effect = _mock_list_entries
         mock_kb.return_value = mock_store
 
-        result = generate_digest(
-            domain="general-news",
-            period="weekly",
-            product_template=_magazine_template(),
-        )
+        with patch(
+            "autoinfo.output._get_domain_source_configs",
+            side_effect=_mock_source_configs,
+        ):
+            result = generate_digest(
+                domain="general-news",
+                period="weekly",
+                product_template=_magazine_template(),
+            )
 
         assert isinstance(result, str)
         assert "## Editor's Note" in result

@@ -118,6 +118,15 @@ def _digest_mock_store(entries: list[dict[str, Any]]) -> MagicMock:
     return store
 
 
+def _fail_open_sources(domain: str) -> list[Any]:
+    """FAIL-OPEN (drift filter #119): the fixture KB's hosts (36kr/techcrunch)
+    do not match the plain domain's config sources, so declare none active
+    and keep everything (this test exercises domain-default language
+    behavior, not source drift)."""
+    del domain
+    return []
+
+
 # ---------------------------------------------------------------------------
 # _resolve_effective_language
 # ---------------------------------------------------------------------------
@@ -243,9 +252,10 @@ class TestDigestDomainDefault:
         assert "English AI funding round" not in body
 
     @patch("autoinfo.output.KBStore")
+    @patch("autoinfo.output._get_domain_source_configs", side_effect=_fail_open_sources)
     @patch("autoinfo.output._call_llm_for_digest")
     def test_no_default_keeps_legacy_behavior(
-        self, mock_llm: MagicMock, mock_kb: MagicMock,
+        self, mock_llm: MagicMock, mock_src, mock_kb: MagicMock,
         tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         """A domain with no default keeps both languages (legacy).

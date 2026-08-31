@@ -130,6 +130,10 @@ def _digest_render_tutorial(entries: list[dict[str, object]] | None = None) -> s
     with (
         patch("autoinfo.output.KBStore") as mkb,
         patch(
+            "autoinfo.output._get_domain_source_configs",
+            side_effect=lambda domain: [],  # fail-open: synthetic fixture hosts
+        ),
+        patch(
             "autoinfo.output._call_llm_for_digest",
             return_value={
                 "executive_summary": "French-learning news roundup for this week.",

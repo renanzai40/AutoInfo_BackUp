@@ -168,9 +168,13 @@ class TestDigestPathTutorialFill:
     """The digest path renders the tutorial template with real content (#342)."""
 
     @patch("autoinfo.output.KBStore")
+    @patch(
+        "autoinfo.output._get_domain_source_configs",
+        side_effect=lambda domain: [],  # fail-open: synthetic the-atlantic host
+    )
     @patch("autoinfo.output._call_llm_for_digest")
     def test_generate_digest_tutorial_has_objectives_and_content(
-        self, mock_llm: MagicMock, mock_kb: MagicMock
+        self, mock_llm: MagicMock, mock_src, mock_kb: MagicMock
     ) -> None:
         """generate_digest with the tutorial template + entries + empty LLM
         renders objectives/content derived from the entries."""
