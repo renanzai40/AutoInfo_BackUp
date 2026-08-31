@@ -75,3 +75,7 @@
 18. **manifest total_domains/total_products 是构建脚本硬编码**——域数变化后可能 stale（18 vs 实际 19）。打包后必须核验 manifest 统计字段与实际一致。
 19. **report/column 厚域超时**（b2b.column exit=124 @400s）：重试 timeout 500 成功。reference 记录过 #106 cap 后仍可能超时，重试即过。
 20. **gh token suspended 期间 git push/fetch 表现不同**：fetch 读正常（匿名/缓存），push 403（写需有效 token）。issue 提不了，先记录等 token 恢复。
+
+### 2026-08-31 追加（column 命令纠正 + chaos guard 发现）
+21. **`output report --type column` 不产出 column 模板**——只有 `--product column`（product_template 非 None）才走 column.md.j2（Big Idea/Deep Dive 结构）。`--type column` 是 T40 向后兼容：H1 保持 `{domain} — Report` + 标准 report 结构。**reference 里 `--type column` 的命令是错的**，正确命令：`output report --domain X --product column`。
+22. **厚 KB 域 LLM 分组不稳定**：b2b report 52 themes/24 single-entry、column 47 themes/16 single-entry 触发 #106 chaos guard → 回退 deterministic 分组，分组标题用原始 source 名（HACKERNEWS/RSS/API）→ 产品正文出现非语义 `###` 标题。已提 #113。fallback 分组标题应改用领域主题词。

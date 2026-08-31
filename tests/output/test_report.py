@@ -273,8 +273,8 @@ class TestGenerateReport:
         # have no domain key → single "Unknown" domain → source_type split
         # (api ×2, rss ×1).
         assert "### General" not in report
-        assert "### API" in report
-        assert "### RSS" in report
+        assert "### Platform & API News" in report
+        assert "### Industry News & Analysis" in report
         # All three entries appear
         assert "Improved IVF outcomes" in report
         assert "Neuroplasticity in early childhood" in report
@@ -308,8 +308,8 @@ class TestGenerateReport:
             report = _call_report("medical-research")
 
         # TRIAGE #51 (stale): same source_type-split fallback as #50.
-        assert "### API" in report
-        assert "### RSS" in report
+        assert "### Platform & API News" in report
+        assert "### Industry News & Analysis" in report
         assert "Improved IVF outcomes" in report
 
     def test_executive_summary_failure_falls_back(
