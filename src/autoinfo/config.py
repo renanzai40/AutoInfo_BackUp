@@ -175,13 +175,13 @@ class LLMConfig:
         *default_provider* supplies the provider prefix when ``self.provider``
         is empty — used by callers that inherit a provider from elsewhere
         (e.g. an empty-provider fallback entry inheriting the primary
-        provider).  When omitted the historical ``'openrouter'`` fallback is
+        provider).  When omitted the historical ``'openai'`` fallback is
         kept, so the no-argument call is fully backward compatible.
         """
         model = self.model or ""
         if "/" in model or not model:
             return model
-        provider = self.provider or default_provider or "openrouter"
+        provider = self.provider or default_provider or "openai"
         return f"{provider}/{model}"
 
 
@@ -1001,7 +1001,7 @@ def create_default_config(domain: str) -> dict[str, Any]:
             "G4": {
                 "category": "hard",
                 "retries": 3,
-                "retry_models": ["deepseek/deepseek-chat", "anthropic/claude-sonnet-4"],
+                "retry_models": ["openai/ark-code-latest", "openai/stealth/ox-alpha", "anthropic/claude-sonnet-4"],
                 "action": "block",
             },
             "G5": {"category": "soft", "retries": 2, "action": "flag"},

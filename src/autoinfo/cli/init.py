@@ -64,8 +64,9 @@ def _print_llm_guidance() -> None:
     typer.echo("     Edit .autoinfo/config.yaml → llm.fallback:")
     typer.echo("       llm:")
     typer.echo("         fallback:")
-    typer.echo("           - model: mimo-v2.5")
+    typer.echo("           - model: openai/stealth/ox-alpha")
     typer.echo("             base_url: https://opencode.ai/zen/go/v1")
+    typer.echo("             api_key: ${COMMANDCODE_API_KEY}")
     typer.echo("     An empty provider/api_key inherits the primary provider/key.")
     typer.echo()
     typer.echo("  3. Mark the primary model as a reasoning model (if applicable):")
@@ -449,7 +450,7 @@ def init(
     selected_domain = domains[choice - 1]
 
     try:
-        provider = typer.prompt("LLM provider", default="openrouter")
+        provider = typer.prompt("LLM provider", default="openai")
     except (EOFError, KeyboardInterrupt):
         typer.echo("")
         raise typer.Exit(code=0)
@@ -477,7 +478,7 @@ def init(
     else:
         try:
             model_value = typer.prompt(
-                "LLM model (optional, empty = default deepseek/deepseek-chat)\n"
+                "LLM model (optional, empty = default openai/ark-code-latest)\n"
                 f"  Providers: {_LLM_PROVIDER_CANDIDATES}",
                 default="",
             )

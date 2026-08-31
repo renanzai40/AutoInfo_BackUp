@@ -150,8 +150,8 @@ def _resolve_model_config(
             if config.cefr.model:
                 model = config.cefr.model
             else:
-                provider = config.llm.provider or "openrouter"
-                llm_model = config.llm.model or "deepseek/deepseek-chat"
+                provider = config.llm.provider or "openai"
+                llm_model = config.llm.model or "openai/ark-code-latest"
                 if "/" not in llm_model:
                     llm_model = f"{provider}/{llm_model}"
                 model = llm_model
@@ -161,7 +161,7 @@ def _resolve_model_config(
     except Exception:
         logger.debug("Could not load autoinfo config for CEFR", exc_info=True)
 
-    return "openrouter/deepseek/deepseek-chat", "", ""
+    return "openai/ark-code-latest", "", ""
 
 
 def _resolve_timeout(model_config: dict[str, Any] | None) -> float | None:

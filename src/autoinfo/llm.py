@@ -1,6 +1,6 @@
 """LLM extraction pipeline — structured information extraction from collected items.
 
-Uses LiteLLM to call configured models (default: deepseek/deepseek-chat via OpenRouter)
+Uses LiteLLM to call configured models (default: openai/ark-code-latest via Volcengine Ark)
 and extract structured fields (TL;DR, key points, entities, relevance score) from
 raw article content. All LLM calls go through :func:`litellm.completion`.
 
@@ -41,8 +41,8 @@ logger = logging.getLogger(__name__)
 # Defaults
 # ---------------------------------------------------------------------------
 
-DEFAULT_PROVIDER = "openrouter"
-DEFAULT_MODEL = "deepseek/deepseek-chat"
+DEFAULT_PROVIDER = "openai"
+DEFAULT_MODEL = "openai/ark-code-latest"
 
 SYSTEM_PROMPT = (
     "You are AutoInfo, an information extraction assistant. "

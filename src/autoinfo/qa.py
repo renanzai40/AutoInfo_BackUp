@@ -23,8 +23,8 @@ logger = logging.getLogger(__name__)
 # Defaults
 # ---------------------------------------------------------------------------
 
-DEFAULT_PROVIDER = "openrouter"
-DEFAULT_MODEL = "deepseek/deepseek-chat"
+DEFAULT_PROVIDER = "openai"
+DEFAULT_MODEL = "openai/ark-code-latest"
 
 
 def query_collected(

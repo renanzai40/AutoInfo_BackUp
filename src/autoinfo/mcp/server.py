@@ -1828,7 +1828,7 @@ def _handle_test_llm_connection(
     temp_config = Config(llm=temp_llm)
 
     tested_model = temp_llm.resolve_model() or (
-        f"{eff_provider or 'openrouter'}/{eff_model or 'deepseek/deepseek-chat'}"
+        f"{eff_provider or 'openai'}/{eff_model or 'openai/ark-code-latest'}"
     )
     config_source = (
         "params" if any([provider, model, base_url, api_key]) else "config"
@@ -2254,20 +2254,20 @@ def _handle_suggest_keywords(
         if config_path:
             config = load_config(config_path)
             model = config.llm.resolve_model() or (
-                f"{config.llm.provider or 'openrouter'}/"
-                f"{config.llm.model or 'deepseek/deepseek-chat'}"
+                f"{config.llm.provider or 'openai'}/"
+                f"{config.llm.model or 'openai/ark-code-latest'}"
             )
             api_key = config.llm.api_key or os.environ.get("AUTOINFO_LLM_API_KEY", "")
             base_url = config.llm.base_url or None
             json_mode = config.llm.json_mode
             timeout = config.llm.timeout
         else:
-            model = "deepseek/deepseek-chat"
+            model = "openai/ark-code-latest"
             api_key = os.environ.get("AUTOINFO_LLM_API_KEY", "")
             base_url = None
             json_mode = False
     except Exception:
-        model = "deepseek/deepseek-chat"
+        model = "openai/ark-code-latest"
         api_key = os.environ.get("AUTOINFO_LLM_API_KEY", "")
         base_url = None
         json_mode = True

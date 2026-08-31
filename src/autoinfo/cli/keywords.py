@@ -169,19 +169,19 @@ def suggest(
         if config_path:
             config = load_config(config_path)
             model = config.llm.resolve_model() or (
-                f"{config.llm.provider or 'openrouter'}/"
-                f"{config.llm.model or 'deepseek/deepseek-chat'}"
+                f"{config.llm.provider or 'openai'}/"
+                f"{config.llm.model or 'openai/ark-code-latest'}"
             )
             api_key = config.llm.api_key or os.environ.get("AUTOINFO_LLM_API_KEY", "")
             base_url = config.llm.base_url or None
             json_mode = config.llm.json_mode
         else:
-            model = "deepseek/deepseek-chat"
+            model = "openai/ark-code-latest"
             api_key = os.environ.get("AUTOINFO_LLM_API_KEY", "")
             base_url = None
             json_mode = False
     except Exception:
-        model = "deepseek/deepseek-chat"
+        model = "openai/ark-code-latest"
         api_key = os.environ.get("AUTOINFO_LLM_API_KEY", "")
         base_url = None
         json_mode = True
