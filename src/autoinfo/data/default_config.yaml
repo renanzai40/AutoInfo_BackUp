@@ -17,10 +17,6 @@ llm:
   # --- Model pool (fallback chain: primary ark → Command Code ox-alpha → Zhipu) ---
   fallback:
     - provider: openai
-      model: openai/stealth/ox-alpha
-      base_url: https://opencode.ai/zen/go/v1
-      api_key: ${COMMANDCODE_API_KEY}
-    - provider: openai
       model: glm-4.7-flash
       base_url: https://open.bigmodel.cn/api/paas/v4
       api_key: ${ZHIPU_API_KEY}
