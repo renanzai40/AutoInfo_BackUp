@@ -2,73 +2,6 @@ name: b2b
 description: B2B & startup intelligence — venture capital, startup funding, enterprise
   SaaS, B2B tech
 sources:
-- name: producthunt
-  type: rss
-  url: https://www.producthunt.com/feed
-  quality_tier: 2
-  enabled: true
-  tos_classification: open
-  rate_limit: 10
-  fetch_depth: abstract
-  extract_fields:
-  - name: title
-    type: string
-    description: Product or launch headline
-    required: true
-  - name: product_name
-    type: string
-    description: Name of the launched product
-    required: false
-  - name: category
-    type: string
-    description: Product category (e.g., SaaS, AI, DevTools)
-    required: false
-- name: techcrunch
-  type: rss
-  url: https://techcrunch.com/feed/
-  quality_tier: 2
-  enabled: true
-  tos_classification: open
-  rate_limit: 10
-  fetch_depth: abstract
-  extract_fields:
-  - name: title
-    type: string
-    description: Startup or tech news headline
-    required: true
-  - name: startup_name
-    type: string
-    description: Startup company mentioned
-    required: false
-  - name: funding_amount
-    type: string
-    description: Funding round amount if mentioned (e.g., '$50M Series B')
-    required: false
-  - name: publish_date
-    type: string
-    description: Original publication date and time
-    required: false
-- name: crunchbase-news
-  type: rss
-  url: https://news.crunchbase.com/feed/
-  quality_tier: 2
-  enabled: true
-  tos_classification: open
-  rate_limit: 10
-  fetch_depth: abstract
-  extract_fields:
-  - name: title
-    type: string
-    description: Funding or company news headline
-    required: true
-  - name: company
-    type: string
-    description: Company mentioned in the article
-    required: false
-  - name: funding_amount
-    type: string
-    description: Funding round amount if mentioned
-    required: false
 - name: a16z
   type: rss
   url: https://a16z.com/feed/
@@ -161,17 +94,14 @@ exclude_keywords:
 - B2C
 - personal gadgets
 - fast food
-# Issue #56 (paid review): drop B2B-domain noise that leaks into products —
-# Show HN / Product Hunt launch self-promotion, native-ad / sponsored posts,
-# and cross-domain death announcements that are not B2B intelligence.
 - Show HN
 - Product Hunt
 - launch your product
-- "has died"
-- "passed away"
+- has died
+- passed away
 - obituary
 - sponsored
-- "native ad"
-- "paid post"
+- native ad
+- paid post
 - webinar promotion
-- "sign up now"
+- sign up now
