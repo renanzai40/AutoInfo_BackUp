@@ -8,19 +8,25 @@ project:
   created_at: "2026-07-20"
 
 llm:
-  provider: openrouter
-  model: deepseek/deepseek-chat
+  provider: openai
+  model: openai/ark-code-latest
+  base_url: https://ark.cn-beijing.volces.com/api/coding/v3
   api_key: ${AUTOINFO_LLM_API_KEY}
-  # base_url: "https://api.openai.com/v1"  # optional: custom API endpoint
   json_mode: false
-  # reasoning_model: false  # set to true for reasoning models that don't support response_format
-  # --- Model pool (uncomment to configure; see configure_llm(llm_fallback=..., llm_tasks=...)) ---
-  # fallback:
-  #   - model: mimo-v2.5
-  #     base_url: "https://opencode.ai/zen/go/v1"
+  reasoning_model: true
+  # --- Model pool (fallback chain: primary ark → Command Code ox-alpha → Zhipu) ---
+  fallback:
+    - provider: openai
+      model: openai/stealth/ox-alpha
+      base_url: https://opencode.ai/zen/go/v1
+      api_key: ${COMMANDCODE_API_KEY}
+    - provider: openai
+      model: glm-4.7-flash
+      base_url: https://open.bigmodel.cn/api/paas/v4
+      api_key: ${ZHIPU_API_KEY}
   # tasks:
   #   extraction:
-  #     model: deepseek-v4-flash
+  #     model: openai/ark-code-latest
   #     provider: openai
   #     max_tokens: 4096
 
