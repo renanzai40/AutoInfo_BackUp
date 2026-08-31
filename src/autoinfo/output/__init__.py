@@ -5288,6 +5288,89 @@ def _normalize_digest_product_context(
 
 
 # ---------------------------------------------------------------------------
+# Shared story-set selection (cross-product coherence, #119)
+# ---------------------------------------------------------------------------
+# SINGLE-DOMAIN products only.  The cross-domain paths (generate_digest's
+# per-domain loop, generate_report's cross-domain loop) are NOT routed here.
+
+
+def _select_story_set(
+    store: "KBStore",
+    domain: str,
+    period: str = "weekly",
+    product: str = "digest",
+    query_limit: int = 200,
+) -> tuple[list[dict[str, Any]], tuple[str, str], bool]:
+    """Select the shared week-windowed story set for a SINGLE-domain product.
+
+    Reproduces ``generate_digest``'s current single-domain selection so the
+    digest's rendered output is byte-identical after the refactor, while
+    presentation and report consume the same set (#119 cross-product
+    coherence: one domain → one story set → digest / presentation / report
+    reference the same sources).
+
+    Selection contract (single-domain path only):
+
+    1. Window: :func:`_compute_date_range` for *period* — the same-week
+       ``(date_from, date_to)`` semantics (``weekly`` = the last 7 days,
+       both ISO dates inclusive).
+    2. Window query: ``store.list_entries(domain=domain, date_from=date_from,
+       limit=query_limit)`` — the default window query the digest runs,
+       with ``query_limit`` defaulting to 200 (the digest's built-in cap).
+    3. Full-domain fallback: when the period window returns NO entries
+       (collectors last ran weeks ago), relax to the full domain set —
+       ``store.list_entries(domain=domain, limit=query_limit)`` so the
+       product is never an empty shell.
+    4. Ordering: :func:`_sorted_ref_entries` (references ordering — has
+       summary desc, then relevance desc, issue #11/#42) so the LLM-synthesis
+       candidates and the digest render consume the same ordered set.
+
+    The caller applies its own downstream filters on the returned set — the
+    digest runs ``_filter_digest_entries`` + drift filter + staleness after
+    this helper, and the drift filter runs AFTER the shared set so drifted
+    entries are excluded from the digest-identical render.  Report applies
+    its own product filters and an ``[:200]`` cap.  Returns
+    ``(entries, (date_from, date_to), period_was_empty)`` where
+    ``period_was_empty`` is True when the window query (or its relaxed
+    full-domain fallback) produced no entries.
+
+    Low-value entries are preserved, not dropped: :func:`_sorted_ref_entries`
+    drops promo/obituary/celebrity entries for non-language-learning domains
+    with enough clean candidates — but the digest's RENDER keeps them (only
+    the synthesis candidates drop them).  The shared set re-attaches any
+    dropped entries at the tail so the digest render stays byte-identical.
+
+    Deterministic — no LLM, no side effects beyond ``store.list_entries``.
+    """
+    date_from, date_to = _compute_date_range(period)
+    period_entries = store.list_entries(
+        domain=domain,
+        date_from=date_from,
+        limit=query_limit,
+    )
+    period_was_empty = not period_entries
+    entries = period_entries
+    if not entries:
+        logger.info(
+            "No entries for domain '%s' in period %s..%s — falling "
+            "back to full domain set",
+            domain, date_from, date_to,
+        )
+        entries = store.list_entries(
+            domain=domain,
+            limit=query_limit,
+        )
+        period_was_empty = not entries
+    ordered = _sorted_ref_entries(entries, domain=domain)
+    if len(ordered) != len(entries):
+        ordered_ids = {id(e) for e in ordered}
+        dropped = [e for e in entries if id(e) not in ordered_ids]
+        if dropped:
+            ordered = ordered + sorted(dropped, key=_ref_sort_key, reverse=True)
+    return ordered, (date_from, date_to), period_was_empty
+
+
+# ---------------------------------------------------------------------------
 # Main entry point
 # ---------------------------------------------------------------------------
 
@@ -5498,7 +5581,6 @@ def generate_digest(
                 return blocked_message
 
     # --- Compute date range --------------------------------------------------
-    date_from, date_to = _compute_date_range(period)
     period_label = PERIOD_LABELS.get(period, period.capitalize())
 
     # --- Query KB entries ----------------------------------------------------
@@ -5506,6 +5588,7 @@ def generate_digest(
     query_limit = max_items if max_items > 0 else 200
 
     if is_cross_domain_digest:
+        date_from, date_to = _compute_date_range(period)
         entries: list[dict[str, Any]] = []
         per_domain_limit = max(query_limit // len(digest_domains), 10)
         for d in digest_domains:
@@ -5521,34 +5604,11 @@ def generate_digest(
         entries = entries[:query_limit]
         period_was_empty = False
     else:
-        period_entries = store.list_entries(
-            domain=domain,
-            date_from=date_from,
-            limit=query_limit,
+        # Single-domain story set — shared with presentation/report (#119).
+        entries, (date_from, date_to), period_was_empty = _select_story_set(
+            store, domain, period=period, product="digest", query_limit=query_limit,
         )
-        period_was_empty = not period_entries
-        entries = _filter_drifted_entries(period_entries, domain)
-        # Data-staleness fallback: when no entry falls inside the period
-        # window (e.g. collectors last ran weeks ago), the digest would be
-        # an empty shell — unacceptable for a paying end user.  Relax the
-        # date filter to the full domain set so the product still delivers
-        # content (2026-08-11: online-education had 8 entries, all
-        # collected 2026-07-2x, weekly window 08-04..08-11 → 0 entries →
-        # empty digest/json/agent shells).
-        if not entries:
-            logger.info(
-                "No entries for domain '%s' in period %s..%s — falling "
-                "back to full domain set",
-                domain, date_from, date_to,
-            )
-            entries = _filter_drifted_entries(
-                store.list_entries(
-                    domain=domain,
-                    limit=query_limit,
-                ),
-                domain,
-            )
-            period_was_empty = not entries
+        entries = _filter_drifted_entries(entries, domain)
 
     # --- Archive/deprecated exclusion + test/empty filter + convergence ------
     # Shared chain (see _filter_digest_entries) so the #83 full-domain
@@ -6156,7 +6216,12 @@ def generate_report(
                     e["domain"] = d
             entries.extend(domain_entries)
     else:
-        entries = kb_store.list_entries(domain, limit=5000)
+        # Single-domain story set — shared with digest/presentation (#119).
+        # The report's downstream filters (product/empty/lang/stale) still
+        # run on the shared set; content MAY change vs the old all-time load.
+        entries, _date_range, _period_was_empty = _select_story_set(
+            kb_store, domain, period=period, product="report", query_limit=5000,
+        )
 
     # --- Promotion trigger (T6): promote eligible 02-Draft entries ------------
     # Best-effort per entry — a rejected/failed promotion never blocks the
@@ -10111,7 +10176,13 @@ def generate_presentation(
 
     # -- Load KB entries related to topic --------------------------------
     kb_store = KBStore()
-    entries = kb_store.list_entries(domain, limit=5000)
+    # Single-domain story set — shared with digest/report (#119).  This is the
+    # intended behavior change: the presentation's entry universe narrows from
+    # all-time (limit=5000, no window) to the same-week shared set, so a deck
+    # and its digest/report reference the same stories.
+    entries, _date_range, _period_was_empty = _select_story_set(
+        kb_store, domain, period="weekly", product="presentation", query_limit=5000,
+    )
 
     # --- Content-preference tier filtering (B-001) ---------------------------
     content_preference: str = _resolve_content_preference(user_id)
