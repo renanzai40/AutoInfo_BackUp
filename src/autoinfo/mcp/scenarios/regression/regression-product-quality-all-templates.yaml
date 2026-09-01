@@ -20,6 +20,10 @@
 #   R6 no placeholder empty-states (_No ..._ / No knowledge base entries)
 #   R7 no HTML entity residue (&amp; etc.)
 #   R8 no brand residue (AutoInfo)
+#   R9 no empty shell (Slides: 0 / missing content section — #149/#152)
+# Plus a second step asserting premium vs enterprise briefings source
+# DIFFERENTIATED references (<50% overlap, #146/#152) and that the
+# enterprise scope label N never exceeds M (issue #11).
 #
 # Deterministic (requires_env: []): KBStore + LLM seams patched in the
 # subprocess (same pattern as regression-no-placeholder-magazine-tutorial),
@@ -76,6 +80,13 @@ steps:
           # R8: brand residue.
           if "AutoInfo" in out:
               failures.append(f"[{family}] R8 brand residue")
+          # R9: empty shell — a presentation with "Slides: 0" or no content
+          # section is a hollow artifact even though the string is non-empty
+          # (issue #149/#152 blind spot).
+          if re.search(r"\*\*Slides\*\*:\s*0\b", out):
+              failures.append(f"[{family}] R9 empty-shell (Slides: 0)")
+          if family == "presentation" and "## Slide" not in out:
+              failures.append(f"[{family}] R9 empty-shell (no slide content)")
 
       # Deterministic fixture: 3 real-shaped entries with summaries and
       # source_urls.  The LLM synthesis is patched to carry the §2.4 fields
@@ -106,6 +117,24 @@ steps:
           "action_required": ["Monitor the AI funding pipeline."],
           "key_metrics": [{"metric": "Total raised", "value": "$35M",
                            "source": "PitchBook"}],
+          # Issue #152: the presentation family needs real slide data in the
+          # synthesis so the digest-path presentation is exercised on real
+          # content (previously slides|length was 0 and the empty shell
+          # slipped past the quality scan).
+          "topic": "AI funding trends",
+          "description": "Key AI venture developments this week.",
+          "slides": [
+              {"title": "AI funding overview",
+               "content": "AI startups raised significant rounds this period.",
+               "bullets": ["Series B led by top funds"],
+               "source_url": "https://techcrunch.com/1",
+               "notes": "Prepared from knowledge base sources."},
+              {"title": "Valuation outlook",
+               "content": "Seed-stage valuations remain competitive.",
+               "bullets": ["Watch AI seed-stage valuations"],
+               "source_url": "https://techcrunch.com/2",
+               "notes": "Prepared from knowledge base sources."},
+          ],
       }
 
       def tmpl(name):
@@ -142,3 +171,99 @@ steps:
       success: true
       exit_code: 0
       stdout_has: ["PRODUCT_QUALITY_ALL_TEMPLATES_OK"]
+
+  - name: "premium vs enterprise briefings source differentiated references (<50% overlap, N<=M)"
+    kind: cli
+    timeout_seconds: 90
+    command: |-
+      python3 -c '
+      import os, re, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_digest
+
+      # Larger fixture so the #146 differentiated subsets genuinely diverge
+      # (a 2-3 entry corpus would force overlap regardless of selection).
+      ENTRIES = [
+          {"entry_id": f"e{i}",
+           "title": f"AI funding round {i}",
+           "summary": f"Startup {i} raised $20M in a Series B round.",
+           "source_url": f"https://techcrunch.com/{i}",
+           "source_type": "rss", "source_platform": "techcrunch",
+           "relevance_score": 95 - i, "tags": "[\"AI\", \"funding\"]",
+           "tier": "01-Raw", "collected_at": "2026-07-15T10:00:00Z",
+           "domain": "ai-commercial"}
+          for i in range(1, 11)
+      ]
+      SYNTH = {
+          "executive_summary": "AI startups raised significant rounds this period.",
+          "key_findings": [
+              {"topic": "Series B", "detail": "Startup 1 raised a $20M Series B."},
+              {"topic": "Series C", "detail": "Startup 2 raised a $15M Series C."},
+          ],
+          "recommendations": ["Watch AI seed-stage valuations next period."],
+          "implications": ["AI funding momentum continues."],
+          "risks": [{"title": "Valuation risk", "likelihood": "medium",
+                     "impact": "medium", "mitigation": "Diversify exposure."}],
+          "action_required": ["Monitor the AI funding pipeline."],
+          "key_metrics": [{"metric": "Total raised", "value": "$35M",
+                           "source": "PitchBook"}],
+      }
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      def ref_urls(out):
+          """Extract the reference source URLs rendered in a product."""
+          return set(re.findall(r"https://techcrunch\.com/\d+", out))
+
+      def selected_counts(out):
+          """Return (N, M) from the enterprise scope line, or None."""
+          m = re.search(r"(\d+) key points .+?(\d+) sources", out)
+          return (int(m.group(1)), int(m.group(2))) if m else None
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-product-quality-overlap-"))
+      old = os.getcwd()
+      failures: list[str] = []
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              premium = generate_digest(
+                  domain="ai-commercial", period="weekly", format="markdown",
+                  product_template=tmpl("premium-briefing"), include_stale=True,
+              )
+              enterprise = generate_digest(
+                  domain="ai-commercial", period="weekly", format="markdown",
+                  product_template=tmpl("enterprise-briefing"), include_stale=True,
+              )
+          # Issue #146/#152: the two paid briefings must source DIFFERENT
+          # references — overlap must stay under 50% (they are differentiated
+          # products, not the same content in a different layout).
+          pu, eu = ref_urls(premium), ref_urls(enterprise)
+          if not pu or not eu:
+              failures.append("[overlap] empty reference set in a briefing")
+          else:
+              overlap = len(pu & eu) / len(pu)
+              if overlap >= 0.5:
+                  failures.append(f"[overlap] premium/enterprise reference overlap {overlap:.0%} >= 50%")
+          # Issue #11: the enterprise scope label N (key points) must never
+          # exceed M (drawn-from sources) — an inverted label is a defect.
+          sc = selected_counts(enterprise)
+          if sc is not None and sc[0] > sc[1]:
+              failures.append(f"[overlap] selected N={sc[0]} exceeds M={sc[1]}")
+          print("PRODUCT_QUALITY_BRIEFING_DIVERGED_OK" if not failures else
+                "PRODUCT_QUALITY_BRIEFING_DEFECTS:\n" + "\n".join(failures))
+          if failures:
+              raise SystemExit(1)
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["PRODUCT_QUALITY_BRIEFING_DIVERGED_OK"]

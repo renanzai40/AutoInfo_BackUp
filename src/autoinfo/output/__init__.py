@@ -6064,6 +6064,27 @@ def generate_digest(
         "target_audience": target_audience,
         "source_tier_badge": _source_tier_badge_enabled(),
     }
+    # Issue #151: the digest path renders presentation.md.j2 via the generic
+    # context, which previously carried no ``slides`` / ``topic`` keys — so
+    # ``slides|length`` was 0 and every digest-path presentation was an empty
+    # shell (Slides: 0).  Populate them for the presentation family: use the
+    # LLM synthesis slides when present, else derive KB-backed slides from the
+    # entries (same fallback the standalone generate_presentation uses).
+    if digest_family == "presentation":
+        synth_slides = (
+            llm_synthesis.get("slides") if isinstance(llm_synthesis, dict) else None
+        )
+        slides = (
+            synth_slides
+            if isinstance(synth_slides, list) and synth_slides
+            else _fallback_slides_from_entries(context_entries, _PRESENTATION_SLIDE_COUNT)
+        )
+        context["slides"] = slides
+        context["topic"] = str(llm_synthesis.get("topic") or period_label).strip() if isinstance(llm_synthesis, dict) else period_label
+        context["description"] = (
+            str(llm_synthesis.get("description") or "").strip()
+            if isinstance(llm_synthesis, dict) else ""
+        )
 
     # --- Render --------------------------------------------------------------
     if format == "agent":
@@ -11022,6 +11043,11 @@ def _render_presentation_agent_json(
         },
     }
     return json.dumps(output, indent=2, ensure_ascii=False, default=str)
+
+
+# Issue #151: default slide count for the digest-path presentation fallback
+# (mirrors the standalone generate_presentation default).
+_PRESENTATION_SLIDE_COUNT: Final[int] = 10
 
 
 def _fallback_slides_from_entries(
