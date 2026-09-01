@@ -32,7 +32,7 @@ from autoinfo.output import (
 )
 
 # The pinned todo-4 honesty marker — asserted byte-for-byte.
-MARKER = "> *Grouped by source \u2014 not semantic topics*"
+MARKER = "> *This edition groups developments by source*"
 
 _SOURCE_TYPES = ("rss", "api", "web")
 

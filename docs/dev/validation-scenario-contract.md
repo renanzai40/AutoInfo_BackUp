@@ -357,7 +357,7 @@ every scenario in `scenarios/regression/` must carry `regression: true` and a
   exercised; canned digest synthesis carries all three D1 sections so the digest
   never falls through to `_deterministic_synthesis_fallback`),
   regression-grouping-degradation-honesty (#120 — `AUTOINFO_FAULT_INJECT=group:fail`
-  renders the pinned `> *Grouped by source — not semantic topics*` marker + 
+  renders the pinned `> *This edition groups developments by source*` marker + 
   config-resolved keyword labels, never bare keyword headers; env-gated via
   `requires_env: ["AUTOINFO_FAULT_INJECT"]`, reports `unconfigured` when the seam
   is unavailable).

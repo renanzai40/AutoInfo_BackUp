@@ -1,9 +1,10 @@
 # Regression #303: empty-shell products + internal-state leak.
-# ① column.md.j2 rendered a silent empty "## Deep Dive" (and empty
-#    "Implications & Outlook") when ``sections`` was empty — now the
-#    ``{% else %}`` branches render fallback text
-#    ("_No deep-dive sections available for this column." /
-#    "_No outlook sections available.").
+# ① column.md.j2 rendered a silent empty "## Deep Dive" when ``sections``
+#    was empty — now the ``{% else %}`` branch renders fallback text
+#    ("_No deep-dive sections available for this column.").  The empty
+#    "Implications & Outlook" case was later tightened by #133: with no
+#    implications the WHOLE section (heading included) is omitted, never a
+#    fallback-text shell.
 # ② the KB-derived presentation fallback exposed internal state in speaker
 #    notes ("KB-derived slide" / "returned no slides") — now the notes are
 #    neutral ("Prepared from knowledge base sources.") and the rendered
@@ -40,8 +41,11 @@ steps:
       assert "No deep-dive sections available for this column." in out, (
           "empty Deep Dive must render fallback text:\n" + out
       )
-      assert "No outlook sections available." in out, (
-          "empty Implications must render fallback text:\n" + out
+      # #133: with no implications in the synthesis, the whole Implications &
+      # Outlook section (heading included) is omitted — never an empty
+      # heading with fallback text, never a hollow placeholder.
+      assert "Implications & Outlook" not in out, (
+          "empty Implications & Outlook section must be omitted:\n" + out
       )
       print("COLUMN_EMPTY_SHELL_OK")
       '

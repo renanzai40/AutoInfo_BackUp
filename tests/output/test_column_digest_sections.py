@@ -319,7 +319,7 @@ class TestColumnNormalizeSections:
         # #120 (C4): the deterministic fallback prepends the honest "grouped
         # by source" marker dict as the leading sections entry — the remaining
         # entries are the real entry-derived sections.
-        _marker = "> *Grouped by source \u2014 not semantic topics*"
+        _marker = "> *This edition groups developments by source*"
         assert flat["sections"][0]["marker"] == _marker
         content_sections = [s for s in flat["sections"] if "marker" not in s]
         assert len(content_sections) >= 8
@@ -574,16 +574,15 @@ class TestColumnValueDrain:
         )
         out = _render_column_template(flat)
 
-        implications, _ = _section_block(out, "## Implications & Outlook")
-        # #129: with no implications in the synthesis, the section renders
-        # NO placeholder bullets — never a hollow "Covered in the Deep Dive".
+        # #129 + #133: with no implications in the synthesis, the whole
+        # Implications & Outlook section (heading included) is omitted —
+        # never a hollow "Covered in the Deep Dive" promise, never an empty
+        # heading followed by the next section.
         assert "Covered in the Deep Dive" not in out, (
             f"hollow placeholder rendered:\n{out}"
         )
-        bullets = [ln for ln in implications.splitlines() if ln.startswith("- **")]
-        assert len(bullets) == 0, (
-            f"expected no implication bullets when synthesis carries none, "
-            f"got {len(bullets)}:\n{implications}"
+        assert "## Implications & Outlook" not in out, (
+            f"empty Implications & Outlook section rendered:\n{out}"
         )
         assert not re.search(r"\(\d+ item\(s\)\)", out), (
             f"internal item count leaked into reader text:\n{out}"

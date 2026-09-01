@@ -4,7 +4,7 @@ When the grouping degrades on a silent-hop path — (a) LLM fail/timeout →
 ``_deterministic_grouping`` fallback, (b) the #106 chaos guard → deterministic
 fallback, (c) the 0/1-group "General" catch-all, (d) entry-level column
 sections — the rendered product must carry the pinned honesty marker
-``> *Grouped by source \u2014 not semantic topics*`` at the top of the section
+``> *This edition groups developments by source*`` at the top of the section
 list, AND a structured ``event="grouping_degraded"`` warning with the correct
 ``reason`` / ``grouping``.  On semantic-success the marker must be ABSENT.
 
@@ -33,7 +33,7 @@ from autoinfo.output import (
 )
 
 # The pinned marker string — asserted byte-for-byte.
-MARKER = "> *Grouped by source \u2014 not semantic topics*"
+MARKER = "> *This edition groups developments by source*"
 
 _SOURCE_TYPES = ("rss", "api", "web")
 
@@ -459,7 +459,7 @@ class TestMarkerAbsentOnSuccess:
             report = generate_report(domain="medical-research")
         assert isinstance(report, str)
         assert MARKER not in report
-        assert "Grouped by source" not in report
+        assert "This edition groups developments by source" not in report
 
     def test_digest_success_no_marker(self) -> None:
         """Column digest with synthesis sections → no deterministic fallback →
@@ -468,7 +468,7 @@ class TestMarkerAbsentOnSuccess:
             _column_entries(10), _column_synthesis_with_sections()
         )
         assert MARKER not in out
-        assert "Grouped by source" not in out
+        assert "This edition groups developments by source" not in out
 
     def test_column_success_no_marker(self) -> None:
         """Column digest with synthesis sections (semantic Deep Dive) → no
@@ -476,5 +476,5 @@ class TestMarkerAbsentOnSuccess:
         out = _render_column_digest(
             _column_entries(10), _column_synthesis_with_sections()
         )
-        assert "Grouped by source" not in out
+        assert "This edition groups developments by source" not in out
         assert MARKER not in out

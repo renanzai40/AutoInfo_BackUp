@@ -1,6 +1,6 @@
 # Regression #120: when grouping degrades (LLM fail/timeout/chaos), the
 # rendered product must HONESTLY say so — the pinned marker
-# `> *Grouped by source — not semantic topics*` leads the section list — and
+# `> *This edition groups developments by source*` leads the section list — and
 # keyword-group section headers must resolve via config group labels (or the
 # curated synonym map / "Additional Topics"), NEVER as bare `name.title()`
 # keyword words.
@@ -24,7 +24,7 @@
 # subprocess sets the env var ITSELF for the child, so the assertion is
 # deterministic regardless of the ambient environment.
 name: regression-grouping-degradation-honesty
-description: "Regression #120: group:fail renders the pinned 'Grouped by source — not semantic topics' marker + config-resolved keyword labels, never bare keyword headers"
+description: "Regression #120: group:fail renders the pinned 'This edition groups developments by source' marker + config-resolved keyword labels, never bare keyword headers"
 category: output
 regression: true
 regression_issue: "#120"
@@ -42,7 +42,7 @@ steps:
 
       from autoinfo.output import generate_report
 
-      MARKER = "> *Grouped by source \u2014 not semantic topics*"
+      MARKER = "> *This edition groups developments by source*"
 
       from datetime import datetime, timezone, timedelta
 
@@ -182,7 +182,7 @@ steps:
 
       from autoinfo.output import PRODUCT_TEMPLATES, generate_digest
 
-      MARKER = "> *Grouped by source \u2014 not semantic topics*"
+      MARKER = "> *This edition groups developments by source*"
 
       from datetime import datetime, timezone, timedelta
 

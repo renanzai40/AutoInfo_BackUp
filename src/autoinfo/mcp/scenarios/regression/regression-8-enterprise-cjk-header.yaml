@@ -71,12 +71,14 @@ steps:
           # No CJK characters anywhere in the rendered body.
           cjk = re.findall(r"[\u4e00-\u9fff]", out)
           assert not cjk, f"CJK leaked into enterprise-briefing body: {cjk}"
-          # The scope line renders the single-language wording.
-          scope_m = re.search(r"> \*\*Scope\*\*: (.+)$", out, re.MULTILINE)
+          # The scope line renders the single-language wording (the old
+          # `> **Scope**: selected N of M key findings` line was replaced by
+          # `> **In this briefing**: N key points · drawn from M sources`
+          # during the #85/#124 metrics-leak cleanup — same honesty contract,
+          # user-meaningful wording).
+          scope_m = re.search(r"> \*\*In this briefing\*\*: (\d+) key points · drawn from (\d+) sources", out)
           assert scope_m, "scope line missing from render"
-          count_m = re.search(r"selected (\d+) of (\d+)", scope_m.group(1))
-          assert count_m, f"selected N of M missing from scope line: {scope_m.group(1)!r}"
-          n, m = int(count_m.group(1)), int(count_m.group(2))
+          n, m = int(scope_m.group(1)), int(scope_m.group(2))
           # N matches the rendered Key Findings bullets.
           findings_m = re.search(
               r"## Key Findings\n(.*?)(?:\n## |\Z)", out, re.DOTALL
