@@ -1150,7 +1150,29 @@ def _cache_items(
     base_dir = Path("collections") / domain / source_name / today
     base_dir.mkdir(parents=True, exist_ok=True)
 
+    # Issue #139: cross-date URL dedup.  Each date directory is independent,
+    # so the same article URL re-collected on a later day would previously be
+    # written as a NEW file in the new date dir — inflating raw counts and
+    # re-appearing in later digests.  Build a URL set spanning ALL prior date
+    # dirs of this source; an item whose URL is already cached is skipped
+    # (the newest copy wins; the older file stays for provenance).
+    seen_urls: set[str] = set()
+    source_root = Path("collections") / domain / source_name
+    if source_root.is_dir():
+        for prior_file in source_root.rglob("*.json"):
+            if prior_file.parent.name == today:
+                continue
+            try:
+                with open(prior_file, encoding="utf-8") as fh:
+                    seen_urls.add(str(json.load(fh).get("source_url") or ""))
+            except (json.JSONDecodeError, OSError):
+                continue
+
     for item in items:
+        # Cross-date duplicate (same URL collected on an earlier day) — skip;
+        # the earlier file already carries it and downstream counts stay unique.
+        if item.source_url and item.source_url in seen_urls:
+            continue
         safe_id = str(item.id).replace("/", "_") if item.id else item.id
         file_path = base_dir / f"{safe_id}.json"
         # Avoid overwriting existing cached files (idempotent)
