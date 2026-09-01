@@ -29,6 +29,7 @@ from unittest.mock import MagicMock, patch
 from autoinfo.output import (
     PRODUCT_TEMPLATES,
     _group_by_theme,
+    generate_report,
 )
 
 # The pinned marker string — asserted byte-for-byte.
@@ -267,6 +268,40 @@ class TestColumnMarkerOnFail:
             and "reason='entry_level'" in r.message
             for r in caplog.records
         ), "column entry_level degradation not logged"
+
+    def test_marker_on_fail_report_product_template(self, caplog: Any) -> None:
+        """`generate_report(product_template=column)` under ``group:fail`` →
+        deterministic source-type fallback → the column product template
+        renders the pinned marker (report-path product-template marker, #120
+        C4 fix)."""
+        entries = [_entry(i) for i in range(1, 4)]
+        old = os.environ.get("AUTOINFO_FAULT_INJECT")
+        os.environ["AUTOINFO_FAULT_INJECT"] = "group:fail"
+        try:
+            with (
+                patch("autoinfo.output.KBStore", return_value=_store(entries)),
+                patch(
+                    "autoinfo.output._generate_executive_summary",
+                    return_value=_stub_summary(),
+                ),
+            ):
+                result = generate_report(
+                    domain="ai-commercial",
+                    product_template=_column_template(),
+                )
+        finally:
+            if old is None:
+                os.environ.pop("AUTOINFO_FAULT_INJECT", None)
+            else:
+                os.environ["AUTOINFO_FAULT_INJECT"] = old
+        assert isinstance(result, str)
+
+        assert MARKER in result
+        deep_dive_idx = result.index("## Deep Dive")
+        marker_idx = result.index(MARKER)
+        assert deep_dive_idx < marker_idx, (
+            "marker must appear inside the Deep Dive of the product-template report"
+        )
 
 
 # ---------------------------------------------------------------------------

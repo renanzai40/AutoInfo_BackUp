@@ -8662,6 +8662,26 @@ def _report_data_to_dict(
         }
         for ref in labeled_refs
     ]
+    sections = [
+        {
+            "title": s.title,
+            "content": s.content,
+            "entries": [
+                {
+                    **item,
+                    "source_platform": (
+                        item.get("source_label", "") or item.get("source_platform", "")
+                    ),
+                }
+                for item in s.items
+            ],
+        }
+        for s in report_data.sections
+    ]
+    if report_data.grouping_degradation_marker:
+        # #120 (C4): the honest "grouped by source" marker leads the section
+        # list when grouping degraded (mirrors the digest normalization path).
+        sections.insert(0, {"marker": report_data.grouping_degradation_marker})
     return {
         "title": report_data.title,
         "generated_at": report_data.generated_at,
@@ -8676,22 +8696,7 @@ def _report_data_to_dict(
         "key_metrics": report_data.key_metrics,
         "source_tier_badge": source_tier_badge,
         "entries": entries,
-        "sections": [
-            {
-                "title": s.title,
-                "content": s.content,
-                "entries": [
-                    {
-                        **item,
-                        "source_platform": (
-                            item.get("source_label", "") or item.get("source_platform", "")
-                        ),
-                    }
-                    for item in s.items
-                ],
-            }
-            for s in report_data.sections
-        ],
+        "sections": sections,
         "references": labeled_refs,
         "appendices": report_data.appendices,
         "grouping_degradation_marker": report_data.grouping_degradation_marker,
