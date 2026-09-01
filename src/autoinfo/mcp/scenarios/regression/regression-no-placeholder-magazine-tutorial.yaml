@@ -119,7 +119,8 @@ steps:
               kb_cls.return_value = kb
               out = generate_digest(domain="ai-commercial", period="weekly",
                                     format="markdown",
-                                    product_template=tmpl("tutorial"))
+                                    product_template=tmpl("tutorial"),
+                                    include_stale=True)
           assert isinstance(out, str), type(out)
           assert "## Learning Objectives" in out, "objectives section missing"
           assert "## Content" in out, "content section missing"
@@ -165,7 +166,8 @@ steps:
               kb = MagicMock()
               kb.list_entries.return_value = ENTRIES
               kb_cls.return_value = kb
-              out = generate_tutorial(domain="ai-commercial", format="markdown")
+              out = generate_tutorial(domain="ai-commercial", format="markdown",
+                                    include_stale=True)
           assert isinstance(out, str), type(out)
           assert "AI funding round 1" in out, "entry-derived content missing"
           assert "_No objectives defined." not in out, "objectives placeholder present"

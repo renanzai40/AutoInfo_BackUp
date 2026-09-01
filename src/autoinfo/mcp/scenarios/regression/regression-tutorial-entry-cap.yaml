@@ -58,7 +58,8 @@ steps:
               kb = MagicMock()
               kb.list_entries.return_value = ENTRIES
               kb_cls.return_value = kb
-              out = generate_tutorial(domain="ai-commercial", format="markdown")
+              out = generate_tutorial(domain="ai-commercial", format="markdown",
+                                    include_stale=True)
           assert isinstance(out, str), type(out)
           markers = re.findall(r"\[e(\d+)\]", captured["summaries"])
           assert len(markers) == 10, (len(markers), captured["summaries"])
@@ -110,7 +111,8 @@ steps:
               kb = MagicMock()
               kb.list_entries.return_value = ENTRIES
               kb_cls.return_value = kb
-              out = generate_tutorial(domain="ai-commercial", format="markdown")
+              out = generate_tutorial(domain="ai-commercial", format="markdown",
+                                    include_stale=True)
           assert isinstance(out, str), type(out)
           assert "[e1]" in captured["summaries"], "entry #1 dropped from thin domain"
           assert "[e3]" in captured["summaries"], "entry #3 dropped from thin domain"

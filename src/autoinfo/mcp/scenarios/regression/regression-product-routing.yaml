@@ -80,7 +80,8 @@ steps:
               kb_cls.return_value = kb
               out = generate_digest(domain="medical-research", period="weekly",
                                     format="markdown",
-                                    product_template=tmpl("premium-briefing"))
+                                    product_template=tmpl("premium-briefing"),
+                                    include_stale=True)
           assert isinstance(out, str), type(out)
           # Differentiated sections NON-EMPTY on the digest path (#156 pattern).
           assert "## Key Takeaways" in out, "missing Key Takeaways section"
@@ -143,7 +144,8 @@ steps:
               kb_cls.return_value = kb
               out = generate_digest(domain="general-news", period="weekly",
                                     format="markdown",
-                                    product_template=tmpl("magazine-digest"))
+                                    product_template=tmpl("magazine-digest"),
+                                    include_stale=True)
           assert isinstance(out, str), type(out)
           # Magazine-differentiated sections on the digest path.
           assert "## In This Issue" in out, "missing In This Issue index"
@@ -222,12 +224,15 @@ steps:
               kb_cls.return_value = kb
               premium = generate_digest(domain="medical-research", period="weekly",
                                         format="markdown",
-                                        product_template=tmpl("premium-briefing"))
+                                        product_template=tmpl("premium-briefing"),
+                                        include_stale=True)
               magazine = generate_digest(domain="general-news", period="weekly",
                                          format="markdown",
-                                         product_template=tmpl("magazine-digest"))
+                                         product_template=tmpl("magazine-digest"),
+                                         include_stale=True)
               standard_digest = generate_digest(domain="medical-research",
-                                                period="weekly", format="markdown")
+                                                period="weekly", format="markdown",
+                                                include_stale=True)
           with patch("autoinfo.output.KBStore") as kb_cls, \
                patch("autoinfo.llm.LLMExtractor.extract",
                      side_effect=[grouping(), summary()]), \

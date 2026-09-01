@@ -102,7 +102,8 @@ steps:
               for family, word in WORDS.items():
                   out = generate_digest(domain="medical-research", period="weekly",
                                         format="markdown",
-                                        product_template=tmpl(family))
+                                        product_template=tmpl(family),
+                                        include_stale=True)
                   assert isinstance(out, str), type(out)
                   expected = f"# Weekly {word} \u2014 medical-research"
                   assert h1(out) == expected, f"{family}: {h1(out)!r} != {expected!r}"
@@ -117,7 +118,8 @@ steps:
               kb_cls.return_value = kb
               daily = generate_digest(domain="medical-research", period="daily",
                                       format="markdown",
-                                      product_template=tmpl("column"))
+                                      product_template=tmpl("column"),
+                                      include_stale=True)
               assert h1(daily) == "# Daily Column \u2014 medical-research", h1(daily)
           print("PRODUCT_H1_DIGEST_OK")
       finally:
@@ -225,7 +227,8 @@ steps:
               kb.list_entries.return_value = ENTRIES
               kb_cls.return_value = kb
               standard_digest = generate_digest(domain="medical-research", period="weekly",
-                                                format="markdown")
+                                                format="markdown",
+                                                include_stale=True)
           assert isinstance(standard_digest, str), type(standard_digest)
           assert h1(standard_digest) == "# Weekly Digest \u2014 medical-research", h1(standard_digest)
           print("PRODUCT_H1_REPORT_OK")
