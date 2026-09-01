@@ -317,7 +317,7 @@ class TestGenerateReportRouting:
             )
 
         assert isinstance(result, str)
-        assert "# medical-research \u2014 Report" in result
+        assert "# Medical Research \u2014 Report" in result
         assert "## Sections" in result
         assert "Report \u00b7 " in result
         assert "## Key Takeaways" not in result

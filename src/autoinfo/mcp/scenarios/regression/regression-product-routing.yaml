@@ -255,7 +255,7 @@ steps:
           assert "## In This Issue" not in standard_report, "standard report rendered magazine layout"
           # Standard outputs keep their own anchors.
           assert "## Entries" in standard_digest, "standard digest anchors missing"
-          assert "# medical-research \u2014 Report" in standard_report, "standard report anchors missing"
+          assert "# Medical Research \u2014 Report" in standard_report, "standard report anchors missing"
           assert "## Sections" in standard_report, "standard report sections missing"
           print("PRODUCT_ROUTING_DISTINCT_OK")
       finally:

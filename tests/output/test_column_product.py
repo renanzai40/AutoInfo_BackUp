@@ -216,7 +216,7 @@ class TestColumnFreePath:
             report = _call_report("medical-research")
 
         # -- Assertions -------------------------------------------------------
-        assert "# medical-research — Report" in report
+        assert "# Medical Research — Report" in report
         assert "## Executive Summary" in report
         assert "IVF treatment" in report
         assert "## References" in report

@@ -226,12 +226,13 @@ class TestReferenceNewlineIntegrity:
         )
         content = tpl_path.read_text()
 
-        from autoinfo.output import _user_source_label
+        from autoinfo.output import _domain_display_name, _user_source_label
 
         env = Environment(trim_blocks=True, lstrip_blocks=True)
         env.filters["product_summary"] = lambda v: v
         env.filters["platform_name"] = lambda v: v or "\u2014"
         env.globals["user_source_label"] = _user_source_label
+        env.globals["domain_display_name"] = _domain_display_name
         tmpl = env.from_string(content)
         result = tmpl.render(
             title="Test", domain="test", generated_at="2026-01-01",
@@ -269,12 +270,13 @@ class TestReferenceNewlineIntegrity:
         )
         content = tpl_path.read_text()
 
-        from autoinfo.output import _user_source_label
+        from autoinfo.output import _domain_display_name, _user_source_label
 
         env = Environment(trim_blocks=True, lstrip_blocks=True)
         env.filters["product_summary"] = lambda v: v
         env.filters["platform_name"] = lambda v: v or "\u2014"
         env.globals["user_source_label"] = _user_source_label
+        env.globals["domain_display_name"] = _domain_display_name
         tmpl = env.from_string(content)
         result = tmpl.render(
             title="Test", domain="test", generated_at="2026-01-01",

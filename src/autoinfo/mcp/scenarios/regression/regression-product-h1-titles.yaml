@@ -105,7 +105,9 @@ steps:
                                         product_template=tmpl(family),
                                         include_stale=True)
                   assert isinstance(out, str), type(out)
-                  expected = f"# Weekly {word} \u2014 medical-research"
+                  # Issue #144: the H1 title uses the user-facing domain name
+                  # (Medical Research), never the internal slug.
+                  expected = f"# Weekly {word} \u2014 Medical Research"
                   assert h1(out) == expected, f"{family}: {h1(out)!r} != {expected!r}"
                   h1s[family] = h1(out)
           # All 8 H1s distinct (acceptance #318/#99).
@@ -120,7 +122,7 @@ steps:
                                       format="markdown",
                                       product_template=tmpl("column"),
                                       include_stale=True)
-              assert h1(daily) == "# Daily Column \u2014 medical-research", h1(daily)
+              assert h1(daily) == "# Daily Column \u2014 Medical Research", h1(daily)
           print("PRODUCT_H1_DIGEST_OK")
       finally:
           os.chdir(old)
@@ -212,14 +214,14 @@ steps:
                                          product_template=tmpl("tutorial"))
           for out in (premium, column, enterprise, tutorial, standard_report, column_default):
               assert isinstance(out, str), type(out)
-          assert h1(premium) == "# medical-research \u2014 Premium Briefing", h1(premium)
-          assert h1(column) == "# medical-research \u2014 Column", h1(column)
-          assert h1(enterprise) == "# medical-research \u2014 Enterprise Briefing", h1(enterprise)
+          assert h1(premium) == "# Medical Research \u2014 Premium Briefing", h1(premium)
+          assert h1(column) == "# Medical Research \u2014 Column", h1(column)
+          assert h1(enterprise) == "# Medical Research \u2014 Enterprise Briefing", h1(enterprise)
           # Issue #99: the tutorial family is product-aware on the report path too.
-          assert h1(tutorial) == "# medical-research \u2014 Tutorial", h1(tutorial)
+          assert h1(tutorial) == "# Medical Research \u2014 Tutorial", h1(tutorial)
           # Default report paths keep the historical title byte-identical.
-          assert h1(standard_report) == "# medical-research \u2014 Report", h1(standard_report)
-          assert h1(column_default) == "# medical-research \u2014 Report", h1(column_default)
+          assert h1(standard_report) == "# Medical Research \u2014 Report", h1(standard_report)
+          assert h1(column_default) == "# Medical Research \u2014 Report", h1(column_default)
           # Default digest path keeps the historical title byte-identical.
           with patch("autoinfo.output.KBStore") as kb_cls, \
                patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
@@ -230,7 +232,7 @@ steps:
                                                 format="markdown",
                                                 include_stale=True)
           assert isinstance(standard_digest, str), type(standard_digest)
-          assert h1(standard_digest) == "# Weekly Digest \u2014 medical-research", h1(standard_digest)
+          assert h1(standard_digest) == "# Weekly Digest \u2014 Medical Research", h1(standard_digest)
           print("PRODUCT_H1_REPORT_OK")
       finally:
           os.chdir(old)

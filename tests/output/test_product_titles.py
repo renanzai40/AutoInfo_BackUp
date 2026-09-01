@@ -269,9 +269,9 @@ class TestDigestProductH1Titles:
     def test_digest_h1_matches_product_word_and_domain(
         self, family: str
     ) -> None:
-        """The H1 is ``# Weekly {product word} — medical-research``."""
+        """The H1 is ``# Weekly {product word} — Medical Research``."""
         result = _render_digest(product_template=_registry_template(family))
-        expected = f"# Weekly {_EXPECTED_H1_WORDS[family]} \u2014 medical-research"
+        expected = f"# Weekly {_EXPECTED_H1_WORDS[family]} \u2014 Medical Research"
         assert _h1(result) == expected
 
     def test_all_product_h1s_are_distinct(self) -> None:
@@ -286,7 +286,7 @@ class TestDigestProductH1Titles:
         # Each H1 embeds its own product word + the domain.
         for family, h1 in h1s.items():
             assert _EXPECTED_H1_WORDS[family] in h1
-            assert "medical-research" in h1
+            assert "Medical Research" in h1
 
     def test_period_label_drives_daily_prefix(self) -> None:
         """``period="daily"`` yields a ``Daily`` prefix on every product."""
@@ -294,7 +294,7 @@ class TestDigestProductH1Titles:
             result = _render_digest(
                 product_template=_registry_template(family), period="daily"
             )
-            expected = f"# Daily {_EXPECTED_H1_WORDS[family]} \u2014 medical-research"
+            expected = f"# Daily {_EXPECTED_H1_WORDS[family]} \u2014 Medical Research"
             assert _h1(result) == expected
 
     def test_period_label_drives_weekly_prefix(self) -> None:
@@ -303,13 +303,13 @@ class TestDigestProductH1Titles:
             result = _render_digest(
                 product_template=_registry_template(family), period="weekly"
             )
-            expected = f"# Weekly {_EXPECTED_H1_WORDS[family]} \u2014 medical-research"
+            expected = f"# Weekly {_EXPECTED_H1_WORDS[family]} \u2014 Medical Research"
             assert _h1(result) == expected
 
     def test_default_digest_h1_unchanged(self) -> None:
         """No product_template → the historical ``Weekly Digest`` H1 (byte-identical)."""
         result = _render_digest()
-        assert _h1(result) == "# Weekly Digest \u2014 medical-research"
+        assert _h1(result) == "# Weekly Digest \u2014 Medical Research"
 
 
 # ===================================================================
@@ -336,15 +336,15 @@ class TestReportProductH1Titles:
             product_template=_registry_template(family),
             report_type=report_type,
         )
-        expected = f"# medical-research \u2014 {_EXPECTED_H1_WORDS[family]}"
+        expected = f"# Medical Research \u2014 {_EXPECTED_H1_WORDS[family]}"
         assert _h1(result) == expected
 
     def test_default_report_h1_unchanged(self) -> None:
-        """No product_template → the historical ``medical-research — Report`` H1."""
+        """No product_template → the historical ``Medical Research — Report`` H1."""
         result = _render_report(report_type="standard")
-        assert _h1(result) == "# medical-research \u2014 Report"
+        assert _h1(result) == "# Medical Research \u2014 Report"
 
     def test_default_column_report_h1_unchanged(self) -> None:
         """``report_type="column"`` without a template keeps ``— Report`` (T40)."""
         result = _render_report(report_type="column")
-        assert _h1(result) == "# medical-research \u2014 Report"
+        assert _h1(result) == "# Medical Research \u2014 Report"

@@ -167,7 +167,7 @@ class TestGenerateReport:
             report = _call_report("test-domain")
 
         assert "This edition has no curated items yet" in report
-        assert "test-domain" in report
+        assert "Test Domain" in report
         assert "No knowledge base entr" not in report
         assert "_No " not in report
 
@@ -210,7 +210,7 @@ class TestGenerateReport:
 
         # -- Assertions -------------------------------------------------------
         # Title
-        assert "# medical-research — Report" in report
+        assert "# Medical Research — Report" in report
 
         # Executive summary section
         assert "## Executive Summary" in report
@@ -507,8 +507,8 @@ class TestReportTypes:
             )
 
         # Both should have same structure
-        assert "# medical-research — Report" in report_default
-        assert "# medical-research — Report" in report_explicit
+        assert "# Medical Research — Report" in report_default
+        assert "# Medical Research — Report" in report_explicit
         assert "## Executive Summary" in report_default
         assert "## Executive Summary" in report_explicit
         assert "## Sections" in report_default
@@ -541,7 +541,7 @@ class TestReportTypes:
 
             report = _call_report("medical-research", report_type="industry")
 
-        assert "medical-research" in report
+        assert "Medical Research" in report
         assert "## Executive Summary" in report
         assert "## Sections" in report
 
@@ -572,7 +572,7 @@ class TestReportTypes:
 
             report = _call_report("medical-research", report_type="competitive")
 
-        assert "medical-research" in report
+        assert "Medical Research" in report
         assert "## Executive Summary" in report
         assert "## Sections" in report
 
@@ -603,7 +603,7 @@ class TestReportTypes:
 
             report = _call_report("medical-research", report_type="trend")
 
-        assert "medical-research" in report
+        assert "Medical Research" in report
         assert "## Executive Summary" in report
         assert "## Sections" in report
 
@@ -636,7 +636,7 @@ class TestReportTypes:
                 "medical-research", report_type="daily-briefing"
             )
 
-        assert "medical-research" in report
+        assert "Medical Research" in report
         assert "## Executive Summary" in report
         assert "## Sections" in report
 
