@@ -73,6 +73,7 @@ EXPECTED_PASS: dict[str, list[str]] = {
         "CNBC Investing",
         "TheStreet",
         "MarketWatch Markets (DJ)",  # #6/#7 (2026-08-24): MW feed domain reachable
+        "WSJ Markets",  # #101-fin (2026-08-30): frozen feed, disabled but dispatchable
     ],
     "tech-ai-developer": [
         "Substack RSS (tech) — Pragmatic Engineer",
@@ -85,6 +86,13 @@ EXPECTED_PASS: dict[str, list[str]] = {
         "Bilibili (B站)",
         "HN Algolia API",  # #6/#7 (2026-08-24): reachable on mainland CN
         "GitHub Blog",  # #6/#7 (2026-08-24): reachable on mainland CN
+        "hnrss",  # #27 (2026-08-25): card-verified feeds
+        "ars-technica",  # #27
+        "techcrunch-ai",  # #27
+        "infoq-cn",  # #27
+        "lobsters",  # #27
+        "juejin",  # #27
+        "qbitai",  # #27
     ],
     "language-learning": ["project-gutenberg", "news-in-levels", "commonlit"],
     # M3T24 demo domains (D12/D14/D15/D16) — all sources dispatch cleanly.
@@ -112,6 +120,9 @@ EXPECTED_PASS: dict[str, list[str]] = {
         "the-verge",
         "engadget",
         "spacenews",
+        "people-cn-world",
+        "cgtn-world",
+        "sina-marquee",
     ],
     "gaming": [
         "ign-rss",
@@ -122,9 +133,18 @@ EXPECTED_PASS: dict[str, list[str]] = {
         "gamespot",
         "pc-gamer",
         "eurogamer",
+        "rock-paper-shotgun",
+        "gematsu",
     ],
-    "b2b": ["producthunt", "techcrunch", "crunchbase-news", "a16z", "hackernews", "saastr"],
-    "retail": ["retail-dive", "modern-retail", "ebrun-via-google-news", "shopify-news", "digiday"],
+    "b2b": ["a16z", "hackernews", "saastr", "b2b-news-network", "marTech"],
+    "retail": [
+        "retail-dive",
+        "modern-retail",
+        "ebrun-via-google-news",
+        "shopify-news",
+        "digiday",
+        "retailwire",
+    ],
 }
 
 EXPECTED_FAIL: dict[str, list[str]] = {
@@ -236,12 +256,12 @@ def test_source_dispatch_pass_fail() -> None:
             f"  Got:      {sorted(domain_fail_names)}"
         )
 
-        # 3. Grand totals: 74 pass, 0 fail (29 legacy incl. M3T30 Finnhub +
-        #    30 M3T24 + 2 #288 keyless RSS + 13 #6/#7 replacements; MarketWatch
-        #    restored as MW RSS feed domain for #6/#7)
-        assert len(all_pass) == 74, f"Expected 74 PASS, got {len(all_pass)}"
+        # 3. Grand totals: 87 pass, 0 fail (all demo-domain sources now
+        #    dispatch — HttpApiHandler + per-type handlers cover every source;
+        #    disabled sources are still dispatchable, matching the count above)
+        assert len(all_pass) == 87, f"Expected 87 PASS, got {len(all_pass)}"
         assert len(all_fail) == 0, f"Expected 0 FAIL, got {len(all_fail)}"
-        assert total == 74, f"Expected 74 total sources, got {total}"
+        assert total == 87, f"Expected 87 total sources, got {total}"
 
 
 # ---------------------------------------------------------------------------

@@ -46,6 +46,10 @@ EXPECTED = {
             "TheStreet",
             # #6/#7 (2026-08-24): MW feed domain reachable on mainland CN
             "MarketWatch Markets (DJ)",
+            # #101-fin (2026-08-30): WSJ Markets feeds.a.dj.com frozen since
+            # 2025-01 (enabled: false) — kept in YAML, counted in total like
+            # tech-ai-developer's disabled Spotify AI Podcasts.
+            "WSJ Markets",
         ],
     },
     "tech-ai-developer": {
@@ -104,6 +108,9 @@ def _load_sources(domain: str) -> list[dict[str, Any]]:
             "CNBC Investing",
             "TheStreet",
             "MarketWatch Markets (DJ)",
+            # #101-fin (2026-08-30): WSJ Markets disabled (frozen feed) but kept
+            # in YAML — counted in total, consistent with tech-ai-developer.
+            "WSJ Markets",
         ],
     ),
     (

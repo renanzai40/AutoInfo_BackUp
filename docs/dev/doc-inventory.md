@@ -14,7 +14,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | Metric | Value |
 |--------|-------|
 | Total files | 92 |
-| Total lines | 30664 |
+| Total lines | 30694 |
 | Active files | 65 |
 | Archived files | 27 |
 | Category — archive | 27 files / 8627 lines |
@@ -24,7 +24,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | Category — adr | 9 files / 424 lines |
 | Category — specs | 12 files / 8815 lines |
 | Category — validation-reports | 14 files / 3186 lines |
-| Category — docs/dev | 21 files / 8081 lines |
+| Category — docs/dev | 21 files / 8111 lines |
 | Category — docs/root | 1 files / 61 lines |
 
 ## Inventory
@@ -96,7 +96,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/specs/quality-gates.md` | 187 | specs | active | — |
 | `dev/specs/user-lifecycle-definition.md` | 441 | specs | active | — |
 | `dev/validation-governance.md` | 75 | docs/dev | active | — |
-| `dev/validation-loop-log.md` | 62 | docs/dev | active | — |
+| `dev/validation-loop-log.md` | 81 | docs/dev | active | — |
 | `dev/validation-reports/README.md` | 59 | validation-reports | active | — |
 | `dev/validation-reports/close-backup-issue-19-20.md` | 37 | validation-reports | active | — |
 | `dev/validation-reports/close-backup-issue-22-37.md` | 77 | validation-reports | active | — |
@@ -111,7 +111,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/validation-reports/evidence-2026-08-12/ac5-report-standard.md` | 813 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-tutorial-student.md` | 501 | validation-reports | active | — |
 | `dev/validation-reports/final-report-backup-issues-19-38.md` | 62 | validation-reports | active | — |
-| `dev/validation-scenario-contract.md` | 782 | docs/dev | active | — |
+| `dev/validation-scenario-contract.md` | 793 | docs/dev | active | — |
 | `dev/workflow-charter.md` | 67 | docs/dev | active | workflow-charter |
 | `dev/七阶段AI开发流程-用CodingAgent交付成品的方法论.md` | 234 | docs/dev | active | methodology |
 | `glossary.md` | 61 | docs/root | active | glossary |

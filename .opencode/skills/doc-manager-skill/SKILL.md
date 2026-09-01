@@ -121,7 +121,7 @@ categories · CLI groups 28 · delivery channels 13 · validation scenarios 129
 (65 functional + 64 regression) · demo domains 21.
 Also keep consistent wherever they appear (README, AGENTS, CHANGELOG, specs,
 skills): source types 29, collector handlers 30, output templates 8,
-LLM-required tools 16, REST port 8741, test count ~4345.
+LLM-required tools 16, REST port 8741, test count ~4644.
 
 ### Step 4 — Verify
 1. `python3 scripts/doc_inventory.py --check` — must exit 0 (README↔AGENTS↔skill

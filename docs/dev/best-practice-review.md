@@ -118,7 +118,7 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 | 类型检查已主流化(86-88% 采用);mypy 仍主流,Rust 系检查器上升 | Meta Typed Python Survey 2024/2025 🔬 | ruff + mypy strict — 与主流一致 | ✅ 已满足 |
 | src layout 是事实默认(pytest/PyPA 官方推荐) | pytest goodpractices;pydevtools | `src/autoinfo/` — 已用 | ✅ 已满足 |
 | 覆盖率是探针不是裁决,不设全局门槛 | Fowler;Google | G0-G5 不用覆盖率做门 | ✅ 已满足(刻意不为) |
-| 测试断言行为而非实现细节;防 AI 生成"自我验证"测试 | deep-modules-skill;AI 评审共识 | ~4345 测试;测试质量(mutation 视角)未系统验证 | 🟡 部分 |
+| 测试断言行为而非实现细节;防 AI 生成"自我验证"测试 | deep-modules-skill;AI 评审共识 | ~4644 测试;测试质量(mutation 视角)未系统验证 | 🟡 部分 |
 
 ### D1-6 代码评审实践 🔬 / 📐
 
@@ -209,7 +209,7 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 
 | 业界主张 | 来源 | AutoInfo 对照 | 结论 |
 |---------|------|--------------|------|
-| 金字塔是成本模型不是比率;AI 生成测试会系统性放错层级(写 15 分钟套件) | Fowler;Nick Perkins 2026 | 4345 pytest + 116 场景分层结构未显式文档化 | 🟡 部分 |
+| 金字塔是成本模型不是比率;AI 生成测试会系统性放错层级(写 15 分钟套件) | Fowler;Nick Perkins 2026 | 4644 pytest + 116 场景分层结构未显式文档化 | 🟡 部分 |
 | E2E 脆性实证:Google 0.5% 小 vs 14% 大 flaky;不可靠测试移出 CI gate | Google Testing Blog 🔬 | 116 场景是 large tests;flaky 处理机制(多跑统计/移出 gate)未文档化 | 🟡 部分 |
 | TDD 实证校准:收益来自节奏非顺序;测试先行不是银弹;ATDD 十年后单一来源理想未兑现 | TSE 2013;Karac 2018;Gojko Adzic 🔬 | RED→GREEN + regression flywheel ✅(节奏价值有实证支撑) | ✅ 已满足 |
 | 覆盖率是探针;mutation testing 是解药(Google 15M mutants;70% 真实 bug 与 mutant 耦合) | Fowler;Google 🔬 | 未用 mutation;G4 factual 自审是自证性 | 🟡 部分 |

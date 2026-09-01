@@ -183,7 +183,7 @@ LLM-based structured extraction, summarization, and a queryable knowledge base.
 | LLM fallback chain | ✅ Shared `llm.call_with_fallback` — every LLM call site (extraction + 17 standalone) walks `[primary] + config.llm.fallback` (actual: `mimo-v2.5` same-gateway, empty `provider`/`api_key` inherit primary); first successful model wins; per-provider shared rate limiting (`AUTOINFO_LLM_MAX_CONCURRENCY`, default 4) + jittered 429/5xx backoff on every chain entry and all fan-out paths |
 | Dead-source detection | ✅ Semantic Scholar 429 → `SourceFailure` (fail-fast); arXiv rss/bio → rss/q-bio fix |
 | CLI module entry | ✅ `python -m autoinfo.cli` runs the same Typer app; `collect` live per-source progress printer |
-| Test suite | ✅ ~4345 tests collected (incl. validation wave E1-E9 scenarios + regression suite + #141-#164 regression guards + kb-curation wave + hermetic config-seam fixes + llm-concurrency wave + baseline-aware coverage-gate tests + security-assertion group; order-dependency fixes landed 2026-08-12) |
+| Test suite | ✅ ~4644 tests collected (incl. validation wave E1-E9 scenarios + regression suite + #141-#164 regression guards + kb-curation wave + hermetic config-seam fixes + llm-concurrency wave + baseline-aware coverage-gate tests + security-assertion group; order-dependency fixes landed 2026-08-12) |
 
 ## Quick Start
 

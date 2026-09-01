@@ -288,7 +288,7 @@ This is the standard. Everything else — tests, architecture, source curation �
 | True Test | ✅ 13-point agent-verifiable checklist — all pass |
 | Code implementation | ✅ ~18K+ lines Python, 35+ modules |
 | Demo source curation | ✅ 7 curated sources shipped with library metadata |
-| Tests | ✅ ~4345 tests across 100+ test files (includes new collector tests) |
+| Tests | ✅ ~4644 tests across 100+ test files (includes new collector tests) |
 | MCP tools | ✅ 146 tools across 35 categories |
 | Technical decisions | ✅ 34 categories documented, all implemented |
 | CLI commands | ✅ 28 command groups |
@@ -444,7 +444,7 @@ Consumer requirements identified from global information payment research (5 rep
 | Product delivery | ✅ RAW (API feeds, webhook streams, bulk export); ✅ PROCESSED (scheduled digests, thematic reports, alert streams) |
 | Delivery channels | 13 channels ✅ (SMTP, Webhook, REST API, File Export, Discord, Telegram, WeChat Work, WeChat OA, DingTalk, FeiShu, RSS, Social Publish, Push). Email as mandatory fallback. |
 | Subscription/billing | ✅ Fully implemented | Stripe webhook endpoint (signature verification), stripe-mock dev setup, freemium gating, usage-based billing. Full Stripe lifecycle from checkout to webhook event dispatch. |
-| Tests | ~4345 (includes new collector tests) |
+| Tests | ~4644 (includes new collector tests) |
 | Demo domains | 13 with curated sources |
 | **🔴 v1.6+ residual gaps** | **11 low-effort fixes** |
 | **🟢 Consumer-facing output gaps** | **6 items** (see §14 consumer gaps) |
