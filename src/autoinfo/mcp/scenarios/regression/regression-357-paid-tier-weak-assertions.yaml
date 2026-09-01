@@ -166,7 +166,13 @@ steps:
       for slot in impl + actions:
           assert "_No " not in slot, f"placeholder leaked: {slot!r}"
           assert slot.strip(), "empty slot leaked"
-      assert "Track Startup A" in actions[0], actions
+      # #54 honest-fallback contract: the fallback action is "Revisit {title}
+      # ({url}) next period for a differentiated assessment." — it states the
+      # signal was NOT captured this period (honest, never fabricated
+      # analysis).  Pre-#54 it said "Track ... for validation", which was
+      # indistinguishable from real LLM analysis; the assertion follows the
+      # current contract.
+      assert "Revisit Startup A" in actions[0], actions
       # A substantive LLM value is preserved, not clobbered.
       assert impl[1] == "Real implication here", impl
       print("PREMIUM_ACTION_FALLBACK_OK")
