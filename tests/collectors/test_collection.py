@@ -997,3 +997,50 @@ class TestCacheItemsIdHandling:
             / "10.4103_2348-2907.142333.json"
         )
         assert expected.is_file()
+
+
+# ======================================================================
+# _cache_items cross-date URL dedup (GitHub issue #139)
+# ======================================================================
+
+
+class TestCacheItemsCrossDateDedup:
+    def test_same_url_across_dates_written_once(self, tmp_path, monkeypatch):
+        """A re-collected article URL must not be re-written under a later
+        date directory — the earlier cached file stays as provenance and the
+        duplicate is skipped (#139)."""
+        monkeypatch.chdir(tmp_path)
+        # Simulate a prior-day collection of URL X.
+        prior_dir = tmp_path / "collections" / "tech" / "gh-trending" / "2026-08-24"
+        prior_dir.mkdir(parents=True)
+        (prior_dir / "a.json").write_text(
+            json.dumps({"id": "a", "source_url": "https://example.com/1", "title": "A"}),
+            encoding="utf-8",
+        )
+
+        # Today's collection returns the same URL (A) plus a new one (B).
+        item_a = _make_item("a2")
+        item_a.source_url = "https://example.com/1"  # duplicate of prior day
+        item_a.title = "A again"
+        item_b = _make_item("b")
+        item_b.source_url = "https://example.com/2"
+        _cache_items([item_a, item_b], "tech", "gh-trending")
+
+        # Only B is written under today's date directory.
+        today_files = list(
+            (tmp_path / "collections" / "tech" / "gh-trending" / date.today().isoformat()).glob("*.json")
+        )
+        assert [f.name for f in today_files] == ["b.json"], (
+            "cross-date duplicate URL re-written under a later date dir"
+        )
+
+    def test_unique_urls_all_written(self, tmp_path, monkeypatch):
+        """No prior dirs -> every item is written (no false positives)."""
+        monkeypatch.chdir(tmp_path)
+        item_a = _make_item("a")
+        item_a.source_url = "https://example.com/1"
+        item_b = _make_item("b")
+        item_b.source_url = "https://example.com/2"
+        _cache_items([item_a, item_b], "tech", "gh-trending")
+        today_dir = tmp_path / "collections" / "tech" / "gh-trending" / date.today().isoformat()
+        assert sorted(f.name for f in today_dir.glob("*.json")) == ["a.json", "b.json"]
