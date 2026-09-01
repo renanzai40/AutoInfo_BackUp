@@ -347,7 +347,7 @@ class TestPremiumBriefingDigestPath:
 
         # Title + masthead (leading newline from trim_blocks)
         assert result.lstrip().startswith("# ") or "\n# " in result
-        assert "**Domain**: medical-research" in result
+        assert "**Domain**: Medical Research" in result
         # Executive summary (flat key)
         assert "## Executive Summary" in result
         assert "IVF technology advancements" in result

@@ -9,9 +9,9 @@
    implications, risks, action_required, key_metrics. strict-undefined is OFF
    in the ProductTemplate environment, but every optional key is still guarded
    explicitly (per-section empty-state rules in spec §6). #}
-# {{ title|default('AutoInfo Enterprise Briefing', true) }}
+# {{ title|default('Enterprise Briefing', true) }}
 
-**Domain**: {{ domain|default('') }}  
+**Domain**: {{ domain_display_name(domain) }}  
 **Generated**: {{ generated_at|default('') }}  
 
 ---

@@ -236,9 +236,9 @@ class TestGenerateReport:
         assert "https://pubmed.ncbi.nlm.nih.gov/87654322/" in report
 
         # Metadata
-        assert "**Domain**: medical-research" in report
+        assert "**Domain**: Medical Research" in report
         assert "**Generated**:" in report
-        assert "medical-research" in report
+        assert "Medical Research" in report
 
     def test_llm_grouping_failure_falls_back_to_single_group(
         self, sample_entries: list[dict[str, Any]]

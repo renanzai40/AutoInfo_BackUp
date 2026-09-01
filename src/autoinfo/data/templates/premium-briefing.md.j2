@@ -4,9 +4,9 @@
    non-empty under BOTH report-shaped and digest-shaped (post-normalization)
    flat key contexts. Keys: §2.1 of phaseA-template-spec.md. #}
 
-# {{ title | default('AutoInfo Premium Briefing') }}
+# {{ title | default('Premium Briefing') }}
 
-**Domain**: {{ domain | default('') }}
+**Domain**: {{ domain_display_name(domain) }}
 **Generated**: {{ generated_at | default('') }}
 
 ---
