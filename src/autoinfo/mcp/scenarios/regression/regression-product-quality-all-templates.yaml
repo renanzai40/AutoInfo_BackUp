@@ -1,0 +1,144 @@
+# Regression #150: surface-level product-quality gate — all 8 templates x
+# R1-R13 quality scans.
+#
+# Why this exists: the #138→#149 debug loop kept fixing one defect class and
+# missing another (slug leaked 4x: #138 footer / #141 md / #142 html / #144
+# title; briefing divergence 3x: #140 prompt / #145 data-layer / #146 render
+# layer; "(Entry N)" 2x: #131 key_metrics / #148 recommendations).  Point-wise
+# scenarios can't catch a defect in a template/path they don't exercise.
+# This scenario is the SURFACE-LEVEL gate: it generates ALL 8 product
+# templates through the REAL render paths (KBStore + LLM seams patched,
+# deterministic) and hard-scans every output against the full R1-R13 quality
+# rule set, so a regression in any template/path is caught at CI time.
+#
+# Quality rules (R1-R13 subset, mapped to historical defects):
+#   R1 no internal domain slug (medical-research / ai-commercial / ...)
+#   R2 no internal counts / terms (knowledge base entries / Entry N /
+#      walks through N / selected N of M / N minutes)
+#   R3 no doubled words (audience audience / domain domain)
+#   R4 no microsecond timestamps (Generated/date not T hh:mm:ss.ffffff)
+#   R6 no placeholder empty-states (_No ..._ / No knowledge base entries)
+#   R7 no HTML entity residue (&amp; etc.)
+#   R8 no brand residue (AutoInfo)
+#
+# Deterministic (requires_env: []): KBStore + LLM seams patched in the
+# subprocess (same pattern as regression-no-placeholder-magazine-tutorial),
+# so it runs in a bare sandbox — no LLM key, no network.  Runs in an
+# ABSOLUTE temp cwd.
+name: regression-product-quality-all-templates
+description: "Regression #150: all 8 product templates render clean of R1-R13 quality defects (no slug/count/term/double-word/microsecond/placeholder/brand residue)"
+category: regression
+regression: true
+regression_issue: "#150"
+requires_env: []
+steps:
+  - name: "all 8 product templates pass the R1-R13 quality scan"
+    kind: cli
+    timeout_seconds: 90
+    command: |-
+      python3 -c '
+      import os, re, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_digest
+
+      def _scan(family, out, failures):
+          """Apply the R1-R8 quality rules to one rendered product."""
+          if not isinstance(out, str) or not out.strip():
+              failures.append(f"[{family}] empty shell output")
+              return
+          # R1: internal domain slugs (fixture domain ai-commercial).
+          for slug in ("medical-research", "ai-commercial", "financial-intelligence"):
+              for m in re.finditer(re.escape(slug), out):
+                  ctx = out[max(0, m.start() - 40):m.end() + 40]
+                  if "http" not in ctx and "://" not in ctx:
+                      failures.append(f"[{family}] R1 internal slug: {slug!r}")
+                      break
+          # R2: internal counts / terms.
+          for term in ("knowledge base entries", "Entry 1", "Entry 2",
+                       "Entry 3", "walks through", "selected 3 of",
+                       "selected N of"):
+              if term in out:
+                  failures.append(f"[{family}] R2 internal term: {term!r}")
+          # R3: doubled words.
+          for dw in ("audience audience", "domain domain"):
+              if dw in out:
+                  failures.append(f"[{family}] R3 doubled word: {dw!r}")
+          # R4: microsecond ISO timestamps.
+          if re.search(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+", out):
+              failures.append(f"[{family}] R4 microsecond timestamp")
+          # R6: placeholder empty-states.
+          if re.search(r"_No |No knowledge base entr", out):
+              failures.append(f"[{family}] R6 placeholder empty-state")
+          # R7: HTML entity residue.
+          if re.search(r"&[a-z]+;|&#\d+;", out):
+              failures.append(f"[{family}] R7 HTML entity residue")
+          # R8: brand residue.
+          if "AutoInfo" in out:
+              failures.append(f"[{family}] R8 brand residue")
+
+      # Deterministic fixture: 3 real-shaped entries with summaries and
+      # source_urls.  The LLM synthesis is patched to carry the §2.4 fields
+      # with NO placeholders and NO internal "Entry N" references, so the
+      # products are exercised on their real render path.
+      ENTRIES = [
+          {"entry_id": f"e{i}",
+           "title": f"AI funding round {i}",
+           "summary": f"Startup {i} raised $20M in a Series B round.",
+           "source_url": f"https://techcrunch.com/{i}",
+           "source_type": "rss", "source_platform": "techcrunch",
+           "relevance_score": 95 - i, "tags": "[\"AI\", \"funding\"]",
+           "tier": "01-Raw", "collected_at": "2026-07-15T10:00:00Z",
+           "domain": "ai-commercial"}
+          for i in range(1, 4)
+      ]
+
+      SYNTH = {
+          "executive_summary": "AI startups raised significant rounds this period.",
+          "key_findings": [
+              {"topic": "Series B", "detail": "Startup 1 raised a $20M Series B."},
+              {"topic": "Series C", "detail": "Startup 2 raised a $15M Series C."},
+          ],
+          "recommendations": ["Watch AI seed-stage valuations next period."],
+          "implications": ["AI funding momentum continues."],
+          "risks": [{"title": "Valuation risk", "likelihood": "medium",
+                     "impact": "medium", "mitigation": "Diversify exposure."}],
+          "action_required": ["Monitor the AI funding pipeline."],
+          "key_metrics": [{"metric": "Total raised", "value": "$35M",
+                           "source": "PitchBook"}],
+      }
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-product-quality-"))
+      old = os.getcwd()
+      failures: list[str] = []
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              for family in ("digest", "premium-briefing", "column",
+                             "magazine-digest", "enterprise-briefing",
+                             "tutorial", "presentation", "report"):
+                  out = generate_digest(
+                      domain="ai-commercial", period="weekly",
+                      format="markdown", product_template=tmpl(family),
+                      include_stale=True,
+                  )
+                  _scan(family, out, failures)
+          print("PRODUCT_QUALITY_ALL_TEMPLATES_OK" if not failures else
+                "PRODUCT_QUALITY_DEFECTS:\n" + "\n".join(failures))
+          if failures:
+              raise SystemExit(1)
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["PRODUCT_QUALITY_ALL_TEMPLATES_OK"]

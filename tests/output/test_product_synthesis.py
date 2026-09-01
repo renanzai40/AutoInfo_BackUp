@@ -358,9 +358,10 @@ class TestDigestProductFieldsFlow:
         # The prompt requested the product fields (keyed by family).
         assert '"implications"' in prompt
         assert "index-aligned" in prompt
-        # Takeaway 1 and 2 each carry their aligned implication.
+        # Issue #146: the premium-briefing uses a DIFFERENTIATED entry subset
+        # (top relevance core), so with this 2-entry fixture it renders the
+        # top takeaway and its aligned implication/risk/action.
         assert "> **So what**: Clinics should evaluate time-lapse imaging" in rendered
-        assert "> **So what**: Regulators and payers should watch" in rendered
         # Aligned risk dict renders its fields.
         assert "**Risk / Opportunity:** Validation lag — likelihood high / impact" in rendered
         # Aligned action renders.

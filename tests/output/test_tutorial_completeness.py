@@ -86,7 +86,8 @@ def _render(shell: dict[str, object], domain: str = "french-learning") -> str:
 class TestTutorialCompleteness:
     def test_shell_header_is_tutorial_not_digest(self) -> None:
         out = _render(_SHELL)
-        assert "# french-learning — Tutorial" in out
+        # Issue #144: H1 uses the display domain name (French Learning).
+        assert "# French Learning — Tutorial" in out
         assert "Weekly Digest" not in out
 
     def test_header_fields_filled(self) -> None:
@@ -173,7 +174,8 @@ class TestDigestPathTutorialH1:
 
     def test_h1_is_weekly_tutorial_not_digest(self) -> None:
         out = _digest_render_tutorial()
-        assert "# Weekly Tutorial — french-learning" in out
+        # Issue #144: H1 uses the display domain name (French Learning).
+        assert "# Weekly Tutorial — French Learning" in out
         assert "Weekly Digest" not in out
 
     def test_header_fields_filled_on_digest_path(self) -> None:
@@ -182,7 +184,11 @@ class TestDigestPathTutorialH1:
         assert "**Duration**: 2 minutes" in out
         assert "no prior experience required" in out
         assert "## Summary" in out
-        assert "walks through 2 knowledge base entries" in out
+        # Issue #147: the digest-path summary no longer leaks internal
+        # counts ("walks through 2 knowledge base entries") — it uses
+        # user-facing wording with the display domain name.
+        assert "walks through 2 knowledge base entries" not in out
+        assert "covers the key weekly findings in French Learning" in out
 
 
 class TestTutorialEntryCap:

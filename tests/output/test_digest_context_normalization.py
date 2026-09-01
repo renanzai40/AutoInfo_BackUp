@@ -351,14 +351,14 @@ class TestPremiumBriefingDigestPath:
         # Executive summary (flat key)
         assert "## Executive Summary" in result
         assert "IVF technology advancements" in result
-        # Key Takeaways — numbered, converted list[str]
+        # Key Takeaways — numbered, converted list[str].  Issue #146: the
+        # premium-briefing uses a DIFFERENTIATED entry subset (top relevance
+        # core), so with this 2-entry fixture it renders the top finding.
         assert "## Key Takeaways" in result
         assert "1. Time-lapse imaging: Significant improvement" in result
-        assert "2. AI embryo selection: Promising but lacks" in result
         # References — 5-key items derived from entries
         assert "## References" in result
         assert "https://pubmed.ncbi.nlm.nih.gov/12345678/" in result
-        assert "https://pubmed.ncbi.nlm.nih.gov/87654321/" in result
         # Footer marker literal to premium-briefing.md.j2
         assert "Premium Briefing \u00b7 " in result
         # NOT the default digest.md.j2 layout

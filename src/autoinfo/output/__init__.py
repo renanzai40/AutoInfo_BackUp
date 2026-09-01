@@ -1442,8 +1442,18 @@ _ENTRY_REF_RE: Final = re.compile(r"\(?\s*(?i:Entry)\s+\d+(?:\s*/\s*\d+)*\s*\)?"
 
 
 def _strip_entry_refs(text: str) -> str:
-    """Remove LLM-echoed internal ``Entry N`` references from a source field."""
-    cleaned = _ENTRY_REF_RE.sub("", text or "")
+    """Remove LLM-echoed internal ``Entry N`` references from a source field.
+
+    Only trims trailing whitespace when nothing was removed, so legitimate
+    punctuation (a closing period/paren) is preserved for clean text.
+    """
+    if not text:
+        return text or ""
+    cleaned = _ENTRY_REF_RE.sub("", text)
+    if cleaned == text:
+        return text
+    # An Entry reference was removed — collapse leftover whitespace and drop
+    # the dangling punctuation that preceded it ("(Entry 1)." -> "...").
     return re.sub(r"\s{2,}", " ", cleaned).strip(" .,;:").strip()
 
 
@@ -3784,26 +3794,27 @@ def _select_family_entry_subset(
     Other families return the input unchanged.  Deterministic, no LLM.
     """
     if product_family == "premium-briefing":
-        return _sorted_ref_entries(entries)[:12]
+        sorted_entries = _sorted_ref_entries(entries)
+        # Deep core: the top relevance entries, capped at half the corpus
+        # so a small domain never yields the FULL list (issue #146 — a
+        # ≤12-entry domain previously returned all entries, overlapping the
+        # enterprise set 100%).
+        cap = min(12, max(len(sorted_entries) // 2, 1))
+        return sorted_entries[:cap]
     if product_family == "enterprise-briefing":
         sorted_entries = _sorted_ref_entries(entries)
-        if len(sorted_entries) <= 25:
-            return sorted_entries
-        # Broad decision coverage: sample ACROSS the relevance range (from
-        # the mid-to-lower half outward) so the enterprise set is NOT a
-        # superset of the premium deep core — the two briefings source
-        # genuinely different entries.
-        lower_half = sorted_entries[len(sorted_entries) // 2 :]
-        upper_half = sorted_entries[: len(sorted_entries) // 2]
-        # Interleave from both halves: the mid-to-lower items premium skips,
-        # plus a light sampling of the top tier for decision anchor points.
-        step_lower = max(len(lower_half) // 20, 1)
-        step_upper = max(len(upper_half) // 5, 1)
-        chosen = lower_half[::step_lower][:20] + upper_half[::step_upper][:5]
-        # De-dupe by source_url while preserving order.
+        n = len(sorted_entries)
+        premium_cap = min(12, max(n // 2, 1))
+        # Enterprise excludes premium's deep core and instead covers the
+        # mid-to-lower relevance range (broad decision coverage) plus a few
+        # top-tier anchors.  Overlap is bounded to just the anchor count, so
+        # the two briefings diverge at ANY corpus size (#146).
+        mid_tail = sorted_entries[premium_cap:]
+        anchor_count = max(2, min(n // 8, 5))
+        anchors = sorted_entries[:: max(n // anchor_count, 1)][:anchor_count]
         seen: set[str] = set()
         deduped: list[dict[str, Any]] = []
-        for e in chosen:
+        for e in list(mid_tail) + list(anchors):
             u = str(e.get("source_url") or "")
             if u and u in seen:
                 continue
@@ -5272,7 +5283,9 @@ def _normalize_digest_product_context(
                 text = str(item["text"]).strip()
             else:
                 continue
-            finding: dict[str, Any] = {"text": text}
+            # Issue #148: strip LLM-echoed internal "Entry N" references from
+            # key-finding text before it reaches the template.
+            finding: dict[str, Any] = {"text": _strip_entry_refs(text)}
             src = str(item.get("source_url") or "").strip()
             if src:
                 finding["source_url"] = src
@@ -5300,9 +5313,9 @@ def _normalize_digest_product_context(
     flat["key_findings"] = findings
 
     raw_recommendations = synthesis.get("recommendations", [])
-    flat["recommendations"] = (
-        raw_recommendations if isinstance(raw_recommendations, list) else []
-    )
+    flat["recommendations"] = [
+        _strip_entry_refs(str(r)) for r in raw_recommendations
+    ] if isinstance(raw_recommendations, list) else []
 
     # --- References derived from entries (report-path item shape) ----------
     # #325: derive the specific source label for entries whose stored
@@ -5436,10 +5449,17 @@ def _normalize_digest_product_context(
         if raw_prereq.lower() in ("tbd", "none", "", "n/a"):
             flat["prerequisites"] = "None (no prior experience required)"
         if not str(flat.get("summary") or "").strip():
+            # Issue #147: the previous fallback leaked internal counts
+            # ("27 knowledge base entries"), the internal KB term, the raw
+            # domain slug, and a doubled "audience audience" word.  Use
+            # user-facing wording with the display domain name and no count.
+            # Note: *audience* already reads "general audience", so do not
+            # append another "audience" noun.
+            period_word = str(context.get("period_label") or "").lower() or "current"
             flat["summary"] = (
-                f"This tutorial walks through {len(entries_list)} knowledge "
-                f"base entries in the {domain} domain, covering the key "
-                f"findings for a {audience} audience."
+                f"This tutorial covers the key {period_word} findings "
+                f"in {_domain_display_name(domain)}, with exercises and a "
+                f"summary for {audience}."
             )
 
     return flat
@@ -6648,13 +6668,21 @@ def generate_report(
             for m in (summary_result.get("key_metrics") or [])
             if isinstance(m, dict)
         ]
-        # Issue #131: the LLM echoes the synthesis prompt's "Entry N" internal
-        # numbering into key_metrics[].source (e.g. "Cochrane review (Entry 1)").
-        # Internal KB row references must never leak to end users — strip
-        # "(Entry N)" / "Entry N" suffix/inline markers from the source field.
+        # Issue #131 + #148: the LLM echoes the synthesis prompt's "Entry N"
+        # internal numbering into free-text product fields (key_metrics[].source
+        # #131; recommendations / implications / action_required / key_findings
+        # #148).  Internal KB row references must never leak to end users —
+        # strip "(Entry N)" / "Entry N" markers from EVERY LLM-produced text
+        # field before it reaches a template.
         for _m in key_metrics:
             _src = _m.get("source", "")
             _m["source"] = _strip_entry_refs(_src)
+        recommendations = [_strip_entry_refs(r) for r in recommendations]
+        implications = [_strip_entry_refs(i) for i in implications]
+        action_required = [_strip_entry_refs(a) for a in action_required]
+        for _f in key_findings:
+            if isinstance(_f, dict) and _f.get("text"):
+                _f["text"] = _strip_entry_refs(str(_f["text"]))
     else:
         executive_summary = str(summary_result or "")
         key_findings = []
@@ -9879,7 +9907,7 @@ def generate_tutorial(
                 ensure_ascii=False,
             )
         empty_md = (
-            f"# {domain} — Tutorial\n\n"
+            f"# {_domain_display_name(domain)} — Tutorial\n\n"
             f"This edition has no curated items yet. Check back after the next collection run."
         )
         if delivery_gate_configs is not None:
@@ -9984,7 +10012,7 @@ def generate_tutorial(
         exercises = []
 
     context = {
-        "title": llm_result.get("title", f"{domain} — Tutorial"),
+        "title": llm_result.get("title", f"{_domain_display_name(domain)} — Tutorial"),
         "domain": domain,
         "target_audience": target_audience,
         "collection_id": collection_id or "",
@@ -10087,7 +10115,7 @@ def _render_tutorial_agent_json(
     output: dict[str, Any] = {
         **_JSONLD_TUTORIAL,
         "uuid": str(uuid.uuid4()),
-        "title": llm_result.get("title", f"{domain} — Tutorial"),
+        "title": llm_result.get("title", f"{_domain_display_name(domain)} — Tutorial"),
         "domain": domain,
         "target_audience": target_audience,
         "duration": llm_result.get("duration", "TBD"),
@@ -10556,7 +10584,7 @@ def _ensure_tutorial_complete(
     if not title or any(
         marker in title.lower() for marker in ("weekly digest", "digest —", "report —")
     ):
-        title = f"{domain} — Tutorial"
+        title = f"{_domain_display_name(domain)} — Tutorial"
 
     # Issue #92: an LLM that copies KB entry titles verbatim as objectives
     # ("Learning Objectives 照抄文章标题") is not teaching — replace the
@@ -10857,7 +10885,8 @@ def generate_presentation(
     llm_result = _call_llm_for_presentation(prompt, slide_count)
 
     # -- Build template context -------------------------------------------
-    generated_at = datetime.now(timezone.utc).isoformat()
+    # Issue #149: day-granularity timestamp (no microseconds), matching #138.
+    generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     context = {
         "title": llm_result.get("title", f"{topic} — Presentation"),
         "topic": topic,
@@ -11009,7 +11038,13 @@ def _fallback_slides_from_entries(
     slides: list[dict[str, Any]] = []
     for e in entries[:slide_count]:
         title = str(e.get("title") or "Untitled")[:80]
+        # Issue #149: entries filtered by topic/language/staleness may carry
+        # an empty summary — fall back to the entry content (first ~600
+        # chars) so the KB-derived slides never yield an empty shell.
         summary = str(e.get("summary") or "").strip()
+        if not summary:
+            content = str(e.get("content") or "").strip()
+            summary = content[:600] if content else ""
         if not summary:
             continue
         bullets = summary.split(".")[:3]
