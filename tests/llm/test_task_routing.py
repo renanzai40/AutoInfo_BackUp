@@ -252,8 +252,8 @@ class TestJudgmentDriftGuardrail:
                 config=config,
             )
 
-        # JUDGMENT_MODEL is litellm-qualified (e.g. openai/stealth/ox-alpha),
-        # so the boundary captures it verbatim — no double prefix.
+        # JUDGMENT_MODEL is litellm-qualified, so the boundary captures it
+        # verbatim — no double prefix.
         assert _captured_model(mock_litellm) == JUDGMENT_MODEL
 
 
@@ -323,7 +323,7 @@ class TestJudgmentFailureNotSilent:
         )
         mock_litellm = MagicMock()
         mock_litellm.completion.side_effect = RuntimeError(
-            "Model openai/stealth/ox-alpha is not supported"
+            "Model openai/deepseek-v4-flash is not supported"
         )
 
         with caplog.at_level("ERROR", logger="autoinfo.llm"):

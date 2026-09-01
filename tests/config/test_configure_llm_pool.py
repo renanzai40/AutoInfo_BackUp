@@ -445,15 +445,17 @@ def test_api_key_env_round_trip(config_dir: Path, monkeypatch: pytest.MonkeyPatc
 def test_judgment_tasks_constant_unchanged() -> None:
     """Guard: the release-pinned judgment set is exactly the three names.
 
-    ``JUDGMENT_MODEL`` is re-pinned to the Command Code free model
-    (``openai/stealth/ox-alpha``, litellm-qualified) for the backup-repo
-    issue run — provider availability on 2026-08-25: Agnes free quota
-    exhausted (429), NVIDIA free tier down (000), Zhipu GLM-4.7-Flash up
-    (concurrency 1) and Command Code ox-alpha up.  Judgment rides the
-    primary chain's fallbacks (zhipu/glm-4.7-flash) when ox-alpha hiccups.
+    ``JUDGMENT_MODEL`` is re-pinned to ``openai/deepseek-v4-flash``
+    (litellm-qualified) for issue #127 — the prior ``openai/stealth/ox-alpha``
+    default was a ghost model (no config/base_url/api_key), so every G4/G5/
+    llm_judge call with an unset ``llm.judgment_model`` failed
+    AuthenticationError and the hard gate silently never judged.  This value
+    matches the deployment's real primary-family model on the
+    opencode.ai/zen/go/v1 gateway and AGENTS.md/README.  Deployments with a
+    different working model MUST set ``llm.judgment_model`` explicitly.
     """
     assert JUDGMENT_TASKS == frozenset({"g4_factual", "g5_translation", "llm_judge"})
-    assert JUDGMENT_MODEL == "openai/stealth/ox-alpha"
+    assert JUDGMENT_MODEL == "openai/deepseek-v4-flash"
 
 
 # ---------------------------------------------------------------------------
@@ -512,7 +514,7 @@ def test_judgment_model_default_when_unset(config_dir: Path) -> None:
     assert loaded.llm.judgment_model == ""
     effective = _resolve_task_llm_config(loaded, "g4_factual")
     assert effective.model == JUDGMENT_MODEL
-    assert JUDGMENT_MODEL == "openai/stealth/ox-alpha"
+    assert JUDGMENT_MODEL == "openai/deepseek-v4-flash"
 
     # Non-judgment task still routes through its task config.
     extraction = _resolve_task_llm_config(loaded, "extraction")

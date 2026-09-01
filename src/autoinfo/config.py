@@ -121,7 +121,14 @@ SOFT_GATE_ACTIONS: frozenset[str] = frozenset({"retry", "flag", "skip", "archive
 # (provider/model) because judgment call sites hand JUDGMENT_MODEL to
 # litellm verbatim — a bare id containing a slash would be mis-parsed by
 # litellm as a provider name.
-JUDGMENT_MODEL = "openai/stealth/ox-alpha"
+# 2026-09-01 re-pin (issue #127): the prior "openai/stealth/ox-alpha" default
+# resolved to a ghost model — no config/base_url/api_key exists for it, so
+# every G4/G5/llm_judge call with an unset llm.judgment_model failed
+# AuthenticationError and the hard gate silently never judged.  Re-pinned to
+# the deployment's real primary-family model (openai/deepseek-v4-flash on the
+# opencode.ai/zen/go/v1 gateway), matching AGENTS.md/README.  Deployments
+# with a different working model MUST set llm.judgment_model explicitly.
+JUDGMENT_MODEL = "openai/deepseek-v4-flash"
 
 # Task names whose model ALWAYS resolves to :data:`JUDGMENT_MODEL`, regardless
 # of any ``llm.tasks[<name>].model`` runtime drift.
