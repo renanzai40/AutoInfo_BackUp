@@ -283,6 +283,7 @@ def test_column_entry_level_annotated_no_bare_keyword() -> None:
             period="weekly",
             format="markdown",
             product_template=_column_template(),
+            include_stale=True,
         )
     assert isinstance(out, str)
 
