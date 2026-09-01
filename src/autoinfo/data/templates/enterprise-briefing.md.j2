@@ -40,16 +40,14 @@ _No executive summary available for this period._
 {% endfor %}
 
 {% endif %}
+{% if key_metrics %}
 ## Key Metrics
 
-{% if key_metrics %}
 | Metric | Value | Source |
 |--------|-------|--------|
 {% for m in key_metrics %}
 | {{ m.metric }} | {{ m.value }} | {{ m.source }} |
 {% endfor %}
-{% else %}
-_No quantified metrics in this period._
 {% endif %}
 
 ## Action Required

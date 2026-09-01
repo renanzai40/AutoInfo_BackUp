@@ -455,6 +455,11 @@ def tutorial(
         "--user-id",
         help="End-user ID for content-preference filtering (default: all tiers)",
     ),
+    include_stale: bool = typer.Option(
+        False,
+        "--include-stale",
+        help="Include stale entries (below the domain freshness threshold) in the tutorial",
+    ),
 ) -> None:
     """Generate a structured tutorial adapted to the target audience.
 
@@ -471,6 +476,7 @@ def tutorial(
             target_audience=target_audience,
             format=format,
             user_id=user_id,
+            include_stale=include_stale,
         )
         typer.echo(result)
     except (ValueError, FileNotFoundError) as exc:
@@ -501,6 +507,11 @@ def presentation(
         "--user-id",
         help="End-user ID for content-preference filtering (default: all tiers)",
     ),
+    include_stale: bool = typer.Option(
+        False,
+        "--include-stale",
+        help="Include stale entries (below the domain freshness threshold) in the presentation",
+    ),
 ) -> None:
     """Generate a slide-based presentation on a topic.
 
@@ -517,6 +528,7 @@ def presentation(
             target_audience=target_audience,
             format=format,
             user_id=user_id,
+            include_stale=include_stale,
         )
         typer.echo(result)
     except (ValueError, FileNotFoundError) as exc:
