@@ -80,7 +80,8 @@ steps:
               kb_cls.return_value = kb
               out = generate_digest(domain="medical-research", period="weekly",
                                     format="markdown",
-                                    product_template=tmpl("column"))
+                                    product_template=tmpl("column"),
+                                    include_stale=True)
           assert isinstance(out, str), type(out)
           assert "## Deep Dive" in out, "missing Deep Dive section"
           assert "_No deep-dive sections available" not in out, \
@@ -146,7 +147,8 @@ steps:
               kb_cls.return_value = kb
               out = generate_digest(domain="medical-research", period="weekly",
                                     format="markdown",
-                                    product_template=tmpl("report"))
+                                    product_template=tmpl("report"),
+                                    include_stale=True)
           assert isinstance(out, str), type(out)
           assert "**Sections**:" in out, "Sections metadata missing"
           m = re.search(r"\*\*Sections\*\*:\s*(\d+)", out)

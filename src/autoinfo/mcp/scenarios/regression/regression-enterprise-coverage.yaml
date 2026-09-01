@@ -169,7 +169,8 @@ steps:
               kb_cls.return_value = kb
               out = generate_digest(domain="medical-research", period="weekly",
                                     format="markdown",
-                                    product_template=tmpl("enterprise-briefing"))
+                                    product_template=tmpl("enterprise-briefing"),
+                                    include_stale=True)
           assert isinstance(out, str), type(out)
           m = re.search(r"## Key Findings\n(.*?)(?:\n## |\Z)", out, re.DOTALL)
           assert m, "Key Findings section missing:\n" + out

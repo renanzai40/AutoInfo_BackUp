@@ -64,7 +64,8 @@ steps:
               kb.list_entries.return_value = ENTRIES
               kb_cls.return_value = kb
               out = generate_digest(domain="medical-research",
-                                    period="weekly", format="markdown")
+                                    period="weekly", format="markdown",
+                                    include_stale=True)
           assert isinstance(out, str), type(out)
           # Entry 1 carries real tags → they render, never an em-dash.
           first_block = out.split("### 2.")[0]

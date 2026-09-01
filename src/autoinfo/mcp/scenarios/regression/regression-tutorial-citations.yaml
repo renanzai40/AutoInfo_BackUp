@@ -60,7 +60,8 @@ steps:
               kb_cls.return_value = kb
               out = generate_tutorial(domain="medical-research",
                                       format="markdown",
-                                      target_audience="student")
+                                      target_audience="student",
+                                      include_stale=True)
           assert isinstance(out, str), type(out)
           # (a) at least one inline citation marker in the body
           citations = re.findall(r"\(Source: ([^)]+)\)", out)

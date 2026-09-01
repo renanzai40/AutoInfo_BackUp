@@ -72,7 +72,8 @@ steps:
               kb.list_entries.return_value = ENTRIES
               kb_cls.return_value = kb
               out = generate_digest(domain="ai-commercial", period="weekly",
-                                    format="markdown")
+                                    format="markdown",
+                                    include_stale=True)
           assert isinstance(out, str), type(out)
           assert "English AI funding round" in out, "en entry dropped by domain default"
           assert "中文 AI 融资动态" not in out, "zh entry not filtered by domain default"
@@ -197,7 +198,8 @@ steps:
               kb.list_entries.return_value = ENTRIES
               kb_cls.return_value = kb
               out = generate_digest(domain="medical-research", period="weekly",
-                                    format="markdown")
+                                    format="markdown",
+                                    include_stale=True)
           assert isinstance(out, str), type(out)
           assert "English AI funding round" in out, "en entry dropped without default"
           assert "中文 AI 融资动态" in out, "zh entry dropped without default"
