@@ -48,6 +48,24 @@ exclude_keywords:
   - buy now
   - hot stocks
   - market recap
+  # Shopping-deals dilution (issue #135): TheStreet /deals/ /shopping/ feed
+  # sections carry consumer retail deals (comforter / dinnerware / sneakers
+  # / mattress markdowns) that are out-of-domain for financial-intelligence
+  # products focused on markets/macro/corporates.  URL-path and product-deal
+  # titles both land here; the collection-time guard skips the URL paths.
+  - deals/
+  - shopping/
+  - walmart
+  - amazon
+  - macy
+  - comforter
+  - dinnerware
+  - sneakers
+  - mattress
+  - on sale
+  - is on sale
+  - "% off"
+  - deal of the day
 
 # Effective-source set (issue #20): production runs on the 3 keyless RSS feed
 # sources (CNBC Investing / TheStreet / MarketWatch Markets) + SEC EDGAR

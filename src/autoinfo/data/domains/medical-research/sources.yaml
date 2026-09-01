@@ -101,6 +101,19 @@ exclude_keywords:
   - plant biology
   - marine biology
   - evolutionary biology
+  # Non-reproductive-domain exclusions (issue #136): broad-keyword
+  # collection pulls oncology, animal-experiment, and non-reproductive
+  # clinical items (cervical cancer / chemoradiotherapy, guinea pig /
+  # equine experiments, intravenous-fluid guidelines) that dilute the
+  # IVF/ART focus.  These are out-of-domain, not edited into the KB.
+  - cervical cancer
+  - oncology
+  - chemoradiotherapy
+  - guinea pig
+  - equine
+  - intravenous fluid
+  - IV fluid
+  - fluid guideline
 
 topics:
   - name: "IVF & Assisted Reproduction"
