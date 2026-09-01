@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/notes/notes.css">
 
 <style>
-  /* AutoInfo presentation overrides — kept minimal, theme-aware */
+  /* Presentation overrides — kept minimal, theme-aware */
   .reveal .slides section.cover-slide {
     text-align: center;
   }
@@ -64,7 +64,7 @@
       {% endif %}
       <p class="meta">
         {% if topic %}Topic: {{ topic }} &middot; {% endif %}
-        {% if domain %}Domain: {{ domain }} &middot; {% endif %}
+        {% if domain %}Domain: {{ domain_display_name(domain) }} &middot; {% endif %}
         Audience: {{ target_audience }} &middot; Slides: {{ slides|length }}
       </p>
     </section>

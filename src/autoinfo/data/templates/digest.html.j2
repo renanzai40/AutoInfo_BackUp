@@ -193,7 +193,7 @@
   <header class="digest-header">
     <h1>{{ title }}</h1>
     <div class="meta-row">
-      <span><strong>Domain:</strong> {{ domain_name }}</span>
+      <span><strong>Domain:</strong> {{ domain_display_name(domain_name) }}</span>
       <span><strong>Period:</strong> {{ period }}</span>
       <span><strong>Generated:</strong> {{ generated_at }}</span>
       <span><strong>Entries:</strong> {{ entries|length }}</span>
@@ -269,7 +269,7 @@
       {% endfor %}
     </ol>
     {% else %}
-    <p class="empty-note">No entries found for {{ domain_name }} in this period.</p>
+    <p class="empty-note">No entries found for {{ domain_display_name(domain_name) }} in this period.</p>
     {% endif %}
   </section>
 
