@@ -48,16 +48,14 @@ exclude_keywords:
   - buy now
   - hot stocks
   - market recap
-  # Shopping-deals dilution (issue #135): TheStreet /deals/ /shopping/ feed
-  # sections carry consumer retail deals (comforter / dinnerware / sneakers
-  # / mattress markdowns) that are out-of-domain for financial-intelligence
-  # products focused on markets/macro/corporates.  URL-path and product-deal
-  # titles both land here; the collection-time guard skips the URL paths.
-  - deals/
-  - shopping/
-  - walmart
-  - amazon
-  - macy
+  # Shopping-deals dilution (issue #135, refined by #137): TheStreet /deals/
+  # /shopping/ feed sections carry consumer retail deals (comforter /
+  # dinnerware / sneakers / mattress markdowns) out-of-domain for financial
+  # products.  The collection-time guard (collect.py
+  # _DOMAIN_NOISE_URL_SUBSTRINGS) skips those URL paths.  At product time we
+  # keep ONLY shopping-feature words — never standalone brand names
+  # (walmart/amazon/macy), which would wrongly drop legitimate company news
+  # (FTC suits, earnings, strategy) that merely mentions a brand (#137).
   - comforter
   - dinnerware
   - sneakers

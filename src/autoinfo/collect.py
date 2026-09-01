@@ -81,15 +81,35 @@ _DOMAIN_NOISE_KEYWORDS: dict[str, tuple[str, ...]] = {
     ),
 }
 
+# URL-path noise per domain (#137): drop items whose source URL path is a
+# known out-of-domain section BEFORE they enter the raw cache.  Unlike the
+# keyword guard above (title+content substring), this is a URL-PATH-level
+# check, so legitimate company news (FTC suits, earnings, strategy) that
+# merely mentions a brand is never caught.  TheStreet /deals/ /shopping/
+# sections are consumer-retail deals, out-of-domain for financial products.
+_DOMAIN_NOISE_URL_SUBSTRINGS: dict[str, tuple[str, ...]] = {
+    "financial-intelligence": (
+        "/deals/",
+        "/shopping/",
+    ),
+}
+
 
 def _item_matches_domain_noise(item: Item, domain: str) -> bool:
     """True when the item's title+summary matches a surface noise keyword
-    for *domain* (#332-B).  Deterministic substring match, no LLM."""
+    for *domain* (#332-B), or its source URL path is a known out-of-domain
+    section (#137).  Deterministic substring match, no LLM."""
     keywords = _DOMAIN_NOISE_KEYWORDS.get(domain)
-    if not keywords:
-        return False
-    haystack = f"{item.title}\n{item.content}".casefold()
-    return any(str(kw).casefold() in haystack for kw in keywords)
+    if keywords:
+        haystack = f"{item.title}\n{item.content}".casefold()
+        if any(str(kw).casefold() in haystack for kw in keywords):
+            return True
+    url_substrings = _DOMAIN_NOISE_URL_SUBSTRINGS.get(domain)
+    if url_substrings:
+        url = str(item.source_url or "").casefold()
+        if any(sub.casefold() in url for sub in url_substrings):
+            return True
+    return False
 
 
 # ---------------------------------------------------------------------------
