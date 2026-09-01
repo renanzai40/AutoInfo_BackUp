@@ -150,7 +150,7 @@ steps:
       exit_code: 0
       stdout_has: ["EXPLICIT_LANGUAGE_OVERRIDE_OK"]
 
-  - name: "domain without default keeps legacy no-filter behavior"
+  - name: "domain with declared empty default keeps legacy no-filter behavior"
     kind: cli
     command: |-
       python3 -c '
@@ -188,8 +188,16 @@ steps:
                   "llm": {"provider": "openrouter", "model": "deepseek/deepseek-chat",
                           "api_key": "test-key"},
                   "domains": [{"name": "medical-research", "active": True,
-                               "sources": [{"name": "pubmed", "type": "api",
-                                            "url": "https://eutils.ncbi.nlm.nih.gov/"}]}],
+                               # Explicitly declared EMPTY default_language ->
+                               # "no filtering" (issue #8: a declared empty
+                               # value wins over the demo-domain seed, which
+                               # would otherwise default medical-research to
+                               # "en" and drop the zh entry).
+                               "default_language": "",
+                               "sources": [{"name": "techcrunch", "type": "rss",
+                                            "url": "https://techcrunch.com/feed/"},
+                                           {"name": "36kr", "type": "rss",
+                                            "url": "https://36kr.com/feed/"}]}],
               }, fh, default_flow_style=False)
           os.chdir(tmp)
           with patch("autoinfo.output.KBStore") as kb_cls, \

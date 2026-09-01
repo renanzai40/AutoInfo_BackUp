@@ -1,20 +1,21 @@
 # Regression #302: render defects in the product templates.
-# ① magazine-digest.md.j2 always printed "publications" (plural) even for a
-#    single distinct source_platform — now "1 publication".
+# ① (superseded by #117/#118) magazine-digest used to print "publications"
+#    pluralization in a count header; #117/#118 removed the internal count
+#    header entirely (P0 metrics leak), so the header must NOT render at all.
 # ② reference lists jammed the platform suffix onto the next reference line
 #    (e.g. "(rss)- **...") because the old `{% if %}` chain emitted no
 #    newline; the new `{{ (" (" ~ ref.source_platform | platform_name ~ ")") if ... }}`
 #    expression keeps each reference on its own line.
 # ③ raw internal source_platform ids (rss, sec_edgar) leaked into rendered
 #    output; the `platform_name` filter now maps them to display names
-#    (RSS, SEC EDGAR).
+#    (RSS, SEC EDGAR) and `_user_source_label` suppresses non-derived labels.
 #
 # This scenario renders the real Jinja2 templates via the shared
 # `_get_jinja_env()` (which registers the `platform_name` / `product_summary`
 # filters) — deterministic, no network, no LLM.  A regression that reverts
-# any of the three fixes fails here.
+# any of the fixes fails here.
 name: regression-302-render-defects
-description: "Regression #302: magazine pluralization, platform_name display mapping, one-per-line references"
+description: "Regression #302: magazine count-header removal (#117/#118), platform_name display mapping, one-per-line references"
 category: regression
 regression: true
 regression_issue: "#302"
@@ -56,8 +57,9 @@ steps:
           llm_synthesis={"executive_summary": "Summary."},
           generated_at="2026-07-17T00:00:00Z",
       )
-      assert "1 publication" in out, "expected singular 1 publication:\n" + out
-      assert "2 publications" not in out, "pluralization not fixed:\n" + out
+      assert "1 publication" not in out, "count header (internal metrics) must not render:\n" + out
+      assert "2 publications" not in out, "count header (internal metrics) must not render:\n" + out
+      assert "articles from" not in out, "count header (internal metrics) must not render:\n" + out
       # Per-entry metadata line uses the display name (groupby headings keep
       # the raw publication id — that is the publication name, not a leak).
       assert "*RSS*" in out, "platform_name did not map rss to RSS:\n" + out
@@ -83,11 +85,13 @@ steps:
               "title": "IVF time-lapse imaging",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
               "source_platform": "rss",
+              "source_label": "NPR",  # host-derived label differs from raw id
           },
           {
               "title": "SEC filing on trial results",
               "source_url": "https://www.sec.gov/edgar/1",
               "source_platform": "sec_edgar",
+              "source_label": "SEC EDGAR",  # derived label, differs from raw id
           },
       ]
       out = tmpl.render(
@@ -104,8 +108,8 @@ steps:
       # Each reference on its own line (numbered list).
       ref_lines = re.findall(r"^\d+\. \*\*", out, re.MULTILINE)
       assert len(ref_lines) == 2, "references not one-per-line:\n" + out
-      # Display names, not raw ids.
-      assert "(RSS)" in out, "rss not mapped to RSS:\n" + out
+      # Derived display labels render; raw internal ids never leak.
+      assert "(NPR)" in out, "derived source_label not rendered:\n" + out
       assert "(SEC EDGAR)" in out, "sec_edgar not mapped to SEC EDGAR:\n" + out
       assert "(rss)" not in out, "raw rss id leaked:\n" + out
       assert "(sec_edgar)" not in out, "raw sec_edgar id leaked:\n" + out

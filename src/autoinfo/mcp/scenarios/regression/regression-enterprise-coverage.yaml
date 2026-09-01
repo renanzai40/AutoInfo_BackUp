@@ -10,20 +10,22 @@
 #   ① prompt guard: the report synthesis prompt (shared via
 #      _REPORT_PRODUCT_BASE_SECTIONS) now instructs the model to name
 #      exactly the number of Key Findings it writes, never a larger count;
-#   ② deterministic scope label: enterprise-briefing.md.j2 renders
-#      "精选 N 条详述 · selected N of M items" computed from the ACTUAL
-#      rendered context (key_findings|length vs references|length) on both
-#      flat-context paths (report _report_data_to_dict, digest
-#      _normalize_digest_product_context), so even a stale summary claim is
-#      visibly scoped.
+#   ② deterministic scope label: enterprise-briefing.md.j2 renders the
+#      "**In this briefing**: N key points · drawn from M sources" line
+#      computed from the ACTUAL rendered context (key_findings|length vs
+#      references|length) on both flat-context paths (report
+#      _report_data_to_dict, digest _normalize_digest_product_context), so
+#      even a stale summary claim is visibly scoped.  (The older
+#      "精选 N 条详述 · selected N of M items" wording was replaced by this
+#      line during the #85 metrics-leak cleanup.)
 #
 # This scenario drives the REAL generate_report / generate_digest paths
 # with the enterprise-briefing registry ProductTemplate (KBStore + LLM
 # seams patched — deterministic, requires_env: []), parses the rendered
-# Key Findings count N, and asserts "精选 N 条详述" is present with a
-# matching N.  A regression that reverts either fix fails here.
+# Key Findings count N, and asserts the scope line names exactly N.  A
+# regression that reverts either fix fails here.
 name: regression-enterprise-coverage
-description: "Regression #314: enterprise-briefing coverage claim matches key-findings count (prompt guard + 精选 N 条详述 scope label)"
+description: "Regression #314: enterprise-briefing coverage claim matches key-findings count (prompt guard + In-this-briefing scope line)"
 category: regression
 regression: true
 regression_issue: "#314"
@@ -106,10 +108,9 @@ steps:
           assert m, "Key Findings section missing:\n" + out
           n = len(re.findall(r"-\s+\S", m.group(1)))
           assert n == 3, f"expected 3 rendered findings, got {n}:\n" + out
-          # The scope label MUST name exactly the rendered count.
-          assert f"精选 {n} 条详述" in out, f"scope label missing/mismatched:\n" + out
-          assert f"selected {n} of 20 items detailed below" in out, \
-              f"selected-count label missing/mismatched:\n" + out
+          # The scope line MUST name exactly the rendered count.
+          assert f"**In this briefing**: {n} key points · drawn from 20 sources" in out, \
+              f"scope line missing/mismatched:\n" + out
           # The summary text still states its own (LLM-written) claim.
           assert "This briefing details 3 selected items" in out
           print("ENTERPRISE_COVERAGE_REPORT_OK")
@@ -176,9 +177,8 @@ steps:
           assert m, "Key Findings section missing:\n" + out
           n = len(re.findall(r"-\s+\S", m.group(1)))
           assert n == 3, f"expected 3 rendered findings, got {n}:\n" + out
-          assert f"精选 {n} 条详述" in out, f"scope label missing/mismatched:\n" + out
-          assert f"selected {n} of 20 items detailed below" in out, \
-              f"selected-count label missing/mismatched:\n" + out
+          assert f"**In this briefing**: {n} key points · drawn from 20 sources" in out, \
+              f"scope line missing/mismatched:\n" + out
           print("ENTERPRISE_COVERAGE_DIGEST_OK")
       finally:
           os.chdir(old)

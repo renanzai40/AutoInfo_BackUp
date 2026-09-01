@@ -1,14 +1,17 @@
-# Regression (#316): column digest Deep Dive sections + Sections metadata.
+# Regression (#316): column digest Deep Dive sections render non-empty.
 #
 # Before #316 the digest path never materialized `sections` for the column
 # product template: `_normalize_digest_product_context` flattened
 # executive_summary / key_findings / recommendations / references but NOT
 # `sections`, so `column.md.j2` rendered `_No deep-dive sections available
-# for this column._` with `**Sections**: 0` even when entries existed.
+# for this column._` even when entries existed.
 # Fixes: the column digest synthesis prompt requests a `sections` array
 # (8-10 subsections), `_normalize_digest_product_context` flattens
 # `llm_synthesis["sections"]`, and a deterministic fallback derives sections
 # from the entries when the synthesis carries none.
+# #85 (R2 metrics-leak, P0) later removed the internal `**Sections**: N`
+# count header from the templates, so this scenario asserts the sections
+# RENDER (>=8 subsections, no empty placeholder) — not a count header.
 #
 # Deterministic (requires_env: []): the KBStore and LLM seams are patched in
 # the subprocess (same pattern as tests/test_column_digest_sections.py and
@@ -18,7 +21,7 @@
 # project config can influence rendering.
 # Failure means the column Deep Dive regressed — never a silent skip.
 name: regression-column-sections
-description: "Regression #316: column digest renders >=8 deep-dive subsections with a matching Sections count, never the empty placeholder"
+description: "Regression #316: column digest renders >=8 deep-dive subsections, never the empty placeholder"
 category: regression
 regression: true
 regression_issue: "#316"
@@ -83,8 +86,6 @@ steps:
           assert len(subs) >= 8, f"expected >=8 subsections, got {len(subs)}"
           assert "_No deep-dive sections available" not in out, \
               "empty placeholder rendered despite sections"
-          assert f"**Sections**: {len(subs)}" in out, \
-              "Sections metadata does not match rendered subsection count"
           print("COLUMN_SECTIONS_OK")
       finally:
           os.chdir(old)
@@ -142,8 +143,6 @@ steps:
               "empty placeholder rendered despite entries existing"
           subs = [ln for ln in out.splitlines() if ln.startswith("### ")]
           assert len(subs) >= 8, f"expected >=8 derived subsections, got {len(subs)}"
-          assert f"**Sections**: {len(subs)}" in out, \
-              "Sections metadata does not match derived subsection count"
           print("COLUMN_SECTIONS_FALLBACK_OK")
       finally:
           os.chdir(old)

@@ -88,8 +88,6 @@ steps:
               "empty placeholder rendered despite real entries"
           subs = [ln for ln in out.splitlines() if ln.startswith("### ")]
           assert len(subs) >= 8, f"expected >=8 derived subsections, got {len(subs)}"
-          assert f"**Sections**: {len(subs)}" in out, \
-              "Sections metadata does not match derived subsection count"
           print(f"COLUMN_REALPATH_SECTIONS_OK: {len(subs)}")
       finally:
           os.chdir(old)
@@ -150,12 +148,14 @@ steps:
                                     product_template=tmpl("report"),
                                     include_stale=True)
           assert isinstance(out, str), type(out)
-          assert "**Sections**:" in out, "Sections metadata missing"
-          m = re.search(r"\*\*Sections\*\*:\s*(\d+)", out)
-          assert m, "Sections count not parseable"
-          n = int(m.group(1))
-          assert n >= 8, f"report Sections empty shell (got {n}):\n{out}"
-          print(f"REPORT_REALPATH_SECTIONS_OK: {n}")
+          # The report template renders a `## Sections` heading with per-section
+          # `### <title>` subsections.  #85 removed the internal `**Sections**: N`
+          # count header (R2 metrics leak), so we assert the sections RENDER
+          # (heading present + >=8 subsection titles), not a count metadata line.
+          assert "## Sections" in out, "Sections section missing:\n" + out
+          subs = [ln for ln in out.splitlines() if ln.startswith("### ")]
+          assert len(subs) >= 8, f"report Sections empty shell (got {len(subs)}):\n{out}"
+          print(f"REPORT_REALPATH_SECTIONS_OK: {len(subs)}")
       finally:
           os.chdir(old)
           shutil.rmtree(tmp, ignore_errors=True)

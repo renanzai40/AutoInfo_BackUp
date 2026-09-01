@@ -415,9 +415,11 @@ class TestPremiumBriefingDigestPath:
         # Recommendations section
         assert "## Recommendations" in result
         assert "- Consider time-lapse imaging as standard of care" in result
-        # Key Metrics + Risk Matrix render their empty states (todo 7 fields)
-        assert "## Key Metrics" in result
-        assert "_No quantified metrics in this period._" in result
+        # Key Metrics (#129): with no key_metrics in the synthesis, the whole
+        # Key Metrics section is omitted — no hollow heading + empty-state
+        # note.  Risk Matrix keeps its honest empty-state line.
+        assert "## Key Metrics" not in result
+        assert "_No quantified metrics" not in result
         assert "## Risk Matrix" in result
         assert "_No material risks identified in this period._" in result
         # References derived from entries

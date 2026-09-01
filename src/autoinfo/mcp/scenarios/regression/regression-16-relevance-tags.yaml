@@ -1,31 +1,31 @@
-# Regression (#16): digest Relevance must show real per-entry scores (never
-# a flat 100.0/100 placeholder) and Tags must show the parsed tags (never an
-# em-dash) when the entry carries them.
+# Regression (#16): relevance/tags scoring must not leak as flat placeholders.
 #
 # History: G3RelevanceScoring returned `score=100 (always pass)` when a
 # topic had no keywords, so every keywordless topic's entries stored
 # `relevance_score=100.0` in the KB and every digest/magazine rendered
 # `Relevance | 100.0/100` with zero discriminative power.  The no-keywords
 # branch now degrades to `score=0, passed=False, flagged=True`, so real
-# scores surface in products.
+# scores surface.  The G3 scoring behavior itself is guarded by
+# tests/llm/test_quality.py (data layer); #85 (R2 metrics-leak, P0) later
+# removed the per-entry Tags/Relevance rows from the digest templates, so
+# this scenario guards the PRODUCT contract: real entries flow into the
+# digest (title + summary render) and NO internal relevance/tags row leaks.
 #
 # Deterministic (requires_env: []): the KBStore and LLM seams are patched in
 # the subprocess (same pattern as regression-9-generic-theme-blocklist.yaml).
 # Two entries are supplied — one with `tags='["ai", "funding"]'` and
 # relevance 70, one with `tags='[]'` and relevance 0.  The digest must render
-# entry 1's real tags (never `—` for an entry that HAS tags) and its real
-# relevance (70.0/100, never the pre-fix flat 100.0/100 placeholder).  Entry 2
-# has no tags and 0 relevance, so the em-dash/`—` for it is correct product
-# behavior.  Runs inside an ABSOLUTE temp cwd (tempfile.mkdtemp,
-# try/finally cleanup).
+# entry 1's title/summary (real data flowing through) and must NOT render any
+# `Relevance | .../100` or `**Tags**` row (internal metrics removed by #85).
+# Runs inside an ABSOLUTE temp cwd (tempfile.mkdtemp, try/finally cleanup).
 name: regression-16-relevance-tags
-description: "Regression #16: digest renders real per-entry Relevance (not a flat 100.0/100 placeholder) and real Tags (not an em-dash) for entries that carry them"
+description: "Regression #16: digest renders real entries with no flat 100.0/100 relevance leak and no internal Tags/Relevance row (#85)"
 category: regression
 regression: true
 regression_issue: "#16"
 requires_env: []
 steps:
-  - name: "digest renders real tags and distinct relevance scores"
+  - name: "digest renders real entries without leaking internal relevance/tags rows"
     kind: cli
     command: |-
       python3 -c '
@@ -67,15 +67,14 @@ steps:
                                     period="weekly", format="markdown",
                                     include_stale=True)
           assert isinstance(out, str), type(out)
-          # Entry 1 carries real tags → they render, never an em-dash.
-          first_block = out.split("### 2.")[0]
-          assert "ai" in first_block and "funding" in first_block, out
-          assert "**Tags** | —" not in first_block, out
-          # Entry 1 relevance renders (70.0), never the pre-fix flat 100.0
-          # placeholder — the core #16 regression guard.
-          assert "| 70.0/100" in first_block, out
-          # No entry may carry the pre-fix placeholder 100.0/100.
-          assert "| 100.0/100" not in out, out
+          # Real entries flow through: titles + summaries render.
+          assert "AI startup raises Series A" in out, out
+          assert "Unrelated filler item" in out, out
+          # #85 (R2 metrics-leak): no per-entry Tags/Relevance rows at all.
+          assert "**Tags**" not in out, "internal Tags row leaked:\n" + out
+          # No flat 100.0/100 placeholder may leak (the #16 pre-fix bug).
+          assert "100.0/100" not in out, "flat 100.0/100 placeholder leaked:\n" + out
+          assert "| 70.0/100" not in out, "internal Relevance row leaked:\n" + out
           print("RELEVANCE_TAGS_OK")
       finally:
           os.chdir(old)

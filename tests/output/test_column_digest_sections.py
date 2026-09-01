@@ -507,6 +507,12 @@ class TestColumnValueDrain:
                 {
                     **_SAMPLE_LLM_SYNTHESIS_WITH_SECTIONS,
                     "sections": sections,
+                    # #129: implications are rendered per-section so-what
+                    # phrasing; provide one per section so the bullets render.
+                    "implications": [
+                        f"So-what phrasing {i}: adopt time-lapse imaging."
+                        for i in range(1, 9)
+                    ],
                 }
             ),
             "medical-research",
@@ -530,12 +536,14 @@ class TestColumnValueDrain:
             )
 
     def test_implications_fallback_never_leaks_internal_count(self) -> None:
-        """#49: the no-implication fallback never exposes ``(N item(s))``.
+        """#49/#129: no-implication sections render NO placeholder bullet.
 
         Pre-#49 the template fell back to ``Covered in the Deep Dive (N
         item(s)); watch for follow-up developments next period.`` when the
         synthesis gave no implication for a section — an internal render
-        count in reader-facing text.  The fallback must carry no count.
+        count in reader-facing text.  #129 goes further: a section with no
+        implication renders NO bullet at all (宁缺毋滥) — never a hollow
+        "go read the Deep Dive" promise.
         """
         sections = [
             {
@@ -567,8 +575,15 @@ class TestColumnValueDrain:
         out = _render_column_template(flat)
 
         implications, _ = _section_block(out, "## Implications & Outlook")
-        assert "Covered in the Deep Dive; watch for follow-up developments next period." in implications, (
-            f"natural fallback missing from Implications:\n{implications}"
+        # #129: with no implications in the synthesis, the section renders
+        # NO placeholder bullets — never a hollow "Covered in the Deep Dive".
+        assert "Covered in the Deep Dive" not in out, (
+            f"hollow placeholder rendered:\n{out}"
+        )
+        bullets = [ln for ln in implications.splitlines() if ln.startswith("- **")]
+        assert len(bullets) == 0, (
+            f"expected no implication bullets when synthesis carries none, "
+            f"got {len(bullets)}:\n{implications}"
         )
         assert not re.search(r"\(\d+ item\(s\)\)", out), (
             f"internal item count leaked into reader text:\n{out}"
