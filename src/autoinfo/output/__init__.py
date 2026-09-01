@@ -1390,6 +1390,22 @@ def _strip_entry_placeholders(text: str) -> str:
     return _ENTRY_N_RE.sub("Source: (source)", text)
 
 
+# Issue #131: the LLM echoes the synthesis prompt's "Entry N" numbering into
+# key_metrics[].source (e.g. "Cochrane review (Entry 1)", "Meta-analysis
+# (Entry 13)").  Internal KB row references must never reach end users —
+# strip the parenthetical ``(Entry N)`` suffix/inline markers.  Unlike
+# ``_ENTRY_N_RE`` (which only matches the ``Source: Entry N`` prefix form),
+# this also handles the trailing ``(Entry N)`` shape the metrics table
+# carries.
+_ENTRY_REF_RE: Final = re.compile(r"\(?\s*(?i:Entry)\s+\d+(?:\s*/\s*\d+)*\s*\)?")
+
+
+def _strip_entry_refs(text: str) -> str:
+    """Remove LLM-echoed internal ``Entry N`` references from a source field."""
+    cleaned = _ENTRY_REF_RE.sub("", text or "")
+    return re.sub(r"\s{2,}", " ", cleaned).strip(" .,;:").strip()
+
+
 # Issue #93: presentation provenance fabrication — a (Source: X) citation
 # where X is not a real http(s) URL (e.g. "KB: <title>", "KB-N",
 # "knowledgebase.local", a bare media/person name) is fabricated and must
@@ -6476,6 +6492,13 @@ def generate_report(
             for m in (summary_result.get("key_metrics") or [])
             if isinstance(m, dict)
         ]
+        # Issue #131: the LLM echoes the synthesis prompt's "Entry N" internal
+        # numbering into key_metrics[].source (e.g. "Cochrane review (Entry 1)").
+        # Internal KB row references must never leak to end users — strip
+        # "(Entry N)" / "Entry N" suffix/inline markers from the source field.
+        for _m in key_metrics:
+            _src = _m.get("source", "")
+            _m["source"] = _strip_entry_refs(_src)
     else:
         executive_summary = str(summary_result or "")
         key_findings = []
@@ -6613,9 +6636,13 @@ def generate_report(
     )
 
     # -- Honest-degradation annotation (issue #120, C4) ---------------------
-    # The rendered report must say "Grouped by source — not semantic topics"
-    # when the grouping degraded (LLM fail / chaos / no groups) instead of
-    # silently presenting source-type/keyword headings as semantic themes.
+    # The rendered report must say "This edition groups developments by
+    # source" when the grouping degraded (LLM fail / chaos / no groups)
+    # instead of silently presenting source-type/keyword headings as
+    # semantic themes.  Rephrased from "Grouped by source — not semantic
+    # topics" (issue #134): the old wording was internal pipeline jargon
+    # (R2 leak to end users); the new copy is user-meaningful while still
+    # honest about the grouping method.
     # The digest/column paths annotate at their own seams; the report path
     # consumes the module-level flag the degradation seams set.
     report_degraded_reason = (
@@ -6928,7 +6955,7 @@ _GROUPING_TARGET_MIN_SIMILARITY: Final[float] = 0.4
 # silently showing source-type/keyword headings as if they were semantic
 # topics.  The marker is pinned byte-for-byte — tests assert the exact string.
 _GROUPING_DEGRADATION_MARKER: Final[str] = (
-    "> *Grouped by source \u2014 not semantic topics*"
+    "> *This edition groups developments by source*"
 )
 
 # Module-level degradation flag: set by ``_log_grouping_degraded`` on every
