@@ -360,7 +360,7 @@ class TestPremiumBriefingDigestPath:
         assert "https://pubmed.ncbi.nlm.nih.gov/12345678/" in result
         assert "https://pubmed.ncbi.nlm.nih.gov/87654321/" in result
         # Footer marker literal to premium-briefing.md.j2
-        assert "AutoInfo Premium Briefing" in result
+        assert "Premium Briefing \u00b7 " in result
         # NOT the default digest.md.j2 layout
         assert "## Entries" not in result
 
@@ -426,7 +426,7 @@ class TestPremiumBriefingDigestPath:
         assert "## References" in result
         assert "https://pubmed.ncbi.nlm.nih.gov/12345678/" in result
         # Footer marker literal to enterprise-briefing.md.j2
-        assert "AutoInfo Enterprise Briefing" in result
+        assert "Enterprise Briefing \u00b7 " in result
         assert "## Entries" not in result
 
 
@@ -445,7 +445,7 @@ class TestNonTemplatePathsUntouched:
         assert "Weekly Digest" in result
         assert "## Entries" in result
         assert "Improved IVF outcomes with time-lapse imaging" in result
-        assert "AutoInfo Premium Briefing" not in result
+        assert "Premium Briefing \u00b7 " not in result
         assert "## Key Takeaways" not in result
 
     def test_json_format_without_template_keeps_raw_shape(self) -> None:

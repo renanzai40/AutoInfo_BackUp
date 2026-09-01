@@ -284,7 +284,7 @@ class TestGenerateReportRouting:
 
         assert isinstance(result, str)
         assert "## Key Takeaways" in result
-        assert "AutoInfo Premium Briefing" in result
+        assert "Premium Briefing \u00b7 " in result
         assert "## Sections" not in result
 
     def test_standard_report_without_product_template_unchanged(
@@ -319,6 +319,6 @@ class TestGenerateReportRouting:
         assert isinstance(result, str)
         assert "# medical-research \u2014 Report" in result
         assert "## Sections" in result
-        assert "AutoInfo Report" in result
+        assert "Report \u00b7 " in result
         assert "## Key Takeaways" not in result
-        assert "AutoInfo Premium Briefing" not in result
+        assert "Premium Briefing \u00b7 " not in result

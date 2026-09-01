@@ -382,7 +382,7 @@ class TestDigestProductFieldsFlow:
         rendered, prompt = self._render(product_template=None)
         assert "## Entries" in rendered
         assert "implications" not in prompt
-        assert "AutoInfo Premium Briefing" not in rendered
+        assert "Premium Briefing \u00b7 " not in rendered
 
     def test_normalize_flat_context_carries_product_fields(self) -> None:
         """The flat context keys come straight from llm_synthesis (todo 5 seam)."""
@@ -532,7 +532,7 @@ class TestReportProductFieldsFlow:
         assert "> **So what**: Clinics should evaluate time-lapse imaging" in rendered
         assert "**Risk / Opportunity:** Validation lag — likelihood high / impact" in rendered
         assert "**Actions:** Run a pilot evaluation of time-lapse imaging" in rendered
-        assert "AutoInfo Premium Briefing" in rendered
+        assert "Premium Briefing \u00b7 " in rendered
 
     def test_report_enterprise_briefing_surfaces_key_metrics(self) -> None:
         """Enterprise report renders the Key Metrics + Risk Matrix tables."""
@@ -543,14 +543,14 @@ class TestReportProductFieldsFlow:
         assert "| Live birth rate | 48.2% vs 39.5% | time-lapse RCT |" in rendered
         assert "| Validation lag | high | medium |" in rendered
         assert "- [ ] Fund prospective AI validation trials." in rendered
-        assert "AutoInfo Enterprise Briefing" in rendered
+        assert "Enterprise Briefing \u00b7 " in rendered
 
     def test_report_default_unchanged(self) -> None:
         """No product_template -> standard report, no product sections requested."""
         rendered, prompt = self._render(product_template=None)
         assert "## Implications" not in prompt
         assert "## Key Takeaways" not in rendered
-        assert "AutoInfo Report" in rendered
+        assert "Report \u00b7 " in rendered
 
 
 # ===================================================================

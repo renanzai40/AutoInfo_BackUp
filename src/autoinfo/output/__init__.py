@@ -469,6 +469,47 @@ def _platform_name(value: Any) -> str:
     return _PLATFORM_DISPLAY_NAMES.get(s.lower(), s)
 
 
+# Issue #138: product footers must not expose the internal domain slug
+# (ai-commercial / financial-intelligence / medical-research) to end users.
+# Map known demo-domain slugs to user-facing display names; unknown slugs
+# fall back to a title-cased slug (medical-research -> Medical Research).
+_DOMAIN_DISPLAY_NAMES: Final[dict[str, str]] = {
+    "medical-research": "Medical Research",
+    "ai-commercial": "AI Commercial",
+    "financial-intelligence": "Financial Intelligence",
+    "tech-ai-developer": "Tech & AI",
+    "language-learning": "Language Learning",
+    "online-video": "Online Video",
+    "financial-news": "Financial News",
+    "online-education": "Online Education",
+    "legal-compliance": "Legal & Compliance",
+    "general-news": "General News",
+    "gaming": "Gaming",
+    "b2b": "B2B",
+    "retail": "Retail",
+    "english-learning": "English Learning",
+    "french-learning": "French Learning",
+    "hindi-learning": "Hindi Learning",
+    "italian-learning": "Italian Learning",
+    "korean-learning": "Korean Learning",
+    "portuguese-learning": "Portuguese Learning",
+    "russian-learning": "Russian Learning",
+    "spanish-learning": "Spanish Learning",
+}
+
+
+def _domain_display_name(value: Any) -> str:
+    """Return a user-facing display name for a domain slug (issue #138)."""
+    if not value:
+        return ""
+    slug = str(value).strip()
+    display = _DOMAIN_DISPLAY_NAMES.get(slug)
+    if display:
+        return display
+    # Fallback: title-case each dash-separated segment.
+    return slug.replace("-", " ").title()
+
+
 def _user_source_label(ref: dict[str, Any]) -> str:
     """Return a user-facing source label for a References entry, or "" when
     none is safe to show (backup issue #91).
@@ -3935,6 +3976,7 @@ def _get_jinja_env() -> Environment:
         _jinja_env.filters["product_summary"] = lambda v: "" if _is_empty_summary(str(v)) else v
         _jinja_env.filters["platform_name"] = _platform_name
         _jinja_env.globals["user_source_label"] = _user_source_label
+        _jinja_env.globals["domain_display_name"] = _domain_display_name
     return _jinja_env
 
 
@@ -4077,6 +4119,8 @@ class ProductTemplate:
         env.filters["platform_name"] = _platform_name
         # Issue #91: never leak raw internal platform ids in References
         env.globals["user_source_label"] = _user_source_label
+        # Issue #138: expose user-facing domain display names in footers
+        env.globals["domain_display_name"] = _domain_display_name
         return env
 
 
@@ -4322,6 +4366,26 @@ _DIGEST_PRODUCT_FIELD_DESCRIPTIONS: dict[str, list[str]] = {
     "column": _DIGEST_COLUMN_SECTIONS_FIELDS,
 }
 
+# Issue #140: per-family selection-scope directive so premium and enterprise
+# briefings differentiate their coverage/angle instead of reusing the same
+# top entries in a different layout.  Premium = deep dive on 1-2 chosen
+# topics; enterprise = decision-oriented coverage of 4-6 topics.
+_DIGEST_PRODUCT_SCOPE_GUIDANCE: dict[str, str] = {
+    "premium-briefing": (
+        "Scope: focus on 1-2 of the most significant developments of the "
+        "period. Provide deep, differentiated analysis of those chosen "
+        "topics \u2014 go beyond the summary list into mechanism, context, and "
+        "likely trajectory. Do not pad with minor items."
+    ),
+    "enterprise-briefing": (
+        "Scope: cover 4-6 decision-relevant developments of the period "
+        "across the domain. Prioritize items with quantified or "
+        "decision-support value (metrics, regulatory, competitive), and "
+        "frame each finding from a decision-maker perspective (what to "
+        "watch, what it means, what to do)."
+    ),
+}
+
 
 def _build_digest_llm_prompt(
     entries: list[dict[str, Any]], product_family: str = "digest"
@@ -4376,6 +4440,14 @@ def _build_digest_llm_prompt(
         "When a key finding, recommendation, or trend is backed by a "
         "specific entry, cite its source inline as (Source: URL)."
     )
+    # Issue #140: differentiate premium vs enterprise briefing scope so the
+    # two paid products read as distinct angles rather than the same content
+    # in a different layout.  The directive is prompt-level (no field or
+    # context split) so both families keep the same data contract.
+    scope_guidance = _DIGEST_PRODUCT_SCOPE_GUIDANCE.get(product_family)
+    if scope_guidance:
+        lines.append("")
+        lines.append(scope_guidance)
     lines.append("Return all fields in a single JSON object.")
 
     return "\n".join(lines)
@@ -5870,7 +5942,10 @@ def generate_digest(
         llm_synthesis = _deterministic_synthesis_fallback(entries)
 
     # --- Build template context ----------------------------------------------
-    generated_at = datetime.now(timezone.utc).isoformat()
+    # Issue #138: day-granularity timestamp (no microseconds) — the full
+    # ISO instant (…T08:56:52.820676+00:00) leaked an internal precision
+    # marker into every product header/footer.
+    generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     # Issue #318/#99: the H1 product word follows the resolved product family
     # (digest/report/tutorial/presentation/premium-briefing/column/
     # magazine-digest/enterprise-briefing) instead of being hardcoded to
@@ -8208,6 +8283,12 @@ def _build_report_synthesis_prompt(
     product_structure = _REPORT_PRODUCT_SYNTHESIS_PROMPTS.get(product_family, "")
     if product_structure:
         prompt += f"\n\n{product_structure}"
+    # Issue #140: differentiate premium vs enterprise briefing coverage scope
+    # so the two paid products read as distinct angles (premium = deep 1-2
+    # topics; enterprise = decision-oriented 4-6 topics).
+    scope_guidance = _DIGEST_PRODUCT_SCOPE_GUIDANCE.get(product_family)
+    if scope_guidance:
+        prompt += f"\n\n{scope_guidance}"
     # -- Structured audience adaptation -----------------------------------
     audience = _normalize_report_audience(target_audience)
     audience_prompt = _REPORT_AUDIENCE_PROMPTS.get(audience, "")
@@ -9797,7 +9878,8 @@ def generate_tutorial(
         )
 
     # -- Build template context -------------------------------------------
-    generated_at = datetime.now(timezone.utc).isoformat()
+    # Issue #138: day-granularity timestamp (no microseconds).
+    generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
     def _coerce_exercise(item: Any) -> dict[str, str]:
         """Normalize one exercise entry to the ``{title, description}`` shape.

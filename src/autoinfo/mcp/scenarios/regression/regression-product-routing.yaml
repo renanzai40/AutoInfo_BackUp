@@ -88,7 +88,7 @@ steps:
           assert "### 1. Time-lapse imaging: Significant improvement" in out, \
               "numbered takeaway empty on digest path"
           assert "IVF technology advanced" in out, "executive summary empty on digest path"
-          assert "AutoInfo Premium Briefing" in out, "premium footer missing"
+          assert "Premium Briefing \u00b7 " in out, "premium footer missing"
           assert "## In This Issue" not in out, "leaked magazine section"
           print("PREMIUM_BRIEFING_DIGEST_OK")
       finally:
@@ -150,7 +150,7 @@ steps:
           # Magazine-differentiated sections on the digest path.
           assert "## In This Issue" in out, "missing In This Issue index"
           assert "Magazine Edition" in out, "missing cover masthead"
-          assert "AutoInfo Magazine Digest" in out, "magazine footer missing"
+          assert "Magazine Digest \u00b7 " in out, "magazine footer missing"
           assert "the-atlantic" in out and "wired" in out, "per-title clusters missing"
           assert "The Quiet AI Revolution in Newsrooms" in out, "entry missing from clusters"
           assert "## Key Takeaways" not in out, "leaked premium section"
