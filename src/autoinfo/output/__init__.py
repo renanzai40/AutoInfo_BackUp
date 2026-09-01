@@ -2623,7 +2623,7 @@ def _export_epub(
         chapters.append((title, body))
 
     result = render_epub(
-        title=f"{domain_label} \u2014 Export",
+        title=f"{_domain_display_name(domain_label)} \u2014 Export",
         author="AutoInfo",
         lang=_derive_export_lang(entries),
         chapters=chapters,
@@ -2682,7 +2682,7 @@ def _export_mobi(
         chapters.append((title, body))
 
     epub_result = render_epub(
-        title=f"{domain_label} \u2014 Export",
+        title=f"{_domain_display_name(domain_label)} \u2014 Export",
         author="AutoInfo",
         lang=_derive_export_lang(entries),
         chapters=chapters,
@@ -3759,6 +3759,59 @@ def _low_value_signal_penalty(entry: dict[str, Any]) -> int:
         for patterns in _COMPILED_LOW_VALUE_PATTERNS.values()
         if any(p.search(haystack) for p in patterns)
     )
+
+
+def _select_family_entry_subset(
+    entries: list[dict[str, Any]], product_family: str
+) -> list[dict[str, Any]]:
+    """Select a differentiated entry subset per briefing family (issue #145).
+
+    Premium and enterprise briefings previously shared the SAME reference
+    set (both derived from the full entry list), so the two paid products
+    were the same content in a different layout.  Prompt-only scope
+    directives (#140) could not fix this — references are fixed at the data
+    layer before the prompt runs.
+
+    This is the data-layer split: the returned subset feeds BOTH the LLM
+    synthesis AND the reference derivation, so premium and enterprise source
+    genuinely different entries:
+
+    - premium-briefing: the top-relevance core (dense deep-dive material,
+      ~12 entries) — "1-2 topics, deep".
+    - enterprise-briefing: a relevance-tiered spread (~25 entries sampled
+      across the relevance range) — "4-6 decision topics, broad".
+
+    Other families return the input unchanged.  Deterministic, no LLM.
+    """
+    if product_family == "premium-briefing":
+        return _sorted_ref_entries(entries)[:12]
+    if product_family == "enterprise-briefing":
+        sorted_entries = _sorted_ref_entries(entries)
+        if len(sorted_entries) <= 25:
+            return sorted_entries
+        # Broad decision coverage: sample ACROSS the relevance range (from
+        # the mid-to-lower half outward) so the enterprise set is NOT a
+        # superset of the premium deep core — the two briefings source
+        # genuinely different entries.
+        lower_half = sorted_entries[len(sorted_entries) // 2 :]
+        upper_half = sorted_entries[: len(sorted_entries) // 2]
+        # Interleave from both halves: the mid-to-lower items premium skips,
+        # plus a light sampling of the top tier for decision anchor points.
+        step_lower = max(len(lower_half) // 20, 1)
+        step_upper = max(len(upper_half) // 5, 1)
+        chosen = lower_half[::step_lower][:20] + upper_half[::step_upper][:5]
+        # De-dupe by source_url while preserving order.
+        seen: set[str] = set()
+        deduped: list[dict[str, Any]] = []
+        for e in chosen:
+            u = str(e.get("source_url") or "")
+            if u and u in seen:
+                continue
+            if u:
+                seen.add(u)
+            deduped.append(e)
+        return deduped[:25]
+    return entries
 
 
 def _sorted_ref_entries(
@@ -5609,6 +5662,10 @@ def generate_digest(
     else:
         digest_domains = [domain]
         digest_title_domain = domain
+    # Issue #144: the H1 title must use the user-facing domain name
+    # (e.g. "Medical Research"), never the internal slug — but the slug
+    # stays for internal product_id / domain keys.
+    digest_title_domain_display: str = _domain_display_name(digest_title_domain)
 
     # --- Auto-load preferences from user profile (G10) -----------------------
     content_preference: str = _resolve_content_preference(user_id)
@@ -5907,6 +5964,11 @@ def generate_digest(
         else "digest"
     )
     llm_synthesis: dict[str, Any] = {}
+    # Default the synthesis/context entry set to the full candidate list;
+    # premium/enterprise families replace it with a differentiated subset
+    # below (issue #145).  Initialised here so context_entries below never
+    # hits an unbound local when *entries* is empty.
+    synthesis_entries: list[dict[str, Any]] = entries
     if entries:
         # Issue #46: prune the LLM-synthesis candidate list the same way #42
         # prunes References — low-value promo/obituary/celebrity entries must
@@ -5917,6 +5979,13 @@ def generate_digest(
         # teaching material).  Deterministic, no LLM.  The full *entries* list
         # still flows to References unchanged below.
         synthesis_entries = _sorted_ref_entries(entries, domain=domain)
+        # Issue #145: premium/enterprise briefings source a DIFFERENTIATED
+        # entry subset (data layer) so their references diverge — a prompt
+        # directive alone cannot change a fixed reference set.  The subset
+        # feeds both the LLM synthesis and the reference derivation below.
+        synthesis_entries = _select_family_entry_subset(
+            synthesis_entries, digest_family
+        )
         prompt = _build_digest_llm_prompt(
             synthesis_entries, product_family=digest_family
         )
@@ -5953,15 +6022,24 @@ def generate_digest(
     # The default digest family keeps the historical
     # "{period_label} Digest — {domain}" title byte-identical.
     digest_h1_word = _product_h1_word(digest_family)
+    # Issue #145: for premium/enterprise briefings the rendered product (and
+    # its References) must draw from the DIFFERENTIATED entry subset selected
+    # above — not the full candidate list — so the two paid products source
+    # different entries.  Other families keep the full list.
+    context_entries = (
+        synthesis_entries
+        if digest_family in ("premium-briefing", "enterprise-briefing")
+        else entries
+    )
     context = {
-        "title": f"{period_label} {digest_h1_word} \u2014 {digest_title_domain}",
+        "title": f"{period_label} {digest_h1_word} \u2014 {digest_title_domain_display}",
         "domain": digest_title_domain,
         "period": period,
         "period_label": period_label,
         "date_from": date_from,
         "date_to": date_to,
         "generated_at": generated_at,
-        "entries": entries,
+        "entries": context_entries,
         "llm_synthesis": llm_synthesis,
         "target_audience": target_audience,
         "source_tier_badge": _source_tier_badge_enabled(),
@@ -6092,7 +6170,7 @@ def generate_digest(
             _try_notify_content_ready(
                 user_id=user_id,
                 product_type="digest",
-                title=f"{period_label} {digest_h1_word} \u2014 {digest_title_domain}",
+                title=f"{period_label} {digest_h1_word} \u2014 {digest_title_domain_display}",
             )
         _fire_agent_notification(
             "new_digest",
@@ -6105,7 +6183,7 @@ def generate_digest(
         _try_notify_content_ready(
             user_id=user_id,
             product_type="digest",
-            title=f"{period_label} {digest_h1_word} \u2014 {digest_title_domain}",
+            title=f"{period_label} {digest_h1_word} \u2014 {digest_title_domain_display}",
         )
     _fire_agent_notification(
         "new_digest", rendered, product_id=f"{digest_title_domain}-{period}"
@@ -6281,6 +6359,9 @@ def generate_report(
     else:
         report_domains = [domain]
         report_title_domain = domain
+    # Issue #144: H1 title uses the user-facing domain name; the slug stays
+    # for internal product_id / domain keys.
+    report_title_domain_display: str = _domain_display_name(report_title_domain)
 
     # --- Auto-load content_preference from user profile (B-001) --------------
     content_preference: str = _resolve_content_preference(user_id)
@@ -6295,7 +6376,7 @@ def generate_report(
             access_result = check_access(user_id, product_access)
             if not access_result["allowed"]:
                 blocked_message = (
-                    f"# {report_title_domain} \u2014 Report\n\n"
+                    f"# {report_title_domain_display} \u2014 Report\n\n"
                     f"**{access_result['upgrade_prompt'] or 'Access denied.'}**\n\n"
                     f"_Reason_: {access_result['reason']}\n\n"
                     f"_Access level required_: `{product_access}`\n"
@@ -6401,7 +6482,7 @@ def generate_report(
         rendered: str
         if format in ("json", "agent"):
             empty_data: dict[str, Any] = {
-                "title": f"{report_title_domain} \u2014 Report",
+                "title": f"{report_title_domain_display} \u2014 Report",
                 "summary": "",
                 "entries": [],
                 "metadata": {
@@ -6429,13 +6510,13 @@ def generate_report(
 
             empty_chapters = [
                 (
-                    f"{report_title_domain} \u2014 Report",
+                    f"{report_title_domain_display} \u2014 Report",
                     _render_empty_report(report_title_domain),
                 )
             ]
             if format == "epub":
                 ebook_result = render_epub(
-                    title=f"{report_title_domain} \u2014 Report",
+                    title=f"{report_title_domain_display} \u2014 Report",
                     author="AutoInfo",
                     lang="en",
                     chapters=empty_chapters,
@@ -6730,7 +6811,7 @@ def generate_report(
     )
 
     report_data = ReportData(
-        title=f"{report_title_domain} \u2014 {report_h1_word}",
+        title=f"{report_title_domain_display} \u2014 {report_h1_word}",
         generated_at=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         domain=report_title_domain,
         collection_id=collection_id or "",
@@ -6954,7 +7035,7 @@ def generate_report(
             _try_notify_content_ready(
                 user_id=user_id,
                 product_type="report",
-                title=f"{report_title_domain} \u2014 {report_h1_word}",
+                title=f"{report_title_domain_display} \u2014 {report_h1_word}",
             )
         _fire_agent_notification(
             "new_report",
@@ -6967,7 +7048,7 @@ def generate_report(
         _try_notify_content_ready(
             user_id=user_id,
             product_type="report",
-            title=f"{report_title_domain} \u2014 {report_h1_word}",
+            title=f"{report_title_domain_display} \u2014 {report_h1_word}",
         )
     _fire_agent_notification(
         "new_report", rendered, product_id=f"{report_title_domain}-{period}"
@@ -8965,7 +9046,7 @@ def _render_report_template(report_data: ReportData, source_tier_badge: bool = T
 def _render_empty_report(domain: str) -> str:
     """Return a brief message when there are no entries for *domain*."""
     return (
-        f"# {domain} \u2014 Report\n\n"
+        f"# {_domain_display_name(domain)} \u2014 Report\n\n"
         f"This edition has no curated items yet. Check back after the next collection run."
     )
 
@@ -9948,7 +10029,7 @@ def generate_tutorial(
             _try_notify_content_ready(
                 user_id=user_id,
                 product_type="tutorial",
-                title=f"{domain} — Tutorial",
+                title=f"{_domain_display_name(domain)} — Tutorial",
             )
         _fire_agent_notification(
             "new_tutorial",
