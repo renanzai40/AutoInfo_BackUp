@@ -474,6 +474,11 @@ def _platform_name(value: Any) -> str:
 # Map known demo-domain slugs to user-facing display names; unknown slugs
 # fall back to a title-cased slug (medical-research -> Medical Research).
 _DOMAIN_DISPLAY_NAMES: Final[dict[str, str]] = {
+    # Issue #155: "Cross-Domain" is a PRODUCT label (the cross-domain
+    # digest/report title), not a domain slug — the hyphen is intentional
+    # and must survive the display-name mapping (the title-case fallback
+    # would otherwise strip it to "Cross Domain").
+    "Cross-Domain": "Cross-Domain",
     "medical-research": "Medical Research",
     "ai-commercial": "AI Commercial",
     "financial-intelligence": "Financial Intelligence",
