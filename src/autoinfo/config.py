@@ -988,6 +988,53 @@ def validate_config(config: Config) -> list[str]:
     return errors
 
 
+# Issue #170: the default quality-gate template (with LLM retries on the
+# hard/judgment gates) must apply when a project config declares no
+# quality_gates at all — otherwise G3 falls back to lexical scoring and
+# systematically rejects multilingual/weak-keyword-hit content.  Mirrors the
+# quality_gates block create_default_config writes for `init`.
+_DEFAULT_QUALITY_GATES: Final[dict[str, dict[str, Any]]] = {
+    "G0": {"category": "hard", "retries": 1, "action": "block"},
+    "G1": {"category": "soft", "action": "flag"},
+    "G1-TosCompliance": {"category": "soft", "action": "flag"},
+    "G2": {"category": "soft", "action": "flag", "window_days": 30},
+    "G3": {"category": "soft", "retries": 2, "action": "archive", "threshold": 30},
+    "G4": {
+        "category": "hard",
+        "retries": 3,
+        "retry_models": ["deepseek/deepseek-chat", "anthropic/claude-sonnet-4"],
+        "action": "block",
+    },
+    "G5": {"category": "soft", "retries": 2, "action": "flag"},
+}
+
+
+def default_quality_gates() -> dict[str, QualityGateConfig]:
+    """Return the default quality gates parsed into QualityGateConfig objects.
+
+    Keys are the canonical long form the pipeline looks up (G3-RelevanceScoring
+    etc., via :data:`_GATE_CONFIG_KEY_MAP`).  Used as the fallback when a
+    project config declares no ``quality_gates`` (issue #170), so G3 (and the
+    hard gates) keep LLM retries instead of silently degrading to lexical
+    scoring.
+    """
+    gates: dict[str, QualityGateConfig] = {}
+    for gate_name, gc_raw in _DEFAULT_QUALITY_GATES.items():
+        gc = gc_raw or {}
+        long_name = _GATE_CONFIG_KEY_MAP.get(gate_name, gate_name)
+        gates[long_name] = QualityGateConfig(
+            name=long_name,
+            category=str(gc.get("category", "soft")),
+            retries=int(gc.get("retries", 0)),
+            retry_models=list(gc.get("retry_models", [])),
+            action=str(gc.get("action", "flag")),
+            threshold=gc.get("threshold", None),
+            window_days=int(gc.get("window_days", 0)),
+            enabled=_as_bool(gc.get("enabled", True)),
+        )
+    return gates
+
+
 def create_default_config(domain: str) -> dict[str, Any]:
     """Generate a minimal default configuration for *domain*.
 
@@ -1012,20 +1059,7 @@ def create_default_config(domain: str) -> dict[str, Any]:
                 "topics": [],
             }
         ],
-        "quality_gates": {
-            "G0": {"category": "hard", "retries": 1, "action": "block"},
-            "G1": {"category": "soft", "action": "flag"},
-            "G1-TosCompliance": {"category": "soft", "action": "flag"},
-            "G2": {"category": "soft", "action": "flag", "window_days": 30},
-            "G3": {"category": "soft", "retries": 2, "action": "archive", "threshold": 30},
-            "G4": {
-                "category": "hard",
-                "retries": 3,
-                "retry_models": ["deepseek/deepseek-chat", "anthropic/claude-sonnet-4"],
-                "action": "block",
-            },
-            "G5": {"category": "soft", "retries": 2, "action": "flag"},
-        },
+        "quality_gates": _DEFAULT_QUALITY_GATES,
         "delivery_gates": {
             "D1": {"enabled": True, "action_on_failure": "block"},
             "D2": {"enabled": True, "action_on_failure": "fallback"},

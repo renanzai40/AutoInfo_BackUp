@@ -10,6 +10,7 @@ import logging
 import os
 import time
 import uuid
+from datetime import datetime, timezone
 from typing import Any
 from urllib.parse import quote
 from xml.etree import ElementTree as ET
@@ -362,7 +363,11 @@ class PubMedHandler(BaseHandler):
             title=article.get("title", ""),
             content=article.get("abstract", ""),
             content_type="text",
-            collected_at=article.get("pub_date", ""),
+            # Issue #169: collected_at must be the COLLECTION time (full ISO
+            # date), never the article's pub_date — PubMed often only provides
+            # a bare year ("2026") which broke date-range KB queries.  The
+            # publication date stays in raw_data["pub_date"].
+            collected_at=datetime.now(timezone.utc).isoformat(),
             domain="medical-research",
             topic_tags=list(article.get("keywords", [])),
             raw_data={

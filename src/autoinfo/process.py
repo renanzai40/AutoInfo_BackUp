@@ -31,6 +31,7 @@ from autoinfo.config import (
     Config,
     DomainConfig,
     QualityGateConfig,
+    default_quality_gates,
     get_config_path,
     load_config,
 )
@@ -931,6 +932,13 @@ def run_processing(
             if d.name == domain:
                 gate_config.update(d.quality_gates)
                 break
+    # Issue #170: a project config with NO quality_gates (init template only
+    # writes them for NEW projects) silently degrades G3 to lexical scoring,
+    # which rejects multilingual / weak-keyword-hit content and leaves the KB
+    # processing layer empty.  Apply the documented default gates (LLM retries
+    # on G3/G4/G5) when nothing is configured — same defaults `init` writes.
+    if config and not gate_config:
+        gate_config = default_quality_gates()
 
     # Resolve the domain config for keyword auto-discovery (#179): toggle,
     # AUTO_ADDED cap and minimum candidate length.  Defaults (on / 100 / 2)
