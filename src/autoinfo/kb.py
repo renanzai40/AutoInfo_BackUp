@@ -3349,6 +3349,20 @@ class KBStore:
                 f"fewer than {self.min_content_chars} characters"
             )
 
+        # If the caller did not explicitly pass a summary, auto-generate a
+        # one-line summary from the source Raw titles / existing summaries so
+        # the Draft is never rendered as an empty shell (issue #176). An
+        # explicit summary always wins — API compatible.
+        if not summary:
+            parts_gen = []
+            for re in raw_entries:
+                src_summary = (re.get("summary") or "").strip()
+                src_title = (re.get("title") or "").strip()
+                parts_gen.append(src_summary or src_title)
+            parts_gen = [p for p in parts_gen if p]
+            if parts_gen:
+                summary = f"本期{domain}要点: " + "; ".join(parts_gen)
+
         # Build KBEntry
         source_raw_ids = ",".join(raw_ids)
         entry = KBEntry(  # type: ignore[assignment]
