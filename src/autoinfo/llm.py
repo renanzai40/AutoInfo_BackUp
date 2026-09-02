@@ -406,7 +406,27 @@ class LLMExtractor:
         degradation for environments where LiteLLM is not installed).
         """
         try:
+            import logging as _logging
+            import sys as _sys
+
             import litellm  # noqa: PLC0415 — deferred import
+
+            # Keep LiteLLM's debug/error chatter (Give Feedback / Get Help
+            # stack, debug info) off of stdout — it would corrupt the CLI's
+            # redirected product payload. Issue #180. We silence the debug
+            # banner outright and pin the "LiteLLM" logger to stderr with
+            # propagate disabled so nothing escapes to stdout.
+            litellm.suppress_debug_info = True
+            _litellm_logger = _logging.getLogger("LiteLLM")
+            _litellm_logger.propagate = False
+            _handlers_changed = False
+            for _handler in list(_litellm_logger.handlers):
+                if isinstance(_handler, _logging.StreamHandler):
+                    _handler.setStream(_sys.stderr)
+                    _handlers_changed = True
+            if not _handlers_changed:
+                _stderr_handler = _logging.StreamHandler(_sys.stderr)
+                _litellm_logger.addHandler(_stderr_handler)
 
             return litellm
         except (ImportError, ModuleNotFoundError):
