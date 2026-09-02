@@ -2917,6 +2917,7 @@ def run_quality_gates(
     context: dict[str, Any] | None = None,
     gate_config: dict[str, QualityGateConfig] | None = None,
     llm_timeout: float | None = None,
+    llm_model: str | None = None,
 ) -> dict[str, QualityResult]:
     """Run all quality gates (G0, G1, G1-ToS, G2, G3) on *item*.
 
@@ -2943,6 +2944,11 @@ def run_quality_gates(
     llm_timeout:
         Optional per-call LLM timeout (seconds) forwarded to the G3
         LLM scorer.  ``None`` keeps litellm's default.
+    llm_model:
+        Optional production LLM model string for G3 (issue #172/#173).
+        When provided (e.g. ``config.llm.resolve_model()``) the serial G3
+        scores with the configured model instead of the hardcoded default
+        that has no API key in the deployment.  ``None`` keeps G3's default.
 
     Returns
     -------
@@ -2978,7 +2984,10 @@ def run_quality_gates(
     g1 = G1SourceAuthority()
     g1tos = G1TosCompliance()
     g2 = G2Dedup()
-    g3 = G3RelevanceScoring(timeout=llm_timeout)
+    # Issue #172/#173: use the configured production LLM when provided, so
+    # the SERIAL G3 path (default `autoinfo process`) scores with the real
+    # model instead of the hardcoded default that has no key locally.
+    g3 = G3RelevanceScoring(model=llm_model, timeout=llm_timeout)
 
     results: dict[str, QualityResult] = {}
 

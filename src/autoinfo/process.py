@@ -1129,6 +1129,10 @@ def run_processing(
                 },
                 gate_config=serial_gate_config if serial_gate_config else None,
                 llm_timeout=llm_timeout,
+                # Issue #173: the SERIAL G3 path (default CLI, no
+                # --check-factual) must score with the configured production
+                # LLM too — not the dead default model with no key.
+                llm_model=_g3_llm_model(proc_config),
             )
             if run_concurrent_g3:
                 quality_results.pop("G3-RelevanceScoring", None)

@@ -10,7 +10,7 @@ Covers:
 from __future__ import annotations
 
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 from autoinfo.config import QualityGateConfig
 from autoinfo.models import Item, KBEntry
@@ -924,6 +924,30 @@ class TestRunQualityGates:
         results = run_quality_gates(sample_item)
 
         assert len(results) >= 4
+
+    def test_llm_model_forwarded_to_g3(self, sample_item: Item) -> None:
+        """Issue #173: the serial run_quality_gates path forwards llm_model to
+        the G3 scorer — the default CLI (no --check-factual) must score with
+        the configured production LLM, never the dead hardcoded default."""
+        context = {
+            "topic_keywords": ["IVF"],
+            "threshold": 30,
+        }
+        with patch(
+            "autoinfo.quality.G3RelevanceScoring",
+            wraps=G3RelevanceScoring,
+        ) as mock_g3_cls:
+            run_quality_gates(
+                sample_item, context,
+                llm_model="openai/mimo-v2.5",
+            )
+        # The G3 scorer was constructed with the forwarded production model.
+        constructed = [c for c in mock_g3_cls.call_args_list]
+        assert constructed, "G3RelevanceScoring was not constructed"
+        kwargs = constructed[0].kwargs
+        assert kwargs.get("model") == "openai/mimo-v2.5", (
+            f"G3 constructed without the forwarded model: {kwargs}"
+        )
 
     def test_g3_triggers_hidden_in_orchestrator(self, sample_item: Item) -> None:
         """Hidden flag propagates through orchestrated G3."""
