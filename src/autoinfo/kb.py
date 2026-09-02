@@ -3345,9 +3345,24 @@ class KBStore:
             len(body.strip()) < self.min_content_chars for body in source_bodies
         ):
             raise ValueError(
-                "draft content too short: a source Raw entry provides "
-                f"fewer than {self.min_content_chars} characters"
-            )
+                 "draft content too short: a source Raw entry provides "
+                 f"fewer than {self.min_content_chars} characters"
+             )
+
+        # Issue #176: when the caller passes no summary, auto-generate a
+        # deterministic one-line summary from the source Raw summaries/titles
+        # so a Draft never renders as an empty shell in digest/report.  An
+        # explicit summary always wins — API compatible.  No language prefix
+        # (the sources carry their own language) and no LLM call.
+        if not summary:
+            parts_gen = []
+            for src_entry in raw_entries:
+                src_summary = (src_entry.get("summary") or "").strip()
+                src_title = (src_entry.get("title") or "").strip()
+                parts_gen.append(src_summary or src_title)
+            parts_gen = [p for p in parts_gen if p]
+            if parts_gen:
+                summary = "; ".join(parts_gen)[:600]
 
         # Build KBEntry
         source_raw_ids = ",".join(raw_ids)

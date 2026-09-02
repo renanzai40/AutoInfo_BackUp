@@ -164,6 +164,28 @@ class TestCreateKbDraft:
         assert fp.is_file()
         assert "02-Draft" in fp.parts
 
+    def test_auto_generates_summary_when_not_passed(self, store: KBStore, raw_entry_ids: list[str]) -> None:
+        """Issue #176: create_kb_draft without a summary must auto-generate a
+        deterministic one from the source Raw summaries/titles, so the Draft
+        never renders as an empty shell in digest/report."""
+        draft = store.create_kb_draft(
+            raw_ids=raw_entry_ids,
+            title="Compiled draft on IVF imaging",
+        )
+        assert draft.summary, "auto-generated summary must be non-empty"
+        # Drawn from the source Raw summaries — no empty-shell, no lang prefix.
+        assert "IVF" in draft.summary or "embryo" in draft.summary
+        assert not draft.summary.startswith(("本期", "要点"))
+
+    def test_explicit_summary_wins(self, store: KBStore, raw_entry_ids: list[str]) -> None:
+        """An explicitly passed summary is kept verbatim (API compatible)."""
+        draft = store.create_kb_draft(
+            raw_ids=[raw_entry_ids[0]],
+            title="Compiled draft on IVF imaging",
+            summary="Explicit custom summary",
+        )
+        assert draft.summary == "Explicit custom summary"
+
     def test_rejects_draft_from_short_raw_entry(
         self, store: KBStore
     ) -> None:
