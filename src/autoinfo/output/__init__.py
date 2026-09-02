@@ -611,6 +611,43 @@ def _contains_raw_llm_leak(text: str) -> bool:
     return False
 
 
+# CJK hard-check for non-bilingual products (issue #181).  English products for
+# non-learning domains must not carry Chinese template-name / summary leaks.
+# ``english-learning`` is the designed bilingual domain and is deliberately
+# exempt.  A single CJK char with no real Chinese sentence reads as noise; we
+# only warn past a small threshold so a stray ideograph in a code sample or a
+# proper noun is not over-flagged.
+_CJK_RE: re.Pattern[str] = re.compile(r"[\u4e00-\u9fff\u3400-\u4dbf]")
+
+# Domains exempt from the CJK leak check because bilingual output is by design.
+_CJK_EXEMPT_DOMAINS: frozenset[str] = frozenset({"english-learning"})
+
+
+def _warn_cjk_leak(
+    domain: str, product_type: str, rendered: str, threshold: int = 5
+) -> int:
+    """Warn when a non-exempt domain's product carries too many CJK chars.
+
+    Counts CJK ideographs in *rendered* and logs a warning (issue #181) when
+    the count exceeds *threshold*.  ``english-learning`` (bilingual by design)
+    is skipped.  Returns the CJK char count so callers may filter if needed.
+    """
+    domain_key = (domain or "").strip().lower()
+    if domain_key in _CJK_EXEMPT_DOMAINS:
+        return 0
+    count = len(_CJK_RE.findall(rendered))
+    if count > threshold:
+        logger.warning(
+            "CJK leak in %s for domain '%s': %d CJK chars (threshold %d) "
+            "— Chinese template name or summary leaked into an English product",
+            product_type,
+            domain,
+            count,
+            threshold,
+        )
+    return count
+
+
 def _is_empty_summary(summary: str) -> bool:
     """True when *summary* is blank or a known placeholder string (issue #294).
 
@@ -6278,6 +6315,11 @@ def generate_digest(
             str(llm_synthesis.get("description") or "").strip()
             if isinstance(llm_synthesis, dict) else ""
         )
+        # Issue #182: keep the deck header Audience populated even when the
+        # digest path did not receive an explicit target_audience.
+        context["target_audience"] = (
+            str(context.get("target_audience") or "").strip() or "executive"
+        )
 
     # --- Render --------------------------------------------------------------
     if format == "agent":
@@ -6387,6 +6429,10 @@ def generate_digest(
                 user_id,
                 exc_info=True,
             )
+
+    # --- CJK leak hard-check (issue #181) -----------------------------------
+    if format not in ("audio", "epub", "audiobook"):
+        _warn_cjk_leak(digest_title_domain, "digest", rendered)
 
     # --- Delivery gates (D1-D3) ---------------------------------------------
     if delivery_gate_configs is not None:
@@ -7259,6 +7305,10 @@ def generate_report(
                 user_id,
                 exc_info=True,
             )
+
+    # --- CJK leak hard-check (issue #181) -----------------------------------
+    if format not in ("audio", "epub", "audiobook"):
+        _warn_cjk_leak(report_title_domain, "report", rendered)
 
     # -- Delivery gates (D1-D3) ---------------------------------------------
     if delivery_gate_configs is not None:
@@ -11098,6 +11148,9 @@ def generate_presentation(
         )
 
     slide_count = max(3, min(30, slide_count))
+    # Issue #182: an empty target_audience renders a blank "Audience:" line;
+    # default to executive so the deck header is always populated.
+    target_audience = (target_audience or "").strip() or "executive"
 
     # --- Resolve delivery-gate config (issue #298: default-on in production) --
     delivery_gate_configs = _resolve_delivery_gate_configs(domain, delivery_gate_configs)
@@ -11378,6 +11431,23 @@ def _render_presentation_agent_json(
 _PRESENTATION_SLIDE_COUNT: Final[int] = 10
 
 
+def _split_summary_sentences(text: str) -> list[str]:
+    """Split *text* into sentences on end-punctuation boundaries.
+
+    Unlike a naive ``str.split(".")``, this preserves decimal points in
+    monetary figures (issue #182: ``$8.5 billion`` must not become
+    ``$8`` / ``5 billion``).  We split only on ``.``/``!``/``?`` that are
+    followed by whitespace (or end of string) and then trim leftover dots.
+    """
+    parts = re.split(r"(?<=[.?!])(?=[ \t\n\r])|(?<=[.?!])$", text)
+    sentences: list[str] = []
+    for part in parts:
+        cleaned = part.strip().rstrip(".")
+        if cleaned:
+            sentences.append(cleaned)
+    return sentences
+
+
 def _fallback_slides_from_entries(
     entries: list[dict[str, Any]],
     slide_count: int,
@@ -11401,8 +11471,11 @@ def _fallback_slides_from_entries(
             summary = content[:600] if content else ""
         if not summary:
             continue
-        bullets = summary.split(".")[:3]
-        bullets = [b.strip().rstrip(".") for b in bullets if b.strip()]
+        # Issue #182: naive ``summary.split(".")`` destroys currency decimals
+        # ($8.5 billion → $8 / "5 billion").  Split on sentence boundaries
+        # (end-punctuation followed by whitespace or end-of-string) so monetary
+        # figures like $8.5 billion and $1.1 billion stay intact.
+        bullets = _split_summary_sentences(summary)[:3]
         slides.append(
             {
                 "title": title,
