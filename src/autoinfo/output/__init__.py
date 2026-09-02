@@ -611,6 +611,43 @@ def _contains_raw_llm_leak(text: str) -> bool:
     return False
 
 
+# CJK hard-check for non-bilingual products (issue #181).  English products for
+# non-learning domains must not carry Chinese template-name / summary leaks.
+# ``english-learning`` is the designed bilingual domain and is deliberately
+# exempt.  A single CJK char with no real Chinese sentence reads as noise; we
+# only warn past a small threshold so a stray ideograph in a code sample or a
+# proper noun is not over-flagged.
+_CJK_RE: re.Pattern[str] = re.compile(r"[\u4e00-\u9fff\u3400-\u4dbf]")
+
+# Domains exempt from the CJK leak check because bilingual output is by design.
+_CJK_EXEMPT_DOMAINS: frozenset[str] = frozenset({"english-learning"})
+
+
+def _warn_cjk_leak(
+    domain: str, product_type: str, rendered: str, threshold: int = 5
+) -> int:
+    """Warn when a non-exempt domain's product carries too many CJK chars.
+
+    Counts CJK ideographs in *rendered* and logs a warning (issue #181) when
+    the count exceeds *threshold*.  ``english-learning`` (bilingual by design)
+    is skipped.  Returns the CJK char count so callers may filter if needed.
+    """
+    domain_key = (domain or "").strip().lower()
+    if domain_key in _CJK_EXEMPT_DOMAINS:
+        return 0
+    count = len(_CJK_RE.findall(rendered))
+    if count > threshold:
+        logger.warning(
+            "CJK leak in %s for domain '%s': %d CJK chars (threshold %d) "
+            "— Chinese template name or summary leaked into an English product",
+            product_type,
+            domain,
+            count,
+            threshold,
+        )
+    return count
+
+
 def _is_empty_summary(summary: str) -> bool:
     """True when *summary* is blank or a known placeholder string (issue #294).
 
@@ -6343,6 +6380,10 @@ def generate_digest(
                 exc_info=True,
             )
 
+    # --- CJK leak hard-check (issue #181) -----------------------------------
+    if format not in ("audio", "epub", "audiobook"):
+        _warn_cjk_leak(digest_title_domain, "digest", rendered)
+
     # --- Delivery gates (D1-D3) ---------------------------------------------
     if delivery_gate_configs is not None:
         result = _apply_delivery_gates(
@@ -7214,6 +7255,10 @@ def generate_report(
                 user_id,
                 exc_info=True,
             )
+
+    # --- CJK leak hard-check (issue #181) -----------------------------------
+    if format not in ("audio", "epub", "audiobook"):
+        _warn_cjk_leak(report_title_domain, "report", rendered)
 
     # -- Delivery gates (D1-D3) ---------------------------------------------
     if delivery_gate_configs is not None:
