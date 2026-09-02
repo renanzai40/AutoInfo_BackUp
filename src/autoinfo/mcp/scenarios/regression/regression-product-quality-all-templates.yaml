@@ -87,6 +87,17 @@ steps:
               failures.append(f"[{family}] R9 empty-shell (Slides: 0)")
           if family == "presentation" and "## Slide" not in out:
               failures.append(f"[{family}] R9 empty-shell (no slide content)")
+          # R10: literal non-URL "(Source: X URL)" placeholders (issue #165).
+          # The \s* is INSIDE the negative lookahead so a real http(s) URL or
+          # markdown link is never matched (mirrors _FABRICATED_SOURCE_RE).
+          if re.search(r"\(Source:(?!\s*(?:https?://|\[))[^)\n]*\)", out):
+              failures.append(f"[{family}] R10 fake-source placeholder")
+          # R11: pinned off-topic noise markers must never appear (issue
+          # #166 — horse RCTs, personal-finance Q&A, lifestyle content).
+          for marker in ("Social Security", "Roth", "tenant", "equine",
+                         "intravenous", "Coca-Cola", "pizza"):
+              if marker in out:
+                  failures.append(f"[{family}] R11 off-topic marker: {marker!r}")
 
       # Deterministic fixture: 3 real-shaped entries with summaries and
       # source_urls.  The LLM synthesis is patched to carry the §2.4 fields

@@ -673,3 +673,55 @@ class TestCliDigest:
     ) -> None:
         """CLI uses default period (weekly) and format (markdown)."""
         pytest.skip("typer broken on Python 3.14 (inspect.signature eval_str)")
+
+
+# ======================================================================
+# #165: literal "(Source: X URL)" fake-source placeholder stripping
+# #166: per-domain product relevance floor
+# ======================================================================
+
+
+class TestFakeSourcePlaceholderStrip:
+    """``_strip_fake_source_placeholders`` removes literal non-URL source
+    citations (issue #165)."""
+
+    def test_strips_literal_x_url_placeholder(self) -> None:
+        from autoinfo.output import _strip_fake_source_placeholders
+
+        out = _strip_fake_source_placeholders(
+            "**Actions:** Due diligence: ... (Source: TechCrunch URL)"
+        )
+        assert "TechCrunch URL" not in out
+        assert "Due diligence" in out
+
+    def test_preserves_real_url_and_markdown_link(self) -> None:
+        from autoinfo.output import _strip_fake_source_placeholders
+
+        url = "(Source: https://techcrunch.com/2026/08/31/ryan-breslow-/)"
+        assert _strip_fake_source_placeholders(f"Keep {url}") == f"Keep {url}"
+        md = "(Source: [TechCrunch](https://techcrunch.com/x))"
+        assert _strip_fake_source_placeholders(md) == md
+
+
+class TestProductRelevanceFloor:
+    """``_filter_entries_by_domain_exclusions`` drops below-floor entries
+    (issue #166)."""
+
+    def test_below_floor_dropped_at_floor_and_absent_kept(self) -> None:
+        from autoinfo.output import _filter_entries_by_domain_exclusions
+
+        entries = [
+            {"entry_id": "a", "title": "Horse hydration RCT", "relevance_score": 10,
+             "domain": "medical-research"},
+            {"entry_id": "b", "title": "IVF breakthrough", "relevance_score": 85,
+             "domain": "medical-research"},
+            {"entry_id": "c", "title": "Unscored curated", "domain": "medical-research"},
+            {"entry_id": "d", "title": "Boundary", "relevance_score": 30,
+             "domain": "medical-research"},
+        ]
+        kept = [e["entry_id"] for e in _filter_entries_by_domain_exclusions(
+            entries, "medical-research"
+        )]
+        # medical-research seed floor is 30 -> below-floor 'a' dropped;
+        # at-floor 'd', scored 'b', and absent-score 'c' (fail-open) kept.
+        assert kept == ["b", "c", "d"], kept
