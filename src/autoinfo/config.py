@@ -264,6 +264,13 @@ class DomainConfig:
     # language used for vocabulary/gloss translations in tutorials (the
     # learner's native language).  Empty defaults to English.
     gloss_language: str = ""
+    # Product relevance floor (issue #166): entries whose stored
+    # relevance_score is below this threshold are excluded from PRODUCT
+    # aggregation (digest/report/tutorial/presentation + cross-domain),
+    # catching off-topic items that pass the substring exclude_keywords
+    # blacklist.  0 (default) = disabled (no behavior change).  Entries
+    # without a stored relevance_score pass (fail-open).
+    min_product_relevance: int = 0
     # Keyword auto-discovery (#179): defaults keep pre-#179 behavior.
     auto_keyword_discovery: bool = True
     max_auto_keywords: int = 100
@@ -740,6 +747,7 @@ def _dict_to_config(raw: dict[str, Any]) -> Config:
                 auto_keyword_min_length=int(d.get("auto_keyword_min_length", 2)),
 default_language=str(d.get("default_language", "")),
                 gloss_language=str(d.get("gloss_language", "")),
+                min_product_relevance=int(d.get("min_product_relevance", 0)),
                 exclude_keywords=list(d.get("exclude_keywords", [])),
             )
         )

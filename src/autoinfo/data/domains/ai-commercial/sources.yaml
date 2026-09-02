@@ -6,6 +6,9 @@ description: "AI commercial intelligence — startup funding, product launches, 
 # 36KR is Chinese.  Default the output language to English so products come out
 # single-language without an explicit --language param.
 default_language: en
+# Issue #166: exclude low-signal entries below this stored relevance score
+# from product aggregation.  0 disables; entries without a score pass.
+min_product_relevance: 30
 
 # Cross-domain noise filter (#319): entries whose title/summary/tags contain
 # any of these keywords are excluded from product generation (digest/report)

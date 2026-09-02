@@ -26,10 +26,10 @@
 {{ section.content }}
 
 {% if section.entries %}
-| # | Title | Summary |
-|---|-------|---------|
+| # | Title | Source | Summary |
+|---|-------|--------|---------|
 {% for entry in section.entries %}
-| {{ loop.index }} | {{ entry.title }} | {{ entry.summary | product_summary or "—" }} |
+| {{ loop.index }} | {{ entry.title }} | {{ entry_source_cell(entry) or "—" }} | {{ entry.summary | product_summary or "—" }} |
 {% endfor %}
 {% endif %}
 {% endif %}

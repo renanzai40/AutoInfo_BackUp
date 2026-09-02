@@ -41,10 +41,10 @@
 {{ section.content }}
 
 {% if section.entries %}
-| # | Title | Summary |
-|---|-------|---------|
+| # | Title | Source | Summary |
+|---|-------|--------|---------|
 {% for entry in section.entries %}
-| {{ loop.index }} | {% if source_tier_badge and entry.source_tier %}[{{ entry.source_tier }}] {% endif %}{{ entry.title }} | {{ entry.summary | product_summary or "—" }} |
+| {{ loop.index }} | {% if source_tier_badge and entry.source_tier %}[{{ entry.source_tier }}] {% endif %}{{ entry.title }} | {{ entry_source_cell(entry) or "—" }} | {{ entry.summary | product_summary or "—" }} |
 {% endfor %}
 {% endif %}
 {% endif %}

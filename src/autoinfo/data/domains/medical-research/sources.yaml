@@ -84,6 +84,10 @@ sources:
     fallback_rss: https://www.uspto.gov/feeds/patent_application.xml
 
 default_language: en
+# Issue #166: exclude entries below this stored relevance score from PRODUCT
+# aggregation (horse RCTs, non-reproductive clinical guidelines that pass the
+# substring blacklist).  0 disables; entries without a score pass (fail-open).
+min_product_relevance: 30
 
 exclude_keywords:
   # Domain-noise blacklist (issue #19): filter out-of-domain / weakly-related

@@ -72,6 +72,10 @@ exclude_keywords:
 # template but are requires_key: true; without env keys they surface as
 # SourceFailure at collect and are excluded from the effective set.
 default_language: en
+# Issue #166: exclude personal-finance/lifestyle Q&A noise below this stored
+# relevance score from product aggregation.  0 disables; entries without a
+# score pass (fail-open).
+min_product_relevance: 40
 
 sources:
   - name: Alpha Vantage

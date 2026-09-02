@@ -533,6 +533,31 @@ def _user_source_label(ref: dict[str, Any]) -> str:
     return ""
 
 
+def _entry_source_cell(entry: dict[str, Any]) -> str:
+    """Return a markdown Source cell for a product-table entry row (#167).
+
+    Renders ``[LABEL](URL)`` when the entry carries a ``source_url`` (LABEL is
+    the derived user-facing source name — ``source_label`` or
+    ``source_platform``, never the generic internal id), the bare LABEL when
+    there is no URL, and ``""`` when neither exists.  Used by the report and
+    column sections tables so every row is traceable to its source.
+    """
+    url = str(entry.get("source_url") or "").strip()
+    label = str(
+        entry.get("source_label") or entry.get("source_platform") or ""
+    ).strip()
+    if url:
+        if not label:
+            # No label but a real URL — show the host as the label.
+            from urllib.parse import urlsplit
+
+            label = urlsplit(url).hostname or url
+        return f"[{label}]({url})"
+    if label:
+        return label
+    return ""
+
+
 # ---------------------------------------------------------------------------
 # LLM leak detection (issue #302 — ①)
 # ---------------------------------------------------------------------------
@@ -1242,6 +1267,67 @@ def _seed_domain_exclude_keywords(domain: str) -> list[str]:
     return list(seed.get("exclude_keywords") or [])
 
 
+def _seed_domain_relevance_floor(domain: str) -> int:
+    """Demo-domain seed fallback for ``min_product_relevance`` (issue #166).
+
+    Reads ``src/autoinfo/data/domains/<domain>/sources.yaml`` so existing
+    projects filter off-topic entries at product aggregation without a config
+    migration (same pattern as the exclude_keywords seed, #319).  Returns 0
+    (disabled) when the seed file is absent or declares no floor.
+    """
+    seed_path = _DEMO_DOMAINS_DIR / domain / "sources.yaml"
+    if not seed_path.is_file():
+        return 0
+    try:
+        with open(seed_path, encoding="utf-8") as f:
+            seed = yaml.safe_load(f) or {}
+    except Exception:
+        return 0
+    try:
+        return int(seed.get("min_product_relevance") or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _get_domain_relevance_floor(domain: str) -> int:
+    """Load the per-domain product relevance floor (issue #166).
+
+    Reads ``min_product_relevance`` from the project config's domain block;
+    when the config declares no ``min_product_relevance`` key for the domain
+    (projects initialized before the field existed), falls back to the
+    demo-domain seed (see :func:`_seed_domain_relevance_floor`) so live
+    surfaces filter immediately without a config migration — the same
+    declare-or-seed pattern as exclude_keywords (#319).  An explicitly
+    declared value always wins.  Returns 0 (disabled) when unset everywhere.
+    """
+    config_path = get_config_path()
+    if config_path and config_path.is_file():
+        try:
+            config = load_config(config_path)
+            for d in config.domains:
+                if d.name == domain:
+                    if _config_declares_relevance_floor(config_path, domain):
+                        return int(d.min_product_relevance or 0)
+                    break
+        except Exception:
+            return _seed_domain_relevance_floor(domain)
+    return _seed_domain_relevance_floor(domain)
+
+
+def _config_declares_relevance_floor(config_path: Path, domain: str) -> bool:
+    """True when the raw config YAML declares a ``min_product_relevance`` key
+    for *domain* (even a zero value).  Mirrors
+    :func:`_config_declares_exclude_keywords` (issue #166/#319)."""
+    try:
+        raw = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
+    except Exception:
+        return False
+    for d in raw.get("domains", []):
+        if d.get("name") == domain:
+            return "min_product_relevance" in d
+    return False
+
+
 def _entry_matches_exclude_keywords(
     entry: dict[str, Any], keywords: list[str]
 ) -> bool:
@@ -1273,7 +1359,8 @@ def _entry_matches_exclude_keywords(
 def _filter_entries_by_domain_exclusions(
     entries: list[dict[str, Any]], domain: str
 ) -> list[dict[str, Any]]:
-    """Drop entries matching a per-domain ``exclude_keywords`` blacklist (#319).
+    """Per-domain product-admission filter: exclude_keywords blacklist +
+    relevance floor (#319 + #166).
 
     Issue #319: ai-commercial digests contained medical entries (贝达药业,
     EyePoint DURAVYU) that passed the G1-G3 relevance gates.  This is a
@@ -1281,12 +1368,19 @@ def _filter_entries_by_domain_exclusions(
     against the ``exclude_keywords`` of its OWN domain (entry dicts carry
     ``domain``; falls back to *domain* when absent), so a cross-domain digest
     filters per-entry.  Matching is deterministic — substring on
-    title+summary+tags, no LLM involvement.  Returns the input unchanged when
-    no domain declares exclusions.
+    title+summary+tags, no LLM involvement.
+
+    Issue #166: additionally drops entries whose stored ``relevance_score``
+    is below the domain's ``min_product_relevance`` floor — catching off-topic
+    items (horse RCTs, personal-finance Q&A) the substring blacklist cannot
+    express.  Entries WITHOUT a stored relevance_score pass (fail-open, so
+    curated/imported/promoted content and unseeded domains are unaffected).
+    Returns the input unchanged when no domain declares exclusions or a floor.
     """
     if not entries:
         return entries
     exclude_by_domain: dict[str, list[str]] = {}
+    floor_by_domain: dict[str, int] = {}
     kept: list[dict[str, Any]] = []
     dropped = 0
     for entry in entries:
@@ -1295,15 +1389,29 @@ def _filter_entries_by_domain_exclusions(
             exclude_by_domain[entry_domain] = _get_domain_exclude_keywords(
                 entry_domain
             )
+            floor_by_domain[entry_domain] = _get_domain_relevance_floor(
+                entry_domain
+            )
         keywords = exclude_by_domain[entry_domain]
         if keywords and _entry_matches_exclude_keywords(entry, keywords):
             dropped += 1
             continue
+        floor = floor_by_domain[entry_domain]
+        if floor > 0:
+            raw_score = entry.get("relevance_score")
+            if isinstance(raw_score, (int, float)) and not isinstance(raw_score, bool):
+                try:
+                    if float(raw_score) < floor:
+                        dropped += 1
+                        continue
+                except (TypeError, ValueError):
+                    pass  # non-numeric score -> fail-open (keep)
+            # absent/None/NaN score -> fail-open (keep)
         kept.append(entry)
     if dropped:
         logger.info(
             "Excluded %d entries from product input for domain '%s' via "
-            "exclude_keywords (cross-domain noise filter)",
+            "exclude_keywords / relevance floor (product admission filter)",
             dropped, domain,
         )
     return kept
@@ -1454,6 +1562,18 @@ def _strip_entry_placeholders(text: str) -> str:
     where such a string would be legitimate structured content.
     """
     return _ENTRY_N_RE.sub("Source: (source)", text)
+
+
+def _strip_fake_source_placeholders(text: str) -> str:
+    """Remove literal non-URL ``(Source: ...)`` placeholders from product text.
+
+    Issue #165: the model emits ``(Source: TechCrunch URL)`` — a literal
+    text placeholder, not a clickable citation.  Reuse the correct
+    ``_FABRICATED_SOURCE_RE`` (its ``\\s*`` sits INSIDE the negative
+    lookahead, so real http(s) URLs and markdown links are preserved while
+    any other ``(Source: X)`` payload is stripped).
+    """
+    return _FABRICATED_SOURCE_RE.sub("", text)
 
 
 # Issue #131: the LLM echoes the synthesis prompt's "Entry N" numbering into
@@ -4066,6 +4186,7 @@ def _get_jinja_env() -> Environment:
         _jinja_env.filters["platform_name"] = _platform_name
         _jinja_env.globals["user_source_label"] = _user_source_label
         _jinja_env.globals["domain_display_name"] = _domain_display_name
+        _jinja_env.globals["entry_source_cell"] = _entry_source_cell
     return _jinja_env
 
 
@@ -4210,6 +4331,8 @@ class ProductTemplate:
         env.globals["user_source_label"] = _user_source_label
         # Issue #138: expose user-facing domain display names in footers
         env.globals["domain_display_name"] = _domain_display_name
+        # Issue #167: source cell for product-table rows
+        env.globals["entry_source_cell"] = _entry_source_cell
         return env
 
 
@@ -6128,6 +6251,7 @@ def generate_digest(
         rendered = product_template.render(product_type, variant, pt_context)
         rendered = _clean_skeleton_placeholders(rendered)
         rendered = _strip_entry_placeholders(rendered)
+        rendered = _strip_fake_source_placeholders(rendered)
     elif format == "json":
         rendered = _render_json(context)
     elif format == "html":
@@ -6973,6 +7097,7 @@ def generate_report(
         rendered = product_template.render(product_type, variant, pt_context)
         rendered = _clean_skeleton_placeholders(rendered)
         rendered = _strip_entry_placeholders(rendered)
+        rendered = _strip_fake_source_placeholders(rendered)
     elif format == "json":
         rendered = _render_report_json(report_data, period=period)
     elif format == "html":
@@ -7247,12 +7372,15 @@ def _deterministic_grouping_kind(groups: list[dict[str, Any]] | None) -> str:
 
     Returns ``"keyword"`` when any group name matches a keyword classifier
     spelling (title-cased topic keyword), ``"source_type"`` when every group
-    maps through ``_SOURCE_TYPE_THEME_LABEL``-derived labels, and
-    ``"general"`` otherwise (a single catch-all).  Used to annotate the
-    structured degradation log with the grouping actually rendered.
+    maps through ``_SOURCE_TYPE_THEME_LABEL``-derived labels OR through a
+    single-source heading (issue #167 — a group named after its actual
+    source, e.g. "PubMed"), and ``"general"`` otherwise (a single
+    catch-all).  Used to annotate the structured degradation log with the
+    grouping actually rendered.
     """
     if not groups:
         return "general"
+    map_values = {v.lower() for v in _SOURCE_TYPE_THEME_LABELS.values()}
     source_type_hits = 0
     for g in groups:
         theme = str(g.get("theme") or "").strip()
@@ -7263,9 +7391,20 @@ def _deterministic_grouping_kind(groups: list[dict[str, Any]] | None) -> str:
             return "general"
         if key == "additional topics":
             continue
-        if key in {v.lower() for v in _SOURCE_TYPE_THEME_LABELS.values()}:
+        if key in map_values:
             source_type_hits += 1
             continue
+        # Issue #167: a single-source heading names the source itself (e.g.
+        # "PubMed"); verify every entry in the group derives that label.
+        entries = g.get("entries") or []
+        if entries:
+            labels = {
+                str(_derive_source_label(e, str(e.get("domain") or "")))
+                for e in entries if isinstance(e, dict)
+            }
+            if labels and theme in labels:
+                source_type_hits += 1
+                continue
         return "keyword"
     if source_type_hits:
         return "source_type"
@@ -7649,14 +7788,18 @@ def _llm_group_batch(
     result: list[dict[str, Any]] | None = groups_raw
     return result
 
+# Issue #167: source-type group headings must state WHERE content came from,
+# never WHAT it is — a semantic-sounding label ("Platform & API News") can
+# contradict its rows when e.g. pubmed (type api) papers land in the group.
+# Provenance-neutral wording only.
 _SOURCE_TYPE_THEME_LABELS: dict[str, str] = {
-    "hackernews": "Community & Developer Insights",
-    "rss": "Industry News & Analysis",
-    "api": "Platform & API News",
-    "github": "Open Source & Developer News",
-    "stack": "Engineering & Architecture",
-    "pubmed": "Research & Clinical Updates",
-    "arxiv": "Research & Preprints",
+    "hackernews": "Community & Forum Sources",
+    "rss": "Syndicated News Feeds",
+    "api": "API & Database Sources",
+    "github": "Open-Source Repositories",
+    "stack": "Q&A & Forum Sources",
+    "pubmed": "PubMed & Life-science Sources",
+    "arxiv": "Preprint & Archive Sources",
 }
 
 
@@ -7678,6 +7821,42 @@ def _SOURCE_TYPE_THEME_LABEL(source_type: str) -> str:
     if key == "unknown":
         return "Other Sources"
     return source_type.strip().upper() if len(source_type.strip()) <= 6 else source_type.strip().title()
+
+
+def _source_group_heading(
+    source_type: str, group_entries: list[dict[str, Any]], domain: str
+) -> str:
+    """Section heading for a deterministic source-type group (issue #167).
+
+    When the whole group maps to ONE user-facing source (every entry derives
+    the same source label), the heading is that source's name — a heading
+    that IS the source can never misrepresent its content (e.g. pubmed IVF
+    papers must not sit under "Platform & API News").  Mixed-platform groups
+    fall back to the provenance-neutral ``_SOURCE_TYPE_THEME_LABEL``.
+    """
+    labels: set[str] = set()
+    for e in group_entries:
+        if not isinstance(e, dict):
+            continue
+        # Prefer the stamped user-facing label; fall back to the deterministic
+        # host/source-config matcher or the humanized platform name; skip
+        # generic platforms and empties.
+        label = str(e.get("source_label") or "").strip()
+        if not label:
+            platform = str(e.get("source_platform") or "").strip()
+            if platform.lower() not in _GENERIC_PLATFORMS:
+                label = _platform_name(platform)
+        if not label:
+            label = _derive_source_label(e, domain)
+            if label.lower() in _GENERIC_PLATFORMS:
+                label = ""  # derived back to a generic platform -> not specific
+        if label:
+            labels.add(label)
+    if len(labels) == 1:
+        # Humanize the single source label (pubmed -> PubMed, techcrunch ->
+        # techcrunch) so the heading reads as a clean user-facing source name.
+        return _platform_name(next(iter(labels)))
+    return _SOURCE_TYPE_THEME_LABEL(source_type)
 
 
 def _deterministic_grouping(
@@ -7703,7 +7882,9 @@ def _deterministic_grouping(
     if len(source_groups) >= 2:
         return [
             {
-                "theme": _SOURCE_TYPE_THEME_LABEL(st),
+                # Issue #167: name the actual source when the group is a
+                # single platform, else a provenance-neutral label.
+                "theme": _source_group_heading(st, es, domain),
                 # #338: user-facing lead, no internal "N entries from" count.
                 "description": f"Updates and analysis from {st} sources.",
                 "entries": es,
