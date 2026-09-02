@@ -3384,7 +3384,17 @@ class KBStore:
             source_score=float(raw_entries[0].get("source_score") or 0.0),
             dedup_status="unique",
             file_path=str(file_path),
-            custom_fields={"source_raw_ids": source_raw_ids},
+            custom_fields={
+                "source_raw_ids": source_raw_ids,
+                # Issue #178: retain EVERY source raw URL (not just the first)
+                # so a multi-source digest stays fully traceable; products that
+                # consume these entries can list all sources.
+                "source_urls": [
+                    str(r.get("source_url") or "").strip()
+                    for r in raw_entries
+                    if str(r.get("source_url") or "").strip()
+                ],
+            },
             # Expanded frontmatter fields
             source_ids=raw_ids,
             status="active",
@@ -3397,6 +3407,12 @@ class KBStore:
         frontmatter = _build_frontmatter(entry)  # type: ignore[arg-type]
         parts = [f"---\n{frontmatter}---\n\n"]
         parts.append(f"_Compiled from: {source_raw_ids}_\n\n")
+        source_urls = entry.custom_fields.get("source_urls", []) if entry.custom_fields else []
+        if len(source_urls) > 1:
+            parts.append("_Sources:_\n")
+            for su in source_urls:
+                parts.append(f"- {su}\n")
+            parts.append("\n")
         parts.append(merged_body)
         file_path.write_text("".join(parts), encoding="utf-8")
 

@@ -725,3 +725,41 @@ class TestProductRelevanceFloor:
         # medical-research seed floor is 30 -> below-floor 'a' dropped;
         # at-floor 'd', scored 'b', and absent-score 'c' (fail-open) kept.
         assert kept == ["b", "c", "d"], kept
+
+
+# ======================================================================
+# #178: synthesized multi-source digest entries excluded from products
+# ======================================================================
+
+
+class TestSynthesizedDigestExclusion:
+    """A Draft/Wiki entry compiled from MULTIPLE raw sources is a production
+    artifact — it must not surface in the product stream as a fake single
+    news item (issue #178)."""
+
+    def test_multi_source_draft_excluded_from_product_input(self) -> None:
+        from autoinfo.output import _filter_product_entries
+
+        synthesized = {
+            "entry_id": "fin-draft-1", "title": "金融市场情报 4",
+            "summary": "本期要点: ...", "tier": "02-Draft",
+            "custom_fields": {"source_ids": ["raw-a", "raw-b"],
+                              "source_raw_ids": "raw-a,raw-b"},
+        }
+        real = {
+            "entry_id": "fin-news-1", "title": "Fed holds rates",
+            "summary": "The Fed held rates steady.", "tier": "01-Raw",
+        }
+        kept = [e["entry_id"] for e in _filter_product_entries([synthesized, real])]
+        assert kept == ["fin-news-1"], kept
+
+    def test_single_source_draft_kept(self) -> None:
+        from autoinfo.output import _filter_product_entries
+
+        single = {
+            "entry_id": "draft-1", "title": "A single compiled note",
+            "summary": "From one source.", "tier": "02-Draft",
+            "custom_fields": {"source_ids": ["raw-a"], "source_raw_ids": "raw-a"},
+        }
+        kept = [e["entry_id"] for e in _filter_product_entries([single])]
+        assert kept == ["draft-1"], kept

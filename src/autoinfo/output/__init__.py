@@ -749,6 +749,33 @@ def _is_test_entry(entry: dict[str, Any]) -> bool:
     return False
 
 
+def _is_synthesized_digest_entry(entry: dict[str, Any]) -> bool:
+    """True when *entry* is a synthesized multi-source digest (issue #178).
+
+    ``create_kb_draft(raw_ids, ...)`` compiles MULTIPLE 01-Raw entries into a
+    single 02-Draft (later promotable to 03-Wiki) digest entry whose
+    frontmatter records the source ids.  Such entries are production
+    workspace artifacts, NOT single news items — surfacing them in the normal
+    product stream renders a fake "one source, one title" news row with a
+    single (misattributed) source_url.  Returns True iff tier is 02-Draft or
+    03-Wiki AND custom_fields marks >1 distinct source raw id (``source_ids``
+    array, or comma-bearing ``source_raw_ids`` for legacy drafts).
+    Deterministic, no LLM.
+    """
+    tier = str(entry.get("tier") or "").strip()
+    if tier not in ("02-Draft", "03-Wiki"):
+        return False
+    cf = _entry_custom_fields(entry)
+    source_ids = cf.get("source_ids")
+    if isinstance(source_ids, list):
+        distinct = {str(i) for i in source_ids if str(i).strip()}
+        return len(distinct) > 1
+    source_raw = str(cf.get("source_raw_ids") or "").strip()
+    if "," in source_raw or "，" in source_raw:
+        return len({p for p in re.split(r"[,\s，]+", source_raw) if p}) > 1
+    return False
+
+
 def _filter_product_entries(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Drop empty / test / placeholder entries from a product's entry list.
 
@@ -762,9 +789,16 @@ def _filter_product_entries(entries: list[dict[str, Any]]) -> list[dict[str, Any
         if _is_test_entry(entry):
             dropped += 1
             continue
+        # Issue #178: synthesized multi-source digest entries (02-Draft /
+        # 03-Wiki compiled from >1 raw) are production-workspace artifacts,
+        # not news items — excluding them keeps the product stream clean of
+        # fake single-source rows and one-source-many-titles misattribution.
+        if _is_synthesized_digest_entry(entry):
+            dropped += 1
+            continue
         kept.append(entry)
     if dropped:
-        logger.info("Filtered %d test/empty entries from product input", dropped)
+        logger.info("Filtered %d test/empty/synthesized entries from product input", dropped)
     return kept
 
 
@@ -4660,6 +4694,17 @@ def _build_digest_llm_prompt(
     if scope_guidance:
         lines.append("")
         lines.append(scope_guidance)
+    # Issue #179: hard no-fabrication constraint — content must come ONLY
+    # from the entries.  Info-poor entries otherwise invite the model to
+    # invent teams/motives/numbers/directions (P0-3/P0-4).
+    lines.append("")
+    lines.append(
+        "Do NOT invent or add details that the entries do not state — no "
+        "invented team members, motives, numbers, dates, product claims, or "
+        "entity descriptions. Write ONLY from content present in the entries; "
+        "when the entries do not state something, omit it or say 'not stated "
+        "in sources.'"
+    )
     lines.append("Return all fields in a single JSON object.")
 
     return "\n".join(lines)
@@ -8625,6 +8670,16 @@ def _build_report_synthesis_prompt(
     scope_guidance = _DIGEST_PRODUCT_SCOPE_GUIDANCE.get(product_family)
     if scope_guidance:
         prompt += f"\n\n{scope_guidance}"
+    # Issue #179: hard no-fabrication constraint — the report synthesis must
+    # write ONLY from the entries' stated content (no invented teams/motives/
+    # numbers/directions or entity descriptions beyond the sources).
+    prompt += (
+        "\n\nDo NOT invent or add details that the entries do not state — "
+        "no invented team members, motives, numbers, dates, product claims, "
+        "or entity descriptions. Write ONLY from content present in the "
+        "entries; when the entries do not state something, omit it or say "
+        "'not stated in sources.'"
+    )
     # -- Structured audience adaptation -----------------------------------
     audience = _normalize_report_audience(target_audience)
     audience_prompt = _REPORT_AUDIENCE_PROMPTS.get(audience, "")
