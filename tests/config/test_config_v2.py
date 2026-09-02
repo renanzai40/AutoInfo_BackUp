@@ -737,3 +737,24 @@ class TestEdgeCases:
         }
         config = _dict_to_config(raw)
         assert config.domains[0].extract_fields == []
+
+
+class TestDefaultQualityGates:
+    """Issue #170: default quality gates fallback (LLM retries on G3)."""
+
+    def test_default_gates_have_canonical_keys_and_llm_retries(self) -> None:
+        from autoinfo.config import default_quality_gates
+
+        gates = default_quality_gates()
+        assert "G3-RelevanceScoring" in gates
+        g3 = gates["G3-RelevanceScoring"]
+        assert g3.retries >= 2, "G3 default must keep LLM retries (#170)"
+        assert g3.threshold == 30
+        assert "G4-SummaryFactual" in gates
+        assert gates["G4-SummaryFactual"].retries >= 3
+
+    def test_create_default_config_matches_default_gates(self) -> None:
+        from autoinfo.config import create_default_config, _DEFAULT_QUALITY_GATES
+
+        cfg = create_default_config("test-domain")
+        assert cfg["quality_gates"] == _DEFAULT_QUALITY_GATES

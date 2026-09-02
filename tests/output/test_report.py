@@ -903,3 +903,37 @@ class TestGluedKeyFindings:
             for item in items:
                 assert ")- " not in item, f"glued separator inside item: {item!r}"
                 assert not item.endswith(")-"), f"item ends with glue: {item!r}"
+
+
+# ======================================================================
+# #168: Key Findings double-source citation dedupe
+# ======================================================================
+
+
+class TestFindingSourceDedupe:
+    """A finding whose text already ends with the real (Source: url) must not
+    have the template append it again (issue #168)."""
+
+    def _render_report_finding(self, text: str, source_url: str) -> str:
+        from autoinfo.output import _get_jinja_env
+
+        env = _get_jinja_env()
+        out = env.get_template("report.md.j2").render(
+            title="T", domain="medical-research",
+            generated_at="2026-09-01", executive_summary="S",
+            key_findings=[{"text": text, "source_url": source_url}],
+            recommendations=[], sections=[], references=[], source_tier_badge=False,
+        )
+        return out
+
+    def test_finding_with_source_in_text_not_doubled(self) -> None:
+        url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?id=42568412"
+        text = f"LH priming improves outcomes (Source: {url})"
+        out = self._render_report_finding(text, url)
+        assert ") (Source:" not in out and "). (Source:" not in out
+        assert out.count("(Source:") == 1
+
+    def test_finding_without_source_gets_one(self) -> None:
+        out = self._render_report_finding("Plain finding", "https://x.com/1")
+        assert out.count("(Source:") == 1
+        assert "https://x.com/1" in out

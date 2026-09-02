@@ -191,6 +191,26 @@ class TestPubMedParsing:
         # -- Keywords (none in the sample XML) --
         assert isinstance(article["keywords"], list)
 
+    def test_to_item_collected_at_is_full_iso_date(self) -> None:
+        """Issue #169: collected_at is the collection time (full ISO date),
+        never the article's pub_date (which may be a bare year like '2026'
+        that broke KB date-range queries)."""
+        handler = PubMedHandler()
+        article = {
+            "pmid": "12345678",
+            "title": "IVF outcomes",
+            "abstract": "Time-lapse imaging improves IVF outcomes.",
+            "pub_date": "2026",  # bare year — PubMed often gives only Year
+        }
+        item = handler.to_item(article)
+        from datetime import datetime
+
+        parsed = datetime.fromisoformat(item.collected_at)
+        assert parsed.tzinfo is not None  # timezone-aware full ISO timestamp
+        assert item.collected_at.startswith("20")  # not a bare '2026'
+        # The publication date is preserved separately in raw_data.
+        assert item.raw_data.get("pub_date") == "2026"
+
     def test_parse_article_minimal(self) -> None:
         """A minimal PubmedArticle (barely any data) should not crash."""
         handler = PubMedHandler()
