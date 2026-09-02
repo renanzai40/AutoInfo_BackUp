@@ -530,3 +530,33 @@ class TestCrossDomainDigest:
         # Not "Cross-Domain" since domains has only 1 entry
         assert "Cross-Domain" not in digest
         assert "Medical Research" in digest
+
+
+# ======================================================================
+# #186: cross-domain shared language filter (drop Chinese in English product)
+# ======================================================================
+
+
+class TestCrossDomainSharedLanguage:
+    """A cross-domain report whose domains all default to English must drop
+    non-English entries so the product stays language-coherent (issue #186)."""
+
+    def test_shared_english_default_resolves(self) -> None:
+        from autoinfo.output import _cross_domain_shared_language
+
+        assert _cross_domain_shared_language(
+            ["ai-commercial", "financial-intelligence"]
+        ) == "en"
+
+    def test_bilingual_domain_disables_filter(self) -> None:
+        from autoinfo.output import _cross_domain_shared_language
+
+        assert _cross_domain_shared_language(
+            ["ai-commercial", "english-learning"]
+        ) == ""
+
+    def test_mixed_or_unknown_defaults_no_filter(self) -> None:
+        from autoinfo.output import _cross_domain_shared_language
+
+        assert _cross_domain_shared_language(["ai-commercial", "nope"]) == ""
+        assert _cross_domain_shared_language([]) == ""
