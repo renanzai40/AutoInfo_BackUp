@@ -983,7 +983,11 @@ class G3RelevanceScoring:
                             {"role": "system", "content": self.SYSTEM_PROMPT},
                             {"role": "user", "content": user_content},
                         ],
-                        max_tokens=10,
+                        # Issue #174: reasoning production models burn the token
+                        # budget on the thinking pass — max_tokens=10 left
+                        # content empty, so every G3 LLM call "failed" and
+                        # degraded to lexical. 512 gives the score room.
+                        max_tokens=512,
                         temperature=0.0,
                     )
                     raw: str = response.choices[0].message.content
@@ -994,7 +998,8 @@ class G3RelevanceScoring:
                             {"role": "system", "content": self.SYSTEM_PROMPT},
                             {"role": "user", "content": user_content},
                         ],
-                        max_tokens=10,
+                        # Issue #174: same reasoning-model token budget fix.
+                        max_tokens=512,
                         temperature=0.0,
                         timeout=self._timeout,
                         api_key=llm_api_key,
