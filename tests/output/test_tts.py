@@ -276,20 +276,24 @@ class TestFallback:
 class TestEngineResolution:
     """Tests for engine parameter resolution."""
 
-    def test_defaults_to_openai_when_engine_is_none(
+    def test_defaults_to_local_when_engine_is_none(
         self, monkeypatch: pytest.MonkeyPatch
     ) -> None:
+        """Issue #159: engine=None resolves to the local (edge-tts) default.
+
+        The OpenAI TTS endpoint is unreachable from the deployment
+        environment (issue #210), so ``_get_tts_engine_from_config`` returns
+        "local" when no ``tts.engine`` config key is set — the engine
+        resolution contract, independent of whether edge-tts is installed
+        (when absent, the local path itself falls back to openai, which the
+        other tests cover).
+        """
         monkeypatch.setenv("AUTOINFO_LLM_API_KEY", "sk-default")
 
-        mock_response = MagicMock()
-        mock_response.content = b"default-openai"
-        mock_response.raise_for_status = MagicMock()
+        from autoinfo.output import _get_tts_engine_from_config
 
         with patch("autoinfo.output.get_config_path", return_value=None):
-            with patch("httpx.post", return_value=mock_response):
-                result = _render_audio("test", engine=None)
-
-        assert result == b"default-openai"
+            assert _get_tts_engine_from_config() == "local"
 
     def test_unknown_engine_falls_back_to_openai(
         self, monkeypatch: pytest.MonkeyPatch

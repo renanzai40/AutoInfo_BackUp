@@ -418,7 +418,8 @@ class TestDigestExcludeKeywords:
         }
         mock_kb_store.return_value = _digest_mock_store(_MIXED_ENTRIES)
         body = _as_text(generate_digest(
-            domain="ai-commercial", period="weekly", format="markdown"
+            domain="ai-commercial", period="weekly", format="markdown",
+            include_stale=True,
         ))
         # Excluded medical entries never reach the LLM prompt nor the body.
         prompt = mock_llm.call_args[0][0]
@@ -444,7 +445,8 @@ class TestDigestExcludeKeywords:
         }
         mock_kb_store.return_value = _digest_mock_store(_MIXED_ENTRIES)
         body = _as_text(generate_digest(
-            domain="ai-commercial", period="weekly", format="markdown"
+            domain="ai-commercial", period="weekly", format="markdown",
+            include_stale=True,
         ))
         assert "贝达药业" in body
         assert "DURAVYU" in body
@@ -479,6 +481,7 @@ class TestDigestExcludeKeywords:
             domains=["ai-commercial", "medical-research"],
             period="weekly",
             format="markdown",
+            include_stale=True,
         ))
         # The ai-commercial medical entry is excluded; the medical-research
         # entry (its own domain has an empty exclude list) is kept.
@@ -536,7 +539,7 @@ class TestTutorialExcludeKeywords:
         # entry titles/summaries verbatim — the strongest leak surface.
         mock_llm.return_value = {}
         mock_kb_store.return_value = _digest_mock_store(_MIXED_ENTRIES)
-        body = _as_text(generate_tutorial(domain="ai-commercial", format="markdown"))
+        body = _as_text(generate_tutorial(domain="ai-commercial", format="markdown", include_stale=True))
         assert "贝达药业" not in body
         assert "DURAVYU" not in body
         assert "AI startup raises series A" in body
@@ -729,7 +732,8 @@ class TestDigestFiltersHuanengNoise:
         }
         mock_kb_store.return_value = _digest_mock_store(_HUANENG_NOISE_ENTRIES)
         body = _as_text(generate_digest(
-            domain="ai-commercial", period="weekly", format="markdown"
+            domain="ai-commercial", period="weekly", format="markdown",
+            include_stale=True,
         ))
         prompt = mock_llm.call_args[0][0]
         assert "华能" not in prompt

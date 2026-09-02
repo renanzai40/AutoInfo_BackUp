@@ -215,7 +215,9 @@ class TestMagazineRender:
         assert isinstance(result, str)
         # Cover-style header markers
         assert "Magazine Digest" in result
-        assert "general-news" in result
+        # Issue #144/#154: the masthead uses the display domain name
+        # (General News), never the internal slug (R1).
+        assert "General News" in result
         # Per-title clusters (grouped by source_platform)
         assert "the-atlantic" in result
         assert "wired" in result

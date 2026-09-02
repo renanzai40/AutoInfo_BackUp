@@ -183,7 +183,7 @@ class TestCrossDomainReport:
             report = _call_report(domain="medical-research")
 
         # Title uses single domain
-        assert "# medical-research — Report" in report
+        assert "# Medical Research — Report" in report
         # Entries included
         assert "CRISPR gene editing advances" in report
         assert "mRNA vaccine platform improvements" in report
@@ -386,7 +386,7 @@ class TestCrossDomainReport:
             )
 
         # Single domain in domains list → treated as single-domain
-        assert "# medical-research — Report" in report
+        assert "# Medical Research — Report" in report
 
     def test_references_include_domain(
         self, medical_entries: list[dict[str, Any]], ai_entries: list[dict[str, Any]]
@@ -469,7 +469,7 @@ class TestCrossDomainDigest:
             with patch("autoinfo.output._call_llm_for_digest", return_value={}):
                 digest = _call_cross_digest(domain="medical-research")
 
-        assert "medical-research" in digest
+        assert "Medical Research" in digest
 
     def test_cross_domain_digest_two_domains(
         self, medical_entries: list[dict[str, Any]], ai_entries: list[dict[str, Any]]
@@ -529,4 +529,4 @@ class TestCrossDomainDigest:
 
         # Not "Cross-Domain" since domains has only 1 entry
         assert "Cross-Domain" not in digest
-        assert "medical-research" in digest
+        assert "Medical Research" in digest

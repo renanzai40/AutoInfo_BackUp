@@ -236,7 +236,9 @@ class TestGenerateDigest:
 
         assert isinstance(result, str)
         assert "Weekly Digest" in result
-        assert "medical-research" in result
+        # Issue #144/#153: the rendered product uses the display domain name
+        # (Medical Research), never the internal slug (R1).
+        assert "Medical Research" in result
         assert "Executive Summary" in result
         assert "IVF outcomes with time-lapse" in result
         assert "AI-driven embryo selection" in result
@@ -297,7 +299,8 @@ class TestGenerateDigest:
 
         result = generate_digest(domain="empty-domain", period="weekly")
         assert "This edition has no curated items yet" in cast(str, result)
-        assert "empty-domain" in cast(str, result)
+        # Issue #144/#153: display domain name (Empty Domain), not the slug.
+        assert "Empty Domain" in cast(str, result)
         assert "No entries found" not in cast(str, result)
         assert "_No " not in cast(str, result)
 

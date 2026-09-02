@@ -32,6 +32,13 @@ class TestColumnEmptyShell:
         env = Environment(trim_blocks=True, lstrip_blocks=True)
         env.filters["product_summary"] = lambda v: v
         env.filters["platform_name"] = lambda v: v or "\u2014"
+        # Issue #157: mirror the production env globals — column.md.j2 uses
+        # domain_display_name (and user_source_label) which the bare env must
+        # register or the template raises UndefinedError.
+        from autoinfo.output import _domain_display_name, _user_source_label
+
+        env.globals["domain_display_name"] = _domain_display_name
+        env.globals["user_source_label"] = _user_source_label
         tmpl = env.from_string(content)
 
         defaults = {
@@ -53,14 +60,14 @@ class TestColumnEmptyShell:
             f"Expected fallback text in Deep Dive section, got:\n{result}"
         )
 
-    def test_implications_empty_shows_fallback(self) -> None:
+    def test_implications_empty_omits_section(self) -> None:
+        # Issue #133: with no implications the whole "## Implications &
+        # Outlook" section (heading included) is omitted — never an empty
+        # heading, never a hollow placeholder.  (#157 fixed the bare-env
+        # globals so this renders at all.)
         result = self._render_column(sections=[])
-        assert (
-            "No outlook" in result
-            or "no outlook" in result.lower()
-            or "no sections" in result.lower()
-        ), (
-            f"Expected fallback text in Implications section, got:\n{result}"
+        assert "## Implications & Outlook" not in result, (
+            f"Expected the empty Implications section to be omitted, got:\n{result}"
         )
 
     def test_column_with_sections_renders_normally(self) -> None:

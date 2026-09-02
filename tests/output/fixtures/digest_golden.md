@@ -1,8 +1,8 @@
-# Weekly Digest — tech-ai-developer
+# Weekly Digest — Tech & AI
 
-**Domain**: tech-ai-developer  
+**Domain**: Tech & AI  
 **Period**: Weekly (2026-08-21 – 2026-08-28)  
-**Generated**: 2026-08-28T12:00:00+00:00  
+**Generated**: 2026-08-28  
 
 ---
 
@@ -83,4 +83,4 @@ This week's developments center on falling model inference costs driving new AI 
 
 ---
 
-*AutoInfo Digest · tech-ai-developer · 2026-08-28T12:00:00+00:00*
+*Digest · Tech & AI · 2026-08-28*
