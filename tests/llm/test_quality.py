@@ -778,8 +778,9 @@ class TestG3RelevanceScoringLLM:
         )
         assert result.score == 73.0
 
-    def test_all_retries_exhausted_returns_50(self, sample_item: Item) -> None:
-        """LLM raises on all 3 attempts → score=50 (neutral pass)."""
+    def test_all_retries_exhausted_falls_back_to_lexical(self, sample_item: Item) -> None:
+        """Issue #172: LLM raises on all retries → lexical fallback (NEVER the
+        old silent neutral-pass 50, which flattened every item's relevance)."""
         g3 = G3RelevanceScoring(model="test/test")
         g3.llm_call = MagicMock(side_effect=RuntimeError("API down"))
         result = g3.check(
@@ -788,8 +789,9 @@ class TestG3RelevanceScoringLLM:
             threshold=30,
             gate_config=self._gate_config(retries=3),
         )
-        assert result.score == 50.0
-        assert result.details["scoring_method"] == "llm"
+        # Discriminative lexical score, not a flat neutral 50.
+        assert result.score != 50.0
+        assert result.details["scoring_method"] == "lexical"
         assert result.details["llm_retries"] == 3
 
     def test_retry_escalating_context(self, sample_item: Item) -> None:

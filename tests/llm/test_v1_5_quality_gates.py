@@ -1464,7 +1464,11 @@ class TestGateConfigIntegration:
         assert results["G0-SchemaIntegrity"].passed is True
         assert results["G1-SourceAuthority"].passed is True
         assert results["G2-Dedup"].passed is True
-        assert results["G3-RelevanceScoring"].passed is True
+        # Issue #16/#171: with NO topic_keywords, G3 has no relevance signal —
+        # the contract is score 0 / not passed (never the pre-fix flat pass).
+        g3 = results["G3-RelevanceScoring"]
+        assert g3.passed is False
+        assert g3.score == 0.0
 
         g0 = G0SchemaIntegrity()
         result = g0.check({"source_url": "", "source_type": "", "source_platform": ""})

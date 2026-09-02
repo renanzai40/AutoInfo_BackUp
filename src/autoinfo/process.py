@@ -644,6 +644,21 @@ def _classify_entry_cefr(
 # ---------------------------------------------------------------------------
 
 
+def _g3_llm_model(config: Config | None) -> str | None:
+    """Resolve the production LLM model string for G3 relevance scoring.
+
+    Issue #172: G3 must score with the CONFIGURED LLM (provider/model from
+    the project config), not the hardcoded default model that has no API key
+    in the deployment.  Returns ``config.llm.resolve_model()`` when a config
+    declares a provider+model, else ``None`` (G3 keeps its own default).
+    """
+    if config is not None and config.llm:
+        llm = config.llm
+        if llm.provider and llm.model:
+            return llm.resolve_model()
+    return None
+
+
 def _build_config_with_model(
     config: Config | None,
     model: str | None,
@@ -1356,7 +1371,13 @@ def run_processing(
                     threshold = 30
                     if g3_config is not None and g3_config.threshold is not None:
                         threshold = int(g3_config.threshold)
-                    g3 = G3RelevanceScoring(timeout=llm_timeout)
+                    # Issue #172: G3 must score with the CONFIGURED production
+                    # LLM (same provider/model the digest/report synthesis
+                    # uses) — the previous default model had no key locally,
+                    # so every LLM call failed and silently neutral-passed at
+                    # score=50 (46/46 items flat 50, relevance filtering dead).
+                    g3_model = _g3_llm_model(proc_config)
+                    g3 = G3RelevanceScoring(model=g3_model, timeout=llm_timeout)
                     return g3.check(item, topic_keywords, threshold, g3_config)
 
                 sub_tasks.append(("G3-RelevanceScoring", _run_g3))

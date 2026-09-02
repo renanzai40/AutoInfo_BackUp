@@ -839,15 +839,30 @@ class G3RelevanceScoring:
 
         # ---- Choose scoring method --------------------------------------
         llm_retries_used = 0
+        llm_failed = False
         if gate_config is not None and gate_config.retries > 0:
             if self._model:
                 score_val, llm_retries_used = self._llm_score(
                     text, keywords, gate_config,
                 )
                 if score_val is None:
-                    # All retries exhausted → neutral pass
-                    score_val = 50
-                scoring_method: str = "llm"
+                    # Issue #172: all LLM retries exhausted (e.g. no API key,
+                    # provider down).  NEVER silently neutral-pass at 50 —
+                    # that flattens every item to the same score and kills
+                    # relevance filtering.  Fall back to lexical scoring so
+                    # the gate keeps real discriminative power, and record
+                    # that the LLM path failed.
+                    llm_failed = True
+                    score_val = self._lexical_score(text, keywords)
+                    logger.warning(
+                        "G3 LLM scoring failed after %d attempt(s) for item "
+                        "%r (no key / provider error); fell back to lexical "
+                        "scoring (score=%d)",
+                        llm_retries_used,
+                        getattr(item, "id", str(item))[:40],
+                        score_val,
+                    )
+                scoring_method: str = "llm" if not llm_failed else "lexical"
             else:
                 score_val = self._lexical_score(text, keywords)
                 scoring_method = "lexical"
