@@ -6719,6 +6719,7 @@ def generate_report(
     from autoinfo.llm import LLMExtractor  # noqa: PLC0415
 
     kb_store = KBStore()
+    _select_story_was_empty = False
     if is_cross_domain:
         entries: list[dict[str, Any]] = []
         for d in report_domains:
@@ -6731,7 +6732,7 @@ def generate_report(
         # Single-domain story set — shared with digest/presentation (#119).
         # The report's downstream filters (product/empty/lang/stale) still
         # run on the shared set; content MAY change vs the old all-time load.
-        entries, _date_range, _period_was_empty = _select_story_set(
+        entries, _date_range, _select_story_was_empty = _select_story_set(
             kb_store, domain, period=period, product="report", query_limit=5000,
         )
 
@@ -6765,6 +6766,26 @@ def generate_report(
     entries = _filter_product_entries(_enrich_product_entries(entries))
     # Near-duplicate convergence (issue #69) — see generate_digest.
     entries = _converge_near_duplicates(entries)
+
+    # Issue #185: the window query returned rows but they were ALL dropped by
+    # the product/empty/synthesized filter (e.g. a window that holds only a
+    # synthesized digest placeholder draft) — the report would be an empty
+    # shell even though valid out-of-window content exists.  Recover the
+    # full-domain set (same relaxation as the digest's #83 fallback) and
+    # re-run the identical filter chain.  Single-domain only — the
+    # cross-domain path has no window fallback.
+    if not entries and not _select_story_was_empty and not is_cross_domain:
+        logger.info(
+            "In-window entries for domain '%s' all dropped by product/empty/"
+            "synthesized filters — falling back to full domain set",
+            domain,
+        )
+        entries = _filter_product_entries(
+            _enrich_product_entries(
+                kb_store.list_entries(domain=domain, limit=5000)
+            )
+        )
+        entries = _converge_near_duplicates(entries)
 
     # --- Language filter (issue #309 / #317) --------------------------------
     # An explicit param wins; otherwise the domain default fills in;

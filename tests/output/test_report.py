@@ -171,6 +171,63 @@ class TestGenerateReport:
         assert "No knowledge base entr" not in report
         assert "_No " not in report
 
+    def test_window_entries_all_filtered_falls_back_to_full_domain(self) -> None:
+        """Issue #185: when the window story set returns rows but every one is
+        dropped by the product filter (e.g. a single-source synthesized digest
+        placeholder that a prior build leaked), the single-domain report falls
+        back to the full-domain set instead of rendering an empty shell.  The
+        cross-domain path is unaffected."""
+        window_only_placeholder = {
+            "entry_id": "draft-ph", "title": "AI-commercial weekly: digest",
+            "summary": "本期核心要点: 占位摘要", "tier": "02-Draft",
+            "custom_fields": {"source_ids": ["raw-a"]},
+        }
+        real_entries = cast(list[dict[str, Any]], [
+            {
+                "entry_id": "entry-001",
+                "title": "Improved IVF outcomes with time-lapse imaging",
+                "summary": "Time-lapse imaging improves live birth rates in IVF.",
+                "source_url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
+                "source_type": "api",
+                "source_platform": "pubmed",
+                "relevance_score": 92.0,
+                "tags": '["IVF"]',
+                "tier": "01-Raw",
+                "language": "en",
+                "collected_at": "2026-07-15T10:00:00Z",
+            },
+        ])
+
+        def _list_entries(domain, **kwargs):
+            # window query has date_from; full-domain fallback has none
+            if "date_from" in kwargs:
+                return [window_only_placeholder]
+            return real_entries
+
+        mock_extract = MagicMock(
+            side_effect=[
+                _make_grouping_result(),
+                _make_summary_result(),
+            ]
+        )
+
+        with (
+            patch("autoinfo.output.KBStore") as mock_kb_cls,
+            patch.object(_get_llm_extractor_class(), "extract", mock_extract),
+            patch("autoinfo.output._call_llm_for_report_synthesis",
+                  return_value=""),
+        ):
+            mock_store = MagicMock()
+            mock_store.list_entries.side_effect = _list_entries
+            mock_kb_cls.return_value = mock_store
+
+            report = _call_report("medical-research")
+
+        # Not an empty shell — the real fallback entry is curated and rendered.
+        assert "This edition has no curated items yet" not in report
+        assert "Improved IVF outcomes with time-lapse imaging" in report
+        assert "## Sections" in report
+
     def test_unsupported_format_raises_value_error(self) -> None:
         """Formats other than 'markdown', 'json', 'html' raise ``ValueError``."""
         with patch("autoinfo.output.KBStore") as mock_kb_cls:
