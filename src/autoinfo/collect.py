@@ -1164,7 +1164,12 @@ def _cache_items(
                 continue
             try:
                 with open(prior_file, encoding="utf-8") as fh:
-                    seen_urls.add(str(json.load(fh).get("source_url") or ""))
+                    data = json.load(fh)
+                    # Issue #160: prior-dir scans also pick up the list-shaped
+                    # _runs.json (collection history) — only dict item files
+                    # carry source_url; a list must be skipped, not crash.
+                    if isinstance(data, dict):
+                        seen_urls.add(str(data.get("source_url") or ""))
             except (json.JSONDecodeError, OSError):
                 continue
 

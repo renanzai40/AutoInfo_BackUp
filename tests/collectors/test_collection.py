@@ -1044,3 +1044,27 @@ class TestCacheItemsCrossDateDedup:
         _cache_items([item_a, item_b], "tech", "gh-trending")
         today_dir = tmp_path / "collections" / "tech" / "gh-trending" / date.today().isoformat()
         assert sorted(f.name for f in today_dir.glob("*.json")) == ["a.json", "b.json"]
+
+    def test_list_shaped_runs_json_does_not_crash(self, tmp_path, monkeypatch):
+        """Issue #160: the prior-dir scan must skip the list-shaped
+        _runs.json (collection history) — a re-collect on a domain that has
+        been collected before must not crash with AttributeError."""
+        monkeypatch.chdir(tmp_path)
+        prior_dir = tmp_path / "collections" / "tech" / "gh-trending" / "2026-08-24"
+        prior_dir.mkdir(parents=True)
+        (prior_dir / "a.json").write_text(
+            json.dumps({"id": "a", "source_url": "https://example.com/1", "title": "A"}),
+            encoding="utf-8",
+        )
+        # _runs.json is a JSON LIST (run history), not an item dict.
+        (tmp_path / "collections" / "tech" / "gh-trending" / "_runs.json").write_text(
+            json.dumps([{"date": "2026-08-24", "count": 1}]),
+            encoding="utf-8",
+        )
+
+        item_b = _make_item("b")
+        item_b.source_url = "https://example.com/2"
+        _cache_items([item_b], "tech", "gh-trending")  # must not raise
+
+        today_dir = tmp_path / "collections" / "tech" / "gh-trending" / date.today().isoformat()
+        assert [f.name for f in today_dir.glob("*.json")] == ["b.json"]
