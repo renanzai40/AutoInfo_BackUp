@@ -260,6 +260,10 @@ class DomainConfig:
     # to this language so mixed-language domains (e.g. ai-commercial) come out
     # single-language.  Empty (default) preserves legacy no-filter behavior.
     default_language: str = ""
+    # Gloss/learner language (issue #162): for language-learning domains, the
+    # language used for vocabulary/gloss translations in tutorials (the
+    # learner's native language).  Empty defaults to English.
+    gloss_language: str = ""
     # Keyword auto-discovery (#179): defaults keep pre-#179 behavior.
     auto_keyword_discovery: bool = True
     max_auto_keywords: int = 100
@@ -735,6 +739,7 @@ def _dict_to_config(raw: dict[str, Any]) -> Config:
                 max_auto_keywords=int(d.get("max_auto_keywords", 100)),
                 auto_keyword_min_length=int(d.get("auto_keyword_min_length", 2)),
 default_language=str(d.get("default_language", "")),
+                gloss_language=str(d.get("gloss_language", "")),
                 exclude_keywords=list(d.get("exclude_keywords", [])),
             )
         )

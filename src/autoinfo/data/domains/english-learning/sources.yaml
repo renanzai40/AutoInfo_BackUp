@@ -2,6 +2,10 @@
 name: english-learning
 description: English language immersion — English learning content and news
 default_language: en
+# Issue #162: the learner's native language used for Vocabulary gloss
+# translations (Simplified Chinese for the Chinese-context demo).  Unset
+# defaults to English glosses.
+gloss_language: zh
 exclude_keywords:
 - advertisement
 - sponsored

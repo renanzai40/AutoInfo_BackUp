@@ -1071,11 +1071,31 @@ def _filter_entries_by_language_product_safe(
     return filtered, False
 
 
+def _resolve_gloss_language(domain: str, default: str = "en") -> str:
+    """Resolve the gloss/learner language for a language-learning domain.
+
+    Issue #162: tutorial Vocabulary translations must be in the learner's
+    native language, not whatever the LLM invents (observed: Korean glosses
+    in an english-learning tutorial).  Reads the domain config's
+    ``gloss_language`` (e.g. ``zh`` for Simplified Chinese); falls back to
+    *default* (``en``) when unset.
+    """
+    try:
+        config_path = get_config_path()
+        if config_path and config_path.is_file():
+            config = load_config(config_path)
+            for d in config.domains:
+                if d.name == domain and d.gloss_language:
+                    return str(d.gloss_language).strip() or default
+    except Exception:
+        pass
+    return default
+
+
 def _resolve_effective_language(
     language: str, domain: str, *, cross_domain: bool = False
 ) -> str:
     """Resolve the effective language for a product (issue #317).
-
     Precedence:
     1. An explicit *language* param always wins.
     2. Otherwise, for a single-domain product, fall back to the domain's
@@ -9885,6 +9905,9 @@ def generate_tutorial(
         if lang_learning
         else ""
     )
+    # Issue #162: the learner's gloss language for Vocabulary translations
+    # (defaults to English when the domain config does not set gloss_language).
+    gloss_language = _resolve_gloss_language(domain) if lang_learning else ""
     if lang_learning and target_language:
         entries = _filter_foreign_language_teaching_entries(entries, target_language)
 
@@ -9974,6 +9997,7 @@ def generate_tutorial(
             custom_instructions,
             lang_learning=lang_learning,
             target_language=target_language,
+            gloss_language=gloss_language,
         )
     else:
         prompt = _build_tutorial_markdown_prompt(
@@ -9983,6 +10007,7 @@ def generate_tutorial(
             custom_instructions,
             lang_learning=lang_learning,
             target_language=target_language,
+            gloss_language=gloss_language,
         )
 
     llm_result = _call_llm_for_tutorial(prompt)
@@ -10010,6 +10035,7 @@ def generate_tutorial(
             llm_result, domain, entries, target_audience,
             lang_learning=lang_learning,
             target_language=target_language,
+            gloss_language=gloss_language,
         )
 
     # -- Build template context -------------------------------------------
@@ -10217,6 +10243,7 @@ def _build_tutorial_json_prompt(
     *,
     lang_learning: bool = False,
     target_language: str = "",
+    gloss_language: str = "",
 ) -> str:
     """Build the structured-JSON tutorial prompt (agent-native format path).
 
@@ -10259,6 +10286,8 @@ def _build_tutorial_json_prompt(
     )
     if lang_learning and target_language:
         lang_label = _lang_display_name(target_language)
+        # Issue #162: gloss translations in the learner's language.
+        gloss_label = _lang_display_name(gloss_language) if gloss_language else "English"
         prompt += (
             f"\n\nThis is a LANGUAGE-LEARNING tutorial for {lang_label}. "
             "Write the tutorial as a language course, not a news summary:\n"
@@ -10270,12 +10299,15 @@ def _build_tutorial_json_prompt(
             "an English retelling.\n"
             '- add two extra keys to the JSON: "vocabulary" (array of objects '
             'with "word" (in target language), "pos" (part of speech), '
-            '"translation", "example" (a sentence in the target language)) '
+            f'"translation" (MUST be in {gloss_label}, never another language), '
+            '"example" (a sentence in the target language)) '
             'and "grammar" (array of objects with "point" (grammar rule name), '
             '"explanation", "example" (target-language example)).\n'
             f'- "exercises" MUST be {lang_label} exercises (fill-in-the-blank, '
             f"translation, sentence construction in {lang_label}), not "
-            "English comprehension questions.\n"
+            "English comprehension questions. Provide EXACTLY 4 exercises; "
+            "each has a short title and a full question body (never embed the "
+            "answer in the question).\n"
         )
     prompt += (
         "\nDo NOT add causal attributions, motivations, or explanations (e.g. "
@@ -10296,6 +10328,7 @@ def _build_tutorial_markdown_prompt(
     *,
     lang_learning: bool = False,
     target_language: str = "",
+    gloss_language: str = "",
 ) -> str:
     """Build the flat-markdown tutorial prompt (robust markdown render path).
 
@@ -10345,6 +10378,10 @@ def _build_tutorial_markdown_prompt(
     )
     if lang_learning and target_language:
         lang_label = _lang_display_name(target_language)
+        # Issue #162: vocabulary glosses must be in the learner's gloss
+        # language (default English) — never the model's arbitrary pick
+        # (observed: Korean glosses in an english-learning tutorial).
+        gloss_label = _lang_display_name(gloss_language) if gloss_language else "English"
         prompt += (
             f"\n\nThis is a LANGUAGE-LEARNING tutorial for {lang_label}. "
             "Write the tutorial as a language course, not a news summary:\n"
@@ -10355,15 +10392,29 @@ def _build_tutorial_markdown_prompt(
             f"({lang_label}); target-language prose adapted to a graded "
             "learner level, not an English retelling. Only technical terms may "
             "stay in the source language.\n"
-            "- Add a '## Vocabulary' section listing 6-10 target-language words "
-            "from the entries, each bullet: '<word> — <part of speech> — "
-            "<translation> — <example sentence in the target language>'.\n"
+            f"- Add a '## Vocabulary' section listing 6-10 target-language words "
+            f"from the entries, each bullet: '<word> — <part of speech> — "
+            f"<translation in {gloss_label}> — <example sentence in the target "
+            f"language>'.  The translation MUST be written in {gloss_label}, "
+            "never in another language.\n"
             "- Add a '## Grammar' section listing 2-3 grammar points relevant "
             "to the content, each bullet: '<grammar point> — <rule> — "
             "<example in the target language>'.\n"
             f"- Exercises MUST be written in the target language "
             f"(fill-in-the-blank, translation, sentence construction in "
             f"{lang_label}), not English comprehension questions.\n"
+            # Issue #163: constrain the exercise format and count so the
+            # model never emits bare '### Exercise N:' titles with no body,
+            # inline answers, or an unbounded list that truncates the tail.
+            "- Write EXACTLY 4 exercises. Each exercise is: a short "
+            "'### Exercise N:' title (number + one-word type, e.g. "
+            "'### Exercise 1: Fill-in-the-blank') followed by the FULL "
+            "question text on its own line (fill-in-the-blank uses ______ "
+            "for the gap; rewriting gives the original sentence). Do NOT "
+            "embed the answer in the question.\n"
+            "- After all 4 exercises, add a '#### Answer Key' section "
+            "listing the answer for each exercise by number. Never put an "
+            "answer inside a question.\n"
         )
     prompt += (
         "\nDo NOT add causal attributions, motivations, or explanations (e.g. "
@@ -10591,6 +10642,7 @@ def _ensure_tutorial_complete(
     *,
     lang_learning: bool = False,
     target_language: str = "",
+    gloss_language: str = "",
 ) -> dict[str, Any]:
     """Guarantee the markdown tutorial never renders the all-empty template.
 
