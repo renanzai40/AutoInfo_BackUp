@@ -255,3 +255,53 @@ class TestTutorialEntryCap:
     def test_thin_domain_under_cap_unchanged(self) -> None:
         markers, _ = self._prompt_entry_ids(3)
         assert markers == ["1", "2", "3"], markers
+
+
+# ======================================================================
+# #164: empty-shell exercise validation (flat-markdown parse shells)
+# ======================================================================
+
+
+class TestValidatedExercises:
+    """``_validated_exercises`` drops empty-bodied exercise shells and falls
+    back to the deterministic KB-derived set when too few survive."""
+
+    def _fallback(self):
+        return [
+            {"title": "KB ex 1", "description": "desc1"},
+            {"title": "KB ex 2", "description": "desc2"},
+        ]
+
+    def test_empty_bodied_shells_dropped_real_kept(self) -> None:
+        from autoinfo.output import _validated_exercises
+
+        shells = [
+            {"title": "Exercise 1: Fill-in-the-blank", "description": ""},
+            {"title": "Exercise 2", "description": "   "},
+            {"title": "Exercise 3", "description": "Real body text"},
+            {"title": "Exercise 4", "description": "Another real one"},
+        ]
+        result = _validated_exercises(shells, self._fallback())
+        assert len(result) == 2, result
+        assert all(r["description"].strip() for r in result)
+
+    def test_all_shells_falls_back_to_kb(self) -> None:
+        from autoinfo.output import _validated_exercises
+
+        all_shells = [{"title": "E1", "description": ""}, {"title": "E2", "description": ""}]
+        result = _validated_exercises(all_shells, self._fallback())
+        assert result == self._fallback()
+
+    def test_empty_input_falls_back_to_kb(self) -> None:
+        from autoinfo.output import _validated_exercises
+
+        assert _validated_exercises([], self._fallback()) == self._fallback()
+
+    def test_valid_exercises_kept_unchanged(self) -> None:
+        from autoinfo.output import _validated_exercises
+
+        good = [
+            {"title": "A", "description": "full question"},
+            {"title": "B", "description": "another full question"},
+        ]
+        assert _validated_exercises(good, self._fallback()) == good

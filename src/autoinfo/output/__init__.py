@@ -10634,6 +10634,33 @@ def _entry_derived_sections(
     return objectives[:5], content, exercises, further_reading[:20]
 
 
+def _validated_exercises(
+    llm_exercises: list[Any], fallback: list[dict[str, str]]
+) -> list[dict[str, str]]:
+    """Return the LLM exercises minus empty-bodied shells, else the fallback.
+
+    Issue #163/#164: the flat-markdown parse can produce ``{title, ''}``
+    entries (the model emitted a bare ``### Exercise N:`` heading with no
+    body).  Drop entries whose description is empty/whitespace-only; when
+    fewer than 2 real exercises survive, use the deterministic KB-derived
+    *fallback* so the tutorial never ships a hollow exercise section.
+    """
+    if not llm_exercises:
+        return list(fallback)
+    valid: list[dict[str, str]] = []
+    for item in llm_exercises:
+        if isinstance(item, dict):
+            title = str(item.get("title") or item.get("question") or "").strip()
+            desc = str(item.get("description") or "").strip()
+            if title and desc:
+                valid.append({"title": title, "description": desc})
+        elif isinstance(item, str) and item.strip():
+            valid.append({"title": item.strip(), "description": ""})
+    if len(valid) >= 2:
+        return valid
+    return list(fallback)
+
+
 def _ensure_tutorial_complete(
     llm_result: dict[str, Any],
     domain: str,
@@ -10723,7 +10750,15 @@ def _ensure_tutorial_complete(
         "prerequisites": prerequisites,
         "objectives": llm_objectives or objectives,
         "content": llm_result.get("content") or content,
-        "exercises": llm_result.get("exercises") or exercises,
+        # Issue #163/#164: the flat-markdown parse can yield "### Exercise N:"
+        # shells whose description is empty (the model emitted only a title —
+        # observed with ark-code-latest: 21 titles / 1 non-empty, 13 titles /
+        # 5 non-empty).  Drop empty-bodied exercises; if fewer than 2 real
+        # exercises survive, fall back to the deterministic KB-derived set so
+        # the tutorial never ships a hollow exercise section.
+        "exercises": _validated_exercises(
+            llm_result.get("exercises") or [], exercises
+        ),
         "summary": llm_result.get("summary") or (
             f"This tutorial walks through {len(entries)} knowledge base "
             f"entries in the {domain} domain, covering the key findings "
