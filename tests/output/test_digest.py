@@ -763,3 +763,29 @@ class TestSynthesizedDigestExclusion:
         }
         kept = [e["entry_id"] for e in _filter_product_entries([single])]
         assert kept == ["draft-1"], kept
+
+
+# ======================================================================
+# #181: CJK leak warning (non-learning domains) / #182: currency split
+# ======================================================================
+
+
+class TestCjkLeakAndCurrencySplit:
+    def test_cjk_leak_warns_for_non_learning_domain(self) -> None:
+        from autoinfo.output import _warn_cjk_leak
+
+        count = _warn_cjk_leak("financial-intelligence", "digest",
+                               "本期要点中文内容1234567")
+        assert count > 5
+
+    def test_cjk_leak_exempts_english_learning(self) -> None:
+        from autoinfo.output import _warn_cjk_leak
+
+        assert _warn_cjk_leak("english-learning", "digest", "中文中文中文中文") == 0
+
+    def test_currency_figure_not_split(self) -> None:
+        from autoinfo.output import _split_summary_sentences
+
+        bullets = _split_summary_sentences("VAST raised $8.5 billion. Second $1.1 billion fund.")
+        assert bullets[0] == "VAST raised $8.5 billion"
+        assert bullets[1] == "Second $1.1 billion fund"
