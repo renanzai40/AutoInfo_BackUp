@@ -6270,6 +6270,11 @@ def generate_digest(
             str(llm_synthesis.get("description") or "").strip()
             if isinstance(llm_synthesis, dict) else ""
         )
+        # Issue #182: keep the deck header Audience populated even when the
+        # digest path did not receive an explicit target_audience.
+        context["target_audience"] = (
+            str(context.get("target_audience") or "").strip() or "executive"
+        )
 
     # --- Render --------------------------------------------------------------
     if format == "agent":
@@ -11088,6 +11093,9 @@ def generate_presentation(
         )
 
     slide_count = max(3, min(30, slide_count))
+    # Issue #182: an empty target_audience renders a blank "Audience:" line;
+    # default to executive so the deck header is always populated.
+    target_audience = (target_audience or "").strip() or "executive"
 
     # --- Resolve delivery-gate config (issue #298: default-on in production) --
     delivery_gate_configs = _resolve_delivery_gate_configs(domain, delivery_gate_configs)
@@ -11368,6 +11376,23 @@ def _render_presentation_agent_json(
 _PRESENTATION_SLIDE_COUNT: Final[int] = 10
 
 
+def _split_summary_sentences(text: str) -> list[str]:
+    """Split *text* into sentences on end-punctuation boundaries.
+
+    Unlike a naive ``str.split(".")``, this preserves decimal points in
+    monetary figures (issue #182: ``$8.5 billion`` must not become
+    ``$8`` / ``5 billion``).  We split only on ``.``/``!``/``?`` that are
+    followed by whitespace (or end of string) and then trim leftover dots.
+    """
+    parts = re.split(r"(?<=[.?!])(?=[ \t\n\r])|(?<=[.?!])$", text)
+    sentences: list[str] = []
+    for part in parts:
+        cleaned = part.strip().rstrip(".")
+        if cleaned:
+            sentences.append(cleaned)
+    return sentences
+
+
 def _fallback_slides_from_entries(
     entries: list[dict[str, Any]],
     slide_count: int,
@@ -11391,8 +11416,11 @@ def _fallback_slides_from_entries(
             summary = content[:600] if content else ""
         if not summary:
             continue
-        bullets = summary.split(".")[:3]
-        bullets = [b.strip().rstrip(".") for b in bullets if b.strip()]
+        # Issue #182: naive ``summary.split(".")`` destroys currency decimals
+        # ($8.5 billion → $8 / "5 billion").  Split on sentence boundaries
+        # (end-punctuation followed by whitespace or end-of-string) so monetary
+        # figures like $8.5 billion and $1.1 billion stay intact.
+        bullets = _split_summary_sentences(summary)[:3]
         slides.append(
             {
                 "title": title,
