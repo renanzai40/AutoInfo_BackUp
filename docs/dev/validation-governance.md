@@ -73,3 +73,38 @@
 
 验收 = **打开产物审查**（digest 条目相关性、summary 非空、无 EMPTY/VAGUE、真实文件），不是 matrix 数字。
 详见全局 skill `references/enduser-content-review.md`。
+
+### 6.1 质量门禁脚本（issue #188）
+
+对一批产物 md 文件做全维度机器门禁检查，作为交付物审查的第一道自动关卡：
+
+```bash
+# 对单个产物目录做全维度检查；exit 0 = 干净，exit 1 = 有缺陷，exit 2 = 用法/IO 错误
+python3 scripts/quality_gate.py outputs/<domain>
+python3 scripts/quality_gate.py outputs/<domain> --cjk-exempt-domains english-learning   # 双语豁免
+python3 scripts/quality_gate.py outputs/<domain> --forbidden-words "horse,cervical cancer"  # 域禁用词 (F4)
+python3 scripts/quality_gate.py outputs/<domain> --domain-blocklist "medical-research:NICE,cervical cancer"
+python3 scripts/quality_gate.py outputs/<domain> --json   # 机器可读摘要
+```
+
+覆盖的规则（规则 id 与 issue #188 一致）：
+
+| 层 | 规则 | 检查 |
+|----|------|------|
+| 格式 | F1 | 空壳（<500B）|
+| 格式 | F2 | 占位符（TODO/PLACEHOLDER/TBD/待补/占位/`{{`）|
+| 格式 | F3 | 双引用（同一 source 连续重复；一题多源合法不误报）|
+| 格式 | F4 | 禁用词（域相关，可配置 `--forbidden-words` / `--domain-blocklist`）|
+| 内容 | C1 | 合成伪条目（占位模板标题「金融市场情报 N」/「AI 商业周报 N」/ weekly: 等）|
+| 内容 | C2 | 日志泄漏（LiteLLM / Give Feedback / litellm._turn_on_debug / ANSI / 栈 trace）|
+| 内容 | C3 | CJK 残留（非双语产物含中文，阈值可配；`*-learning` 双语域豁免）|
+| 内容 | C4 | 截断（80-250 字符行无结尾标点；区分完整句/元数据/页脚）|
+| 内容 | C5 | 来源完整性（References 与正文引用可对齐；仅 report/*-briefing 要求 References 段）|
+| 跨产物 | X1 | 实体一致性（简单版：同实体 copular 身份描述跨产物冲突标记；复杂 LLM 判定版后续）|
+
+说明：C3 的默认双语豁免域为 `*-learning`（与 output 层 `_CJK_EXEMPT_DOMAINS` 一致）。
+issue #188 原始描述建议 ai-commercial 也豁免，但 #181/#186 已落地设计将 ai-commercial
+的 CJK 视为缺陷（36kr 泄漏进英文产物），故门禁以代码库现状为准，可用
+`--cjk-exempt-domains` 覆盖。
+
+人工审查在机器门禁通过后进行（机器保证无已知缺陷类别，人保证相关性/价值判断）。
