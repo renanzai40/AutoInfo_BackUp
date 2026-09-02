@@ -1164,7 +1164,9 @@ def _cache_items(
                 continue
             try:
                 with open(prior_file, encoding="utf-8") as fh:
-                    seen_urls.add(str(json.load(fh).get("source_url") or ""))
+                    data = json.load(fh)
+                    if isinstance(data, dict):
+                        seen_urls.add(str(data.get("source_url") or ""))
             except (json.JSONDecodeError, OSError):
                 continue
 
