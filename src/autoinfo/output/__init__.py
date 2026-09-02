@@ -786,8 +786,30 @@ def _is_test_entry(entry: dict[str, Any]) -> bool:
     return False
 
 
+# Placeholder digest draft patterns (issue #184).
+#
+# ``create_kb_draft`` can produce a SINGLE-source placeholder when the digest
+# entity extraction yielded no per-article rows: the draft carries a generic
+# placeholder title ("AI-commercial weekly: <domain> digest") and a truncated
+# summary beginning with "本期" and containing "要点" ("本期核心要点: ..." /
+# "本期...要点: ...").  Such single-source drafts carry source_ids of length 1
+# so the multi-source check above lets them escape — but they are still
+# synthesized workspace digest artifacts, not news items, and must be excluded
+# from the product stream the same way (#184).
+#
+# Placeholder detection is deterministic (no LLM): the truncated summary
+# starts with "本期" and contains "要点"; or the title carries a digest-flag
+# token like "weekly:" followed by content, or a domain template name
+# ("情报"/"周报"/"素材"/"前沿") followed by a digit.  These markers are chosen
+# to be specific enough that real news headlines (which rarely embed
+# "本期"+"要点", a bare "weekly:" template token, or a template name + digit)
+# are never misclassified.
+_SUMMARY_PLACEHOLDER_RE = re.compile(r"^本期.*要点")
+_TITLE_PLACEHOLDER_RE = re.compile(r"(weekly:|情报\s*\d|周报\s*\d|素材\s*\d|前沿\s*\d)", re.IGNORECASE)
+
+
 def _is_synthesized_digest_entry(entry: dict[str, Any]) -> bool:
-    """True when *entry* is a synthesized multi-source digest (issue #178).
+    """True when *entry* is a synthesized digest artifact (issues #178/#184).
 
     ``create_kb_draft(raw_ids, ...)`` compiles MULTIPLE 01-Raw entries into a
     single 02-Draft (later promotable to 03-Wiki) digest entry whose
@@ -795,8 +817,15 @@ def _is_synthesized_digest_entry(entry: dict[str, Any]) -> bool:
     workspace artifacts, NOT single news items — surfacing them in the normal
     product stream renders a fake "one source, one title" news row with a
     single (misattributed) source_url.  Returns True iff tier is 02-Draft or
-    03-Wiki AND custom_fields marks >1 distinct source raw id (``source_ids``
-    array, or comma-bearing ``source_raw_ids`` for legacy drafts).
+    03-Wiki AND either:
+
+    * custom_fields marks >1 distinct source raw id (``source_ids`` array, or
+      comma-bearing ``source_raw_ids`` for legacy drafts), OR
+    * the entry carries single-source placeholder artifact markers (a
+      truncated "本期...要点" summary, or a digest-flag placeholder title) —
+      the #184 leak path where a single-source placeholder draft escapes the
+      multi-source check and would otherwise reach the product stream.
+
     Deterministic, no LLM.
     """
     tier = str(entry.get("tier") or "").strip()
@@ -806,10 +835,22 @@ def _is_synthesized_digest_entry(entry: dict[str, Any]) -> bool:
     source_ids = cf.get("source_ids")
     if isinstance(source_ids, list):
         distinct = {str(i) for i in source_ids if str(i).strip()}
-        return len(distinct) > 1
-    source_raw = str(cf.get("source_raw_ids") or "").strip()
-    if "," in source_raw or "，" in source_raw:
-        return len({p for p in re.split(r"[,\s，]+", source_raw) if p}) > 1
+        if len(distinct) > 1:
+            return True
+    else:
+        source_raw = str(cf.get("source_raw_ids") or "").strip()
+        if "," in source_raw or "，" in source_raw:
+            if len({p for p in re.split(r"[,\s，]+", source_raw) if p}) > 1:
+                return True
+    # Issue #184: placeholder artifact markers (single-source placeholder
+    # drafts escape the multi-source check above).  Only the explicit digest
+    # flag/template patterns count — real entries at rest aren't touched.
+    summary = str(entry.get("summary") or "").strip()
+    if summary and _SUMMARY_PLACEHOLDER_RE.search(summary):
+        return True
+    title = str(entry.get("title") or "").strip()
+    if title and _TITLE_PLACEHOLDER_RE.search(title):
+        return True
     return False
 
 

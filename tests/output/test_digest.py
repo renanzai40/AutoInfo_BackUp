@@ -766,6 +766,74 @@ class TestSynthesizedDigestExclusion:
 
 
 # ======================================================================
+# #184: single-source placeholder drafts excluded from products
+# ======================================================================
+
+
+class TestSingleSourcePlaceholderDraftExclusion:
+    """A single-source Draft carrying digest-flag placeholder markers is still
+    a synthesized digest artifact, not a news item — it must be excluded from
+    the product stream even though it escapes the multi-source check (issue
+    #184)."""
+
+    @pytest.mark.parametrize("entry", [
+        # truncated "本期...要点" summary placeholder
+        {
+            "entry_id": "ph-1", "title": "AI-commercial weekly: digest",
+            "summary": "本期核心要点: 数字人民币联盟链交易量环比翻倍, 大模型",
+            "tier": "02-Draft",
+            "custom_fields": {"source_ids": ["raw-a"]},
+        },
+        # digest-flag title token ("weekly:", "weekly")
+        {
+            "entry_id": "ph-2", "title": "AI-commercial weekly: 本期周报",
+            "summary": "Some normal summary text here.",
+            "tier": "03-Wiki",
+            "custom_fields": {"source_raw_ids": "raw-a"},
+        },
+        # template-name + digit title ("情报 4")
+        {
+            "entry_id": "ph-3", "title": "金融市场情报 4",
+            "summary": "正常摘要文本。", "tier": "02-Draft",
+            "custom_fields": {"source_ids": ["raw-a"]},
+        },
+        # template-name + digit title ("周报9" no space)
+        {
+            "entry_id": "ph-4", "title": "医疗前沿周报9",
+            "summary": "Normal English summary.", "tier": "02-Draft",
+            "custom_fields": {"source_ids": ["raw-a"]},
+        },
+    ])
+    def test_single_source_placeholder_draft_excluded(self, entry) -> None:
+        from autoinfo.output import _is_synthesized_digest_entry, _filter_product_entries
+
+        assert _is_synthesized_digest_entry(entry) is True
+        kept = [e["entry_id"] for e in _filter_product_entries([entry])]
+        assert kept == [], kept
+
+    @pytest.mark.parametrize("entry", [
+        # real single-source news item
+        {
+            "entry_id": "news-1", "title": "Fed holds rates steady",
+            "summary": "The Fed held rates steady at 5.25%.", "tier": "02-Draft",
+            "custom_fields": {"source_ids": ["raw-a"]},
+        },
+        # real article whose title contains a number but NO template flag
+        {
+            "entry_id": "news-2", "title": "3 trends in AI for 2025",
+            "summary": "Analysis of the top three AI trends.", "tier": "02-Draft",
+            "custom_fields": {"source_id": "raw-a"},
+        },
+    ])
+    def test_real_entries_not_misclassified(self, entry) -> None:
+        from autoinfo.output import _is_synthesized_digest_entry, _filter_product_entries
+
+        assert _is_synthesized_digest_entry(entry) is False
+        kept = [e["entry_id"] for e in _filter_product_entries([entry])]
+        assert kept == [entry["entry_id"]], kept
+
+
+# ======================================================================
 # #181: CJK leak warning (non-learning domains) / #182: currency split
 # ======================================================================
 
