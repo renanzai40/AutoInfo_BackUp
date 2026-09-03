@@ -506,6 +506,22 @@ class OutputConfig:
 
 
 @dataclass
+class CurrencyConfig:
+    """Currency conversion settings.
+
+    Attributes
+    ----------
+    rmb_usd_rate:
+        The canonical RMB→USD exchange rate (7.0).  Used by ALL product
+        synthesis prompt injection so every product converts an RMB-denominated
+        amount with the SAME rate — change it once here, never per-product
+        (issue #203).  ``0`` or negative disables the annotation.
+    """
+
+    rmb_usd_rate: float = 7.0
+
+
+@dataclass
 class TTSConfig:
     """Text-to-Speech engine settings.
 
@@ -543,6 +559,7 @@ class Config:
     cost_alerts: CostAlertsConfig = field(default_factory=CostAlertsConfig)
     tts: TTSConfig = field(default_factory=TTSConfig)
     output: OutputConfig = field(default_factory=OutputConfig)
+    currency: CurrencyConfig = field(default_factory=CurrencyConfig)
 
 
 # ---------------------------------------------------------------------------
@@ -839,6 +856,7 @@ default_language=str(d.get("default_language", "")),
     multi_user_raw = _dict_or_empty("multi_user")
     tts_raw = _dict_or_empty("tts")
     output_raw = _dict_or_empty("output")
+    currency_raw = _dict_or_empty("currency")
 
     return Config(
         project=ProjectConfig(
@@ -914,6 +932,9 @@ default_language=str(d.get("default_language", "")),
             pdf_timeout=float(output_raw.get("pdf_timeout", 120.0)),
             source_tier_badge=_as_bool(output_raw.get("source_tier_badge", True)),
             ref_limit=int(output_raw.get("ref_limit", 60)),
+        ),
+        currency=CurrencyConfig(
+            rmb_usd_rate=float(currency_raw.get("rmb_usd_rate", 7.0)),
         ),
     )
 
@@ -1190,6 +1211,11 @@ def config_to_dict(config: Config) -> dict[str, Any]:
         "pdf_timeout": config.output.pdf_timeout,
         "source_tier_badge": config.output.source_tier_badge,
         "ref_limit": config.output.ref_limit,
+    }
+    # Issue #203: canonical RMB→USD rate — always serialized so a configured
+    # rate round-trips (change once, used by every product synthesis).
+    raw["currency"] = {
+        "rmb_usd_rate": config.currency.rmb_usd_rate,
     }
 
     # --- Serialize cost_rates ---

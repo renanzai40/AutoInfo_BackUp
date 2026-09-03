@@ -16,6 +16,7 @@ import yaml
 
 from autoinfo.config import (
     Config,
+    CurrencyConfig,
     DomainConfig,
     LLMConfig,
     LLMTaskConfig,
@@ -629,6 +630,38 @@ class TestDataclassRoundTrip:
 
 
 # ---------------------------------------------------------------------------
+# currency (issue #203) — canonical RMB→USD rate
+# ---------------------------------------------------------------------------
+
+
+class TestCurrency:
+    def test_default_rmb_usd_rate_is_seven(self) -> None:
+        """The Config dataclass defaults the canonical RMB→USD rate to 7.0."""
+        assert Config().currency.rmb_usd_rate == 7.0
+
+    def test_load_config_parses_present_currency(self, tmp_path: Path) -> None:
+        cfg_path = tmp_path / "config.yaml"
+        cfg_path.write_text(
+            "project:\n  name: test\n"
+            "currency:\n  rmb_usd_rate: 7.25\n",
+            encoding="utf-8",
+        )
+        cfg = load_config(cfg_path)
+        assert cfg.currency.rmb_usd_rate == 7.25
+
+    def test_load_config_missing_currency_defaults_seven(self, tmp_path: Path) -> None:
+        cfg_path = tmp_path / "config.yaml"
+        cfg_path.write_text("project:\n  name: test\n", encoding="utf-8")
+        assert load_config(cfg_path).currency.rmb_usd_rate == 7.0
+
+    def test_config_to_dict_round_trips_currency(self) -> None:
+        d = config_to_dict(
+            Config(currency=CurrencyConfig(rmb_usd_rate=7.5))
+        )
+        assert d["currency"]["rmb_usd_rate"] == 7.5
+
+
+# ---------------------------------------------------------------------------
 # Validation edge cases
 # ---------------------------------------------------------------------------
 
@@ -754,7 +787,7 @@ class TestDefaultQualityGates:
         assert gates["G4-SummaryFactual"].retries >= 3
 
     def test_create_default_config_matches_default_gates(self) -> None:
-        from autoinfo.config import create_default_config, _DEFAULT_QUALITY_GATES
+        from autoinfo.config import _DEFAULT_QUALITY_GATES, create_default_config
 
         cfg = create_default_config("test-domain")
         assert cfg["quality_gates"] == _DEFAULT_QUALITY_GATES

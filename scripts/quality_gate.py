@@ -704,6 +704,264 @@ def find_orphan_narrative_claims(text: str) -> list[str]:
 
 
 # ---------------------------------------------------------------------------
+# H1/H2/H3 — grade-review assertion classes (issues #200/#203/#204)
+# ---------------------------------------------------------------------------
+#
+# H1  narrative-to-References signal integrity.  The report synthesis must not
+#     rename/abstract source signals into NEW terms ("low VIX, inflation shocks,
+#     and excessive AI spending" must not become "low market breadth" — #200).
+#     Deterministic lexical check: a distinctive signal term that ENDS a
+#     narrative noun phrase and appears in NO References/entry line is flagged.
+# H2  word-boundary truncation.  A line/field ending mid-word at a raw slice
+#     boundary ("police offi$" when "officers" appears elsewhere, "product
+#     syste$" when "system" does) is a rendering defect.
+# H3  list serialization glue.  A "- " bullet that does NOT start a line
+#     (previous char is not a newline) — ").- Morgan" / ").- **Foo" — is the
+#     newline-separated-bullet serializer gluing bullets together.
+
+# Product families whose Executive Summary / Key Findings / Recommendations
+# narrative is judged against their References (H1).  Digest/column/magazine
+# carry entries inline; magazine-digest/column are already owned by C6.
+_H1_FAMILIES = frozenset(
+    {"report", "premium-briefing", "enterprise-briefing", "digest"}
+)
+
+# Signal qualifier adjectives — the #200 signal shape is ``<qualifier> <noun
+# phrase>`` ("low VIX", "inflation shocks", "excessive AI spending", "low
+# market breadth").  When such a phrase is introduced in the narrative but its
+# noun phrase appears in NO References/entry line, it is an ungrounded,
+# re-abstracted signal.
+_H1_SIGNAL_QUALIFIERS = frozenset(
+    {
+        "low", "high", "weak", "strong", "soft", "tight", "excessive",
+        "rising", "falling", "sluggish", "robust", "volatile", "sticky",
+        "expanding", "contracting", "waning", "cooling", "firming", "broad",
+        "narrowing", "ailing", "booming", "shrinking", "looming", "frothy",
+        "subdued", "elevated", "escalating", "strained", "resilient",
+    }
+)
+
+# Tokens that must never be consumed as the noun of a signal phrase (function
+# words and glue).  We stop the phrase here and never flag it.
+_H1_GLUE = frozenset(
+    {
+        "a", "an", "and", "as", "at", "be", "but", "for", "from", "in",
+        "into", "is", "it", "not", "of", "on", "or", "so", "that", "the",
+        "this", "to", "with", "which", "while", "than", "when", "since",
+        "their", "its", "over", "under", "about", "by", "are", "was",
+        "were", "has", "have", "had", "will", "can", "may", "than",
+    }
+)
+
+# A lowercase token (signal noun candidate).
+_H1_TOKEN_RE = re.compile(r"\b[a-z]{2,}\b")
+
+# References-heading regex compiled with MULTILINE so it finds the heading
+# anywhere in the file (the shared _REFERENCES_HEADING_RE is used per-line
+# elsewhere; here we need a whole-text anchor).
+_REF_HEADING_ML_RE = re.compile(
+    r"^#{1,6}\s*References\s*$", re.IGNORECASE | re.MULTILINE
+)
+
+# Signal-noun words we do NOT treat as distinctive even when absent from
+# References (too generic to be a meaningful re-abstracted SIGNAL: "market"),
+# but the HEAD of a socio-economic signal usually is distinctive.
+_H1_HARD_HEAD_STOP = frozenset(
+    {"market", "markets", "demand", "growth", "revenue", "sales",
+     "quarter", "year", "week", "day", "price", "prices", "costs",
+     "investment", "spending"}
+)
+
+# Verb / chrome words that routinely follow a qualifier in Recommendations /
+# Risks prose but are NOT signal nouns ("conduct thorough due diligence").
+_H1_VERB_STOP = frozenset(
+    {"focus", "engage", "collaborate", "diversify", "conduct", "thorough",
+     "differentiate", "ensure", "provide", "pursue", "maintain", "implement",
+     "monitor", "review", "prioritize", "invest", "manage", "hedge",
+     "rebalance", "evaluate"}
+)
+
+
+def find_narrative_signal_integrity(
+    text: str, path: Path | None = None
+) -> list[str]:
+    """H1: flag a distinctive signal introduced in the narrative that appears
+    in NO References/entry line.
+
+    Issue #200: the financial report paraphrased source signals ("low VIX,
+    inflation shocks, excessive AI spending") into a NEW term "low market
+    breadth".  Deterministic lexical approach: find signal qualifiers
+    ("low", "excessive", "weak", ...) in the narrative body (everything
+    before References) and read the following noun phrase; when that phrase
+    — or its head noun — appears in NO References line, it is an ungrounded,
+    re-abstracted signal.
+    """
+    if path is not None and _family_of(path) not in _H1_FAMILIES:
+        return []
+    ref_hit = _REF_HEADING_ML_RE.search(text)
+    body = text[: ref_hit.start()] if ref_hit else text
+    refs = text[ref_hit.start():] if ref_hit else text
+    refs_lower = refs.lower()
+    ref_tokens = set(_H1_TOKEN_RE.findall(refs_lower))
+    if not ref_tokens:  # no References ground truth to judge against
+        return []
+
+    out: list[str] = []
+    seen: set[str] = set()
+    # Build the token stream of the narrative body (lowercased) and scan for a
+    # signal qualifier followed by a noun phrase.  Drop risk/metric table rows
+    # (they carry "| high | medium |" chrome that would read as qualifiers).
+    body_lines = [
+        ln for ln in body.splitlines()
+        if ln.strip() and "|" not in ln and "**" not in ln
+    ]
+    tokens = _H1_TOKEN_RE.findall("\n".join(body_lines).lower())
+    phrase_stream = " ".join(tokens)
+    # Simpler: regex over the raw token stream for a qualifier word boundary.
+    for q in re.finditer(
+        r"\b(?:"
+        + "|".join(sorted(_H1_SIGNAL_QUALIFIERS, key=len, reverse=True))
+        + r")\b",
+        phrase_stream,
+    ):
+        start = q.end()
+        head = phrase_stream[start:].split(maxsplit=2)
+        words = []
+        for w in head:
+            if w in _H1_GLUE:
+                break
+            words.append(w)
+            if len(words) == 2:
+                break
+        if not words:
+            continue
+        phrase = " ".join(words)
+        if phrase in seen:
+            continue
+        seen.add(phrase)
+        head_word = words[-1]
+        if head_word in _H1_HARD_HEAD_STOP or head_word in _H1_VERB_STOP:
+            continue
+        if len(head_word) < 4:
+            continue
+        if phrase in refs_lower:
+            continue  # grounded verbatim in References/entries
+        if head_word in ref_tokens:
+            continue  # head noun is present somewhere in References
+        out.append(
+            f"H1 narrative signal not in references: {phrase}"
+        )
+    return out
+
+
+# H2 — a line whose trailing alphanumeric run is a mid-word cut: it is a
+# prefix of a longer word elsewhere in the file, and it is never used as a
+# standalone word (except at this same line-end).  "police offi$" when
+# "officers" appears; "product syste$" when "system" does.
+_H2_ABBREVIATIONS = frozenset(
+    {"inc", "ltd", "llc", "corp", "co", "vs", "etc", "eg", "ie",
+     "est", "jan", "feb", "mar", "apr", "jun", "jul", "aug", "sep",
+     "oct", "nov", "dec", "mon", "tue", "wed", "thu", "fri", "sat", "sun"}
+)
+
+
+def find_word_boundary_truncation(text: str) -> list[str]:
+    """H2: flag lines/fields ending mid-word at a raw slice boundary."""
+    lower_words = set(re.findall(r"[a-z]{2,}", text.lower()))
+    out: list[str] = []
+    seen: set[str] = set()
+    for lineno, raw in enumerate(text.splitlines(), start=1):
+        line = raw.strip()
+        if not line:
+            continue
+        if re.match(r"^(#{1,6}\s|```|>\s)", line):
+            continue  # heading / fence / quote chrome
+        if re.fullmatch(r"!?\[[^\]]*\]\([^)]*\)", line):
+            continue  # bare link/image
+        if re.search(r"[.!?。！？…]$|\.\.\.$", line):
+            continue  # terminated normally
+        m = re.search(r"([A-Za-z]{2,})\s*$", line)
+        if not m:
+            continue
+        frag = m.group(1)
+        frag_lower = frag.lower()
+        if frag_lower in _H2_ABBREVIATIONS:
+            continue
+        # Is there a longer word in the file that starts with this fragment?
+        if not any(w.startswith(frag_lower) and w != frag_lower
+                   for w in lower_words):
+            continue
+        # Is the fragment ever used as a standalone word elsewhere (not just
+        # at a line-end cut)?  If yes it is a real word, not a slice.
+        if len(frag_lower) < 4:
+            continue  # too short to be a confident mid-word cut (e.g. "cat")
+        # Count standalone occurrences that are NOT end-of-line.
+        standalone_elsewhere = _count_non_line_end(
+            re.escape(frag_lower), text.lower()
+        )
+        if standalone_elsewhere > 0:
+            continue
+        if frag_lower in seen:
+            continue
+        seen.add(frag_lower)
+        longer = next(
+            (w for w in sorted(lower_words)
+             if w.startswith(frag_lower) and w != frag_lower),
+            frag_lower,
+        )
+        out.append(
+            f"H2 word-boundary truncation {lineno}: {frag!r} is a bare prefix "
+            f"of a longer word ({longer})"
+        )
+    return out
+
+
+def _count_non_line_end(pattern: str, text_lower: str) -> int:
+    """Count standalone ``pattern`` occurrences that are NOT a line-end cut.
+
+    ``rest_of_line`` is the text after the match on the SAME line.  If
+    anything meaningful follows (more prose), the occurrence is a real
+    standalone word; if only trailing whitespace/newline/EOF follows, it is
+    just the line-end of a mid-word truncation.
+    """
+    count = 0
+    for mm in re.finditer(rf"\b{pattern}\b", text_lower):
+        rest_of_line = text_lower[mm.end():].split("\n", 1)[0]
+        if rest_of_line.strip() != "":
+            count += 1
+    return count
+
+
+# H3 — a "- " bullet that does NOT start a line (previous char is not a
+# newline): newline-separated Key Findings bullets glued together as
+# ").- next" / ").- **next" (issues #201/#202/#204).
+_H3_BULLET_GLUE_RE = re.compile(r"(?<!^)(?<!\n)(?<=\S)- ")
+
+
+def find_bullet_serialization_glue(text: str) -> list[str]:
+    """H3: flag a "- " bullet that does not start a line.
+
+    A real bullet starts a line (previous char is ``\\n`` or start-of-file).
+    When the serializer writes bullets newline-separated but the preceding
+    field ends without the separator, the artifact reads ``).- Morgan`` or
+    ``).- **bold`` — a glued bullet.  The core documented pattern is
+    ``).- `` (punctuation ``).`` immediately before the ``- ``); we also
+    accept any ``- `` glued directly onto a non-whitespace glyph.
+    """
+    out: list[str] = []
+    for m in _H3_BULLET_GLUE_RE.finditer(text):
+        prev = text[m.start() - 1]
+        start = max(0, m.start() - 35)
+        ctx = text[start : m.end() + 30].replace("\n", " ")
+        out.append(
+            f"H3 bullet serialization glue: '- ' after {prev!r} "
+            f"(not a new line): ...{ctx}..."
+        )
+        break  # report the first glue; a whole block shares one root cause
+    return out
+
+
+# ---------------------------------------------------------------------------
 # Cross-product consistency (X1) — simple version (entity + conflict marking)
 # ---------------------------------------------------------------------------
 
@@ -949,6 +1207,11 @@ def gate_file(
     # narrative-vs-entries structure the grounding scan can judge.
     if _family_of(path) in _GROUNDING_CHECK_FAMILIES:
         defects.extend(find_orphan_narrative_claims(text))
+    # H1 needs the family — only report/briefing/digest carry a
+    # synthesis narrative judged against a References list (#200).
+    defects.extend(find_narrative_signal_integrity(text, path=path))
+    defects.extend(find_word_boundary_truncation(text))
+    defects.extend(find_bullet_serialization_glue(text))
     return defects
 
 
