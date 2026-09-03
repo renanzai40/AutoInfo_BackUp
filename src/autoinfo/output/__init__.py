@@ -58,6 +58,7 @@ from autoinfo.quality_constraints import (
     FEATURE_STORY_GROUNDING_CONSTRAINT,
     NO_FABRICATION_CONSTRAINT,
     SYNTHESIS_SIGNAL_TRACEABILITY_CONSTRAINT,
+    URL_VERBATIM_CONSTRAINT,
 )
 
 logger = logging.getLogger(__name__)
@@ -1854,6 +1855,71 @@ def _sanitize_presentation_sources(
     if allowed_urls:
         text = _strip_unverifiable_presentation_sources(text, allowed_urls)
     return text
+
+
+# Issue #207 (backup): report/digest body citations.  A body citation is
+# "(Source: URL)", "(Sources: URL and URL)", or "[label](URL)".  The report
+# synthesis once re-slugged a real TechCrunch URL into a fabricated
+# "…/a16z-brings-growth-fund-to-8-5b-days-after-launching-a-new-1-1b-fund/"
+# (HTTP 404) that quality_gate C5 only caught post-hoc.  These regexes pick
+# an http(s) URL out of a "(Source[s]: …)" citation and a "[label](URL)"
+# markdown link, respectively.
+_REPORT_SOURCE_START_RE = re.compile(r"\(Source[s]?:", re.IGNORECASE)
+_REPORT_CITE_URL_RE = re.compile(r"https?://[^)\s]+", re.IGNORECASE)
+_REPORT_MD_LINK_RE = re.compile(r"\[([^\]]+)\]\((https?://[^)\s]+)\)")
+
+
+def _sanitize_report_urls(text: str, allowed_urls: set[str]) -> str:
+    """Strip fabricated body-cited URLs from rendered report/digest text.
+
+    A deterministic post-synthesis backstop (issue #207, mirror of the #93/#101
+    presentation sanitizer): every body citation URL — ``(Source: URL)``,
+    ``(Sources: URL and URL)``, and ``[label](URL)`` — is cross-checked against
+    the real KB ``source_url`` *allowed_urls* whitelist.  A URL that is NOT
+    verifiable against the whitelist (prefix-aligned, path-boundary match via
+    :func:`_source_url_verifiable`) is dropped so a fabricated slug never ships:
+
+    - an unverifiable ``(Source: …)`` / ``(Sources: …)`` citation is removed
+      whole (the surrounding bullet text stays, mirroring
+      ``_strip_unverifiable_presentation_sources``);
+    - an unverifiable ``[label](URL)`` markdown link is reduced to bare
+      ``label`` so the human-readable label survives while the untraceable
+      URL is gone.
+
+    Never applied to JSON/agent payloads, whose URLs are already the real
+    KB source_urls (never LLM-composed).
+    """
+    if not allowed_urls:
+        return text
+    out: list[str] = []
+    pos = 0
+    for m in _REPORT_SOURCE_START_RE.finditer(text):
+        out.append(text[pos : m.start()])
+        j = m.end()
+        depth = 1
+        while j < len(text) and depth:
+            if text[j] == "(":
+                depth += 1
+            elif text[j] == ")":
+                depth -= 1
+            j += 1
+        citation = text[m.start() : j]
+        urls = _REPORT_CITE_URL_RE.findall(citation)
+        keep = bool(urls) and all(
+            _source_url_verifiable(u, allowed_urls) for u in urls
+        )
+        out.append(citation if keep else "")
+        pos = j
+    out.append(text[pos:])
+    text = "".join(out)
+
+    def _replace(match: re.Match[str]) -> str:
+        url = match.group(2).rstrip(".,;:!?)]").rstrip("/")
+        if _source_url_verifiable(url, allowed_urls):
+            return match.group(0)
+        return match.group(1)
+
+    return _REPORT_MD_LINK_RE.sub(_replace, text)
 
 
 def _sections_from_headings(text: str, product_type: str = "report") -> dict[str, str]:
@@ -4956,6 +5022,11 @@ def _build_digest_llm_prompt(
     # and excessive AI spending").  Canonical string in quality_constraints.
     lines.append("")
     lines.append(SYNTHESIS_SIGNAL_TRACEABILITY_CONSTRAINT)
+    # Issue #207: every (Source: URL) must be taken VERBATIM from the KB
+    # Entries list above — never re-slug or invent a URL (mirror of the
+    # presentation prompt's #93 wording).  Canonical string in quality_constraints.
+    lines.append("")
+    lines.append(URL_VERBATIM_CONSTRAINT)
     lines.append("Return all fields in a single JSON object.")
 
     return "\n".join(lines)
@@ -6474,6 +6545,46 @@ def generate_digest(
     ):
         llm_synthesis = _deterministic_synthesis_fallback(entries)
 
+    # -- Body-citation URL whitelist sanitizer (issue #207) -----------------
+    # Mirror of the report path: cross-check every body-citation URL in the
+    # LLM-produced digest text fields (incl. the magazine-digest
+    # feature_story / editorial_intro) against the real KB source_url
+    # whitelist so a fabricated re-slugged URL never reaches any render.
+    _digest_whitelist = {
+        str(e.get("source_url") or "").strip()
+        for e in entries
+        if str(e.get("source_url") or "").strip()
+    }
+    if _digest_whitelist and isinstance(llm_synthesis, dict):
+        for _key in ("executive_summary", "editorial_intro", "feature_story"):
+            _val = llm_synthesis.get(_key)
+            if isinstance(_val, str) and _val:
+                llm_synthesis[_key] = _sanitize_report_urls(_val, _digest_whitelist)
+        for _key in ("key_findings", "recommendations", "implications",
+                     "action_required", "trends"):
+            _vals = llm_synthesis.get(_key)
+            if isinstance(_vals, list):
+                for _i, _v in enumerate(_vals):
+                    if isinstance(_v, str) and _v:
+                        _vals[_i] = _sanitize_report_urls(_v, _digest_whitelist)
+                    elif isinstance(_v, dict):
+                        for _field in _v:
+                            if isinstance(_v[_field], str) and _v[_field]:
+                                _v[_field] = _sanitize_report_urls(
+                                    _v[_field], _digest_whitelist
+                                )
+        for _key in ("risks", "key_metrics"):
+            _vals = llm_synthesis.get(_key)
+            if isinstance(_vals, list):
+                for _v in _vals:
+                    if not isinstance(_v, dict):
+                        continue
+                    for _field in _v:
+                        if isinstance(_v[_field], str) and _v[_field]:
+                            _v[_field] = _sanitize_report_urls(
+                                _v[_field], _digest_whitelist
+                            )
+
     # --- Build template context ----------------------------------------------
     # Issue #138: day-granularity timestamp (no microseconds) — the full
     # ISO instant (…T08:56:52.820676+00:00) leaked an internal precision
@@ -7338,6 +7449,45 @@ def generate_report(
         if report_degraded_reason
         else ""
     )
+
+    # -- Body-citation URL whitelist sanitizer (issue #207) -----------------
+    # The report synthesis may cite a fabricated re-slugged URL (e.g. a
+    # "…/a16z-brings-growth-fund-to-8-5b-days-after-launching-a-new-1-1b-fund/"
+    # 404 that quality_gate C5 only caught post-hoc).  Cross-check every
+    # body-citation URL in the LLM-produced text fields against the real KB
+    # source_url whitelist so a fabricated slug never reaches any render
+    # format (markdown/html/json/agent flow through report_data.references is
+    # untouched — its URLs are the real KB source_urls).
+    _report_whitelist = {
+        str(e.get("source_url") or "").strip()
+        for e in entries
+        if str(e.get("source_url") or "").strip()
+    }
+    if _report_whitelist:
+        executive_summary = _sanitize_report_urls(executive_summary, _report_whitelist)
+        for _f in key_findings:
+            if isinstance(_f, dict) and _f.get("text"):
+                _f["text"] = _sanitize_report_urls(str(_f["text"]), _report_whitelist)
+        recommendations = [
+            _sanitize_report_urls(r, _report_whitelist) for r in recommendations
+        ]
+        implications = [
+            _sanitize_report_urls(i, _report_whitelist) for i in implications
+        ]
+        action_required = [
+            _sanitize_report_urls(a, _report_whitelist) for a in action_required
+        ]
+        for _r in risks:
+            for _k in ("title", "likelihood", "impact", "mitigation"):
+                if _r.get(_k):
+                    _r[_k] = _sanitize_report_urls(str(_r[_k]), _report_whitelist)
+        for _m in key_metrics:
+            for _k in ("metric", "value", "source"):
+                if _m.get(_k):
+                    _m[_k] = _sanitize_report_urls(str(_m[_k]), _report_whitelist)
+        for _s in sections:
+            if _s.content:
+                _s.content = _sanitize_report_urls(_s.content, _report_whitelist)
 
     report_data = ReportData(
         title=f"{report_title_domain_display} \u2014 {report_h1_word}",
@@ -8978,6 +9128,10 @@ def _build_report_synthesis_prompt(
     # spending" into the novel "low market breadth".  Canonical string lives
     # in quality_constraints (rides digest + report paths identically).
     prompt += f"\n\n{SYNTHESIS_SIGNAL_TRACEABILITY_CONSTRAINT}"
+    # Issue #207: every (Source: URL) must be taken VERBATIM from the KB
+    # Entries list — never re-slug or invent a URL (mirror of the presentation
+    # prompt's #93 wording).  Canonical string lives in quality_constraints.
+    prompt += f"\n\n{URL_VERBATIM_CONSTRAINT}"
     # -- Structured audience adaptation -----------------------------------
     audience = _normalize_report_audience(target_audience)
     audience_prompt = _REPORT_AUDIENCE_PROMPTS.get(audience, "")
@@ -10814,7 +10968,9 @@ def _build_tutorial_json_prompt(
         f"KB Entries:\n{entry_summaries}\n\n"
         "In every \"content\" section body, follow each key claim with an "
         "inline citation to its source entry, e.g. \"(Source: <source_url>)\". "
-        "Only cite URLs present in the KB Entries list.\n"
+        "Only cite URLs present in the KB Entries list. "
+        + URL_VERBATIM_CONSTRAINT
+        + "\n"
         "Return all fields in a single JSON object. Adapt depth, terminology, "
         f"and examples specifically for a {target_audience} audience."
     )
@@ -10903,7 +11059,9 @@ def _build_tutorial_markdown_prompt(
         "- <reference 2>\n\n"
         "In every content paragraph, follow each key claim with an inline "
         "citation to its source entry, e.g. \"(Source: <source_url>)\". Only "
-        "cite URLs present in the KB Entries list.\n\n"
+        "cite URLs present in the KB Entries list. "
+        + URL_VERBATIM_CONSTRAINT
+        + "\n\n"
         "Use exactly the heading names above. Do NOT wrap your answer in a "
         "code fence or emit JSON.\n\n"
         f"KB Entries:\n{entry_summaries}\n\n"
