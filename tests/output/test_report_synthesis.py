@@ -17,8 +17,11 @@ Issue #207 adds two defenses, both tested here:
 
 from __future__ import annotations
 
-from autoinfo.output import _build_digest_llm_prompt, _build_report_synthesis_prompt
-from autoinfo.output import _sanitize_report_urls
+from autoinfo.output import (
+    _build_digest_llm_prompt,
+    _build_report_synthesis_prompt,
+    _sanitize_report_urls,
+)
 from autoinfo.quality_constraints import URL_VERBATIM_CONSTRAINT
 
 # The exact fabricated 404 variant from issue #207 (with "a-").
