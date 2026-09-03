@@ -4687,6 +4687,13 @@ _DIGEST_ENTERPRISE_METRICS_FIELDS: list[str] = [
 # Issue #313: magazine-digest editorial framing — an editor's note framing
 # the week plus a personality profile / deep-dive feature story, so the
 # magazine is a narrative product rather than a bare summary list.
+#
+# Issue #191: feature_story must carry the SAME grounding discipline as the
+# column sections (#316) — long-form narrative invites inferential wording
+# ("enterprises clearly crave", "likely from media and corporate clientele")
+# unless the field prompt pins it to sourced facts.  The field says what it
+# must be: grounded in entries, concrete numbers/dates/companies, inference
+# explicitly hedged or omitted.
 _DIGEST_MAGAZINE_EDITORIAL_FIELDS: list[str] = (
     _DIGEST_PRODUCT_BASE_FIELDS
     + [
@@ -4695,7 +4702,14 @@ _DIGEST_MAGAZINE_EDITORIAL_FIELDS: list[str] = (
         'written in a magazine voice (opinionated but factual)"',
         '"feature_story": "A 3-5 paragraph personality profile / deep-dive '
         "story on one notable person, company, or trend from the period, in "
-        "magazine feature style \u2014 a narrative beyond the summary list\"",
+        "magazine feature style \u2014 a narrative that connects and "
+        "interprets the entries' stated facts. Ground every paragraph in the "
+        "specific entries: quote concrete numbers, dates, and named "
+        "companies/studies from the source material. Do NOT assert as fact "
+        "anything the sources do not state \u2014 speculation about motives, "
+        "plans, customer composition, or market reaction must be clearly "
+        "hedged ('likely', 'suggests', 'may'), and where a detail is not in "
+        "the sources, say so or omit it\"",
     ]
 )
 

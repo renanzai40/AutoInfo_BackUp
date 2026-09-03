@@ -304,6 +304,30 @@ class TestMagazineEditorialFeature:
         assert "editorial_intro" in prompt
         assert "feature_story" in prompt
 
+    def test_feature_story_prompt_grounded_not_narrative_beyond(
+        self,
+    ) -> None:
+        """#191: feature_story must demand grounding, not invite inference.
+
+        The field previously said "magazine feature style — a narrative
+        beyond the summary list", which pushed the LLM into inferential
+        assertions ("enterprises clearly crave", "likely from media
+        clients") with no source backing.  The prompt now requires
+        grounding language aligned with the column sections.
+        """
+        prompt = _build_digest_llm_prompt(
+            _SAMPLE_ENTRIES, product_family="magazine-digest"
+        )
+
+        # The old inviting phrasing is gone.
+        assert "narrative beyond the summary list" not in prompt
+        # Grounding requirements present.
+        assert "Ground every paragraph in the" in prompt
+        assert "quote concrete numbers, dates, and named" in prompt
+        # No-inference discipline present.
+        assert "Do NOT assert as fact" in prompt
+        assert "clearly hedged" in prompt
+
     def test_magazine_template_renders_editorial_and_feature(self) -> None:
         """Rendering magazine-digest.md.j2 emits Editor's Note + The Feature.
 
