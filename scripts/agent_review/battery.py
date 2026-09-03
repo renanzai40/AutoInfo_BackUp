@@ -261,27 +261,28 @@ def _judge_with_llm(prompt: str, want_json: bool) -> dict[str, Any]:
                 '{"verdict": "PASS"|"FLAG"|"ESCALATE", '
                 '"evidence": "<file:line or URL>", "note": "<1-3 sentences>"}'
             )
-            content = call_with_fallback(
+            resp = call_with_fallback(
                 messages=[
                     {"role": "system", "content": system},
                     {"role": "user", "content": prompt},
                 ],
                 task="",  # base config model — no judgment pin (battery is not a hard gate)
             )
-            verdict = _extract_json_verdict(content)
+            verdict = _extract_json_verdict(resp)
             if verdict is None:
-                return _escalate("unparseable LLM output", str(content)[:200])
+                return _escalate("unparseable LLM output", _extract_text(resp)[:200])
             return verdict
         # Markdown path.
-        content = call_with_fallback(
+        resp = call_with_fallback(
             messages=[
                 {"role": "user", "content": prompt},
             ],
             task="",
         )
-        blocks = _parse_markdown_verdicts(str(content))
+        raw = _extract_text(resp)
+        blocks = _parse_markdown_verdicts(raw)
         if not blocks:
-            return _escalate("no parseable verdict block in LLM output", str(content)[:200])
+            return _escalate("no parseable verdict block in LLM output", raw[:200])
         b = blocks[0]
         return {
             "verdict": str(b.get("verdict", "ESCALATE")).upper(),
@@ -294,7 +295,7 @@ def _judge_with_llm(prompt: str, want_json: bool) -> dict[str, Any]:
 
 def _extract_json_verdict(content: Any) -> dict[str, Any] | None:
     """Pull {verdict, evidence, note} from a JSON-mode LLM response."""
-    text = str(content)
+    text = _extract_text(content)
     # Strip possible ```json fences.
     text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text.strip())
     try:
@@ -308,6 +309,22 @@ def _extract_json_verdict(content: Any) -> dict[str, Any] | None:
         "evidence": str(data.get("evidence", "")),
         "note": str(data.get("note", "")),
     }
+
+
+def _extract_text(resp: Any) -> str:
+    """Extract the message text from an LLM response.
+
+    call_with_fallback returns a litellm ModelResponse whose text lives at
+    .choices[0].message.content; str() of it yields the repr with literal
+    backslash-n escapes that defeat line-based markdown parsing and
+    json.loads.  Robust to providers that already return a plain string.
+    """
+    if hasattr(resp, "choices") and resp.choices:
+        msg = resp.choices[0].message
+        text = getattr(msg, "content", None)
+        if isinstance(text, str):
+            return text
+    return str(resp)
 
 
 def _escalate(reason: str, detail: str) -> dict[str, Any]:
