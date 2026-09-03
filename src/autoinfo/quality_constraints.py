@@ -61,3 +61,17 @@ SYNTHESIS_SIGNAL_TRACEABILITY_CONSTRAINT: str = (
     "signals into new terms \u2014 e.g. never rewrite 'low VIX, inflation "
     "shocks, and excessive AI spending' as 'low market breadth'."
 )
+
+# Issue #207 (backup): report synthesis must take its cited URLs VERBATIM from
+# the KB Entries list.  A financial report once re-slugged a real TechCrunch
+# URL (…/launching-new-1-1b-fund/) into a fabricated "…/a16z-brings-growth-
+# fund-to-8-5b-days-after-launching-a-new-1-1b-fund/" that returned HTTP 404 —
+# quality_gate C5 caught it post-hoc, but the product shipped an untraceable
+# URL.  This prompt-level constraint (mirroring the presentation prompt's
+# existing #93 wording) is the first line of defense; the render-time URL
+# whitelist sanitizer (output._sanitize_report_urls) is the deterministic
+# backstop.  Appended to the report and digest synthesis prompts.
+URL_VERBATIM_CONSTRAINT: str = (
+    "Every (Source: URL) must be a real http(s) URL taken VERBATIM from the "
+    "KB Entries list above \u2014 do not alter, re-slug, or invent the URL."
+)

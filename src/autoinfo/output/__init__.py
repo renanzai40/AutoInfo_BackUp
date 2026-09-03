@@ -58,6 +58,7 @@ from autoinfo.quality_constraints import (
     FEATURE_STORY_GROUNDING_CONSTRAINT,
     NO_FABRICATION_CONSTRAINT,
     SYNTHESIS_SIGNAL_TRACEABILITY_CONSTRAINT,
+    URL_VERBATIM_CONSTRAINT,
 )
 
 logger = logging.getLogger(__name__)
@@ -1854,6 +1855,71 @@ def _sanitize_presentation_sources(
     if allowed_urls:
         text = _strip_unverifiable_presentation_sources(text, allowed_urls)
     return text
+
+
+# Issue #207 (backup): report/digest body citations.  A body citation is
+# "(Source: URL)", "(Sources: URL and URL)", or "[label](URL)".  The report
+# synthesis once re-slugged a real TechCrunch URL into a fabricated
+# "…/a16z-brings-growth-fund-to-8-5b-days-after-launching-a-new-1-1b-fund/"
+# (HTTP 404) that quality_gate C5 only caught post-hoc.  These regexes pick
+# an http(s) URL out of a "(Source[s]: …)" citation and a "[label](URL)"
+# markdown link, respectively.
+_REPORT_SOURCE_START_RE = re.compile(r"\(Source[s]?:", re.IGNORECASE)
+_REPORT_CITE_URL_RE = re.compile(r"https?://[^)\s]+", re.IGNORECASE)
+_REPORT_MD_LINK_RE = re.compile(r"\[([^\]]+)\]\((https?://[^)\s]+)\)")
+
+
+def _sanitize_report_urls(text: str, allowed_urls: set[str]) -> str:
+    """Strip fabricated body-cited URLs from rendered report/digest text.
+
+    A deterministic post-synthesis backstop (issue #207, mirror of the #93/#101
+    presentation sanitizer): every body citation URL — ``(Source: URL)``,
+    ``(Sources: URL and URL)``, and ``[label](URL)`` — is cross-checked against
+    the real KB ``source_url`` *allowed_urls* whitelist.  A URL that is NOT
+    verifiable against the whitelist (prefix-aligned, path-boundary match via
+    :func:`_source_url_verifiable`) is dropped so a fabricated slug never ships:
+
+    - an unverifiable ``(Source: …)`` / ``(Sources: …)`` citation is removed
+      whole (the surrounding bullet text stays, mirroring
+      ``_strip_unverifiable_presentation_sources``);
+    - an unverifiable ``[label](URL)`` markdown link is reduced to bare
+      ``label`` so the human-readable label survives while the untraceable
+      URL is gone.
+
+    Never applied to JSON/agent payloads, whose URLs are already the real
+    KB source_urls (never LLM-composed).
+    """
+    if not allowed_urls:
+        return text
+    out: list[str] = []
+    pos = 0
+    for m in _REPORT_SOURCE_START_RE.finditer(text):
+        out.append(text[pos : m.start()])
+        j = m.end()
+        depth = 1
+        while j < len(text) and depth:
+            if text[j] == "(":
+                depth += 1
+            elif text[j] == ")":
+                depth -= 1
+            j += 1
+        citation = text[m.start() : j]
+        urls = _REPORT_CITE_URL_RE.findall(citation)
+        keep = bool(urls) and all(
+            _source_url_verifiable(u, allowed_urls) for u in urls
+        )
+        out.append(citation if keep else "")
+        pos = j
+    out.append(text[pos:])
+    text = "".join(out)
+
+    def _replace(match: re.Match[str]) -> str:
+        url = match.group(2).rstrip(".,;:!?)]").rstrip("/")
+        if _source_url_verifiable(url, allowed_urls):
+            return match.group(0)
+        return match.group(1)
+
+    return _REPORT_MD_LINK_RE.sub(_replace, text)
 
 
 def _sections_from_headings(text: str, product_type: str = "report") -> dict[str, str]:
@@ -4777,6 +4843,24 @@ _DIGEST_PRODUCT_SCOPE_GUIDANCE: dict[str, str] = {
 _RMB_YI_RE = re.compile(r"([0-9][0-9,_]*(?:\.[0-9]+)?)\s*(亿元?)")
 _RMB_WAN_RE = re.compile(r"([0-9][0-9,_]*(?:\.[0-9]+)?)\s*(万元)")
 
+# Issue #206 — Chinese-numeral RMB amounts WITHOUT leading digits that the
+# digit-led regexes above (which REQUIRE a leading ``[0-9]``) never cover:
+# a bare ``千万元`` (1000万 = 10,000,000 yuan) or a bare ``亿元``
+# (100,000,000 yuan).  A preceding degree word (``超/近/约/逾``) is just a
+# CJK pass-through and does not change the base.  Kept CONSERVATIVE:
+#     * ``数X`` forms (独具数千万元 / 数亿元) have NO reliable base and are
+#       SKIPPED — a ``千万元``/``亿元`` preceded by ``数`` is not annotated.
+#     * ``千万元？`` (bare ``千万``) is NOT matched — ``千万不要`` (be sure
+#       not to) is a common everyday idiom, never a money amount.
+#     * bare ``亿`` alone is NOT matched — ``亿万人`` counts people, not yuan.
+# Each textual unit is matched as a WHOLE token (``千万元`` before ``亿元``)
+# so the unit is never partially consumed.
+_RMB_TEXTUAL_RE = re.compile(r"(?<![0-9数])(?:千万元|亿元)")
+
+# Yuan per textual RMB unit (issue #206): 千万元 = 10,000,000 yuan;
+# 亿元 = 100,000,000 yuan.
+_TEXTUAL_RMB_BASE = {"千万元": 1e7, "亿元": 1e8}
+
 
 def _get_rmb_usd_rate() -> float:
     """Resolve the canonical RMB→USD rate from config (default 7.0).
@@ -4800,12 +4884,38 @@ def _format_usd_equivalent(usd: float) -> str:
     return f"${int(round(usd / 1e3))}K"
 
 
+def _format_usd_equivalent_rounded(usd: float) -> str:
+    """Format a USD value with 3 significant digits for bare-magnitude (issue
+    #206) RMB amounts — ``≈$1.43M`` (千万元@7.0) / ``≈$14.3M`` (亿元@7.0).
+
+    The whole-millions ``_format_usd_equivalent`` is intentionally kept for
+    digit-led amounts (``30亿元`` → ``≈$429M``) so the existing #203 exact
+    assertions hold; textual Chinese-numeral amounts resolve to values like
+    1.43 or 14.3 million where whole-millions rounding would erase the
+    magnitude (1.43 → ``$1M``), so they use this 3-significant-figure form.
+    """
+    millions = usd / 1e6
+    if millions >= 100:
+        digits = 0
+    elif millions >= 10:
+        digits = 1
+    else:
+        digits = 2
+    return f"${millions:.{digits}f}M"
+
+
 def _annotate_rmb_usd(text: str, rate: float) -> str:
     """Append a canonical USD equivalent next to each RMB-denominated amount.
 
     ``30亿元`` → ``30亿元（≈$429M @7.0）``; ``50亿元`` → ``50亿元（≈$714M @7.0）``.
     value = amount_yi * 1e8 / rate (or * 1e4 for 万元), shown as whole
     millions.  A non-positive *rate* (or ``None``) disables annotation.
+
+    Issue #206 also covers Chinese-NUMERAL amounts without leading digits:
+    a bare ``千万元`` (超/近/约/逾 千万元 → 10,000,000 yuan) → ``≈$1.43M @7.0``
+    and a bare ``亿元`` (超/近/约/逾 亿元 → 100,000,000 yuan) → ``≈$14.3M
+    @7.0``.  Ambiguous ``数X`` forms (数千万元 / 数亿元) are skipped — they have
+    no reliable base.
     """
     if not text or not rate or rate <= 0:
         return text
@@ -4818,8 +4928,13 @@ def _annotate_rmb_usd(text: str, rate: float) -> str:
         usd = amount * base / rate
         return f"{match.group(0)}（≈{_format_usd_equivalent(usd)} @{rate:.1f}）"
 
+    def _annotate_textual(match: re.Match[str]) -> str:
+        usd = _TEXTUAL_RMB_BASE[match.group(0)] / rate
+        return f"{match.group(0)}（≈{_format_usd_equivalent_rounded(usd)} @{rate:.1f}）"
+
     out = _RMB_YI_RE.sub(_annotate, text)
     out = _RMB_WAN_RE.sub(_annotate, out)
+    out = _RMB_TEXTUAL_RE.sub(_annotate_textual, out)
     return out
 
 
@@ -4907,6 +5022,11 @@ def _build_digest_llm_prompt(
     # and excessive AI spending").  Canonical string in quality_constraints.
     lines.append("")
     lines.append(SYNTHESIS_SIGNAL_TRACEABILITY_CONSTRAINT)
+    # Issue #207: every (Source: URL) must be taken VERBATIM from the KB
+    # Entries list above — never re-slug or invent a URL (mirror of the
+    # presentation prompt's #93 wording).  Canonical string in quality_constraints.
+    lines.append("")
+    lines.append(URL_VERBATIM_CONSTRAINT)
     lines.append("Return all fields in a single JSON object.")
 
     return "\n".join(lines)
@@ -6425,6 +6545,46 @@ def generate_digest(
     ):
         llm_synthesis = _deterministic_synthesis_fallback(entries)
 
+    # -- Body-citation URL whitelist sanitizer (issue #207) -----------------
+    # Mirror of the report path: cross-check every body-citation URL in the
+    # LLM-produced digest text fields (incl. the magazine-digest
+    # feature_story / editorial_intro) against the real KB source_url
+    # whitelist so a fabricated re-slugged URL never reaches any render.
+    _digest_whitelist = {
+        str(e.get("source_url") or "").strip()
+        for e in entries
+        if str(e.get("source_url") or "").strip()
+    }
+    if _digest_whitelist and isinstance(llm_synthesis, dict):
+        for _key in ("executive_summary", "editorial_intro", "feature_story"):
+            _val = llm_synthesis.get(_key)
+            if isinstance(_val, str) and _val:
+                llm_synthesis[_key] = _sanitize_report_urls(_val, _digest_whitelist)
+        for _key in ("key_findings", "recommendations", "implications",
+                     "action_required", "trends"):
+            _vals = llm_synthesis.get(_key)
+            if isinstance(_vals, list):
+                for _i, _v in enumerate(_vals):
+                    if isinstance(_v, str) and _v:
+                        _vals[_i] = _sanitize_report_urls(_v, _digest_whitelist)
+                    elif isinstance(_v, dict):
+                        for _field in _v:
+                            if isinstance(_v[_field], str) and _v[_field]:
+                                _v[_field] = _sanitize_report_urls(
+                                    _v[_field], _digest_whitelist
+                                )
+        for _key in ("risks", "key_metrics"):
+            _vals = llm_synthesis.get(_key)
+            if isinstance(_vals, list):
+                for _v in _vals:
+                    if not isinstance(_v, dict):
+                        continue
+                    for _field in _v:
+                        if isinstance(_v[_field], str) and _v[_field]:
+                            _v[_field] = _sanitize_report_urls(
+                                _v[_field], _digest_whitelist
+                            )
+
     # --- Build template context ----------------------------------------------
     # Issue #138: day-granularity timestamp (no microseconds) — the full
     # ISO instant (…T08:56:52.820676+00:00) leaked an internal precision
@@ -7289,6 +7449,45 @@ def generate_report(
         if report_degraded_reason
         else ""
     )
+
+    # -- Body-citation URL whitelist sanitizer (issue #207) -----------------
+    # The report synthesis may cite a fabricated re-slugged URL (e.g. a
+    # "…/a16z-brings-growth-fund-to-8-5b-days-after-launching-a-new-1-1b-fund/"
+    # 404 that quality_gate C5 only caught post-hoc).  Cross-check every
+    # body-citation URL in the LLM-produced text fields against the real KB
+    # source_url whitelist so a fabricated slug never reaches any render
+    # format (markdown/html/json/agent flow through report_data.references is
+    # untouched — its URLs are the real KB source_urls).
+    _report_whitelist = {
+        str(e.get("source_url") or "").strip()
+        for e in entries
+        if str(e.get("source_url") or "").strip()
+    }
+    if _report_whitelist:
+        executive_summary = _sanitize_report_urls(executive_summary, _report_whitelist)
+        for _f in key_findings:
+            if isinstance(_f, dict) and _f.get("text"):
+                _f["text"] = _sanitize_report_urls(str(_f["text"]), _report_whitelist)
+        recommendations = [
+            _sanitize_report_urls(r, _report_whitelist) for r in recommendations
+        ]
+        implications = [
+            _sanitize_report_urls(i, _report_whitelist) for i in implications
+        ]
+        action_required = [
+            _sanitize_report_urls(a, _report_whitelist) for a in action_required
+        ]
+        for _r in risks:
+            for _k in ("title", "likelihood", "impact", "mitigation"):
+                if _r.get(_k):
+                    _r[_k] = _sanitize_report_urls(str(_r[_k]), _report_whitelist)
+        for _m in key_metrics:
+            for _k in ("metric", "value", "source"):
+                if _m.get(_k):
+                    _m[_k] = _sanitize_report_urls(str(_m[_k]), _report_whitelist)
+        for _s in sections:
+            if _s.content:
+                _s.content = _sanitize_report_urls(_s.content, _report_whitelist)
 
     report_data = ReportData(
         title=f"{report_title_domain_display} \u2014 {report_h1_word}",
@@ -8929,6 +9128,10 @@ def _build_report_synthesis_prompt(
     # spending" into the novel "low market breadth".  Canonical string lives
     # in quality_constraints (rides digest + report paths identically).
     prompt += f"\n\n{SYNTHESIS_SIGNAL_TRACEABILITY_CONSTRAINT}"
+    # Issue #207: every (Source: URL) must be taken VERBATIM from the KB
+    # Entries list — never re-slug or invent a URL (mirror of the presentation
+    # prompt's #93 wording).  Canonical string lives in quality_constraints.
+    prompt += f"\n\n{URL_VERBATIM_CONSTRAINT}"
     # -- Structured audience adaptation -----------------------------------
     audience = _normalize_report_audience(target_audience)
     audience_prompt = _REPORT_AUDIENCE_PROMPTS.get(audience, "")
@@ -10765,7 +10968,9 @@ def _build_tutorial_json_prompt(
         f"KB Entries:\n{entry_summaries}\n\n"
         "In every \"content\" section body, follow each key claim with an "
         "inline citation to its source entry, e.g. \"(Source: <source_url>)\". "
-        "Only cite URLs present in the KB Entries list.\n"
+        "Only cite URLs present in the KB Entries list. "
+        + URL_VERBATIM_CONSTRAINT
+        + "\n"
         "Return all fields in a single JSON object. Adapt depth, terminology, "
         f"and examples specifically for a {target_audience} audience."
     )
@@ -10854,7 +11059,9 @@ def _build_tutorial_markdown_prompt(
         "- <reference 2>\n\n"
         "In every content paragraph, follow each key claim with an inline "
         "citation to its source entry, e.g. \"(Source: <source_url>)\". Only "
-        "cite URLs present in the KB Entries list.\n\n"
+        "cite URLs present in the KB Entries list. "
+        + URL_VERBATIM_CONSTRAINT
+        + "\n\n"
         "Use exactly the heading names above. Do NOT wrap your answer in a "
         "code fence or emit JSON.\n\n"
         f"KB Entries:\n{entry_summaries}\n\n"

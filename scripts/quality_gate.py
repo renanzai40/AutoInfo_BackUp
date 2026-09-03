@@ -54,6 +54,13 @@ Content layer (C):
                                in a "## References" section).  Fabricated /
                                dangling citations are flagged.
 
+Magnitude layer (G6 — issue #206 backstop):
+  G6  RMB/USD implied-rate — a line carrying BOTH a RMB amount and a local
+      USD figure is recomputed; an implied RMB→USD rate outside [5.0, 9.0]
+      is a 10x magnitude error (report.md folded 10M yuan into ~$0.14M, a
+      ~71x implied rate), flagged even when the injection pass missed a
+      Chinese-numeral form.
+
 Cross-product consistency (X1, the P0-4 addition — simple version):
   entity extraction + cross-file conflict marking.  For every real product
   file under a delivery directory, extract capitalized entity phrases
@@ -962,6 +969,137 @@ def find_bullet_serialization_glue(text: str) -> list[str]:
 
 
 # ---------------------------------------------------------------------------
+# G6 — RMB/USD magnitude assertion (issue #206, backstop)
+# ---------------------------------------------------------------------------
+#
+# Even with the injection coverage fix in output._annotate_rmb_usd, a MISSED
+# Chinese-numeral form ("超千万元") can still let the LLM convert the amount
+# independently and badly (report.md turned 10,000,000 yuan into ~$0.14M,
+# a ~71x implied rate instead of ~7).  This DETERMINISTIC backstop recomputes
+# the implied RMB→USD rate from any LINE that carries BOTH a RMB amount and a
+# USD figure and flags it when the implied rate escapes the sane band.  A real
+# product either keeps the canonical ~7.0 annotation (rate in-band) or states
+# the RMB converted at a market rate in the band — an out-of-band rate is a
+# 10x magnitude error, never a deliberate conversion.
+_RMB_USD_RATE_MIN = 5.0
+_RMB_USD_RATE_MAX = 9.0
+
+# Yuan per bare textual RMB unit for the G6 gate (mirrors output._TEXTUAL_RMB_BASE).
+_TEXTUAL_RMB_BASE_GATE = {"千万元": 1e7, "亿元": 1e8}
+
+# RMB amount shapes we can attribute a yuan value to, on a single line:
+#   * digit-led numeral: "<n>亿元" / "<n>千万元" / "<n>万元" / "<n>元"
+#   * English "<n> (M|million|mn) yuan"
+#   * bare Chinese-numeral "千万元" / "亿元" (textual, issue #206)
+_RMB_AMT_NUM_RE = re.compile(r"(\d[\d,]*(?:\.\d+)?)\s*(亿元|千万元|万元|元)")
+_RMB_AMT_EN_RE = re.compile(
+    r"(\d[\d,]*(?:\.\d+)?)\s*(M|million|mn)\s*(yuan)\b", re.IGNORECASE
+)
+_RMB_AMT_TEXT_RE = re.compile(r"(?<![0-9数])(千万元|亿元)")
+
+# USD figure: "$<n>" with an optional M/B/K suffix ("$14.3M", "$429M",
+# "$0.14M", "$1.43M", "$1K", "$14.3", "$250M").
+_USD_AMT_RE = re.compile(
+    r"\$\s*(\d[\d,]*(?:\.\d+)?)\s*(?:(M|B|K|k|thousand|million|billion))?\b",
+    re.IGNORECASE,
+)
+
+
+def _rmb_yuan(value: str, unit: str) -> float:
+    """Convert a (amount, unit) pair to yuan on the output side of #206."""
+    v = float(value.replace(",", ""))
+    if unit == "亿元":
+        return v * 1e8
+    if unit == "千万元":
+        return v * 1e7
+    if unit == "万元":
+        return v * 1e4
+    if unit[:1].lower() == "m":  # English "<n> M yuan" / "<n> million yuan"
+        return v * 1e6
+    return v  # bare 元
+
+
+def _usd_dollars(value: str, suffix: str) -> float:
+    """Convert a ($<amount>, <suffix>) pair to whole dollars."""
+    v = float(value.replace(",", ""))
+    s = (suffix or "").lower()
+    if s in ("b", "billion"):
+        return v * 1e9
+    if s in ("m", "million"):
+        return v * 1e6
+    if s in ("k", "thousand"):
+        return v * 1e3
+    return v
+
+
+# A RMB↔USD pairing is only trusted when the two figures are in the SAME
+# clause: the canonical annotation "RMB（≈$USD @rate）" is ~2-7 chars apart,
+# and the report defect "~$0.14M (Shenyi, over 10M yuan)" is ~20.  A window
+# of 30 couples those genuine pairs while leaving genuinely-separate threads
+# on a mixed line uncoupled (a clean "…$6M … 10M yuan …" cross-couple sits at
+# 39+ chars and must not fire).  A RMB straddled by several local USD just
+# contributes more candidates to the worst-outlier pick below.
+_RMB_USD_PROXIMITY = 30
+
+# The market rate a product is expected to use (centre of the [min, max] band).
+# The worst-candidate pick maximises the gap from here, so a 10x defect (rate
+# ~71) is reported ahead of a benign far-off valuation on the same line.
+_RMB_USD_RATE_CANONICAL = 7.0
+
+
+def find_rmb_usd_implied_rate_outliers(text: str) -> list[str]:
+    """G6: flag a line carrying BOTH a RMB amount and a USD figure whose
+    implied RMB→USD rate is outside [min, max] — a 10x magnitude error.
+
+    Mirrors the P2 (issue #206): "~$0.14M ... over 10M yuan" implies a ~71x
+    rate.  Only LOCAL pairings are judged: a RMB amount is paired with any USD
+    figure within *proximity* characters on the same line (the canonical
+    annotation and the defect both place the two figures adjacent); a line
+    that mixes several independent amounts far apart ("Clipto's $250M
+    valuation ... Shenyi's 10M yuan") never couples the wrong crossing.
+    """
+    out: list[str] = []
+    for lineno, raw in enumerate(text.splitlines(), start=1):
+        line = raw.strip()
+        rmb: list[tuple[int, float]] = []
+        usd: list[tuple[int, float]] = []
+        for m in _RMB_AMT_NUM_RE.finditer(line):
+            rmb.append((m.start(1), _rmb_yuan(m.group(1), m.group(2))))
+        for m in _RMB_AMT_TEXT_RE.finditer(line):
+            rmb.append((m.start(1), _TEXTUAL_RMB_BASE_GATE[m.group(1)]))
+        for m in _RMB_AMT_EN_RE.finditer(line):
+            # "<n> M yuan" — the amount runs from the digit to the 万-free unit.
+            rmb.append((m.start(1), _rmb_yuan(m.group(1), "M")))
+        for m in _USD_AMT_RE.finditer(line):
+            usd.append((m.start(1), _usd_dollars(m.group(1), m.group(2))))
+        if not rmb or not usd:
+            continue
+        for r_start, r_yuan in rmb:
+            # Collect every local USD figure that implies an out-of-band rate.
+            worst: tuple[float, float] | None = None  # (rate, dollars)
+            for u_start, u_dollars in usd:
+                if abs(u_start - r_start) > _RMB_USD_PROXIMITY:
+                    continue
+                if u_dollars <= 0:
+                    continue
+                rate = r_yuan / u_dollars
+                if _RMB_USD_RATE_MIN <= rate <= _RMB_USD_RATE_MAX:
+                    continue  # a legitimately-annotated ~7x conversion
+                gap = abs(rate - _RMB_USD_RATE_CANONICAL)
+                if worst is None or gap > abs(worst[0] - _RMB_USD_RATE_CANONICAL):
+                    worst = (rate, u_dollars)
+            if worst is not None:
+                rate, u_dollars = worst
+                out.append(
+                    f"G6 RMB/USD implied rate {rate:.1f} (RMB "
+                    f"{r_yuan:,.0f} yuan vs ${u_dollars:,.0f}) outside "
+                    f"[{_RMB_USD_RATE_MIN:.1f}, {_RMB_USD_RATE_MAX:.1f}] at "
+                    f"line {lineno}: {line[:60]!r}..."
+                )
+    return out
+
+
+# ---------------------------------------------------------------------------
 # Cross-product consistency (X1) — simple version (entity + conflict marking)
 # ---------------------------------------------------------------------------
 
@@ -1170,6 +1308,7 @@ _CHECKS = {
     "C1": find_fake_entries,
     "C2": find_llm_leaks,
     "C4": find_truncated_lines,
+    "G6": find_rmb_usd_implied_rate_outliers,
     # C5 needs the file family (path) — invoked explicitly in gate_file.
     # C6 needs the file family (grounding-scope) — invoked explicitly.
 }
