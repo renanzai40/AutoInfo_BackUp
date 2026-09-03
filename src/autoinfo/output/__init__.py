@@ -11558,6 +11558,25 @@ def _split_summary_sentences(text: str) -> list[str]:
     return sentences
 
 
+def _truncate_ellipsis(text: str, limit: int) -> str:
+    """Truncate *text* to at most *limit* chars, never cutting mid-word.
+
+    Returns *text* unchanged when it fits within *limit*.  Otherwise
+    returns the longest prefix that ends on a complete word within the
+    limit and appends ``…`` to signal truncation.  Because we only ever
+    break on whitespace, monetary figures like ``$8.5 billion`` stay
+    intact (issue #201).  Falls back to a hard cut when a single word
+    alone exceeds *limit* (no earlier break exists).
+    """
+    if len(text) <= limit:
+        return text
+    head = text[:limit]
+    break_at = max(head.rfind(" "), head.rfind("\t"), head.rfind("\n"))
+    if break_at > 0:
+        head = head[:break_at].rstrip()
+    return head + "…"
+
+
 def _fallback_slides_from_entries(
     entries: list[dict[str, Any]],
     slide_count: int,
@@ -11571,14 +11590,14 @@ def _fallback_slides_from_entries(
     """
     slides: list[dict[str, Any]] = []
     for e in entries[:slide_count]:
-        title = str(e.get("title") or "Untitled")[:80]
+        title = _truncate_ellipsis(str(e.get("title") or "Untitled"), 80)
         # Issue #149: entries filtered by topic/language/staleness may carry
         # an empty summary — fall back to the entry content (first ~600
         # chars) so the KB-derived slides never yield an empty shell.
         summary = str(e.get("summary") or "").strip()
         if not summary:
             content = str(e.get("content") or "").strip()
-            summary = content[:600] if content else ""
+            summary = _truncate_ellipsis(content, 600) if content else ""
         if not summary:
             continue
         # Issue #182: naive ``summary.split(".")`` destroys currency decimals
@@ -11589,7 +11608,7 @@ def _fallback_slides_from_entries(
         slides.append(
             {
                 "title": title,
-                "content": summary[:600],
+                "content": _truncate_ellipsis(summary, 600),
                 "bullets": bullets,
                 "notes": "Prepared from knowledge base sources.",
                 "source_url": str(e.get("source_url") or "").strip(),
