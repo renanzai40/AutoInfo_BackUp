@@ -912,3 +912,26 @@ class TestSynthesisTraceabilityAndRmbUsd:
     def test_rmb_annotation_disabled_when_rate_zero(self) -> None:
         assert _annotate_rmb_usd("筹集30亿元", 0) == "筹集30亿元"
         assert _annotate_rmb_usd("筹集30亿元", None) == "筹集30亿元"
+
+    def test_rmb_textual_qianwan_yi_annotated(self) -> None:
+        # Issue #206: Chinese-NUMERAL amounts without leading digits must be
+        # annotated too — a bare 千万元 (10,000,000 yuan) converts to ~$1.43M
+        # and a bare 亿元 (100,000,000 yuan) to ~$14.3M @7.0.  A leading
+        # degree word (超/近/约/逾) is a pass-through that keeps the base.
+        assert "≈$1.43M" in _annotate_rmb_usd("深圳神奕超千万元天使轮融资", 7.0)
+        assert "≈$14.3M" in _annotate_rmb_usd("融资超亿元", 7.0)
+        assert "≈$1.43M" in _annotate_rmb_usd("近千万元募资", 7.0)
+        assert "≈$14.3M" in _annotate_rmb_usd("逾亿元融资", 7.0)
+
+    def test_rmb_textual_ambiguous_forms_skipped(self) -> None:
+        # Issue #206: "数X" forms (数千万元 / 数亿元) have NO reliable base and
+        # must be left untouched.  "千万不要" (an everyday idiom) and "亿万人"
+        # (counting people) must never be annotated either.
+        assert "≈" not in _annotate_rmb_usd("融资数千万元", 7.0)
+        assert "≈" not in _annotate_rmb_usd("融资数亿元", 7.0)
+        assert "≈" not in _annotate_rmb_usd("千万不要错过这个项目", 7.0)
+        assert "≈" not in _annotate_rmb_usd("亿万人受益", 7.0)
+
+    def test_rmb_textual_disabled_when_rate_zero(self) -> None:
+        assert "≈" not in _annotate_rmb_usd("超千万元融资", 0)
+        assert "≈" not in _annotate_rmb_usd("超亿元融资", None)

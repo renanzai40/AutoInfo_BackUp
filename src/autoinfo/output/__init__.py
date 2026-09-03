@@ -4777,6 +4777,24 @@ _DIGEST_PRODUCT_SCOPE_GUIDANCE: dict[str, str] = {
 _RMB_YI_RE = re.compile(r"([0-9][0-9,_]*(?:\.[0-9]+)?)\s*(亿元?)")
 _RMB_WAN_RE = re.compile(r"([0-9][0-9,_]*(?:\.[0-9]+)?)\s*(万元)")
 
+# Issue #206 — Chinese-numeral RMB amounts WITHOUT leading digits that the
+# digit-led regexes above (which REQUIRE a leading ``[0-9]``) never cover:
+# a bare ``千万元`` (1000万 = 10,000,000 yuan) or a bare ``亿元``
+# (100,000,000 yuan).  A preceding degree word (``超/近/约/逾``) is just a
+# CJK pass-through and does not change the base.  Kept CONSERVATIVE:
+#     * ``数X`` forms (独具数千万元 / 数亿元) have NO reliable base and are
+#       SKIPPED — a ``千万元``/``亿元`` preceded by ``数`` is not annotated.
+#     * ``千万元？`` (bare ``千万``) is NOT matched — ``千万不要`` (be sure
+#       not to) is a common everyday idiom, never a money amount.
+#     * bare ``亿`` alone is NOT matched — ``亿万人`` counts people, not yuan.
+# Each textual unit is matched as a WHOLE token (``千万元`` before ``亿元``)
+# so the unit is never partially consumed.
+_RMB_TEXTUAL_RE = re.compile(r"(?<![0-9数])(?:千万元|亿元)")
+
+# Yuan per textual RMB unit (issue #206): 千万元 = 10,000,000 yuan;
+# 亿元 = 100,000,000 yuan.
+_TEXTUAL_RMB_BASE = {"千万元": 1e7, "亿元": 1e8}
+
 
 def _get_rmb_usd_rate() -> float:
     """Resolve the canonical RMB→USD rate from config (default 7.0).
@@ -4800,12 +4818,38 @@ def _format_usd_equivalent(usd: float) -> str:
     return f"${int(round(usd / 1e3))}K"
 
 
+def _format_usd_equivalent_rounded(usd: float) -> str:
+    """Format a USD value with 3 significant digits for bare-magnitude (issue
+    #206) RMB amounts — ``≈$1.43M`` (千万元@7.0) / ``≈$14.3M`` (亿元@7.0).
+
+    The whole-millions ``_format_usd_equivalent`` is intentionally kept for
+    digit-led amounts (``30亿元`` → ``≈$429M``) so the existing #203 exact
+    assertions hold; textual Chinese-numeral amounts resolve to values like
+    1.43 or 14.3 million where whole-millions rounding would erase the
+    magnitude (1.43 → ``$1M``), so they use this 3-significant-figure form.
+    """
+    millions = usd / 1e6
+    if millions >= 100:
+        digits = 0
+    elif millions >= 10:
+        digits = 1
+    else:
+        digits = 2
+    return f"${millions:.{digits}f}M"
+
+
 def _annotate_rmb_usd(text: str, rate: float) -> str:
     """Append a canonical USD equivalent next to each RMB-denominated amount.
 
     ``30亿元`` → ``30亿元（≈$429M @7.0）``; ``50亿元`` → ``50亿元（≈$714M @7.0）``.
     value = amount_yi * 1e8 / rate (or * 1e4 for 万元), shown as whole
     millions.  A non-positive *rate* (or ``None``) disables annotation.
+
+    Issue #206 also covers Chinese-NUMERAL amounts without leading digits:
+    a bare ``千万元`` (超/近/约/逾 千万元 → 10,000,000 yuan) → ``≈$1.43M @7.0``
+    and a bare ``亿元`` (超/近/约/逾 亿元 → 100,000,000 yuan) → ``≈$14.3M
+    @7.0``.  Ambiguous ``数X`` forms (数千万元 / 数亿元) are skipped — they have
+    no reliable base.
     """
     if not text or not rate or rate <= 0:
         return text
@@ -4818,8 +4862,13 @@ def _annotate_rmb_usd(text: str, rate: float) -> str:
         usd = amount * base / rate
         return f"{match.group(0)}（≈{_format_usd_equivalent(usd)} @{rate:.1f}）"
 
+    def _annotate_textual(match: re.Match[str]) -> str:
+        usd = _TEXTUAL_RMB_BASE[match.group(0)] / rate
+        return f"{match.group(0)}（≈{_format_usd_equivalent_rounded(usd)} @{rate:.1f}）"
+
     out = _RMB_YI_RE.sub(_annotate, text)
     out = _RMB_WAN_RE.sub(_annotate, out)
+    out = _RMB_TEXTUAL_RE.sub(_annotate_textual, out)
     return out
 
 

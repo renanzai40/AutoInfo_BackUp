@@ -772,3 +772,46 @@ def test_h3_clean_lines_pass() -> None:
         "- Second finding on its own line.\n"
     )
     assert qg.find_bullet_serialization_glue(text) == []
+
+
+# ---------------------------------------------------------------------------
+# G6 — RMB/USD implied-rate magnitude backstop (issue #206)
+# ---------------------------------------------------------------------------
+
+
+def test_g6_flags_rmb_usd_10x_error() -> None:
+    """#206 acceptance (c): the P2 line '~$0.14M (Shenyi, over 10M yuan)'
+    folds a ~71x implied rate (10,000,000 yuan / $140,000) — the same 10x
+    defect class as the report.md finding — and G6 must flag it."""
+    text = "Ranging from ~$0.14M (Shenyi, over 10M yuan) to a later round."
+    defects = qg.find_rmb_usd_implied_rate_outliers(text)
+    assert any("G6" in d and "71.4" in d for d in defects), defects
+
+
+def test_g6_pass_canonical_annotation() -> None:
+    """A correctly-annotated amount (30亿元 ≈ $429M @7.0, implied rate ~6.99)
+    is inside the sane [5,9] band and must NOT be flagged."""
+    text = "VAST 完成 30亿元（≈$429M @7.0）融资，创下 AI 3D 融资纪录。"
+    assert qg.find_rmb_usd_implied_rate_outliers(text) == []
+
+
+def test_g6_pass_canonical_rmb_textual_annotation() -> None:
+    """The issue-#206 fixed annotation (千万元 ≈ $1.43M @7.0) is in-band and
+    clean; a bare 亿元 (≈$14.3M) annotation is clean too."""
+    text = "Shenyi 超千万元（≈$1.43M @7.0）天使轮融资。"
+    assert qg.find_rmb_usd_implied_rate_outliers(text) == []
+    assert qg.find_rmb_usd_implied_rate_outliers("完成亿元（≈$14.3M @7.0）融资") == []
+
+
+def test_g6_skips_mixed_independent_en_amounts() -> None:
+    """A line mixing several genuinely-independent amounts across entities
+    (Clipto's $250M valuation vs Shenyi's 10M yuan) must not couple a wrong
+    crossing in a clean file — the disparate values stay out of range."""
+    text = (
+        "Clipto reached a $250M valuation, Blue Voice raised $6M, and Shenyi "
+        "Technology secured over 10M yuan for AI work."
+    )
+    # $6M crosses 10M yuan at ~1.7x (out of band) — but they belong to
+    # DIFFERENT entities on the same line, so a clean backstop reports nothing
+    # unless the pairing is a genuine magnitude error of the SAME amount.
+    assert qg.find_rmb_usd_implied_rate_outliers(text) == []
