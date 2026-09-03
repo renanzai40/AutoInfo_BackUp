@@ -5,7 +5,7 @@
 
 ## The Feature
 
-Acme Corp's journey from a five-year-old enterprise software firm shows steady growth. The company raised funding for cloud products and built a strong customer base. Its products serve a broad audience of enterprises. Analysts point to the founding team's persistence as the key differentiator in a crowded market.
+Acme Corp is a five-year-old enterprise software firm that raised funding for cloud products, per the source. The sources do not disclose its growth figures or customer composition. Its products likely serve a broad audience of enterprises, the sources suggest. The sources name no specific analysts, and the founding team's persistence is not stated in the sources as a differentiator.
 
 ## Entries
 

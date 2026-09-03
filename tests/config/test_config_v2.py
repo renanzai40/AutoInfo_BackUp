@@ -787,7 +787,7 @@ class TestDefaultQualityGates:
         assert gates["G4-SummaryFactual"].retries >= 3
 
     def test_create_default_config_matches_default_gates(self) -> None:
-        from autoinfo.config import create_default_config, _DEFAULT_QUALITY_GATES
+        from autoinfo.config import _DEFAULT_QUALITY_GATES, create_default_config
 
         cfg = create_default_config("test-domain")
         assert cfg["quality_gates"] == _DEFAULT_QUALITY_GATES

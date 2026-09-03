@@ -183,9 +183,40 @@ def _detect_bilingual_domains(directory: Path) -> list[str]:
     return []
 
 
+_FILE_SNIPPET_CHAR_LIMIT = 8000
+_TRUNCATION_MARKER = "\u2026[truncated]"
+
+
+def _read_file_snippet(path: str, limit: int = _FILE_SNIPPET_CHAR_LIMIT) -> str:
+    """Return the first *limit* chars of a product file, marked if truncated.
+
+    Products are local files the review runs against; the LLM is a stateless
+    API call and cannot read them itself, so the caller embeds a bounded
+    snippet in the prompt.  Truncated tails are explicitly marked so a
+    judgment never silently bases itself on a partial file.
+    """
+    try:
+        text = Path(path).read_text(encoding="utf-8")
+    except OSError:
+        return f"<unreadable file: {path}>"
+    if len(text) <= limit:
+        return text
+    return text[:limit] + _TRUNCATION_MARKER
+
+
 def _judge_prompt(item: dict[str, Any]) -> str:
-    """Build the judgment prompt for one worklist item (no vendor naming)."""
+    """Build the judgment prompt for one worklist item (no vendor naming).
+
+    The product files' actual contents are embedded (bounded to
+    *limit* chars each) so the LLM, which is a stateless API call and cannot
+    open local files, can judge against real text instead of file paths
+    (#197).  The output contract below is aligned exactly with what
+    :func:`_parse_markdown_verdicts` parses.
+    """
     file_list = "\n".join(f"- {f}" for f in item["files"])
+    snippets = "\n\n".join(
+        f"--- File: {f} ---\n{_read_file_snippet(f)}" for f in item["files"]
+    )
     return (
         "You are a quality reviewer for a knowledge-digest product family.\n"
         f"Family: {item['family']}\n"
@@ -193,6 +224,8 @@ def _judge_prompt(item: dict[str, Any]) -> str:
         f"Blind spot: {item['name']} ({item['blind_spot']})\n"
         f"What to check: {item['check_desc']}\n"
         f"Evidence required: {item['evidence_required']}\n\n"
+        "File contents:\n"
+        f"{snippets}\n\n"
         "Rules:\n"
         "- Verdict PASS only when the product satisfies the blind spot; "
         "FLAG when it violates it; ESCALATE when you cannot judge or it is "
@@ -202,7 +235,15 @@ def _judge_prompt(item: dict[str, Any]) -> str:
         "- Every verdict MUST cite evidence (file:line or source URL). A "
         "verdict without evidence is invalid.\n"
         "- If you cannot reach a judgment for any reason, output ESCALATE — "
-        "never PASS on an unverified claim.\n"
+        "never PASS on an unverified claim.\n\n"
+        "OUTPUT SCHEMA — respond with EXACTLY ONE block starting with the "
+        "header '## Verdict', followed by these four lines:\n"
+        "- **blind_spot**: <id>\n"
+        "- **verdict**: PASS | FLAG | ESCALATE\n"
+        "- **evidence**: <file:line or source URL>\n"
+        "- **note**: <1-3 sentences>\n"
+        "Output NOTHING outside that block.  Do not add prose before or "
+        "after it.\n"
     )
 
 
@@ -261,27 +302,28 @@ def _judge_with_llm(prompt: str, want_json: bool) -> dict[str, Any]:
                 '{"verdict": "PASS"|"FLAG"|"ESCALATE", '
                 '"evidence": "<file:line or URL>", "note": "<1-3 sentences>"}'
             )
-            content = call_with_fallback(
+            resp = call_with_fallback(
                 messages=[
                     {"role": "system", "content": system},
                     {"role": "user", "content": prompt},
                 ],
                 task="",  # base config model — no judgment pin (battery is not a hard gate)
             )
-            verdict = _extract_json_verdict(content)
+            verdict = _extract_json_verdict(resp)
             if verdict is None:
-                return _escalate("unparseable LLM output", str(content)[:200])
+                return _escalate("unparseable LLM output", _extract_text(resp)[:200])
             return verdict
         # Markdown path.
-        content = call_with_fallback(
+        resp = call_with_fallback(
             messages=[
                 {"role": "user", "content": prompt},
             ],
             task="",
         )
-        blocks = _parse_markdown_verdicts(str(content))
+        raw = _extract_text(resp)
+        blocks = _parse_markdown_verdicts(raw)
         if not blocks:
-            return _escalate("no parseable verdict block in LLM output", str(content)[:200])
+            return _escalate("no parseable verdict block in LLM output", raw[:200])
         b = blocks[0]
         return {
             "verdict": str(b.get("verdict", "ESCALATE")).upper(),
@@ -294,7 +336,7 @@ def _judge_with_llm(prompt: str, want_json: bool) -> dict[str, Any]:
 
 def _extract_json_verdict(content: Any) -> dict[str, Any] | None:
     """Pull {verdict, evidence, note} from a JSON-mode LLM response."""
-    text = str(content)
+    text = _extract_text(content)
     # Strip possible ```json fences.
     text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text.strip())
     try:
@@ -308,6 +350,22 @@ def _extract_json_verdict(content: Any) -> dict[str, Any] | None:
         "evidence": str(data.get("evidence", "")),
         "note": str(data.get("note", "")),
     }
+
+
+def _extract_text(resp: Any) -> str:
+    """Extract the message text from an LLM response.
+
+    call_with_fallback returns a litellm ModelResponse whose text lives at
+    .choices[0].message.content; str() of it yields the repr with literal
+    backslash-n escapes that defeat line-based markdown parsing and
+    json.loads.  Robust to providers that already return a plain string.
+    """
+    if hasattr(resp, "choices") and resp.choices:
+        msg = resp.choices[0].message
+        text = getattr(msg, "content", None)
+        if isinstance(text, str):
+            return text
+    return str(resp)
 
 
 def _escalate(reason: str, detail: str) -> dict[str, Any]:

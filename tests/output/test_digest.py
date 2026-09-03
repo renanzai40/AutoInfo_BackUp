@@ -807,7 +807,7 @@ class TestSingleSourcePlaceholderDraftExclusion:
         },
     ])
     def test_single_source_placeholder_draft_excluded(self, entry) -> None:
-        from autoinfo.output import _is_synthesized_digest_entry, _filter_product_entries
+        from autoinfo.output import _filter_product_entries, _is_synthesized_digest_entry
 
         assert _is_synthesized_digest_entry(entry) is True
         kept = [e["entry_id"] for e in _filter_product_entries([entry])]
@@ -828,7 +828,7 @@ class TestSingleSourcePlaceholderDraftExclusion:
         },
     ])
     def test_real_entries_not_misclassified(self, entry) -> None:
-        from autoinfo.output import _is_synthesized_digest_entry, _filter_product_entries
+        from autoinfo.output import _filter_product_entries, _is_synthesized_digest_entry
 
         assert _is_synthesized_digest_entry(entry) is False
         kept = [e["entry_id"] for e in _filter_product_entries([entry])]
