@@ -539,29 +539,19 @@ class TestCurationG4:
     def test_g4_config_none_without_disk_config_falls_back_to_defaults(
         self, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        """No Config and no disk config — G4 falls back to hardcoded defaults."""
+        """No Config and no disk config — issue #195: promotion raises loudly
+        (a G4 gate cannot judge without a configured model; it never silently
+        calls a hardcoded vendor default)."""
+        from autoinfo.config import JudgmentModelNotConfiguredError
+
         monkeypatch.setattr("autoinfo.config.get_config_path", lambda: None)
-
-        records: list[str] = []
-        result = g4_result(True)
-
-        class _RecorderG4:
-            def __init__(self, model: str = "", **_: object) -> None:
-                records.append(model)
-
-            def check(self, *_: object, **__: object) -> QualityResult:
-                return result
-
-        monkeypatch.setattr("autoinfo.promotion.G4FactualConsistency", _RecorderG4)
-
-        admission = check_promotion_admission(
-            make_entry(),
-            "medical-research",
-            None,
-            resolve_raw=resolver([make_raw()]),
-        )
-        assert admission.allowed is True
-        assert records == ["openrouter/deepseek/deepseek-chat"]
+        with pytest.raises(JudgmentModelNotConfiguredError):
+            check_promotion_admission(
+                make_entry(),
+                "medical-research",
+                None,
+                resolve_raw=resolver([make_raw()]),
+            )
 
 
 # ===================================================================

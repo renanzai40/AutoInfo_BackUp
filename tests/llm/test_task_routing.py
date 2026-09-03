@@ -1,24 +1,28 @@
 """Per-task LLM model routing — todo 9 of llm-concurrency-remediation.
 
-Routing table (release-pinned, static — never a runtime classifier):
+Routing table (config-driven, never a vendor/model code constant — #195):
 
     extraction / classification  -> ``llm.tasks["extraction"]`` when present,
                                     else the base ``llm`` config
                                     (deepseek-v4-flash this release)
-    judgment (G4/G5/llm_judge)   -> ``JUDGMENT_MODEL`` — the release-pinned
-                                    constant in ``autoinfo.config``; a
-                                    judgment task's task-config model is
-                                    NEVER honored (drift guardrail)
+    judgment (G4/G5/llm_judge)   -> ``llm.judgment_model`` when set, else
+                                    ``llm.model`` (the deployment's own
+                                    working model), else a loud
+                                    JudgmentModelNotConfiguredError; a judgment
+                                    task's task-config model is NEVER honored
+                                    (drift guardrail)
 
 The mock-capture asserts the model argument at the provider-call boundary
 (``_litellm.completion(model=...)``) — the actual LLM call seam — not
 config-layer defaults.  All LLM calls are mocked; no real API calls.
 
 Coverage (plan todo 9):
-(a) extraction call -> deepseek-v4-flash; G4/G5 judgment call -> JUDGMENT_MODEL;
-(b) judgment task with an invalid task-config model -> still pinned;
+(a) extraction call -> deepseek-v4-flash; G4/G5 judgment call -> the
+    configured deployment model;
+(b) judgment task with an invalid task-config model -> still never honored;
 (c) no task config -> current defaults preserved (incl. explicit-model wins,
-    which keeps the G4 retry-chain model escalation contract intact).
+    which keeps the G4 retry-chain model escalation contract intact);
+(d) no judgment_model AND no llm.model -> JudgmentModelNotConfiguredError (#195).
 """
 
 from __future__ import annotations
@@ -30,8 +34,8 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from autoinfo.config import (
-    JUDGMENT_MODEL,
     Config,
+    JudgmentModelNotConfiguredError,
     LLMConfig,
     LLMTaskConfig,
     _resolve_task_llm_config,
@@ -164,34 +168,49 @@ class TestExtractionRouting:
 
 
 class TestJudgmentRouting:
-    """G4/G5/llm_judge resolve through the release-pinned JUDGMENT_MODEL."""
+    """G4/G5/llm_judge resolve the deployment judgment model (issue #195)."""
 
-    def test_g4_judgment_uses_pinned_model(self) -> None:
-        """G4 default model is the pinned judgment model at the boundary."""
+    def test_g4_judgment_uses_configured_model(self) -> None:
+        """G4 default model is the configured model at the boundary."""
         mock_litellm = _mock_litellm(
             json.dumps({"contradiction": False, "explanation": "consistent"})
         )
         with patch.object(LLMExtractor, "_get_litellm", return_value=mock_litellm):
-            result = G4FactualConsistency().check(_make_item(), _make_extraction())
+            # No deployment config in this test — pass the model explicitly
+            # (a config-less default construction raises, issue #195).
+            result = G4FactualConsistency(
+                model="openai/deepseek-v4-flash"
+            ).check(_make_item(), _make_extraction())
 
         assert result.passed is True
-        assert _captured_model(mock_litellm) == JUDGMENT_MODEL
+        assert _captured_model(mock_litellm) == "openai/deepseek-v4-flash"
 
-    def test_g5_judgment_uses_pinned_model(self) -> None:
-        """G5 default model is the pinned judgment model at the boundary."""
+    def test_g4_configless_construction_raises(self) -> None:
+        """Issue #195 acceptance #1: no config → a config-less G4 default
+        construction raises JudgmentModelNotConfiguredError (never a code-constant
+        guess)."""
+        with patch.object(LLMExtractor, "_get_litellm"), \
+             patch("autoinfo.config.get_config_path", return_value=None):
+            with pytest.raises(JudgmentModelNotConfiguredError):
+                G4FactualConsistency()  # noqa: B018
+
+    def test_g5_judgment_uses_configured_model(self) -> None:
+        """G5 default model is the configured model at the boundary."""
         mock_litellm = _mock_litellm(
             json.dumps({"faithful": True, "explanation": "faithful", "issues": []})
         )
         with patch.object(LLMExtractor, "_get_litellm", return_value=mock_litellm):
-            result = G5TranslationAccuracy().check(
+            result = G5TranslationAccuracy(
+                model="openai/deepseek-v4-flash"
+            ).check(
                 _make_item(), _make_extraction(translation="IVF 成功率有所提升。")
             )
 
         assert result.passed is True
-        assert _captured_model(mock_litellm) == JUDGMENT_MODEL
+        assert _captured_model(mock_litellm) == "openai/deepseek-v4-flash"
 
-    def test_llm_judge_uses_pinned_model(self) -> None:
-        """llm_judge (translation QA gate 5) default is the pinned model."""
+    def test_llm_judge_uses_configured_model(self) -> None:
+        """llm_judge (translation QA gate 5) default is the configured model."""
         mock_litellm = _mock_litellm(
             json.dumps(
                 {
@@ -209,10 +228,12 @@ class TestJudgmentRouting:
                 "IVF 成功率随时间推移成像而提升。",
                 "en",
                 "zh",
+                model="openai/deepseek-v4-flash",
             )
 
         assert scores["faithfulness"] == 95
-        assert _captured_model(mock_litellm) == JUDGMENT_MODEL
+        assert scores["judged"] is True
+        assert _captured_model(mock_litellm) == "openai/deepseek-v4-flash"
 
 
 # ===================================================================
@@ -221,10 +242,11 @@ class TestJudgmentRouting:
 
 
 class TestJudgmentDriftGuardrail:
-    """A judgment task configured with an invalid model stays pinned."""
+    """A judgment task configured with an invalid model stays un-drifted."""
 
-    def test_resolve_task_llm_config_pins_judgment_model(self) -> None:
-        """``_resolve_task_llm_config`` ignores task-config model for judgment."""
+    def test_resolve_task_llm_config_ignores_task_model(self) -> None:
+        """``_resolve_task_llm_config`` ignores task-config model for judgment:
+        resolution is llm.judgment_model → llm.model (issue #195)."""
         config = Config(
             llm=LLMConfig(
                 provider="openai",
@@ -233,10 +255,13 @@ class TestJudgmentDriftGuardrail:
             )
         )
         resolved = _resolve_task_llm_config(config, "g4_factual")
-        assert resolved.model == JUDGMENT_MODEL
+        # The written llm.tasks override is never honored — judgment falls
+        # through to the deployment's llm.model.
+        assert resolved.model == "openai/some-base-model"
 
-    def test_call_with_fallback_judgment_task_pinned_at_boundary(self) -> None:
-        """Task-routed judgment call reaches the boundary with the pin."""
+    def test_call_with_fallback_judgment_task_at_boundary(self) -> None:
+        """Task-routed judgment call reaches the boundary with the resolved
+        deployment model (never the drifted task model)."""
         config = Config(
             llm=LLMConfig(
                 provider="openai",
@@ -252,13 +277,12 @@ class TestJudgmentDriftGuardrail:
                 config=config,
             )
 
-        # JUDGMENT_MODEL is litellm-qualified, so the boundary captures it
-        # verbatim — no double prefix.
-        assert _captured_model(mock_litellm) == JUDGMENT_MODEL
+        # The resolved model is provider-qualified at the boundary.
+        assert _captured_model(mock_litellm) == "openai/some-base-model"
 
 
 class TestJudgmentModelOverride:
-    """llm.judgment_model (#45): deployment override of the judgment model."""
+    """llm.judgment_model (#45/#195): deployment override of the judgment model."""
 
     def test_resolve_returns_override_when_set(self) -> None:
         """`llm.judgment_model` set -> g4_factual resolves to the override."""
@@ -273,8 +297,9 @@ class TestJudgmentModelOverride:
         resolved = _resolve_task_llm_config(config, "g4_factual")
         assert resolved.model == "deepseek-v4-flash"
 
-    def test_resolve_returns_release_default_when_unset(self) -> None:
-        """No llm.judgment_model -> g4_factual resolves to JUDGMENT_MODEL."""
+    def test_resolve_falls_through_to_llm_model_when_unset(self) -> None:
+        """No llm.judgment_model -> g4_factual resolves to llm.model (issue
+        #195; previously a code-constant release pin)."""
         config = Config(
             llm=LLMConfig(
                 provider="openai",
@@ -283,7 +308,14 @@ class TestJudgmentModelOverride:
             )
         )
         resolved = _resolve_task_llm_config(config, "g4_factual")
-        assert resolved.model == JUDGMENT_MODEL
+        assert resolved.model == "openai/deepseek-v4-flash"
+
+    def test_resolve_raises_when_nothing_configured(self) -> None:
+        """Issue #195 acceptance #1: neither judgment_model nor llm.model →
+        resolution raises loudly (never guesses a model)."""
+        config = Config(llm=LLMConfig(provider="", model=""))
+        with pytest.raises(JudgmentModelNotConfiguredError):
+            _resolve_task_llm_config(config, "g4_factual")
 
     def test_call_with_fallback_judgment_override_at_boundary(self) -> None:
         """The override reaches the completion boundary (not silent)."""

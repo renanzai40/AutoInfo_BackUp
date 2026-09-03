@@ -68,7 +68,14 @@ def classify_text(
         return {"cefr_level": "unknown", "confidence": 0.0}
 
     lang_name = _LANG_NAMES.get(lang, "English")
-    model, api_key, base_url = _resolve_model_config(model_config)
+    try:
+        model, api_key, base_url = _resolve_model_config(model_config)
+    except Exception as exc:
+        # Issue #195: an unconfigured deployment raises loudly at resolution;
+        # classify degrades to the documented "unknown" (never calls a guessed
+        # model).  Same contract as the LLM-call failure path below.
+        logger.warning("CEFR model resolution failed: %s", exc)
+        return {"cefr_level": "unknown", "confidence": 0.0}
     if timeout is None:
         timeout = _resolve_timeout(model_config)
 
@@ -131,8 +138,9 @@ def _resolve_model_config(
     Priority:
     1. Explicit *model_config* dict (if it contains a ``model`` key).
     2. AutoInfo project config (``.autoinfo/config.yaml``), using the
-       CEFR-specific model if configured, else the base LLM model.
-    3. Hard-coded fallback (``deepseek/deepseek-chat``).
+       CEFR-specific model if configured, else the base LLM model
+       (resolved via :func:`resolve_llm_model` — issue #195, no hardcoded
+       vendor default; an unconfigured deployment raises loudly).
     """
     if model_config and model_config.get("model"):
         return (
@@ -142,7 +150,7 @@ def _resolve_model_config(
         )
 
     try:
-        from autoinfo.config import get_config_path, load_config
+        from autoinfo.config import get_config_path, load_config, resolve_llm_model
 
         config_path = get_config_path()
         if config_path is not None:
@@ -150,18 +158,22 @@ def _resolve_model_config(
             if config.cefr.model:
                 model = config.cefr.model
             else:
-                provider = config.llm.provider or "openrouter"
-                llm_model = config.llm.model or "deepseek/deepseek-chat"
-                if "/" not in llm_model:
-                    llm_model = f"{provider}/{llm_model}"
-                model = llm_model
+                # Issue #195: resolves llm.judgment_model/llm.model or raises
+                # JudgmentModelNotConfiguredError (callers degrade gracefully).
+                model = resolve_llm_model(config.llm)
             api_key = config.llm.api_key or ""
             base_url = config.llm.base_url or ""
             return model, api_key, base_url
     except Exception:
         logger.debug("Could not load autoinfo config for CEFR", exc_info=True)
 
-    return "openrouter/deepseek/deepseek-chat", "", ""
+    from autoinfo.config import JudgmentModelNotConfiguredError
+
+    raise JudgmentModelNotConfiguredError(
+        "CEFR classification needs an LLM model: set llm.model (and provider) "
+        "in .autoinfo/config.yaml, or export AUTOINFO_LLM_API_KEY and run "
+        "'autoinfo init' to generate a config."
+    )
 
 
 def _resolve_timeout(model_config: dict[str, Any] | None) -> float | None:

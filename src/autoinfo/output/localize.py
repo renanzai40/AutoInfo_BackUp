@@ -182,15 +182,19 @@ def _qa_segment(
     single-model pool degrades the back-translation to the same-model mode
     (documented in translation_qa.back_translate) but keeps the gate live.
     """
-    from autoinfo.config import get_config_path, load_config  # noqa: PLC0415
+    from autoinfo.config import get_config_path, load_config, resolve_llm_model  # noqa: PLC0415
 
     pool: list[str] = []
     try:
         config = load_config(get_config_path())
-        resolved = config.llm.resolve_model() or "openrouter/deepseek/deepseek-chat"
+        # Issue #195: resolve_llm_model raises when unconfigured — no silent
+        # hardcoded vendor default.  The raise is caught below and the empty
+        # pool surfaces through run_back_translation_pipeline's own loud
+        # resolution (_resolve_default_model).
+        resolved = resolve_llm_model(config.llm)
         pool = [resolved]
     except Exception:
-        pool = ["openrouter/deepseek/deepseek-chat"]
+        pool = []
 
     def _score(trans: str) -> float:
         pipeline = run_back_translation_pipeline(

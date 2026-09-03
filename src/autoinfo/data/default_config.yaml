@@ -8,18 +8,22 @@ project:
   created_at: "2026-07-20"
 
 llm:
-  provider: openrouter
-  model: deepseek/deepseek-chat
+  # Issue #195: vendor-neutral default — a deployment edits provider/model
+  # (+ base_url for non-OpenAI gateways) to its own stack; nothing is pinned
+  # to a vendor in code.
+  provider: openai
+  model: deepseek-v4-flash
   api_key: ${AUTOINFO_LLM_API_KEY}
-  # base_url: "https://api.openai.com/v1"  # optional: custom API endpoint
+  # base_url: "https://opencode.ai/zen/go/v1"  # custom gateway endpoint
   json_mode: false
   # reasoning_model: false  # set to true for reasoning models that don't support response_format
   # --- Judgment model (G4 factual / G5 translation / llm_judge) ---
-  # Deployment override for the release-pinned JUDGMENT_MODEL.  When unset,
-  # judgment calls use the release-pinned default (openai/deepseek-v4-flash);
-  # deployments whose gateway serves a different model MUST set this so the
-  # hard gates (G4/G5) actually judge instead of failing on a missing model.
-  # judgment_model: openai/deepseek-v4-flash
+  # Issue #195: judgment-model resolution is judgment_model -> llm.model ->
+  # explicit error (never a code-constant guess).  This shipped default is
+  # the deployment's judgment pin — edit it when your gateway serves a
+  # different model; a deployment with NO model anywhere fails loudly at the
+  # first judgment call instead of silently mis-judging (#127/#195).
+  judgment_model: openai/deepseek-v4-flash
   # --- Model pool (uncomment to configure; see configure_llm(llm_fallback=..., llm_tasks=...)) ---
   # fallback:
   #   - model: mimo-v2.5

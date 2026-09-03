@@ -2246,28 +2246,28 @@ def _handle_suggest_keywords(
     """Use LLM to suggest keywords from the given text."""
     import json
 
-    from autoinfo.config import get_config_path, load_config
+    from autoinfo.config import get_config_path, load_config, resolve_llm_model
 
     timeout: float | None = None
     try:
         config_path = get_config_path()
         if config_path:
             config = load_config(config_path)
-            model = config.llm.resolve_model() or (
-                f"{config.llm.provider or 'openrouter'}/"
-                f"{config.llm.model or 'deepseek/deepseek-chat'}"
-            )
+            # Issue #195: resolve_llm_model raises when unconfigured — no
+            # hardcoded vendor default; the not-api_key guard below is the
+            # MCP-level LLM_NOT_CONFIGURED response.
+            model = resolve_llm_model(config.llm)
             api_key = config.llm.api_key or os.environ.get("AUTOINFO_LLM_API_KEY", "")
             base_url = config.llm.base_url or None
             json_mode = config.llm.json_mode
             timeout = config.llm.timeout
         else:
-            model = "deepseek/deepseek-chat"
+            model = ""
             api_key = os.environ.get("AUTOINFO_LLM_API_KEY", "")
             base_url = None
             json_mode = False
     except Exception:
-        model = "deepseek/deepseek-chat"
+        model = ""
         api_key = os.environ.get("AUTOINFO_LLM_API_KEY", "")
         base_url = None
         json_mode = True
@@ -4535,8 +4535,9 @@ def _handle_configure_llm(
         Per-task LLM overrides keyed by task name (``model``/``provider``/
         ``max_tokens``).  ``None`` leaves existing tasks untouched;
         ``{}`` clears them.  Judgment tasks (g4_factual/g5_translation/
-        llm_judge) are writable but still resolve to the release-pinned
-        JUDGMENT_MODEL at runtime.
+        llm_judge) are writable but still resolve to the effective
+        judgment model (llm.judgment_model → llm.model → loud error,
+        issue #195) at runtime.
     """
     config_path = _config_path()
 
@@ -4676,8 +4677,9 @@ def _handle_configure_llm(
             if judgment_written:
                 message += (
                     f" Judgment task(s) {', '.join(judgment_written)} "
-                    "are written to llm.tasks but 运行期仍强制 JUDGMENT_MODEL "
-                    "(release-pinned; llm.tasks cannot override judgment models)."
+                    "are written to llm.tasks but 运行期仍强制 judgment model "
+                    "(llm.judgment_model/llm.model; llm.tasks cannot override "
+                    "judgment models)."
                 )
 
         return success_response({
@@ -10505,7 +10507,7 @@ async def list_tools() -> list[Tool]:
                 "[] = clear, entries merge by (provider, model) identity); "
                 "llm_tasks configures per-task model routing (None = unchanged, "
                 "{} = clear; judgment tasks still resolve to the release-pinned "
-                "JUDGMENT_MODEL at runtime)."
+                "the effective judgment model at runtime)."
             ),
             inputSchema={
                 "type": "object",
@@ -10570,7 +10572,7 @@ async def list_tools() -> list[Tool]:
                     },
                     "llm_tasks": {
                         "type": "object",
-                        "description": "Per-task LLM overrides keyed by task name (model/provider/max_tokens). None = leave unchanged; {} = clear. Judgment tasks (g4_factual/g5_translation/llm_judge) still resolve to the release-pinned JUDGMENT_MODEL at runtime.",
+                        "description": "Per-task LLM overrides keyed by task name (model/provider/max_tokens). None = leave unchanged; {} = clear. Judgment tasks (g4_factual/g5_translation/llm_judge) still resolve to the effective judgment model (llm.judgment_model/llm.model) at runtime.",
                         "additionalProperties": {
                             "type": "object",
                             "properties": {

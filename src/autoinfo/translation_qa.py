@@ -460,8 +460,20 @@ def _resolve_timeout() -> float | None:
 
 
 def _resolve_default_model() -> str:
-    """Resolve default model string from config, falling back to default."""
-    from autoinfo.config import Config, get_config_path, load_config  # noqa: PLC0415
+    """Resolve the fully-qualified model from config, or raise if unset.
+
+    Issue #195: the historical ``resolve_model() or
+    \"openrouter/deepseek/deepseek-chat\"`` fallback silently called an
+    unsupported model on an unconfigured deployment.  Now an unconfigured
+    deployment raises a loud JudgmentModelNotConfiguredError instead.
+    """
+    from autoinfo.config import (  # noqa: PLC0415
+        Config,
+        JudgmentModelNotConfiguredError,
+        get_config_path,
+        load_config,
+        resolve_llm_model,
+    )
 
     try:
         config_path = get_config_path()
@@ -472,8 +484,15 @@ def _resolve_default_model() -> str:
     except Exception:
         config = Config()
 
-    model = config.llm.resolve_model() or "openrouter/deepseek/deepseek-chat"
-    return model
+    try:
+        return resolve_llm_model(config.llm)
+    except JudgmentModelNotConfiguredError:
+        raise
+    except Exception as exc:
+        raise JudgmentModelNotConfiguredError(
+            f"No LLM model configured: set llm.model in .autoinfo/config.yaml "
+            f"({exc})"
+        ) from exc
 
 
 def _resolve_model_pool(model_pool: list[str] | None) -> list[str]:
@@ -489,7 +508,12 @@ def _resolve_model_pool(model_pool: list[str] | None) -> list[str]:
     pool: list[str] = []
 
     try:
-        from autoinfo.config import Config, get_config_path, load_config  # noqa: PLC0415
+        from autoinfo.config import (  # noqa: PLC0415
+            Config,
+            get_config_path,
+            load_config,
+            resolve_llm_model,
+        )
 
         config_path = get_config_path()
         if config_path:
@@ -497,16 +521,18 @@ def _resolve_model_pool(model_pool: list[str] | None) -> list[str]:
         else:
             config = Config()
 
-        provider = config.llm.provider or "openrouter"
-        model = config.llm.model or "deepseek/deepseek-chat"
+        # Issue #195: resolve_llm_model raises when the deployment configured
+        # no model — never silently fall back to a hardcoded vendor default.
+        model = resolve_llm_model(config.llm)
         if "/" not in model:
+            provider = config.llm.provider or "openrouter"
             pool.append(f"{provider}/{model}")
         else:
             pool.append(model)
 
         # Add fallback models
         for fb in config.llm.fallback:
-            fb_provider = fb.provider or provider
+            fb_provider = fb.provider or config.llm.provider or "openrouter"
             fb_model = fb.model or model
             fb_full = f"{fb_provider}/{fb_model}"
             if fb_full not in pool:

@@ -4863,7 +4863,7 @@ def _call_llm_for_digest(
         else:
             config = Config()
 
-    model = config.llm.resolve_model() or "openrouter/deepseek/deepseek-chat"
+    model = config.llm.resolve_model()
     full_model = model
 
     # Issue #217: DeepSeek-V4-Flash intermittently returns empty synthesis on
@@ -9096,7 +9096,7 @@ def _call_llm_for_report_synthesis(prompt: str) -> str:
     else:
         config = Config()
 
-    model = config.llm.resolve_model() or "openrouter/deepseek/deepseek-chat"
+    model = config.llm.resolve_model()
     try:
         response = call_with_fallback(
             model=model,
@@ -9722,7 +9722,7 @@ def _call_llm_for_translation(
         else:
             config = Config()
 
-    model = config.llm.resolve_model() or "openrouter/deepseek/deepseek-chat"
+    model = config.llm.resolve_model()
     full_model = model
 
     user_prompt = _build_translation_prompt(
@@ -10598,7 +10598,7 @@ def _call_llm_for_tutorial(prompt: str) -> dict[str, Any]:
     else:
         config = Config()
 
-    model = config.llm.resolve_model() or "openrouter/deepseek/deepseek-chat"
+    model = config.llm.resolve_model()
     full_model = model
 
     try:
@@ -11611,7 +11611,7 @@ def _call_llm_for_presentation(prompt: str, slide_count: int) -> dict[str, Any]:
     else:
         config = Config()
 
-    model = config.llm.resolve_model() or "openrouter/deepseek/deepseek-chat"
+    model = config.llm.resolve_model()
     full_model = model
 
     try:
@@ -12702,19 +12702,24 @@ def simplify_text(
         "Rewrite this text at the target CEFR level. Return only the simplified text."
     )
 
-    # Resolve model config (same pattern as cefr.py)
-    from autoinfo.config import get_config_path, load_config  # noqa: PLC0415
+    # Resolve model config (same pattern as cefr.py).  Issue #195: no
+    # hardcoded vendor default — resolve_llm_model raises when unconfigured,
+    # the surrounding try degrades to the documented call_with_fallback
+    # default (llm.py DEFAULT_MODEL) for config-less backward-compat.
+    from autoinfo.config import (  # noqa: PLC0415
+        get_config_path,
+        load_config,
+        resolve_llm_model,
+    )
 
-    model = "openrouter/deepseek/deepseek-chat"
+    model = ""
     api_key = ""
     base_url = ""
     try:
         config_path = get_config_path()
         if config_path is not None:
             config = load_config(config_path)
-            provider = config.llm.provider or "openrouter"
-            llm_model = config.llm.model or "deepseek/deepseek-chat"
-            model = f"{provider}/{llm_model}"
+            model = resolve_llm_model(config.llm)
             api_key = config.llm.api_key or ""
             base_url = config.llm.base_url or ""
     except Exception:

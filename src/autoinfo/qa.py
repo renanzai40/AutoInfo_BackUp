@@ -13,18 +13,11 @@ import logging
 import os
 from typing import Any
 
-from autoinfo.config import get_config_path, load_config
+from autoinfo.config import JudgmentModelNotConfiguredError, get_config_path, load_config
 from autoinfo.kb import KBStore
 from autoinfo.llm import call_with_fallback
 
 logger = logging.getLogger(__name__)
-
-# ---------------------------------------------------------------------------
-# Defaults
-# ---------------------------------------------------------------------------
-
-DEFAULT_PROVIDER = "openrouter"
-DEFAULT_MODEL = "deepseek/deepseek-chat"
 
 
 def query_collected(
@@ -188,20 +181,25 @@ def _call_llm_for_qa(query: str, articles: list[str]) -> str:
 def _resolve_model() -> str:
     """Read LLM provider/model from config and set the API key env var.
 
-    Returns the full model string (e.g. ``"openrouter/deepseek/deepseek-chat"``).
+    Issue #195: resolution is config-driven — resolve_llm_model raises a
+    loud JudgmentModelNotConfiguredError when the deployment configured no model
+    (never a hardcoded vendor default).  The caller's error path surfaces it.
     """
+    from autoinfo.config import resolve_llm_model
+
     try:
         config_path = get_config_path()
         if config_path is not None:
             config = load_config(config_path)
-            provider = config.llm.provider or DEFAULT_PROVIDER
-            model = config.llm.model or DEFAULT_MODEL
             if config.llm.api_key:
+                provider = config.llm.provider or "openai"
                 env_key = f"{provider.upper()}_API_KEY"
                 os.environ.setdefault(env_key, config.llm.api_key)
-            if "/" not in model:
-                return f"{provider}/{model}"
-            return model
+            return resolve_llm_model(config.llm)
     except Exception:
-        logger.warning("Failed to load LLM config, using defaults")
-    return f"{DEFAULT_PROVIDER}/{DEFAULT_MODEL}"
+        raise
+    raise JudgmentModelNotConfiguredError(
+        "Q&A needs an LLM model: set llm.model (and provider) in "
+        ".autoinfo/config.yaml, or export AUTOINFO_LLM_API_KEY and run "
+        "'autoinfo init' to generate a config."
+    )

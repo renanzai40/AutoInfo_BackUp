@@ -10,9 +10,10 @@
 #      falls into `missing` and the 146/146 coverage assertion fails.
 #   5. judgment tasks (g4_factual/g5_translation/llm_judge) still resolve to
 #      the effective judgment model — the deployment override
-#      ``llm.judgment_model`` when set, else the release-pinned JUDGMENT_MODEL
-#      (config.py _resolve_task_llm_config, issue #45).  A drifted llm.tasks
-#      entry can never change what model judges content.
+#      ``llm.judgment_model`` when set, else ``llm.model``, else a loud
+#      JudgmentModelNotConfiguredError (config.py _resolve_task_llm_config,
+#      issues #45/#195).  A drifted llm.tasks entry can never change what
+#      model judges content.
 #
 # The test_llm_connection step is env-agnostic via the recovery pattern
 # (mirrors llm-failure-recovery.yaml): without a key it asserts the
@@ -66,13 +67,13 @@ steps:
           success: true
           data_has: ["connectable", "tested_model", "latency_ms", "config_source"]
 
-  - name: "judgment tasks still resolve JUDGMENT_MODEL"
+  - name: "judgment tasks resolve the deployment model"
     kind: cli
     command: |-
       python3 -c '
       from autoinfo.config import (
           Config, LLMConfig, LLMTaskConfig,
-          JUDGMENT_MODEL, JUDGMENT_TASKS, _resolve_task_llm_config,
+          JUDGMENT_TASKS, _resolve_task_llm_config,
       )
       c = Config()
       c.llm = LLMConfig(provider="openai", model="deepseek-v4-flash")
@@ -83,27 +84,29 @@ steps:
           "extraction": LLMTaskConfig(model="extraction-model"),
       }
       for t in sorted(JUDGMENT_TASKS):
-          assert _resolve_task_llm_config(c, t).model == JUDGMENT_MODEL, t
+          # Issue #195: judgment resolves to the deployment llm.model when no
+          # llm.judgment_model override is set — NEVER the drifted task model.
+          assert _resolve_task_llm_config(c, t).model == "openai/deepseek-v4-flash", t
       assert _resolve_task_llm_config(c, "extraction").model == "extraction-model"
-      print("JUDGMENT_PINNED")
+      print("JUDGMENT_RESOLVED")
       '
     expect:
       success: true
       exit_code: 0
-      stdout_has: ["JUDGMENT_PINNED"]
+      stdout_has: ["JUDGMENT_RESOLVED"]
 
-  - name: "llm.judgment_model override wins over the release pin"
+  - name: "llm.judgment_model override wins over llm.model"
     kind: cli
     command: |-
       python3 -c '
       from autoinfo.config import (
           Config, LLMConfig, LLMTaskConfig,
-          JUDGMENT_MODEL, JUDGMENT_TASKS, _resolve_task_llm_config,
+          JUDGMENT_TASKS, _resolve_task_llm_config,
       )
       c = Config()
       c.llm = LLMConfig(
           provider="openai",
-          model="deepseek-v4-flash",
+          model="some-other-model",
           judgment_model="deepseek-v4-flash",
       )
       c.llm.tasks = {
@@ -113,7 +116,6 @@ steps:
       for t in sorted(JUDGMENT_TASKS):
           assert _resolve_task_llm_config(c, t).model == "deepseek-v4-flash", t
       assert _resolve_task_llm_config(c, "extraction").model == "extraction-model"
-      assert _resolve_task_llm_config(c, "g4_factual").model != JUDGMENT_MODEL
       print("JUDGMENT_OVERRIDE")
       '
     expect:

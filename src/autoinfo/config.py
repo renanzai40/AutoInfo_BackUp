@@ -12,7 +12,7 @@ import re
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, Final
 
 import yaml
 
@@ -107,34 +107,47 @@ HARD_GATE_ACTIONS: frozenset[str] = frozenset({"block", "retry"})
 SOFT_GATE_ACTIONS: frozenset[str] = frozenset({"retry", "flag", "skip", "archive"})
 
 # ---------------------------------------------------------------------------
-# Per-task LLM routing (release-pinned, static — never a runtime classifier)
+# Per-task LLM routing (config-driven, never a vendor/model code constant)
 # ---------------------------------------------------------------------------
+#
+# Issue #195 (2026-09-03): judgment-model resolution is now config-first.
+# The release pin (openai/deepseek-v4-flash) ships as the default value of
+# ``llm.judgment_model`` in default_config.yaml — NOT as a code constant.
+# A deployment whose gateway serves a different model edits that one YAML
+# line; a deployment with NO configured model fails loudly at the first
+# judgment attempt instead of guessing (the #127 ghost-model failure mode
+# becomes structurally impossible: an unset model raises, it never resolves
+# to a code constant that no deployment configured).
+#
+# History (why the pin keeps moving, recorded for the config reader):
+#   2026-08-25  NVIDIA free-tier Llama Nemotron Super 49B — the prior bare
+#               deepseek-v4-flash was unsupported on the Command Code
+#               provider endpoint.
+#   2026-09-01  openai/stealth/ox-alpha resolved to a GHOST model (issue
+#               #127) — no config/base_url/key exists for it, so every
+#               G4/G5/llm_judge call failed AuthenticationError and the
+#               hard gate silently never judged.
+#   2026-09-03  openai/deepseek-v4-flash moved from code constant to the
+#               default_config.yaml ``llm.judgment_model`` shipped default
+#               (#195).
 
-# Release-pinned judgment model for the G4 (factual consistency), G5
-# (translation accuracy) and llm_judge (translation QA gate 5) call sites.
-# The value is chosen per release; changing it is a release-level decision,
-# never a runtime one — judgment calls must NOT drift with task config.
-# 2026-08-25 re-pin: NVIDIA free-tier Llama Nemotron Super 49B
-# (backup-repo #19-#38 run) — the prior bare deepseek-v4-flash value was
-# unsupported on the Command Code provider endpoint, and its opencode.ai
-# gateway key is quota-exhausted.  The value is litellm-qualified
-# (provider/model) because judgment call sites hand JUDGMENT_MODEL to
-# litellm verbatim — a bare id containing a slash would be mis-parsed by
-# litellm as a provider name.
-# 2026-09-01 re-pin (issue #127): the prior "openai/stealth/ox-alpha" default
-# resolved to a ghost model — no config/base_url/api_key exists for it, so
-# every G4/G5/llm_judge call with an unset llm.judgment_model failed
-# AuthenticationError and the hard gate silently never judged.  Re-pinned to
-# the deployment's real primary-family model (openai/deepseek-v4-flash on the
-# opencode.ai/zen/go/v1 gateway), matching AGENTS.md/README.  Deployments
-# with a different working model MUST set llm.judgment_model explicitly.
-JUDGMENT_MODEL = "openai/deepseek-v4-flash"
-
-# Task names whose model ALWAYS resolves to :data:`JUDGMENT_MODEL`, regardless
-# of any ``llm.tasks[<name>].model`` runtime drift.
+# Task names whose model ALWAYS resolves to the effective judgment model
+# (``llm.judgment_model`` → ``llm.model`` → hard error), regardless of any
+# ``llm.tasks[<name>].model`` runtime drift.
 JUDGMENT_TASKS: frozenset[str] = frozenset(
     {"g4_factual", "g5_translation", "llm_judge"}
 )
+
+
+class JudgmentModelNotConfiguredError(RuntimeError):
+    """Raised when a judgment task (G4/G5/llm_judge) needs an LLM model but
+    the deployment configured none.
+
+    Issue #195: judgment resolution is ``llm.judgment_model`` →
+    ``llm.model`` → this error.  A judgment gate must NEVER silently fall
+    back to a guessed model (the #127 ghost-model failure mode) — an
+    unconfigured deployment fails loudly with an actionable message.
+    """
 
 # ---------------------------------------------------------------------------
 # Dataclasses
@@ -165,9 +178,11 @@ class LLMConfig:
     tasks: dict[str, LLMTaskConfig] = field(default_factory=dict)
     # Deployment override for the judgment model (G4/G5/llm_judge).  When
     # set via ``llm.judgment_model`` in config.yaml, judgment tasks resolve
-    # to this value; when empty the release-pinned :data:`JUDGMENT_MODEL` is
-    # used (backward compat).  ``llm.tasks[<judgment>].model`` is NEVER
-    # honored (drift guardrail — see :func:`_resolve_task_llm_config`).
+    # to this value; when empty they fall through to ``llm.model`` (the
+    # deployment's own working model) and raise
+    # :class:`JudgmentModelNotConfiguredError` when that is unset too (issue
+    # #195 — never guess a code-constant model).  ``llm.tasks[<judgment>].model``
+    # is NEVER honored (drift guardrail — see :func:`_resolve_task_llm_config`).
     judgment_model: str = ""
 
     def resolve_model(self, default_provider: str | None = None) -> str:
@@ -1327,6 +1342,75 @@ def save_config(config: Config, path: Path | str) -> None:
 # ---------------------------------------------------------------------------
 
 
+def resolve_judgment_model(llm: LLMConfig, task_name: str = "") -> str:
+    """Resolve the model a judgment task (G4/G5/llm_judge) must call.
+
+    Issue #195: the judgment model is config-first, never a code constant.
+
+    Priority:
+    1. ``llm.judgment_model`` — the deployment override (the shipped default
+       lives in ``default_config.yaml``, editable per deployment).
+    2. ``llm.model`` (provider-qualified via :meth:`LLMConfig.resolve_model`)
+       — the deployment's own working model.
+    3. :class:`JudgmentModelNotConfiguredError` — raised when NEITHER is set, so
+       an unconfigured deployment fails loudly at the judgment attempt
+       instead of silently calling a guessed model (the #127 ghost-model
+       failure mode).
+
+    Returns the RAW model string (matching the historical contract of
+    :func:`_resolve_task_llm_config`, which stores the model field verbatim
+    and lets ``call_with_fallback``/``resolve_model`` qualify it at the
+    boundary).  A bare ``judgment_model`` value is therefore preserved
+    unqualified here, exactly as before.
+    """
+    if llm.judgment_model:
+        return llm.judgment_model
+    if llm.model:
+        return llm.resolve_model()
+    raise JudgmentModelNotConfiguredError(
+        f"Judgment gate {task_name!r} needs an LLM model: set "
+        "llm.judgment_model (or llm.model with a provider) in "
+        ".autoinfo/config.yaml, or export AUTOINFO_LLM_API_KEY and run "
+        "'autoinfo init' to generate a config."
+    )
+
+
+def resolve_model_or_empty(llm: LLMConfig) -> str:
+    """Soft variant of :func:`resolve_llm_model` — return "" when unconfigured.
+
+    For NON-judgment call sites where LLM-unavailable is a first-class soft
+    fallback (e.g. G3 relevance's lexical scoring), not an error.  Returns
+    the fully-qualified configured model, ``llm.judgment_model`` when set,
+    or ``""`` when nothing is configured (never a hardcoded vendor default).
+    """
+    if llm.judgment_model:
+        return llm.judgment_model
+    return llm.resolve_model()
+
+
+def resolve_llm_model(llm: LLMConfig) -> str:
+    """Return the fully-qualified configured model, or raise if unset.
+
+    The strict sibling of :meth:`LLMConfig.resolve_model` (which returns
+    ``""`` when unset for backward compat).  Issue #195: call sites that
+    previously fell back to a hardcoded ``deepseek/deepseek-chat`` /
+    ``openrouter/deepseek/deepseek-chat`` default must route through this
+    helper so an unconfigured deployment raises instead of silently calling
+    an unsupported model.  ``llm.judgment_model`` is honored when set
+    (judgment call sites prefer it).
+    """
+    if llm.judgment_model:
+        return llm.judgment_model
+    model = llm.resolve_model()
+    if not model:
+        raise JudgmentModelNotConfiguredError(
+            "No LLM model configured: set llm.model (and provider) in "
+            ".autoinfo/config.yaml, or export AUTOINFO_LLM_API_KEY and run "
+            "'autoinfo init' to generate a config."
+        )
+    return model
+
+
 def _resolve_task_llm_config(config: Config, task_name: str = "") -> LLMConfig:
     """Resolve effective :class:`LLMConfig` for *task_name* from an in-memory config.
 
@@ -1336,9 +1420,10 @@ def _resolve_task_llm_config(config: Config, task_name: str = "") -> LLMConfig:
 
     Judgment task names (see :data:`JUDGMENT_TASKS`) are exempt from task
     overrides: their model ALWAYS resolves to the effective judgment model —
-    the deployment override ``llm.judgment_model`` when set, else the
-    release-pinned :data:`JUDGMENT_MODEL` — so a drifted ``llm.tasks``
-    entry can never change what model judges content.
+    ``llm.judgment_model`` when set, else ``llm.model`` (the deployment's
+    own working model), else :class:`JudgmentModelNotConfiguredError` is raised
+    (issue #195).  A drifted ``llm.tasks`` entry can never change what model
+    judges content, and an unconfigured deployment never silently guesses.
 
     Returns a new ``LLMConfig`` with task-level fields merged on top of
     the base config.  Falls back to the base ``LLMConfig`` when
@@ -1346,11 +1431,13 @@ def _resolve_task_llm_config(config: Config, task_name: str = "") -> LLMConfig:
     """
     base = config.llm
     if task_name in JUDGMENT_TASKS:
-        # Judgment model: deployment override (``llm.judgment_model``) wins;
-        # otherwise the release-pinned :data:`JUDGMENT_MODEL`.  Never a
-        # ``llm.tasks[<task>].model`` drift — judgment calls must NOT move
-        # with per-task config.
-        judgment_model = base.judgment_model or JUDGMENT_MODEL
+        # Judgment model (issue #195): deployment override
+        # (``llm.judgment_model``) wins; else the deployment's own
+        # ``llm.model`` (provider-qualified via resolve_model); else a loud
+        # JudgmentModelNotConfiguredError — NEVER a code-constant guess (the #127
+        # ghost-model failure mode).  ``llm.tasks[<task>].model`` is never
+        # consulted (judgment calls must NOT move with per-task config).
+        judgment_model = resolve_judgment_model(base, task_name)
         return LLMConfig(
             provider=base.provider,
             model=judgment_model,

@@ -25,7 +25,7 @@ from typing import Any, Literal
 
 import yaml
 
-from autoinfo.config import JUDGMENT_MODEL, QualityGateConfig
+from autoinfo.config import QualityGateConfig
 from autoinfo.llm import call_with_fallback, parse_json_response
 from autoinfo.models import ExtractionResult, Item, KBEntry
 
@@ -66,6 +66,62 @@ def _llm_credentials(
     return (api_key or None), (base_url or None)
 
 
+def _resolve_deployment_judgment_model(task_name: str = "") -> str:
+    """Resolve the deployment's judgment model, raising when unconfigured.
+
+    Issue #195: judgment gates (G4/G5/llm_judge) must NOT default to a
+    code-constant model (the #127 ghost-model failure mode).  An empty
+    constructor model resolves through the config chain
+    (``llm.judgment_model`` → ``llm.model`` → loud
+    :class:`~autoinfo.config.JudgmentModelNotConfiguredError`).
+    """
+    from autoinfo.config import (  # noqa: PLC0415
+        JudgmentModelNotConfiguredError,
+        get_config_path,
+        load_config,
+        resolve_judgment_model,
+    )
+
+    try:
+        path = get_config_path()
+        if path is not None:
+            config = load_config(path)
+            return resolve_judgment_model(config.llm, task_name)
+    except JudgmentModelNotConfiguredError:
+        raise
+    except Exception:
+        pass
+    raise JudgmentModelNotConfiguredError(
+        f"Judgment gate {task_name!r} needs an LLM model: set "
+        "llm.judgment_model (or llm.model with a provider) in "
+        ".autoinfo/config.yaml, or export AUTOINFO_LLM_API_KEY and run "
+        "'autoinfo init' to generate a config."
+    )
+
+
+def _resolve_optional_llm_model() -> str:
+    """Resolve the deployment's configured model, or "" when unconfigured.
+
+    For NON-judgment gates (G3 relevance) where LLM-unavailable is a
+    first-class soft fallback (lexical scoring, issue #189/#195) — never a
+    raise, never a hardcoded vendor default.
+    """
+    from autoinfo.config import (  # noqa: PLC0415
+        get_config_path,
+        load_config,
+        resolve_model_or_empty,
+    )
+
+    try:
+        path = get_config_path()
+        if path is not None:
+            config = load_config(path)
+            return resolve_model_or_empty(config.llm)
+    except Exception:
+        pass
+    return ""
+
+
 # ---------------------------------------------------------------------------
 # Deterministic source credibility score map (E9)
 # ---------------------------------------------------------------------------
@@ -96,6 +152,13 @@ class QualityResult:
     score: float = 0.0
     details: dict[str, object] = field(default_factory=dict)
     flagged: bool = False
+    # Issue #195: tri-state marker — False means the gate could NOT run (LLM
+    # unreachable / misconfigured), so ``passed`` must NOT be read as a
+    # genuine verdict.  Default True keeps every non-judgment gate and the
+    # 80+ existing constructors unchanged; only the judgment failure paths
+    # opt into judged=False (NOT_JUDGED).  Consumers that treat a failed
+    # gate as "blocked/passed" must check ``judged`` first.
+    judged: bool = True
 
 
 # ---------------------------------------------------------------------------
@@ -747,9 +810,16 @@ class G3RelevanceScoring:
 
     def __init__(
         self,
-        model: str = "openrouter/deepseek/deepseek-chat",
+        model: str = "",
         timeout: float | None = None,
     ) -> None:
+        # Issue #195: an empty model resolves to the deployment's configured
+        # model (config.llm) when available; when the deployment configured
+        # none, it stays "" and G3 falls back to lexical scoring (G3 is NOT a
+        # judgment gate — LLM-unavailable is a first-class soft fallback, not
+        # an error).  Never a hardcoded vendor default.
+        if not model:
+            model = _resolve_optional_llm_model()
         self._model = model
         self._timeout = timeout
         # Mockable LLM call function for CI tests.
@@ -1198,13 +1268,18 @@ class G4FactualConsistency:
 
     def __init__(
         self,
-        model: str = JUDGMENT_MODEL,
+        model: str = "",
         collections_path: str | Path = "collections",
         json_mode: bool = False,
         timeout: float | None = None,
         api_key: str | None = None,
         base_url: str | None = None,
     ) -> None:
+        # Issue #195: an empty model resolves to the deployment's configured
+        # judgment model (llm.judgment_model → llm.model → loud error), never
+        # a code-constant guess.  Callers with no config pass model explicitly.
+        if not model:
+            model = _resolve_deployment_judgment_model("g4_factual")
         self._model = model
         self._collections_path = Path(collections_path)
         self._json_mode = json_mode
@@ -1343,6 +1418,11 @@ class G4FactualConsistency:
                         gate_name="G4-SummaryFactual",
                         passed=False,
                         flagged=True,
+                        # Issue #195: an unparseable LLM response is NOT a
+                        # genuine contradiction verdict — the gate could not
+                        # judge.  judged=False (NOT_JUDGED) so consumers never
+                        # read this as a real FAIL.
+                        judged=False,
                         details={
                             "contradiction": None,
                             "explanation": f"Failed to parse LLM response: {exc}",
@@ -1363,6 +1443,10 @@ class G4FactualConsistency:
                         gate_name="G4-SummaryFactual",
                         passed=False,
                         flagged=True,
+                        # Issue #195: an LLM-call failure (401 / timeout /
+                        # ghost model) is NOT a contradiction verdict — the
+                        # gate could not judge.  judged=False (NOT_JUDGED).
+                        judged=False,
                         details={
                             "contradiction": None,
                             "explanation": f"LLM check failed: {exc}",
@@ -1383,8 +1467,14 @@ class G4FactualConsistency:
                 passed=False,
                 flagged=True,
                 score=0.0,
+                # Issue #195: when the retries exhausted on LLM FAILURE
+                # (last_error set — 401/timeout/ghost), this is NOT a genuine
+                # contradiction verdict — the gate could not judge.  judged=
+                # False (NOT_JUDGED) distinguishes infra-failure from a real
+                # contradiction; action="block" (hard gate) stays either way.
+                judged=(last_error is None),
                 details={
-                    "contradiction": True,
+                    "contradiction": last_error is None,
                     "action": "block",
                     "retry_count": len(retry_log),
                     "retries": list(retry_log),
@@ -1501,10 +1591,14 @@ class G5TranslationAccuracy:
 
     def __init__(
         self,
-        model: str = JUDGMENT_MODEL,
+        model: str = "",
         json_mode: bool = False,
         timeout: float | None = None,
     ) -> None:
+        # Issue #195: empty model resolves to the deployment judgment model
+        # (llm.judgment_model → llm.model → loud error), never a code guess.
+        if not model:
+            model = _resolve_deployment_judgment_model("g5_translation")
         self._model = model
         self._json_mode = json_mode
         self._timeout = timeout
@@ -1596,6 +1690,8 @@ class G5TranslationAccuracy:
                 gate_name="G5-TranslationAccuracy",
                 passed=False,
                 flagged=True,
+                # Issue #195: unparseable LLM response = could not judge.
+                judged=False,
                 details={
                     "faithful": None,
                     "explanation": f"Failed to parse LLM response: {exc}",
@@ -1609,6 +1705,9 @@ class G5TranslationAccuracy:
                 gate_name="G5-TranslationAccuracy",
                 passed=False,
                 flagged=True,
+                # Issue #195: LLM failure (401/timeout/ghost) = could not
+                # judge — never a genuine "unfaithful" verdict.
+                judged=False,
                 details={
                     "faithful": None,
                     "explanation": f"LLM check failed: {exc}",
@@ -2806,7 +2905,9 @@ def llm_judge(
 ) -> dict[str, Any]:
     """Gate 5: LLM-based quality eval (faithfulness, terminology, style, readability 0-100)."""
     if model is None:
-        model = JUDGMENT_MODEL
+        # Issue #195: resolve the deployment judgment model (never a code
+        # constant).  Raises JudgmentModelNotConfiguredError when unconfigured.
+        model = _resolve_deployment_judgment_model("llm_judge")
     if timeout is None:
         timeout = _resolve_llm_timeout()
 
@@ -2836,8 +2937,11 @@ def llm_judge(
         parsed = parse_json_response(resp.choices[0].message.content)
     except Exception as e:
         logger.warning("llm_judge failed: %s", e)
+        # Issue #195: an LLM failure is NOT a genuine all-zero verdict — it
+        # could not judge.  judged=False lets consumers distinguish
+        # NOT_JUDGED from a real score of 0 (never silent PASS).
         return {"faithfulness": 0, "terminology": 0, "style": 0, "readability": 0,
-                "issues": [f"LLM eval failed: {e}"]}
+                "issues": [f"LLM eval failed: {e}"], "judged": False, "error": str(e)}
 
     return {
         "faithfulness": max(0, min(100, int(parsed.get("faithfulness", 0)))),
@@ -2845,12 +2949,27 @@ def llm_judge(
         "style": max(0, min(100, int(parsed.get("style", 0)))),
         "readability": max(0, min(100, int(parsed.get("readability", 0)))),
         "issues": list(parsed.get("issues", [])),
+        # Issue #195: success path is explicitly judged (consumers can rely
+        # on the key being present on BOTH success and failure).
+        "judged": True,
     }
 
 
 def _resolve_llm_model() -> str:
-    """Resolve LLM model string from config, falling back to defaults."""
-    from autoinfo.config import Config, get_config_path, load_config  # noqa: PLC0415
+    """Resolve the fully-qualified LLM model from config, or raise if unset.
+
+    Issue #195: the historical ``resolve_model() or
+    \"openrouter/deepseek/deepseek-chat\"`` fallback silently called an
+    unsupported model on an unconfigured deployment.  Now an unconfigured
+    deployment raises a loud JudgmentModelNotConfiguredError instead.
+    """
+    from autoinfo.config import (  # noqa: PLC0415
+        Config,
+        JudgmentModelNotConfiguredError,
+        get_config_path,
+        load_config,
+        resolve_llm_model,
+    )
 
     try:
         config_path = get_config_path()
@@ -2861,8 +2980,15 @@ def _resolve_llm_model() -> str:
     except Exception:
         config = Config()
 
-    model = config.llm.resolve_model() or "openrouter/deepseek/deepseek-chat"
-    return model
+    try:
+        return resolve_llm_model(config.llm)
+    except JudgmentModelNotConfiguredError:
+        raise
+    except Exception as exc:
+        raise JudgmentModelNotConfiguredError(
+            f"No LLM model configured: set llm.model in .autoinfo/config.yaml "
+            f"({exc})"
+        ) from exc
 
 
 def _resolve_llm_timeout() -> float | None:

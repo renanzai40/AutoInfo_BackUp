@@ -3,7 +3,8 @@
 Covers:
 - Interactive mode: the model prompt appears in the prompt chain and a typed
   model lands in ``config.yaml`` ``llm.model``.
-- Empty model input falls back to the template default (deepseek/deepseek-chat).
+- Empty model input falls back to the template default (deepseek-v4-flash,
+  the issue #195 vendor-neutral template).
 - ``--model`` non-interactive override wins over the template default.
 - ``--demo`` path without ``--model`` is unchanged (template default preserved).
 - The model prompt text surfaces provider candidates (openai/openrouter/ollama/
@@ -80,7 +81,8 @@ class TestInitModelPrompt:
     def test_empty_model_input_uses_template_default(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        """Empty model input keeps the template default (deepseek/deepseek-chat)."""
+        """Empty model input keeps the template default (deepseek-v4-flash on openai,
+        the issue #195 vendor-neutral shipped default)."""
         self._run_interactive(
             tmp_path,
             monkeypatch,
@@ -88,7 +90,8 @@ class TestInitModelPrompt:
         )
 
         config = _read_config(tmp_path / ".autoinfo" / "config.yaml")
-        assert config["llm"]["model"] == "deepseek/deepseek-chat"
+        assert config["llm"]["model"] == "deepseek-v4-flash"
+        assert config["llm"]["provider"] == "openai"
 
     def test_model_flag_non_interactive_override(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
@@ -104,10 +107,12 @@ class TestInitModelPrompt:
     def test_demo_path_unchanged_without_model(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        """--demo without --model keeps the template default (no regression)."""
+        """--demo without --model keeps the template default (no regression;
+        now the issue #195 deployment-accurate deepseek-v4-flash/openai)."""
         monkeypatch.chdir(tmp_path)
         init(demo=["medical-research"], name=None, interactive=True,
              list_domains=False, model=None)
 
         config = _read_config(tmp_path / ".autoinfo" / "config.yaml")
-        assert config["llm"]["model"] == "deepseek/deepseek-chat"
+        assert config["llm"]["model"] == "deepseek-v4-flash"
+        assert config["llm"]["provider"] == "openai"

@@ -2,12 +2,12 @@
 
 Covers the write path of ``_handle_configure_llm`` (server.py): fallback
 merge + dedup keyed on ``(provider or primary, model)``, per-task routing
-via ``_resolve_task_llm_config``, judgment-task pinning (``JUDGMENT_MODEL``
-is release-level and must NOT be overridable via ``llm.tasks``), the
-``None``-vs-``[]`` clear semantics, validate-before-write (mtime unchanged
-on failure), and the ``${ENV}`` round-trip trap (``load_config`` resolves
-env references, so field-fidelity assertions must not compare the raw
-placeholder after loading).
+via ``_resolve_task_llm_config``, judgment-model resolution (issue #195:
+``llm.judgment_model`` → ``llm.model`` → loud error; never overridable via
+``llm.tasks``), the ``None``-vs-``[]`` clear semantics,
+validate-before-write (mtime unchanged on failure), and the ``${ENV}``
+round-trip trap (``load_config`` resolves env references, so field-fidelity
+assertions must not compare the raw placeholder after loading).
 
 All tests run against a tmp_path config so the repository's runtime
 ``.autoinfo/config.yaml`` is never touched.
@@ -22,8 +22,8 @@ import pytest
 import yaml
 
 from autoinfo.config import (
-    JUDGMENT_MODEL,
     JUDGMENT_TASKS,
+    JudgmentModelNotConfiguredError,
     _resolve_task_llm_config,
     get_effective_llm_config,
     load_config,
@@ -185,8 +185,8 @@ def test_llm_tasks_take_effect_via_resolve_task_llm_config(
 
 def test_judgment_tasks_ignore_tasks_override(config_dir: Path) -> None:
     """Judgment tasks (g4_factual/g5_translation/llm_judge) ALWAYS resolve
-    to JUDGMENT_MODEL via ``_resolve_task_llm_config`` — a written
-    ``llm.tasks`` override must never change the judging model."""
+    to the effective judgment model via ``_resolve_task_llm_config`` — a
+    written ``llm.tasks`` override must never change the judging model."""
     config_path = _write_base_config(config_dir)
 
     result = _handle_configure_llm(
@@ -199,10 +199,14 @@ def test_judgment_tasks_ignore_tasks_override(config_dir: Path) -> None:
     assert result["success"] is True
 
     loaded = load_config(config_path)
+    # Issue #195: the base config has llm.model=deepseek-v4-flash (provider
+    # openai) and no judgment_model — judgment falls through to llm.model,
+    # NEVER to the written llm.tasks override.
     for task_name in ("g4_factual", "g5_translation", "llm_judge"):
         effective = _resolve_task_llm_config(loaded, task_name)
-        assert effective.model == JUDGMENT_MODEL, (
-            f"{task_name} must resolve to JUDGMENT_MODEL, got {effective.model}"
+        assert effective.model == "openai/deepseek-v4-flash", (
+            f"{task_name} must resolve to the deployment model, "
+            f"got {effective.model}"
         )
 
 
@@ -216,7 +220,7 @@ def test_judgment_task_names_allowed_to_write(config_dir: Path) -> None:
     )
 
     assert result["success"] is True
-    assert "运行期仍强制 JUDGMENT_MODEL" in result["data"]["message"]
+    assert "运行期仍强制 judgment model" in result["data"]["message"]
 
     loaded = load_config(config_path)
     assert "g4_factual" in loaded.llm.tasks
@@ -239,7 +243,7 @@ def test_get_effective_llm_config_judgment_behavior_unchanged(
     )
 
     # Existing behavior: get_effective_llm_config applies the task override
-    # verbatim (no JUDGMENT_MODEL pinning here — that lives only in
+    # verbatim (no judgment-model resolution here — that lives only in
     # _resolve_task_llm_config).
     result = get_effective_llm_config(task="g4_factual")
     assert result["model"] == "evil-judge"
@@ -443,19 +447,27 @@ def test_api_key_env_round_trip(config_dir: Path, monkeypatch: pytest.MonkeyPatc
 
 
 def test_judgment_tasks_constant_unchanged() -> None:
-    """Guard: the release-pinned judgment set is exactly the three names.
+    """Guard: the judgment-task name set is exactly the three names.
 
-    ``JUDGMENT_MODEL`` is re-pinned to ``openai/deepseek-v4-flash``
-    (litellm-qualified) for issue #127 — the prior ``openai/stealth/ox-alpha``
-    default was a ghost model (no config/base_url/api_key), so every G4/G5/
-    llm_judge call with an unset ``llm.judgment_model`` failed
-    AuthenticationError and the hard gate silently never judged.  This value
-    matches the deployment's real primary-family model on the
-    opencode.ai/zen/go/v1 gateway and AGENTS.md/README.  Deployments with a
-    different working model MUST set ``llm.judgment_model`` explicitly.
+    Issue #195 removed the ``JUDGMENT_MODEL`` code constant (the release pin
+    now ships as ``default_config.yaml``'s ``llm.judgment_model``); the task
+    set that must NEVER drift with per-task config stays a code constant.
     """
     assert JUDGMENT_TASKS == frozenset({"g4_factual", "g5_translation", "llm_judge"})
-    assert JUDGMENT_MODEL == "openai/deepseek-v4-flash"
+
+
+def test_default_config_ships_judgment_model() -> None:
+    """Issue #195: the release pin lives in the shipped default_config.yaml
+    (``llm.judgment_model``), not a code constant — a deployment edits YAML,
+    and an unconfigured deployment fails loudly instead of guessing."""
+    path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "src" / "autoinfo" / "data" / "default_config.yaml"
+    )
+    raw = yaml.safe_load(path.read_text(encoding="utf-8"))
+    assert raw["llm"]["judgment_model"] == "openai/deepseek-v4-flash"
+    assert raw["llm"]["model"] == "deepseek-v4-flash"
+    assert raw["llm"]["provider"] == "openai"
 
 
 # ---------------------------------------------------------------------------
@@ -494,8 +506,8 @@ def test_judgment_model_override_wins_when_set(config_dir: Path) -> None:
 
 
 def test_judgment_model_default_when_unset(config_dir: Path) -> None:
-    """No ``llm.judgment_model`` → judgment tasks resolve to the release
-    default ``JUDGMENT_MODEL`` (backward compat)."""
+    """No ``llm.judgment_model`` → judgment tasks resolve to the deployment's
+    ``llm.model`` (issue #195), never to a drifted ``llm.tasks`` entry."""
     cfg = {
         "project": {"name": "test", "created_at": ""},
         "llm": {
@@ -513,12 +525,28 @@ def test_judgment_model_default_when_unset(config_dir: Path) -> None:
     loaded = load_config(path)
     assert loaded.llm.judgment_model == ""
     effective = _resolve_task_llm_config(loaded, "g4_factual")
-    assert effective.model == JUDGMENT_MODEL
-    assert JUDGMENT_MODEL == "openai/deepseek-v4-flash"
+    assert effective.model == "openai/deepseek-v4-flash"
+    assert loaded.llm.model == "deepseek-v4-flash"
 
     # Non-judgment task still routes through its task config.
     extraction = _resolve_task_llm_config(loaded, "extraction")
     assert extraction.model == "deepseek-v4-flash"
+
+
+def test_judgment_model_unconfigured_raises(config_dir: Path) -> None:
+    """Issue #195 acceptance #1: NO judgment_model AND NO llm.model → a
+    judgment task resolution raises loudly (never silently guesses a model)."""
+    cfg = {
+        "project": {"name": "test", "created_at": ""},
+        "llm": {"provider": "", "model": "", "api_key": ""},
+        "domains": [],
+    }
+    path = Path(config_dir) / "config.yaml"
+    path.write_text(yaml.safe_dump(cfg, sort_keys=False), encoding="utf-8")
+
+    loaded = load_config(path)
+    with pytest.raises(JudgmentModelNotConfiguredError):
+        _resolve_task_llm_config(loaded, "g4_factual")
 
 
 def test_judgment_model_override_not_touched_by_tasks_clear(config_dir: Path) -> None:

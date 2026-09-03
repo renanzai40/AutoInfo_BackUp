@@ -216,10 +216,14 @@ def _run_g4_check(
 
     When *config* is ``None`` the on-disk project config is loaded (same
     fallback as :func:`autoinfo.llm.call_with_fallback`) so the G4 model
-    resolves to the configured provider/model — the hardcoded
+    resolves to the configured provider/model — the historical hardcoded
     ``openrouter/deepseek/deepseek-chat`` default (an unsupported model)
     previously blocked every promotion when callers omitted ``config``
-    (#283).
+    (#283).  Issue #195: the model resolves softly through
+    ``resolve_model_or_empty`` — the real G4 gate's own constructor then
+    raises :class:`JudgmentModelNotConfiguredError` when truly unconfigured
+    (never a guessed vendor default), while an injected test double accepts
+    the empty model.
     """
     if config is None:
         from autoinfo.config import get_config_path, load_config
@@ -230,21 +234,33 @@ def _run_g4_check(
         except Exception:
             config = None
 
-    provider = config.llm.provider if config and config.llm.provider else "openrouter"
-    model_name = config.llm.model if config and config.llm.model else "deepseek/deepseek-chat"
-    json_mode = bool(config.llm.json_mode) if config else False
-    timeout = config.llm.timeout if config else None
+    if config is not None:
+        from autoinfo.config import resolve_model_or_empty
+
+        # Soft resolution: the deployment's configured model, or "" when
+        # unconfigured — the G4 gate's own constructor then raises
+        # JudgmentModelNotConfiguredError for the REAL gate (issue #195),
+        # while an injected test double accepts the empty model.  Never a
+        # hardcoded vendor default; never double-prefix.
+        model_name = resolve_model_or_empty(config.llm)
+        json_mode = bool(config.llm.json_mode)
+        timeout = config.llm.timeout
+    else:
+        # No config at all — same soft path; the real G4 raises on its own.
+        model_name = ""
+        json_mode = False
+        timeout = None
 
     g4_config = gate_config.get(_G4_GATE_KEY) if gate_config else None
     if g4_config is not None:
         g4_config = replace(g4_config, retries=0)
 
     g4 = G4FactualConsistency(
-        model=f"{provider}/{model_name}",
+        model=model_name,
         json_mode=json_mode,
         timeout=timeout,
-        api_key=(config.llm.api_key if config and config.llm.api_key else None),
-        base_url=(config.llm.base_url if config and config.llm.base_url else None),
+        api_key=(config.llm.api_key or None) if config else None,
+        base_url=(config.llm.base_url or None) if config else None,
     )
     return g4.check(
         _item_from_entry(entry, _draft_body(entry)),

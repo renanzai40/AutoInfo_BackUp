@@ -161,27 +161,31 @@ def suggest(
         )
         return
 
-    # Same config resolution as the MCP suggest_keywords handler
-    from autoinfo.config import get_config_path, load_config
+    # Same config resolution as the MCP suggest_keywords handler.
+    # Issue #195: resolve_llm_model raises when unconfigured (no hardcoded
+    # vendor default); the not-api_key guard below is the primary CLI error.
+    from autoinfo.config import (  # noqa: PLC0415
+        JudgmentModelNotConfiguredError,
+        get_config_path,
+        load_config,
+        resolve_llm_model,
+    )
 
     try:
         config_path = get_config_path()
         if config_path:
             config = load_config(config_path)
-            model = config.llm.resolve_model() or (
-                f"{config.llm.provider or 'openrouter'}/"
-                f"{config.llm.model or 'deepseek/deepseek-chat'}"
-            )
+            model = resolve_llm_model(config.llm)
             api_key = config.llm.api_key or os.environ.get("AUTOINFO_LLM_API_KEY", "")
             base_url = config.llm.base_url or None
             json_mode = config.llm.json_mode
         else:
-            model = "deepseek/deepseek-chat"
-            api_key = os.environ.get("AUTOINFO_LLM_API_KEY", "")
-            base_url = None
-            json_mode = False
+            raise JudgmentModelNotConfiguredError(
+                "LLM not configured: set AUTOINFO_LLM_API_KEY or run "
+                "'autoinfo init'."
+            )
     except Exception:
-        model = "deepseek/deepseek-chat"
+        model = ""
         api_key = os.environ.get("AUTOINFO_LLM_API_KEY", "")
         base_url = None
         json_mode = True

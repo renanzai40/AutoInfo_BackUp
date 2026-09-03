@@ -365,7 +365,12 @@ def _resolve_llm_config() -> dict[str, Any]:
     way); ``api_key`` comes from the config (with ``${ENV}`` references
     resolved by the config loader) or the ``AUTOINFO_LLM_API_KEY`` env var.
     """
-    from autoinfo.config import Config, get_config_path, load_config  # noqa: PLC0415
+    from autoinfo.config import (  # noqa: PLC0415
+        Config,
+        get_config_path,
+        load_config,
+        resolve_llm_model,
+    )
 
     try:
         config_path = get_config_path()
@@ -373,10 +378,10 @@ def _resolve_llm_config() -> dict[str, Any]:
     except Exception:
         config = Config()
 
-    provider = config.llm.provider or "openrouter"
-    model = config.llm.model or "deepseek/deepseek-chat"
-    if "/" not in model:
-        model = f"{provider}/{model}"
+    # Issue #195: resolve_llm_model raises when unconfigured (never a
+    # hardcoded vendor default); validation surfaces the raise as an
+    # llm-unavailable step (unconfigured, never silently pass).
+    model = resolve_llm_model(config.llm)
     # Resolve api_key consistently (fixes #119): resolve ${ENV} placeholders,
     # fall back to AUTOINFO_LLM_API_KEY env var when config key is empty.
     api_key = config.llm.api_key or ""

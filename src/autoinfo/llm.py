@@ -678,9 +678,11 @@ def call_with_fallback(
     ``max_tokens`` become the effective defaults.  An explicit *model* /
     *max_tokens* parameter always wins over the resolved task values.
     Judgment task names (G4/G5/llm_judge) resolve their model to the
-    release-pinned :data:`autoinfo.config.JUDGMENT_MODEL` — a drifted
-    ``llm.tasks`` entry can never re-route a judgment call.  ``None``
-    (default) keeps the historical behavior with no task resolution.
+    effective judgment model (``llm.judgment_model`` → ``llm.model``
+    → loud :class:`autoinfo.config.JudgmentModelNotConfiguredError`, issue
+    #195) — a drifted ``llm.tasks`` entry can never re-route a judgment
+    call.  ``None`` (default) keeps the historical behavior with no task
+    resolution.
 
     Every actual provider call is guarded by a per-provider shared
     semaphore (keyed ``(provider, base_url)``, default width 4, override

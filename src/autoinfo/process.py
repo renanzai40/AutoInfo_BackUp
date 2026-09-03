@@ -27,7 +27,6 @@ from pathlib import Path
 from typing import Any, Callable
 
 from autoinfo.config import (
-    JUDGMENT_MODEL,
     Config,
     DomainConfig,
     QualityGateConfig,
@@ -1156,8 +1155,11 @@ def run_processing(
                         g4_gate_config = (
                             gate_config.get("G4-SummaryFactual") if gate_config else None
                         )
+                        # Issue #195: model="" lets the gate resolve the
+                        # deployment judgment model (llm.judgment_model →
+                        # llm.model → loud error); never a code constant.
                         g4 = G4FactualConsistency(
-                            model=JUDGMENT_MODEL,
+                            model="",
                             json_mode=proc_config.llm.json_mode if proc_config else False,
                             timeout=llm_timeout,
                         )
@@ -1170,6 +1172,8 @@ def run_processing(
                             gate_name="G4-SummaryFactual",
                             passed=False,
                             flagged=True,
+                            # Issue #195: wrapper exception = could not judge.
+                            judged=False,
                             details={
                                 "contradiction": None,
                                 "explanation": str(exc),
@@ -1201,9 +1205,10 @@ def run_processing(
                             },
                         )
 
-                    # Judgment model is release-pinned (JUDGMENT_MODEL) —
-                    # never derived from runtime task-config drift.
-                    g5_model = JUDGMENT_MODEL
+                    # Judgment model resolves config-first (issue #195):
+                    # llm.judgment_model → llm.model → loud error.  Never a
+                    # code-constant / runtime task-config drift.
+                    g5_model = ""
                     try:
                         source_text = item.content or ""
                         target_text = translation
@@ -1297,6 +1302,34 @@ def run_processing(
                         composite_score = float(
                             composite.get("composite", 0.0)  # type: ignore[arg-type]  # pyright: ignore[reportArgumentType]
                         )
+                        # Issue #195: when the LLM judge could not run
+                        # (judged=False — 401/timeout/ghost), the composite is
+                        # NOT a genuine verdict.  Return NOT_JUDGED instead of
+                        # a fake composite-derived FAIL/PASS.
+                        if g5_scores.get("judged", True) is False:
+                            return QualityResult(
+                                gate_name="G5-TranslationAccuracy",
+                                passed=False,
+                                flagged=True,
+                                score=0.0,
+                                judged=False,
+                                details={
+                                    "faithful": None,
+                                    "explanation": (
+                                        "LLM judge unavailable — G5 not "
+                                        "judged: " + str(g5_scores.get("error", ""))
+                                    ),
+                                    "issues": g5_scores.get("issues", []),
+                                    "gates": {
+                                        "inline_tags": g1_pre,
+                                        "terminology": g2_pre,
+                                        "length_ratio": g3_pre,
+                                        "source_copy": g4_pre,
+                                        "llm_judge": g5_scores,
+                                    },
+                                    "composite_score": 0.0,
+                                },
+                            )
                         # Threshold: faithful when composite >= 50
                         faithful = composite_score >= 50.0
                         return QualityResult(
@@ -1337,6 +1370,8 @@ def run_processing(
                                 gate_name="G5-TranslationAccuracy",
                                 passed=False,
                                 flagged=True,
+                                # Issue #195: fallback failure = could not judge.
+                                judged=False,
                                 details={
                                     "faithful": None,
                                     "explanation": str(single_exc),
