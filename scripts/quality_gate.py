@@ -153,6 +153,51 @@ _LEAK_RE = re.compile(
 # CJK markers are inherently unambiguous.
 _PLACEHOLDER_RE = re.compile(r"(?:\bTODO\b|\bPLACEHOLDER\b|\bTBD\b|\{\{|\[\[待|待补|占位)")
 
+# Minimal character size for a prose paragraph to count as a narrative
+# passage (The Feature / Deep Dive / analysis section) for the C6 grounding
+# scan.  Entry-list rows, tables, headings and short bullets never qualify.
+_NARRATIVE_MIN_CHARS = 200
+
+# A grounding corpus (file minus narrative) smaller than this has no real
+# entries/References structure — C6 cannot judge drift in bare notes.
+_MIN_GROUNDING_CORPUS_CHARS = 100
+
+# Spelled-out numbers normalized to digits ("three-person" -> "3-person") so
+# narrative claims compare against entry/References numbers.
+_SPELLED_NUM = {
+    "zero": "0", "one": "1", "two": "2", "three": "3", "four": "4",
+    "five": "5", "six": "6", "seven": "7", "eight": "8", "nine": "9",
+    "ten": "10", "eleven": "11", "twelve": "12", "thirteen": "13",
+    "fourteen": "14", "fifteen": "15", "sixteen": "16", "seventeen": "17",
+    "eighteen": "18", "nineteen": "19", "twenty": "20", "thirty": "30",
+    "forty": "40", "fifty": "50", "sixty": "60", "seventy": "70",
+    "eighty": "80", "ninety": "90", "hundred": "100", "thousand": "1000",
+    "million": "M", "billion": "B", "trillion": "T",
+}
+
+# A numeric claim: digit or spelled number + unit word (space or
+# hyphen-separated: "3 person" / "3-person" / "three-person").  Bare
+# 3+ digit numbers are NOT claims (internal ids, years) and $+digits only
+# count with a unit ("$76 million").
+_NUMBER_CLAIM_RE = re.compile(
+    r"(?:\$\s*)?\d[\d,]*(?:\.\d+)?[\s-]*"
+    r"(?:person|people|year|years|month|months|week|weeks|day|days|"
+    r"user|users|customer|customers|employee|employees|member|members|"
+    r"startup|startups|company|companies|firm|firms|dollar|dollars|"
+    r"million|billion|thousand|percent|%)",
+    re.IGNORECASE,
+)
+
+# Honest-hedge markers (issue #179/#191): a sentence stating the source DOES
+# NOT provide a detail is CORRECT behavior and must never be flagged as an
+# orphan claim.
+_HONEST_HEDGE_RE = re.compile(
+    r"not (?:stated|disclosed|provided|specified|mentioned|reported)|"
+    r"not available|not in the (?:sources?|entries?)|undisclosed|"
+    r"unknown|not detailed|no .{0,20} disclosed",
+    re.IGNORECASE,
+)
+
 # C4 — a line that is 80-250 chars and lacks terminal punctuation.  A line
 # ending in a balanced citation ``)`` is treated as terminated (real products
 # end key-finding bullets with ``(Source: <url>)``), so only a line that just
@@ -448,6 +493,15 @@ _REFERENCE_BEARING_FAMILIES = frozenset(
     {"report", "premium-briefing", "enterprise-briefing"}
 )
 
+# Families whose long-form narrative (The Feature / Deep Dive) sits NEXT TO
+# an embedded entries/References list — the only structure where the C6
+# grounding scan (narrative claims vs grounded entries) has definitional
+# power.  Report/presentation/tutorial are narrative-PRIMARY synthesis
+# (their whole body is prose over the References), so a deterministic
+# narrative-vs-corpus split is meaningless there — the LLM-judge semantic
+# mode (#192 deferred) is the right tool for those families.
+_GROUNDING_CHECK_FAMILIES = frozenset({"magazine-digest", "column"})
+
 
 def _family_of(path: Path) -> str:
     """Best-effort product family from the file name (digest.md -> digest)."""
@@ -497,6 +551,159 @@ def find_source_integrity(
 
 
 # ---------------------------------------------------------------------------
+# C6 — long-form narrative grounding (issue #192)
+# ---------------------------------------------------------------------------
+
+
+def _normalize_numbers(text: str) -> str:
+    """Replace spelled-out numbers with digit tokens ("three-person" ->
+    "3-person") so narrative claims compare against entry/References
+    numbers.  Single-token replacement (word-boundary) keeps multi-word
+    amounts as separate digit tokens — enough for claim matching."""
+    def _repl(match: re.Match[str]) -> str:
+        return _SPELLED_NUM[match.group(1).lower()]
+
+    return _SPELLED_NUM_RE.sub(_repl, text)
+
+
+_SPELLED_NUM_RE = re.compile(
+    r"\b(" + "|".join(_SPELLED_NUM) + r")\b", re.IGNORECASE
+)
+
+
+def _narrative_paragraphs(body: str) -> list[str]:
+    """Return prose paragraphs large enough to be narrative passages.
+
+    The Feature / Deep Dive / analysis sections render as long prose
+    paragraphs (>= _NARRATIVE_MIN_CHARS).  Entry-list rows, tables,
+    headings and short bullets never qualify, so they stay in the
+    grounding corpus.
+    """
+    out: list[str] = []
+    for raw in body.split("\n\n"):
+        para = raw.strip()
+        if len(para) < _NARRATIVE_MIN_CHARS:
+            continue
+        if para.startswith(("|", "#", "-", "*", "+", ">", "```")):
+            continue
+        if re.fullmatch(r"!?\[[^\]]*\]\([^)]*\)", para):
+            continue
+        out.append(para)
+    return out
+
+
+def _norm_claim_for_compare(claim: str) -> str:
+    """Canonicalize a number/entity claim for corpus matching.
+
+    Strips currency symbol, commas, dashes and spaces, and unifies percent
+    spellings so "9,000%" == "9000-percent" == "9000 percent" — a
+    paraphrase of the SAME amount is grounded, only a unit/entity drift is
+    an orphan.
+    """
+    c = claim.lower()
+    c = c.replace("$", "").replace(",", "").replace("-", " ")
+    c = c.replace("percent", "%").replace("per cent", "%")
+    c = re.sub(r"\s+", "", c).strip()
+    return c
+
+
+def find_orphan_narrative_claims(text: str) -> list[str]:
+    """C6: flag entity/number claims in long-form narrative that are NOT
+    grounded anywhere else in the file (entry text / References).
+
+    Issue #192: the deterministic grounding check.  The Feature / Deep
+    Dive passages must draw every entity and number from the same
+    product's entries+References; a claim that appears ONLY in the
+    narrative ("enterprises clearly crave", "three-person idea" when the
+    source says "three-year-old") is an orphan assertion — ungrounded
+    drift that deterministic structure checks (F/C1-C5) cannot see.
+
+    Precision model (calibrated on real outputs): entity orphans are
+    multi-word Title-Case phrases only (single capitalized words are
+    sentence-initial adverbs/adjectives, not claims); number orphans are
+    unit-bearing amounts compared after normalization, so "9,000%" ==
+    "9000-percent" paraphrase is grounded — only genuine unit/entity drift
+    ("three-person" vs "three-year-old") is flagged.
+
+    Honest hedges are protected: sentences that say the source does NOT
+    state a detail ("not disclosed", "not provided in the sources") are
+    correct #179/#191 behavior and are never flagged.
+
+    Returns defect strings (empty = fully grounded).
+    """
+    # Strip the References section from the NARRATIVE scan (references are
+    # part of the grounding CORPUS, not narrative claim sources).
+    body = text
+    ref_hit = _REFERENCES_HEADING_RE.search(body, re.MULTILINE)
+    if ref_hit:
+        body = body[: ref_hit.start()]
+    narrative = _narrative_paragraphs(body)
+    if not narrative:
+        return []
+
+    # Grounding corpus = the whole file MINUS the narrative passages: the
+    # entries, references, tables and headers the narrative must draw from.
+    corpus = text
+    for para in narrative:
+        corpus = corpus.replace(para, "")
+    corpus_norm = _normalize_numbers(corpus).lower()
+
+    # A file with no real entries/References (a bare single-paragraph note)
+    # has no grounding corpus to judge against — skip; there is no product
+    # structure to have drifted from.
+    if len(corpus_norm.strip()) < _MIN_GROUNDING_CORPUS_CHARS:
+        return []
+
+    # Corpus claim inventory: every number claim + every multi-word entity
+    # in the non-narrative text (normalized).  Entities are extracted from
+    # the ORIGINAL-cased corpus (the entity regex is case-sensitive) and
+    # lowercased for matching.
+    corpus_claims: set[str] = {
+        _norm_claim_for_compare(_normalize_numbers(c))
+        for c in _NUMBER_CLAIM_RE.findall(_normalize_numbers(corpus).lower())
+    }
+    for ent in _ENTITY_RE.findall(corpus):
+        key = ent.rstrip("'s").rstrip("'")
+        if len(key.split()) >= 2 and key.lower() not in _GENERIC_ENTITY_STOP:
+            corpus_claims.add(_norm_claim_for_compare(key))
+
+    orphans: list[str] = []
+    for para in narrative:
+        for sentence in _SENTENCE_SPLIT_RE.split(para):
+            sentence = sentence.strip()
+            if len(sentence) < 40:
+                continue
+            if _HONEST_HEDGE_RE.search(sentence):
+                continue
+            sent_norm = _normalize_numbers(sentence)
+            for claim in _NUMBER_CLAIM_RE.findall(sent_norm):
+                cc = _norm_claim_for_compare(claim)
+                if len(cc) > 4 and cc not in corpus_claims:
+                    orphans.append((cc, sentence[:140]))
+            # Entity orphans: multi-word Title-Case phrases absent from the
+            # corpus (single capitalized words are too noisy).
+            for ent in _ENTITY_RE.findall(sentence):
+                key = ent.rstrip("'s").rstrip("'")
+                if len(key.split()) < 2 or key.lower() in _GENERIC_ENTITY_STOP:
+                    continue
+                ek = _norm_claim_for_compare(key)
+                if ek and ek not in corpus_claims:
+                    orphans.append((ek, sentence[:140]))
+
+    out: list[str] = []
+    seen: set[tuple[str, str]] = set()
+    for claim, ctx in orphans:
+        if (claim, ctx) in seen:
+            continue
+        seen.add((claim, ctx))
+        out.append(
+            f"C6 orphan narrative claim {claim!r} not grounded in "
+            f"entries/References: ...{ctx}..."
+        )
+    return out
+
+
+# ---------------------------------------------------------------------------
 # Cross-product consistency (X1) — simple version (entity + conflict marking)
 # ---------------------------------------------------------------------------
 
@@ -525,6 +732,11 @@ _GENERIC_ENTITY_STOP = frozenset(
         "product", "products", "services", "service", "businesses", "tools",
         "tool", "startups", "startup", "company", "companies", "enterprise",
         "b2b", "b2c", "sectors", "sector", "space", "apps", "app",
+        "analyst", "analysts", "observer", "observers", "expert", "experts",
+        "researcher", "researchers", "founder", "founders", "team", "teams",
+        "investor", "investors", "customer", "customers", "consumer",
+        "consumers", "producer", "producers", "supplier", "suppliers",
+        "regulator", "regulators", "official", "officials",
     }
 )
 
@@ -701,6 +913,7 @@ _CHECKS = {
     "C2": find_llm_leaks,
     "C4": find_truncated_lines,
     # C5 needs the file family (path) — invoked explicitly in gate_file.
+    # C6 needs the file family (grounding-scope) — invoked explicitly.
 }
 
 
@@ -732,6 +945,10 @@ def gate_file(
     # C5 needs the file family (only report/briefings/tutorial are
     # reference-bearing) — pass the path so the check self-scopes.
     defects.extend(find_source_integrity(text, path=path))
+    # C6 needs the family too — only magazine-digest/column embed a
+    # narrative-vs-entries structure the grounding scan can judge.
+    if _family_of(path) in _GROUNDING_CHECK_FAMILIES:
+        defects.extend(find_orphan_narrative_claims(text))
     return defects
 
 

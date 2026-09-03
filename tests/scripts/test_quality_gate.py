@@ -559,3 +559,85 @@ def test_main_json_flag(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> N
     out = capsys.readouterr().out
     assert '"exit_code": 1' in out
     assert "TODO" in out
+
+
+# ---------------------------------------------------------------------------
+# C6 long-form narrative grounding (issue #192)
+# ---------------------------------------------------------------------------
+
+_FEATURE_DRIFT = (
+    "Zorpzilla's journey from a three-person idea to a market leader has "
+    "been remarkable. The company has built a strong customer base across "
+    "multiple regions. Its products serve a broad audience of enterprises "
+    "and consumers alike. Analysts point to the founding team's persistence "
+    "as the key differentiator in a crowded market."
+)
+_FEATURE_GROUNDED = (
+    "Zorpzilla's journey from a three-year-old startup shows steady and "
+    "disciplined growth. The company raised funding for hardware products "
+    "and built a strong customer base. Its products serve a broad audience "
+    "of enterprises and consumers alike. Analysts point to the founding "
+    "team's persistence as the key differentiator in a crowded market."
+)
+_FEATURE_HEDGE = (
+    "Zorpzilla's financial details are not disclosed in the available "
+    "sources. The startup's customer composition is unknown, though its "
+    "hardware products reach a broad audience. Analysts note the founding "
+    "team's persistence as the key differentiator in a crowded market. "
+    "Specific revenue figures are not in the sources at all."
+)
+
+
+def _magazine_with_feature(feature: str) -> str:
+    return f"""# Weekly Magazine Digest
+
+## The Feature
+
+{feature}
+
+## Entries
+
+### 1. Zorpzilla
+
+**Summary**: Zorpzilla is a three-year-old startup from Berlin.
+
+## References
+
+1. **Zorpzilla** — https://example.com/zorpzilla — Zorpzilla is a three-year-old startup.
+"""
+
+
+def test_c6_three_person_drift_flagged() -> None:
+    """#192 acceptance: 'three-person idea' when sources say 'three-year-old
+    startup' is an orphan narrative claim — the deterministic grounding
+    check must FAIL the product."""
+    defects = qg.find_orphan_narrative_claims(_magazine_with_feature(_FEATURE_DRIFT))
+    assert len(defects) == 1
+    assert "C6 orphan narrative claim" in defects[0]
+    # Normalized claim is "3person" (whitespace/punct stripped for compare).
+    assert "3person" in defects[0] or "3 person" in defects[0]
+
+
+def test_c6_grounded_feature_passes() -> None:
+    """A feature that restates the sources' facts (three-year-old, funding,
+    hardware) is fully grounded — no orphans."""
+    assert qg.find_orphan_narrative_claims(
+        _magazine_with_feature(_FEATURE_GROUNDED)
+    ) == []
+
+
+def test_c6_honest_hedge_never_flagged() -> None:
+    """#179/#191 correct behavior: 'not disclosed in the available sources'
+    is an honest hedge, NOT an orphan claim — must PASS."""
+    assert qg.find_orphan_narrative_claims(
+        _magazine_with_feature(_FEATURE_HEDGE)
+    ) == []
+
+
+def test_c6_gate_file_runs_grounding_check(tmp_path: Path) -> None:
+    """C6 is wired into gate_file — a drifted magazine-digest fails the
+    standard gate command."""
+    f = tmp_path / "magazine-digest.md"
+    f.write_text(_magazine_with_feature(_FEATURE_DRIFT), encoding="utf-8")
+    defects = qg.gate_file(f, domain="ai-commercial")
+    assert any("C6" in d for d in defects)
