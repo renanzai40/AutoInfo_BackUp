@@ -183,9 +183,40 @@ def _detect_bilingual_domains(directory: Path) -> list[str]:
     return []
 
 
+_FILE_SNIPPET_CHAR_LIMIT = 8000
+_TRUNCATION_MARKER = "\u2026[truncated]"
+
+
+def _read_file_snippet(path: str, limit: int = _FILE_SNIPPET_CHAR_LIMIT) -> str:
+    """Return the first *limit* chars of a product file, marked if truncated.
+
+    Products are local files the review runs against; the LLM is a stateless
+    API call and cannot read them itself, so the caller embeds a bounded
+    snippet in the prompt.  Truncated tails are explicitly marked so a
+    judgment never silently bases itself on a partial file.
+    """
+    try:
+        text = Path(path).read_text(encoding="utf-8")
+    except OSError:
+        return f"<unreadable file: {path}>"
+    if len(text) <= limit:
+        return text
+    return text[:limit] + _TRUNCATION_MARKER
+
+
 def _judge_prompt(item: dict[str, Any]) -> str:
-    """Build the judgment prompt for one worklist item (no vendor naming)."""
+    """Build the judgment prompt for one worklist item (no vendor naming).
+
+    The product files' actual contents are embedded (bounded to
+    *limit* chars each) so the LLM, which is a stateless API call and cannot
+    open local files, can judge against real text instead of file paths
+    (#197).  The output contract below is aligned exactly with what
+    :func:`_parse_markdown_verdicts` parses.
+    """
     file_list = "\n".join(f"- {f}" for f in item["files"])
+    snippets = "\n\n".join(
+        f"--- File: {f} ---\n{_read_file_snippet(f)}" for f in item["files"]
+    )
     return (
         "You are a quality reviewer for a knowledge-digest product family.\n"
         f"Family: {item['family']}\n"
@@ -193,6 +224,8 @@ def _judge_prompt(item: dict[str, Any]) -> str:
         f"Blind spot: {item['name']} ({item['blind_spot']})\n"
         f"What to check: {item['check_desc']}\n"
         f"Evidence required: {item['evidence_required']}\n\n"
+        "File contents:\n"
+        f"{snippets}\n\n"
         "Rules:\n"
         "- Verdict PASS only when the product satisfies the blind spot; "
         "FLAG when it violates it; ESCALATE when you cannot judge or it is "
@@ -202,7 +235,15 @@ def _judge_prompt(item: dict[str, Any]) -> str:
         "- Every verdict MUST cite evidence (file:line or source URL). A "
         "verdict without evidence is invalid.\n"
         "- If you cannot reach a judgment for any reason, output ESCALATE — "
-        "never PASS on an unverified claim.\n"
+        "never PASS on an unverified claim.\n\n"
+        "OUTPUT SCHEMA — respond with EXACTLY ONE block starting with the "
+        "header '## Verdict', followed by these four lines:\n"
+        "- **blind_spot**: <id>\n"
+        "- **verdict**: PASS | FLAG | ESCALATE\n"
+        "- **evidence**: <file:line or source URL>\n"
+        "- **note**: <1-3 sentences>\n"
+        "Output NOTHING outside that block.  Do not add prose before or "
+        "after it.\n"
     )
 
 
