@@ -9,7 +9,7 @@
 | 类 | 典型表现 | 检测层 | 严重度 | 状态 |
 |---|---|---|---|---|
 | 叙事↔来源漂移 | 源信号被改名/抽象成新词("low VIX/inflation/AI spending" → "market breadth") | H1 gate(已知形态)+ L1 battery + 外部 review | P1(若混入) | 有约束+检测;新形态靠 battery/review |
-| 推断措辞无 hedge | editorial 句断言市场方向/动机("the smart money is betting") | L1 battery(#191 只约束 feature_story,未盖 editorial 开场) | P2/P3 | **登记:已发现 1 例(R6),待加审查程序** |
+| 推断措辞无 hedge | editorial 句断言市场方向/动机("the smart money is betting") | L1 battery(#191 只约束 feature_story,未盖 editorial 开场)+ 审查程序 | P2/P3 | **已登记(R6/R7 连续双样本再现);审查程序已入 skill demo-package-deliverable-review(2026-09-03);待补 prompt 层约束** |
 | 实体事实误差 | 与来源不符的数字/事实(非汇率类) | 无确定性 gate;L1 battery 部分;外部 review | P1(若混入) | 靠独立 review 兜底 |
 | 主题归类/结构组织 | funding 表漏放头条条目(VAST)→ Additional Topics | 无(L0/L1 均不判组织) | P3 | 非缺陷,润色建议 |
 | 金额换算轻微漂移 | 新中文金额形态(数百万/几千万/千万级)未注入,LLM 自算 | G6 抓量级错(隐含汇率越界);抓不住轻微漂移 | P2 | 已覆盖数字+中文数字形态;新形态靠 G6 部分兜底 |
