@@ -95,8 +95,11 @@ from typing import Sequence
 _CJK_RE = re.compile(r"[\u4e00-\u9fff\u3400-\u4dbf]")
 
 # Domains exempt from the CJK residue check because bilingual output is by
-# design (mirrors output._CJK_EXEMPT_DOMAINS = {"english-learning"}, extended
-# to every *-learning domain which is the language-learning family).
+# design (mirrors output._CJK_EXEMPT_DOMAINS).  ``*-learning`` is bilingual by
+# design; issue #190/193: ai-commercial is bilingual by product-positioning
+# decision (36kr Chinese source, no forced default_language), and the
+# cross-domain aggregate surface carries bilingual content too — the standard
+# gate command must never false-flag CJK there.
 _CJK_EXEMPT_DOMAINS_DEFAULT = frozenset(
     {
         "english-learning",
@@ -108,6 +111,8 @@ _CJK_EXEMPT_DOMAINS_DEFAULT = frozenset(
         "portuguese-learning",
         "russian-learning",
         "spanish-learning",
+        "ai-commercial",
+        "cross-domain",
     }
 )
 

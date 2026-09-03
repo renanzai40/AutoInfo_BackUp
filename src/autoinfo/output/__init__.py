@@ -620,7 +620,13 @@ def _contains_raw_llm_leak(text: str) -> bool:
 _CJK_RE: re.Pattern[str] = re.compile(r"[\u4e00-\u9fff\u3400-\u4dbf]")
 
 # Domains exempt from the CJK leak check because bilingual output is by design.
-_CJK_EXEMPT_DOMAINS: frozenset[str] = frozenset({"english-learning"})
+# ``english-learning`` (and the *-learning family) is bilingual by design
+# (#181); issue #190/193 added ``ai-commercial`` (36kr Chinese source, no
+# forced default_language) and the ``cross-domain`` aggregate surface so the
+# standard gate/warning commands never false-flag CJK there.
+_CJK_EXEMPT_DOMAINS: frozenset[str] = frozenset(
+    {"english-learning", "ai-commercial", "cross-domain"}
+)
 
 
 def _warn_cjk_leak(

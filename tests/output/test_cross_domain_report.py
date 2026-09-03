@@ -544,15 +544,28 @@ class TestCrossDomainSharedLanguage:
     def test_shared_english_default_resolves(self) -> None:
         from autoinfo.output import _cross_domain_shared_language
 
+        # b2b + financial-intelligence both default to English (b2b's seed
+        # declares en; ai-commercial became bilingual in #190 and no longer
+        # qualifies as an en-exemplar).
+        assert _cross_domain_shared_language(
+            ["b2b", "financial-intelligence"]
+        ) == "en"
+
+    def test_bilingual_ai_commercial_disables_filter(self) -> None:
+        # Issue #190: ai-commercial is bilingual (seed default_language is "")
+        # — a cross-domain product mixing it with an English domain must NOT
+        # silently filter the Chinese AI-market dimension.
+        from autoinfo.output import _cross_domain_shared_language
+
         assert _cross_domain_shared_language(
             ["ai-commercial", "financial-intelligence"]
-        ) == "en"
+        ) == ""
 
     def test_bilingual_domain_disables_filter(self) -> None:
         from autoinfo.output import _cross_domain_shared_language
 
         assert _cross_domain_shared_language(
-            ["ai-commercial", "english-learning"]
+            ["b2b", "english-learning"]
         ) == ""
 
     def test_mixed_or_unknown_defaults_no_filter(self) -> None:

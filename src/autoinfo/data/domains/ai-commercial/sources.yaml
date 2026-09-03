@@ -3,9 +3,18 @@
 name: ai-commercial
 description: "AI commercial intelligence — startup funding, product launches, industry trends"
 # Issue #317: 3 of 4 sources are English (TechCrunch/ProductHunt/Crunchbase);
-# 36KR is Chinese.  Default the output language to English so products come out
-# single-language without an explicit --language param.
-default_language: en
+# 36KR is Chinese.  Originally defaulted the output language to English so
+# products came out single-language.
+#
+# Issue #190 (2026-09-03): product positioning decision — ai-commercial is a
+# BILINGUAL domain.  Chinese-market high-score news (VAST, 中科大, StartLux,
+# 神奕 BCI) was systematically lost because the en default language-filter
+# dropped every 36kr entry.  The default_language is now "" (no forced
+# language): products keep both the English and Chinese AI-market dimensions.
+# Empty means "no filtering" in _resolve_effective_language; the CJK checks
+# (output _CJK_EXEMPT_DOMAINS + scripts/quality_gate.py C3) exempt
+# ai-commercial accordingly (#193).  An explicit --language param still wins.
+default_language: ""
 # Issue #166: exclude low-signal entries below this stored relevance score
 # from product aggregation.  0 disables; entries without a score pass.
 min_product_relevance: 30

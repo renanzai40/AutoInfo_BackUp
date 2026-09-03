@@ -184,7 +184,7 @@ def test_c2_clean_text_passes() -> None:
 
 def test_c3_english_domain_cjk_fails() -> None:
     text = "English product with 中文残留内容混入." * 4  # > 5 CJK chars
-    defects = qg.find_cjk_residue(text, "ai-commercial")
+    defects = qg.find_cjk_residue(text, "medical-research")
     assert len(defects) == 1
     assert "CJK residue" in defects[0]
 
@@ -196,19 +196,29 @@ def test_c3_learning_domain_exempt() -> None:
 
 def test_c3_low_cjk_count_under_threshold_passes() -> None:
     # A single stray ideograph (e.g. in a code sample) is not a leak.
-    assert qg.find_cjk_residue("One 字 in a code sample", "ai-commercial") == []
+    assert qg.find_cjk_residue("One 字 in a code sample", "medical-research") == []
 
 
 def test_c3_threshold_respected() -> None:
     text = "字字字字字字"  # 6 CJK chars
-    assert qg.find_cjk_residue(text, "ai-commercial", threshold=10) == []
-    assert len(qg.find_cjk_residue(text, "ai-commercial", threshold=5)) == 1
+    assert qg.find_cjk_residue(text, "medical-research", threshold=10) == []
+    assert len(qg.find_cjk_residue(text, "medical-research", threshold=5)) == 1
 
 
-def test_c3_learnings_all_exempt() -> None:
+def test_c3_learning_domains_all_exempt() -> None:
     text = "字" * 20
-    for domain in ("french-learning", "korean-learning", "language-learning"):
+    for domain in ("english-learning", "french-learning", "korean-learning",
+                   "language-learning"):
         assert qg.find_cjk_residue(text, domain) == [], domain
+
+
+def test_c3_ai_commercial_bilingual_exempt() -> None:
+    # Issue #190/#193: ai-commercial is a bilingual domain (36kr Chinese
+    # source, seed default_language "") — CJK residue is by-design, not a
+    # leak, and the standard gate command must not false-flag it.
+    text = "中文字符残留" * 4  # well above threshold
+    assert qg.find_cjk_residue(text, "ai-commercial") == []
+    assert qg.find_cjk_residue(text, "cross-domain") == []
 
 
 # ---------------------------------------------------------------------------
@@ -487,10 +497,27 @@ def test_gate_file_polluted_catches_multiple(tmp_path: Path) -> None:
         "LiteLLM.Info leaked. TODO finish. 中文残留混入文本." * 6,
         encoding="utf-8",
     )
-    defects = qg.gate_file(f, domain="ai-commercial")
+    # medical-research is NOT a bilingual domain — CJK there is a real leak.
+    defects = qg.gate_file(f, domain="medical-research")
     assert any("C2" in d for d in defects)
     assert any("F2" in d for d in defects)
     assert any("C3" in d for d in defects)
+
+
+def test_gate_directory_bilingual_ai_commercial_no_flag_passes(
+    tmp_path: Path,
+) -> None:
+    """#193 acceptance: the STANDARD gate command on an ai-commercial dir
+    (bilingual, 36kr Chinese content) must PASS with no --cjk-exempt-domains
+    flag — the exemption is a code default, not a magic flag.
+    """
+    domain_dir = tmp_path / "ai-commercial"
+    domain_dir.mkdir()
+    (domain_dir / "digest.md").write_text(
+        "OpenAI 融资 85 分新闻 中文内容混排 English content. " * 10,
+        encoding="utf-8",
+    )
+    assert qg.gate_directory(domain_dir) == []
 
 
 def test_gate_directory_clean_exit_zero(tmp_path: Path) -> None:

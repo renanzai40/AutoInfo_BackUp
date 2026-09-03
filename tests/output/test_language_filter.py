@@ -343,11 +343,27 @@ def _write_tmp_config(tmp_path: Path, domain_block: str) -> Path:
 class TestResolveEffectiveLanguageSeed:
     # --- (a) DISCRIMINATING case: config-present, key-absent -> seed ---------
     def test_config_present_key_absent_uses_seed(self, tmp_path: Path) -> None:
+        # b2b's demo seed declares default_language: en — the fallback engages
+        # and resolves "en" (issue #8 mechanism alive for en-seeded domains).
+        cfg_path = _write_tmp_config(
+            tmp_path, "  - name: b2b\n    active: true\n"
+        )
+        with patch("autoinfo.output.get_config_path", return_value=cfg_path):
+            assert _resolve_effective_language("", "b2b") == "en"
+
+    # --- (a2) ai-commercial seed is bilingual (issue #190/#193) --------------
+    def test_config_present_key_absent_ai_commercial_seed_bilingual(
+        self, tmp_path: Path
+    ) -> None:
+        # Issue #190: ai-commercial is a bilingual domain — its demo seed
+        # default_language is "" (no forced language) so the 36kr Chinese
+        # high-score news is NOT dropped.  The seed fallback must resolve ""
+        # (not the pre-#190 "en").
         cfg_path = _write_tmp_config(
             tmp_path, "  - name: ai-commercial\n    active: true\n"
         )
         with patch("autoinfo.output.get_config_path", return_value=cfg_path):
-            assert _resolve_effective_language("", "ai-commercial") == "en"
+            assert _resolve_effective_language("", "ai-commercial") == ""
 
     # --- (b) explicit-empty wins over the seed -------------------------------
     def test_explicit_empty_language_wins_over_seed(self, tmp_path: Path) -> None:
@@ -393,6 +409,42 @@ class TestResolveEffectiveLanguageSeed:
 
 
 # ---------------------------------------------------------------------------
+# Issue #190: ai-commercial bilingual product input (36kr Chinese survives)
+# ---------------------------------------------------------------------------
+# ai-commercial collects 36kr (Chinese) + TechCrunch/ProductHunt/Crunchbase
+# (English).  Pre-#190 the seed en default filtered every Chinese entry out of
+# products — the entire China-AI-market dimension (VAST 融资, 中科大太空计算,
+# 神奕 BCI) was silently lost.  With the bilingual seed (default_language "")
+# the product input keeps BOTH languages; only an explicit --language param
+# filters.
+
+
+class TestAiCommercialBilingualProductInput:
+    def test_mixed_zh_en_entries_pass_unfiltered_product_safe(self) -> None:
+        """A bilingual-domain product keeps zh AND en entries (no filter)."""
+        mixed = [
+            {"language": "zh", "title": "中文 AI 融资"},
+            {"language": "en", "title": "English AI funding"},
+            {"language": "zh-cn", "title": "另一中文条目"},
+        ]
+        kept, collapsed = _filter_entries_by_language_product_safe(mixed, "")
+        assert collapsed is False
+        assert len(kept) == 3
+
+    def test_explicit_language_still_filters_bilingual_domain(self) -> None:
+        """--language en still wins over the bilingual default (#317)."""
+        mixed = [
+            {"language": "zh", "title": "中文 AI 融资"},
+            {"language": "en", "title": "English AI funding"},
+        ]
+        with patch("autoinfo.output.get_config_path", return_value=None):
+            effective = _resolve_effective_language("en", "ai-commercial")
+        assert effective == "en"
+        kept = _filter_entries_by_language(mixed, effective)
+        assert [e["title"] for e in kept] == ["English AI funding"]
+
+
+# ---------------------------------------------------------------------------
 # ai-commercial empty-after-filter enforcement (issue #8)
 # ---------------------------------------------------------------------------
 # INTENDED enforcement decision: the ai-commercial domain on the current KB
@@ -413,9 +465,14 @@ class TestResolveEffectiveLanguageSeed:
 # LLM call ever happens (the D1 gate is a deterministic completeness check and
 # the product judge is skipped once the min-content guard blocks, and fails
 # open without an LLM key anyway).
+#
+# Issue #190: ai-commercial is now a BILINGUAL domain (its seed default_language
+# is "") so it is no longer an en-seed exemplar — these enforcement tests
+# exercise the same mechanism through ``b2b``, whose demo seed still declares
+# ``default_language: en``.
 
 
-class TestAiCommercialEmptyAfterFilter:
+class TestEnSeedEmptyAfterFilter:
     def test_zh_entries_filtered_by_en_seed_are_dropped(self) -> None:
         zh_only_entries = [
             {"language": "zh", "title": "中文条目"},
@@ -433,18 +490,18 @@ class TestAiCommercialEmptyAfterFilter:
         tmp_path: Path,
     ) -> None:
         # zh/vi-only KB (zero en) + a config file that EXISTS and declares
-        # ai-commercial WITHOUT a default_language key: the seed "en" filter
-        # drops every entry, so the empty-entries branch runs.  With gates
-        # passed, _apply_min_content_guard forces delivery_blocked=True.
+        # b2b WITHOUT a default_language key: the seed "en" filter drops every
+        # entry, so the empty-entries branch runs.  With gates passed,
+        # _apply_min_content_guard forces delivery_blocked=True.
         cfg_path = _write_tmp_config(
-            tmp_path, "  - name: ai-commercial\n    active: true\n"
+            tmp_path, "  - name: b2b\n    active: true\n"
         )
         mock_kb.return_value = _digest_mock_store(_ZH_ONLY_ENTRIES)
         mock_group.return_value = []
         mock_synthesis.return_value = "Overview."
         with patch("autoinfo.output.get_config_path", return_value=cfg_path):
             result = generate_report(
-                domain="ai-commercial",
+                domain="b2b",
                 period="weekly",
                 format="markdown",
                 delivery_gate_configs={"D1": {"action": "block"}},
@@ -467,14 +524,14 @@ class TestAiCommercialEmptyAfterFilter:
         # passed (the guard call sits inside the ``delivery_gate_configs is
         # not None`` conditional in generate_report).
         cfg_path = _write_tmp_config(
-            tmp_path, "  - name: ai-commercial\n    active: true\n"
+            tmp_path, "  - name: b2b\n    active: true\n"
         )
         mock_kb.return_value = _digest_mock_store(_ZH_ONLY_ENTRIES)
         mock_group.return_value = []
         mock_synthesis.return_value = "Overview."
         with patch("autoinfo.output.get_config_path", return_value=cfg_path):
             body = generate_report(
-                domain="ai-commercial",
+                domain="b2b",
                 period="weekly",
                 format="markdown",
             )
