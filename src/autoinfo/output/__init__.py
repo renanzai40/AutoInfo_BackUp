@@ -55,6 +55,7 @@ from autoinfo.config import Config, get_config_path, load_config
 from autoinfo.kb import KBStore, PromotionRejected, SQLiteIndex
 from autoinfo.llm import call_with_fallback
 from autoinfo.quality_constraints import (
+    EDITORIAL_OPENING_HEDGE_CONSTRAINT,
     FEATURE_STORY_GROUNDING_CONSTRAINT,
     NO_FABRICATION_CONSTRAINT,
     SYNTHESIS_SIGNAL_TRACEABILITY_CONSTRAINT,
@@ -4733,7 +4734,13 @@ _DIGEST_SYSTEM_PROMPT = (
 )
 
 _DIGEST_FIELD_DESCRIPTIONS = [
-    '"executive_summary": "2-3 sentence overview of the period\'s key developments"',
+    # Issue #210: the Executive Summary opener is an editorial-OPENING
+    # surface — its summary voice invited unhedged market-direction/motive
+    # assertions.  Hedge/grounding now pinned (mirrors editorial_intro).
+    '"executive_summary": "2-3 sentence overview of the period\'s key '
+    "developments grounded in the entries. "
+    + EDITORIAL_OPENING_HEDGE_CONSTRAINT
+    + '"',
     '"key_findings": [{"topic": "Topic name", "detail": "Key finding sentence"}], '
     "list 3-5 most important findings",
     '"trends": ["Trend or pattern observed across multiple entries"], '
@@ -4778,9 +4785,15 @@ _DIGEST_ENTERPRISE_METRICS_FIELDS: list[str] = [
 _DIGEST_MAGAZINE_EDITORIAL_FIELDS: list[str] = (
     _DIGEST_PRODUCT_BASE_FIELDS
     + [
+        # Issue #210: the Editor's Note is an editorial-OPENING surface — its
+        # "opinionated but factual" voice invited unhedged market-direction /
+        # motive assertions (R6/R7: "the smart money is betting on…").  The
+        # hedge constraint (#191 discipline) now pins it to sourced+hedged.
         '"editorial_intro": "A 2-3 sentence editorial introduction paragraph '
         'for this magazine edition \u2014 the editor\'s framing of the week, '
-        'written in a magazine voice (opinionated but factual)"',
+        'written in a magazine voice (opinionated but factual). '
+        + EDITORIAL_OPENING_HEDGE_CONSTRAINT
+        + '"',
         '"feature_story": "A 3-5 paragraph personality profile / deep-dive '
         "story on one notable person, company, or trend from the period, in "
         "magazine feature style \u2014 a narrative that connects and "
@@ -4793,11 +4806,16 @@ _DIGEST_MAGAZINE_EDITORIAL_FIELDS: list[str] = (
 # Issue #316: column deep-dive sections — the column template renders a
 # Deep Dive from a ``sections`` array (each ``{title, content}``), so the
 # digest synthesis must request it (mirroring the #308 report-path wording).
+# Issue #210: the section opener is an editorial-OPENING surface too — add
+# the hedge discipline so analysis sentences never assert unhedged
+# market-direction/motive judgments as fact.
 _DIGEST_COLUMN_SECTIONS_FIELDS: list[str] = [
     '"sections": [{"title": "Subsection title", "content": "2-3 paragraphs '
     'of analysis grounded in specific entries \u2014 quote concrete numbers, '
     'dates, and named companies/studies from the source material; no filler '
-    'paragraphs"}], 8-10 distinct deep-dive subsections, each with '
+    "paragraphs. "
+    + EDITORIAL_OPENING_HEDGE_CONSTRAINT
+    + '"}], 8-10 distinct deep-dive subsections, each with '
     'substantive content',
 ]
 
@@ -9132,6 +9150,11 @@ def _build_report_synthesis_prompt(
     # Entries list — never re-slug or invent a URL (mirror of the presentation
     # prompt's #93 wording).  Canonical string lives in quality_constraints.
     prompt += f"\n\n{URL_VERBATIM_CONSTRAINT}"
+    # Issue #210: the Executive Summary / Recommendations opener is an
+    # editorial voice that invited unhedged market-direction/motive assertions
+    # ("the smart money is betting on…").  Hedge discipline pinned (mirrors
+    # the magazine editorial_intro constraint from #191).
+    prompt += f"\n\n{EDITORIAL_OPENING_HEDGE_CONSTRAINT}"
     # -- Structured audience adaptation -----------------------------------
     audience = _normalize_report_audience(target_audience)
     audience_prompt = _REPORT_AUDIENCE_PROMPTS.get(audience, "")

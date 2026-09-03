@@ -328,6 +328,48 @@ class TestMagazineEditorialFeature:
         assert "Do NOT assert as fact" in prompt
         assert "clearly hedged" in prompt
 
+    def test_editorial_opening_surfaces_have_hedge_constraint(
+        self,
+    ) -> None:
+        """#210: editorial-OPENING surfaces (Editor's Note, Executive Summary,
+        column Deep Dive) carry the SAME hedge discipline #191 gave
+        feature_story — unhedged market-direction/motive assertions recurred
+        in R6/R7 because only feature_story was pinned."""
+        # magazine-digest prompt: editorial_intro must be hedged.
+        magazine = _build_digest_llm_prompt(
+            _SAMPLE_ENTRIES, product_family="magazine-digest"
+        )
+        assert "editorial_intro" in magazine
+        assert "market-direction, motive, or forward-looking claim" in magazine
+        assert "clearly hedged" in magazine
+
+        # digest prompt (executive_summary opener) must be hedged.
+        digest = _build_digest_llm_prompt(
+            _SAMPLE_ENTRIES, product_family="digest"
+        )
+        assert "executive_summary" in digest
+        assert "market-direction, motive, or forward-looking claim" in digest
+
+        # column prompt (Deep Dive opener) must be hedged.
+        column = _build_digest_llm_prompt(
+            _SAMPLE_ENTRIES, product_family="column"
+        )
+        assert "sections" in column
+        assert "market-direction, motive, or forward-looking claim" in column
+
+    def test_report_executive_summary_opener_has_hedge_constraint(
+        self,
+    ) -> None:
+        """#210: the report synthesis prompt's Executive Summary / opener
+        surface carries the same editorial hedge discipline."""
+        from autoinfo.output import _build_report_synthesis_prompt
+
+        prompt = _build_report_synthesis_prompt(
+            "sample entries detail", product_family="report"
+        )
+        assert "Executive Summary" in prompt
+        assert "market-direction, motive, or forward-looking claim" in prompt
+
     def test_magazine_template_renders_editorial_and_feature(self) -> None:
         """Rendering magazine-digest.md.j2 emits Editor's Note + The Feature.
 

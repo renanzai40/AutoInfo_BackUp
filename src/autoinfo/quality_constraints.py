@@ -75,3 +75,20 @@ URL_VERBATIM_CONSTRAINT: str = (
     "Every (Source: URL) must be a real http(s) URL taken VERBATIM from the "
     "KB Entries list above \u2014 do not alter, re-slug, or invent the URL."
 )
+
+# Issue #210: editorial-OPENING surfaces (magazine Editor's Note, report
+# Executive Summary opener, column Deep Dive opener) are written in an
+# opinionated editorial voice, which invites unhedged market-direction /
+# motive assertions ("the smart money is betting on…").  #191 grounded the
+# feature_story field specifically; these openers need the SAME hedge
+# discipline: an opinion or forward-looking claim is allowed ONLY when it is
+# clearly hedged ('likely', 'suggests', 'may', 'could') or attributed to a
+# stated source position — never asserted as an unhedged fact.
+EDITORIAL_OPENING_HEDGE_CONSTRAINT: str = (
+    "This is an editorial opener: an opinionated voice is welcome, but every "
+    "market-direction, motive, or forward-looking claim must be clearly "
+    "hedged ('likely', 'suggests', 'may', 'could') or attributed to a "
+    "position the sources actually state. Do NOT assert an unhedged "
+    "market/motive judgment as fact \u2014 if the direction is not stated in "
+    "the entries, say so or omit it."
+)
