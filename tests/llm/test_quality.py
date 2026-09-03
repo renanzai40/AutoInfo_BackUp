@@ -607,6 +607,40 @@ class TestG3RelevanceScoring:
         assert result.details["scoring_method"] == "llm"
         assert result.details.get("archive") is True
 
+    def test_llm_failure_lexical_zero_never_archives(
+        self, sample_item: Item,
+    ) -> None:
+        """Issue #189: an LLM scoring failure (no key / provider down) falls
+        back to lexical; a zero-hit lexical score is UNKNOWN, not irrelevant
+        — it must NEVER archive.  Archiving would bury genuinely high-score
+        news (VAST 85 / Harvard 85 / 中科大 65) permanently, because a later
+        LLM re-score of 85+ cannot un-archive (kb.py #79 preservation)."""
+        from autoinfo.config import QualityGateConfig
+
+        g3 = G3RelevanceScoring()
+
+        def _always_fail(**kwargs: object) -> object:
+            raise RuntimeError("LLM provider unavailable")
+
+        g3.llm_call = _always_fail
+        config = QualityGateConfig(
+            name="G3-RelevanceScoring", category="soft", retries=2,
+            action="archive", threshold=30,
+        )
+        # sample_item has zero hits for these keywords — lexical score is 0.
+        result = g3.check(
+            sample_item, topic_keywords=["quantum computing"], threshold=30,
+            gate_config=config,
+        )
+
+        assert result.passed is False
+        assert result.score == 0.0
+        assert result.details["scoring_method"] == "lexical"
+        assert result.details["llm_failed"] is True
+        assert result.details.get("archive") is False
+        assert result.details.get("archived_as_unknown") is True
+        assert "LLM unavailable" in result.details["reason"]
+
     def test_above_threshold_not_hidden(self, sample_item: Item) -> None:
         g3 = G3RelevanceScoring()
         result = g3.check(sample_item, topic_keywords=["IVF"], threshold=30)

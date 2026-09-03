@@ -2513,6 +2513,12 @@ def _default_kb_base_path() -> Path:
 # (issue #279: entries with empty/short content must never enter the KB).
 MIN_KB_CONTENT_CHARS = 50
 
+# Issue #189: a fresh G3 re-score at or above this threshold is a strong
+# positive signal that must restore an archived entry to active (the #79
+# status preservation is one-directional and would otherwise bury news that
+# was archived while the LLM scorer was unavailable).
+_HIGH_RESCORE_RESTORE = 60.0
+
 
 class KBStore:
     """High-level knowledge base store that combines Markdown files + SQLite.
@@ -2748,6 +2754,15 @@ class KBStore:
         # (empty-shell regression).  entry_id is content-derived, so a re-ingest
         # of the same item resolves to the same id: preserve the existing
         # status when the entry already exists; gates only apply to NEW entries.
+        #
+        # Issue #189: the #79 preservation is one-directional — it can never
+        # UN-archive.  After the G3 fix (LLM-unavailable lexical score 0 no
+        # longer archives), an entry archived by a genuine-negative gate still
+        # deserves a second look once the LLM recovers: a fresh G3 re-score of
+        # >= _HIGH_RESCORE_RESTORE (60) is a strong positive signal that MUST
+        # restore archived -> active, so high-relevance news (VAST 85 /
+        # Harvard 85 / 中科大 65) is never permanently buried by a transient
+        # gate failure.  Deprecated stays deprecated (human decision).
         existing_entry = self.index.get_entry(entry_id)
         if existing_entry is not None:
             try:
@@ -2757,6 +2772,17 @@ class KBStore:
             existing_status = existing_cf.get("status") or existing_entry.get("status")
             if existing_status in ("active", "archived", "deprecated"):
                 entry_status = existing_status
+                if existing_status == "archived" and quality_results:
+                    g3 = quality_results.get("G3-RelevanceScoring")
+                    if g3 is not None and g3.score >= _HIGH_RESCORE_RESTORE:
+                        entry_status = "active"
+                        logger.info(
+                            "Re-scored archived entry %r: G3=%s >= %s — "
+                            "restored to active (issue #189)",
+                            entry_id,
+                            g3.score,
+                            _HIGH_RESCORE_RESTORE,
+                        )
 
         # --- resolve user_id ---------------------------------------------------
         resolved_user_id: str = ""
@@ -3371,7 +3397,18 @@ class KBStore:
             title=title,
             domain=domain,
             tier="02-Draft",
-            source_url=raw_entries[0].get("source_url", ""),
+            # Issue #189: a compiled draft must NOT share the first raw's
+            # source_url.  G2-Dedup matches source_url EXACTLY (quality.py),
+            # so a draft reusing raw[0].url makes the real raw look like a
+            # duplicate on re-ingest — a high-score news item gets archived
+            # as "duplicate" and never reaches a product.  The draft is a
+            # synthesis; its real source URLs live in the frontmatter
+            # (custom_fields.source_urls, #178).  A synthetic ``draft://``
+            # URL keeps G0 schema integrity happy (source_url must be
+            # non-empty for promotion) while never colliding with a real
+            # article URL (G2 compares exact equality, and no real source
+            # uses the draft: scheme).
+            source_url=f"draft://{domain}/{entry_id}",
             source_type=raw_entries[0].get("source_type", ""),
             source_platform=raw_entries[0].get("source_platform", ""),
             collected_at=today_str,

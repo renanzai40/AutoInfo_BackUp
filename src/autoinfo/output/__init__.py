@@ -536,17 +536,21 @@ def _user_source_label(ref: dict[str, Any]) -> str:
 def _entry_source_cell(entry: dict[str, Any]) -> str:
     """Return a markdown Source cell for a product-table entry row (#167).
 
-    Renders ``[LABEL](URL)`` when the entry carries a ``source_url`` (LABEL is
-    the derived user-facing source name — ``source_label`` or
-    ``source_platform``, never the generic internal id), the bare LABEL when
-    there is no URL, and ``""`` when neither exists.  Used by the report and
-    column sections tables so every row is traceable to its source.
+    Renders ``[LABEL](URL)`` when the entry carries a real http(s)
+    ``source_url`` (LABEL is the derived user-facing source name —
+    ``source_label`` or ``source_platform``, never the generic internal id),
+    the bare LABEL when there is no URL, and ``""`` when neither exists.
+    Synthetic non-http provenance (issue #189: compiled drafts carry a
+    ``draft://<domain>/<entry>`` source_url so they never collide with the
+    raw at G2 dedup) is rendered as the bare LABEL, never as a broken link.
+    Used by the report and column sections tables so every row is traceable
+    to its source.
     """
     url = str(entry.get("source_url") or "").strip()
     label = str(
         entry.get("source_label") or entry.get("source_platform") or ""
     ).strip()
-    if url:
+    if url and url.startswith(("http://", "https://")):
         if not label:
             # No label but a real URL — show the host as the label.
             from urllib.parse import urlsplit

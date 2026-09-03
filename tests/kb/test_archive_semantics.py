@@ -108,6 +108,25 @@ def _g3_active() -> dict[str, QualityResult]:
     }
 
 
+def _g3_passing_low_score() -> dict[str, QualityResult]:
+    """G3 passes but with a LOW score (< #189 restore threshold of 60) — a
+    weak positive signal that must NOT resurrect an archived entry."""
+    return {
+        "G1-SourceAuthority": QualityResult(
+            gate_name="G1-SourceAuthority", passed=True, score=1.0,
+            details={"quality_tier": 1, "source_name": "pubmed"},
+        ),
+        "G2-Dedup": QualityResult(
+            gate_name="G2-Dedup", passed=True, score=1.0,
+            details={"is_duplicate": False, "matched_by": None},
+        ),
+        "G3-RelevanceScoring": QualityResult(
+            gate_name="G3-RelevanceScoring", passed=True, score=45.0,
+            details={"hidden": False, "action": "archive"},
+        ),
+    }
+
+
 def _entry_status(entry: dict[str, Any]) -> str:
     """Read the ``status`` value from an entry dict's custom_fields JSON."""
     cf = entry.get("custom_fields") or "{}"
@@ -375,16 +394,38 @@ class TestReprocessPreservesDeliverableStatus:
         assert _entry_status(store.get_entry(second.entry_id)) == "active"
 
     def test_archived_stays_archived_on_reingest(self, tmp_path: Path) -> None:
-        """An archived entry stays archived when re-ingested with a passing
-        gate — a reprocess never silently resurrects rejected content."""
+        """An archived entry stays archived when re-ingested with a WEAK
+        positive gate — a reprocess never silently resurrects rejected
+        content (issue #79; the #189 high-rescore restore is score >= 60).
+        """
         store = self._store(tmp_path)
         item = _make_item("reproc-2", "Zorpzilla reingest archived article")
         ext = _make_extraction("reproc-2", item.title, 5.0)
         first = store.store_entry(item, ext, _g3_archived())
         assert _entry_status(store.get_entry(first.entry_id)) == "archived"
 
-        second = store.store_entry(item, ext, _g3_active())
+        # A passing gate at score 45 (< 60) is weak — archived survives.
+        second = store.store_entry(item, ext, _g3_passing_low_score())
         assert _entry_status(store.get_entry(second.entry_id)) == "archived"
+
+    def test_archived_restored_to_active_on_high_rescore(
+        self, tmp_path: Path,
+    ) -> None:
+        """Issue #189: a HIGH G3 re-score (>= 60) restores archived -> active.
+
+        An entry archived while the LLM scorer was unavailable (or by a
+        genuine-negative gate) must not be buried forever once the scorer
+        recovers and rates it 85+ — digest coverage depends on it.
+        """
+        store = self._store(tmp_path)
+        item = _make_item("reproc-2b", "Zorpzilla rescored archived article")
+        ext = _make_extraction("reproc-2b", item.title, 5.0)
+        first = store.store_entry(item, ext, _g3_archived())
+        assert _entry_status(store.get_entry(first.entry_id)) == "archived"
+
+        # _g3_active() scores 90 >= 60 — the entry is restored to active.
+        second = store.store_entry(item, ext, _g3_active())
+        assert _entry_status(store.get_entry(second.entry_id)) == "active"
 
     def test_new_entry_goes_through_gate(self, tmp_path: Path) -> None:
         """A brand-new entry (no existing id) still follows the gates —

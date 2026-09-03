@@ -271,3 +271,43 @@ def _get_llm_extractor_class() -> type[LLMExtractor]:
     from autoinfo.llm import LLMExtractor
 
     return LLMExtractor
+
+
+# ===================================================================
+# Issue #189: synthetic draft:// provenance renders as bare label
+# ===================================================================
+
+
+class TestEntrySourceCellSyntheticProvenance:
+    """Compiled drafts carry a synthetic ``draft://`` source_url (#189) so
+    they never collide with the real raw at G2 dedup.  A product table
+    source cell must render the LABEL, never a broken ``[x](draft://...)``
+    link."""
+
+    def test_http_url_renders_as_link(self) -> None:
+        from autoinfo.output import _entry_source_cell
+
+        cell = _entry_source_cell(
+            {"source_url": "https://techcrunch.com/story",
+             "source_platform": "techcrunch"}
+        )
+        assert cell == "[techcrunch](https://techcrunch.com/story)"
+
+    def test_synthetic_draft_url_renders_bare_label(self) -> None:
+        from autoinfo.output import _entry_source_cell
+
+        cell = _entry_source_cell(
+            {"source_url": "draft://ai-commercial/ai-commercial-research-abc",
+             "source_platform": "ai-commercial"}
+        )
+        assert cell == "ai-commercial"
+        assert "draft://" not in cell
+        assert "(" not in cell
+
+    def test_no_url_but_label_renders_label(self) -> None:
+        from autoinfo.output import _entry_source_cell
+
+        cell = _entry_source_cell(
+            {"source_url": "", "source_platform": "pubmed"}
+        )
+        assert cell == "pubmed"

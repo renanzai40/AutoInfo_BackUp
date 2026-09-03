@@ -301,6 +301,30 @@ class TestCreateKbDraft:
         assert "Source 1:" in raw or "Time-lapse" in raw
         assert "Source 2:" in raw or "AI-assisted" in raw
 
+    def test_draft_source_url_synthetic_not_shared_with_raw(
+        self, store: KBStore, raw_entry_ids: list[str]
+    ) -> None:
+        """Issue #189: a compiled draft must not reuse the first raw's
+        source_url — G2-Dedup matches source_url EXACTLY, and a shared URL
+        makes the REAL raw look like a duplicate on re-ingest (high-score
+        news silently archived).  The draft carries a synthetic draft:// URL
+        (keeps G0 mandatory-provenance satisfied for promotion; never
+        collides with a real article URL).  The real URLs stay in
+        custom_fields.source_urls."""
+        draft = store.create_kb_draft(
+            raw_ids=raw_entry_ids,
+            title="URL-collision draft",
+        )
+        assert draft.source_url.startswith("draft://")
+        assert "https://" not in draft.source_url
+        orig_raw_urls = [
+            "https://example.com/paper1",
+            "https://example.com/paper2",
+        ]
+        assert draft.source_url not in orig_raw_urls
+        cf = draft.custom_fields or {}
+        assert len(cf.get("source_urls", [])) >= 2  # both real URLs preserved
+
     def test_draft_tags_stored_in_sqlite(self, store: KBStore, raw_entry_ids: list[str]) -> None:
         draft = store.create_kb_draft(
             raw_ids=[raw_entry_ids[0]],

@@ -879,6 +879,7 @@ class G3RelevanceScoring:
                 "threshold": threshold,
                 "scoring_method": scoring_method,
                 "llm_retries": llm_retries_used,
+                "llm_failed": llm_failed,
             }
             if scoring_method == "lexical":
                 details["keyword_matches"] = sum(
@@ -893,7 +894,25 @@ class G3RelevanceScoring:
                 # evidence (score == 0, no keyword hits at all) — genuine
                 # negative signal; weak relevance (1-29 with some hits) is
                 # flagged, not archived, so valid content survives.
-                if scoring_method != "lexical" or score_val == 0:
+                #
+                # Issue #189: when the LLM scoring path FAILED (no key /
+                # provider down) and the fallback lexical score is 0, that 0
+                # is "unknown", NOT "irrelevant" — the LLM never judged the
+                # item.  Archiving here buries genuinely high-score news
+                # (VAST 85 / Harvard 85 / 中科大 65) permanently: a later
+                # LLM re-score of 85+ cannot un-archive because kb.py #79
+                # preserves the archived status.  Never archive on an
+                # LLM-failure fallback — flag it so a re-judge can happen;
+                # only archive on a genuine negative signal (LLM judged low,
+                # or pure-lexical config with zero keyword evidence).
+                if llm_failed:
+                    details["archive"] = False
+                    details["archived_as_unknown"] = True
+                    details["reason"] = (
+                        "below relevance threshold (LLM unavailable — "
+                        "lexical fallback is unknown, not irrelevant)"
+                    )
+                elif scoring_method != "lexical" or score_val == 0:
                     details["archive"] = True
                 else:
                     details["archive"] = False
@@ -912,6 +931,7 @@ class G3RelevanceScoring:
             "action": action,
             "scoring_method": scoring_method,
             "llm_retries": llm_retries_used,
+            "llm_failed": llm_failed,
         }
         if scoring_method == "lexical":
             details_pass["keyword_matches"] = sum(
