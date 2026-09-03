@@ -54,6 +54,10 @@ from jinja2 import ChoiceLoader, Environment, FileSystemLoader, TemplateNotFound
 from autoinfo.config import Config, get_config_path, load_config
 from autoinfo.kb import KBStore, PromotionRejected, SQLiteIndex
 from autoinfo.llm import call_with_fallback
+from autoinfo.quality_constraints import (
+    FEATURE_STORY_GROUNDING_CONSTRAINT,
+    NO_FABRICATION_CONSTRAINT,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -4713,13 +4717,9 @@ _DIGEST_MAGAZINE_EDITORIAL_FIELDS: list[str] = (
         '"feature_story": "A 3-5 paragraph personality profile / deep-dive '
         "story on one notable person, company, or trend from the period, in "
         "magazine feature style \u2014 a narrative that connects and "
-        "interprets the entries' stated facts. Ground every paragraph in the "
-        "specific entries: quote concrete numbers, dates, and named "
-        "companies/studies from the source material. Do NOT assert as fact "
-        "anything the sources do not state \u2014 speculation about motives, "
-        "plans, customer composition, or market reaction must be clearly "
-        "hedged ('likely', 'suggests', 'may'), and where a detail is not in "
-        "the sources, say so or omit it\"",
+        "interprets the entries' stated facts. "
+        + FEATURE_STORY_GROUNDING_CONSTRAINT
+        + '"',
     ]
 )
 
@@ -4827,15 +4827,10 @@ def _build_digest_llm_prompt(
         lines.append(scope_guidance)
     # Issue #179: hard no-fabrication constraint — content must come ONLY
     # from the entries.  Info-poor entries otherwise invite the model to
-    # invent teams/motives/numbers/directions (P0-3/P0-4).
+    # invent teams/motives/numbers/directions (P0-3/P0-4).  Canonical string
+    # lives in quality_constraints (#194 spec D).
     lines.append("")
-    lines.append(
-        "Do NOT invent or add details that the entries do not state — no "
-        "invented team members, motives, numbers, dates, product claims, or "
-        "entity descriptions. Write ONLY from content present in the entries; "
-        "when the entries do not state something, omit it or say 'not stated "
-        "in sources.'"
-    )
+    lines.append(NO_FABRICATION_CONSTRAINT)
     lines.append("Return all fields in a single JSON object.")
 
     return "\n".join(lines)
@@ -8843,13 +8838,8 @@ def _build_report_synthesis_prompt(
     # Issue #179: hard no-fabrication constraint — the report synthesis must
     # write ONLY from the entries' stated content (no invented teams/motives/
     # numbers/directions or entity descriptions beyond the sources).
-    prompt += (
-        "\n\nDo NOT invent or add details that the entries do not state — "
-        "no invented team members, motives, numbers, dates, product claims, "
-        "or entity descriptions. Write ONLY from content present in the "
-        "entries; when the entries do not state something, omit it or say "
-        "'not stated in sources.'"
-    )
+    # Canonical string lives in quality_constraints (#194 spec D).
+    prompt += f"\n\n{NO_FABRICATION_CONSTRAINT}"
     # -- Structured audience adaptation -----------------------------------
     audience = _normalize_report_audience(target_audience)
     audience_prompt = _REPORT_AUDIENCE_PROMPTS.get(audience, "")

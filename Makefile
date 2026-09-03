@@ -1,4 +1,4 @@
-.PHONY: install dev-install test lint clean stripe-mock backup
+.PHONY: install dev-install test lint clean stripe-mock backup validate
 
 install:
 	pip install -e .
@@ -42,3 +42,13 @@ stripe-mock:
 
 backup:
 	bash scripts/backup-db.sh
+
+# One-command quality adjudication (issue #194 spec B).  L0 dead-code gate
+# runs by default (blocking); the L1 semantic battery is opt-in with
+# --semantic (calls the configured LLM; see scripts/agent_review/battery.py).
+# Usage: make validate DIR=outputs/<domain>   (default DIR=outputs)
+validate:
+	python3 scripts/quality_gate.py $(DIR) || exit 1
+	@echo "L0 gate passed for $(DIR) — optional L1 semantic battery:"
+	@echo "  python3 scripts/agent_review/battery.py $(DIR)              # worklist preview"
+	@echo "  python3 scripts/agent_review/battery.py $(DIR) --semantic   # + LLM verdicts"

@@ -1,0 +1,182 @@
+# L1 agent-review battery — semantic blind-spot manifest (issue #194)
+#
+# The L0 dead-code gate (scripts/quality_gate.py F1-F4/C1-C5/C6/X1) is the
+# workhorse: deterministic structural checks.  What it structurally CANNOT
+# see is these per-family semantic blind spots — coverage absence, claim
+# fabrication vs honest hedge, product-intent judgment.  The L1 battery
+# (scripts/agent_review/battery.py) turns each blind spot below into a
+# worklist item and asks the configured LLM (vendor-agnostic, config-driven,
+# see #195) for a verdict.  L1 is OPT-IN (--semantic): it never replaces L0.
+#
+# check_desc MUST NOT name any model/vendor (per #194 comment + #195): blind
+# spots are described purely in terms of what the product must satisfy; the
+# execution channel is config-driven.
+
+- family: digest
+  blind_spots:
+    - id: coverage-absence
+      name: Coverage absence
+      check_desc: >-
+        The domain collects N high-relevance entries this period; the digest
+        renders a proper subset.  Does the digest omit any entry that a
+        paying reader would expect (major named funding rounds, product
+        launches, regulatory actions)?  Absence of the whole China-AI-market
+        dimension when 36kr is a configured source is the canonical defect.
+      evidence_required: "entry title + source URL for each expected-but-missing item"
+    - id: entry-relevance
+      name: Entry relevance
+      check_desc: >-
+        Every rendered entry belongs to the domain's stated topic.  An entry
+        that drifted off-topic (unrelated consumer product, personal-finance
+        Q&A, lifestyle content) is a defect even if structurally clean.
+      evidence_required: "off-topic entry title + why it does not belong"
+    - id: summary-emptiness
+      name: Summary emptiness
+      check_desc: >-
+        No entry renders with an empty / EMPTY / VAGUE / placeholder summary
+        (mirrors the #294 guard at the semantic level).
+      evidence_required: "entry title + the empty summary text"
+    - id: source-traceability
+      name: Source traceability
+      check_desc: >-
+        A reader can trace every factual claim to a real source.  Any claim
+        with no (Source: URL) and no reference entry is a traceability gap.
+      evidence_required: "the claim sentence + the missing source"
+
+- family: magazine-digest
+  blind_spots:
+    - id: claim-fabrication-vs-hedge
+      name: Claim fabrication vs honest hedge
+      check_desc: >-
+        The Feature / editorial_intro must assert ONLY what the entries
+        state.  A statement of source-unstated detail presented as FACT is a
+        defect ('three-person idea' when sources say 'three-year-old
+        startup').  A sentence that honestly says the detail is not in the
+        sources ('not disclosed', 'not provided in the available entries')
+        is CORRECT behavior — never flag it.
+      evidence_required: "the assertive sentence + the source sentence it rewrites"
+    - id: inferential-wording
+      name: Inferential wording
+      check_desc: >-
+        Speculation about motives, plans, customer composition or market
+        reaction must be hedged ('likely', 'suggests', 'may').  Unhedged
+        inference dressed as analysis is a defect.
+      evidence_required: "the speculative sentence + what the source actually states"
+    - id: feature-grounding
+      name: Feature grounding
+      check_desc: >-
+        The Feature's named companies/people/numbers all appear in the
+        digest's entries or References (mirrors quality_gate C6 at the
+        semantic level — a name that paraphrases or invents a source entity).
+      evidence_required: "the name/number + where it appears in the entries"
+
+- family: column
+  blind_spots:
+    - id: deep-dive-grounding
+      name: Deep Dive grounding
+      check_desc: >-
+        Every deep-dive section quotes concrete numbers, dates and named
+        companies/studies from the source material.  A section of generic
+        filler with no sourced specifics is a defect.
+      evidence_required: "section title + the filler paragraph"
+    - id: claim-fabrication-vs-hedge
+      name: Claim fabrication vs honest hedge
+      check_desc: Same contract as magazine-digest (shared long-form discipline).
+      evidence_required: "the assertive sentence + the source sentence it rewrites"
+
+- family: premium-briefing
+  blind_spots:
+    - id: value-hierarchy
+      name: Value hierarchy not inverted
+      check_desc: >-
+        A premium briefing renders fewer, deeper items than the free digest.
+        If the premium selection is a strict subset of the digest with no
+        deeper analysis, or if a low-value filler item displaces a
+        high-relevance one, the paid tier is not differentiated.
+      evidence_required: "premium item list vs digest item list"
+    - id: section-differentiation
+      name: So-what / Risk / Action differentiation
+      check_desc: >-
+        Every So-what / Risk / Action item is specific to its source entry —
+        not the same dead-template sentence repeated across items.  A
+        boilerplate risk repeated verbatim 5x is a defect.
+      evidence_required: "the repeated boilerplate + the two entries it should differ between"
+
+- family: enterprise-briefing
+  blind_spots:
+    - id: value-hierarchy
+      name: Value hierarchy not inverted
+      check_desc: Same contract as premium (enterprise selection is a deliberate
+        sub-choice; the scope label N<=M must hold and the coverage claim must
+        match the detailed count).
+      evidence_required: "selected N vs available M + the rendered scope label"
+    - id: metrics-accuracy
+      name: Key-metrics accuracy
+      check_desc: >-
+        Key Metrics table figures match the underlying entries (a fabricated
+        or mis-transcribed number is a defect — mirrors #131/#148 at the
+        semantic level).
+      evidence_required: "the metric cell + the source entry number"
+
+- family: report
+  blind_spots:
+    - id: coverage-absence
+      name: Coverage absence
+      check_desc: Same contract as digest — the report omits a major
+        period event a reader would expect.
+      evidence_required: "entry title + source URL for each missing item"
+    - id: synthesis-grounding
+      name: Synthesis grounding
+      check_desc: >-
+        Executive Summary / analysis sentences assert only entry-stated
+        facts; a claim that no entry supports is fabrication.
+      evidence_required: "the claim + why no entry supports it"
+
+- family: presentation
+  blind_spots:
+    - id: slide-source-honesty
+      name: Slide source honesty
+      check_desc: >-
+        Every slide cites a real source present in the KB; a fabricated
+        (Source:) placeholder or unverifiable URL never ships (mirrors
+        #93/#101/#102 semantic layer).
+      evidence_required: "slide citation + the KB source whitelist"
+
+- family: cross-domain
+  blind_spots:
+    - id: language-coherence
+      name: Language coherence
+      check_desc: >-
+        A cross-domain product is language-coherent per its intent: an
+        English report mixing Chinese 36kr raws with no framing is a defect
+        UNLESS the product is bilingual by design (ai-commercial #190).  The
+        judge must know the domain's declared language posture.
+      evidence_required: "the mixed-language paragraph + the domain language posture"
+    - id: no-fake-entries
+      name: No fake entries
+      check_desc: >-
+        No synthesized digest artifact (multi-source compiled draft) renders
+        as a fake single-source news row (mirrors #178/#184 at the semantic
+        layer).
+      evidence_required: "the artifact row + its source_ids custom field"
+
+- family: all
+  blind_spots:
+    - id: cross-product-entity-consistency
+      name: Cross-product entity consistency
+      check_desc: >-
+        The same company/product described with CONFLICTING type claims
+        across products (one says 'legal-industry AI-native OS', another
+        says 'model-evaluation platform') is a defect.  This is the semantic
+        layer above quality_gate X1's deterministic copular scan.
+      evidence_required: "the two conflicting descriptions + product files"
+
+- family: bilingual-domains
+  blind_spots:
+    - id: local-market-presence
+      name: Local-market presence
+      check_desc: >-
+        For a bilingual domain (ai-commercial #190, *-learning), the local-
+        market content (Chinese AI news / target-language material) actually
+        reached the entries — the absence class #190 caught.
+      evidence_required: "local-market entry that should appear + its absence"
