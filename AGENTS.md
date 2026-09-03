@@ -174,6 +174,33 @@ Hard/soft split with retry-first, block-last philosophy. G0 (Schema Integrity) a
 | D2: Format integrity | 🔴 Hard | 🔴 P0 | Blocks delivery |
 | D3: Freshness | 🟡 Soft | 🟡 P1 | Configurable threshold |
 
+### Product QC — 3-Layer Model (issue #194)
+
+Product/delivery quality control is **layered**, not one mechanism. L0 is the
+default workhorse; L1 is opt-in; humans own value judgment.
+
+| Layer | What | Default? | Command |
+|-------|------|----------|---------|
+| **L0 dead-code gate** | `scripts/quality_gate.py` — deterministic structural checks over product files: F1 empty shell, F2 placeholders, F3 doubled citations, F4 forbidden words, C1 fake entries, C2 log leaks, C3 CJK residue, C4 truncated lines, C5 source integrity, **C6 narrative grounding** (#192), X1 cross-product entity conflicts. Exit 0/1/2. | **Yes — blocking** | `make validate DIR=outputs/<domain>` (or `python3 scripts/quality_gate.py <dir>`) |
+| **L1 agent battery** | `scripts/agent_review/battery.py` — semantic blind-spot judging over the residue L0 structurally cannot see (coverage absence, claim fabrication vs honest hedge, product intent). Verdicts carry mandatory evidence; unreachable/unparseable judgment ⇒ **ESCALATE, never PASS** (#195). Blind-spot manifest: `scripts/agent_review/blindspots.yaml`. | **No — opt-in `--semantic`** | `python3 scripts/agent_review/battery.py outputs/<domain> --semantic` |
+| **ESCALATE (human)** | Value/intent calls — value-hierarchy inversion, product-positioning tradeoffs, "is this premium selection differentiated?" — go to the human director. Never machine-final for subjective calls. | — | surfaced as `ESCALATE` verdicts in the L1 report |
+
+**Single-production discipline**: a product is produced ONCE; the QC pipeline
+(L0 → opt-in L1 → ESCALATE) is the arbiter. Do NOT regenerate-and-select the
+"best" version — that reintroduces hidden selection bias. A failed gate sends
+the product back for ONE constrained regeneration (with the flagged defect
+fed back), then re-gates.
+
+**L1 vendor/model agnosticism (#194/#195)**: the battery LLM channel is the
+config-driven `config.llm` resolution (provider/model/api_key/base_url +
+fallback chain) — no vendor or model name is hardcoded in the battery or its
+blind-spot manifest. Structured output is capability-probed (config
+`llm.json_mode`); unsupported ⇒ markdown verdict blocks parsed
+deterministically into the same schema.
+
+**Honest hedges are PASS**: a product that says "not disclosed in the
+available sources" is CORRECT behavior (#179/#191) — never flag it.
+
 ## Agent Constraints (MUST NOT)
 
 | Action | Reason |
