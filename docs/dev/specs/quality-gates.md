@@ -28,7 +28,7 @@ Each quality gate operates at a specific pipeline stage, evaluates a different s
 
 **Key rule**: G0-G3 are **mandatory** on every collected item. G4-G5 are **opt-in** (require explicit flags because they make LLM calls). **CurationGate** runs at Draft→Wiki promotion time (see §3.1). D1-D3 run **only for PROCESSED products**; RAW products skip all delivery gates.
 
-**Concurrency note (gate semantics unchanged, 2026-08-13)**: post-extraction gates G3/G4/G5/CEFR run concurrently per item (bounded by `AUTOINFO_SUBTASK_CAP`, default 4; canonical gate order, G3 retry loop, G4 hard-gate 3× retry and the G0-G5 report order are preserved). All gate LLM calls route through `llm.call_with_fallback` and inherit the shared per-provider rate limiter (`AUTOINFO_LLM_MAX_CONCURRENCY`, default 4) + jittered 429/5xx backoff; G4/G5 judgment calls resolve to the release-pinned `JUDGMENT_MODEL` (see [`pipeline.md`](pipeline.md) §3.5).
+**Concurrency note (gate semantics unchanged, 2026-08-13)**: post-extraction gates G3/G4/G5/CEFR run concurrently per item (bounded by `AUTOINFO_SUBTASK_CAP`, default 4; canonical gate order, G3 retry loop, G4 hard-gate 3× retry and the G0-G5 report order are preserved). All gate LLM calls route through `llm.call_with_fallback` and inherit the shared per-provider rate limiter (`AUTOINFO_LLM_MAX_CONCURRENCY`, default 4) + jittered 429/5xx backoff; G4/G5 judgment calls resolve config-first to `llm.judgment_model`/`llm.model` (issue #195 — see [`pipeline.md`](pipeline.md) §3.5); an LLM-failure surfaces as NOT_JUDGED (`QualityResult.judged=False`), never a silent pass.
 
 Pipeline diagram:
 
