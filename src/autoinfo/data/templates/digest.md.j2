@@ -15,12 +15,9 @@
 ### Key Findings
 
 {% for finding in llm_synthesis.key_findings %}
-{% if finding is mapping and finding.topic %}
-- **{{ finding.topic }}**: {{ finding.detail }}
-{% else %}
-- {{ finding.text if finding is mapping else finding }}
+{% if finding is mapping and finding.topic %}- **{{ finding.topic }}**: {{ finding.detail }}{{ (" (Source: " ~ finding.source_url ~ ")") if finding.source_url and finding.source_url not in (finding.text or "") else "" }}
+{% else %}- {{ finding.text if finding is mapping else finding }}{{ (" (Source: " ~ finding.source_url ~ ")") if finding.source_url and finding.source_url not in (finding.text or "") else "" }}
 {% endif %}
-{% if finding.source_url and finding.source_url not in (finding.text or "") %} (Source: {{ finding.source_url }}){% endif %}
 {% endfor %}
 {% endif %}
 
