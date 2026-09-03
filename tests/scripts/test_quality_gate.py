@@ -641,3 +641,27 @@ def test_c6_gate_file_runs_grounding_check(tmp_path: Path) -> None:
     f.write_text(_magazine_with_feature(_FEATURE_DRIFT), encoding="utf-8")
     defects = qg.gate_file(f, domain="ai-commercial")
     assert any("C6" in d for d in defects)
+
+
+# ---------------------------------------------------------------------------
+# known-defects fixture corpus acceptance (#194 spec C)
+# ---------------------------------------------------------------------------
+
+
+def test_quality_gate_known_good_passes() -> None:
+    """The known-good fixture product must pass the L0 gate clean."""
+    known_good = (
+        Path(__file__).resolve().parent.parent.parent
+        / "tests" / "fixtures" / "known-defects" / "known-good"
+    )
+    assert qg.gate_directory(known_good) == []
+
+
+def test_quality_gate_flags_three_person_fixture() -> None:
+    """The three-person-drift fixture is caught deterministically (C6)."""
+    drift_dir = (
+        Path(__file__).resolve().parent.parent.parent
+        / "tests" / "fixtures" / "known-defects" / "three-person-drift"
+    )
+    defects = qg.gate_directory(drift_dir)
+    assert any("C6" in d for d in defects)
