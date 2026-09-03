@@ -76,3 +76,9 @@ domains: []
 # tts:
 #   engine: openai  # "openai" (default) or "local" (edge-tts, free, offline)
 #   # local_voice: "en-US-JennyNeural"  # voice for edge-tts
+
+# --- #203 canonical RMB->USD rate (uncomment to change) ---
+# The single rate ALL product synthesis uses to annotate RMB-denominated
+# amounts with their USD equivalent.  Change it once here, never per-product.
+# currency:
+#   rmb_usd_rate: 7.0

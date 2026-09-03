@@ -57,6 +57,7 @@ from autoinfo.llm import call_with_fallback
 from autoinfo.quality_constraints import (
     FEATURE_STORY_GROUNDING_CONSTRAINT,
     NO_FABRICATION_CONSTRAINT,
+    SYNTHESIS_SIGNAL_TRACEABILITY_CONSTRAINT,
 )
 
 logger = logging.getLogger(__name__)
@@ -4764,8 +4765,74 @@ _DIGEST_PRODUCT_SCOPE_GUIDANCE: dict[str, str] = {
 }
 
 
+# ---------------------------------------------------------------------------
+# Issue #203 — canonical RMB→USD annotation for synthesis context
+# ---------------------------------------------------------------------------
+
+# Chinese monetary units and the RMB amounts they denote.  ``亿元`` / bare ``亿``
+# are hundred-millions of yuan; ``万元`` is ten-thousands of yuan.  This is the
+# config-driven conversion (never a prompt hardcode): the rate is read from
+# ``config.currency.rmb_usd_rate`` so EVERY product annotates the SAME
+# canonical USD value for the same RMB amount.
+_RMB_YI_RE = re.compile(r"([0-9][0-9,_]*(?:\.[0-9]+)?)\s*(亿元?)")
+_RMB_WAN_RE = re.compile(r"([0-9][0-9,_]*(?:\.[0-9]+)?)\s*(万元)")
+
+
+def _get_rmb_usd_rate() -> float:
+    """Resolve the canonical RMB→USD rate from config (default 7.0).
+
+    Config-driven by design (#203): the rate is read once from
+    ``currency.rmb_usd_rate`` and injected into every product's synthesis
+    prompt, so products never invent their own per-product conversion.
+    """
+    try:
+        cfg = load_config(get_config_path())  # type: ignore[arg-type]
+        return float(cfg.currency.rmb_usd_rate)
+    except Exception:
+        return float(Config().currency.rmb_usd_rate)
+
+
+def _format_usd_equivalent(usd: float) -> str:
+    """Format a USD value as '⟪N⟫M' (whole millions) or '⟪N⟫K' (sub-million)."""
+    millions = usd / 1e6
+    if millions >= 1:
+        return f"${int(round(millions))}M"
+    return f"${int(round(usd / 1e3))}K"
+
+
+def _annotate_rmb_usd(text: str, rate: float) -> str:
+    """Append a canonical USD equivalent next to each RMB-denominated amount.
+
+    ``30亿元`` → ``30亿元（≈$429M @7.0）``; ``50亿元`` → ``50亿元（≈$714M @7.0）``.
+    value = amount_yi * 1e8 / rate (or * 1e4 for 万元), shown as whole
+    millions.  A non-positive *rate* (or ``None``) disables annotation.
+    """
+    if not text or not rate or rate <= 0:
+        return text
+
+    def _annotate(match: re.Match[str]) -> str:
+        raw = match.group(1).replace(",", "")
+        amount = float(raw)
+        unit = match.group(2)
+        base = 1e8 if unit.startswith("亿") else 1e4
+        usd = amount * base / rate
+        return f"{match.group(0)}（≈{_format_usd_equivalent(usd)} @{rate:.1f}）"
+
+    out = _RMB_YI_RE.sub(_annotate, text)
+    out = _RMB_WAN_RE.sub(_annotate, out)
+    return out
+
+
+def _digest_entry_text(entry: dict[str, Any], rate: float) -> tuple[str, str]:
+    """Return (title, summary) with canonical RMB→USD annotations applied."""
+    title = str(entry.get("title", "") or "")
+    summary = str(entry.get("summary", "") or "")
+    return _annotate_rmb_usd(title, rate), _annotate_rmb_usd(summary, rate)
+
+
 def _build_digest_llm_prompt(
-    entries: list[dict[str, Any]], product_family: str = "digest"
+    entries: list[dict[str, Any]], product_family: str = "digest",
+    rmb_usd_rate: float | None = None,
 ) -> str:
     """Build the user prompt for LLM digest synthesis.
 
@@ -4775,15 +4842,19 @@ def _build_digest_llm_prompt(
     ``risks`` / ``action_required`` (index-aligned with ``key_findings``),
     plus ``key_metrics`` for enterprise-briefing — keyed by the resolved
     family. The default ``digest`` family is unchanged (spec §2.4, todo 7).
+
+    *rmb_usd_rate* (config-driven, issue #203) injects the canonical USD
+    equivalent next to RMB-denominated amounts; ``None`` reads it from config.
     """
+    if rmb_usd_rate is None:
+        rmb_usd_rate = _get_rmb_usd_rate()
     lines: list[str] = [
         "Synthesize the following knowledge base entries into a digest.",
         "",
     ]
 
     for i, entry in enumerate(entries, 1):
-        title = entry.get("title", "(no title)")
-        summary = entry.get("summary", "")
+        title, summary = _digest_entry_text(entry, rmb_usd_rate)
         tags_raw = entry.get("tags", "")
         if isinstance(tags_raw, str):
             try:
@@ -4797,7 +4868,7 @@ def _build_digest_llm_prompt(
         tags_str = ", ".join(tags_list) if tags_list else "\u2014"
 
         lines.append(f"Entry {i}:")
-        lines.append(f"  Title: {title}")
+        lines.append(f"  Title: {title or '(no title)'}")
         lines.append(f"  Summary: {summary[:500] if summary else chr(8212)}")
         lines.append(f"  Tags: {tags_str}")
         lines.append(f"  Source URL: {entry.get('source_url') or chr(8212)}")
@@ -4831,6 +4902,11 @@ def _build_digest_llm_prompt(
     # lives in quality_constraints (#194 spec D).
     lines.append("")
     lines.append(NO_FABRICATION_CONSTRAINT)
+    # Issue #200: never rename/abstract source signals into new terms
+    # ("low market breadth" must not replace "low VIX, inflation shocks,
+    # and excessive AI spending").  Canonical string in quality_constraints.
+    lines.append("")
+    lines.append(SYNTHESIS_SIGNAL_TRACEABILITY_CONSTRAINT)
     lines.append("Return all fields in a single JSON object.")
 
     return "\n".join(lines)
@@ -8732,6 +8808,7 @@ def _build_report_entries_detail(
     max_detail_entries: int = 40,
     max_entry_summary_chars: int = 120,
     detail_char_budget: int | None = None,
+    rmb_usd_rate: float | None = None,
 ) -> str:
     """Build the theme-grouped entry detail block embedded in the synthesis
     prompt.
@@ -8742,7 +8819,13 @@ def _build_report_entries_detail(
     truncation note appended — used by the smaller-prompt retry in
     :func:`_generate_executive_summary` so the prompt stays within the size
     the configured LLM endpoint reliably answers.
+
+    *rmb_usd_rate* (config-driven, issue #203) appends the canonical USD
+    equivalent to RMB-denominated amounts in titles/summaries (``None`` reads
+    it from config).
     """
+    if rmb_usd_rate is None:
+        rmb_usd_rate = _get_rmb_usd_rate()
     ranked = sorted(
         (e for g in groupings for e in g["entries"]),
         key=lambda e: float(e.get("relevance_score") or 0.0),
@@ -8757,9 +8840,10 @@ def _build_report_entries_detail(
             break
         picked = [e for e in g["entries"] if id(e) in picked_ids]
         for e in picked:
+            title, summary = _digest_entry_text(e, rmb_usd_rate)
             line = (
-                f"- [{g['theme']}] {e.get('title', '')}: "
-                f"{(e.get('summary') or '')[: max_entry_summary_chars]}"
+                f"- [{g['theme']}] {title or '(no title)'}: "
+                f"{summary[: max_entry_summary_chars]}"
             )
             # Issue #279: thread source_url into the synthesis context.
             src = str(e.get("source_url") or "").strip()
@@ -8840,6 +8924,11 @@ def _build_report_synthesis_prompt(
     # numbers/directions or entity descriptions beyond the sources).
     # Canonical string lives in quality_constraints (#194 spec D).
     prompt += f"\n\n{NO_FABRICATION_CONSTRAINT}"
+    # Issue #200: never rename/abstract source signals into new terms — a
+    # financial report turned "low VIX, inflation shocks, and excessive AI
+    # spending" into the novel "low market breadth".  Canonical string lives
+    # in quality_constraints (rides digest + report paths identically).
+    prompt += f"\n\n{SYNTHESIS_SIGNAL_TRACEABILITY_CONSTRAINT}"
     # -- Structured audience adaptation -----------------------------------
     audience = _normalize_report_audience(target_audience)
     audience_prompt = _REPORT_AUDIENCE_PROMPTS.get(audience, "")

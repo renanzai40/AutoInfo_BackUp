@@ -16,6 +16,7 @@ import yaml
 
 from autoinfo.config import (
     Config,
+    CurrencyConfig,
     DomainConfig,
     LLMConfig,
     LLMTaskConfig,
@@ -626,6 +627,38 @@ class TestDataclassRoundTrip:
         assert fb["model"] == "mimo-v2.5"
         assert fb["base_url"] == "https://opencode.ai/zen/go/v1"
         assert fb["api_key"] == "fb-key"
+
+
+# ---------------------------------------------------------------------------
+# currency (issue #203) — canonical RMB→USD rate
+# ---------------------------------------------------------------------------
+
+
+class TestCurrency:
+    def test_default_rmb_usd_rate_is_seven(self) -> None:
+        """The Config dataclass defaults the canonical RMB→USD rate to 7.0."""
+        assert Config().currency.rmb_usd_rate == 7.0
+
+    def test_load_config_parses_present_currency(self, tmp_path: Path) -> None:
+        cfg_path = tmp_path / "config.yaml"
+        cfg_path.write_text(
+            "project:\n  name: test\n"
+            "currency:\n  rmb_usd_rate: 7.25\n",
+            encoding="utf-8",
+        )
+        cfg = load_config(cfg_path)
+        assert cfg.currency.rmb_usd_rate == 7.25
+
+    def test_load_config_missing_currency_defaults_seven(self, tmp_path: Path) -> None:
+        cfg_path = tmp_path / "config.yaml"
+        cfg_path.write_text("project:\n  name: test\n", encoding="utf-8")
+        assert load_config(cfg_path).currency.rmb_usd_rate == 7.0
+
+    def test_config_to_dict_round_trips_currency(self) -> None:
+        d = config_to_dict(
+            Config(currency=CurrencyConfig(rmb_usd_rate=7.5))
+        )
+        assert d["currency"]["rmb_usd_rate"] == 7.5
 
 
 # ---------------------------------------------------------------------------

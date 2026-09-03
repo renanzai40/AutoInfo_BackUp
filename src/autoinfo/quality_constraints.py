@@ -44,3 +44,20 @@ FEATURE_STORY_GROUNDING_CONSTRAINT: str = (
     "reaction must be clearly hedged ('likely', 'suggests', 'may'), and "
     "where a detail is not in the sources, say so or omit it"
 )
+
+
+# Issue #200: the report synthesis must not RENAME or ABSTRACT source signals
+# into new terms.  A reviewer found a financial report paraphrasing source
+# signals ("low VIX, inflation shocks, and excessive AI spending") into a NEW
+# term "low market breadth" that no entry states.  Every cited signal, factor,
+# or reason must trace verbatim to the cited entry's summary or the References
+# list.  Appended to BOTH the digest and report synthesis prompts so the
+# constraint rides every product synthesis path consistently (complements
+# NO_FABRICATION_CONSTRAINT, which forbids inventing details ex nihilo).
+SYNTHESIS_SIGNAL_TRACEABILITY_CONSTRAINT: str = (
+    "Every named signal, factor, or reason cited in the Executive Summary, "
+    "Key Findings, or Recommendations must trace to the cited entry's "
+    "summary or the References list. Do NOT rename or abstract source "
+    "signals into new terms \u2014 e.g. never rewrite 'low VIX, inflation "
+    "shocks, and excessive AI spending' as 'low market breadth'."
+)

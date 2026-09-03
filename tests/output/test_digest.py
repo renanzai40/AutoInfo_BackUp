@@ -21,6 +21,8 @@ import pytest
 
 from autoinfo.output import (
     DeliveryOutput,
+    _annotate_rmb_usd,
+    _build_digest_llm_prompt,
     _call_llm_for_digest,
     _compute_date_range,
     _parse_json_response,
@@ -857,3 +859,56 @@ class TestCjkLeakAndCurrencySplit:
         bullets = _split_summary_sentences("VAST raised $8.5 billion. Second $1.1 billion fund.")
         assert bullets[0] == "VAST raised $8.5 billion"
         assert bullets[1] == "Second $1.1 billion fund"
+
+
+# ======================================================================
+# #200/#203: synthesis traceability (report+digest) and canonical RMB->USD
+# annotation injected into the digest synthesis context
+# ======================================================================
+
+
+class TestSynthesisTraceabilityAndRmbUsd:
+    def test_digest_prompt_carries_signal_traceability_constraint(self) -> None:
+        from autoinfo.quality_constraints import (
+            SYNTHESIS_SIGNAL_TRACEABILITY_CONSTRAINT,
+        )
+
+        prompt = _build_digest_llm_prompt(_SAMPLE_ENTRIES)
+        assert SYNTHESIS_SIGNAL_TRACEABILITY_CONSTRAINT in prompt
+        assert "low market breadth" in prompt
+
+    def test_report_prompt_carries_signal_traceability_constraint(self) -> None:
+        from autoinfo.output import _build_report_synthesis_prompt
+        from autoinfo.quality_constraints import (
+            SYNTHESIS_SIGNAL_TRACEABILITY_CONSTRAINT,
+        )
+
+        prompt = _build_report_synthesis_prompt("themes and entries here")
+        assert SYNTHESIS_SIGNAL_TRACEABILITY_CONSTRAINT in prompt
+        assert "low market breadth" in prompt
+
+    def test_rmb_yi_to_usd_whole_millions(self) -> None:
+        assert _annotate_rmb_usd("筹集30亿元", 7.0) == "筹集30亿元（≈$429M @7.0）"
+        assert _annotate_rmb_usd("获得50亿元", 7.0) == "获得50亿元（≈$714M @7.0）"
+
+    def test_digest_context_injects_canonical_usd_for_30yi(self) -> None:
+        entry = {
+            "entry_id": "va-1",
+            "title": "VAST 完成30亿元融资",
+            "language": "zh",
+            "domain": "ai-commercial",
+            "tier": "01-Raw",
+            "source_url": "https://example.com/vast",
+            "source_type": "api",
+            "source_platform": "web",
+            "collected_at": "2026-09-01",
+            "summary": "该公司获得30亿元新一轮投资，用于扩大算力规模。",
+            "tags": '["融资", "AI"]',
+            "relevance_score": 90.0,
+        }
+        prompt = _build_digest_llm_prompt([entry], rmb_usd_rate=7.0)
+        assert "≈$429M @7.0" in prompt
+
+    def test_rmb_annotation_disabled_when_rate_zero(self) -> None:
+        assert _annotate_rmb_usd("筹集30亿元", 0) == "筹集30亿元"
+        assert _annotate_rmb_usd("筹集30亿元", None) == "筹集30亿元"

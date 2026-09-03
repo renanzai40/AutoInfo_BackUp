@@ -665,3 +665,110 @@ def test_quality_gate_flags_three_person_fixture() -> None:
     )
     defects = qg.gate_directory(drift_dir)
     assert any("C6" in d for d in defects)
+
+
+# ---------------------------------------------------------------------------
+# H1/H2/H3 grade-review assertion classes (issues #200/#203/#204)
+# ---------------------------------------------------------------------------
+
+
+def _report_with_signal_and_refs(signal_lines: str, refs: str) -> str:
+    """A report-family body (narrative) + References ground truth."""
+    return (
+        "# Report\n\n## Executive Summary\n"
+        + signal_lines
+        + "\n\n## References\n"
+        + refs
+    )
+
+
+def test_h1_flags_narrative_only_signal(tmp_path: Path) -> None:
+    """#200 acceptance: 'low market breadth' appears in the narrative but
+    NOT in References (which carry the honest source signals) — H1 flags it."""
+    text = _report_with_signal_and_refs(
+        signal_lines=(
+            "Joe Tigay points to signals such as low market breadth as reasons "
+            "to expect a pullback this month."
+        ),
+        refs=(
+            "1. **Stocks predict** — https://example.com/tigay — Joe Tigay "
+            "points to low VIX, inflation shocks, and excessive AI spending."
+        ),
+    )
+    f = tmp_path / "report.md"
+    f.write_text(text, encoding="utf-8")
+    defects = qg.find_narrative_signal_integrity(text, path=f)
+    assert any("market breadth" in d for d in defects), defects
+    # The honest source signals are grounded and never flagged.
+    for grounded in ("VIX", "inflation shocks", "AI spending"):
+        assert not any(grounded in d for d in defects), defects
+
+
+def test_h1_grounded_signal_passes(tmp_path: Path) -> None:
+    """A narrative signal that IS in References passes H1 (no orphan)."""
+    text = _report_with_signal_and_refs(
+        signal_lines=(
+            "The source notes excessive AI spending across the sector."
+        ),
+        refs=(
+            "1. **A spending call** — https://example.com/s — excessive AI "
+            "spending is a key concern."
+        ),
+    )
+    f = tmp_path / "report.md"
+    f.write_text(text, encoding="utf-8")
+    assert qg.find_narrative_signal_integrity(text, path=f) == []
+
+
+def test_h1_only_applies_to_reference_bearing_families(tmp_path: Path) -> None:
+    """H1 is scoped to report/briefing/digest — not magazine-digest."""
+    text = _report_with_signal_and_refs(
+        signal_lines="Signals such as low market breadth dominate the period.",
+        refs="1. **X** — https://example.com/x — low VIX and inflation.",
+    )
+    f = tmp_path / "magazine-digest.md"
+    f.write_text(text, encoding="utf-8")
+    assert qg.find_narrative_signal_integrity(text, path=f) == []
+
+
+def test_h2_flags_mid_word_line_end() -> None:
+    """H2 acceptance: 'police offi' is a bare prefix of 'officers' elsewhere —
+    the line ends mid-word and is flagged."""
+    text = (
+        "Officers arrested the suspect. The statement lists police offi" + "\n"
+        "several roles including investigating officers across the precinct."
+    )
+    defects = qg.find_word_boundary_truncation(text)
+    assert any("offi" in d for d in defects), defects
+
+
+def test_h2_complete_line_passes() -> None:
+    """A line ending in a real terminal word is not an H2 truncation."""
+    text = (
+        "Officers conducted the investigation thoroughly and completed the "
+        "full product system review before publishing."
+    )
+    assert qg.find_word_boundary_truncation(text) == []
+
+
+def test_h3_flags_glued_bullet() -> None:
+    """H3 acceptance: a '- ' bullet that does not start a line (previous char
+    is not a newline) — ').- **next' — is flagged."""
+    text = (
+        "## Key Findings\n"
+        "- First finding with a citation (Source: https://a.com/1).- **Second "
+        "finding glued onto the first line** but this is a real paragraph."
+    )
+    defects = qg.find_bullet_serialization_glue(text)
+    assert len(defects) == 1
+    assert "H3 bullet serialization glue" in defects[0]
+
+
+def test_h3_clean_lines_pass() -> None:
+    """Bullets that each start a new line are not glue."""
+    text = (
+        "## Key Findings\n"
+        "- First finding on its own line.\n"
+        "- Second finding on its own line.\n"
+    )
+    assert qg.find_bullet_serialization_glue(text) == []
