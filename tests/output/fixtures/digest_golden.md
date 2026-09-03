@@ -13,6 +13,7 @@ This week's developments center on falling model inference costs driving new AI 
 ### Key Findings
 
 - **Inference costs**: Startups report 40% cost cuts.
+
 ### Trends & Patterns
 
 - Cheaper inference

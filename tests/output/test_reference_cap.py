@@ -54,12 +54,17 @@ def _as_text(result: str | DeliveryOutput) -> str:
 
 
 def _make_entries(n_summary: int, n_title_only: int) -> list[dict[str, Any]]:
-    """``n_summary`` summary-bearing entries (relevance 1..N) + one top-score
-    entry (relevance 99) + ``n_title_only`` title-only entries whose high
-    relevance (61..) must NOT outrank the summary-bearing ones.  The
-    title-only entries carry a real ``content`` body so the #294/#326
+    """``n_summary`` summary-bearing entries (relevance 30..N+29) + one
+    top-score entry (relevance 99) + ``n_title_only`` title-only entries
+    whose high relevance (61..) must NOT outrank the summary-bearing ones.
+    The title-only entries carry a real ``content`` body so the #294/#326
     product-entry filter keeps them (they model real Draft/Wiki entries with
-    an empty DB summary)."""
+    an empty DB summary).
+
+    Issue #213: summary relevance starts at 30 (not 1) so every entry clears
+    the domain's ``min_product_relevance`` floor (#166 — medical-research
+    floors at 30); the pre-#166 fixture used 1..N which the floor now drops,
+    collapsing the intended 60-reference render to 51."""
     entries: list[dict[str, Any]] = []
     for i in range(1, n_summary + 1):
         entries.append({
@@ -70,7 +75,7 @@ def _make_entries(n_summary: int, n_title_only: int) -> list[dict[str, Any]]:
             "source_type": "api",
             "source_platform": "pubmed",
             "domain": "medical-research",
-            "relevance_score": float(i),
+            "relevance_score": float(29 + i),
             "language": "en",
             "tags": "[]",
             "tier": "01-Raw",
@@ -110,7 +115,12 @@ def _make_entries(n_summary: int, n_title_only: int) -> list[dict[str, Any]]:
 
 
 def _make_plain_entries(n: int) -> list[dict[str, Any]]:
-    """``n`` summary-bearing entries with descending relevance (N..1)."""
+    """``n`` summary-bearing entries with descending relevance (30+n-1..30).
+
+    Issue #213: relevance starts above 30 so every entry clears the domain's
+    ``min_product_relevance`` floor (#166, medical-research floors at 30);
+    the pre-#166 fixture used n-1..0 which the floor drops entirely, leaving
+    an empty report ("no curated items yet")."""
     return [
         {
             "entry_id": f"e-{i}",
@@ -120,7 +130,7 @@ def _make_plain_entries(n: int) -> list[dict[str, Any]]:
             "source_type": "api",
             "source_platform": "pubmed",
             "domain": "medical-research",
-            "relevance_score": float(n - i),
+            "relevance_score": float(30 + n - i),
             "language": "en",
             "tags": "[]",
             "tier": "01-Raw",
