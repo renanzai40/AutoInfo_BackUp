@@ -627,6 +627,7 @@ class TestOutputCommandUserID:
             target_audience="student",
             format="markdown",
             user_id="user-123",
+            include_stale=False,
         )
 
     @patch("autoinfo.output.generate_tutorial", return_value="# tutorial")
@@ -644,6 +645,7 @@ class TestOutputCommandUserID:
             target_audience="student",
             format="markdown",
             user_id="",
+            include_stale=False,
         )
 
     @patch("autoinfo.output.generate_presentation", return_value="# pres")
@@ -668,6 +670,7 @@ class TestOutputCommandUserID:
             target_audience="executive",
             format="markdown",
             user_id="user-123",
+            include_stale=False,
         )
 
     @patch("autoinfo.output.generate_presentation", return_value="# pres")
@@ -691,4 +694,5 @@ class TestOutputCommandUserID:
             target_audience="executive",
             format="markdown",
             user_id="",
+            include_stale=False,
         )

@@ -242,7 +242,7 @@ class TestInitLlmOverride:
             cfg = yaml.safe_load(f)
         assert cfg["llm"]["provider"] == "openai"
         # Other defaults should remain
-        assert cfg["llm"]["model"] == "deepseek/deepseek-chat"
+        assert cfg["llm"]["model"] == "deepseek-v4-flash"
 
     def test_llm_model_override(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.chdir(tmp_path)
@@ -258,7 +258,7 @@ class TestInitLlmOverride:
         with open(config_path) as f:
             cfg = yaml.safe_load(f)
         assert cfg["llm"]["model"] == "gpt-4"
-        assert cfg["llm"]["provider"] == "openrouter"
+        assert cfg["llm"]["provider"] == "openai"
 
     def test_llm_base_url_override(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.chdir(tmp_path)
@@ -306,8 +306,8 @@ class TestInitLlmOverride:
         config_path = tmp_path / ".autoinfo" / "config.yaml"
         with open(config_path) as f:
             cfg = yaml.safe_load(f)
-        assert cfg["llm"]["provider"] == "openrouter"
-        assert cfg["llm"]["model"] == "deepseek/deepseek-chat"
+        assert cfg["llm"]["provider"] == "openai"
+        assert cfg["llm"]["model"] == "deepseek-v4-flash"
         assert "base_url" not in cfg["llm"]
 
     def test_dry_run_includes_llm_values(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
