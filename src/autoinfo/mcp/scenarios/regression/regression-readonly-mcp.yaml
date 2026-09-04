@@ -1,0 +1,114 @@
+# Regression (plan todo-14): read-only MCP server mode (autoinfo serve --agent).
+#
+# The read-only mode is a DOUBLE gate on the 4-tool whitelist
+# (_READONLY_TOOLS): (1) list_tools() lists ONLY the whitelisted tools;
+# (2) call_tool() returns an explicit READ_ONLY_SERVER error envelope for
+# any non-whitelisted name — never silent.  run_validation_scenario and
+# init_project are both non-whitelisted and must be blocked.  The default
+# (full) server mode still lists all 146 tools.
+#
+# Deterministic (requires_env: []): everything runs in-process inside an
+# ABSOLUTE temp cwd (tempfile.mkdtemp, try/finally cleanup); no LLM key and
+# no network.  export_kb(format="agent") exercises the pure-function path
+# (_export_agent_json) and must return the JSON-LD @type with zero entries.
+name: regression-readonly-mcp
+description: "Read-only MCP mode: tools/list returns exactly the 4 whitelisted tools and non-whitelisted calls return READ_ONLY_SERVER"
+category: regression
+regression: true
+regression_issue: "#readonly-mcp"
+requires_env: []
+steps:
+  - name: "readonly double gate: 4-tool list + explicit block + pure agent export + full mode regression"
+    kind: cli
+    command: |-
+      python3 -c '
+      import asyncio, json, os, shutil, tempfile
+      from pathlib import Path
+
+      from autoinfo.mcp import server
+      from autoinfo.mcp.errors import ErrorCode
+
+      READONLY = {
+          "search_knowledge_base",
+          "get_kb_entry",
+          "export_kb",
+          "list_validation_scenarios",
+      }
+
+      async def main():
+          tmp = Path(tempfile.mkdtemp(prefix="regression-readonly-mcp-"))
+          old = os.getcwd()
+          os.chdir(tmp)
+          try:
+              # -- full mode regression: still 146 tools ---------------
+              tools = await server.list_tools()
+              assert len(tools) == 146, len(tools)
+              print("FULL_MODE_146_OK")
+
+              # -- prep (full mode): config for the agent export -------
+              # Every dispatch audit-writes and auto-creates a bare
+              # autoinfo.db WITHOUT the entries table; rebuild a proper
+              # empty index db so export_kb runs the pure
+              # _export_agent_json path with zero entries.
+              init = await server.call_tool(
+                  "init_project", {"domain": "medical-research"}
+              )
+              assert json.loads(init[0].text)["success"] is True
+              from autoinfo.kb import SQLiteIndex
+
+              SQLiteIndex(tmp / "autoinfo.db").init_db()
+
+              # -- gate 1: readonly tools/list is exactly the 4 --------
+              server.set_readonly_mode(True)
+              tools = await server.list_tools()
+              names = {t.name for t in tools}
+              assert names == READONLY, names
+              assert "run_validation_scenario" not in names
+              print("READONLY_LIST_4_OK")
+
+              # -- gate 2: non-whitelisted calls blocked explicitly ----
+              for tool, args in (
+                  ("collect_sources", {"domain": "medical-research"}),
+                  ("run_validation_scenario", {"scenario": "system-health"}),
+                  ("init_project", {"domain": "medical-research"}),
+              ):
+                  res = await server.call_tool(tool, args)
+                  body = json.loads(res[0].text)
+                  assert body["success"] is False, (tool, body)
+                  assert (
+                      body["error"]["code"]
+                      == ErrorCode.READ_ONLY_SERVER.value
+                  ), (tool, body)
+                  assert body["error"]["actionable"] is True
+              print("READONLY_BLOCK_OK")
+
+              # -- whitelisted tool dispatches in readonly mode --------
+              res = await server.call_tool("list_validation_scenarios", {})
+              assert json.loads(res[0].text)["success"] is True
+              print("READONLY_LVS_OK")
+
+              # -- pure-function agent export with NO LLM key ----------
+              res = await server.call_tool(
+                  "export_kb",
+                  {"domain": "medical-research", "format": "agent"},
+              )
+              body = json.loads(res[0].text)
+              assert body.get("@type") == "KnowledgeBaseExport", body
+              assert body["stats"]["total_entries"] == 0
+              print("READONLY_AGENT_EXPORT_OK")
+          finally:
+              server.set_readonly_mode(False)
+              os.chdir(old)
+              shutil.rmtree(tmp, ignore_errors=True)
+
+      asyncio.run(main())
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has:
+        - "FULL_MODE_146_OK"
+        - "READONLY_LIST_4_OK"
+        - "READONLY_BLOCK_OK"
+        - "READONLY_LVS_OK"
+        - "READONLY_AGENT_EXPORT_OK"

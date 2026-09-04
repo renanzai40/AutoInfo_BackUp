@@ -11,10 +11,7 @@ Covers:
 
 from __future__ import annotations
 
-import json
-
 import pytest
-from mcp.types import TextContent
 
 from autoinfo.mcp import ErrorCode, ErrorResponse
 from autoinfo.mcp.errors import error_dict, error_response
@@ -51,8 +48,8 @@ class TestErrorCodeEnumValues:
         assert member.value == expected
 
     def test_total_members(self) -> None:
-        """Ensure exactly 28 members exist (23 original + 4 UX enhancement + 1 DIRECTOR_ONLY)."""
-        assert len(ErrorCode) == 28
+        """Ensure the enum member count stays pinned (grows only with new codes)."""
+        assert len(ErrorCode) == 29
 
 
 class TestErrorResponseTypedDict:

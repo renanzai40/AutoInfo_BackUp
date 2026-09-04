@@ -11,7 +11,6 @@ from enum import Enum
 from typing import Any, TypedDict
 
 
-
 class ErrorCode(str, Enum):
     """Error codes for MCP tool responses.
 
@@ -47,6 +46,7 @@ class ErrorCode(str, Enum):
     EMPTY_RESULT = "EmptyResult"
     CONFIG_NOT_FOUND = "ConfigNotFound"
     DIRECTOR_ONLY = "DIRECTOR_ONLY"
+    READ_ONLY_SERVER = "READ_ONLY_SERVER"
 
 
 class ErrorDetail(TypedDict):

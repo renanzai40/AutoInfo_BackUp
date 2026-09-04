@@ -26,6 +26,7 @@ from . import (
     portal,
     process,
     query_collected,
+    serve,
     sources,
     status,
     summaries,
@@ -128,6 +129,11 @@ app.add_typer(
     agent_callback.app,
     name="agent-callback",
     help="Manage agent push callbacks — mirrors MCP set/list/remove_agent_callback",
+)
+app.add_typer(
+    serve.app,
+    name="serve",
+    help="Run the AutoInfo MCP server over stdio ('serve --agent' = read-only 4-tool mode)",
 )
 
 if __name__ == "__main__":

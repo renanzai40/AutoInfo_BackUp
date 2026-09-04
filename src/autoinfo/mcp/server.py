@@ -7506,7 +7506,16 @@ app = Server("autoinfo")
 
 @app.list_tools()  # type: ignore[untyped-decorator,no-untyped-call]
 async def list_tools() -> list[Tool]:
-    """Declare the available MCP tools with their input schemas."""
+    """Declare the available MCP tools with their input schemas.
+
+    Read-only mode (gate 1): exposes ONLY the ``_READONLY_TOOLS`` whitelist.
+    """
+    if _is_readonly():
+        return [t for t in _full_tool_list() if t.name in _READONLY_TOOLS]
+    return _full_tool_list()
+
+
+def _full_tool_list() -> list[Tool]:
     return [
         # -- System (2) ---------------------------------------------------
         Tool(
@@ -11447,6 +11456,36 @@ _LLM_REQUIRED_TOOLS: frozenset[str] = frozenset({
 })
 
 
+# -- Read-only server mode (``autoinfo serve --agent``) ----------------------
+# SECURITY: double gate — list_tools() lists ONLY whitelisted tools;
+# call_tool() returns an explicit READ_ONLY_SERVER error envelope for any
+# non-whitelisted name (never silent).  ``run_validation_scenario`` is
+# EXPLICITLY EXCLUDED (its steps contain write ops: collect/promote/delete).
+# ``export_kb`` / ``search_knowledge_base`` are not in _LLM_REQUIRED_TOOLS,
+# and export_kb(format="agent") is served by the pure-function path
+# (_export_agent_json — no LLM, no disk), so readonly mode works keyless.
+_READONLY_TOOLS: frozenset[str] = frozenset({
+    "search_knowledge_base",
+    "get_kb_entry",
+    "export_kb",
+    "list_validation_scenarios",
+})
+
+# Mode is decided at startup (--readonly / serve --agent), never mid-session.
+_READONLY_MODE = False
+
+
+def set_readonly_mode(enabled: bool) -> None:
+    """Enable/disable read-only server mode (process-wide)."""
+    global _READONLY_MODE
+    _READONLY_MODE = bool(enabled)
+
+
+def _is_readonly() -> bool:
+    """Return ``True`` when the server runs in read-only mode."""
+    return _READONLY_MODE
+
+
 def _is_llm_configured() -> bool:
     """Return ``True`` if an LLM API key has been configured.
 
@@ -11593,6 +11632,26 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
         if name == "health_check":
             result = _handle_health_check()
             return [TextContent(type="text", text=json.dumps(result))]
+
+        # -- Read-only gate (gate 2): whitelist enforcement ---------------
+        # Explicit error envelope for non-whitelisted names — never silent.
+        if _is_readonly() and name not in _READONLY_TOOLS:
+            _dispatch_audit["code"] = "read_only"
+            return [
+                TextContent(
+                    type="text",
+                    text=json.dumps(error_response(
+                        code=ErrorCode.READ_ONLY_SERVER,
+                        message=(
+                            f"Tool '{name}' is not available in read-only "
+                            "server mode (autoinfo serve --agent). "
+                            f"Allowed tools: {', '.join(sorted(_READONLY_TOOLS))}. "
+                            "Restart the server without --readonly for full access."
+                        ),
+                        actionable=True,
+                    )),
+                )
+            ]
 
         # -- LLM guard: block LLM-required tools when not configured ------
         if name in _LLM_REQUIRED_TOOLS and not _is_llm_configured():
@@ -12100,13 +12159,21 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
 # ---------------------------------------------------------------------------
 
 
-async def main() -> None:
+async def main(readonly: bool = False) -> None:
     """Run the MCP server over stdio transport.
 
     Opens the stdio read/write streams and enters the server's main loop.
     The server processes incoming JSON-RPC messages until the client
     disconnects.
+
+    Parameters
+    ----------
+    readonly:
+        When ``True``, expose ONLY the ``_READONLY_TOOLS`` whitelist
+        (read-only server mode — ``autoinfo serve --agent`` /
+        ``python -m autoinfo.mcp.server --readonly``).
     """
+    set_readonly_mode(readonly)
     async with stdio_server() as (read_stream, write_stream):
         await app.run(
             read_stream,
@@ -12115,10 +12182,23 @@ async def main() -> None:
         )
 
 
-def run() -> None:
+def run(readonly: bool = False) -> None:
     """Synchronous entry point (used by ``python -m autoinfo.mcp.server``)."""
-    asyncio.run(main())
+    asyncio.run(main(readonly=readonly))
 
 
 if __name__ == "__main__":
-    run()
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Run the AutoInfo MCP server (stdio transport).",
+    )
+    parser.add_argument(
+        "--readonly",
+        action="store_true",
+        help="Read-only mode: expose only the 4 read-only tools "
+        "(search_knowledge_base, get_kb_entry, export_kb(format=agent), "
+        "list_validation_scenarios). Equivalent to 'autoinfo serve --agent'.",
+    )
+    args = parser.parse_args()
+    run(readonly=args.readonly)
