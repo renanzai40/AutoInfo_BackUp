@@ -1,7 +1,7 @@
 # AutoInfo 商业论证状态报告（启动阶段）
 
 > **日期**：2026-09-02 · **验证轮次**：第 1 轮（demo 阶段基本完工）
-> **项目状态**：已建成、demo 交付包 R5(1) 通过独立审查、周迭代（最近 10 天 150 提交）
+> **项目状态**：已建成、demo 交付包 R5(1) 自检通过（[已修正 2026-09-04] 独立审查报告未存档，见 docs/demo-release-standard.md:12——DoD 标准 1 要求审查报告归档，缺失）、周迭代（最近 10 天 151 提交[已修正 2026-09-04：原 150，`git rev-list --count HEAD --since=2026-08-25` = 151 实测 @2026-09-04]）
 > **方法论**：business-validation skill（Steve Blank / JTBD / ODI / Sean Ellis / Van Westendorp）
 > **数据纪律**：一切结论带来源；找不到的标注 [未验证]；禁止凭印象
 
@@ -19,7 +19,7 @@
 | 锚定项 | 数据 | 来源 |
 |:-------|:-----|:-----|
 | 产品形态 | 信息追踪 + 知识库平台（Universal information tracking and KB platform） | [README.md](../../README.md) |
-| 开发迭代 | **663 提交，最近 10 天 150 提交**（高速迭代中） | `git rev-list --count` |
+| 开发迭代 | **[已修正 2026-09-04] 665 提交，最近 10 天 151 提交**（高速迭代中；原 663/150 过时——`git rev-list --count HEAD` = 665、`--since=2026-08-25` = 151 实测 @2026-09-04，偏差属自然增长） | `git rev-list --count` |
 | 测试规模 | **247 测试文件** | `find tests -name "test_*.py"` |
 | Validation 场景 | **130 场景（65 功能 + 65 回归）** | `find src/autoinfo/mcp/scenarios` |
 | MCP 工具 | **146 工具 / 35 类别** | README |
@@ -30,7 +30,7 @@
 | 用户模型 | **B1 付费终端用户 / B2 Agent 操作者 / B3 人类总监** | docs/dev/specs/user-lifecycle-definition.md |
 
 ### 状态声明
-**AutoInfo：已建成（247 测试 / 130 validation 场景），demo 阶段基本完工（R5 通过），零真实付费用户，周迭代（150 提交/10天）。** 商业验证目标：启动阶段确认定位、用户画像、竞品坐标、付费意愿。
+**AutoInfo：已建成（247 测试 / 130 validation 场景），demo 阶段基本完工（R5 自检通过——审查报告未存档，见阶段 0 标注[已修正 2026-09-04]），零真实付费用户，周迭代（151 提交/10天[已修正 2026-09-04：原 150]）。** 商业验证目标：启动阶段确认定位、用户画像、竞品坐标、付费意愿。
 
 ---
 
@@ -50,7 +50,7 @@
 | 来源 | docs/dev/specs/market-positioning.md §7.2 | 同左 |
 
 ### JTBD 核心洞察
-**"翻译完还要保持原版式"式的具体工作**：客户要的是"不用自己读 100 个源，就能得到结构化的领域情报"——这个需求已被付费 newsletter 生态验证（TLDR 1.25M 订阅、Pragmatic Engineer $15/月），但 newsletter 是**人工 curation**，AutoInfo 是**自动化 + Agent 原生**，这是差异点。
+**"翻译完还要保持原版式"式的具体工作**：客户要的是"不用自己读 100 个源，就能得到结构化的领域情报"——这个需求已被付费 newsletter 生态验证（[已修正 2026-09-04] TLDR 主版 ~1.25M 订阅、免费/广告模式；Pragmatic Engineer $15/月为独立付费 newsletter——两者定价模式不同，不可混用[未验证细节]），但 newsletter 是**人工 curation**，AutoInfo 是**自动化 + Agent 原生**，这是差异点。**结论仍成立：付费 newsletter 生态验证了"结构化领域情报"需求存在（TLDR 1.25M 订阅规模 + PE 独立付费均为真实可查事实）。**
 
 ---
 
@@ -60,8 +60,8 @@
 
 | 期望结果 | 来源 | 重要度 | 当前满意度 | 机会缺口 |
 |:---------|:-----|:------:|:---------:|:--------:|
-| 最小化 多源信息 累积到"来不及读"的时间（天） | Reddit r/rss "drowning in feeds / +999 unread" | 9 | 3 | 高 |
-| 最小化 增加 RSS 源后 信息过载的时间（3 源即崩） | Reddit "once I add more than 3 sources, it becomes unmanageable" | 8 | 3 | 高 |
+| 最小化 多源信息 累积到"来不及读"的时间（天） | [已修正 2026-09-04] Reddit r/rss 多帖（社区情绪转述非逐字引语；thread 1jrh66h "2876 unread" 为可查实例） | 9 | 3 | 高 |
+| 最小化 增加 RSS 源后 信息过载的时间（3 源即崩） | [已修正 2026-09-04] Reddit r/rss（社区情绪转述，"3 源即崩"类引语无法逐字定位） | 8 | 3 | 高 |
 | 最大化 每天花在阅读上的时间回报（省回的小时数/天） | TLDR "150 hours/year 省回"（开发者 newsletter 评测）| 8 | 4 | 中高 |
 | 最大化 领域情报的新鲜度（小时级） | market-positioning §7.2 客户 A 质量关切 | 9 | 5 | 高 |
 | 最大化 产物可追溯性（每条分析能溯源到源） | market-positioning §7.2 客户 A/B 共同关切 | 8 | 6 | 中 |
@@ -79,10 +79,10 @@
 |:-----|:-----|:-----|:-----|
 | **Feedly** | RSS 阅读器 | Free $0 / Pro $6.99 / Pro+ $12.99 / Enterprise $1,600+/月 | readless.app 2026 + official |
 | **Inoreader** | RSS 阅读器 | Free $0 / Pro $7.50-9.99 / Team $44.99+ / 50人 $374.99+ | inoreader.com/pricing |
-| **AlphaSense** | 企业情报 | **$15K-$20K/座席/年**（SMB $12,210/年, Enterprise $123,760/年）| elevatedsignal.com + spendhound + vendr |
-| **Kompyte**（Semrush）| 竞品监控 | $300/年起（不公开；Semrush 收购披露 avg $20K ARR/客户）| competely.ai + parano.ai |
-| **Readless** | AI digest | Free / Pro $4.90 / Max $9/月（新玩家，2026）| readless.app/pricing |
-| **Competely** | 竞品监控 | $39-$59/月起（公开定价）| competely.ai |
+| **AlphaSense** | 企业情报 | [已修正 2026-09-04] **$15K-$20K/座席/年**（SMB $12,210/年, Enterprise $123,760/年；溯源注释：$12,210/$123,760 可溯源至 SpendHound，Vendr 中位 $17.5K 为合同总额非座席价——per-seat 与合同总额口径不同[未验证官方价目，官方无公开价]）| elevatedsignal.com + spendhound + vendr |
+| **Kompyte**（Semrush）| 竞品监控 | $300/年起（不公开；Semrush 收购披露 avg $20K ARR/客户）| competely.ai + parano.ai [已修正 2026-09-04：来源列勘误——Kompyte 数据实际出处为 directory 定价页 + Business Wire 2022-02-28 Semrush 收购公告，competely.ai/parano.ai 是 Kompyte 竞品 Competely/Parano 的官网，非 Kompyte 来源] |
+| **Readless** | AI digest | [已修正 2026-09-04] 无永久免费层（仅 7 天免费试用）/ Pro $4.90 / Max $9/月（新玩家，2026）| readless.app/pricing |
+| **Competely** | 竞品监控 | [已修正 2026-09-04] $39 / $59 / $99 三档（公开定价；原记录漏 $99 Scale 档）| competely.ai |
 | **Diffbot** | Web 提取 API | Free $0 / Startup $299 / Plus $899/月 | diffbot.com/pricing |
 | **KnowledgeSDK** | Web 提取 API | Starter $29 / Pro $99/月起 | knowledgesdk.com |
 
@@ -112,7 +112,7 @@
 
 | 检查项 | 发现 | 风险 |
 |:-------|:-----|:----:|
-| anthropics/skills 官方仓库 | **BlogWatcher skill**（RSS 监控）已在 KiwiClaw/OpenClaw 生态存在 | 🟡 |
+| [已修正 2026-09-04] 社区/生态 skill 仓库（anthropics/skills 官方仓库无 BlogWatcher/rss skill——已核对 anthropics/skills 全量技能名清单，无 blogwatcher/rss 相关技能） | **BlogWatcher skill**（RSS 监控）已在 KiwiClaw/OpenClaw/Hermes 生态存在（KiwiClaw Hub + OpenClaw registry(steipete) + Hermes blogwatcher-cli v2.0.0）（**结论仍成立**：免费 RSS 监控 skill 已存在——KiwiClaw/OpenClaw/Hermes 生态来源支撑，仅 anthropics/skills 归属有误） | 🟡 |
 | Hermes 自带 skills | **Hermes 内置 blogwatcher-cli**（RSS/Atom 监控）— 你已用 | 🟡 |
 | skills.sh / 社区 | **rss-agent**（GitHub shiquda，SKILL.md）等 RSS 摘要 skill 已存在 | 🟡 |
 | 通用 Agent 实测 | **Claude Code/Codex + MCP** 可以搭竞品监控 agent（Digital Applied 2026-07 实测）| 🟡 |
@@ -122,17 +122,17 @@
 | AutoInfo 能力块 | 通用 Agent + 现成 skill 能替代？ | 风险 | 硬差距 |
 |:-----|:-----|:----:|:-----|
 | **RSS 采集 + AI 摘要** | ✅ BlogWatcher + LLM 半小时搭出 | 🔴 高 | 无（免费 skill 已覆盖）|
-| **竞品监控核心** | ✅ changedetection.io $8.99/月 + MCP = DIY 监控 | 🔴 高 | 无 |
+| **竞品监控核心** | ✅ [已修正 2026-09-04] changedetection.io（自托管开源版免费；$8.99/月为托管 SaaS 价）+ MCP = DIY 监控 | 🔴 高 | 无 |
 | **结构化提取 + KB 沉淀** | ⚠️ 可搭但要写代码 | 🟡 中 | 部分（需要 schema 设计）|
-| **质量门控（防幻觉/占位/泄漏）** | ❌ 通用 agent 不会默认做 | 🟢 低 | **强（R1-R13 硬扫 + G0-G5）** |
+| **质量门控（防幻觉/占位/泄漏）** | ❌ 通用 agent 不会默认做 | 🟢 低 | **强（[已修正 2026-09-04] L0 gate（F1-F4/C1-C6/X1, scripts/quality_gate.py）+ 产物级 R1-R13 场景规则（regression-product-quality-all-templates.yaml）硬扫 + G0-G5）** |
 | **多格式产物（video/epub/audiobook）** | ⚠️ 可搭但工程量大 | 🟡 中 | 部分 |
 | **端到端管线 + 溯源 + 审计** | ❌ 通用 agent 搭不出这种完备度 | 🟢 低 | **强** |
 
 ### 4.3 斩杀风险核心结论（诚实）
 
-**Digital Applied 2026-07 文章是决定性证据**：企业 CI 套件 $16K-70K/年，但"MCP 连接是简单的 20%，hash-gate/去重/告警预算 才是让产品可用的 80%"。**监控核心已经被 DIY 化（$8.99/月 changedetection.io）**。
+**Digital Applied 2026-07 文章是决定性证据**：企业 CI 套件 $16K-70K/年，但"MCP 连接是简单的 20%，hash-gate/去重/告警预算 才是让产品可用的 80%"。**监控核心已经被 DIY 化（[已修正 2026-09-04] changedetection.io：自托管开源版免费，$8.99/月为托管 SaaS 价）**。
 
-这直接威胁 AutoInfo 的 RAW 产品线（监控/数据管道 = commodity）。**但 AutoInfo 的防御不在管道，在质量门控 + 多格式产物 + 端到端完备性**——DIY agent 能采集能摘要，但**不会默认做 R1-R13 硬扫（空壳/泄漏/占位/品牌残留）+ D1-D5 付费价值维度**。这正是 AutoInfo 130 validation 场景证明的差异化。
+这直接威胁 AutoInfo 的 RAW 产品线（监控/数据管道 = commodity）。**但 AutoInfo 的防御不在管道，在质量门控 + 多格式产物 + 端到端完备性**——DIY agent 能采集能摘要，但**不会默认做 [已修正 2026-09-04] L0 gate（F1-F4/C1-C6/X1, scripts/quality_gate.py）+ 产物级 R1-R13 场景规则（regression-product-quality-all-templates.yaml）硬扫（空壳/泄漏/占位/品牌残留）+ D1-D3 交付门控[已修正 2026-09-04：原 D1-D5 为已归档 launch-validation-framework 旧维度，现行交付门控为 D1-D3，见 docs/dev/specs/quality-gates.md:25-27]**。这正是 AutoInfo 130 validation 场景证明的差异化。
 
 ---
 
@@ -142,16 +142,16 @@
 
 | 数据 | 值 | 来源 |
 |:-----|:---|:-----|
-| 竞争情报工具市场 | **$823.4M (2026) → $3,004.1M (2033)，CAGR 20.3%** | Grand View Research |
-| AI Agent 市场 | **$10.9B (2026) → $182.9B (2033)，CAGR 49.6%** | Grand View Research |
-| 全球数字新闻付费率 | **仅 16%** 全球为数字新闻付费（弱付费基础）| Reuters Institute DNR 2026 |
-| AI 用户付费强度 | AI 用户平均付 **4× 订阅费（$66/月）**；67% 称 AI 订阅"最重要" | Bango 2025（market-positioning 引用）|
+| 竞争情报工具市场 | [已修正 2026-09-04] **[来源未验证]** $823.4M (2026) → $3,004.1M (2033)，CAGR 20.3%——无 GVR 对应报告，数字撞车 stick-packaging 报告；真实 CI 市场报告区间 $0.5-19B/CAGR 9-13%（"市场在增长"定性结论仍成立——真实报告区间亦为增长曲线） | Grand View Research [未验证]（原标 GVR） |
+| AI Agent 市场 | [已修正 2026-09-04] **$182.97B (2033) + CAGR 49.6% 已确证；2025 基值实际 $7.63B，"$10.9B (2026)" 非 GVR 原文**（部分确证） | Grand View Research（部分确证） |
+| 全球数字新闻付费率 | [已修正 2026-09-04] **18%**（20 个较富裕国家，非全球口径；16% 为 2019 旧美国数字）为数字新闻付费（弱付费基础定性结论保留） | Reuters Institute DNR 2025 [已修正 2026-09-04：原标 DNR 2026] |
+| AI 用户付费强度 | AI 用户平均 **$66/月（4 个 AI 工具均摊）**；67% 称 AI 订阅"最重要"；[已修正 2026-09-04] "4× 订阅费"为报告衍生计算，非 Bango 材料原文 | Bango 2025（market-positioning 引用；$66/月与 67% 确证，4× 衍生）|
 | 订阅疲劳 | 流失率 31%→47% (2024→2026)；87% Gen Z 疲劳 | market-positioning §7.7.1 |
 | **中间地带（$20-200/月）** | 已被 Readless($4.9-9)/Competely($39)/Parano(€89) 进入 | 2026 实测 |
 
 ### 5.2 关键缺口发现（对项目文档的修正）
 
-**项目自带 market-positioning.md 说"$20-200/月中间地带真空，只有 Kompyte"——这个论断已经过时**。2026 实测发现 Readless（$4.9-9/月 AI digest）、Competely（$39/月竞品监控）、Parano（€89/月）都进入了这个区间。
+**[已修正 2026-09-04] 项目自带 market-positioning.md 并无"$20-200/月中间地带真空，只有 Kompyte"论断（原报告引述有误）：$20-$200/user/mo 在该文档中为企业 Copilot/IDE WTP 范围（docs/dev/specs/market-positioning.md:144 "Enterprise: $20-$200/user/mo (Copilot, IDE plugins)"），与"中间地带真空"无关。** 2026 实测发现 Readless（$4.9-9/月 AI digest）、Competely（$39/月竞品监控）、Parano（€89/月）都进入了这个区间。**结论仍成立：中间价已拥挤（Readless/Competely/Parano 2026 实测定价确证，见阶段 3 定价表）。**
 
 **修正后的真实格局**：
 - **$0-15/月**：Feedly/Inoreader/Readless（消费级 AI digest 拥挤）
@@ -176,7 +176,7 @@
 
 ### 优势（有证据）
 1. **能力深度**：8 产品 × 8 格式 × 146 MCP × 21 域，无单一竞品同时具备（阶段 3 对照）
-2. **质量门控是硬差距**：R1-R13 硬扫 + G0-G5 + 130 validation 场景——DIY agent 和轻量竞品都不做
+2. **质量门控是硬差距**：[已修正 2026-09-04] L0 gate（F1-F4/C1-C6/X1, scripts/quality_gate.py）+ 产物级 R1-R13 场景规则（regression-product-quality-all-templates.yaml）硬扫 + G0-G5 + 130 validation 场景——DIY agent 和轻量竞品都不做
 3. **Agent 原生**：146 MCP 工具是未来（Reuters Institute 2026 #2 主题 = agent 中介触达）
 4. **BYOK + 数据所有权**：对"怕 SaaS 锁定"的用户有吸引力
 5. **Demo 质量已证**：R5 独立审查 0 缺陷（可信度证据）[已修正 2026-09-04：R5 审查报告未归档、demo 包不存在——同上，证据强度有限，见阶段 0 标注]
@@ -195,7 +195,7 @@
 2. **差异化话术**：从"我们采集信息"改为"**我们交付可溯源、经过质量门控、多格式的知识产品**"（vs DIY agent 只给你原始摘要）
 3. **定价锚点**：对标 $4.9-9 的 Readless（轻量 digest）和 $39 的 Competely（监控），PROCESSED 产品取 **$20-100/月**（中间偏上，靠质量差异化），避免正面撞 $4.9
 4. **试点设计**：找 3-5 个特定域用户（金融情报/医学研究）做 Concierge MVP——用户提供域，AutoInfo 生成 PROCESSED 产品，验证付费意愿
-5. **斩杀对冲**：公开 BlogWatcher 等价 skill 被替代的差距 = 必须让"质量门控"成为可感知差异（demo 里强化 R1-R13 扫描的可视化）
+5. **斩杀对冲**：公开 BlogWatcher 等价 skill 被替代的差距 = 必须让"质量门控"成为可感知差异（demo 里强化 [已修正 2026-09-04] L0 gate（F1-F4/C1-C6/X1, scripts/quality_gate.py）+ 产物级 R1-R13 场景规则（regression-product-quality-all-templates.yaml）扫描的可视化）
 
 ---
 
@@ -208,24 +208,24 @@
 | 3 | docs/dev/specs/user-lifecycle-definition.md | B1/B2/B3 用户模型 |
 | 4 | docs/demo-release-standard.md | demo DoD/R5 状态 |
 | 5 | deliverables/autoinfo-demo-package-20260902-perfect2.zip[已修正 2026-09-04：该文件在本仓库与 $HOME 均不存在] | demo 包内容（437 文件）（文件不存在，改用 outputs/autoinfo-deliverable-13domains-20260810.zip）|
-| 6 | git log / rev-list | 迭代速度（663 提交/10 天 150）|
+| 6 | git log / rev-list | 迭代速度（[已修正 2026-09-04] 665 提交/10 天 151；原 663/150 过时）|
 | 7 | Feedly pricing（readless.app 2026 + official）| Feedly $0-1600/月 |
 | 8 | Inoreader pricing（inoreader.com）| Inoreader $7.50-629.99/月 |
 | 9 | AlphaSense pricing（elevatedsignal/spendhound/vendr）| $15K-100K+/年 |
-| 10 | Kompyte pricing（competely.ai/parano.ai）| $300/yr 起 |
-| 11 | Readless pricing（readless.app）| $4.90-9/月 |
-| 12 | Competely pricing（competely.ai）| $39-59/月 |
+| 10 | Kompyte pricing（[已修正 2026-09-04] 来源勘误：competely.ai/parano.ai 为 Kompyte 竞品 Competely/Parano 官网，Kompyte 数据实际出处 = directory 定价页 + Business Wire 2022-02-28 Semrush 收购公告）| $300/yr 起 |
+| 11 | Readless pricing（readless.app）| [已修正 2026-09-04] $4.90-9/月（无永久免费层，仅 7 天试用）|
+| 12 | Competely pricing（competely.ai）| [已修正 2026-09-04] $39/$59/$99 三档（原记 $39-59 漏 $99 Scale 档）|
 | 13 | Diffbot pricing（diffbot.com）| $299-899/月 |
 | 14 | KnowledgeSDK（knowledgesdk.com）| $29-99/月 |
-| 15 | BlogWatcher skill（kiwiclaw + Hermes docs）| 斩杀风险等价物 |
+| 15 | BlogWatcher skill（[已修正 2026-09-04] 来源勘误：kiwiclaw + Hermes docs + OpenClaw registry——anthropics/skills 官方仓库**不含** BlogWatcher/rss skill，已核对全量技能名清单）| 斩杀风险等价物 |
 | 16 | rss-agent（github shiquda）| 斩杀风险等价物 |
 | 17 | Digital Applied 竞品监控文章（2026-07-08）| DIY 成本 $8.99/月 + noise control 是 80% |
-| 18 | Grand View Research：竞争情报工具市场 | $823.4M→$3,004.1M, CAGR 20.3% |
-| 19 | Grand View Research：AI Agents 市场 | $10.9B→$182.9B, CAGR 49.6% |
-| 20 | Reuters Institute DNR 2026 | 16% 全球数字新闻付费率 |
+| 18 | Grand View Research：竞争情报工具市场 | [已修正 2026-09-04] [来源未验证]（$823.4M→$3,004.1M CAGR 20.3% 无法定位 GVR 原始报告，数字撞车 stick-packaging 报告） |
+| 19 | Grand View Research：AI Agents 市场 | [已修正 2026-09-04] 2033 $182.97B + CAGR 49.6% 确证；2025 基值 $7.63B（$10.9B@2026 非 GVR 原文） |
+| 20 | Reuters Institute DNR 2025 [已修正 2026-09-04：原标 DNR 2026] | [已修正 2026-09-04] 18%（20 个较富裕国家篮子，非全球口径；原 16% 为 2019 旧美国数字） |
 | 21 | Reddit r/rss 多帖（overwhelmed/drowning）| 用户痛点证据 |
 | 22 | readless/rockstar 开发者 newsletter 评测 | newsletter curation 价值（TLDR 150h/年）|
-| 23 | Bango 2025（market-positioning 引用）| AI 用户付 4× 订阅费 $66/月 |
+| 23 | Bango 2025（market-positioning 引用）| [已修正 2026-09-04] AI 用户 $66/月（4 个 AI 工具均摊）；"4×"为报告衍生计算非 Bango 原文 |
 
 ---
 
@@ -256,7 +256,7 @@
 
 | 动作 | 依据数据 | 预期效果 |
 |:-----|:---------|:---------|
-| demo 增加"AutoInfo vs 裸 LLM 输出"对照页（同一 topic，AutoInfo 产物 vs 直接让 ChatGPT 写摘要，展示 R1-R13 硬扫差异）| 斩杀风险第 4 阶段（free skill 能摘要但无门控）| 让"质量门控"可感知，抵消"自己用 LLM 也行"的认知 |
+| demo 增加"AutoInfo vs 裸 LLM 输出"对照页（同一 topic，AutoInfo 产物 vs 直接让 ChatGPT 写摘要，展示 [已修正 2026-09-04] L0 gate（F1-F4/C1-C6/X1, scripts/quality_gate.py）+ 产物级 R1-R13 场景规则（regression-product-quality-all-templates.yaml）硬扫差异）| 斩杀风险第 4 阶段（free skill 能摘要但无门控）| 让"质量门控"可感知，抵消"自己用 LLM 也行"的认知 |
 | 把 130 validation 场景做成公开的"质量承诺页"（`list_validation_scenarios` 公开展示）| 阶段 0（130 场景 = 工程证据）| 对 B2B 买家（CIO/合规敏感）是最强信任状——证明"每次交付都过门控" |
 | PROCESSED 产品默认带"溯源清单"（每条结论 → source_url 链接）| market-positioning §7.2（客户 A/B 都关切溯源）| 直接对标 AlphaSense 的 traceability，让溯源成为默认而非可选 |
 
