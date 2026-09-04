@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """Domain CLI — manage domain configurations.
 
 Usage::
@@ -10,8 +8,10 @@ Usage::
     autoinfo domain remove --name test
     autoinfo domain activate --name test
     autoinfo domain deactivate --name test
+    autoinfo domain init medical-research --seed
 """
 
+from __future__ import annotations
 
 import json
 from pathlib import Path
@@ -33,6 +33,11 @@ from autoinfo.config import (
 _HERE = Path(__file__).resolve().parent
 _DEMO_DOMAINS_DIR = _HERE.parent / "data" / "domains"
 
+_NO_CONFIG_ERROR = (
+    "Error: No configuration found. Run 'autoinfo init' first. "
+    "See docs/dev/required-api-keys.md for API key setup."
+)
+
 app = typer.Typer(help="Manage domain configurations")
 
 
@@ -48,7 +53,7 @@ def _load() -> tuple[Path, Config]:
     """
     cfg_path = get_config_path()
     if cfg_path is None:
-        typer.echo("Error: No configuration found. Run 'autoinfo init' first. See docs/dev/required-api-keys.md for API key setup.", err=True)
+        typer.echo(_NO_CONFIG_ERROR, err=True)
         raise typer.Exit(1)
     config = load_config(cfg_path)
     return cfg_path, config
@@ -138,7 +143,10 @@ def show(
     typer.echo(f"Search mode:   {domain_cfg.search_mode}")
     typer.echo(f"Sources:       {len(domain_cfg.sources)}")
     for s in domain_cfg.sources:
-        typer.echo(f"  - {s.name} ({s.type}, tier={s.quality_tier}, tos={s.tos_classification}): {s.url}")
+        typer.echo(
+            f"  - {s.name} ({s.type}, tier={s.quality_tier},"
+            f" tos={s.tos_classification}): {s.url}"
+        )
     typer.echo(f"Topics:        {len(domain_cfg.topics)}")
     for t in domain_cfg.topics:
         kw_str = ", ".join(t.keywords) if t.keywords else "(none)"
@@ -213,16 +221,21 @@ def import_cmd(
     ),
 ) -> None:
     """Import a demo domain into the current project configuration (idempotent)."""
-    _SOURCE_CORE_KEYS = frozenset({"name", "type", "url", "quality_tier", "tos_classification", "fetch_depth"})
-    _TIER_TOS_MAP = {1: "open", 2: "licensed", 3: "restricted", 4: "sensitive"}
+    source_core_keys = frozenset(
+        {"name", "type", "url", "quality_tier", "tos_classification", "fetch_depth"}
+    )
+    tier_tos_map = {1: "open", 2: "licensed", 3: "restricted", 4: "sensitive"}
 
     demo_yaml = _DEMO_DOMAINS_DIR / from_demo / "sources.yaml"
     if not demo_yaml.is_file():
-        typer.echo(
-            f"Unknown demo domain '{from_demo}'. "
-            f"Available: {', '.join(sorted(d.name for d in _DEMO_DOMAINS_DIR.iterdir() if d.is_dir() and (d / 'sources.yaml').is_file()))}",
-            err=True,
+        available = ", ".join(
+            sorted(
+                d.name
+                for d in _DEMO_DOMAINS_DIR.iterdir()
+                if d.is_dir() and (d / "sources.yaml").is_file()
+            )
         )
+        typer.echo(f"Unknown demo domain '{from_demo}'. Available: {available}", err=True)
         raise typer.Exit(1)
 
     cfg_path, config = _load()
@@ -238,7 +251,7 @@ def import_cmd(
         tier = s.get("quality_tier", 1)
         tos = s.get("tos_classification")
         if not tos:
-            tos = _TIER_TOS_MAP.get(tier, "open")
+            tos = tier_tos_map.get(tier, "open")
         sources.append(
             SourceConfig(
                 name=s.get("name", ""),
@@ -247,7 +260,7 @@ def import_cmd(
                 quality_tier=tier,
                 tos_classification=tos,
                 fetch_depth=s.get("fetch_depth", "abstract"),
-                settings={k: v for k, v in s.items() if k not in _SOURCE_CORE_KEYS},
+                settings={k: v for k, v in s.items() if k not in source_core_keys},
             )
         )
 
@@ -272,3 +285,96 @@ def import_cmd(
     config.domains.append(new_domain)
     save_config(config, cfg_path)
     typer.echo(f"Domain '{from_demo}' imported.")
+
+
+# Seed-mode domain blocks carry keys beyond the dataclass round-trip surface
+# (e.g. min_product_relevance) and BYOK ${ENV} refs inside source settings.
+# load_config resolves ${ENV} to "" when the var is unset, so the seed path
+# edits the raw YAML tree instead of round-tripping through dataclasses.
+_SEED_DOMAIN_KEYS = ("name", "description", "active", "sources", "topics", "extract_fields")
+
+
+def _resolve_seed_name(name: str) -> str:
+    """Return the demo-domain name for *name*, validating it exists.
+
+    Accepts either the exact directory name or the ``name:`` value inside its
+    sources.yaml (they coincide for every bundled demo domain).
+    """
+    demo_dir = _DEMO_DOMAINS_DIR / name
+    if (demo_dir / "sources.yaml").is_file():
+        return name
+
+    for candidate in sorted(_DEMO_DOMAINS_DIR.iterdir()):
+        demo_yaml = candidate / "sources.yaml"
+        if not demo_yaml.is_file():
+            continue
+        with open(demo_yaml) as f:
+            data = yaml.safe_load(f) or {}
+        if data.get("name") == name:
+            return candidate.name
+
+    available = ", ".join(
+        sorted(
+            d.name
+            for d in _DEMO_DOMAINS_DIR.iterdir()
+            if d.is_dir() and (d / "sources.yaml").is_file()
+        )
+    )
+    typer.echo(f"Unknown demo domain '{name}'. Available: {available}", err=True)
+    raise typer.Exit(1)
+
+
+@app.command()
+def init(
+    name: str = typer.Argument(..., help="Demo domain name to seed"),
+    seed: bool = typer.Option(
+        False, "--seed", help="Seed the domain from its bundled demo definition"
+    ),
+) -> None:
+    """One-command flagship-domain setup: import the demo domain config (idempotent).
+
+    Reuses the ``import --from-demo`` demo-source-of-truth logic. When the
+    domain is missing it is seeded whole (sources, topics, extract_fields,
+    description). When it already exists (e.g. created by ``autoinfo init
+    --demo``), only missing ``extract_fields`` are backfilled — existing
+    sources/topics are never duplicated.
+    """
+    demo_name = _resolve_seed_name(name)
+    demo_yaml = _DEMO_DOMAINS_DIR / demo_name / "sources.yaml"
+    with open(demo_yaml) as f:
+        domain_data = yaml.safe_load(f) or {}
+
+    cfg_path = get_config_path()
+    if cfg_path is None:
+        typer.echo(_NO_CONFIG_ERROR, err=True)
+        raise typer.Exit(1)
+    with open(cfg_path, "r", encoding="utf-8") as f:
+        raw = yaml.safe_load(f) or {}
+
+    domains_raw: list[dict] = raw.get("domains", []) or []
+    existing = next((d for d in domains_raw if d.get("name") == demo_name), None)
+
+    if existing is None:
+        seed_block = {k: domain_data[k] for k in _SEED_DOMAIN_KEYS if domain_data.get(k)}
+        seed_block["name"] = demo_name
+        seed_block["active"] = True
+        seed_block.setdefault("extract_fields", domain_data.get("extract_fields", []))
+        raw.setdefault("domains", []).append(seed_block)
+        with open(cfg_path, "w", encoding="utf-8") as f:
+            yaml.dump(raw, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
+        typer.echo(
+            f"Domain '{demo_name}' seeded "
+            f"({len(seed_block.get('sources', []))} sources, "
+            f"{len(seed_block.get('topics', []))} topics, "
+            f"{len(seed_block.get('extract_fields', []))} extract_fields)."
+        )
+        return
+
+    if existing.get("extract_fields"):
+        typer.echo(f"Domain '{demo_name}' already seeded")
+        return
+
+    existing["extract_fields"] = domain_data.get("extract_fields", [])
+    with open(cfg_path, "w", encoding="utf-8") as f:
+        yaml.dump(raw, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
+    typer.echo(f"Domain '{demo_name}' already exists — extract_fields backfilled.")

@@ -3,6 +3,17 @@
 name: medical-research
 description: "Medical research tracking — 辅助生殖/脑科学/神经科学"
 
+# LLM structured-extraction fields (task 15) — populated by the extraction
+# engine; seeded via `domain init --seed`.
+extract_fields:
+  - disease_area
+  - intervention
+  - study_type
+  - outcome_measure
+  - sample_size
+  - journal
+  - publication_date
+
 sources:
   - name: pubmed
     type: api

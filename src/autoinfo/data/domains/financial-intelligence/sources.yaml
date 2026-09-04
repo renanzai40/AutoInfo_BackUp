@@ -3,6 +3,17 @@
 name: financial-intelligence
 description: "Financial and business intelligence — market data, economic indicators, corporate filings"
 
+# LLM structured-extraction fields (task 15) — populated by the extraction
+# engine; seeded via `domain init --seed`.
+extract_fields:
+  - company
+  - sector
+  - event_type
+  - financial_metric
+  - currency
+  - region
+  - date
+
 # SEC-filing dilution filter (#332): SEC EDGAR 8-K/10-K/10-Q items are
 # metadata-only filings (form + company + date) whose titles and summaries
 # carry the bare form id.  Excluding them from product input keeps the

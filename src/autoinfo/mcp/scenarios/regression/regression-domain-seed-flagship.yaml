@@ -1,0 +1,114 @@
+# Regression (concierge wave task 15): `autoinfo domain init <name> --seed`
+# gives the two flagship domains (medical-research, financial-intelligence)
+# one-command setup from the bundled demo sources.yaml — full seed (sources /
+# topics / extract_fields / description) when the domain is absent, and an
+# extract_fields-only backfill when it already exists (e.g. created by
+# `autoinfo init --demo`). Re-seeding is idempotent (no duplicate sources).
+#
+# Deterministic (requires_env: [], no network/LLM): seeding is purely local —
+# it reads the bundled demo YAML and edits .autoinfo/config.yaml. `init` runs
+# with --demo (non-interactive; a bare `autoinfo init` needs a TTY). The
+# two-independent-temp-dir step diffs the seeded domain blocks.
+#
+# Operational note (NOT asserted here, per task-15 scope): the "5-minute
+# collect→product" flagship demo requires network + an LLM key and stays an
+# operational demo scenario, not a CI assertion.
+name: regression-domain-seed-flagship
+description: "Regression (task 15): domain init --seed seeds flagship domains with 7 sources/6 topics + extract_fields, idempotent, byte-reproducible"
+category: regression
+regression: true
+regression_issue: "concierge-wave-task-15"
+requires_env: []
+steps:
+  - name: "full-seed absent flagship (7 sources/6 topics/extract_fields) + backfill over init --demo domain, idempotent, domain show intact"
+    kind: cli
+    timeout_seconds: 120
+    command: |-
+      set -euo pipefail
+      TMP="$(mktemp -d)"
+      trap 'rm -rf "$TMP"' EXIT
+      cd "$TMP"
+      autoinfo init --demo general-news > init.out 2>&1
+      autoinfo domain init medical-research --seed
+      autoinfo domain init medical-research --seed
+      python3 -c '
+      import sys, yaml
+      cfg = yaml.safe_load(open(sys.argv[1]))
+      domains = [d for d in cfg["domains"] if d["name"] == "medical-research"]
+      assert len(domains) == 1, "seed duplicated the domain"
+      d = domains[0]
+      assert len(d["sources"]) == 7, "sources: " + str(len(d["sources"]))
+      assert len(d["topics"]) == 6, "topics: " + str(len(d["topics"]))
+      ef = d.get("extract_fields")
+      assert isinstance(ef, list) and ef, "extract_fields missing/empty"
+      assert ef == ["disease_area", "intervention", "study_type",
+                    "outcome_measure", "sample_size", "journal",
+                    "publication_date"], ef
+      assert d["active"] is True
+      print("SEED_CONTENT_OK")
+      ' "$TMP/.autoinfo/config.yaml"
+      # Backfill branch: seeding over an `init --demo`-created flagship
+      # injects extract_fields without duplicating sources/topics.
+      TMP2="$(mktemp -d)"
+      cd "$TMP2"
+      autoinfo init --demo medical-research > init2.out 2>&1
+      autoinfo domain init medical-research --seed
+      autoinfo domain init medical-research --seed
+      python3 -c '
+      import sys, yaml
+      cfg = yaml.safe_load(open(sys.argv[1]))
+      domains = [d for d in cfg["domains"] if d["name"] == "medical-research"]
+      assert len(domains) == 1, "backfill duplicated the domain"
+      d = domains[0]
+      assert len(d["sources"]) == 7, "backfill duplicated sources: " + str(len(d["sources"]))
+      assert len(d["topics"]) == 6, "backfill duplicated topics: " + str(len(d["topics"]))
+      assert d["extract_fields"] == ["disease_area", "intervention", "study_type",
+                                     "outcome_measure", "sample_size", "journal",
+                                     "publication_date"], d.get("extract_fields")
+      print("SEED_BACKFILL_OK")
+      ' "$TMP2/.autoinfo/config.yaml"
+      autoinfo domain show --name medical-research > show.out 2>&1
+      grep -q "Sources:       7" show.out
+      grep -q "Topics:        6" show.out
+      grep -q "Extract fields:" show.out
+      grep -q "disease_area" show.out
+      echo "SEED_FLAGSHIP_OK"
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SEED_CONTENT_OK", "SEED_BACKFILL_OK", "SEED_FLAGSHIP_OK"]
+
+  - name: "two independent temp dirs seed byte-identical domain config blocks"
+    kind: cli
+    timeout_seconds: 120
+    command: |-
+      set -euo pipefail
+      TMPA="$(mktemp -d)"
+      TMPB="$(mktemp -d)"
+      trap 'rm -rf "$TMPA" "$TMPB"' EXIT
+      for D in "$TMPA" "$TMPB"; do
+        cd "$D"
+        autoinfo init --demo general-news > init.out 2>&1
+        autoinfo domain init financial-intelligence --seed > /dev/null
+      done
+      python3 -c '
+      import sys, yaml
+      def block(path):
+          cfg = yaml.safe_load(open(path))
+          d = next(d for d in cfg["domains"] if d["name"] == "financial-intelligence")
+          return yaml.safe_dump(d, sort_keys=False, allow_unicode=True)
+      a = block(sys.argv[1] + "/.autoinfo/config.yaml")
+      b = block(sys.argv[2] + "/.autoinfo/config.yaml")
+      assert a == b, "seeded domain blocks differ across independent temp dirs"
+      d = yaml.safe_load(a)
+      assert d["extract_fields"] == ["company", "sector", "event_type",
+                                     "financial_metric", "currency", "region",
+                                     "date"], d["extract_fields"]
+      assert len(d["sources"]) == 11
+      assert len(d["topics"]) == 5
+      print("SEED_REPRODUCIBLE_OK")
+      ' "$TMPA" "$TMPB"
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SEED_REPRODUCIBLE_OK"]
