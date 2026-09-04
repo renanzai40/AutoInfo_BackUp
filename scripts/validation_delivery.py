@@ -5,6 +5,7 @@ Runs after validation scenarios that declare collect_artifacts. Builds:
 
     validation-delivery-<timestamp>.zip
     ├── 01-RAW/          # real collected data (cached items, 01-Raw entries)
+    ├── 01-QA-GATES/     # per-product gate reports (gate-report-<product>.md/.json + index)
     ├── 02-PROCESSED/    # produced products (digest/report/tutorial...)
     ├── 03-KB/           # KB entries by tier (02-Draft, 03-Wiki)
     ├── 04-MATRIX/       # E8 end-user coverage matrix (matrix-report.md + coverage-gaps.json)
@@ -807,6 +808,223 @@ def _failure_reason(gates: dict[str, Any]) -> str:
 
 
 # ---------------------------------------------------------------------------
+# 01-QA-GATES: per-product gate reports (concierge wave, plan task 7)
+# ---------------------------------------------------------------------------
+
+_QA_GATES_DIR_NAME = "01-QA-GATES"
+# Honesty note carried verbatim in every gate report: the G0-G5 gates run at
+# PROCESS time (autoinfo.quality run_quality_gates / LLM extraction), not at
+# packaging time. These reports record only the delivery-layer determinations
+# (D1-D3 + authenticity + packager-level results) that _package actually made.
+_QA_LAYER_NOTE = (
+    "G0-G5 于 process 层执行, 本报告记录 delivery 层判定 "
+    "(G0-G5 run at process time; this report records the delivery layer's "
+    "determinations only: D1-D3 delivery gates + authenticity pre-check + "
+    "packager-level deliver/reject decisions). No G0-G5 data is recomputed "
+    "or persisted here."
+)
+
+
+def _qa_product_key(path: Path, used: set[str]) -> str:
+    """Deterministic, filesystem-safe, collision-free report key for a file.
+
+    ``outputs/medical-research/digest-markdown-20260904.md`` -> ``digest``,
+    nested paths keep their directory segments joined with ``__``. A second
+    file mapping to the same key gets ``-2``, ``-3``, ... suffixes.
+    """
+    parts = path.with_suffix("").parts
+    key = re.sub(r"[^A-Za-z0-9._-]", "_", "__".join(parts)) or "artifact"
+    base = key
+    n = 2
+    while key in used:
+        key = f"{base}-{n}"
+        n += 1
+    used.add(key)
+    return key
+
+
+def _qa_gate_row(gates: dict[str, Any]) -> list[dict[str, Any]]:
+    """The honest gates array for one artifact (D1-D3 + authenticity)."""
+    return [
+        {
+            "gate": name,
+            "passed": bool((gates.get(name) or {}).get("passed", True)),
+            "details": (gates.get(name) or {}).get("details") or {},
+        }
+        for name in ("D1", "D2", "D3")
+    ] + [
+        {
+            "gate": "authenticity",
+            "passed": (gates.get("authenticity") or {}).get("authenticity") == "pass",
+            "details": (gates.get("authenticity") or {}).get("reason", ""),
+        }
+    ]
+
+
+def _build_qa_gate_report(
+    product_key: str,
+    *,
+    product: str,
+    kind: str,
+    delivered: bool,
+    quality: str,
+    gates: dict[str, Any],
+    rejected_reason: str = "",
+) -> tuple[str, str]:
+    """Render one product's gate report as ``(markdown, json_text)``.
+
+    Records ONLY what the packager actually determined (D1-D3 + authenticity
+    + deliver/reject), with the process-layer honesty note — never fabricated
+    G0-G5 data.
+    """
+    payload: dict[str, Any] = {
+        "product": product,
+        "product_key": product_key,
+        "kind": kind,
+        "delivered": delivered,
+        "rejected_reason": rejected_reason,
+        "quality": quality,
+        "layer_note": _QA_LAYER_NOTE,
+        "gates": _qa_gate_row(gates),
+    }
+    json_text = json.dumps(payload, ensure_ascii=False, indent=2, default=str)
+
+    md: list[str] = [
+        f"# Gate Report — {product}",
+        "",
+        f"- Delivered: {'yes' if delivered else 'no (rejected)'}",
+        f"- Quality: {quality}",
+        f"- Kind: {kind}",
+    ]
+    if rejected_reason:
+        md.append(f"- Rejection reason: {rejected_reason}")
+    md.extend([
+        "",
+        "## Gates",
+        "",
+        "| Gate | Passed | Details |",
+        "|------|--------|---------|",
+    ])
+    for row in payload["gates"]:
+        details = row["details"]
+        if isinstance(details, dict):
+            details = details.get("error") or details.get("reason") or json.dumps(
+                details, ensure_ascii=False, default=str
+            )
+        md.append(f"| {row['gate']} | {'PASS' if row['passed'] else 'FAIL'} | {details} |")
+    md.extend([
+        "",
+        "## Scope Note",
+        "",
+        _QA_LAYER_NOTE,
+        "",
+    ])
+    return "\n".join(md), json_text
+
+
+def _write_qa_gates_section(
+    stage: Path,
+    delivered: list[dict[str, Any]],
+    rejected: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Write ``01-QA-GATES/`` into the staged package; return file entries.
+
+    One ``gate-report-<product>.md`` + ``gate-report-<product>.json`` pair per
+    packaged product (delivered AND rejected — a rejection is itself an honest
+    delivery-layer determination), plus a ``gate-reports-index.json`` whose
+    ``rejected`` list is the manifest's ``rejected`` list verbatim for
+    traceability. Entries are returned for the manifest's additive
+    ``qa_gate_reports`` key (NOT ``files`` — that list stays the delivered +
+    MATRIX artifact evidence other consumers already parse).
+    """
+    qa_dir = stage / _QA_GATES_DIR_NAME
+    qa_dir.mkdir(exist_ok=True)
+    used: set[str] = set()
+    reports: list[dict[str, Any]] = []
+
+    def _emit(entry: dict[str, Any], *, delivered: bool, quality: str) -> None:
+        product = entry.get("file", "")
+        gates = entry.get("gates") or {}
+        rejected_reason = "" if delivered else entry.get("reason", "")
+        key = _qa_product_key(Path(product), used)
+        md_text, json_text = _build_qa_gate_report(
+            key,
+            product=product,
+            kind=entry.get("kind", ""),
+            delivered=delivered,
+            quality=quality,
+            gates=gates,
+            rejected_reason=rejected_reason,
+        )
+        md_name = f"gate-report-{key}.md"
+        json_name = f"gate-report-{key}.json"
+        (qa_dir / md_name).write_text(md_text, encoding="utf-8")
+        (qa_dir / json_name).write_text(json_text, encoding="utf-8")
+        reports.append({
+            "product": product,
+            "report_md": f"{_QA_GATES_DIR_NAME}/{md_name}",
+            "report_json": f"{_QA_GATES_DIR_NAME}/{json_name}",
+            "delivered": delivered,
+            "quality": quality,
+        })
+
+    # Report only real products (RAW/KB/PROCESSED). Generated packager
+    # artifacts registered in ``manifest`` after the base write (04-MATRIX
+    # files, kind=MATRIX) are internal evidence, not products.
+    for entry in delivered:
+        if entry.get("kind") not in ("RAW", "KB", "PROCESSED"):
+            continue
+        _emit(entry, delivered=True, quality=str(entry.get("quality", "")))
+    # Rejected entries carry {file, source, reason} — the rejection itself is
+    # the packager's determination; gates were captured at rejection time and
+    # live in the manifest reason string.
+    for entry in rejected:
+        _emit(entry, delivered=False, quality="FAIL")
+
+    index = {
+        "layer_note": _QA_LAYER_NOTE,
+        "delivered_count": sum(1 for r in reports if r["delivered"]),
+        "rejected_count": len(rejected),
+        "rejected": rejected,  # manifest's rejected list, verbatim — traceable
+        "reports": reports,
+    }
+    (qa_dir / "gate-reports-index.json").write_text(
+        json.dumps(index, ensure_ascii=False, indent=2, default=str),
+        encoding="utf-8",
+    )
+    manifest_entries = [
+        {
+            "file": f"{_QA_GATES_DIR_NAME}/gate-reports-index.json",
+            "kind": "QA-GATES",
+            "source": "generated:validation_delivery.py (01-QA-GATES)",
+            "size": (qa_dir / "gate-reports-index.json").stat().st_size,
+            "quality": "PASS",
+        }
+    ]
+    manifest_entries.extend(
+        {
+            "file": r["report_md"],
+            "kind": "QA-GATES",
+            "source": "generated:validation_delivery.py (01-QA-GATES)",
+            "size": (qa_dir / Path(r["report_md"]).name).stat().st_size,
+            "quality": "PASS",
+        }
+        for r in reports
+    )
+    manifest_entries.extend(
+        {
+            "file": r["report_json"],
+            "kind": "QA-GATES",
+            "source": "generated:validation_delivery.py (01-QA-GATES)",
+            "size": (qa_dir / Path(r["report_json"]).name).stat().st_size,
+            "quality": "PASS",
+        }
+        for r in reports
+    )
+    return manifest_entries
+
+
+# ---------------------------------------------------------------------------
 # E8 (#131): end-user coverage matrix — the 04-MATRIX section of the package
 # ---------------------------------------------------------------------------
 
@@ -1006,6 +1224,14 @@ def _package(artifacts: list[dict[str, Any]], results: list[dict[str, Any]], out
     enduser-journey scenario are emitted as a "UX metrics" report section
     and registered in the manifest under ``ux``. Advisory only: like
     04-MATRIX, metrics never block the package.
+
+    01-QA-GATES: every packaged product (delivered and rejected) gets
+    ``gate-report-<product>.md`` + ``gate-report-<product>.json`` recording
+    its delivery-layer determinations (D1-D3 + authenticity + packager
+    deliver/reject) honestly, plus ``gate-reports-index.json`` whose
+    ``rejected`` list mirrors the manifest's ``rejected`` key. G0-G5 run at
+    process time and are never recomputed here — the reports carry the
+    layer note instead.
     """
     stamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     stage = out / f"validation-delivery-{stamp}"
@@ -1106,6 +1332,9 @@ def _package(artifacts: list[dict[str, Any]], results: list[dict[str, Any]], out
                 "file": str(rej_dest.relative_to(stage)),
                 "source": rel,
                 "reason": _failure_reason(gates),
+                # 01-QA-GATES: the gate determinations at rejection time, so
+                # the rejected product's gate report is honest too.
+                "gates": gates,
             })
         else:
             manifest.append(entry)
@@ -1250,10 +1479,31 @@ def _package(artifacts: list[dict[str, Any]], results: list[dict[str, Any]], out
             report.append(f"  - {step['name']} — {step['status']}")
         report.append("")
 
+    # 01-QA-GATES: per-product gate reports. Written BEFORE the final
+    # manifest.json write so the QA-GATES file entries are registered under
+    # the manifest's additive ``qa_gate_reports`` key (``files`` stays the
+    # delivered + MATRIX evidence existing consumers parse; generated QA
+    # sources would never match the persisted-path shape anyway). The
+    # section's index carries the rejected list verbatim for traceability.
+    qa_manifest_entries = _write_qa_gates_section(stage, manifest, rejected)
+    report.append("## QA Gate Reports (01-QA-GATES)")
+    report.append("")
+    report.append(
+        "Per-product delivery-layer gate reports: "
+        "`01-QA-GATES/gate-reports-index.json` "
+        f"({len(qa_manifest_entries) - 1} report files)."
+    )
+    report.append("")
+
     (stage / "validation-report.md").write_text("\n".join(report), encoding="utf-8")
     (stage / "manifest.json").write_text(
         json.dumps(
-            {"files": manifest, "rejected": rejected, "ux": ux_metrics},
+            {
+                "files": manifest,
+                "rejected": rejected,
+                "ux": ux_metrics,
+                "qa_gate_reports": qa_manifest_entries,
+            },
             ensure_ascii=False,
             indent=2,
             default=str,

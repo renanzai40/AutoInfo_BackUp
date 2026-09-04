@@ -1,0 +1,123 @@
+# Regression (concierge wave task 7): the validation delivery package must
+# ship a 01-QA-GATES/ directory with per-product gate reports.
+#
+# scripts/validation_delivery.py _package() now emits
+# ``01-QA-GATES/gate-report-<product>.{md,json}`` for every PROCESSED product
+# (delivered and rejected) plus ``gate-reports-index.json`` whose ``rejected``
+# list mirrors manifest.json's ``rejected`` key. Reports record ONLY the
+# delivery-layer determinations (D1-D3 + authenticity + packager-level
+# deliver/reject) and carry the honesty note that G0-G5 run at process time —
+# no process-layer G0-G5 data is fabricated here.
+#
+# Deterministic (requires_env: []): the packaging seams run hermetically —
+# the D1-D3 gates in autoinfo.quality are pure file/content checks (no LLM,
+# no network) and _package writes into an ABSOLUTE temp dir (tempfile.mkdtemp,
+# try/finally cleanup). A complete digest fixture (recent "Key Findings" etc.
+# headings) passes the real gates; a section-less report fixture genuinely
+# fails D1 and lands in 06-REJECTED — never a mocked gate result.
+name: regression-qa-gates-dir
+description: "Regression: delivery zip contains 01-QA-GATES/ and every PROCESSED product has a gate-report (md+json); index rejected list matches manifest rejected key"
+category: regression
+regression: true
+regression_issue: "concierge-wave-task-7"
+requires_env: []
+steps:
+  - name: "packaged zip contains 01-QA-GATES with reports for every processed product"
+    kind: cli
+    command: |-
+      python3 -c '
+      import importlib.util, json, shutil, tempfile, zipfile
+      from pathlib import Path
+
+      # Repo root: walk up from cwd until scripts/validation_delivery.py is
+      # found (portable — no dev-machine absolute paths, see issue #347).
+      root = Path.cwd()
+      while not (root / "scripts" / "validation_delivery.py").is_file():
+          if root.parent == root:
+              raise SystemExit("repo root not found from cwd")
+          root = root.parent
+      spec = importlib.util.spec_from_file_location(
+          "validation_delivery", root / "scripts" / "validation_delivery.py"
+      )
+      vd = importlib.util.module_from_spec(spec)
+      spec.loader.exec_module(vd)
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-qa-gates-dir-"))
+      try:
+          # Complete digest: all three D1 sections present -> real PASS.
+          digest = tmp / "digest-qa-gates.md"
+          digest.write_text(
+              "# Weekly AI Digest\n\n"
+              "## Executive Summary\n\nAI adoption accelerates.\n\n"
+              "### Key Findings\n\n- LLM costs dropped 40%.\n\n"
+              "### Recommendations\n\n- Adopt agent workflows.\n",
+              encoding="utf-8",
+          )
+          # Broken report: no canonical sections -> real D1 fail -> 06-REJECTED.
+          broken = tmp / "broken-report.md"
+          broken.write_text("# Broken Report\n\nNo canonical sections.\n", encoding="utf-8")
+
+          out = tmp / "out"
+          out.mkdir()
+          zip_path = vd._package(
+              [{"path": str(digest)}, {"path": str(broken)}], [], out
+          )
+          with zipfile.ZipFile(zip_path) as zf:
+              names = zf.namelist()
+              manifest = json.loads(zf.read("manifest.json").decode("utf-8"))
+              index = json.loads(
+                  zf.read("01-QA-GATES/gate-reports-index.json").decode("utf-8")
+              )
+
+          # 1. The 01-QA-GATES/ directory exists with the index.
+          assert "01-QA-GATES/gate-reports-index.json" in names, names
+
+          # 2. Every PROCESSED product has a gate report (md + json).
+          processed = [e for e in manifest["files"] if e.get("kind") == "PROCESSED"]
+          assert len(processed) == 1, processed
+          by_product = {r["product"]: r for r in index["reports"]}
+          assert len(by_product) == 2, sorted(by_product)
+
+          def _read(name: str) -> str:
+              with zipfile.ZipFile(zip_path) as z:
+                  return z.read(name).decode("utf-8")
+
+          for entry in processed:
+              rep = by_product[entry["file"]]
+              assert rep["report_md"] in names, names
+              assert rep["report_json"] in names, names
+              assert rep["delivered"] is True
+
+          # 3. JSON report carries a gates array (D1-D3 + authenticity) and
+          #    the process-layer honesty note (no fabricated G0-G5 data).
+          good = json.loads(
+              _read(by_product[processed[0]["file"]]["report_json"])
+          )
+          assert [g["gate"] for g in good["gates"]] == [
+              "D1", "D2", "D3", "authenticity"
+          ], good["gates"]
+          assert all(g["passed"] for g in good["gates"]), good["gates"]
+          assert good["quality"] == "PASS"
+          assert "G0-G5" in good["layer_note"] and "process" in good["layer_note"]
+
+          # 4. The rejected product: traceable via the manifest rejected key.
+          assert len(manifest["rejected"]) == 1, manifest["rejected"]
+          rej = manifest["rejected"][0]
+          assert rej["file"].startswith("06-REJECTED/"), rej
+          assert rej["reason"].startswith("D1:"), rej
+          assert index["rejected"] == manifest["rejected"], "rejected traceability"
+          rej_report = by_product[rej["file"]]
+          assert rej_report["delivered"] is False
+          rej_json = json.loads(_read(rej_report["report_json"]))
+          rej_gates = {g["gate"]: g for g in rej_json["gates"]}
+          assert rej_gates["D1"]["passed"] is False
+          assert rej_json["quality"] == "FAIL"
+
+          print("QA_GATES_DIR_OK")
+      finally:
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["QA_GATES_DIR_OK"]
