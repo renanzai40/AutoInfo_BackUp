@@ -455,6 +455,16 @@ class StripeConfig:
 
 
 @dataclass
+class FreeTierConfig:
+    """Free-tier limits (todo 11 — aligned with storefront _PRODUCT_PRICING)."""
+
+    max_domains: int = 1
+    max_products: int = 1
+    frequency: str = "weekly"
+    allow_custom: bool = False
+
+
+@dataclass
 class VectorSearchConfig:
     """Vector / hybrid search settings (FTS5 + embeddings)."""
     enabled: bool = False
@@ -550,6 +560,7 @@ class Config:
     email: EmailConfig = field(default_factory=EmailConfig)
     rest_api: RestAPIConfig = field(default_factory=RestAPIConfig)
     stripe: StripeConfig = field(default_factory=StripeConfig)
+    free_tier: FreeTierConfig = field(default_factory=FreeTierConfig)
     vector_search: VectorSearchConfig = field(default_factory=VectorSearchConfig)
     cron: CronConfig = field(default_factory=CronConfig)
     multi_user: MultiUserConfig = field(default_factory=MultiUserConfig)
@@ -851,6 +862,7 @@ default_language=str(d.get("default_language", "")),
     email_raw = _dict_or_empty("email")
     rest_api_raw = _dict_or_empty("rest_api")
     stripe_raw = _dict_or_empty("stripe")
+    free_tier_raw = _dict_or_empty("free_tier")
     vector_search_raw = _dict_or_empty("vector_search")
     cron_raw = _dict_or_empty("cron")
     multi_user_raw = _dict_or_empty("multi_user")
@@ -899,6 +911,12 @@ default_language=str(d.get("default_language", "")),
         ),
         stripe=StripeConfig(
             webhook_secret=str(stripe_raw.get("webhook_secret", "")),
+        ),
+        free_tier=FreeTierConfig(
+            max_domains=int(free_tier_raw.get("max_domains", 1)),
+            max_products=int(free_tier_raw.get("max_products", 1)),
+            frequency=str(free_tier_raw.get("frequency", "weekly")),
+            allow_custom=_as_bool(free_tier_raw.get("allow_custom", False)),
         ),
         vector_search=VectorSearchConfig(
             enabled=bool(vector_search_raw.get("enabled", False)),
@@ -1192,6 +1210,12 @@ def config_to_dict(config: Config) -> dict[str, Any]:
     }
     raw["stripe"] = {
         "webhook_secret": config.stripe.webhook_secret,
+    }
+    raw["free_tier"] = {
+        "max_domains": config.free_tier.max_domains,
+        "max_products": config.free_tier.max_products,
+        "frequency": config.free_tier.frequency,
+        "allow_custom": config.free_tier.allow_custom,
     }
     raw["vector_search"] = {
         "enabled": config.vector_search.enabled,

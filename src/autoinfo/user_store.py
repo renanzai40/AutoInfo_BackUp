@@ -86,6 +86,9 @@ def init_db() -> None:
                 domain_limit    INTEGER DEFAULT 1,
                 raw_access      INTEGER DEFAULT 0,
                 processed_access INTEGER DEFAULT 1,
+                max_products    INTEGER DEFAULT 1,
+                max_frequency   TEXT DEFAULT 'weekly',
+                allow_custom    INTEGER DEFAULT 0,
                 FOREIGN KEY (user_id) REFERENCES user_profiles(user_id)
             );
         """)
@@ -99,14 +102,14 @@ def _ensure_columns_exist() -> None:
     checking for missing columns via ``PRAGMA table_info`` and adding
     them with ``ALTER TABLE``.
     """
-    _USER_COLS: list[tuple[str, str]] = [
+    user_cols: list[tuple[str, str]] = [
         ("trial_started_at", "TEXT DEFAULT ''"),
         ("trial_days", "INTEGER DEFAULT 14"),
         ("preferences", "TEXT DEFAULT '{}'"),
         ("stripe_customer_id", "TEXT DEFAULT ''"),
         ("stripe_subscription_id", "TEXT DEFAULT ''"),
     ]
-    _SUB_COLS: list[tuple[str, str]] = [
+    sub_cols: list[tuple[str, str]] = [
         ("tier", "TEXT DEFAULT 'free'"),
         ("channels", "TEXT DEFAULT '[]'"),
         ("domains", "TEXT DEFAULT '[]'"),
@@ -115,10 +118,13 @@ def _ensure_columns_exist() -> None:
         ("domain_limit", "INTEGER DEFAULT 1"),
         ("raw_access", "INTEGER DEFAULT 0"),
         ("processed_access", "INTEGER DEFAULT 1"),
+        ("max_products", "INTEGER DEFAULT 1"),
+        ("max_frequency", "TEXT DEFAULT 'weekly'"),
+        ("allow_custom", "INTEGER DEFAULT 0"),
     ]
 
     with _connect() as conn:
-        for table, col_list in [("user_profiles", _USER_COLS), ("subscriptions", _SUB_COLS)]:
+        for table, col_list in [("user_profiles", user_cols), ("subscriptions", sub_cols)]:
             existing = {
                 row[1]
                 for row in conn.execute(
@@ -153,7 +159,9 @@ def _row_to_profile(row: sqlite3.Row) -> UserProfile:
     # Map delivery_prefs (DB) → delivery_preferences (model)
     raw_prefs = data.pop("delivery_prefs", "{}")
     try:
-        data["delivery_preferences"] = json.loads(raw_prefs) if isinstance(raw_prefs, str) else raw_prefs
+        data["delivery_preferences"] = (
+            json.loads(raw_prefs) if isinstance(raw_prefs, str) else raw_prefs
+        )
     except (json.JSONDecodeError, TypeError):
         data["delivery_preferences"] = {}
 
@@ -189,8 +197,9 @@ def _row_to_profile(row: sqlite3.Row) -> UserProfile:
         data["trial_days"] = 14
 
     # Filter to known UserProfile fields only
-    from autoinfo.models import UserProfile as _UP
-    valid_fields = set(_UP.__dataclass_fields__.keys())
+    from autoinfo.models import UserProfile
+
+    valid_fields = set(UserProfile.__dataclass_fields__.keys())
     data = {k: v for k, v in data.items() if k in valid_fields}
 
     return UserProfile(**data)
@@ -200,11 +209,11 @@ def _row_to_subscription(row: sqlite3.Row) -> Subscription:
     data = dict(row)
 
     # Map SQL column names → dataclass field names
-    _COL_MAP = {
+    col_map = {
         "sub_id": "subscription_id",
         "product_id": "plan",
     }
-    for db_col, model_field in _COL_MAP.items():
+    for db_col, model_field in col_map.items():
         if db_col in data:
             data[model_field] = data.pop(db_col)
 
@@ -212,14 +221,19 @@ def _row_to_subscription(row: sqlite3.Row) -> Subscription:
     data["auto_renew"] = bool(data.get("auto_renew", True))
     data["raw_access"] = bool(data.get("raw_access", False))
     data["processed_access"] = bool(data.get("processed_access", True))
+    data["allow_custom"] = bool(data.get("allow_custom", False))
 
     # Coerce int fields
-    for int_col in ("platform_limit", "domain_limit"):
+    for int_col in ("platform_limit", "domain_limit", "max_products"):
         val = data.get(int_col, 1)
         try:
             data[int_col] = int(val) if val is not None else 1
         except (ValueError, TypeError):
             data[int_col] = 1
+
+    # Coerce max_frequency
+    if not data.get("max_frequency"):
+        data["max_frequency"] = "weekly"
 
     # Parse JSON list fields
     for json_col in ("channels", "domains", "products"):
@@ -272,7 +286,11 @@ def create_profile(
     init_db()
     now = datetime.now(timezone.utc).isoformat()
     trial_start = now if status == "trial" else ""
-    trial_end = (datetime.now(timezone.utc) + timedelta(days=14)).isoformat() if status == "trial" else ""
+    trial_end = (
+        (datetime.now(timezone.utc) + timedelta(days=14)).isoformat()
+        if status == "trial"
+        else ""
+    )
     profile = UserProfile(
         user_id=user_id,
         name=name,
@@ -290,7 +308,8 @@ def create_profile(
     with _connect() as conn:
         conn.execute(
             """INSERT INTO user_profiles
-               (user_id, name, email, delivery_prefs, status, tier, created_at, updated_at, trial_start, trial_end)
+               (user_id, name, email, delivery_prefs, status, tier,
+                created_at, updated_at, trial_start, trial_end)
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (
                 profile.user_id,
@@ -685,6 +704,9 @@ def create_subscription(
     domain_limit: int = 1,
     raw_access: bool = False,
     processed_access: bool = True,
+    max_products: int = 1,
+    max_frequency: str = "weekly",
+    allow_custom: bool = False,
 ) -> Subscription:
     """Create a new subscription for a user."""
     init_db()
@@ -706,14 +728,18 @@ def create_subscription(
         domain_limit=domain_limit,
         raw_access=raw_access,
         processed_access=processed_access,
+        max_products=max_products,
+        max_frequency=max_frequency,
+        allow_custom=allow_custom,
     )
     with _connect() as conn:
         conn.execute(
             """INSERT INTO subscriptions
                (sub_id, user_id, product_id, status, start_date, end_date, auto_renew,
                 tier, channels, domains, products,
-                platform_limit, domain_limit, raw_access, processed_access)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                platform_limit, domain_limit, raw_access, processed_access,
+                max_products, max_frequency, allow_custom)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (
                 sub.subscription_id,
                 sub.user_id,
@@ -730,6 +756,9 @@ def create_subscription(
                 sub.domain_limit,
                 int(sub.raw_access),
                 int(sub.processed_access),
+                sub.max_products,
+                sub.max_frequency,
+                int(sub.allow_custom),
             ),
         )
     return sub

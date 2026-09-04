@@ -251,7 +251,8 @@ class QuietHours:
 class Subscription:
     """Subscription tied to a user profile with plan, status, and billing info.
     CD-024 fields: tier, channels, domains, products, platform_limit, domain_limit,
-    raw_access, processed_access.
+    raw_access, processed_access. Free-tier limit fields (2026-09): max_products,
+    max_frequency, allow_custom — defaults aligned with ``free_tier`` in config.py.
     """
     subscription_id: str             # "sub_{uuid8}"
     user_id: str                     # FK to UserProfile
@@ -273,6 +274,9 @@ class Subscription:
     domain_limit: int = 1            # CD-024: max domains
     raw_access: bool = False         # CD-024: RAW product access
     processed_access: bool = True    # CD-024: PROCESSED product access
+    max_products: int = 1            # Free-tier limit: max distinct product types
+    max_frequency: str = "weekly"    # Free-tier limit: "daily" | "weekly"
+    allow_custom: bool = False       # Free-tier limit: custom products allowed
 ```
 
 ---
@@ -287,7 +291,7 @@ class Subscription:
 <!-- schema: ProductLifecycle -->
 ```python
 class ProductState(Enum):
-    """Lifecycle states for a product instance. State machine: 
+    """Lifecycle states for a product instance. State machine:
     draft → pending → active ↔ paused → archived → deprecated."""
     DRAFT = "draft"           # Being configured/edited
     PENDING = "pending"       # Scheduled for generation, awaiting trigger
@@ -377,7 +381,7 @@ class EngagementMetrics:
     last_interaction: datetime | None = None
 
 
-@dataclass  
+@dataclass
 class ReadReceipt:
     """Per-channel delivery receipt with open/read timestamps."""
     id: str                          # "rcpt_{uuid8}"
@@ -581,7 +585,7 @@ class RateLimit:
 
 
 # ── Auth Architecture Notes ──
-# 
+#
 # 1. Session tokens: JWT or opaque token stored as HTTP-only cookie / Bearer header.
 #    Sessions are tenant-scoped — a user must select or be assigned a tenant.
 #

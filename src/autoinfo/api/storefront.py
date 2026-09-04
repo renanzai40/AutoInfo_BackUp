@@ -52,6 +52,7 @@ router = APIRouter(tags=["storefront"])
 
 # Product type → (access_level, default monthly price, currency).
 # RAW feeds are free-tier (API access); PROCESSED outputs are premium.
+# Prices here are placeholders pending a pricing decision.
 _PRODUCT_PRICING: dict[str, dict[str, Any]] = {
     "raw": {
         "access_level": "free",

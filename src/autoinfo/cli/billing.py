@@ -1,6 +1,5 @@
-from __future__ import annotations
-
-"""Billing CLI — read-only billing summary for end-users.
+"""Billing CLI — read-only billing summary for end-users, plus free-tier
+subscription provisioning.
 
 Combines usage data from CostMeter with subscription status from Stripe.
 
@@ -8,6 +7,7 @@ Usage::
 
     autoinfo billing --user-id alice --period month
     autoinfo billing --user-id alice --period month --json
+    autoinfo billing create-free --user-id alice
 """
 
 import json
@@ -18,8 +18,88 @@ app = typer.Typer(help="Read-only billing summary (usage + subscription)")
 
 
 @app.command()
+def create_free(
+    user_id: str = typer.Option("", "--user-id", help="End-user ID to provision"),
+    json_output: bool = typer.Option(False, "--json", help="JSON output"),
+) -> None:
+    """Create a free subscription for *user_id* with free-tier defaults.
+
+    Defaults (aligned with ``free_tier`` in config.py and storefront
+    _PRODUCT_PRICING): 1 domain / 1 product / weekly / no custom products.
+    Idempotent: an existing subscription for the user is left untouched.
+    """
+    if not user_id.strip():
+        typer.echo("Error: --user-id is required", err=True)
+        raise typer.Exit(code=1)
+
+    from autoinfo.user_store import create_profile, create_subscription, get_profile
+
+    user_id = user_id.strip()
+    try:
+        existing = get_profile(user_id)
+        if existing is None:
+            create_profile(user_id=user_id, name=user_id, status="active")
+    except Exception as exc:
+        typer.echo(f"Error: {exc}", err=True)
+        raise typer.Exit(code=1)
+
+    try:
+        from autoinfo.user_store import list_subscriptions
+
+        existing_subs = list_subscriptions(user_id)
+        if existing_subs:
+            sub = existing_subs[0]
+            created = False
+        else:
+            sub = create_subscription(
+                user_id=user_id,
+                plan="free",
+                status="active",
+                tier="free",
+                platform_limit=1,
+                domain_limit=1,
+                max_products=1,
+                max_frequency="weekly",
+                allow_custom=False,
+            )
+            created = True
+    except Exception as exc:
+        typer.echo(f"Error: {exc}", err=True)
+        raise typer.Exit(code=1)
+
+    result = {
+        "user_id": user_id,
+        "plan": "free",
+        "created": created,
+        "limits": {
+            "max_domains": sub.domain_limit,
+            "max_products": sub.max_products,
+            "max_frequency": sub.max_frequency,
+            "allow_custom": sub.allow_custom,
+        },
+    }
+
+    if json_output:
+        typer.echo(json.dumps(result, ensure_ascii=False, indent=2))
+    elif created:
+        typer.echo(f"Created free subscription for '{user_id}'")
+        typer.echo(
+            "  Limits: 1 domain / 1 product / weekly / no custom products"
+        )
+    else:
+        typer.echo(
+            f"Subscription for '{user_id}' already exists (plan: {sub.plan}) — "
+            "left unchanged"
+        )
+
+
+@app.command("summary")
 def summary(
-    user_id: str = typer.Option("", "--user-id", help="End-user ID (defaults to config multi_user.default_user_id)"),
+    user_id: str = typer.Option(
+        "",
+        "--user-id",
+        help="End-user ID (defaults to config multi_user.default_user_id)",
+    ),
     period: str = typer.Option("month", "--period", help="Time period (today/week/month/all)"),
     json_output: bool = typer.Option(False, "--json", help="JSON output"),
 ) -> None:

@@ -403,3 +403,7 @@ class Subscription:
     domain_limit: int = 1
     raw_access: bool = False
     processed_access: bool = True
+    # Free-tier limits; max_frequency allows "daily" | "weekly"
+    max_products: int = 1
+    max_frequency: str = "weekly"
+    allow_custom: bool = False
