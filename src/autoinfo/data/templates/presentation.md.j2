@@ -1,9 +1,13 @@
+{# P0-2 provenance decision (concierge wave todo 8): the presentation keeps
+   per-slide inline citations "(Source: <url>)" by design — a slide deck
+   aggregates no prose tail section, so NO Sources/References section is
+   appended here (unlike digest/report/briefings). #}
 # {{ title }}
 
-**Topic**: {{ topic }}  
-**Domain**: {{ domain_display_name(domain) }}  
-**Audience**: {{ target_audience }}  
-**Slides**: {{ slides|length }}  
+**Topic**: {{ topic }}
+**Domain**: {{ domain_display_name(domain) }}
+**Audience**: {{ target_audience }}
+**Slides**: {{ slides|length }}
 **Generated**: {{ generated_at }}
 
 {% if description %}

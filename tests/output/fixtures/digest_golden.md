@@ -1,8 +1,8 @@
 # Weekly Digest — Tech & AI
 
-**Domain**: Tech & AI  
-**Period**: Weekly (2026-08-21 – 2026-08-28)  
-**Generated**: 2026-08-28  
+**Domain**: Tech & AI
+**Period**: Weekly (2026-08-21 – 2026-08-28)
+**Generated**: 2026-08-28
 
 ---
 
@@ -81,6 +81,16 @@ This week's developments center on falling model inference costs driving new AI 
 
 ---
 
+
+---
+
+## References
+
+1. **AI funding round 1: model inference costs fall** — https://techcrunch.com/category/artificial-intelligence/1
+2. **AI funding round 2: model inference costs fall** — https://techcrunch.com/category/artificial-intelligence/2
+3. **AI funding round 3: model inference costs fall** — https://techcrunch.com/category/artificial-intelligence/3
+4. **AI funding round 4: model inference costs fall** — https://arstechnica.com/ai/2026/08/funding-round-4
+5. **AI funding round 5: model inference costs fall** — https://arstechnica.com/ai/2026/08/funding-round-5
 
 ---
 

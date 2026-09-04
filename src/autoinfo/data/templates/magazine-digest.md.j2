@@ -63,4 +63,16 @@ This edition has no curated items yet. Check back after the next collection run.
 
 ---
 
+## Sources
+
+{% for entry in entries %}
+{% if entry.source_url %}- [{{ entry.source_label or entry.source_platform | platform_name }}]({{ entry.source_url }})
+{% else %}- {{ entry.source_label or entry.source_platform | platform_name }}
+{% endif %}
+{% else %}
+No sources for this edition.
+{% endfor %}
+
+---
+
 *Magazine Digest · {{ domain_display_name(domain) }} · {{ generated_at }}*

@@ -180,6 +180,11 @@
     border-top: 1px solid var(--border);
   }
   footer.digest-footer a { color: var(--accent); text-decoration: none; }
+  section.references-tail { padding-bottom: 1rem; }
+  section.references-tail ol { margin: 0; padding-left: 1.25rem; }
+  section.references-tail li { margin-bottom: 0.35rem; font-size: 0.9rem; }
+  section.references-tail a { color: var(--accent); text-decoration: none; }
+  section.references-tail a:hover { text-decoration: underline; }
   @media (max-width: 600px) {
     .container { padding: 1rem 0.75rem 3rem; }
     header.digest-header, section { padding: 1.1rem 1rem; }
@@ -270,6 +275,20 @@
     </ol>
     {% else %}
     <p class="empty-note">No entries found for {{ domain_display_name(domain_name) }} in this period.</p>
+    {% endif %}
+  </section>
+
+  {% set _ref_entries = entries | selectattr("source_url") | list %}
+  <section class="references-tail">
+    <h2>References</h2>
+    {% if _ref_entries %}
+    <ol class="trends-list">
+      {% for entry in _ref_entries %}
+      <li><a href="{{ entry.source_url }}">{{ entry.title }}</a></li>
+      {% endfor %}
+    </ol>
+    {% else %}
+    <p class="empty-note">No sources for this edition.</p>
     {% endif %}
   </section>
 

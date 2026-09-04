@@ -1,0 +1,234 @@
+# Regression (concierge wave task 8 / P0-2): every product template ships a
+# default source-provenance section rendered from its existing render context.
+#
+# Per-template matrix (roadmap P0-2, corrected 2026-09-04):
+#   report / premium-briefing / enterprise-briefing / column -> ## References
+#     (pre-existing; locked here so they never regress)
+#   magazine-digest -> ## Sources (per-entry label+URL links)
+#   tutorial        -> ## Sources (structured KB references + Further Reading)
+#   digest          -> aggregate ## References tail before the footer
+#   presentation    -> inline per-slide citations BY DESIGN (no section);
+#                      the template documents that decision.
+#
+# Deterministic (requires_env: []): KBStore + LLM seams patched in the
+# subprocess (same pattern as regression-product-quality-all-templates);
+# renders happen in an ABSOLUTE temp cwd — no LLM key, no network.
+name: regression-sources-sections
+description: "Regression (P0-2): all 8 product templates render their Sources/References provenance section (or documented inline decision) with real source_urls"
+category: regression
+regression: true
+regression_issue: "concierge-wave-task-8"
+requires_env: []
+steps:
+  - name: "all 8 product templates carry source provenance (section or documented inline)"
+    kind: cli
+    timeout_seconds: 120
+    command: |-
+      python3 -c '
+      import os, re, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_digest, generate_tutorial
+
+      # Repo root from the INSTALLED package location (portable — the cwd is
+      # an absolute temp dir inside the scenario, see issue #347).
+      ROOT = Path(__import__("autoinfo").__file__).resolve().parents[2]
+
+      ENTRIES = [
+          {"entry_id": f"e{i}",
+           "title": f"Time-lapse imaging study {i}",
+           "summary": f"Cohort {i} reports improved live birth rates.",
+           "source_url": f"https://pubmed.ncbi.nlm.nih.gov/1234500{i}/",
+           "source_type": "api", "source_platform": "pubmed",
+           "relevance_score": 95 - i, "tags": "[]",
+           "tier": "01-Raw", "collected_at": "2026-08-15T10:00:00Z",
+           "domain": "medical-research"}
+          for i in range(1, 4)
+      ]
+
+      SYNTH = {
+          "executive_summary": "Imaging and embryo selection advances led the week.",
+          "key_findings": [
+              {"topic": "Imaging", "detail": "Live birth rates improved."},
+          ],
+          "recommendations": ["Adopt time-lapse imaging."],
+          "implications": ["Clinics may upgrade incubators."],
+          "risks": [{"title": "Cost risk", "likelihood": "medium",
+                     "impact": "medium", "mitigation": "Phase adoption."}],
+          "action_required": ["Review the imaging literature."],
+          "key_metrics": [{"metric": "Live birth uplift", "value": "+8.7%",
+                           "source": "PubMed"}],
+      }
+      SYNTH_WITH_SLIDES = {
+          **SYNTH,
+          "topic": "IVF imaging",
+          "description": "Weekly IVF imaging developments.",
+          "slides": [
+              {"title": "Imaging overview",
+               "content": "Cohorts report improved live birth rates.",
+               "bullets": ["Time-lapse imaging"],
+               "source_url": ENTRIES[0]["source_url"],
+               "notes": "Prepared from knowledge base sources."},
+          ],
+      }
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      def section_urls(text, heading):
+          """URLs inside the `## <heading>` section (to the next `## `)."""
+          lines = text.splitlines()
+          starts = [i for i, ln in enumerate(lines)
+                    if ln.strip() == f"## {heading}"]
+          assert starts, f"## {heading} section missing"
+          start = starts[-1]
+          end = next((i for i in range(start + 1, len(lines))
+                      if lines[i].startswith("## ")), len(lines))
+          block = "\n".join(lines[start + 1:end])
+          return set(re.findall(r"https?://[^\s)\]]+", block))
+
+      all_urls = {e["source_url"] for e in ENTRIES}
+      failures = []
+      tmp = Path(tempfile.mkdtemp(prefix="regression-sources-sections-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH_WITH_SLIDES):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+
+              # Reference-bearing families (pre-existing sections — never regress).
+              for family in ("report", "premium-briefing",
+                             "enterprise-briefing", "column"):
+                  out = generate_digest(
+                      domain="medical-research", period="weekly",
+                      format="markdown", product_template=tmpl(family),
+                      include_stale=True)
+                  if "## References" not in out:
+                      failures.append(f"[{family}] no ## References section")
+                  elif not (section_urls(out, "References") & all_urls):
+                      failures.append(f"[{family}] References lacks entry source_urls")
+
+              # magazine-digest — NEW ## Sources.
+              out = generate_digest(
+                  domain="medical-research", period="weekly", format="markdown",
+                  product_template=tmpl("magazine-digest"), include_stale=True)
+              if "## Sources" not in out:
+                  failures.append("[magazine-digest] no ## Sources section")
+              elif not (section_urls(out, "Sources") & all_urls):
+                  failures.append("[magazine-digest] Sources lacks entry source_urls")
+
+              # tutorial — NEW structured ## Sources (real generate path).
+              tut = generate_tutorial(domain="medical-research",
+                                      format="markdown", include_stale=True)
+              assert isinstance(tut, str)
+              if "## Sources" not in tut:
+                  failures.append("[tutorial] no ## Sources section")
+              elif not (section_urls(tut, "Sources") & all_urls):
+                  failures.append("[tutorial] Sources lacks KB source_urls")
+
+              # digest — NEW aggregate ## References tail before the footer.
+              out = generate_digest(
+                  domain="medical-research", period="weekly", format="markdown",
+                  product_template=tmpl("digest"), include_stale=True)
+              if "## References" not in out:
+                  failures.append("[digest] no ## References section")
+              elif not (section_urls(out, "References") & all_urls):
+                  failures.append("[digest] References lacks entry source_urls")
+              elif out.index("## References") > out.rindex("*Digest ·"):
+                  failures.append("[digest] References tail not before footer")
+
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value=SYNTH_WITH_SLIDES):
+              kb = MagicMock()
+              kb.list_entries.return_value = ENTRIES
+              kb_cls.return_value = kb
+              # presentation — inline by design; no aggregate section.
+              pres = generate_digest(
+                  domain="medical-research", period="weekly", format="markdown",
+                  product_template=tmpl("presentation"), include_stale=True)
+              assert isinstance(pres, str)
+              if "(Source: " not in pres:
+                  failures.append("[presentation] inline citations missing")
+              if "## Sources" in pres or "## References" in pres:
+                  failures.append("[presentation] aggregate section leaked (inline by design)")
+
+          # Template-note decision lock for presentation.md.j2.
+          note = (ROOT / "src" / "autoinfo" / "data" / "templates"
+                  / "presentation.md.j2").read_text(encoding="utf-8")
+          if "Sources/References" not in note or "inline" not in note:
+              failures.append("[presentation] template note missing")
+
+          print("SOURCES_SECTIONS_OK" if not failures else
+                "SOURCES_SECTIONS_DEFECTS:\n" + "\n".join(failures))
+          if failures:
+              raise SystemExit(1)
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SOURCES_SECTIONS_OK"]
+
+  - name: "empty-corpus renders stay graceful (no KeyError, honest empty-state)"
+    kind: cli
+    timeout_seconds: 120
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from unittest.mock import MagicMock, patch
+      from autoinfo.output import PRODUCT_TEMPLATES, generate_digest, _render_digest_html
+
+      def tmpl(name):
+          return next(r["template"] for r in PRODUCT_TEMPLATES if r["name"] == name)
+
+      failures = []
+      tmp = Path(tempfile.mkdtemp(prefix="regression-sources-sections-empty-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          context = {
+              "title": "Weekly Digest — medical-research",
+              "domain": "medical-research",
+              "period": "weekly", "period_label": "Weekly",
+              "date_from": "2026-08-03", "date_to": "2026-08-10",
+              "generated_at": "2026-08-10",
+              "entries": [],
+              "llm_synthesis": {"executive_summary": "Synthesis.",
+                                "key_findings": [], "recommendations": []},
+              "target_audience": "", "source_tier_badge": False,
+          }
+          with patch("autoinfo.output.KBStore") as kb_cls, \
+               patch("autoinfo.output._call_llm_for_digest", return_value={}):
+              kb = MagicMock()
+              kb.list_entries.return_value = []
+              kb_cls.return_value = kb
+              for family in ("magazine-digest", "digest"):
+                  out = generate_digest(
+                      domain="medical-research", period="weekly",
+                      format="markdown", product_template=tmpl(family),
+                      include_stale=True)
+                  assert isinstance(out, str)
+                  if "No sources" not in out:
+                      failures.append(f"[{family}] empty-state missing")
+          html = _render_digest_html(context)
+          assert isinstance(html, str)
+          if "No sources for this edition." not in html:
+              failures.append("[digest-html] empty-state missing")
+          print("SOURCES_EMPTY_OK" if not failures else
+                "SOURCES_EMPTY_DEFECTS:\n" + "\n".join(failures))
+          if failures:
+              raise SystemExit(1)
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["SOURCES_EMPTY_OK"]

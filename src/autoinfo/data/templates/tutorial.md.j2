@@ -1,9 +1,9 @@
 # {{ title }}
 
-**Domain**: {{ domain_display_name(domain) }}  
-**Target Audience**: {{ target_audience }}  
-**Duration**: {{ duration }}  
-**Prerequisites**: {{ prerequisites }}  
+**Domain**: {{ domain_display_name(domain) }}
+**Target Audience**: {{ target_audience }}
+**Duration**: {{ duration }}
+**Prerequisites**: {{ prerequisites }}
 
 {% if collection_id %}
 **Collection**: {{ collection_id }}
@@ -100,6 +100,14 @@ This edition has no exercises yet. Check back after the next collection run.
 - {{ ref }}
 {% else %}
 This edition has no further reading yet. Check back after the next collection run.
+{% endfor %}
+
+## Sources
+
+{% for ref in references %}
+{{ loop.index }}. **{{ ref.title }}**{{ (" — " ~ ref.source_url) if ref.source_url else "" }}{{ (" (" ~ user_source_label(ref) ~ ")") if user_source_label(ref) else "" }}
+{% else %}
+No sources for this edition.
 {% endfor %}
 
 ---

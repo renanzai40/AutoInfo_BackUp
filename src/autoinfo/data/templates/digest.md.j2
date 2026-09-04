@@ -1,8 +1,8 @@
 # {{ title }}
 
-**Domain**: {{ domain_display_name(domain) }}  
-**Period**: {{ period_label }} ({{ date_from }} – {{ date_to }})  
-**Generated**: {{ generated_at }}  
+**Domain**: {{ domain_display_name(domain) }}
+**Period**: {{ period_label }} ({{ date_from }} – {{ date_to }})
+**Generated**: {{ generated_at }}
 
 {% if llm_synthesis %}
 ---
@@ -66,6 +66,17 @@
 
 {% else %}
 This edition has no curated items yet. Check back after the next collection run.
+{% endfor %}
+
+---
+
+## References
+
+{% for entry in entries %}
+{% if entry.source_url %}{{ loop.index }}. **{{ entry.title }}** — {{ entry.source_url }}
+{% endif %}
+{% else %}
+No sources for this edition.
 {% endfor %}
 
 ---

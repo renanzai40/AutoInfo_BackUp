@@ -822,7 +822,9 @@ def _is_test_entry(entry: dict[str, Any]) -> bool:
 # "本期"+"要点", a bare "weekly:" template token, or a template name + digit)
 # are never misclassified.
 _SUMMARY_PLACEHOLDER_RE = re.compile(r"^本期.*要点")
-_TITLE_PLACEHOLDER_RE = re.compile(r"(weekly:|情报\s*\d|周报\s*\d|素材\s*\d|前沿\s*\d)", re.IGNORECASE)
+_TITLE_PLACEHOLDER_RE = re.compile(
+    r"(weekly:|情报\s*\d|周报\s*\d|素材\s*\d|前沿\s*\d)", re.IGNORECASE
+)
 
 
 def _is_synthesized_digest_entry(entry: dict[str, Any]) -> bool:
@@ -6653,7 +6655,10 @@ def generate_digest(
             else _fallback_slides_from_entries(context_entries, _PRESENTATION_SLIDE_COUNT)
         )
         context["slides"] = slides
-        context["topic"] = str(llm_synthesis.get("topic") or period_label).strip() if isinstance(llm_synthesis, dict) else period_label
+        context["topic"] = (
+            str(llm_synthesis.get("topic") or period_label).strip()
+            if isinstance(llm_synthesis, dict) else period_label
+        )
         context["description"] = (
             str(llm_synthesis.get("description") or "").strip()
             if isinstance(llm_synthesis, dict) else ""
@@ -8306,7 +8311,7 @@ _SOURCE_TYPE_THEME_LABELS: dict[str, str] = {
 }
 
 
-def _SOURCE_TYPE_THEME_LABEL(source_type: str) -> str:
+def _SOURCE_TYPE_THEME_LABEL(source_type: str) -> str:  # noqa: N802 (paired with _SOURCE_TYPE_THEME_LABELS map)
     """Human-readable section title for a deterministic source-type group.
 
     The chaos-guard fallback (issue #106) groups by ``source_type`` when the
@@ -8323,7 +8328,8 @@ def _SOURCE_TYPE_THEME_LABEL(source_type: str) -> str:
     # "hnrss" -> "Hnrss", "unknown" -> "Other Sources").
     if key == "unknown":
         return "Other Sources"
-    return source_type.strip().upper() if len(source_type.strip()) <= 6 else source_type.strip().title()
+    _s = source_type.strip()
+    return _s.upper() if len(_s) <= 6 else _s.title()
 
 
 def _source_group_heading(
@@ -10774,6 +10780,24 @@ def generate_tutorial(
     else:
         exercises = []
 
+    # P0-2: KB references for the tutorial template's ``## Sources`` section
+    # (report-context item shape, deduplicated in entry order, no LLM call).
+    kb_references: list[dict[str, Any]] = []
+    _seen_urls: set[str] = set()
+    for entry in entries:
+        url = str(entry.get("source_url") or "").strip()
+        if not url or url in _seen_urls:
+            continue
+        _seen_urls.add(url)
+        kb_references.append({
+            "title": entry.get("title") or "",
+            "source_url": url,
+            "source_type": entry.get("source_type") or "",
+            "source_platform": entry.get("source_platform") or "",
+            "source_label": entry.get("source_label") or "",
+            "domain": entry.get("domain") or domain,
+        })
+
     context = {
         "title": llm_result.get("title", f"{_domain_display_name(domain)} — Tutorial"),
         "domain": domain,
@@ -10786,6 +10810,7 @@ def generate_tutorial(
         "exercises": exercises,
         "summary": llm_result.get("summary", ""),
         "further_reading": llm_result.get("further_reading", []),
+        "references": kb_references,
         "generated_at": generated_at,
         "vocabulary": llm_result.get("vocabulary", []),
         "grammar": llm_result.get("grammar", []),
