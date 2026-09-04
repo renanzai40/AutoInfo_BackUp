@@ -222,8 +222,8 @@ Category → key-tool mapping is maintained in the README, not duplicated here.
 
 **Discovery flow**: `health_check()` → `tools/list` (MCP auto-discovery) → `list_domains()` → `get_domain_schema(domain)` → `list_available_models()` → `list_output_templates(domain)`.
 
-**Validation**: `list_validation_scenarios` / `run_validation_scenario` — 129 scenarios
- (65 functional + 64 regression in `src/autoinfo/mcp/scenarios/regression/`); per-scenario timeout,
+**Validation**: `list_validation_scenarios` / `run_validation_scenario` — 130 scenarios
+ (65 functional + 65 regression in `src/autoinfo/mcp/scenarios/regression/`); per-scenario timeout,
 recovery_steps + partial-pass, per-step trace + root-cause report, regression flywheel;
 env-gated steps report `unconfigured` (never silently pass); `llm_assert` runs a real
 model call. Scenario authoring contract: `docs/dev/validation-scenario-contract.md`.
@@ -325,7 +325,7 @@ Key counts the agent must know without opening README:
 | MCP tools | **146 tools across 35 categories** |
 | CLI command groups | **28 command groups** |
 | Delivery channels | **13 channels** |
-| Validation scenarios | **129 scenarios** (65 functional + 64 regression) |
+| Validation scenarios | **130 scenarios** (65 functional + 65 regression) |
 | Demo domains | **21 demo domains** |
 | LLM-required tools | **16 LLM-required tools** |
 | Test suite | **~4644 tests** |
