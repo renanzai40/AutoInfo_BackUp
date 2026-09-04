@@ -54,6 +54,14 @@ from jinja2 import ChoiceLoader, Environment, FileSystemLoader, TemplateNotFound
 from autoinfo.config import Config, get_config_path, load_config
 from autoinfo.kb import KBStore, PromotionRejected, SQLiteIndex
 from autoinfo.llm import call_with_fallback
+
+# Free-tier gate seam (todo 12) — re-exported for tests/callers.
+from autoinfo.output.free_tier import (  # noqa: E402  (import at module top)
+    FreeTierLimitError as FreeTierLimitError,
+)
+from autoinfo.output.free_tier import (
+    check_free_tier_generation as check_free_tier_generation,
+)
 from autoinfo.quality_constraints import (
     EDITORIAL_OPENING_HEDGE_CONSTRAINT,
     FEATURE_STORY_GROUNDING_CONSTRAINT,
@@ -6209,6 +6217,13 @@ def generate_digest(
     # getting a plain ``str`` (backward compatible).
     delivery_gate_configs = _resolve_delivery_gate_configs(domain, delivery_gate_configs)
 
+    # --- Free-tier quota gate (todo 12) — named users only; user_id="" (batch) skips
+
+    check_free_tier_generation(
+        user_id=user_id, domain=domain, product_type="digest", raise_on_block=True
+    )
+
+
     # --- Determine cross-domain mode -----------------------------------------
     is_cross_domain_digest: bool = domains is not None and len(domains) >= 2
     if is_cross_domain_digest:
@@ -6979,6 +6994,12 @@ def generate_report(
 
     # --- Resolve delivery-gate config (issue #298: default-on in production) --
     delivery_gate_configs = _resolve_delivery_gate_configs(domain, delivery_gate_configs)
+
+    # --- Free-tier quota gate (todo 12) — named users only; user_id="" (batch) skips
+
+    check_free_tier_generation(
+        user_id=user_id, domain=domain, product_type="report", raise_on_block=True
+    )
 
     # --- Determine cross-domain mode -----------------------------------------
     is_cross_domain: bool = domains is not None and len(domains) >= 2

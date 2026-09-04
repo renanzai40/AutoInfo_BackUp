@@ -3047,6 +3047,7 @@ def _handle_generate_digest(
 
     from autoinfo.kb import KBStore
     from autoinfo.output import generate_digest as _generate_digest
+    from autoinfo.output.free_tier import FreeTierLimitError
 
     product_template = None
     if product:
@@ -3159,6 +3160,16 @@ def _handle_generate_digest(
             {"success": True, "format": format, "content": result},
             persist, domain, "digest", format, result,
         )
+    except FreeTierLimitError as exc:
+        # Named free-tier user over quota — unified FREE_TIER_LIMIT envelope.
+        error_detail = exc.to_envelope()["error"]
+        return {
+            "error_code": error_detail["code"],
+            "message": error_detail["message"],
+            "actionable": error_detail["actionable"],
+            "success": False,
+            "error": error_detail,
+        }
     except ValueError as exc:
         return {
             "error_code": ErrorCode.VALIDATION_ERROR.value,
@@ -3191,6 +3202,7 @@ def _handle_generate_report(
 
     from autoinfo.kb import KBStore
     from autoinfo.output import generate_report as _generate_report
+    from autoinfo.output.free_tier import FreeTierLimitError
 
     product_template = None
     if product:
@@ -3325,6 +3337,15 @@ def _handle_generate_report(
             },
             persist, domain, _persist_product, format, result,
         )
+    except FreeTierLimitError as exc:
+        error_detail = exc.to_envelope()["error"]
+        return {
+            "error_code": error_detail["code"],
+            "message": error_detail["message"],
+            "actionable": error_detail["actionable"],
+            "success": False,
+            "error": error_detail,
+        }
     except ValueError as exc:
         return {
             "error_code": ErrorCode.VALIDATION_ERROR.value,
@@ -3360,6 +3381,7 @@ def _handle_generate_cross_domain_report(
         default (no preference lookup).
     """
     from autoinfo.output import generate_report as _generate_report
+    from autoinfo.output.free_tier import FreeTierLimitError
 
     # Validate at least 2 domains
     if not isinstance(domains, list) or len(domains) < 2:
@@ -3478,6 +3500,15 @@ def _handle_generate_cross_domain_report(
             },
             persist, domains[0], "report", format, result,
         )
+    except FreeTierLimitError as exc:
+        error_detail = exc.to_envelope()["error"]
+        return {
+            "error_code": error_detail["code"],
+            "message": error_detail["message"],
+            "actionable": error_detail["actionable"],
+            "success": False,
+            "error": error_detail,
+        }
     except ValueError as exc:
         return {
             "error_code": ErrorCode.VALIDATION_ERROR.value,
@@ -4062,6 +4093,7 @@ def _handle_add_delivery_schedule(
                 "message": f"'{cron_expression}' is not a valid cron expression",
                 "actionable": True,
             }
+
 
         new_schedule = DeliverySchedule(
             cron_expression=cron_expression,

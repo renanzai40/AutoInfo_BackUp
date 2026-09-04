@@ -49,7 +49,7 @@ class TestErrorCodeEnumValues:
 
     def test_total_members(self) -> None:
         """Ensure the enum member count stays pinned (grows only with new codes)."""
-        assert len(ErrorCode) == 29
+        assert len(ErrorCode) == 30
 
 
 class TestErrorResponseTypedDict:

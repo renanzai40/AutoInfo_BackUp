@@ -47,6 +47,7 @@ class ErrorCode(str, Enum):
     CONFIG_NOT_FOUND = "ConfigNotFound"
     DIRECTOR_ONLY = "DIRECTOR_ONLY"
     READ_ONLY_SERVER = "READ_ONLY_SERVER"
+    FREE_TIER_LIMIT = "FreeTierLimit"
 
 
 class ErrorDetail(TypedDict):

@@ -949,6 +949,12 @@ def add_delivery(
     period: str = typer.Option(
         "weekly", "--period", help="Content period: daily, weekly, monthly",
     ),
+    schedule_user_id: str = typer.Option(
+        "",
+        "--user-id",
+        help="End-user ID bound to the schedule (content-preference filtering; "
+        "free-tier frequency limits apply to named users only)",
+    ),
 ) -> None:
     """Add a delivery schedule: periodic output generation + channel delivery."""
     try:
@@ -999,6 +1005,17 @@ def add_delivery(
         )
         raise typer.Exit(code=1)
 
+    # Free-tier frequency gate (todo 12) — named users only; empty skips
+    from autoinfo.delivery.frequency_gate import check_schedule_frequency
+
+    gate = check_schedule_frequency(user_id=schedule_user_id, frequency=period)
+    if not gate["allowed"]:
+        typer.echo(
+            f"Error: [{gate['code']}] {gate['message']}",
+            err=True,
+        )
+        raise typer.Exit(code=1)
+
     recipients_list = [r.strip() for r in to.split(",") if r.strip()] if to else []
 
     new_schedule = DeliverySchedule(
@@ -1009,6 +1026,7 @@ def add_delivery(
         channel=channel,
         recipients=recipients_list,
         period=period,
+        user_id=schedule_user_id,
     )
     scheduler = DeliveryScheduler()
     scheduler.add_schedule(new_schedule)

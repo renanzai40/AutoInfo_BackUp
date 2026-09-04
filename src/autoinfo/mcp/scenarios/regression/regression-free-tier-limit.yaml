@@ -1,0 +1,137 @@
+# Regression (todo 12 / roadmap:64): free-tier limits enforced at product
+# generation / schedule time — over-limit named free user gets an explicit
+# FREE_TIER_LIMIT error (never silent), user_id="" batch paths are NOT
+# blocked, and check_access stays a boolean gate.
+#
+# Deterministic (requires_env: []): the gate reads the user-store
+# subscription + ConsumptionStore ledger (both bootstrapped hermetically in
+# the subprocess's temp cwd — no LLM, no network).  The digest generation
+# body itself is not reached in the over-limit case (the gate fires at
+# ENTRY), so no KBStore patching is needed.  Runs inside an ABSOLUTE temp
+# cwd (tempfile.mkdtemp, try/finally cleanup) — same pattern as
+# regression-11-producthunt-ref-description.yaml.
+name: regression-free-tier-limit
+description: "Regression todo 12: named free user over product/frequency quota gets explicit FREE_TIER_LIMIT error; user_id='' batch path unblocked; premium unaffected"
+category: regression
+regression: true
+regression_issue: "todo-12 free-tier enforcement (roadmap:64)"
+requires_env: []
+steps:
+  - name: "free-tier gate blocks named over-limit user, allows batch and premium"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, shutil, tempfile
+      from pathlib import Path
+      from autoinfo.mcp.errors import ErrorCode
+      from autoinfo.output import FreeTierLimitError, check_free_tier_generation
+      from autoinfo.delivery.frequency_gate import check_schedule_frequency
+      from autoinfo.user_store import (
+          create_profile,
+          create_subscription,
+          init_db,
+      )
+
+      def free_user(user_id):
+          init_db()
+          create_profile(user_id=user_id, name=user_id, status="active")
+          return create_subscription(
+              user_id=user_id, plan="free", tier="free", status="active",
+              max_products=1, max_frequency="weekly", allow_custom=False,
+          )
+
+      def premium_user(user_id):
+          init_db()
+          create_profile(user_id=user_id, name=user_id, status="active")
+          return create_subscription(
+              user_id=user_id, plan="premium", tier="premium", status="active",
+              max_products=8, max_frequency="daily", allow_custom=True,
+          )
+
+      def record(user_id, product_type, product_id, domain):
+          from autoinfo.consumption import ConsumptionStore
+          ConsumptionStore().record_event(
+              user_id=user_id, product_type=product_type,
+              product_id=product_id, event_type="delivered",
+              metadata={"domain": domain},
+          )
+
+      tmp = Path(tempfile.mkdtemp(prefix="regression-free-tier-limit-"))
+      old = os.getcwd()
+      try:
+          os.chdir(tmp)
+          free_user("u-limit")
+          record("u-limit", "digest", "medical-research-weekly", "medical-research")
+
+          # 1. 2nd product (report) for the same user → explicit error.
+          blocked = check_free_tier_generation(
+              user_id="u-limit", domain="medical-research", product_type="report"
+          )
+          assert blocked["allowed"] is False, blocked
+          assert blocked["code"] == ErrorCode.FREE_TIER_LIMIT.value, blocked
+          assert blocked["actionable"] is True, blocked
+          assert "upgrade" in blocked["message"].lower(), blocked["message"]
+          assert "1/1" in blocked["message"], blocked["message"]
+
+          # 2. 2nd domain digest is ALSO a 2nd product.
+          blocked2 = check_free_tier_generation(
+              user_id="u-limit", domain="ai-commercial", product_type="digest"
+          )
+          assert blocked2["allowed"] is False, blocked2
+          assert blocked2["code"] == ErrorCode.FREE_TIER_LIMIT.value, blocked2
+
+          # 3. Same (family, domain) regeneration stays allowed.
+          regen = check_free_tier_generation(
+              user_id="u-limit", domain="medical-research", product_type="digest"
+          )
+          assert regen["allowed"] is True, regen
+
+          # 4. user_id="" batch path NOT blocked (despite exhausted quota).
+          batch = check_free_tier_generation(
+              user_id="", domain="other-domain", product_type="digest"
+          )
+          assert batch["allowed"] is True, batch
+
+          # 5. Premium user with more products than the free limit → allowed.
+          premium_user("u-prem")
+          for i in range(3):
+              record("u-prem", "digest", f"domain-{i}-weekly", f"domain-{i}")
+          prem = check_free_tier_generation(
+              user_id="u-prem", domain="new-domain", product_type="report"
+          )
+          assert prem["allowed"] is True, prem
+
+          # 6. Schedule frequency: daily under a weekly free limit → blocked.
+          over = check_schedule_frequency(user_id="u-limit", frequency="daily")
+          assert over["allowed"] is False, over
+          assert over["code"] == ErrorCode.FREE_TIER_LIMIT.value, over
+          assert "weekly" in over["message"].lower(), over["message"]
+          # Weekly schedule within the allowance → allowed.
+          ok = check_schedule_frequency(user_id="u-limit", frequency="weekly")
+          assert ok["allowed"] is True, ok
+          # Premium daily schedule → allowed.
+          prem_freq = check_schedule_frequency(user_id="u-prem", frequency="daily")
+          assert prem_freq["allowed"] is True, prem_freq
+
+          # 7. Over-limit generation raises the envelope-carrying ValueError.
+          try:
+              check_free_tier_generation(
+                  user_id="u-limit", domain="medical-research",
+                  product_type="report", raise_on_block=True,
+              )
+              raise SystemExit("expected FreeTierLimitError")
+          except FreeTierLimitError as exc:
+              env = exc.to_envelope()
+              assert env["success"] is False, env
+              assert env["error"]["code"] == ErrorCode.FREE_TIER_LIMIT.value, env
+              assert isinstance(exc, ValueError), type(exc)
+
+          print("FREE_TIER_LIMIT_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["FREE_TIER_LIMIT_OK"]
