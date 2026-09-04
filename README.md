@@ -101,7 +101,7 @@ LLM-based structured extraction, summarization, and a queryable knowledge base.
 | Component | Status |
 |-----------|--------|
 | Config system | ✅ LLM task config, per-task model, fallback chains, schema versioning |
-| CLI | ✅ 28 command groups (init, doctor, collect, process, status, summaries, sources, topics, topic-group, domain, audit, kb, output, cron, knowledge, cefr, email, keywords, clean, cost, billing, enduser, portal, trace, import-kb, query-collected, alert-rules, agent-callback) |
+| CLI | ✅ 29 command groups (init, doctor, collect, process, status, summaries, sources, topics, topic-group, domain, audit, kb, output, cron, knowledge, cefr, email, keywords, clean, cost, billing, enduser, portal, trace, import-kb, query-collected, alert-rules, agent-callback, validation) |
 | Collection | ✅ 30 collector handlers (PubMed, Semantic Scholar, DBLP, OpenAlex, USPTO, NYT, Yahoo Finance, Quandl, RSS, Web, webhook, email, PDF, Reddit, Spotify, YouTube, Bilibili, Apple Podcasts, plus paid AP API and Reuters MCP, plus SSRN, GDELT, HuggingFace/Kaggle, Unpaywall/CORE, HackerNews, AKShare, SEC EDGAR, edX sitemap), scheduled via crond; `fetch_depth: fulltext` threading (unpaywall/rss/youtube/gdelt, 8000-char cap) |
 | LLM extraction | ✅ Custom extraction fields, TL;DR, key points, entities, G4 factual consistency, token usage tracking |
 | Translation QA pipeline | ✅ 5 lite quality gates, back-translation verification, terminology guardrails, composite scoring, translator-qa-skill |
@@ -345,7 +345,7 @@ Sources (RSS/API/Web)
 | Layer | Technology |
 |-------|-----------|
 | Language | Python ≥ 3.11 |
-| CLI | typer (28 command groups) |
+| CLI | typer (29 command groups) |
 | REST API | FastAPI + uvicorn (port 8741) |
 | MCP server | mcp (Model Context Protocol) — 146 tools over stdio |
 | LLM layer | LiteLLM — multi-provider (OpenRouter, OpenAI-compatible, Ollama, Azure) via BYOK |
@@ -362,13 +362,13 @@ Sources (RSS/API/Web)
 | Utilities | python-dateutil |
 | Testing | pytest + pytest-asyncio + pytest-vcr + pytest-timeout |
 | Lint & type checking | ruff + mypy (strict) |
-| Secret scanning | gitleaks v8.18.4 pre-commit hook + local `no-credential-url` guard (blocks `https://token@github.com` / `ghp_`/`github_pat_` in staged files) + `gitleaks-action` in CI |
+| Secret scanning | gitleaks v8.18.4 pre-commit hook + local `no-credential-url` guard (blocks token-authenticated GitHub URLs of the `https://<token>@` form and `ghp_`/`github_pat_` PAT prefixes in staged files) + `gitleaks-action` in CI |
 
 Optional extras: `pip install "autoinfo[web]"` (Playwright),
 `"autoinfo[pdf]"` (PyMuPDF + weasyprint), `"autoinfo[tts]"` (edge-tts), or
 `"autoinfo[all]"` for everything.
 
-## CLI Commands (28 groups)
+## CLI Commands (29 groups)
 
 ```bash
 autoinfo init --name <project>      # Initialize project

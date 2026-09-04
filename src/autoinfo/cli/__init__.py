@@ -32,6 +32,7 @@ from . import (
     topics,
     trace,
     validate,
+    validation,
 )
 
 # Import init function directly (not as typer app — single-command module)
@@ -102,6 +103,11 @@ app.add_typer(
     validate.app,
     name="validate",
     help="Run the full-matrix acceptance executor + regression guard (#331/#332)",
+)
+app.add_typer(
+    validation.app,
+    name="validation",
+    help="Browse the validation scenario library (list_validation_scenarios parity)",
 )
 app.add_typer(
     import_kb.app,

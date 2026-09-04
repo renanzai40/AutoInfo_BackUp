@@ -101,7 +101,7 @@ AutoInfo/
 │   └── skills/                     # Coding agent skills (for developing AutoInfo)
 ├── src/
 │   └── autoinfo/
-│       ├── cli/                     # 28 CLI command groups
+│       ├── cli/                     # 29 CLI command groups
 │       ├── mcp/                     # MCP server (146 tools)
 │       ├── api/                     # REST API (FastAPI, port 8741)
 │       ├── kb.py                    # Knowledge base pipeline (4-tier KB pipeline)
@@ -323,7 +323,7 @@ Key counts the agent must know without opening README:
 | Fact | Value |
 |------|-------|
 | MCP tools | **146 tools across 35 categories** |
-| CLI command groups | **28 command groups** |
+| CLI command groups | **29 command groups** |
 | Delivery channels | **13 channels** |
 | Validation scenarios | **130 scenarios** (65 functional + 65 regression) |
 | Demo domains | **21 demo domains** |

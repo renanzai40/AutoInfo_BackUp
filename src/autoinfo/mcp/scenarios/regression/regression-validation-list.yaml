@@ -1,0 +1,77 @@
+# Regression (P1-1, wave todo 10): the `autoinfo validation` CLI group must
+# list the live validation scenario library and derive its --summary counts
+# at runtime from list_scenarios() — never hardcoded totals.
+#
+# The `validation` group is distinct from `validate` (the matrix/diff/stability
+# acceptance executor).  This scenario asserts:
+#   1. `autoinfo validation list` exits 0 and names every scenario that
+#      list_scenarios() discovers (no name dropped or renamed).
+#   2. `autoinfo validation list --summary` prints "functional: N" and
+#      "regression: M" where N + M == the live list_scenarios() total
+#      (derived in-process, compared against the CLI subprocess output).
+#
+# Deterministic (requires_env: []): runs `python -m autoinfo.cli` in an
+# ABSOLUTE temp cwd (tempfile.mkdtemp, try/finally cleanup) with no network,
+# no LLM, and no repo runtime state.  Counts are read from the same
+# list_scenarios() the CLI uses, so the scenario stays green as the
+# regression flywheel grows the library.
+name: regression-validation-list
+description: "P1-1: autoinfo validation list/--summary output matches list_scenarios() live counts (runtime-derived, no hardcoded totals)"
+category: regression
+regression: true
+requires_env: []
+steps:
+  - name: "validation list --summary counts reconcile with live list_scenarios()"
+    kind: cli
+    command: |-
+      python3 -c '
+      import os, re, shutil, subprocess, sys, tempfile
+      from autoinfo.mcp.validation import list_scenarios
+
+      live = list_scenarios()
+      scenarios = live["scenarios"]
+      exp_functional = sum(1 for s in scenarios if not s.get("regression"))
+      exp_regression = sum(1 for s in scenarios if s.get("regression"))
+      assert exp_functional + exp_regression == live["count"]
+
+      tmp = tempfile.mkdtemp(prefix="regression-validation-list-")
+      old = os.getcwd()
+      env = dict(os.environ)
+      try:
+          os.chdir(tmp)
+          proc = subprocess.run(
+              [sys.executable, "-m", "autoinfo.cli", "validation", "list",
+               "--summary"],
+              capture_output=True, text=True, timeout=180,
+          )
+          assert proc.returncode == 0, proc.stderr[-2000:]
+          out = proc.stdout
+          m_f = re.search(r"functional:\s*(\d+)", out)
+          m_r = re.search(r"regression:\s*(\d+)", out)
+          assert m_f and m_r, out
+          got_functional = int(m_f.group(1))
+          got_regression = int(m_r.group(1))
+          assert got_functional == exp_functional, (
+              f"functional {got_functional} != live {exp_functional}")
+          assert got_regression == exp_regression, (
+              f"regression {got_regression} != live {exp_regression}")
+          assert got_functional + got_regression == live["count"], (
+              "CLI counts do not reconcile with list_scenarios() total")
+
+          proc_all = subprocess.run(
+              [sys.executable, "-m", "autoinfo.cli", "validation", "list"],
+              capture_output=True, text=True, timeout=180,
+          )
+          assert proc_all.returncode == 0, proc_all.stderr[-2000:]
+          missing = [s["name"] for s in scenarios
+                     if s["name"] not in proc_all.stdout]
+          assert not missing, f"scenario names missing from list: {missing}"
+          print("VALIDATION_LIST_OK")
+      finally:
+          os.chdir(old)
+          shutil.rmtree(tmp, ignore_errors=True)
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["VALIDATION_LIST_OK"]

@@ -117,7 +117,7 @@ Before identifying affected docs, decide **whether this change needs an ADR**:
 
 ### Step 3 — Update quantitative references
 Drift-prone facts checked by `doc_inventory.py --check`: MCP tools 146 / 35
-categories · CLI groups 28 · delivery channels 13 · validation scenarios 130
+categories · CLI groups 29 · delivery channels 13 · validation scenarios 130
 (65 functional + 65 regression) · demo domains 21.
 Also keep consistent wherever they appear (README, AGENTS, CHANGELOG, specs,
 skills): source types 29, collector handlers 30, output templates 8,
