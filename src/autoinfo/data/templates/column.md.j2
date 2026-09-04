@@ -112,4 +112,14 @@ _No outlook sections available._
 
 ---
 
+## References
+
+{% for ref in references %}
+{{ loop.index }}. **{{ ref.title }}**{{ (" — " ~ ref.source_url) if ref.source_url else "" }}{{ (" (" ~ user_source_label(ref) ~ ")") if user_source_label(ref) else "" }}
+{% else %}
+_No sources for this edition._
+{% endfor %}
+
+---
+
 *Column · {{ domain_display_name(domain) }} · {{ generated_at }}*
