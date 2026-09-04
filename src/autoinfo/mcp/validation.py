@@ -905,7 +905,8 @@ def list_scenarios(scenarios_dir: Path | None = None) -> dict[str, Any]:
     -------
     dict
         ``{"scenarios": [{name, description, category, step_count,
-        requires_env, requires_http, matrix_domains}, ...], "count": N}``
+        requires_env, requires_http, matrix_domains, regression}, ...],
+        "count": N}``
     """
     scs = load_scenarios(scenarios_dir)
     return {
@@ -918,6 +919,7 @@ def list_scenarios(scenarios_dir: Path | None = None) -> dict[str, Any]:
                 "requires_env": sc.get("requires_env", []),
                 "requires_http": sc.get("requires_http", []),
                 "matrix_domains": sc.get("matrix_domains", []),
+                "regression": bool(sc.get("regression", False)),
             }
             for sc in scs
         ],
