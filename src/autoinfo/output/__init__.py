@@ -12623,7 +12623,11 @@ def _render_markdown(context: dict[str, Any]) -> str:
     # for a consumer product.
     from autoinfo.kb import _decode_html_entities  # noqa: PLC0415
 
-    return _decode_html_entities(rendered)
+    rendered = _decode_html_entities(rendered)
+    # Canonical EOF: one trailing newline (Jinja consumes the template's
+    # final newline; pre-commit's end-of-file-fixer always re-adds one to
+    # the golden fixture — the render must match byte-for-byte).
+    return rendered.rstrip("\n") + "\n"
 
 
 def _digest_chapters(context: dict[str, Any]) -> list[tuple[str, str]]:
