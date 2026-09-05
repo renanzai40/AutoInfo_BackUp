@@ -220,3 +220,99 @@ class TestInitMergeBackfill:
         data = _read_config(autoinfo_dir / "config.yaml")
         ai = next(d for d in data["domains"] if d["name"] == "ai-commercial")
         assert ai["exclude_keywords"] == ["custom-term"]
+
+
+def _demo_extract_fields(domain: str) -> list[str]:
+    """Read ``extract_fields`` from the bundled demo domain sources.yaml."""
+    demo_yaml = (
+        Path(__file__).resolve().parents[2]
+        / "src" / "autoinfo" / "data" / "domains" / domain / "sources.yaml"
+    )
+    assert demo_yaml.is_file(), f"demo sources.yaml missing: {demo_yaml}"
+    data = yaml.safe_load(demo_yaml.read_text()) or {}
+    fields = data.get("extract_fields", [])
+    assert fields, f"demo domain {domain!r} carries no extract_fields seed"
+    return list(fields)
+
+
+class TestInitExtractFields:
+    """init --demo must persist extract_fields (parity with domain import --from-demo).
+
+    ``domain import --from-demo`` and ``domain init --seed`` both write the demo
+    domain's ``extract_fields`` into the project config; ``init --demo`` skipped
+    the key, so a user onboarded via init --demo got the domain WITHOUT its
+    extraction schema. Both fresh-create and merge branches must propagate it.
+    """
+
+    def test_fresh_init_persists_extract_fields_medical_research(
+        self, autoinfo_dir: Path
+    ) -> None:
+        _run_init(["medical-research"], autoinfo_dir)
+
+        data = _read_config(autoinfo_dir / "config.yaml")
+        med = next(d for d in data["domains"] if d["name"] == "medical-research")
+        assert med["extract_fields"] == _demo_extract_fields("medical-research")
+        assert len(med["extract_fields"]) == 7
+
+    def test_fresh_init_persists_extract_fields_financial_intelligence(
+        self, autoinfo_dir: Path
+    ) -> None:
+        _run_init(["financial-intelligence"], autoinfo_dir)
+
+        data = _read_config(autoinfo_dir / "config.yaml")
+        fin = next(
+            d for d in data["domains"] if d["name"] == "financial-intelligence"
+        )
+        assert fin["extract_fields"] == _demo_extract_fields(
+            "financial-intelligence"
+        )
+
+    def test_merge_branch_persists_extract_fields_for_new_domain(
+        self, autoinfo_dir: Path
+    ) -> None:
+        """Second init on an existing project adds the domain with extract_fields."""
+        _run_init(["medical-research"], autoinfo_dir)
+        _run_init(["financial-intelligence"], autoinfo_dir)
+
+        data = _read_config(autoinfo_dir / "config.yaml")
+        names = [d["name"] for d in data["domains"]]
+        assert names == ["medical-research", "financial-intelligence"]
+        fin = next(d for d in data["domains"] if d["name"] == "financial-intelligence")
+        assert fin["extract_fields"] == _demo_extract_fields("financial-intelligence")
+
+    def test_merge_branch_backfills_missing_extract_fields(
+        self, autoinfo_dir: Path
+    ) -> None:
+        """An existing domain created by older init (no extract_fields) is
+        backfilled additively — present values are never overwritten."""
+        autoinfo_dir.mkdir(parents=True)
+        cfg = {
+            "project": {"name": "test"},
+            "llm": {"provider": "openai", "model": "deepseek-v4-flash"},
+            "domains": [
+                {
+                    "name": "medical-research",
+                    "active": True,
+                    "sources": [
+                        {
+                            "name": "pubmed",
+                            "type": "api",
+                            "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/",
+                        }
+                    ],
+                    "topics": [],
+                }
+            ],
+        }
+        (autoinfo_dir / "config.yaml").write_text(
+            yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False), encoding="utf-8"
+        )
+
+        _run_init(["medical-research"], autoinfo_dir)
+
+        data = _read_config(autoinfo_dir / "config.yaml")
+        med = next(d for d in data["domains"] if d["name"] == "medical-research")
+        assert med["extract_fields"] == _demo_extract_fields("medical-research")
+        # untouched pre-existing keys survive the backfill
+        assert med["topics"] == []
+        assert med["sources"][0]["name"] == "pubmed"

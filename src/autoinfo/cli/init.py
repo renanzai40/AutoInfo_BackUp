@@ -158,6 +158,15 @@ def _generate_config(
                             ):
                                 d["exclude_keywords"] = seed_kw
                                 backfilled.append(domain_name)
+                    seed_ef = domain_data.get("extract_fields")
+                    if seed_ef:
+                        for d in config.get("domains", []):
+                            if (
+                                d.get("name") == domain_name
+                                and not d.get("extract_fields")
+                            ):
+                                d["extract_fields"] = seed_ef
+                                backfilled.append(domain_name)
                 continue
             if demo_sources_path.is_file():
                 with open(demo_sources_path) as f:
@@ -175,6 +184,11 @@ def _generate_config(
                     | (
                         {"exclude_keywords": domain_data["exclude_keywords"]}
                         if domain_data.get("exclude_keywords")
+                        else {}
+                    )
+                    | (
+                        {"extract_fields": domain_data["extract_fields"]}
+                        if domain_data.get("extract_fields")
                         else {}
                     ),
                 })
@@ -236,6 +250,11 @@ def _generate_config(
                 | (
                     {"exclude_keywords": domain_data["exclude_keywords"]}
                     if domain_data.get("exclude_keywords")
+                    else {}
+                )
+                | (
+                    {"extract_fields": domain_data["extract_fields"]}
+                    if domain_data.get("extract_fields")
                     else {}
                 ),
             })
