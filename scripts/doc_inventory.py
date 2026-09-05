@@ -210,17 +210,7 @@ def extract_number(text: str, pattern: str) -> str | None:
     m = re.search(pattern, text)
     return m.group(1) if m else None
 
-    # On-disk scenario count validation
-    claimed_readme = readme_values.get("Validation scenarios")
-    if claimed_readme is not None:
-        actual = sum(1 for _ in SCENARIOS_DIR.rglob("*.yaml"))
-        status = "match" if actual == claimed_readme else "MISMATCH"
-        print(f"  Validation scenarios on disk: {actual} yaml files vs README.md={claimed_readme} -> {status}")
-        if actual != claimed_readme:
-            failures.append(f"validation scenario count drift: README.md={claimed_readme} vs actual {actual} .yaml files under {SCENARIOS_DIR.relative_to(ROOT)}")
-            failures.append(f"validation scenario count drift: README.md={claimed_readme} vs actual {actual} .yaml files under {SCENARIOS_DIR.relative_to(ROOT)}")
-        if actual != claimed_readme:
-            failures.append(f"validation scenario count drift: README.md={claimed_readme} vs actual {actual} .yaml files under {SCENARIOS_DIR.relative_to(ROOT)}")
+
 def run_check() -> list[str]:
     """Check cross-doc consistency; return the list of human-readable failures."""
     failures: list[str] = []
@@ -253,6 +243,20 @@ def run_check() -> list[str]:
             failures.append(
                 f"doc-manager-skill '{fact}': SKILL.md={sv_disp} vs README.md={rv_disp} — "
                 f"update .opencode/skills/doc-manager-skill/SKILL.md (§3 Step 3)"
+            )
+
+    # On-disk scenario count validation (issue #215): the README/AGENTS/SKILL
+    # cross-checks above can all agree on a stale number; assert against the
+    # actual .yaml files under src/autoinfo/mcp/scenarios/.
+    claimed_readme = readme_values.get("Validation scenarios")
+    if claimed_readme is not None:
+        actual = sum(1 for _ in SCENARIOS_DIR.rglob("*.yaml"))
+        status = "match" if actual == int(claimed_readme) else "MISMATCH"
+        print(f"  Validation scenarios on disk: {actual} yaml files vs README.md={claimed_readme} -> {status}")
+        if actual != int(claimed_readme):
+            failures.append(
+                f"validation scenario count drift: README.md={claimed_readme} vs actual "
+                f"{actual} .yaml files under {SCENARIOS_DIR.relative_to(ROOT)}"
             )
 
     stray = sorted(TESTS.glob("test_bug_*")) if TESTS.is_dir() else []
