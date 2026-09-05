@@ -1,6 +1,11 @@
 # Meta-validation — verify the validation toolset itself works.
 # list_validation_scenarios must list scenarios; run_validation_scenario must
 # execute one (system-health) and report a real passed status.
+# The library-integrity step additionally asserts the regression-flag
+# contract: every returned scenario carries a ``regression`` bool, with both
+# True (scenarios/regression/*.yaml) and False (functional) entries present,
+# and the True count matches the number of ``regression: true`` files on
+# disk (concierge wave task 11 — regression flywheel coverage check).
 # Issue #280: this scenario declares ``matrix_domains`` so the schema key is
 # exercised on every live run — load_scenarios must accept it,
 # list_validation_scenarios must report it, and run_scenario must expand the
@@ -19,6 +24,48 @@ steps:
     expect:
       success: true
       data_has: ["scenarios", "count"]
+
+  - name: "every scenario carries a regression bool; regression:true count matches disk"
+    kind: cli
+    timeout_seconds: 60
+    command: |-
+      python3 -c '
+      from pathlib import Path
+
+      from autoinfo.mcp.validation import SCENARIOS_DIR, list_scenarios
+
+      payload = list_scenarios()
+      scenarios = payload["scenarios"]
+      assert payload["count"] == len(scenarios), payload["count"]
+
+      missing_flag = [s["name"] for s in scenarios
+                      if not isinstance(s.get("regression"), bool)]
+      assert not missing_flag, f"regression flag missing/not bool: {missing_flag}"
+
+      flagged = [s for s in scenarios if s["regression"]]
+      unflagged = [s for s in scenarios if not s["regression"]]
+      assert flagged, "no regression:true scenarios returned"
+      assert unflagged, "no functional (regression:false) scenarios returned"
+
+      # Dynamic count comparison: every regression:true entry must have a
+      # scenario file under scenarios/regression/ on disk that itself
+      # declares ``regression: true`` (the recursive-glob auto-load contract).
+      regression_dir = Path(SCENARIOS_DIR) / "regression"
+      disk_flagged = [
+          p for p in sorted(regression_dir.glob("*.yaml"))
+          if p.read_text(encoding="utf-8").count("regression: true") >= 1
+      ]
+      assert len(flagged) == len(disk_flagged), (
+          f"regression:true count {len(flagged)} != disk files "
+          f"{len(disk_flagged)} under {regression_dir}"
+      )
+      print(f"META_REGRESSION_FLAGS_OK ({len(flagged)} regression / "
+            f"{len(unflagged)} functional)")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["META_REGRESSION_FLAGS_OK"]
 
   - name: "run_validation_scenario executes system-health"
     tool: run_validation_scenario

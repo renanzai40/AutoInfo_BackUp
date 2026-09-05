@@ -1,0 +1,239 @@
+# Regression (concierge wave task 11): `autoinfo billing create-free`
+# provisions a free-tier subscription hermetically (no LLM key, no network,
+# no Stripe) and the free-tier generation gate honours it.
+#
+# Mechanisms under test (same contract as tests/cli/test_billing_create_free.py):
+#   - Fresh user: profile created with status="active" + exactly one free
+#     subscription row (plan/tier/status all free/active) carrying the
+#     free-tier defaults: 1 domain / 1 platform / 1 product / weekly /
+#     no custom products.
+#   - Idempotency: a second create-free is a clear no-op ("already exists")
+#     and does NOT duplicate the subscription row.
+#   - Error path: missing/blank --user-id exits 1 with "Error: --user-id is
+#     required" and no traceback.
+#   - Gate wiring (the enforcement seam this subscription feeds): a free user
+#     at the 1-product ceiling who requests a DIFFERENT product family gets
+#     FreeTierLimitError at the generate_digest ENTRY point — BEFORE any
+#     KB/LLM work, so the step stays hermetic (no LLM key needed).
+#
+# Deterministic (requires_env: []): each step runs inside its own temp dir
+# with a minimal config, AUTOINFO_LLM_API_KEY unset, the user-store /
+# consumption-store redirected to the temp project (the db paths derive from
+# Path.cwd()), and `autoinfo` resolved to the repo's venv console script
+# (bare `python3 -c` cannot patch the already-imported CLI subprocess's
+# stores the way the pytest fixture does).  Same shape as
+# regression-mvp-init.yaml.
+name: regression-billing-create-free
+description: "Regression concierge-wave-task-11: billing create-free provisions active profile + free-tier subscription (1 domain / 1 product / weekly / no custom) hermetically; idempotent; clean error path; over-limit generate_digest raises FreeTierLimitError"
+category: regression
+regression: true
+regression_issue: "concierge-wave-task-11"
+requires_env: []
+steps:
+  - name: "create-free provisions a free subscription (exit 0, creation surfaced)"
+    kind: cli
+    timeout_seconds: 120
+    command: |-
+      set -euo pipefail
+      TMP="$(mktemp -d)"
+      trap 'rm -rf "$TMP"' EXIT
+      cd "$TMP"
+      unset AUTOINFO_LLM_API_KEY || true
+      AUTOINFO="$(dirname "$(command -v python3)")/autoinfo"
+      if [ ! -x "$AUTOINFO" ]; then AUTOINFO=autoinfo; fi
+      mkdir -p .autoinfo
+      python3 -c '
+      import yaml
+      with open(".autoinfo/config.yaml", "w") as fh:
+          yaml.dump({
+              "project": {"name": "Regression Billing Create-Free", "created_at": "2026-09-05"},
+              "llm": {"provider": "openrouter", "model": "deepseek/deepseek-chat",
+                      "api_key": "${AUTOINFO_LLM_API_KEY}"},
+              "domains": [],
+          }, fh, default_flow_style=False)
+      '
+      "$AUTOINFO" billing create-free --user-id alice | tee create.out
+      grep -q "Created free subscription for 'alice'" create.out
+      grep -q "Limits: 1 domain / 1 product / weekly / no custom products" create.out
+      echo "CREATE_FREE_OK"
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["CREATE_FREE_OK", "Created free subscription for 'alice'"]
+
+  - name: "free subscription row carries the free-tier defaults (active profile, 1 domain / 1 product / weekly / no custom)"
+    kind: cli
+    timeout_seconds: 120
+    command: |-
+      set -euo pipefail
+      TMP="$(mktemp -d)"
+      trap 'rm -rf "$TMP"' EXIT
+      cd "$TMP"
+      unset AUTOINFO_LLM_API_KEY || true
+      AUTOINFO="$(dirname "$(command -v python3)")/autoinfo"
+      if [ ! -x "$AUTOINFO" ]; then AUTOINFO=autoinfo; fi
+      mkdir -p .autoinfo
+      python3 -c '
+      import yaml
+      with open(".autoinfo/config.yaml", "w") as fh:
+          yaml.dump({
+              "project": {"name": "Regression Billing Create-Free", "created_at": "2026-09-05"},
+              "llm": {"provider": "openrouter", "model": "deepseek/deepseek-chat",
+                      "api_key": "${AUTOINFO_LLM_API_KEY}"},
+              "domains": [],
+          }, fh, default_flow_style=False)
+      '
+      "$AUTOINFO" billing create-free --user-id alice > create.out
+      python3 -c '
+      from autoinfo.user_store import get_profile, list_subscriptions
+
+      profile = get_profile("alice")
+      assert profile is not None, "profile missing"
+      assert profile.status == "active", profile.status
+      subs = list_subscriptions("alice")
+      assert len(subs) == 1, len(subs)
+      sub = subs[0]
+      assert sub.plan == "free", sub.plan
+      assert sub.tier == "free", sub.tier
+      assert sub.status == "active", sub.status
+      assert sub.domain_limit == 1, sub.domain_limit
+      assert sub.platform_limit == 1, sub.platform_limit
+      assert sub.max_products == 1, sub.max_products
+      assert sub.max_frequency == "weekly", sub.max_frequency
+      assert sub.allow_custom is False, sub.allow_custom
+      print("FREE_TIER_DEFAULTS_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["FREE_TIER_DEFAULTS_OK"]
+
+  - name: "second create-free is idempotent (no duplicate subscription row)"
+    kind: cli
+    timeout_seconds: 120
+    command: |-
+      set -euo pipefail
+      TMP="$(mktemp -d)"
+      trap 'rm -rf "$TMP"' EXIT
+      cd "$TMP"
+      unset AUTOINFO_LLM_API_KEY || true
+      AUTOINFO="$(dirname "$(command -v python3)")/autoinfo"
+      if [ ! -x "$AUTOINFO" ]; then AUTOINFO=autoinfo; fi
+      mkdir -p .autoinfo
+      python3 -c '
+      import yaml
+      with open(".autoinfo/config.yaml", "w") as fh:
+          yaml.dump({
+              "project": {"name": "Regression Billing Create-Free", "created_at": "2026-09-05"},
+              "llm": {"provider": "openrouter", "model": "deepseek/deepseek-chat",
+                      "api_key": "${AUTOINFO_LLM_API_KEY}"},
+              "domains": [],
+          }, fh, default_flow_style=False)
+      '
+      "$AUTOINFO" billing create-free --user-id alice > first.out
+      "$AUTOINFO" billing create-free --user-id alice | tee second.out
+      grep -qi "already" second.out
+      python3 -c '
+      from autoinfo.user_store import list_subscriptions
+
+      subs = list_subscriptions("alice")
+      assert len(subs) == 1, f"duplicate subscription: {len(subs)}"
+      assert subs[0].plan == "free" and subs[0].tier == "free"
+      assert subs[0].status == "active"
+      print("CREATE_FREE_IDEMPOTENT_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["CREATE_FREE_IDEMPOTENT_OK"]
+
+  - name: "missing --user-id exits 1 without a traceback"
+    kind: cli
+    timeout_seconds: 120
+    command: |-
+      set -euo pipefail
+      TMP="$(mktemp -d)"
+      trap 'rm -rf "$TMP"' EXIT
+      cd "$TMP"
+      unset AUTOINFO_LLM_API_KEY || true
+      AUTOINFO="$(dirname "$(command -v python3)")/autoinfo"
+      if [ ! -x "$AUTOINFO" ]; then AUTOINFO=autoinfo; fi
+      mkdir -p .autoinfo
+      python3 -c '
+      import yaml
+      with open(".autoinfo/config.yaml", "w") as fh:
+          yaml.dump({
+              "project": {"name": "Regression Billing Create-Free", "created_at": "2026-09-05"},
+              "llm": {"provider": "openrouter", "model": "deepseek/deepseek-chat",
+                      "api_key": "${AUTOINFO_LLM_API_KEY}"},
+              "domains": [],
+          }, fh, default_flow_style=False)
+      '
+      if "$AUTOINFO" billing create-free >err.out 2>&1; then
+        echo "missing --user-id should fail" && exit 1
+      fi
+      grep -q "Error: --user-id is required" err.out
+      grep -q "Traceback" err.out && { echo "traceback leaked (missing --user-id)"; exit 1; } || true
+      echo "CREATE_FREE_ERROR_PATH_OK"
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["CREATE_FREE_ERROR_PATH_OK"]
+
+  - name: "free-tier gate wiring: over-limit generate_digest raises FreeTierLimitError at entry (no LLM)"
+    kind: cli
+    timeout_seconds: 120
+    command: |-
+      set -euo pipefail
+      TMP="$(mktemp -d)"
+      trap 'rm -rf "$TMP"' EXIT
+      cd "$TMP"
+      unset AUTOINFO_LLM_API_KEY || true
+      AUTOINFO="$(dirname "$(command -v python3)")/autoinfo"
+      if [ ! -x "$AUTOINFO" ]; then AUTOINFO=autoinfo; fi
+      mkdir -p .autoinfo
+      python3 -c '
+      import yaml
+      with open(".autoinfo/config.yaml", "w") as fh:
+          yaml.dump({
+              "project": {"name": "Regression Billing Create-Free", "created_at": "2026-09-05"},
+              "llm": {"provider": "openrouter", "model": "deepseek/deepseek-chat",
+                      "api_key": "${AUTOINFO_LLM_API_KEY}"},
+              "domains": [],
+          }, fh, default_flow_style=False)
+      '
+      # The very seam under test provisions the free user, then one prior
+      # delivered product (report@medical-research) puts them at the
+      # 1-product ceiling; a DIFFERENT family (digest) must be blocked.
+      "$AUTOINFO" billing create-free --user-id alice > create.out
+      python3 -c '
+      from autoinfo.consumption import ConsumptionStore
+      from autoinfo.output import FreeTierLimitError, generate_digest
+
+      ConsumptionStore().record_event(
+          user_id="alice",
+          product_type="report",
+          product_id="medical-research-report",
+          event_type="delivered",
+          metadata={"domain": "medical-research"},
+      )
+      try:
+          generate_digest(domain="medical-research", period="weekly", user_id="alice")
+      except FreeTierLimitError as exc:
+          envelope = exc.to_envelope()
+          err = envelope["error"]
+          assert envelope["success"] is False, envelope
+          assert err["code"] == "FreeTierLimit", err
+          assert err["actionable"] is True, err
+          assert "Free-tier limit reached" in err["message"], err["message"]
+      else:
+          raise AssertionError(
+              "generate_digest did not raise FreeTierLimitError for an "
+              "over-limit free user"
+          )
+      print("FREE_TIER_GATE_OK")
+      '
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["FREE_TIER_GATE_OK"]
