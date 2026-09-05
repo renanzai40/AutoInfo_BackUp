@@ -222,13 +222,13 @@ Category → key-tool mapping is maintained in the README, not duplicated here.
 
 **Discovery flow**: `health_check()` → `tools/list` (MCP auto-discovery) → `list_domains()` → `get_domain_schema(domain)` → `list_available_models()` → `list_output_templates(domain)`.
 
-**Validation**: `list_validation_scenarios` / `run_validation_scenario` — 130 scenarios
- (65 functional + 65 regression in `src/autoinfo/mcp/scenarios/regression/`); per-scenario timeout,
+**Validation**: `list_validation_scenarios` / `run_validation_scenario` — 137 scenarios
+ (65 functional + 72 regression in `src/autoinfo/mcp/scenarios/regression/`); per-scenario timeout,
 recovery_steps + partial-pass, per-step trace + root-cause report, regression flywheel;
 env-gated steps report `unconfigured` (never silently pass); `llm_assert` runs a real
 model call. Scenario authoring contract: `docs/dev/validation-scenario-contract.md`.
 
-**Response format**: All tools return `{success: true, data: ...}` on success and `{success: false, error: {code, message, actionable}}` on failure. `actionable` is a boolean flag; the remediation guidance itself lives in `message`. Error codes: `src/autoinfo/mcp/errors.py` (`ErrorCode` enum, 28 values). LLM-required tools return `LLM_NOT_CONFIGURED` when no key is configured. REST API uses the same envelope.
+**Response format**: All tools return `{success: true, data: ...}` on success and `{success: false, error: {code, message, actionable}}` on failure. `actionable` is a boolean flag; the remediation guidance itself lives in `message`. Error codes: `src/autoinfo/mcp/errors.py` (`ErrorCode` enum, 30 values). LLM-required tools return `LLM_NOT_CONFIGURED` when no key is configured. REST API uses the same envelope.
 
 ## Common Patterns
 
@@ -326,10 +326,10 @@ Key counts the agent must know without opening README:
 | MCP tools | **146 tools across 35 categories** |
 | CLI command groups | **31 command groups** |
 | Delivery channels | **13 channels** |
-| Validation scenarios | **130 scenarios** (65 functional + 65 regression) |
+| Validation scenarios | **137 scenarios** (65 functional + 72 regression) |
 | Demo domains | **21 demo domains** |
 | LLM-required tools | **16 LLM-required tools** |
-| Test suite | **~4644 tests** |
+| Test suite | **~4925 tests** |
 
 Operational invariants (full rules in Architecture Rules above and
 `docs/dev/acceptance-framework.md`):
