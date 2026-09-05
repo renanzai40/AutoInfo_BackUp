@@ -139,11 +139,6 @@ app.add_typer(
 app.add_typer(
     mvp.app,
     name="mvp",
-    help="Concierge MVP pilots: provision and list paying pilot users",
-)
-app.add_typer(
-    mvp.app,
-    name="mvp",
     help="Concierge MVP pilots: provision and list paying pilot users (mvp init/list)",
 )
 
