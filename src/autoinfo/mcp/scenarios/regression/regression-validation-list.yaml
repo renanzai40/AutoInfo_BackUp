@@ -19,6 +19,7 @@ name: regression-validation-list
 description: "P1-1: autoinfo validation list/--summary output matches list_scenarios() live counts (runtime-derived, no hardcoded totals)"
 category: regression
 regression: true
+regression_issue: "concierge-wave-task-10"
 requires_env: []
 steps:
   - name: "validation list --summary counts reconcile with live list_scenarios()"

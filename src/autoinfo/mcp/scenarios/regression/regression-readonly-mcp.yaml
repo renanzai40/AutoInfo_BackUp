@@ -5,7 +5,7 @@
 # (2) call_tool() returns an explicit READ_ONLY_SERVER error envelope for
 # any non-whitelisted name — never silent.  run_validation_scenario and
 # init_project are both non-whitelisted and must be blocked.  The default
-# (full) server mode still lists all 146 tools.
+# (full) server mode still lists the full runtime-derived tool set.
 #
 # Deterministic (requires_env: []): everything runs in-process inside an
 # ABSOLUTE temp cwd (tempfile.mkdtemp, try/finally cleanup); no LLM key and
@@ -40,10 +40,13 @@ steps:
           old = os.getcwd()
           os.chdir(tmp)
           try:
-              # -- full mode regression: still 146 tools ---------------
+              # -- full mode regression: runtime-derived count ---------
+              # Same source list_tools() uses — never a hardcoded literal.
+              expected_full = len(server._full_tool_list())
+              assert expected_full >= 4
               tools = await server.list_tools()
-              assert len(tools) == 146, len(tools)
-              print("FULL_MODE_146_OK")
+              assert len(tools) == expected_full, (len(tools), expected_full)
+              print("FULL_MODE_DYNAMIC_OK")
 
               # -- prep (full mode): config for the agent export -------
               # Every dispatch audit-writes and auto-creates a bare
@@ -107,7 +110,7 @@ steps:
       success: true
       exit_code: 0
       stdout_has:
-        - "FULL_MODE_146_OK"
+        - "FULL_MODE_DYNAMIC_OK"
         - "READONLY_LIST_4_OK"
         - "READONLY_BLOCK_OK"
         - "READONLY_LVS_OK"
