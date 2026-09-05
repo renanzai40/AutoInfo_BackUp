@@ -43,6 +43,7 @@ OUT = DOCS / "dev" / "doc-inventory.md"
 TESTS = ROOT / "tests"
 README = ROOT / "README.md"
 AGENTS = ROOT / "AGENTS.md"
+SCENARIOS_DIR = ROOT / "src" / "autoinfo" / "mcp" / "scenarios"
 #: The doc-manager skill whose own drift-prone numbers must agree with README.
 SKILL = ROOT / ".opencode" / "skills" / "doc-manager-skill" / "SKILL.md"
 
@@ -242,6 +243,20 @@ def run_check() -> list[str]:
             failures.append(
                 f"doc-manager-skill '{fact}': SKILL.md={sv_disp} vs README.md={rv_disp} — "
                 f"update .opencode/skills/doc-manager-skill/SKILL.md (§3 Step 3)"
+            )
+
+    # On-disk scenario count validation (issue #215): the README/AGENTS/SKILL
+    # cross-checks above can all agree on a stale number; assert against the
+    # actual .yaml files under src/autoinfo/mcp/scenarios/.
+    claimed_readme = readme_values.get("Validation scenarios")
+    if claimed_readme is not None:
+        actual = sum(1 for _ in SCENARIOS_DIR.rglob("*.yaml"))
+        status = "match" if actual == int(claimed_readme) else "MISMATCH"
+        print(f"  Validation scenarios on disk: {actual} yaml files vs README.md={claimed_readme} -> {status}")
+        if actual != int(claimed_readme):
+            failures.append(
+                f"validation scenario count drift: README.md={claimed_readme} vs actual "
+                f"{actual} .yaml files under {SCENARIOS_DIR.relative_to(ROOT)}"
             )
 
     stray = sorted(TESTS.glob("test_bug_*")) if TESTS.is_dir() else []
