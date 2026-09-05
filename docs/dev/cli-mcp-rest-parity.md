@@ -8,12 +8,13 @@ three commands:
 
 | Surface | Derivation command |
 |---------|-------------------|
-| CLI | `.venv/bin/autoinfo --help` + per-group `autoinfo <group> --help` (28 groups, all subcommands) |
+| CLI | `.venv/bin/autoinfo --help` + per-group `autoinfo <group> --help` (31 groups, all subcommands) |
 | MCP | `list_tools()` on `autoinfo.mcp.server` (146 tools, runtime registry) |
 | REST | FastAPI `app.routes` + `router.routes` on `autoinfo.api.server` (3 routers: routes/portal/storefront + app-level) |
 
-Derivation date: 2026-08-05. Re-derive with the commands above whenever the
-surface set changes; do not edit cells by hand.
+Derivation date: 2026-08-05 (re-derived 2026-09-05 after the concierge wave:
+CLI 28→31 groups, validation scenarios 116→137). Re-derive with the commands
+above whenever the surface set changes; do not edit cells by hand.
 
 ## Status legend
 
@@ -61,7 +62,7 @@ CLI human mode prints text + exit 0; CLI `--json` mirrors the MCP shape exactly.
 - **Global `--json`**: the root callback (`src/autoinfo/cli/__init__.py:49`)
   accepts `--json` before any command (e.g. `autoinfo --json status`) and sets
   `ctx.obj = {"json": True}`. Verified running: `autoinfo --json status`.
-- **Per-command `--json`**: 21 of the 28 groups declare their own `--json`
+- **Per-command `--json`**: 21 of the 31 groups declare their own `--json`
   option at the group level or on individual subcommands (grep of `"--json"`
   in `src/autoinfo/cli/`): `sources`, `topics` (via `keywords`/`topic-group`),
   `domain`, `audit`, `billing`, `kb` (11 subcommands), `output`, `email`,
@@ -384,7 +385,7 @@ CLI human mode prints text + exit 0; CLI `--json` mirrors the MCP shape exactly.
 
 | Capability | CLI | MCP | REST | Status | Notes |
 |------------|-----|-----|------|--------|-------|
-| List validation scenarios | — | `list_validation_scenarios` | — | MCP-only | 116 scenarios (65 functional + 51 regression) |
+| List validation scenarios | `autoinfo validation list [--summary]` | `list_validation_scenarios` | — | MCP + CLI (validation list) | 137 scenarios (65 functional + 72 regression) |
 | Run validation scenario | — | `run_validation_scenario` | — | MCP-only | Scenario steps may invoke CLI/REST internally |
 
 ### REST-only endpoints (no CLI / MCP counterpart)

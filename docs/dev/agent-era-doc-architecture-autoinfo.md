@@ -52,9 +52,9 @@
 ```
 
 **The 7 drift-prone facts** (checked README ↔ AGENTS ↔ skill): MCP tools **146**
-/ CLI groups **28** / delivery channels **13** / validation scenarios **116**
-(65 functional + 51 regression) / demo domains **13** / LLM-required tools **16**
-/ test count **~4644**.
+/ CLI groups **31** / delivery channels **13** / validation scenarios **137**
+(65 functional + 72 regression) / demo domains **21** / LLM-required tools **16**
+/ test count **~4925**.
 
 **Additional facts to keep consistent manually** (not checker-gated): source
 types 29, collector handlers 30, output templates 8, REST port 8741, schemas 4.

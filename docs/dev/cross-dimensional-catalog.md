@@ -979,4 +979,19 @@ Maps existing gap IDs from other (now archived) documents to CD-NNN. Kept for hi
 
 ---
 
-*End of Cross-Dimensional Catalog. 42 gaps cataloged across 5 types (15 resolved/merged after codebase reality check), with full priority matrix and implementation roadmap + feasibility verdicts (absorbed from enduser-coverage-matrix, `docs/dev/enduser-coverage-matrix.md`). Last updated 2026-08-12 (status corrections: CD-010 resolved via destructive-op guard fix + product MCP tools; CD-036 description corrected to tier-based filter; CD-017/CD-022/CD-039 annotated partially resolved). This is the keystone product definition document — start here, then navigate to the relevant spec in `docs/dev/specs/`.*
+## 2026-09-05 更新 — Concierge wave counts (scenario suite + CLI surface + readonly/free-tier guards)
+
+Post-concierge-wave count refresh (source of truth: on-disk reality, re-derived 2026-09-05):
+
+- **Scenario suite: 137 scenario YAMLs** (65 functional + 72 regression in `src/autoinfo/mcp/scenarios/regression/`) — up from 116 at the 2026-08-03 entry; the suite grew through the #351/#357 security-assertions wave (116), #9-reopened (117), #14-#18 output-quality wave (124), #119/#120 cross-product-coherence wave (129), and the 2026-09-04 concierge wave (137). Coverage remains 146/146 MCP tools + 8 REST endpoints; `all 28 CLI groups` from the 2026-08-03 entry is now **all 31 CLI groups** (3 new groups: `validation`, `serve`, `mvp`).
+- **CLI: 31 command groups** — added `validation` (`autoinfo validation list [--summary]`, MCP `list_validation_scenarios` parity), `serve` (`autoinfo serve --agent`, read-only MCP over stdio), `mvp` (`autoinfo mvp init|list`, concierge MVP pilot provisioning).
+- **Read-only server mode: 4 read-only tools** — `autoinfo serve --agent` exposes a read-only MCP surface; mutating dispatch returns `READ_ONLY_SERVER`.
+- **01-QA-GATES**: QA-gates directory workflow scenario (`regression-qa-gates-dir`) + `autoinfo mvp init` first-product gating.
+- **Free tier + MVP CLI**: free-tier usage gating via `FREE_TIER_LIMIT` error code (`regression-free-tier-limit`), concierge MVP pilots provisioned via `autoinfo mvp init|list` (`regression-mvp-init`).
+- **New concierge-wave regression scenarios (10)**: regression-qa-gates-dir, regression-mvp-init, regression-free-tier-limit, regression-readonly-mcp, regression-domain-seed-flagship, regression-sources-sections, regression-validation-list, regression-product-quality-all-templates, regression-report-entries-cap, regression-tutorial-entry-cap.
+
+**Cell-impact**: no matrix cell flips — these are operational-capability and governance strengthenings (A7 Operations B2.5 Monitor; B1 free-tier enforcement; B3 readonly safety), consistent with the 2026-08-03 convention.
+
+---
+
+*End of Cross-Dimensional Catalog. 42 gaps cataloged across 5 types (15 resolved/merged after codebase reality check), with full priority matrix and implementation roadmap + feasibility verdicts (absorbed from enduser-coverage-matrix, `docs/dev/enduser-coverage-matrix.md`). Last updated 2026-09-05 (concierge-wave counts: 137 scenarios, CLI 31 groups, readonly-mode 4 tools, 01-QA-GATES, free-tier + mvp CLI). This is the keystone product definition document — start here, then navigate to the relevant spec in `docs/dev/specs/`.*

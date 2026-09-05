@@ -55,7 +55,7 @@ fix existing bad modules):
 6. **Merge into the deep module.** Combine the cluster behind ONE small
    interface. AutoInfo's interface truth: `docs/dev/specs/mcp-tools.md` (146
    tools), `docs/dev/specs/data-models.md` (schemas), `AGENTS.md` Project
-   Structure. Watch-list: `cli/` (28 groups mirroring MCP — deliberately thin
+   Structure. Watch-list: `cli/` (31 groups mirroring MCP — deliberately thin
    adapter layer, keep thin *by design*), `collectors/` (30 handlers sharing a
    protocol — consolidate shared plumbing, not handlers), `output/` (subpackage:
    digest/report/ebook/video share templates + rendering — look for duplicated

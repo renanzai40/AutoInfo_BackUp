@@ -22,7 +22,7 @@ Every MCP tool and REST endpoint returns the **same envelope**:
 - Success: `{success: true, data: ...}`
 - Failure: `{success: false, error: {code, message, actionable}}`
 
-`error.code` comes from the `ErrorCode` enum (28 values); `message` carries the
+`error.code` comes from the `ErrorCode` enum (30 values); `message` carries the
 remediation guidance; `actionable` flags that a hint exists. The LLM guard
 centralizes `LLM_NOT_CONFIGURED` at `call_tool` dispatch. `error_dict()` is
 deprecated. Dashboard JS unwraps the envelope transparently.

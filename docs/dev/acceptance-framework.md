@@ -176,7 +176,7 @@ Two orientations, one hierarchy. The **agent track** proves the tool is operable
 
 ### Binary acceptance criteria
 
-1. **Full-surface agent operability.** An agent can exercise the entire feature surface — MCP tools (146/146), CLI groups (28/28), REST endpoints (8/8), delivery channels (13/13), collector reachability (30/30) — via real calls and record per-feature verdicts. Any surface row with neither a scenario nor a real artifact = FAIL.
+1. **Full-surface agent operability.** An agent can exercise the entire feature surface — MCP tools (146/146), CLI groups (31/31), REST endpoints (8/8), delivery channels (13/13), collector reachability (30/30) — via real calls and record per-feature verdicts. Any surface row with neither a scenario nor a real artifact = FAIL.
 2. **Self-discovering coverage.** An agent can enumerate coverage and features using only MCP tools and in-repo audit scripts, with no human help. False = FAIL.
 
 ### 3.2 Human track (deliverable acceptability) — the higher bar
@@ -373,8 +373,8 @@ AutoInfo is an agent-facing tool: the primary consumer of its documentation is a
 
 Two layers, judged separately:
 
-- **(a) Test layer** — the pytest suite (~4644 tests) that verifies the code itself. Industry best practice: organized by subject, mirroring the `src/` package structure; named by subject, not issue number; pyramid-shaped (many fast unit tests, few integration, very few end-to-end).
-- **(b) Validation layer** — the agent-facing scenario suite (116 scenarios, 65 functional + 51 regression) executed through the MCP surface by an agent (agent as tester / validator). This layer is the executable specification at the top of the pyramid: real-surface calls, `unconfigured` never passes, per-step trace + root-cause report, regression flywheel. **Judged compliant with best practice as of 2026-08-08**; it is retained as positive acceptance evidence.
+- **(a) Test layer** — the pytest suite (~4925 tests) that verifies the code itself. Industry best practice: organized by subject, mirroring the `src/` package structure; named by subject, not issue number; pyramid-shaped (many fast unit tests, few integration, very few end-to-end).
+- **(b) Validation layer** — the agent-facing scenario suite (116 scenarios, 65 functional + 51 regression) executed through the MCP surface by an agent (agent as tester / validator). This layer is the executable specification at the top of the pyramid: real-surface calls, `unconfigured` never passes, per-step trace + root-cause report, regression flywheel. **Judged compliant with best practice as of 2026-08-08** (current: 137 scenarios, 65 functional + 72 regression); it is retained as positive acceptance evidence.
 
 ### Binary acceptance criteria
 

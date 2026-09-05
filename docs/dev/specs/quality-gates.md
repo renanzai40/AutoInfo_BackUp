@@ -163,7 +163,7 @@ quality_gates:
 
 ## 8. ErrorCode & Error Response System
 
-The MCP server uses a unified error response system (`src/autoinfo/mcp/errors.py`) that provides consistent error classification across all 146 MCP tools. The `ErrorCode` enum (28 values) covers all known failure modes and includes eight codes added since v1.8 (incl. `DIRECTOR_ONLY`):
+The MCP server uses a unified error response system (`src/autoinfo/mcp/errors.py`) that provides consistent error classification across all 146 MCP tools. The `ErrorCode` enum (30 values) covers all known failure modes and includes ten codes added since v1.8 (incl. `DIRECTOR_ONLY`):
 
 | Code | Value | Purpose |
 |------|-------|---------|
@@ -175,8 +175,10 @@ The MCP server uses a unified error response system (`src/autoinfo/mcp/errors.py
 | `EMPTY_RESULT` | `"EmptyResult"` | Operation produced an empty result (v1.8.1) |
 | `CONFIG_NOT_FOUND` | `"ConfigNotFound"` | Project configuration not found (v1.8.1) |
 | `DIRECTOR_ONLY` | `"DIRECTOR_ONLY"` | Director-only tool dispatched to a non-director actor — e.g. `force_promote` / `demote_kb_wiki` / `soft_delete_entry` purge (actor whitelist `AUTOINFO_DIRECTOR_ACTORS`, default `director`) |
+| `READ_ONLY_SERVER` | `"READ_ONLY_SERVER"` | Mutating tool dispatched on a read-only server (`autoinfo serve --agent`, 4 read-only tools) — the server refuses state-changing calls |
+| `FreeTierLimit` | `"FreeTierLimit"` | Free-tier end user hit a Subscription platform limit (concurrency/products/channels) — freemium gating (G15) |
 
-These eight codes extend the existing 20 error codes (`NotFound`, `DomainNotFound`, `ValidationError`, `InvalidSourceId`, `SourceNotFound`, `Timeout`, `TopicNotFound`, `KeywordNotFound`, `EmailNotEnabled`, `EmailSendFailed`, `InvalidCronExpression`, `ScheduleAlreadyExists`, `ScheduleNotFound`, `NotPublished`, `CollectionFailed`, `ProcessingFailed`, `InvalidSection`, `UnknownTool`, `ConfirmationRequired`, `InternalError`). The three v1.8 codes (`AuthRequired`, `RateLimited`, `SessionExpired`) remain reserved for future use; the four v1.8.1 codes (`LLMNotConfigured`, `NoCachedItems`, `EmptyResult`, `ConfigNotFound`) are actively thrown — `LLM_NOT_CONFIGURED` is dispatched centrally by `call_tool` for all 16 LLM-required tools.
+These ten codes extend the existing 20 error codes (`NotFound`, `DomainNotFound`, `ValidationError`, `InvalidSourceId`, `SourceNotFound`, `Timeout`, `TopicNotFound`, `KeywordNotFound`, `EmailNotEnabled`, `EmailSendFailed`, `InvalidCronExpression`, `ScheduleAlreadyExists`, `ScheduleNotFound`, `NotPublished`, `CollectionFailed`, `ProcessingFailed`, `InvalidSection`, `UnknownTool`, `ConfirmationRequired`, `InternalError`). The three v1.8 codes (`AuthRequired`, `RateLimited`, `SessionExpired`) remain reserved for future use; the four v1.8.1 codes (`LLMNotConfigured`, `NoCachedItems`, `EmptyResult`, `ConfigNotFound`) are actively thrown — `LLM_NOT_CONFIGURED` is dispatched centrally by `call_tool` for all 16 LLM-required tools.
 
 **Dual-format responses**: Error responses are backward-compatible via two formats:
 

@@ -100,7 +100,7 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 | 业界主张 | 来源 | AutoInfo 对照 | 结论 |
 |---------|------|--------------|------|
 | 永不静默失败;尽早抛错;不吞根因 | Google tech-writing;OWASP | G0/G4 硬门 3× retry → block + `_failed/`;`SourceFailure` fail-fast | ✅ 已满足 |
-| 错误四问模型:人类可读 message + 机器可读 code + 4xx/5xx 分层 + 可操作下一步;不泄漏堆栈/内部 ID | OWASP(信息泄漏=A10:2025);Reclear;AgentPlaybook | `{success,error:{code,message,actionable}}` + 28 ErrorCode + `LLM_NOT_CONFIGURED` 带提示 — 基本实现 | 🟡 部分(需核对:错误码是否 snake_case 可机器处理?429 是否带 Retry-After?堆栈是否可能泄漏到 REST 响应?) |
+| 错误四问模型:人类可读 message + 机器可读 code + 4xx/5xx 分层 + 可操作下一步;不泄漏堆栈/内部 ID | OWASP(信息泄漏=A10:2025);Reclear;AgentPlaybook | `{success,error:{code,message,actionable}}` + 30 ErrorCode + `LLM_NOT_CONFIGURED` 带提示 — 基本实现 | 🟡 部分(需核对:错误码是否 snake_case 可机器处理?429 是否带 Retry-After?堆栈是否可能泄漏到 REST 响应?) |
 | 类型化异常;只在能恢复时捕获;裸重抛保留栈 | Microsoft .NET;OWASP dev guide | `ErrorCode` 枚举 + `SourceFailure` 类型化 ✅;但全库裸 `except: pass` / log-and-throw / Pokemon 捕获需扫描 | 🟡 部分(需代码扫描验证) |
 
 ### D1-4 命名/注释/一致性(含 AI 代码) 📐 / ⚖️
@@ -140,7 +140,7 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 |---------|------|--------------|------|
 | 工具是"确定性系统↔非确定性 agent"的契约,不是 API 包装;按 agent 感知方式设计(search_contacts 优于 list_contacts) | Anthropic "Writing effective tools"(2025-09) | 146 工具;是否有"原样包装 API"的工具未审计 | 🟡 部分 |
 | 描述像给新员工写文档:动词化命名;参数 ≤8(AWS)/≤5(Grizzly);有限值用 enum + default;描述含"何时用"与示例;40+ 词描述与选择准确率正相关 | AWS;RaftLabs;Grizzly Peak;Anthropic | ✅ **已审计 2026-08-14**(`scripts/tool_desc_audit.py`,146 工具全量):99.3% 动词风格命名(唯一违规 `email_config`);参数均值 2.68、>8 仅 4 个(`add_source`/`generate_digest`/`generate_report`/`search_knowledge_base`);⚠️ **36 个工具描述 <10 词**(短描述无"何时用"信号;2026-08-14 消歧后 40→36)与 **103 个工具零 enum 参数**(有限值未声明 enum)——这两项是高 ROI 改进点 | 🟡 部分(命名/参数已达标,描述与 enum 待提升) |
-| 可操作错误信息:错误码 + 人类/LLM 可读消息 + 建议修复;不返回裸 HTTP 状态码 | Anthropic;AWS | envelope 已实现;28 ErrorCode message 是否都含"具体修复"需核对 | 🟡 部分 |
+| 可操作错误信息:错误码 + 人类/LLM 可读消息 + 建议修复;不返回裸 HTTP 状态码 | Anthropic;AWS | envelope 已实现;30 ErrorCode message 是否都含"具体修复"需核对 | 🟡 部分 |
 | 返回高信号字段:UUID 换语义可读标识;response_format concise/detailed(1/3 token) | Anthropic | `summary_id`/条目 ID 对模型语义友好度未验证;concise 模式无 | 🟡 部分 |
 | 工具合并与拆分:单一清晰目的;合并频繁链式调用;相似工具 <10 个就会让 agent 迷惑 | Anthropic;OpenAI | 35 类别 146 工具;相似度审计(list_summaries/get_summary/search_knowledge_base 边界)未做 | 🟡 部分 |
 
@@ -183,7 +183,7 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 
 ## §4 维度 3:Validation 与 agent-as-tester 最佳实践
 
-> 本地现状基线:agent-as-tester 是**最成熟的维度**——AC1-AC9 判据 + validation-scenario-contract 机制 + 116 场景(65 functional + 51 regression)+ 2 次实跑 + 诚实性机制(unconfigured/RED-GREEN/SUSPECT)。业界先例确认这不是孤例(Anthropic evals、τ-bench、AutoCover、SpecOps 都是同行)。
+> 本地现状基线:agent-as-tester 是**最成熟的维度**——AC1-AC9 判据 + validation-scenario-contract 机制 + 137 场景(65 functional + 72 regression)+ 2 次实跑 + 诚实性机制(unconfigured/RED-GREEN/SUSPECT)。业界先例确认这不是孤例(Anthropic evals、τ-bench、AutoCover、SpecOps 都是同行)。
 
 ### D3-1 agent-as-tester 业界先例确认 🔬
 
@@ -244,7 +244,7 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 | D-工-1 | **146 工具描述/参数审计**(命名动词化、参数 ≤8、enum/default、description 含示例与"何时用") | AWS/RaftLabs/Anthropic — 共识度最高项;Anthropic 实测描述改进降 40% 任务时间 | 中(可脚本化半自动) | 极高 | ✅ **审计已落地** → `scripts/tool_desc_audit.py`(2026-08-14 落地,2026-08-23 重跑,146 工具,回归测试 7 例);剩余短描述/enum 差距转 backlog |
 | D-工-2 | **LLM-judge 校准证据**(golden set 50-100 例、kappa、多试次) | Airbnb EDD;arXiv 2025-2026 偏见研究 | 中 | 高(直接提升 G4/G5 可信度) | ✅ **已校准(真实运行)** → `scripts/llm_judge_calibration.py`(2026-08-14:8 例 seed golden set × 3 试次,accuracy 1.0 / kappa 1.0 / spread 0.0,证据 `validation-runs/coverage/llm-judge-calibration-2026-08-14.json`(未重跑——需 LLM key;D-工-2 证据保持 08-14 最新),回归测试 9 例);扩充至 50-100 例为后续 backlog |
 | D-工-3 | **AI 代码专项审查清单**(命名一致、幻觉包名、同义反复测试) | CodeRabbit;USENIX 2025 | 低(文档 + PR 模板) | 高 | ⏳ 待落地 |
-| D-工-4 | 错误信息一致性审计(28 ErrorCode 的 message 是否全含修复指引;429 Retry-After;堆栈泄漏) | OWASP;MCP spec | 低-中 | 高 | ✅ **已修复** → `scripts/error_message_audit.py`(2026-08-14 落地,2026-08-23 重跑,0 缺修复指引,**0 裸异常**——65 处 `_error_dict(exc)` 全部替换为 `_error_from_exc(exc, context)` 统一模板(context + 异常 + retry 指引),回归测试 9 例) |
+| D-工-4 | 错误信息一致性审计(30 ErrorCode 的 message 是否全含修复指引;429 Retry-After;堆栈泄漏) | OWASP;MCP spec | 低-中 | 高 | ✅ **已修复** → `scripts/error_message_audit.py`(2026-08-14 落地,2026-08-23 重跑,0 缺修复指引,**0 裸异常**——65 处 `_error_dict(exc)` 全部替换为 `_error_from_exc(exc, context)` 统一模板(context + 异常 + retry 指引),回归测试 9 例) |
 | D-工-5 | 场景路径断言审计(grade outcome 别 grade path)+ 隔离环境防作弊 | Anthropic | 低-中 | 中 | ✅ **审计已落地** → `scripts/scenario_outcome_audit.py`(2026-08-14 落地,2026-08-23 重跑:116 场景/446 步,outcome 断言 ≥95%,0 未门控 llm_assert/http,回归测试 9 例) |
 | D-工-6 | 幂等键显式语义 + 合作式取消 | MCP Tasks;Async workflows | 中 | 中 | ⏳ 待落地 |
 | D-工-7 | 工具相似度审计(35 类别 146 工具边界) | Anthropic;OpenAI | 中 | 中 | ✅ **已修复** → `scripts/tool_similarity_audit.py`(2026-08-14 落地,2026-08-23 重跑:146 工具,0 名称边界碰撞,**0 高描述重叠对**——10 个工具描述用独有词汇消歧,回归测试 7 例) |

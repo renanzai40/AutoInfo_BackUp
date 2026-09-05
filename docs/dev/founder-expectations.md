@@ -72,7 +72,7 @@ The system serves three distinct user roles. Unlike traditional multi-user syste
 | Role | Code | Description | Interface | Example | Lifecycle |
 |------|------|-------------|-----------|---------|-----------|
 | **End User** (最终用户 / 付费客户) | **B1** | **The paying customer.** Consumes curated knowledge products. Interacts in natural language; the B2 Agent (powered by LLM) translates NL into structured subscription config via the NL→Config pipeline. | Delivered products (email, Telegram, WeChat, API feeds); NL interaction with Agent for config changes; self-service portal | A pharmaceutical company subscribing to an "IVF Research Weekly" digest delivered via email + WeChat Work; a VC firm paying for "AI Competitive Intelligence" data feeds | B1.1 Discover → B1.2 Subscribe → B1.3 Onboard → B1.4 Consume → B1.5 Modify Config → B1.6 Churn → B1.7 Reactivate |
-| **Direct User** (直接执行者 / Agent) | **B2** | **The operator.** Executes automation commands via structured tools. **Agent-first**: all capabilities are MCP tools for AI agents. The agent is the primary execution layer. | MCP tools (146 across 35 categories — primary), CLI (28 command groups — fallback) | An AI agent calling `collect_sources()` and `generate_digest()`; a human running `autoinfo collect` for ad-hoc operations | B2.1 Discover → B2.2 Connect → B2.3 Configure → B2.4 Operate → B2.5 Monitor → B2.6 Report |
+| **Direct User** (直接执行者 / Agent) | **B2** | **The operator.** Executes automation commands via structured tools. **Agent-first**: all capabilities are MCP tools for AI agents. The agent is the primary execution layer. | MCP tools (146 across 35 categories — primary), CLI (31 command groups — fallback) | An AI agent calling `collect_sources()` and `generate_digest()`; a human running `autoinfo collect` for ad-hoc operations | B2.1 Discover → B2.2 Connect → B2.3 Configure → B2.4 Operate → B2.5 Monitor → B2.6 Report |
 | **Director User** (人类指挥者) | **B3** | **The commander.** Sets policy at deploy time, monitors passively, intervenes only on critical errors that B2 cannot self-heal. Never daily-operates the pipeline. | Dashboard + B2-generated reports; CLI for emergency intervention | "帮我追踪本周辅助生殖领域的重要论文，按创新程度排序，出一份简报" | B3.1 Configure → B3.2 Monitor → B3.3 Intervene |
 
 **Design principle**: Agent-oriented by default, human-capable by design. All system capabilities are exposed as structured MCP tools first (for B2 agent), with CLI as an accessible alternative. B3 communicates intent through B2, not through AutoInfo directly. B1's requirements for quality, reliability, and delivery channel flexibility are embedded as hard constraints in every subsystem — see F36-F40 plus F65-F72 for the full lifecycle specification.
@@ -288,10 +288,10 @@ This is the standard. Everything else — tests, architecture, source curation �
 | True Test | ✅ 13-point agent-verifiable checklist — all pass |
 | Code implementation | ✅ ~18K+ lines Python, 35+ modules |
 | Demo source curation | ✅ 7 curated sources shipped with library metadata |
-| Tests | ✅ ~4644 tests across 100+ test files (includes new collector tests) |
+| Tests | ✅ ~4925 tests across 100+ test files (includes new collector tests) |
 | MCP tools | ✅ 146 tools across 35 categories |
 | Technical decisions | ✅ 34 categories documented, all implemented |
-| CLI commands | ✅ 28 command groups |
+| CLI commands | ✅ 31 command groups |
 
 ---
 
@@ -444,7 +444,7 @@ Consumer requirements identified from global information payment research (5 rep
 | Product delivery | ✅ RAW (API feeds, webhook streams, bulk export); ✅ PROCESSED (scheduled digests, thematic reports, alert streams) |
 | Delivery channels | 13 channels ✅ (SMTP, Webhook, REST API, File Export, Discord, Telegram, WeChat Work, WeChat OA, DingTalk, FeiShu, RSS, Social Publish, Push). Email as mandatory fallback. |
 | Subscription/billing | ✅ Fully implemented | Stripe webhook endpoint (signature verification), stripe-mock dev setup, freemium gating, usage-based billing. Full Stripe lifecycle from checkout to webhook event dispatch. |
-| Tests | ~4644 (includes new collector tests) |
+| Tests | ~4925 (includes new collector tests) |
 | Demo domains | 13 with curated sources |
 | **🔴 v1.6+ residual gaps** | **11 low-effort fixes** |
 | **🟢 Consumer-facing output gaps** | **6 items** (see §14 consumer gaps) |

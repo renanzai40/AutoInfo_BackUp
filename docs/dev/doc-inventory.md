@@ -14,7 +14,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | Metric | Value |
 |--------|-------|
 | Total files | 97 |
-| Total lines | 31691 |
+| Total lines | 31716 |
 | Active files | 70 |
 | Archived files | 27 |
 | Category — archive | 27 files / 8627 lines |
@@ -22,9 +22,9 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | Category — schemas | 4 files / 397 lines |
 | Category — skills | 3 files / 785 lines |
 | Category — adr | 9 files / 424 lines |
-| Category — specs | 12 files / 8819 lines |
+| Category — specs | 12 files / 8821 lines |
 | Category — validation-reports | 14 files / 3186 lines |
-| Category — docs/dev | 24 files / 9014 lines |
+| Category — docs/dev | 24 files / 9037 lines |
 | Category — docs/root | 2 files / 103 lines |
 
 ## Inventory
@@ -76,8 +76,8 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/autoinfo-corrections-20260904.md` | 440 | docs/dev | active | — |
 | `dev/autoinfo-dev-roadmap-20260902.md` | 135 | docs/dev | active | — |
 | `dev/best-practice-review.md` | 388 | docs/dev | active | best-practice-review |
-| `dev/cli-mcp-rest-parity.md` | 466 | docs/dev | active | — |
-| `dev/cross-dimensional-catalog.md` | 982 | docs/dev | active | — |
+| `dev/cli-mcp-rest-parity.md` | 467 | docs/dev | active | — |
+| `dev/cross-dimensional-catalog.md` | 997 | docs/dev | active | — |
 | `dev/director-user-guide.md` | 756 | docs/dev | active | — |
 | `dev/enduser-coverage-matrix.md` | 483 | docs/dev | active | — |
 | `dev/founder-expectations.md` | 471 | docs/dev | active | — |
@@ -97,7 +97,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/specs/operations.md` | 972 | specs | active | — |
 | `dev/specs/ops-runbook.md` | 1040 | specs | active | — |
 | `dev/specs/pipeline.md` | 584 | specs | active | — |
-| `dev/specs/quality-gates.md` | 187 | specs | active | — |
+| `dev/specs/quality-gates.md` | 189 | specs | active | — |
 | `dev/specs/user-lifecycle-definition.md` | 441 | specs | active | — |
 | `dev/validation-governance.md` | 110 | docs/dev | active | — |
 | `dev/validation-loop-log.md` | 81 | docs/dev | active | — |
@@ -115,7 +115,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/validation-reports/evidence-2026-08-12/ac5-report-standard.md` | 813 | validation-reports | active | — |
 | `dev/validation-reports/evidence-2026-08-12/ac5-tutorial-student.md` | 501 | validation-reports | active | — |
 | `dev/validation-reports/final-report-backup-issues-19-38.md` | 62 | validation-reports | active | — |
-| `dev/validation-scenario-contract.md` | 793 | docs/dev | active | — |
+| `dev/validation-scenario-contract.md` | 800 | docs/dev | active | — |
 | `dev/workflow-charter.md` | 67 | docs/dev | active | workflow-charter |
 | `dev/七阶段AI开发流程-用CodingAgent交付成品的方法论.md` | 234 | docs/dev | active | methodology |
 | `glossary.md` | 61 | docs/root | active | glossary |

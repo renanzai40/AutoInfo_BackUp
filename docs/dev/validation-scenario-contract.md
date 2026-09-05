@@ -76,7 +76,7 @@ Mirrors the `unconfigured` verdict semantics in `docs/dev/acceptance-framework.m
 ### 0.4 Baseline honesty
 
 Before any key is configured, record the system's known no-keys profile (the RED
-baseline): run `list_validation_scenarios()` (expect 129) then `run_validation_scenario`
+baseline): run `list_validation_scenarios()` (expect 137) then `run_validation_scenario`
 for every scenario, and record the aggregate. The env-gated set is stable — **15
 scenarios need keys**: 13 need `AUTOINFO_LLM_API_KEY` (cli-llm, data-lifecycle-e2e,
 enduser-journey, kb-extraction, llm-gated, output-column, output-digest-report,
@@ -85,7 +85,7 @@ output-tutorial-presentation, output-video, processing), products-billing needs
 `STRIPE_API_KEY`, and sources-a6-keyed needs `FRED_API_KEY` + `FINNHUB_API_KEY`.
 After configuring keys, re-run those to GREEN (`passed`, never
 `unconfigured`). Observed example (47-scenario suite, 2026-08-05): **37 passed / 0 failed
-/ 10 unconfigured**; the suite has since grown to 129 (65 functional + 64 regression; §1.8) — the baseline shape (all
+/ 10 unconfigured**; the suite has since grown to 137 (65 functional + 72 regression; §1.8) — the baseline shape (all
 env-gated `unconfigured`, nothing failed) is unchanged.
 
 ---
@@ -303,8 +303,8 @@ every scenario in `scenarios/regression/` must carry `regression: true` and a
 
 ## 1.8 Scenario inventory (as of 2026-09-01)
 
-129 scenario files in `src/autoinfo/mcp/scenarios/` (65 functional flat in `scenarios/`
-+ 64 regression in `scenarios/regression/`):
+137 scenario files in `src/autoinfo/mcp/scenarios/` (65 functional flat in `scenarios/`
++ 72 regression in `scenarios/regression/`):
 
 - **System/Discovery**: system-health, discovery, meta-validation
 - **Errors**: error-boundary
@@ -357,16 +357,23 @@ every scenario in `scenarios/regression/` must carry `regression: true` and a
   exercised; canned digest synthesis carries all three D1 sections so the digest
   never falls through to `_deterministic_synthesis_fallback`),
   regression-grouping-degradation-honesty (#120 — `AUTOINFO_FAULT_INJECT=group:fail`
-  renders the pinned `> *This edition groups developments by source*` marker + 
+  renders the pinned `> *This edition groups developments by source*` marker +
   config-resolved keyword labels, never bare keyword headers; env-gated via
   `requires_env: ["AUTOINFO_FAULT_INJECT"]`, reports `unconfigured` when the seam
   is unavailable).
+  2026-09-04 concierge-wave additions (full live list:
+  `ls src/autoinfo/mcp/scenarios/regression/*.yaml | wc -l` — 72 at last count):
+  regression-qa-gates-dir, regression-mvp-init, regression-free-tier-limit,
+  regression-readonly-mcp, regression-domain-seed-flagship,
+  regression-sources-sections, regression-validation-list,
+  regression-product-quality-all-templates, regression-report-entries-cap,
+  regression-tutorial-entry-cap.
   Each carries
   `regression: true` + `regression_issue`, is auto-loaded via recursive glob, and
   appears with a "(regression)" suffix in verdicts plus a `## Regression failures`
   report section.
 
-Coverage: 146/146 MCP tools (100%), all 28 CLI command groups, 8 REST API endpoints,
+Coverage: 146/146 MCP tools (100%), all 31 CLI command groups, 8 REST API endpoints,
 plus collector platform reachability probes (collectors-e2e) and G4/G5 gate flags
 (processing, LLM-gated). Status profile depends on BYOK keys: LLM-gated and env-gated
 scenarios (requires_env) report `unconfigured` without the keys (never silently
@@ -381,7 +388,7 @@ the aggregate regression metric.
 ## 2.1 Purpose and scope
 
 Prove, with real calls and real artifacts, that AutoInfo works across its full surface:
-**146 MCP tools (35 categories), 28 CLI command groups, 8 REST endpoints, 13 delivery
+**146 MCP tools (35 categories), 31 CLI command groups, 8 REST endpoints, 13 delivery
 channels, 30 collector handlers, and every output format**. Each proof must leave a
 verifiable artifact on disk, in the SQLite store, in the audit log, or on a network
 sink, and that artifact must be shown to the director.
@@ -591,7 +598,7 @@ but the matrix row additionally requires the real call and the artifact.
 | I3 | Metrics | MCP `get_metrics()` and `get_prometheus_metrics()`; REST `curl http://localhost:8741/metrics` | The metrics JSON and the Prometheus text exposition from the REST endpoint | no | observability |
 | I4 | Alert rules | MCP `add_alert_rule(domain, topic_keywords, relevance_threshold, channel, kind)` → `get_alert_rules()` → trigger a rule → `remove_alert_rule(...)` | The rules YAML file (persisted), the alert list JSON, and the dispatch log line when the rule fired | no | webhooks-alerts |
 | I5 | REST API | Start `uvicorn autoinfo.api.server:app --port 8741`; `curl` each endpoint: `GET /health`, `GET /api/v1/entries`, `POST /api/v1/entries`, `GET /api/v1/entries/{id}`, `DELETE /api/v1/entries/{id}`, `GET /api/v1/search`, `GET /dashboard`, `GET /metrics` | The envelope JSON for each endpoint (success + error envelopes) and the dashboard HTML | no | rest-api |
-| I6 | Validation meta-coverage | MCP `list_validation_scenarios()`; `run_validation_scenario` for 129; then `python3 scripts/coverage_audit.py` | The 129-scenario inventory JSON, per-scenario results, and the audit report showing **146/146** covered with zero MISSING | no | meta-validation |
+| I6 | Validation meta-coverage | MCP `list_validation_scenarios()`; `run_validation_scenario` for 137; then `python3 scripts/coverage_audit.py` | The 137-scenario inventory JSON, per-scenario results, and the audit report showing **146/146** covered with zero MISSING | no | meta-validation |
 
 ## 2.6 Step-by-Step Walkthrough
 
@@ -605,7 +612,7 @@ Run from the project root (`<repo-root>`). The venv interpreter is
    `exports/`, `autoinfo.db`, `.autoinfo/`, `logs/`, `.omo/`) are gitignored and must
    **never** be committed. If the tree is dirty, stop and report to the director.
 2. **No-keys profile.** Record the RED baseline (§0.4): with no BYOK keys, run
-   `list_validation_scenarios()` (expect 129) then `run_validation_scenario` for every
+   `list_validation_scenarios()` (expect 137) then `run_validation_scenario` for every
    scenario; record the aggregate. Honest, recorded, never graded as pass.
 3. **Configure the key.** `export AUTOINFO_LLM_API_KEY="sk-..."` then MCP
    `configure_llm(...)`; confirm with `get_effective_llm_config()`.
@@ -640,7 +647,7 @@ Rules inside the loop:
 
 ### 2.6.3 Final sweep
 
-1. Re-run 129 scenarios with keys configured — all must report `passed` (expect 0
+1. Re-run 137 scenarios with keys configured — all must report `passed` (expect 0
    failed, 0 unconfigured).
 2. Run `python3 scripts/coverage_audit.py`; report **146/146 covered, zero MISSING**.
 3. Cleanup sweep: re-run every scenario's `cleanup_steps` result (they run
@@ -713,7 +720,7 @@ Deliver this table to the director at the end of the walkthrough:
 
 Plus the two hard meta-results:
 
-- Scenario suite: **129/129 passed** (0 failed, 0 unconfigured) with keys set.
+- Scenario suite: **137/137 passed** (0 failed, 0 unconfigured) with keys set.
 - `scripts/coverage_audit.py`: **146/146 MCP tools covered, zero MISSING**.
 
 ## 2.9 QA Checklist (Pre-Handoff)
@@ -724,7 +731,7 @@ Before handing off to the director, verify all of the following:
 - [ ] RED was recorded before GREEN for every row.
 - [ ] Every GREEN has a real artifact on disk / DB / log / sink, and that artifact was shown to the director (pasted or absolute path).
 - [ ] No `unconfigured` row was graded as a pass; each missing key was surfaced as a BYOK obligation.
-- [ ] All 129 scenarios re-run GREEN with keys configured (0 failed, 0 unconfigured); `python3 scripts/coverage_audit.py` reports 146/146 with zero MISSING.
+- [ ] All 137 scenarios re-run GREEN with keys configured (0 failed, 0 unconfigured); `python3 scripts/coverage_audit.py` reports 146/146 with zero MISSING.
 - [ ] All 8 REST endpoints exercised via `curl` against `uvicorn autoinfo.api.server:app --port 8741`.
 - [ ] All mutating calls have paired cleanup, verified by `list_*` and `git status --porcelain`.
 - [ ] Runtime artifacts (`collections/`, `knowledge/`, `outputs/`, `exports/`, `autoinfo.db`, `.autoinfo/`, `logs/`, `.omo/`) are NOT committed and the working tree is clean.
