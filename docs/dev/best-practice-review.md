@@ -183,7 +183,7 @@ AGENTS.md 与验收框架已确认:AutoInfo 的 direct user 是 **Agent**(agent-
 
 ## §4 维度 3:Validation 与 agent-as-tester 最佳实践
 
-> 本地现状基线:agent-as-tester 是**最成熟的维度**——AC1-AC9 判据 + validation-scenario-contract 机制 + 137 场景(65 functional + 72 regression)+ 2 次实跑 + 诚实性机制(unconfigured/RED-GREEN/SUSPECT)。业界先例确认这不是孤例(Anthropic evals、τ-bench、AutoCover、SpecOps 都是同行)。
+> 本地现状基线:agent-as-tester 是**最成熟的维度**——AC1-AC9 判据 + validation-scenario-contract 机制 + 138 场景(65 functional + 73 regression)+ 2 次实跑 + 诚实性机制(unconfigured/RED-GREEN/SUSPECT)。业界先例确认这不是孤例(Anthropic evals、τ-bench、AutoCover、SpecOps 都是同行)。
 
 ### D3-1 agent-as-tester 业界先例确认 🔬
 

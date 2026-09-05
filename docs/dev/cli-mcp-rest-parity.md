@@ -13,7 +13,7 @@ three commands:
 | REST | FastAPI `app.routes` + `router.routes` on `autoinfo.api.server` (3 routers: routes/portal/storefront + app-level) |
 
 Derivation date: 2026-08-05 (re-derived 2026-09-05 after the concierge wave:
-CLI 28→31 groups, validation scenarios 116→137). Re-derive with the commands
+CLI 28→31 groups, validation scenarios 116→138). Re-derive with the commands
 above whenever the surface set changes; do not edit cells by hand.
 
 ## Status legend
@@ -385,7 +385,7 @@ CLI human mode prints text + exit 0; CLI `--json` mirrors the MCP shape exactly.
 
 | Capability | CLI | MCP | REST | Status | Notes |
 |------------|-----|-----|------|--------|-------|
-| List validation scenarios | `autoinfo validation list [--summary]` | `list_validation_scenarios` | — | MCP + CLI (validation list) | 137 scenarios (65 functional + 72 regression) |
+| List validation scenarios | `autoinfo validation list [--summary]` | `list_validation_scenarios` | — | MCP + CLI (validation list) | 138 scenarios (65 functional + 73 regression) |
 | Run validation scenario | — | `run_validation_scenario` | — | MCP-only | Scenario steps may invoke CLI/REST internally |
 
 ### REST-only endpoints (no CLI / MCP counterpart)
