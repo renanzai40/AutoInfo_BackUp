@@ -43,6 +43,7 @@ OUT = DOCS / "dev" / "doc-inventory.md"
 TESTS = ROOT / "tests"
 README = ROOT / "README.md"
 AGENTS = ROOT / "AGENTS.md"
+SCENARIOS_DIR = ROOT / "src" / "autoinfo" / "mcp" / "scenarios"
 #: The doc-manager skill whose own drift-prone numbers must agree with README.
 SKILL = ROOT / ".opencode" / "skills" / "doc-manager-skill" / "SKILL.md"
 
@@ -209,7 +210,17 @@ def extract_number(text: str, pattern: str) -> str | None:
     m = re.search(pattern, text)
     return m.group(1) if m else None
 
-
+    # On-disk scenario count validation
+    claimed_readme = readme_values.get("Validation scenarios")
+    if claimed_readme is not None:
+        actual = sum(1 for _ in SCENARIOS_DIR.rglob("*.yaml"))
+        status = "match" if actual == claimed_readme else "MISMATCH"
+        print(f"  Validation scenarios on disk: {actual} yaml files vs README.md={claimed_readme} -> {status}")
+        if actual != claimed_readme:
+            failures.append(f"validation scenario count drift: README.md={claimed_readme} vs actual {actual} .yaml files under {SCENARIOS_DIR.relative_to(ROOT)}")
+            failures.append(f"validation scenario count drift: README.md={claimed_readme} vs actual {actual} .yaml files under {SCENARIOS_DIR.relative_to(ROOT)}")
+        if actual != claimed_readme:
+            failures.append(f"validation scenario count drift: README.md={claimed_readme} vs actual {actual} .yaml files under {SCENARIOS_DIR.relative_to(ROOT)}")
 def run_check() -> list[str]:
     """Check cross-doc consistency; return the list of human-readable failures."""
     failures: list[str] = []
