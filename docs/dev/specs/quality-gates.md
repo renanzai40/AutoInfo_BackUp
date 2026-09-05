@@ -113,6 +113,8 @@ At product output time (for PROCESSED products), additional gates verify deliver
 | **D2: Format integrity** | Rendered output parses correctly (valid HTML, valid PDF, valid JSON schema) | Block delivery; fall back to plain-text format |
 | **D3: Freshness** | All cited items are within configured recency window (default 30 days) | Flag stale citations; optional block per domain config |
 
+**Packaged gate reports**: validation-delivery packaging (`scripts/validation_delivery.py`) additionally persists a per-product `01-QA-GATES/gate-report-<product>.md` (human-readable) + `.json` (agent-consumable) recording that product's D1-D3 delivery-gate and authenticity verdicts, plus a `gate-reports-index.json` whose `rejected` list stays consistent with the package `manifest.json`'s `rejected` key. These packaged reports record delivery-gate outcomes only — G0-G5 run at the process layer and are not recomputed in packaging.
+
 ---
 
 ## 5. Configuration Model

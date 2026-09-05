@@ -712,11 +712,11 @@ The research report reveals a clear **polarization** between "engineering-feasib
 |-----------|---------------|
 | **Billing model** | Partially implemented. Hybrid base+overage model specified. CostMeter tracks usage per domain/user. `get_enduser_invoice()` generates invoice-like summaries. Actual Stripe invoice creation and automated charging not connected. |
 | **Overage units** | Usage units (items, API calls, storage) tracked in `cost.py`. Not connected to actual overage billing or Stripe metering. |
-| **Tier structure** | Free/trial → RAW Pro → PROCESSED Pro → Enterprise tiers specified. `check_access()` enforces in output generation. No subscription tier gating in MCP layer. |
+| **Tier structure** | Free/trial → RAW Pro → PROCESSED Pro → Enterprise tiers specified. `check_access()` enforces in output generation. No subscription tier gating in MCP layer. **Implemented (2026-09 concierge wave):** configurable free-tier quotas (`free_tier` config section: max_domains=1, max_products=1, frequency=weekly) enforced at `generate_digest`/`generate_report` entry (only when user_id is non-empty) and at cron add-delivery via a frequency gate, returning `FREE_TIER_LIMIT` on violation; `check_access()` remains the boolean content gate. |
 | **Conversion layer** | Partially implemented: CostMeter maps internal costs to product billing units. Conversion factors domain-configurable in `cost.py`. Not wired to Stripe pricing API. |
 | **Invoice structure** | Partially implemented: `get_enduser_invoice()` itemizes charges. No automated monthly invoice generation or Stripe Invoice API calls. |
 | **MCP tool** | `get_enduser_usage`, `get_enduser_invoice`, and `get_billing_summary` all exist. **Implemented (2026-08-05):** `get_billing_summary` registered at `src/autoinfo/mcp/server.py:9782`, dispatched at line 10560, handler `_handle_get_billing_summary` at line 5397. |
-| **CLI** | `autoinfo billing summary|usage|invoice` implemented; `autoinfo cost dashboard` and `autoinfo cost allocation` also provide cost views. **Implemented (2026-08-05):** `billing` CLI group added. |
+| **CLI** | `autoinfo billing summary|usage|invoice` implemented; `autoinfo cost dashboard` and `autoinfo cost allocation` also provide cost views. **Implemented (2026-08-05):** `billing` CLI group added. **Implemented (2026-09 concierge wave):** `autoinfo billing create-free --user-id X` provisions a free-tier user. |
 
 #### F43 — End-User Cost Dashboard ✅
 

@@ -107,12 +107,14 @@ AutoInfo/
 │       ├── kb.py                    # Knowledge base pipeline (4-tier KB pipeline)
 │       ├── collectors/              # 30 collector handlers (PubMed, Semantic Scholar, DBLP, OpenAlex, USPTO, NYT, Yahoo Finance, Quandl, RSS, Web, webhook, email, PDF, Reddit, Spotify, YouTube, Bilibili, Apple Podcasts, AP API, Reuters MCP, SSRN, GDELT, HuggingFace/Kaggle, Unpaywall/CORE, HackerNews, AKShare, SEC EDGAR, edX sitemap)
 │       ├── llm.py                   # LLM extraction engine
-│       ├── output/                   # Output generation package (digest, report, tutorial, presentation, export; formats: Markdown/HTML/JSON/PDF/Audio/Agent/EPUB/MOBI/Audiobook/Video) — __init__.py + ebook.py (B23: EPUB/MOBI/audiobook) + video.py (HyperFrames HTML+GSAP→MP4, 36+8 themes) + video_assets/ (themes + templates) + seo.py
+│       ├── output/                   # Output generation package (digest, report, tutorial, presentation, export; formats: Markdown/HTML/JSON/PDF/Audio/Agent/EPUB/MOBI/Audiobook/Video) — __init__.py + ebook.py (B23: EPUB/MOBI/audiobook) + video.py (HyperFrames HTML+GSAP→MP4, 36+8 themes) + video_assets/ (themes + templates) + seo.py + free_tier.py (free-tier product limits)
 │       ├── data/                     # Domain configs (domains/*/sources.yaml) + 8 output product templates (incl. premium-briefing.md.j2, enterprise-briefing.md.j2)
 │       ├── cefr.py                  # CEFR classification (EN/ZH/JA)
 │       ├── quality.py               # Quality gates G0-G5, D1-D3 delivery gates
 │       ├── delivery.py              # Delivery channel abstraction (13 channels)
 │       ├── delivery/scheduler.py    # Delivery schedule management (cron integration)
+│       ├── delivery/gate_report.py   # Per-product gate reports (01-QA-GATES/ md+json for validation delivery)
+│       ├── delivery/frequency_gate.py # Delivery frequency gate (free-tier frequency enforcement at cron add-delivery)
 │       ├── alerts.py                # Alert rule CRUD, YAML persistence, check & dispatch
 │       └── ...                      # email_sender, keywords, qa, etc.
 ```
@@ -160,7 +162,7 @@ Phase 2 — Process:   autoinfo process --domain medical [--model deepseek-chat]
 
 ### Quality Gates (Production-Grade)
 
-Hard/soft split with retry-first, block-last philosophy. G0 (Schema Integrity) and G4 (Factual Consistency) are **hard gates** — 3× retry then block. G1-G3 and G5 are **soft gates** with configurable thresholds and actions (archive/flag/pass). 3 delivery gates (D1-D3) check product completeness, format integrity, and freshness at output time.
+Hard/soft split with retry-first, block-last philosophy. G0 (Schema Integrity) and G4 (Factual Consistency) are **hard gates** — 3× retry then block. G1-G3 and G5 are **soft gates** with configurable thresholds and actions (archive/flag/pass). 3 delivery gates (D1-D3) check product completeness, format integrity, and freshness at output time. Validation-delivery packaging additionally persists per-product `01-QA-GATES/gate-report-<product>.{md,json}` (D1-D3 + authenticity verdicts, md for humans / json for agents) with a `gate-reports-index.json` — the packaged reports record delivery-gate outcomes; G0-G5 run at the process layer and are not recomputed in packaging.
 
 | Gate | Type | Priority | Action on Failure |
 |------|------|----------|-------------------|

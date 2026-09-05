@@ -14,7 +14,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | Metric | Value |
 |--------|-------|
 | Total files | 97 |
-| Total lines | 31716 |
+| Total lines | 31727 |
 | Active files | 70 |
 | Archived files | 27 |
 | Category — archive | 27 files / 8627 lines |
@@ -22,7 +22,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | Category — schemas | 4 files / 397 lines |
 | Category — skills | 3 files / 785 lines |
 | Category — adr | 9 files / 424 lines |
-| Category — specs | 12 files / 8821 lines |
+| Category — specs | 12 files / 8832 lines |
 | Category — validation-reports | 14 files / 3186 lines |
 | Category — docs/dev | 24 files / 9037 lines |
 | Category — docs/root | 2 files / 103 lines |
@@ -87,7 +87,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/plans/README.md` | 50 | docs/dev | active | plan-index |
 | `dev/required-api-keys.md` | 144 | docs/dev | active | — |
 | `dev/research/综合报告-资讯付费与AI触达研究.md` | 702 | docs/dev | active | — |
-| `dev/specs/data-models.md` | 770 | specs | active | — |
+| `dev/specs/data-models.md` | 779 | specs | active | — |
 | `dev/specs/delivery.md` | 1268 | specs | active | — |
 | `dev/specs/end-user-matrix.yaml` | 1110 | specs | active | — |
 | `dev/specs/expectations.md` | 1188 | specs | active | — |
@@ -97,7 +97,7 @@ python3 scripts/doc_inventory.py --check  # cross-doc consistency (exit 0 = clea
 | `dev/specs/operations.md` | 972 | specs | active | — |
 | `dev/specs/ops-runbook.md` | 1040 | specs | active | — |
 | `dev/specs/pipeline.md` | 584 | specs | active | — |
-| `dev/specs/quality-gates.md` | 189 | specs | active | — |
+| `dev/specs/quality-gates.md` | 191 | specs | active | — |
 | `dev/specs/user-lifecycle-definition.md` | 441 | specs | active | — |
 | `dev/validation-governance.md` | 110 | docs/dev | active | — |
 | `dev/validation-loop-log.md` | 81 | docs/dev | active | — |

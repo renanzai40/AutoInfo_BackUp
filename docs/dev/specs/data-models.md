@@ -39,7 +39,7 @@ consumes each entity. "spec only" marks models not yet implemented in code.
 | `NotificationPreferences` | `update_preferences` (spec only) | `per_type_channel_preference`, `digest_frequency` |
 | `CostLog` | `get_billing_summary`, `get_enduser_invoice`, `get_budget_thresholds` | `id`, `category`, `domain`, `amount`, `trace_id` |
 | `AuditLog` | `audit query` (CLI + MCP) | `id`, `action`, `entity_type`, `operator`, `timestamp` |
-| `SysConfig` | `get_config`, `get_gate_config`, `set_gate_config` | `llm`, `storage`, `logging`, `metrics` |
+| `SysConfig` | `get_config`, `get_gate_config`, `set_gate_config` | `llm`, `storage`, `logging`, `metrics`, `free_tier` |
 | `DecayMetrics` | `get_domain_decay`, `calculate_freshness_score`, `mark_stale` | `domain`, `staleness_ratio`, `decay_grade` |
 | `SystemHealth` | `diagnose_system`, `health_check`, `get_metrics` | `status`, `llm_key_configured`, `overall_health_score` |
 | `Tenant` | (multi-tenancy, spec only) | `id`, `name`, `slug`, `settings` |
@@ -491,6 +491,15 @@ class SysConfig:
     storage: StorageConfig = field(default_factory=StorageConfig)
     logging: LoggingConfig = field(default_factory=LoggingConfig)
     metrics: MetricsConfig = field(default_factory=MetricsConfig)
+    free_tier: FreeTierConfig = field(default_factory=FreeTierConfig)
+
+@dataclass
+class FreeTierConfig:
+    """Free-tier limits (mirrors src/autoinfo/config.py FreeTierConfig)."""
+    max_domains: int = 1
+    max_products: int = 1
+    frequency: str = "weekly"        # delivery frequency cap for free-tier users
+    allow_custom: bool = False       # whether free tier may define custom products
 
 @dataclass
 class DecayMetrics:
