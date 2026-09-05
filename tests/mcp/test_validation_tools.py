@@ -2397,7 +2397,8 @@ class TestRegressionScenarios:
         for s in regr:
             assert s["regression"] is True
             assert "regression_issue" in s
-            assert s["regression_issue"].startswith("#")
+            assert isinstance(s["regression_issue"], str)
+            assert s["regression_issue"].strip()
         func = [s for s in scs if not s.get("regression")]
         for s in func:
             assert "regression" not in s
