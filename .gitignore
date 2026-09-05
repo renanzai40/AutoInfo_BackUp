@@ -67,3 +67,6 @@ out/
 handoff/
 _cleanup_backup_20260831/
 autoinfo.db.bak-precrossdom-cleanup-20260831
+
+# Concierge MVP pilot delivery dirs
+mvp/

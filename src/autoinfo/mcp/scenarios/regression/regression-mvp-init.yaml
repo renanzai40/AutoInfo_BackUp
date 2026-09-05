@@ -1,0 +1,125 @@
+# Regression (concierge wave task 13): `autoinfo mvp init` provisions a
+# complete Concierge MVP pilot in one command and `autoinfo mvp list`
+# surfaces it — hermetically (no LLM key, no network, no Stripe).
+#
+# Mechanisms under test (same contract as tests/cli/test_cli_mvp.py):
+#   - EndUserProfile provisioned with tier="premium" + status="active"
+#     DIRECTLY (check_access premium fast path reads UserProfile.tier;
+#     activate_trial would set status="trial" and hit the Stripe fallback).
+#   - Matching premium subscription row (plan/tier/status all premium/active).
+#   - Demo domain imported into the project config (domain import
+#     --from-demo same-source logic).
+#   - mvp/<user>/ delivery dir: product .md + gate-report (md+json, shared
+#     autoinfo.delivery.gate_report implementation) + provenance.json
+#     (real demo source base, hermetic disclosure) + user.json.
+#   - The first product rides the honest empty-state seam: a fresh pilot
+#     project has an empty KB, so the digest renders its neutral "no curated
+#     items yet" edition with zero LLM calls.
+#   - Idempotency: a second init is a clear no-op ("already provisioned").
+#   - Error paths: unknown product / frequency exit 1 without a traceback.
+#
+# Deterministic (requires_env: []): runs inside a temp dir with a minimal
+# config, AUTOINFO_LLM_API_KEY unset, the system user-store redirected to
+# temp project (a cwd chdir happens naturally — the db path derives from
+# Path.cwd()), and `autoinfo` resolved to the repo's venv console script
+# (bare `python3 -c` cannot patch the already-imported CLI subprocess's
+# stores the way the pytest fixture does). Same shape as
+# regression-domain-seed-flagship.yaml.
+name: regression-mvp-init
+description: "Regression task 13: mvp init provisions premium/active pilot + mvp/u1 artifacts hermetically; mvp list shows it; idempotent; clean error paths"
+category: regression
+regression: true
+regression_issue: "concierge-wave-task-13"
+requires_env: []
+steps:
+  - name: "mvp init full chain + mvp list + idempotency + error paths, no LLM key"
+    kind: cli
+    timeout_seconds: 120
+    command: |-
+      set -euo pipefail
+      TMP="$(mktemp -d)"
+      trap 'rm -rf "$TMP"' EXIT
+      cd "$TMP"
+      unset AUTOINFO_LLM_API_KEY || true
+      AUTOINFO="$(dirname "$(command -v python3)")/autoinfo"
+      if [ ! -x "$AUTOINFO" ]; then AUTOINFO=autoinfo; fi
+      mkdir -p .autoinfo
+      python3 -c '
+      import yaml
+      with open(".autoinfo/config.yaml", "w") as fh:
+          yaml.dump({
+              "project": {"name": "Regression MVP", "created_at": "2026-09-05"},
+              "llm": {"provider": "openrouter", "model": "deepseek/deepseek-chat",
+                      "api_key": "${AUTOINFO_LLM_API_KEY}"},
+              "domains": [],
+          }, fh, default_flow_style=False)
+      '
+      # Full chain: provision + import + hermetic first product.
+      "$AUTOINFO" mvp init --user u1 --domain medical-research --product digest --frequency weekly
+      "$AUTOINFO" mvp list | tee list.out
+      grep -q "u1" list.out
+      grep -q "premium" list.out
+      grep -q "active" list.out
+      grep -q "mvp/u1/" list.out
+      python3 -c '
+      import json, sys, yaml
+      from pathlib import Path
+      from autoinfo.billing import check_access
+      from autoinfo.user_store import get_profile, list_subscriptions
+
+      profile = get_profile("u1")
+      assert profile is not None, "profile missing"
+      assert profile.tier == "premium", profile.tier
+      assert profile.status == "active", profile.status
+      subs = list_subscriptions("u1")
+      assert len(subs) == 1, len(subs)
+      assert subs[0].plan == "premium" and subs[0].tier == "premium"
+      assert subs[0].status == "active"
+      access = check_access("u1", "premium")
+      assert access["allowed"] is True and access["upgrade_prompt"] is None, access
+
+      cfg = yaml.safe_load(open(".autoinfo/config.yaml"))
+      assert "medical-research" in [d.get("name") for d in cfg["domains"]], cfg["domains"]
+
+      user_dir = Path("mvp/u1")
+      products = [p for p in user_dir.glob("*.md") if not p.name.startswith("gate-report-")]
+      assert len(products) == 1, [p.name for p in products]
+      assert products[0].read_text(encoding="utf-8").strip(), "empty product"
+      reports = sorted(user_dir.glob("gate-report-*"))
+      assert any(g.suffix == ".md" for g in reports) and any(g.suffix == ".json" for g in reports), reports
+      payload = json.loads(next(g for g in reports if g.suffix == ".json").read_text(encoding="utf-8"))
+      assert payload["delivered"] is True and payload["quality"] == "PASS", payload
+      assert [g["gate"] for g in payload["gates"]] == ["D1", "D2", "D3", "authenticity"], payload["gates"]
+      prov = json.loads((user_dir / "provenance.json").read_text(encoding="utf-8"))
+      assert prov["entries"], "provenance empty"
+      for e in prov["entries"]:
+          assert e.get("source_url") and e.get("source_type") and e.get("source_platform"), e
+      assert "hermetic" in json.dumps(prov).lower(), "hermetic disclosure missing"
+      assert (user_dir / "user.json").is_file()
+      print("MVP_ARTIFACTS_OK")
+      '
+      # Idempotency: second init is a clear no-op.
+      "$AUTOINFO" mvp init --user u1 --domain medical-research --product digest --frequency weekly | tee second.out
+      grep -qi "already" second.out
+      python3 -c '
+      from pathlib import Path
+      from autoinfo.user_store import list_subscriptions
+      assert len(list_subscriptions("u1")) == 1, "duplicate subscription"
+      products = [p for p in Path("mvp/u1").glob("*.md") if not p.name.startswith("gate-report-")]
+      assert len(products) == 1, [p.name for p in products]
+      print("MVP_IDEMPOTENT_OK")
+      '
+      # Error paths: exit 1, no traceback.
+      if "$AUTOINFO" mvp init --user u2 --domain medical-research --product podcast --frequency weekly >err1.out 2>&1; then
+        echo "unknown product should fail" && exit 1
+      fi
+      grep -q "Traceback" err1.out && { echo "traceback leaked (product)"; exit 1; } || true
+      if "$AUTOINFO" mvp init --user u2 --domain medical-research --product digest --frequency hourly >err2.out 2>&1; then
+        echo "unknown frequency should fail" && exit 1
+      fi
+      grep -q "Traceback" err2.out && { echo "traceback leaked (frequency)"; exit 1; } || true
+      echo "MVP_INIT_OK"
+    expect:
+      success: true
+      exit_code: 0
+      stdout_has: ["MVP_ARTIFACTS_OK", "MVP_IDEMPOTENT_OK", "MVP_INIT_OK"]

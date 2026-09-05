@@ -101,7 +101,7 @@ LLM-based structured extraction, summarization, and a queryable knowledge base.
 | Component | Status |
 |-----------|--------|
 | Config system | ✅ LLM task config, per-task model, fallback chains, schema versioning |
-| CLI | ✅ 30 command groups (init, doctor, collect, process, status, summaries, sources, topics, topic-group, domain, audit, kb, output, cron, knowledge, cefr, email, keywords, clean, cost, billing, enduser, portal, trace, import-kb, query-collected, alert-rules, agent-callback, validation, serve) |
+| CLI | ✅ 31 command groups (init, doctor, collect, process, status, summaries, sources, topics, topic-group, domain, audit, kb, output, cron, knowledge, cefr, email, keywords, clean, cost, billing, enduser, portal, trace, import-kb, query-collected, alert-rules, agent-callback, validation, serve, mvp) |
 | Collection | ✅ 30 collector handlers (PubMed, Semantic Scholar, DBLP, OpenAlex, USPTO, NYT, Yahoo Finance, Quandl, RSS, Web, webhook, email, PDF, Reddit, Spotify, YouTube, Bilibili, Apple Podcasts, plus paid AP API and Reuters MCP, plus SSRN, GDELT, HuggingFace/Kaggle, Unpaywall/CORE, HackerNews, AKShare, SEC EDGAR, edX sitemap), scheduled via crond; `fetch_depth: fulltext` threading (unpaywall/rss/youtube/gdelt, 8000-char cap) |
 | LLM extraction | ✅ Custom extraction fields, TL;DR, key points, entities, G4 factual consistency, token usage tracking |
 | Translation QA pipeline | ✅ 5 lite quality gates, back-translation verification, terminology guardrails, composite scoring, translator-qa-skill |
@@ -345,7 +345,7 @@ Sources (RSS/API/Web)
 | Layer | Technology |
 |-------|-----------|
 | Language | Python ≥ 3.11 |
-| CLI | typer (30 command groups) |
+| CLI | typer (31 command groups) |
 | REST API | FastAPI + uvicorn (port 8741) |
 | MCP server | mcp (Model Context Protocol) — 146 tools over stdio |
 | LLM layer | LiteLLM — multi-provider (OpenRouter, OpenAI-compatible, Ollama, Azure) via BYOK |
@@ -368,7 +368,7 @@ Optional extras: `pip install "autoinfo[web]"` (Playwright),
 `"autoinfo[pdf]"` (PyMuPDF + weasyprint), `"autoinfo[tts]"` (edge-tts), or
 `"autoinfo[all]"` for everything.
 
-## CLI Commands (30 groups)
+## CLI Commands (31 groups)
 
 ```bash
 autoinfo init --name <project>      # Initialize project
@@ -401,6 +401,7 @@ autoinfo query-collected <query>    # Q&A over collected content (MCP query_coll
 autoinfo alert-rules add|list|remove  # Alert rule management (MCP parity)
 autoinfo agent-callback add|list|remove  # Agent push callbacks (MCP parity)
 autoinfo serve --agent               # Read-only MCP server over stdio (4 read-only tools)
+autoinfo mvp init|list               # Concierge MVP pilots: provision pilot users + first product
 ```
 
 ## MCP Tools (146)

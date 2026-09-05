@@ -22,6 +22,7 @@ from . import (
     kb,
     keywords,
     knowledge,
+    mvp,
     output,
     portal,
     process,
@@ -134,6 +135,16 @@ app.add_typer(
     serve.app,
     name="serve",
     help="Run the AutoInfo MCP server over stdio ('serve --agent' = read-only 4-tool mode)",
+)
+app.add_typer(
+    mvp.app,
+    name="mvp",
+    help="Concierge MVP pilots: provision and list paying pilot users",
+)
+app.add_typer(
+    mvp.app,
+    name="mvp",
+    help="Concierge MVP pilots: provision and list paying pilot users (mvp init/list)",
 )
 
 if __name__ == "__main__":

@@ -101,7 +101,7 @@ AutoInfo/
 │   └── skills/                     # Coding agent skills (for developing AutoInfo)
 ├── src/
 │   └── autoinfo/
-│       ├── cli/                     # 30 CLI command groups
+│       ├── cli/                     # 31 CLI command groups
 │       ├── mcp/                     # MCP server (146 tools)
 │       ├── api/                     # REST API (FastAPI, port 8741)
 │       ├── kb.py                    # Knowledge base pipeline (4-tier KB pipeline)
@@ -305,6 +305,7 @@ AutoInfo generates runtime state at execution time. Distinguish from source:
 | `collections/` | Runtime | Raw JSON cache from `collect`, gitignored |
 | `knowledge/` | Runtime | 4-tier KB pipeline output (01-Raw, 02-Draft, 03-Wiki), gitignored |
 | `outputs/` | Runtime | Generated digests, reports, exports, gitignored |
+| `mvp/` | Runtime | Concierge MVP pilot delivery dirs (`mvp/<user_id>/`: product + gate report + provenance), gitignored |
 | `autoinfo.db` | Runtime | SQLite KB + user + cost stores, gitignored |
 | `logs/` | Runtime | Structured pipeline logs, gitignored |
 | `.autoinfo/` | Runtime | Project config (`config.yaml`), gitignored — modify via MCP tools, not by hand |
@@ -323,7 +324,7 @@ Key counts the agent must know without opening README:
 | Fact | Value |
 |------|-------|
 | MCP tools | **146 tools across 35 categories** |
-| CLI command groups | **30 command groups** |
+| CLI command groups | **31 command groups** |
 | Delivery channels | **13 channels** |
 | Validation scenarios | **130 scenarios** (65 functional + 65 regression) |
 | Demo domains | **21 demo domains** |
