@@ -6,6 +6,7 @@ Verifies the two-step fetch: GET /topstories.json → array of int ids → GET /
 from __future__ import annotations
 
 from types import SimpleNamespace
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import httpx
@@ -40,7 +41,7 @@ def _fake_response(json_payload: object) -> MagicMock:
 
 TOP_STORIES = [1, 2, 3]
 
-STORY_PAYLOADS: dict[int, dict] = {
+STORY_PAYLOADS: dict[int, dict[str, Any]] = {
     1: {"id": 1, "title": "Story One", "text": "", "by": "author1", "url": "https://example.com/1"},
     2: {"id": 2, "title": "Story Two", "text": "Content of story two.", "by": "author2", "url": ""},
     3: {
@@ -66,7 +67,7 @@ class TestHackerNewsHandler:
 
     @patch("autoinfo.collectors.hackernews.httpx.get")
     def test_fetch_returns_items(self, mock_get: MagicMock, hn_config: SourceConfig) -> None:
-        def side_effect(url: str, **kwargs):
+        def side_effect(url: str, **kwargs: Any) -> MagicMock:
             if "topstories" in url:
                 return _fake_response(TOP_STORIES)
             # /item/{id}.json — extract id from URL
@@ -105,7 +106,7 @@ class TestHackerNewsHandler:
     def test_fetch_calls_topstories_first(
         self, mock_get: MagicMock, hn_config: SourceConfig
     ) -> None:
-        def side_effect(url: str, **kwargs):
+        def side_effect(url: str, **kwargs: Any) -> MagicMock:
             if "topstories" in url:
                 return _fake_response(TOP_STORIES)
             for sid in TOP_STORIES:
@@ -124,7 +125,7 @@ class TestHackerNewsHandler:
 
     @patch("autoinfo.collectors.hackernews.httpx.get")
     def test_fetch_calls_item_endpoints(self, mock_get: MagicMock, hn_config: SourceConfig) -> None:
-        def side_effect(url: str, **kwargs):
+        def side_effect(url: str, **kwargs: Any) -> MagicMock:
             if "topstories" in url:
                 return _fake_response(TOP_STORIES)
             for sid in TOP_STORIES:

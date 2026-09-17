@@ -91,7 +91,7 @@ class HackerNewsHandler(BaseHandler):
     # Public API
     # ------------------------------------------------------------------
 
-    def fetch(self, query: str = "", limit: int = DEFAULT_LIMIT) -> list[dict[str, Any]]:
+    def fetch(self, query: str = "", limit: int = DEFAULT_LIMIT) -> list[dict[str, Any]]:  # type: ignore[override]
         """Fetch top stories from Hacker News.
 
         Args:
