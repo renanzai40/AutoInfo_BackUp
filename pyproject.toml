@@ -76,7 +76,7 @@ dev = [
     # which crashes caplog-based tests in _pytest/logging.py (#211). A
     # dependabot bump widened this to <10 (#243) and re-admitted 9.1.1 in CI,
     # so the bound and the dependabot ignore below must move together.
-    "pytest>=8.0,<9",
+    "pytest>=8.0,<10",
     "pytest-asyncio>=0.24",
     "pytest-cov>=4.1",
     "pytest-mock>=3.14",
