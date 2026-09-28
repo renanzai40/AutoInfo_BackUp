@@ -85,7 +85,7 @@ dev = [
     # Pinned, not ranged: the full-tree lint count is only comparable across
     # machines/CI when the linter version is fixed (a >= range silently
     # upgrades ruff and changes the number and the rule set).
-    "ruff==0.16.8",
+    "ruff==0.16.9",
     "mypy>=1.10",
     "pre-commit>=3.7",
     "jsonschema>=4.23",
@@ -137,7 +137,7 @@ select = ["E", "F", "I", "N", "W"]
 
 # Pre-existing lint debt — CI yml declares "Cleanup is a separate tracked
 # work item" (287 pre-existing errors tree-wide under the pinned
-# ruff==0.16.8).  server.py rows injected by direct commit 2026-08-08
+# ruff==0.16.9).  server.py rows injected by direct commit 2026-08-08
 # bypassing PR gates; never lint-cleaned.  Suppressing here so the
 # changed-files gate catches NEW errors without blocking legacy file touches.
 [tool.ruff.lint.per-file-ignores]
